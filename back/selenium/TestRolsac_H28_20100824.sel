@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>TestRolsac_H28_20100824</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestRolsac_H28_20100824</td></tr>
+</thead><tbody>
+<!---- Test que comproba el botó Traduir en procediment i en tramit-->
+<tr>
+	<td>open</td>
+	<td>sacback/contenido/procedimiento/editar.do?action=Seleccionar&amp;idSelect=247</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Castellano</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[1].nombre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[1].resumen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[1].destinatarios</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].nombre</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].resumen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].destinatarios</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='action' and @value='Traducir']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>La traducción se realizará del catalán a los otros idiomas. Desea continuar?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Castellano</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].nombre</td>
+	<td>Solicitud de abertura de sucursal de agencia de viajes</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].resumen</td>
+	<td>Solicitud para la abertura de sucursal de una agencia de viajes autorizada a operar en el ámbito de las Islas Baleares.</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>traducciones[1].destinatarios</td>
+	<td>Agencias de viajes</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>Seleccionar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>descripció del tràmit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>- Document acreditatiu de la disponibilitat del local. - Certificat de barreres arquitectòniques del local objecte de l'activitat. - D'acord amb el nombre de sucursals ja autoritzades, s'haurà&nbsp;&nbsp;d'acreditar en el seu cas l'increment de la quantia de</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>- requisit 1 - requisit 2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>el meu plaç</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>el meu lloc</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertConfirmation</td>
+	<td>La traducción se realizará del catalán a los otros idiomas. Desea continuar?</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Castellano</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>descripción del trámite</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>- Documento acreditativo de la disponibilidad del local. - Certificado de barreras arquitectniques del local objeto de la actividad. - De acuerdo con el nÃºmero de sucursales ya autorizadas, se haur de acreditar en su caso el incremento de la cuantÃ­a de</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>- requisito 1 - requisito 2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>mi plaç</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>mi lugar</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
