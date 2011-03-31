@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   '-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN'
+   'http://java.sun.com/dtd/application_1_3.dtd'>
+<application>
+	<display-name>ROLSAC</display-name>
+  	<description/>
+
+	     	<module><java>extractor.jar</java></module>
+    		<module><java>model.jar</java></module>
+    		
+    		<module>
+        		<web>
+    	      	<web-uri>integracion.war</web-uri>
+        	  	<context-root>integracion</context-root>
+        		</web>
+    		</module>
+    		
+    		
+    	<!-- 	<module><java>integracion.jar</java></module> -->
+    		
+    		<!-- 
+    		<module><java>boib.jar</java></module>
+    		<module><java>micromodel.jar</java></module>
+			 -->
+
+  			<!-- BACK -->
+    		<module><ejb>sac-persistence.jar</ejb></module>
+    		<!-- 
+    		<module><ejb>sac-micropersistence.jar</ejb></module>
+			 -->
+			 
+			<module>
+        		<web>
+    	      	<web-uri>sac-back.war</web-uri>
+        	  	<!--<context-root>sacback</context-root>-->
+                <!--<context-root>rolsacpmaback</context-root>-->
+                 <context-root>@context.back@</context-root>
+        		</web>
+    		</module>
+			<module>
+        		<web>
+    	      	<web-uri>sac-ws.war</web-uri>
+        	  	<!--<context-root>sacws</context-root>-->
+                 <!--<context-root>rolsacpmaws</context-root>-->
+                 <context-root>@context.ws@</context-root>
+        		</web>
+    		</module>
+	<security-role>
+        <description>Administrador del cercador del BOIB</description>
+        <role-name>LBO_ADMIN</role-name>
+    </security-role>
+    <security-role>
+        <description>Administrador del cercador de Resums de premsa</description>
+        <role-name>LRP_ADMIN</role-name>
+    </security-role> 
+ 
+</application>

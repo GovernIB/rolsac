@@ -1,0 +1,43 @@
+
+_____________________________________
+Passos per la integracio del VUDS
+
+
+ /moduls/back/etc/xml/  -> arxius xml que venen amb axis1.4 (ver:C:\j2ee-developer\webservices\axis-1.4)
+
+ 1) moduls/persistence/vuds/build.xml -> target wsdl2java_axis2
+
+ 2) copiar el package es.* (generat en gen-src) en  
+moduls/persistence/vuds/src
+
+para eso, quito del buildpath el directorio persistence/src, y hago copy-paste del directorio 'map' sobre el 
+existente /src/'es'  Previamente cambio la version del 'map' existente.
+
+ 3) afegir en el arxiu moduls/ws/etc/server-config.wsdd el
+ <service name="CCAAWebService"> generat en deploy.wsdd
+ 
+ 
+ 4) copiar el services.xml generado en test/vuds/resources  
+ 
+ 5) copiar el Stub i el Handler 
+ 
+  FAQ: no se genera el GestorWebserviceBeanServiceStub
+  	poner opcion -g (generate all)
+  
+  FAQ: no se genera el test
+  
+  
+ 
+ 
+ 
+ _____________________________________
+ Servidor Axis de pruebas
+ 
+ 
+ copiar el services.xml generado en test/vuds/resources  
+ 
+ poner nombre clase del mi servicio de test en:
+  
+ <parameter name="ServiceClass"></parameter>
+ 
+ moduls/persistence/vuds/build.xml -> target build.aar  + deploy.aar

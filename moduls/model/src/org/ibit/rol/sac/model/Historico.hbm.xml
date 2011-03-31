@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Historico" table="RSC_HISTOR" discriminator-value="historico">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="HIS_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <discriminator column="HIS_TYPE" type="string" length="64"/>
+
+        <property name="nombre" length="512" column="HIS_NOMBRE"/>
+
+        <subclass name="org.ibit.rol.sac.model.HistoricoUA" discriminator-value="UnidadAdministrativa">
+            <many-to-one name="ua" cascade="none" outer-join="false" column="HIS_CODUNA" foreign-key="RSC_HISUNA_FK"/>
+        </subclass>
+
+        <subclass name="org.ibit.rol.sac.model.HistoricoNormativa" discriminator-value="Normativa">
+            <many-to-one name="normativa" cascade="none" outer-join="false" column="HIS_CODNOR" foreign-key="RSC_HISNOR_FK"/>
+        </subclass>
+
+        <subclass name="org.ibit.rol.sac.model.HistoricoProcedimiento" discriminator-value="Procedimiento">
+            <many-to-one name="procedimiento" cascade="none" outer-join="false" column="HIS_CODPRO" foreign-key="RSC_HISPRO_FK"/>
+        </subclass>
+
+        <subclass name="org.ibit.rol.sac.model.HistoricoFicha" discriminator-value="Ficha">
+            <many-to-one name="ficha" cascade="none" outer-join="false" column="HIS_CODFIC" foreign-key="RSC_HISFIC_FK"/>
+            <many-to-one name="materia" cascade="none" outer-join="false" column="HIS_CODMAT" foreign-key="RSC_HISMAT_FK"/>
+			<many-to-one name="ua" cascade="none" outer-join="false" column="HIS_CODUNA" foreign-key="RSC_HISUNA_FK"/>
+        </subclass>
+
+        <subclass name="org.ibit.rol.sac.model.HistoricoMateria" discriminator-value="Materia">
+            <many-to-one name="materia" cascade="none" outer-join="false" column="HIS_CODMAT" foreign-key="RSC_HISMAT_FK"/>
+        </subclass>
+
+    </class>
+</hibernate-mapping>

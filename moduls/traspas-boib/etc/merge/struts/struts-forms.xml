@@ -1,0 +1,27 @@
+<form-bean name="EditarActionForm" type="es.caib.traspasa.actionsforms.EditarActionForm"/>
+<form-bean name="normativaTraspasaForm"
+    type="es.caib.traspasa.actionsforms.NormativaForm"
+    className="es.caib.traspasa.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionNormativaExterna"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="idTipo" type="java.lang.Long" initial=""/>
+    <form-property name="nombreTipo" type="java.lang.String" initial=""/>
+    <form-property name="idBoletin" type="java.lang.Long" initial=""/>
+    <form-property name="nombreBoletin" type="java.lang.String" initial=""/>
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUA" type="java.lang.String" initial=""/>
+    <form-property name="valorNumero" type="java.lang.Long" initial=""/>
+    <form-property name="valorRegistro" type="java.lang.Long" initial=""/>
+    <form-property name="ley" type="java.lang.String" initial=""/>
+    <form-property name="textoFecha" type="java.lang.String"/>
+    <form-property name="textoFechaBoletin" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="ficheros" type="org.apache.struts.upload.FormFile[]" />
+</form-bean>
+<form-bean name="SearchnormativaActionForm" type="es.caib.traspasa.actionsforms.SearchnormativaActionForm"/>
+
+<form-bean name="BusquedaNormativasVudsForm"
+	type="org.ibit.rol.sac.back.form.BusquedaCodisVudsForm">
+    <form-property name="codiVuds" type="java.lang.String" initial=""/>
+</form-bean>

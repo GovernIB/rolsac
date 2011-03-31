@@ -1,0 +1,436 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Oracle JAX-WS 2.1.3-07/10/2008 08:41 PM(bt). -->
+<xs:schema xmlns:tns="http://webservice.service.si.vuds.map.es/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://webservice.service.si.vuds.map.es/">
+
+	<xs:element name="cargarActividadesEconomicas" type="tns:cargarActividadesEconomicas" />
+
+	<xs:element name="cargarActividadesEconomicasResponse" type="tns:cargarActividadesEconomicasResponse" />
+
+	<xs:element name="cargarAreasTramitadora" type="tns:cargarAreasTramitadora" />
+
+	<xs:element name="cargarAreasTramitadoraResponse" type="tns:cargarAreasTramitadoraResponse" />
+
+	<xs:element name="cargarCanalesTramitacion" type="tns:cargarCanalesTramitacion" />
+
+	<xs:element name="cargarCanalesTramitacionResponse" type="tns:cargarCanalesTramitacionResponse" />
+
+	<xs:element name="cargarFormaIniciacion" type="tns:cargarFormaIniciacion" />
+
+	<xs:element name="cargarFormaIniciacionResponse" type="tns:cargarFormaIniciacionResponse" />
+
+	<xs:element name="cargarIdiomas" type="tns:cargarIdiomas" />
+
+	<xs:element name="cargarIdiomasResponse" type="tns:cargarIdiomasResponse" />
+
+	<xs:element name="cargarInstrumentosReclamacion" type="tns:cargarInstrumentosReclamacion" />
+
+	<xs:element name="cargarInstrumentosReclamacionResponse" type="tns:cargarInstrumentosReclamacionResponse" />
+
+	<xs:element name="cargarNormativas" type="tns:cargarNormativas" />
+
+	<xs:element name="cargarNormativasResponse" type="tns:cargarNormativasResponse" />
+
+	<xs:element name="cargarOrganizacionesAsistencia" type="tns:cargarOrganizacionesAsistencia" />
+
+	<xs:element name="cargarOrganizacionesAsistenciaResponse" type="tns:cargarOrganizacionesAsistenciaResponse" />
+
+	<xs:element name="cargarRecursosResolucion" type="tns:cargarRecursosResolucion" />
+
+	<xs:element name="cargarRecursosResolucionResponse" type="tns:cargarRecursosResolucionResponse" />
+
+	<xs:element name="cargarResultadosProceso" type="tns:cargarResultadosProceso" />
+
+	<xs:element name="cargarResultadosProcesoResponse" type="tns:cargarResultadosProcesoResponse" />
+
+	<xs:element name="cargarTramites" type="tns:cargarTramites" />
+
+	<xs:element name="cargarTramitesResponse" type="tns:cargarTramitesResponse" />
+
+	<xs:element name="cargarTramitesVuds" type="tns:cargarTramitesVuds" />
+
+	<xs:element name="cargarTramitesVudsResponse" type="tns:cargarTramitesVudsResponse" />
+
+	<xs:element name="cargarViasReclamacion" type="tns:cargarViasReclamacion" />
+
+	<xs:element name="cargarViasReclamacionResponse" type="tns:cargarViasReclamacionResponse" />
+
+	<xs:element name="guardarOrganizacionesAsistencia" type="tns:guardarOrganizacionesAsistencia" />
+
+	<xs:element name="guardarOrganizacionesAsistenciaResponse" type="tns:guardarOrganizacionesAsistenciaResponse" />
+
+	<xs:element name="guardarTramites" type="tns:guardarTramites" />
+
+	<xs:element name="guardarTramitesResponse" type="tns:guardarTramitesResponse" />
+
+	<xs:element name="guardarViasReclamacion" type="tns:guardarViasReclamacion" />
+
+	<xs:element name="guardarViasReclamacionResponse" type="tns:guardarViasReclamacionResponse" />
+
+	<xs:complexType name="cargarTramites">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="idioma">
+		<xs:sequence>
+			<xs:element name="descripcionIdioma" type="xs:string" />
+			<xs:element name="idIdioma" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarTramitesResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:tramite" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="tramite">
+		<xs:sequence>
+			<xs:element name="areaTramitadora" type="tns:areaTramitadora" />
+			<xs:element name="canalTramitacion" type="tns:canalTramitacion" />
+			<xs:element name="codigoIdentificador" type="xs:string" />
+			<xs:element name="denominacionTramite" type="xs:string" />
+			<xs:element name="descripcionTramite" type="xs:string" />
+			<xs:element name="documento" type="xs:string" maxOccurs="unbounded" />
+			<xs:element name="formaIniciacion" type="tns:formaIniciacion" />
+			<xs:element name="formulario" type="tns:formulario" maxOccurs="unbounded" />
+			<xs:element name="normativa" type="tns:normativa" maxOccurs="unbounded" />
+			<xs:element name="observaciones" type="xs:string" />
+			<xs:element name="plazosLegales" type="xs:string" />
+			<xs:element name="requisitosPrevios" type="xs:string" maxOccurs="unbounded" />
+			<xs:element name="tasa" type="tns:tasa" />
+			<xs:element name="tiempoResolucion" type="xs:string" />
+			<xs:element name="tipoRegistro" type="tns:tipoRegistro" />
+			<xs:element name="tipologia" type="tns:tipologiaTramite" />
+			<xs:element name="tramiteVuds" type="tns:tramiteVuds" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="areaTramitadora">
+		<xs:sequence>
+			<xs:element name="descripcionAreaTramitadora" type="xs:string" />
+			<xs:element name="idAreaTramitadora" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="canalTramitacion">
+		<xs:sequence>
+			<xs:element name="descripcionCanal" type="xs:string" />
+			<xs:element name="idCanal" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="formaIniciacion">
+		<xs:sequence>
+			<xs:element name="descripcionFormaIniciacion" type="xs:string" />
+			<xs:element name="idFormaIniciacion" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="formulario">
+		<xs:sequence>
+			<xs:element name="descripcionFormulario" type="xs:string" />
+			<xs:element name="idCodificacion" type="xs:string" />
+			<xs:element name="urlDescarga" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="normativa">
+		<xs:sequence>
+			<xs:element name="descripcionNormativa" type="xs:string" />
+			<xs:element name="idNormativa" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="tasa">
+		<xs:sequence>
+			<xs:element name="codificacion" type="xs:string" />
+			<xs:element name="descripcionTasa" type="xs:string" />
+			<xs:element name="modoPago" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="tramiteVuds">
+		<xs:sequence>
+			<xs:element name="descripcionTramiteVuds" type="xs:string" />
+			<xs:element name="idTramiteVuds" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarActividadesEconomicas">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarActividadesEconomicasResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:actividadEconomica" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="actividadEconomica">
+		<xs:sequence>
+			<xs:element name="descripcionActividadEconomiva" type="xs:string" />
+			<xs:element name="idActividadEconomica" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarTramitesVuds">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarTramitesVudsResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:tramiteVuds" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarNormativas">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarNormativasResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:normativa" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="guardarViasReclamacion">
+		<xs:sequence>
+			<xs:element name="viaReclamacion" type="tns:viaReclamacion" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="viaReclamacion">
+		<xs:sequence>
+			<xs:element name="actividadEconomica" type="tns:actividadEconomica" />
+			<xs:element name="ambito" type="tns:ambito" />
+			<xs:element name="descripcionViaReclamacion" type="xs:string" />
+			<xs:element name="enlaceWeb" type="xs:string" />
+			<xs:element name="organismo" type="xs:string" />
+			<xs:element name="telefono" type="xs:string" />
+			<xs:element name="tipologia" type="tns:tipologiaViaReclamacion" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="guardarViasReclamacionResponse">
+		<xs:sequence />
+	</xs:complexType>
+
+	<xs:complexType name="cargarViasReclamacion">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarViasReclamacionResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:viaReclamacion" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarResultadosProceso">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarResultadosProcesoResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:resultadoProceso" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="resultadoProceso">
+		<xs:sequence>
+			<xs:element name="descripcionResultadoProceso" type="xs:string" />
+			<xs:element name="idResultadoProceso" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarRecursosResolucion">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarRecursosResolucionResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:recursoResolucion" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="recursoResolucion">
+		<xs:sequence>
+			<xs:element name="descripcionRecursoResolucion" type="xs:string" />
+			<xs:element name="idRecursoResolucion" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarAreasTramitadora">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarAreasTramitadoraResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:areaTramitadora" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarInstrumentosReclamacion">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarInstrumentosReclamacionResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:instrumentoReclamacion" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="instrumentoReclamacion">
+		<xs:sequence>
+			<xs:element name="descripcionInstrumentoReclamacion" type="xs:string" />
+			<xs:element name="idInstrumentoReclamacion" type="xs:long" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarFormaIniciacion">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarFormaIniciacionResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:formaIniciacion" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarCanalesTramitacion">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarCanalesTramitacionResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:canalTramitacion" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarIdiomas">
+		<xs:sequence />
+	</xs:complexType>
+
+	<xs:complexType name="cargarIdiomasResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:idioma" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarOrganizacionesAsistencia">
+		<xs:sequence>
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="cargarOrganizacionesAsistenciaResponse">
+		<xs:sequence>
+			<xs:element name="return" type="tns:organizacionAsistencia" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="organizacionAsistencia">
+		<xs:sequence>
+			<xs:element name="descripcion" type="xs:string" />
+			<xs:element name="instrumentoReclamancion" type="tns:instrumentoReclamacion" />
+			<xs:element name="organismo" type="xs:string" />
+			<xs:element name="recursoResolucion" type="tns:recursoResolucion" />
+			<xs:element name="resultadoProceso" type="tns:resultadoProceso" />
+			<xs:element name="tipologia" type="tns:tipologiaOrganizaciones" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="guardarTramites">
+		<xs:sequence>
+			<xs:element name="tramite" type="tns:tramite" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="guardarTramitesResponse">
+		<xs:sequence />
+	</xs:complexType>
+
+	<xs:complexType name="guardarOrganizacionesAsistencia">
+		<xs:sequence>
+			<xs:element name="organizacionesAsistencia" type="tns:organizacionAsistencia" minOccurs="0" maxOccurs="unbounded" />
+			<xs:element name="idioma" type="tns:idioma" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="guardarOrganizacionesAsistenciaResponse">
+		<xs:sequence />
+	</xs:complexType>
+
+	<xs:simpleType name="tipoRegistro">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Alta" />
+			<xs:enumeration value="Modificación" />
+			<xs:enumeration value="Baja" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="tipologiaTramite">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Autorización" />
+			<xs:enumeration value="Colegiación el en Colegio" />
+			<xs:enumeration value="Comunicación Colegios" />
+			<xs:enumeration value="Homologación" />
+			<xs:enumeration value="Inscripción en el Colegio" />
+			<xs:enumeration value="Inscripción en el registro" />
+			<xs:enumeration value="Inscripción temporal en el registro" />
+			<xs:enumeration value="Licencias" />
+			<xs:enumeration value="Reconocimiento del Titulo" />
+			<xs:enumeration value="Registro de la Sociedad Profesional en el Registro del Colegio Profesional" />
+			<xs:enumeration value="Solicitud de admisión a examen de carné profesional" />
+			<xs:enumeration value="Solicitud de expedición del carné profesional" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="ambito">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Estatal" />
+			<xs:enumeration value="Europeo" />
+			<xs:enumeration value="Municipal" />
+			<xs:enumeration value="Provincial" />
+			<xs:enumeration value="Regional" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="tipologiaViaReclamacion">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Organización" />
+			<xs:enumeration value="Asociación" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="tipologiaOrganizaciones">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Judicial" />
+			<xs:enumeration value="Extrajudicial" />
+			<xs:enumeration value="Administrativa" />
+			<xs:enumeration value="Otros" />
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

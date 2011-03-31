@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.HistoricoEnvio" table="RSC_HISENV">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="HEN_COD">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQHIS</param>
+            </generator>
+        </id>
+        
+        <property name="fechaEnvio" column="HEN_FENVIO"/>
+                
+
+        <many-to-one name="tipoSuscripcion" not-null="true" column="HEN_STPCOD"  foreign-key="FK_RSC_HISE_REFERENCE_RSC_SCRT"/>                
+
+
+ 		<set name="temas" table="RSC_ENVTEM">
+            <cache usage="read-write"/>
+            <key column="HEN_COD" foreign-key="FK_RSC_ENVT_REFERENCE_RSC_HISE"/>
+            <composite-element class="org.ibit.rol.sac.model.RegistroTemaEnvio">
+                <property name="idMateria" column="MAT_CODI"/>
+                <property name="html" column="HEN_HTML" type="org.ibit.rol.sac.model.types.StringClobType"/>
+                <property name="activo" column="HEN_ACTIVO"/>
+            </composite-element>
+        </set>
+
+
+    </class>
+</hibernate-mapping>

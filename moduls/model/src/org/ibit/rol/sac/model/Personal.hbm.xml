@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Personal" table="RSC_PERSON">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="PER_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="username" length="128" column="PER_USERNA"/>
+        <property name="nombre" length="256" column="PER_NOMBRE"/>
+        <property name="funciones" length="256" column="PER_FUNCIO"/>
+        <property name="cargo" length="256" column="PER_CARGO"/>
+        <property name="email" length="256" column="PER_EMAIL"/>
+
+        <property name="extensionPublica" length="64" column="PER_EXTPUB"/>
+        <property name="numeroLargoPublico" length="64" column="PER_NUMPUB"/>
+        <property name="extensionPrivada" length="64" column="PER_EXTPRI"/>
+        <property name="numeroLargoPrivado" length="64" column="PER_NUMPRI"/>
+        <property name="extensionMovil" length="64" column="PER_EXTMOV"/>
+        <property name="numeroLargoMovil" length="64" column="PER_NUMMOV"/>
+
+        <many-to-one name="unidadAdministrativa" column="PER_CODUNA" foreign-key="RSC_PERUNA_FK"/>
+
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="https://proves.caib.es/" />
+<title>TestRolsac_H56_20100826</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestRolsac_H56_20100826</td></tr>
+</thead><tbody>
+<!--afegeix un document en una fitxa-->
+<tr>
+	<td>open</td>
+	<td>http://epreinf45.caib.es:8080/sacback/contenido/ficha/editar.do?action=Seleccionar&amp;idSelect=192713</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>https://proves.caib.es/sacback/contenido/ficha/editar.do?action=Seleccionar&amp;idSelect=192713</td>
+	<td></td>
+</tr>
+<!---- insertar document-->
+<tr>
+	<td>click</td>
+	<td>link=Nuevo Registro</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Alta Documento</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].titulo</td>
+	<td>doc 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].descripcion</td>
+	<td>descripcio doc 1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>fichers[0]</td>
+	<td>C:\dgtic\workspace\01rolsac\test\back\selenium\test.readme.txt</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>doc 1</td>
+	<td></td>
+</tr>
+<!----  consultar document-->
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@name='Seleccionar' and @value='Seleccionar' and @type='button' ]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Modificación Documento</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>test.readme.txt</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//input[@name='action' and @value='Cancelar']</td>
+	<td></td>
+</tr>
+<!---- esborrar document-->
+<tr>
+	<td>clickAndWait</td>
+	<td>Eliminar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>doc 1</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

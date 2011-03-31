@@ -1,0 +1,11 @@
+<!-- @jspc.mappings -->
+
+<servlet-mapping>
+    <servlet-name>myjsp</servlet-name>
+    <url-pattern>*.jsp</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>action</servlet-name>
+    <url-pattern>*.do</url-pattern>
+</servlet-mapping>
