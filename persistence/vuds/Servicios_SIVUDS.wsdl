@@ -1,0 +1,1225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://webservice.vuds.map.es" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://webservice.vuds.map.es" xmlns:intf="http://webservice.vuds.map.es" xmlns:tns1="http://bean.vuds.map.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://webservice.vuds.map.es" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://bean.vuds.map.es"/>
+   <element name="getMapaTramite">
+    <complexType>
+     <sequence>
+      <element name="prestador" type="xsd:string"/>
+      <element name="agrupacion" type="xsd:string"/>
+      <element name="actividad" type="xsd:string"/>
+      <element name="ccaa" type="xsd:string"/>
+      <element name="provincia" type="xsd:string"/>
+      <element name="poblacion" type="xsd:string"/>
+      <element name="establecimiento" type="xsd:string"/>
+      <element name="forma" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getMapaTramiteResponse">
+    <complexType>
+     <sequence>
+      <element name="getMapaTramiteReturn" type="tns1:ResultadoGrafoTramites"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_tns1_EnlaceGrafo">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:EnlaceGrafo"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TramiteExcluyente">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:TramiteExcluyente"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_xsd_string">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOf_tns1_TramiteMapaBean">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:TramiteMapaBean"/>
+    </sequence>
+   </complexType>
+   <element name="getCCAA">
+    <complexType/>
+   </element>
+   <element name="getCCAAResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getCCAAReturn" type="tns1:CCAABean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProvincia">
+    <complexType>
+     <sequence>
+      <element name="idCCAA" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProvinciaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getProvinciaReturn" type="tns1:ProvinciaBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getAgrupacionActividad">
+    <complexType/>
+   </element>
+   <element name="getAgrupacionActividadResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getAgrupacionActividadReturn" type="tns1:AgrupacionActividadBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getActividad">
+    <complexType>
+     <sequence>
+      <element name="idAgrupacion" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getActividadResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getActividadReturn" type="tns1:ActividadBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getEstablecimiento">
+    <complexType/>
+   </element>
+   <element name="getEstablecimientoResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getEstablecimientoReturn" type="tns1:EstablecimientoBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getFormaPrestacion">
+    <complexType>
+     <sequence>
+      <element name="idEstablecimiento" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getFormaPrestacionResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getFormaPrestacionReturn" type="tns1:FormaPrestacionBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTipoPrestador">
+    <complexType/>
+   </element>
+   <element name="getTipoPrestadorResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getTipoPrestadorReturn" type="tns1:TipoPrestadorBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getPoblacion">
+    <complexType>
+     <sequence>
+      <element name="idProvincia" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getPoblacionResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getPoblacionReturn" type="tns1:PoblacionBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getSolicitante">
+    <complexType/>
+   </element>
+   <element name="getSolicitanteResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getSolicitanteReturn" type="tns1:SolicitanteBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTipoOrganismo">
+    <complexType/>
+   </element>
+   <element name="getTipoOrganismoResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getTipoOrganismoReturn" type="tns1:TipoOrganismoBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getOrganizacionesAsistencia">
+    <complexType>
+     <sequence>
+      <element name="idAgrupacion" type="xsd:int"/>
+      <element name="idActividad" type="xsd:int"/>
+      <element name="idSolicitante" type="xsd:int"/>
+      <element name="idCCAA" type="xsd:int"/>
+      <element name="idProvincia" type="xsd:int"/>
+      <element name="idPoblacion" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getOrganizacionesAsistenciaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getOrganizacionesAsistenciaReturn" type="tns1:AsociacionBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getViaReclamacion">
+    <complexType>
+     <sequence>
+      <element name="idSolicitante" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getViaReclamacionResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getViaReclamacionReturn" type="tns1:ReclamacionBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTipoNormativa">
+    <complexType/>
+   </element>
+   <element name="getTipoNormativaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getTipoNormativaReturn" type="tns1:TipoNormativaBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getNormativa">
+    <complexType/>
+   </element>
+   <element name="getNormativaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getNormativaReturn" type="tns1:NormativaBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTramite">
+    <complexType>
+     <sequence>
+      <element name="idTramite" type="xsd:string"/>
+      <element name="idCCAA" type="xsd:int"/>
+      <element name="idProvincia" type="xsd:int"/>
+      <element name="idPoblacion" type="xsd:int"/>
+      <element name="registrado" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTramiteResponse">
+    <complexType>
+     <sequence>
+      <element name="getTramiteReturn" type="tns1:TramiteInfoBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDetalleTramiteNormativa">
+    <complexType>
+     <sequence>
+      <element name="idTramite" type="xsd:string"/>
+      <element name="idCCAA" type="xsd:int"/>
+      <element name="idProvincia" type="xsd:int"/>
+      <element name="idPoblacion" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDetalleTramiteNormativaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getDetalleTramiteNormativaReturn" type="tns1:NormativaBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTramiteNormativa">
+    <complexType>
+     <sequence>
+      <element name="idNormativa" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getTramiteNormativaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getTramiteNormativaReturn" type="tns1:TramiteBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getMapaTramiteNormativa">
+    <complexType>
+     <sequence>
+      <element name="prestador" type="xsd:string"/>
+      <element name="agrupacion" type="xsd:string"/>
+      <element name="actividad" type="xsd:string"/>
+      <element name="ccaa" type="xsd:string"/>
+      <element name="provincia" type="xsd:string"/>
+      <element name="poblacion" type="xsd:string"/>
+      <element name="establecimiento" type="xsd:string"/>
+      <element name="forma" type="xsd:string"/>
+      <element name="normativa" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getMapaTramiteNormativaResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getMapaTramiteNormativaReturn" type="tns1:MapaTramiteNormativaBean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_tns1_NormativaBean">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:NormativaBean"/>
+    </sequence>
+   </complexType>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://bean.vuds.map.es" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://webservice.vuds.map.es"/>
+   <complexType name="EnlaceGrafo">
+    <sequence>
+     <element name="idTramiteDestino" nillable="true" type="xsd:string"/>
+     <element name="idTramiteOrigen" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TramiteExcluyente">
+    <sequence>
+     <element name="enlacesOR" nillable="true" type="impl:ArrayOf_tns1_EnlaceGrafo"/>
+     <element name="mensajeInformativo" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TramiteMapaBean">
+    <sequence>
+     <element name="antecesores" nillable="true" type="impl:ArrayOf_xsd_string"/>
+     <element name="clasificacion" nillable="true" type="xsd:string"/>
+     <element name="denominacion" nillable="true" type="xsd:string"/>
+     <element name="desTramite" nillable="true" type="xsd:string"/>
+     <element name="documentacion" nillable="true" type="xsd:string"/>
+     <element name="idClasificacion" nillable="true" type="xsd:string"/>
+     <element name="idTramite" nillable="true" type="xsd:string"/>
+     <element name="organismoCompetente" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ResultadoGrafoTramites">
+    <sequence>
+     <element name="listaTramitesExcluyente" nillable="true" type="impl:ArrayOf_tns1_TramiteExcluyente"/>
+     <element name="resumenGrafoTramites" nillable="true" type="xsd:string"/>
+     <element name="tramites" nillable="true" type="impl:ArrayOf_tns1_TramiteMapaBean"/>
+    </sequence>
+   </complexType>
+   <complexType name="CCAABean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idCCAA" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="ProvinciaBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idCCAA" type="xsd:int"/>
+     <element name="idProvincia" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="AgrupacionActividadBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idAgrupacion" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="ActividadBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idActividad" type="xsd:int"/>
+     <element name="idAgrupacion" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="EstablecimientoBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idEstablecimiento" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="FormaPrestacionBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idEstablecimiento" type="xsd:int"/>
+     <element name="idForma" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="TipoPrestadorBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idTipoPrestador" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="PoblacionBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idPoblacion" type="xsd:int"/>
+     <element name="idProvincia" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="SolicitanteBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idSolicitante" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="TipoOrganismoBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idTipo" type="xsd:int"/>
+    </sequence>
+   </complexType>
+   <complexType name="AsociacionBean">
+    <sequence>
+     <element name="ambito" nillable="true" type="xsd:string"/>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="enlace" nillable="true" type="xsd:string"/>
+     <element name="idAsistencia" type="xsd:int"/>
+     <element name="idModoActividad" type="xsd:int"/>
+     <element name="idSolicitante" type="xsd:int"/>
+     <element name="idTipo" type="xsd:int"/>
+     <element name="organismo" nillable="true" type="xsd:string"/>
+     <element name="telefono" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ReclamacionBean">
+    <sequence>
+     <element name="descripcion" nillable="true" type="xsd:string"/>
+     <element name="idReclamacion" type="xsd:int"/>
+     <element name="instrumentoReclamacion" nillable="true" type="xsd:string"/>
+     <element name="organismo" nillable="true" type="xsd:string"/>
+     <element name="recurso" nillable="true" type="xsd:string"/>
+     <element name="resultado" nillable="true" type="xsd:string"/>
+     <element name="tipo" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TipoNormativaBean">
+    <sequence>
+     <element name="idTipoNormativa" nillable="true" type="xsd:string"/>
+     <element name="tipoNormativa" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="NormativaBean">
+    <sequence>
+     <element name="afectadaDS" type="xsd:boolean"/>
+     <element name="idNormativa" nillable="true" type="xsd:string"/>
+     <element name="normativa" nillable="true" type="xsd:string"/>
+     <element name="tipoNormativa" nillable="true" type="tns1:TipoNormativaBean"/>
+    </sequence>
+   </complexType>
+   <complexType name="TramiteInfoBean">
+    <sequence>
+     <element name="clasificacion" nillable="true" type="xsd:string"/>
+     <element name="codTramite" nillable="true" type="xsd:string"/>
+     <element name="denominacion" nillable="true" type="xsd:string"/>
+     <element name="desCanal" nillable="true" type="xsd:string"/>
+     <element name="desEfectosSilencio" nillable="true" type="xsd:string"/>
+     <element name="desFormaInicio" nillable="true" type="xsd:string"/>
+     <element name="desMedioPago" nillable="true" type="xsd:string"/>
+     <element name="desObservacionesTramite" nillable="true" type="xsd:string"/>
+     <element name="desOrganoResponsable" nillable="true" type="xsd:string"/>
+     <element name="desSectorActividad" nillable="true" type="xsd:string"/>
+     <element name="desTasaCalculada" nillable="true" type="xsd:string"/>
+     <element name="desTramite" nillable="true" type="xsd:string"/>
+     <element name="documentacion" nillable="true" type="xsd:string"/>
+     <element name="duracionTramitacion" nillable="true" type="xsd:string"/>
+     <element name="formularioReferencia" nillable="true" type="xsd:string"/>
+     <element name="idClasificacion" nillable="true" type="xsd:string"/>
+     <element name="identificacion" nillable="true" type="xsd:string"/>
+     <element name="nombreFormulario" nillable="true" type="xsd:string"/>
+     <element name="organismoCompetente" nillable="true" type="xsd:string"/>
+     <element name="plazoSolicitud" nillable="true" type="xsd:string"/>
+     <element name="resultado" nillable="true" type="xsd:string"/>
+     <element name="tasaCodificacion" nillable="true" type="xsd:string"/>
+     <element name="tasas" nillable="true" type="xsd:string"/>
+     <element name="tipoNormativa" nillable="true" type="xsd:string"/>
+     <element name="tipologia" nillable="true" type="xsd:string"/>
+     <element name="tituloNormativa" nillable="true" type="xsd:string"/>
+     <element name="url" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="TramiteBean">
+    <sequence>
+     <element name="clasificacion" nillable="true" type="xsd:string"/>
+     <element name="codTramite" nillable="true" type="xsd:string"/>
+     <element name="denominacion" nillable="true" type="xsd:string"/>
+     <element name="desTramite" nillable="true" type="xsd:string"/>
+     <element name="documentacion" nillable="true" type="xsd:string"/>
+     <element name="idClasificacion" nillable="true" type="xsd:string"/>
+     <element name="organismoCompetente" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="MapaTramiteNormativaBean">
+    <sequence>
+     <element name="denominacionTramite" nillable="true" type="xsd:string"/>
+     <element name="descripcionTramite" nillable="true" type="xsd:string"/>
+     <element name="idTramite" nillable="true" type="xsd:string"/>
+     <element name="normativa" nillable="true" type="impl:ArrayOf_tns1_NormativaBean"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getSolicitanteResponse">
+
+      <wsdl:part element="impl:getSolicitanteResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNormativaResponse">
+
+      <wsdl:part element="impl:getNormativaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCCAARequest">
+
+      <wsdl:part element="impl:getCCAA" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAgrupacionActividadRequest">
+
+      <wsdl:part element="impl:getAgrupacionActividad" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getCCAAResponse">
+
+      <wsdl:part element="impl:getCCAAResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFormaPrestacionRequest">
+
+      <wsdl:part element="impl:getFormaPrestacion" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getOrganizacionesAsistenciaResponse">
+
+      <wsdl:part element="impl:getOrganizacionesAsistenciaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDetalleTramiteNormativaResponse">
+
+      <wsdl:part element="impl:getDetalleTramiteNormativaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTramiteNormativaResponse">
+
+      <wsdl:part element="impl:getTramiteNormativaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMapaTramiteNormativaResponse">
+
+      <wsdl:part element="impl:getMapaTramiteNormativaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMapaTramiteResponse">
+
+      <wsdl:part element="impl:getMapaTramiteResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoOrganismoRequest">
+
+      <wsdl:part element="impl:getTipoOrganismo" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getActividadRequest">
+
+      <wsdl:part element="impl:getActividad" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMapaTramiteRequest">
+
+      <wsdl:part element="impl:getMapaTramite" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTramiteResponse">
+
+      <wsdl:part element="impl:getTramiteResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoPrestadorResponse">
+
+      <wsdl:part element="impl:getTipoPrestadorResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTramiteRequest">
+
+      <wsdl:part element="impl:getTramite" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProvinciaRequest">
+
+      <wsdl:part element="impl:getProvincia" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoPrestadorRequest">
+
+      <wsdl:part element="impl:getTipoPrestador" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoOrganismoResponse">
+
+      <wsdl:part element="impl:getTipoOrganismoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getActividadResponse">
+
+      <wsdl:part element="impl:getActividadResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getViaReclamacionRequest">
+
+      <wsdl:part element="impl:getViaReclamacion" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTramiteNormativaRequest">
+
+      <wsdl:part element="impl:getTramiteNormativa" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getViaReclamacionResponse">
+
+      <wsdl:part element="impl:getViaReclamacionResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getMapaTramiteNormativaRequest">
+
+      <wsdl:part element="impl:getMapaTramiteNormativa" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getDetalleTramiteNormativaRequest">
+
+      <wsdl:part element="impl:getDetalleTramiteNormativa" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getAgrupacionActividadResponse">
+
+      <wsdl:part element="impl:getAgrupacionActividadResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getFormaPrestacionResponse">
+
+      <wsdl:part element="impl:getFormaPrestacionResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoNormativaResponse">
+
+      <wsdl:part element="impl:getTipoNormativaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getSolicitanteRequest">
+
+      <wsdl:part element="impl:getSolicitante" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPoblacionResponse">
+
+      <wsdl:part element="impl:getPoblacionResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getEstablecimientoResponse">
+
+      <wsdl:part element="impl:getEstablecimientoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getOrganizacionesAsistenciaRequest">
+
+      <wsdl:part element="impl:getOrganizacionesAsistencia" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getPoblacionRequest">
+
+      <wsdl:part element="impl:getPoblacion" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getEstablecimientoRequest">
+
+      <wsdl:part element="impl:getEstablecimiento" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getProvinciaResponse">
+
+      <wsdl:part element="impl:getProvinciaResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getNormativaRequest">
+
+      <wsdl:part element="impl:getNormativa" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getTipoNormativaRequest">
+
+      <wsdl:part element="impl:getTipoNormativa" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="Service">
+
+      <wsdl:operation name="getMapaTramite">
+
+         <wsdl:input message="impl:getMapaTramiteRequest" name="getMapaTramiteRequest"/>
+
+         <wsdl:output message="impl:getMapaTramiteResponse" name="getMapaTramiteResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCCAA">
+
+         <wsdl:input message="impl:getCCAARequest" name="getCCAARequest"/>
+
+         <wsdl:output message="impl:getCCAAResponse" name="getCCAAResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProvincia">
+
+         <wsdl:input message="impl:getProvinciaRequest" name="getProvinciaRequest"/>
+
+         <wsdl:output message="impl:getProvinciaResponse" name="getProvinciaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAgrupacionActividad">
+
+         <wsdl:input message="impl:getAgrupacionActividadRequest" name="getAgrupacionActividadRequest"/>
+
+         <wsdl:output message="impl:getAgrupacionActividadResponse" name="getAgrupacionActividadResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getActividad">
+
+         <wsdl:input message="impl:getActividadRequest" name="getActividadRequest"/>
+
+         <wsdl:output message="impl:getActividadResponse" name="getActividadResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEstablecimiento">
+
+         <wsdl:input message="impl:getEstablecimientoRequest" name="getEstablecimientoRequest"/>
+
+         <wsdl:output message="impl:getEstablecimientoResponse" name="getEstablecimientoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFormaPrestacion">
+
+         <wsdl:input message="impl:getFormaPrestacionRequest" name="getFormaPrestacionRequest"/>
+
+         <wsdl:output message="impl:getFormaPrestacionResponse" name="getFormaPrestacionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoPrestador">
+
+         <wsdl:input message="impl:getTipoPrestadorRequest" name="getTipoPrestadorRequest"/>
+
+         <wsdl:output message="impl:getTipoPrestadorResponse" name="getTipoPrestadorResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPoblacion">
+
+         <wsdl:input message="impl:getPoblacionRequest" name="getPoblacionRequest"/>
+
+         <wsdl:output message="impl:getPoblacionResponse" name="getPoblacionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSolicitante">
+
+         <wsdl:input message="impl:getSolicitanteRequest" name="getSolicitanteRequest"/>
+
+         <wsdl:output message="impl:getSolicitanteResponse" name="getSolicitanteResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoOrganismo">
+
+         <wsdl:input message="impl:getTipoOrganismoRequest" name="getTipoOrganismoRequest"/>
+
+         <wsdl:output message="impl:getTipoOrganismoResponse" name="getTipoOrganismoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getOrganizacionesAsistencia">
+
+         <wsdl:input message="impl:getOrganizacionesAsistenciaRequest" name="getOrganizacionesAsistenciaRequest"/>
+
+         <wsdl:output message="impl:getOrganizacionesAsistenciaResponse" name="getOrganizacionesAsistenciaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getViaReclamacion">
+
+         <wsdl:input message="impl:getViaReclamacionRequest" name="getViaReclamacionRequest"/>
+
+         <wsdl:output message="impl:getViaReclamacionResponse" name="getViaReclamacionResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoNormativa">
+
+         <wsdl:input message="impl:getTipoNormativaRequest" name="getTipoNormativaRequest"/>
+
+         <wsdl:output message="impl:getTipoNormativaResponse" name="getTipoNormativaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNormativa">
+
+         <wsdl:input message="impl:getNormativaRequest" name="getNormativaRequest"/>
+
+         <wsdl:output message="impl:getNormativaResponse" name="getNormativaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTramite">
+
+         <wsdl:input message="impl:getTramiteRequest" name="getTramiteRequest"/>
+
+         <wsdl:output message="impl:getTramiteResponse" name="getTramiteResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetalleTramiteNormativa">
+
+         <wsdl:input message="impl:getDetalleTramiteNormativaRequest" name="getDetalleTramiteNormativaRequest"/>
+
+         <wsdl:output message="impl:getDetalleTramiteNormativaResponse" name="getDetalleTramiteNormativaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTramiteNormativa">
+
+         <wsdl:input message="impl:getTramiteNormativaRequest" name="getTramiteNormativaRequest"/>
+
+         <wsdl:output message="impl:getTramiteNormativaResponse" name="getTramiteNormativaResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getMapaTramiteNormativa">
+
+         <wsdl:input message="impl:getMapaTramiteNormativaRequest" name="getMapaTramiteNormativaRequest"/>
+
+         <wsdl:output message="impl:getMapaTramiteNormativaResponse" name="getMapaTramiteNormativaResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ServiceSoapBinding" type="impl:Service">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getMapaTramite">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getMapaTramiteRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getMapaTramiteResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getCCAA">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getCCAARequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getCCAAResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getProvincia">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getProvinciaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getProvinciaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getAgrupacionActividad">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getAgrupacionActividadRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getAgrupacionActividadResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getActividad">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getActividadRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getActividadResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getEstablecimiento">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getEstablecimientoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getEstablecimientoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getFormaPrestacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getFormaPrestacionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getFormaPrestacionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoPrestador">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTipoPrestadorRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTipoPrestadorResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getPoblacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getPoblacionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getPoblacionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getSolicitante">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getSolicitanteRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getSolicitanteResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoOrganismo">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTipoOrganismoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTipoOrganismoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getOrganizacionesAsistencia">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getOrganizacionesAsistenciaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getOrganizacionesAsistenciaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getViaReclamacion">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getViaReclamacionRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getViaReclamacionResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTipoNormativa">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTipoNormativaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTipoNormativaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getNormativa">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getNormativaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getNormativaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTramite">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTramiteRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTramiteResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getDetalleTramiteNormativa">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getDetalleTramiteNormativaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getDetalleTramiteNormativaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getTramiteNormativa">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getTramiteNormativaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getTramiteNormativaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="getMapaTramiteNormativa">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getMapaTramiteNormativaRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getMapaTramiteNormativaResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ServiceService">
+
+      <wsdl:port binding="impl:ServiceSoapBinding" name="Service">
+
+         <wsdlsoap:address location="http://10.252.135.136:10031/vudsaplicacion/services/Service"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
