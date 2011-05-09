@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".ws.organismo.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ws.ListaOrganismosLocalesController">
+        <put name="contenido" value="/ws/listaOrganismos.jsp"/>
+    </definition>
+
+    <definition name=".ws.organismo.nuevo" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ws.ListaUnidadesSinBusinessKeyController">
+        <put name="contenido" value="/ws/nuevoOrganismo.jsp"/>
+    </definition>
+
+    <definition name=".ws.organismo.editar" extends=".main">
+        <put name="contenido" value="/ws/editarOrganismo.jsp"/>
+    </definition>
+
+    <definition name=".ws.especificacion.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ws.ListaEspecificacionesController">
+        <put name="contenido" value="/ws/listaEspecificaciones.jsp"/>
+    </definition>
+
+    <definition name=".ws.especificacion.editar" extends=".main">
+        <put name="contenido" value="/ws/editarEspecificacion.jsp"/>
+    </definition>
+
+    <definition name=".ws.servicio.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ws.ListaServiciosController" >
+        <put name="contenido" value="/ws/listaServicios.jsp"/>
+    </definition>
+
+    <definition name=".ws.servicio.editar" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ws.EditarServicioSupportController">
+        <put name="contenido" value="/ws/editarServicio.jsp"/>
+    </definition>
+
+</tiles-definitions>
