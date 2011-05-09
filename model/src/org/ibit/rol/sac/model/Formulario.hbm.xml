@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Formulario" table="RSC_FORMUL">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="FOR_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="nombre" length="256" column="FOR_NOMBRE"/>
+        <property name="url" length="512" column="FOR_URL"/>
+        <many-to-one name="archivo" cascade="all" column="FOR_CODARC" foreign-key="RSC_FORARC_FK"/>
+        <property name="urlManual" length="512" column="FOR_URLMAN"/>
+        <many-to-one name="manual" cascade="all" column="FOR_MANUAL" foreign-key="RSC_FORMAN_FK"/>
+        <many-to-one name="tramite" column="FOR_CODTRA" foreign-key="RSC_FORTRA_FK"/>
+
+    </class>
+</hibernate-mapping>
