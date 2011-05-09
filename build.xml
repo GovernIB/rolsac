@@ -21,15 +21,15 @@
 	
 	<property name="projecte.name.rolsac" value="rolsac"/>	
 
-	<property name="etc.approlsac" value="${etc}/approlsac"/>
-	
+	<property name="etc.approlsac" value="${etc}/approlsac"/>	
+
 
 	<!--<property name="deploy.dir" value="D:\servers\slave1-jboss-3.2.8-caib4\server\default\deploycaib"/>-->
 
 	<property environment="env"/>
 	<property name="deploy.dir" value="${env.DEPLOY_DIR}"/>
 
-
+	
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
   <!-- ====================================================================== -->
@@ -167,6 +167,31 @@
 		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
 	</target>
 
+
+
+	  <!-- ================================================================== -->
+	  <!-- test.unitario    Executa els tests unitaris                        -->
+	  <!-- ================================================================== -->
+
+
+	  <target name="test.unitario">
+	  		<ant dir="test/common" target="main" inheritall="false"/>
+			<ant dir="moduls/extractor" target="test.unitario" inheritall="false"/>
+			<ant dir="moduls/model" target="test.unitario" inheritall="false"/>
+		  	<ant dir="moduls/persistence" target="test.unitario" inheritall="false"/>
+	  		<ant dir="moduls/integracion" target="test.unitario" inheritall="false"/>
+	  		<ant dir="moduls/back" target="test.unitario" inheritall="false"/>
+	  	
+	  	<!--
+		  	<ant dir="moduls/integracion" target="test" inheritall="false"/>
+			<ant dir="moduls/ws" target="test" inheritall="false"/>
+			<ant dir="moduls/back" target="test" inheritall="false"/>
+			<ant dir="moduls/traspas-boib" target="test" inheritall="false"/>
+		-->
+	  </target>	
+	 	
+
+
   <!-- ================================================================== -->
   <!-- application.xml                                                                                                                    -->
   <!-- ================================================================== -->
@@ -179,6 +204,7 @@
         </replace>
 
 
+	
   <!-- ================================================================== -->
   <!-- assemble                                                                                                                      -->
   <!-- ================================================================== -->
@@ -200,10 +226,10 @@
 				<include name="model.jar" />
 				<include name="integracion.war" />
 				<include name="sac-persistence.jar" />				
-				<include name="sac-persistence-client.jar" />				
-				<include name="sac-back.jar" />
+				<include name="sac-persistence-client.jar" />
+				<!--include name="sac-back.jar" /-->
 				<include name="sac-back.war" />
-				<include name="sac-ws.war" />					
+				<include name="sac-ws.war" />
 				<include name="traspasboib.war" />
 			</fileset>
 			
@@ -215,6 +241,12 @@
 				<include name="sac-micropersistence.jar" />
 			</fileset>
 			-->
+			
+			<!-- Incluimos los .jar dependientes -->
+			<fileset dir="${lib}">
+				<include name="hibernate2.jar" />
+				<include name="ehcache.jar" />
+			</fileset>
 
     	</ear>
   </target>	
@@ -223,6 +255,9 @@
   <!-- main                                                                                                                              -->
   <!-- ================================================================== -->
   
+  
+
+
 	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construcción de ROLSAC">
 
 		 <antcall target="propagate01ROLSAC">
@@ -232,7 +267,7 @@
 	      <antcall target="assemble01ROLSAC"/>
 	      <antcall target="deploy01ROLSAC"/>
 	  </target>	
-	
+
   <!-- ================================================================== -->
   <!-- propagate                                                                                                                     -->
   <!-- ================================================================== -->
@@ -255,7 +290,7 @@
 
 	  <target name="deploy01ROLSAC">
 	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>	  
-	  </target>
+	  </target>		  	
 
 	<target name="copiarAOTROS">
 		<copy file="${moduls.dir}/model.jar" todir="${home}/../02microsites/lib"/>
