@@ -1,0 +1,8 @@
+<mime-mapping>
+    <extension>html</extension>
+    <mime-type>text/html</mime-type>
+</mime-mapping>
+<mime-mapping>
+    <extension>txt</extension>
+    <mime-type>text/plain</mime-type>
+</mime-mapping>
