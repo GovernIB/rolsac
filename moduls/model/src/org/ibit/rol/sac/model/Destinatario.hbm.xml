@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Destinatario" table="RSC_DESTIN">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="DES_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+		
+		<property name="nombre" length="512" column="DES_NOMBRE"/>
+        <property name="idRemoto" length="512" column="DES_IDREMO"/>
+        <property name="endpoint" length="512" column="DES_ENDPOI"/>
+		<property name="email" length="256" column="DES_EMAIL"/>		
+		
+    </class>
+</hibernate-mapping>

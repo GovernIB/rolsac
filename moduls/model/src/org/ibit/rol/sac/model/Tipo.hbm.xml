@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Tipo" table="RSC_TIPO">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="TIP_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <set name="normativas" cascade="none" inverse="true" lazy="true">
+            <key column="NOR_CODTIP" foreign-key="RSC_NORTIP_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.Normativa"/>
+        </set>
+        <map name="traducciones" cascade="all" table="RSC_TRATIP">
+            <cache usage="read-write"/>
+            <key column="TTI_CODTIP" foreign-key="RSC_TTITIP_FK"/>
+            <index column="TTI_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionTipo">
+                <property name="nombre" length="128" column="TTI_NOMBRE"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

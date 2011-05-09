@@ -1,0 +1,5 @@
+<global-forwards>
+    <forward name="main" path="/main.do" />
+    <forward name="pleaseWait" path=".espera"/>
+    <forward name="info" path="/subscripcions/info.jsp"/>
+</global-forwards>

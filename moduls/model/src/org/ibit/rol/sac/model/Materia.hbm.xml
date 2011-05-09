@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Materia" table="RSC_MATERI">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="MAT_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="codiHita" length="128" column="MAT_CODHIT"/>
+        <property name="codigoEstandar" length="256" column="MAT_CODEST"/>
+        <property name="destacada" not-null= "true" column="MAT_DESTAC" />
+
+        <many-to-one name="icono" cascade="all" column="MAT_ICONO" foreign-key="RSC_MATICO_FK"/>
+        <many-to-one name="foto" cascade="all" column="MAT_FOTO" foreign-key="RSC_MATFOT_FK"/>
+        <many-to-one name="iconoGrande" cascade="all" column="MAT_ICOGRA" foreign-key="RSC_MATICG_FK"/>
+
+        <set name="fichas" cascade="none" inverse="true" lazy="true" table="RSC_FICMAT">
+            <key column="FIM_CODMAT" foreign-key="RSC_FIMMAT_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Ficha" column="FIM_CODFIC" foreign-key="RSC_FIMFIC_FK" />
+        </set>
+
+        <set name="materiasAgrupacionM" cascade="all" lazy="true" inverse="true">
+            <cache usage="read-write"/>
+            <key column="MAG_CODMAT" foreign-key="RSC_MAGMAT_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.MateriaAgrupacionM"/>
+        </set>
+
+        <set name="procedimientosLocales" cascade="none" inverse="true" lazy="true" table="RSC_PROMAT" >
+            <key column="PRM_CODMAT" foreign-key="RSC_PRMMAT_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PRM_CODPRO" foreign-key="RSC_PRMPRO_FK" />
+        </set>
+
+        <set name="unidadesmaterias" cascade="all" inverse="true" >
+            <key column="UNM_CODMAT" foreign-key="RSC_UNMMAT_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.UnidadMateria" />
+        </set>
+
+        <set name="iconos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="ICM_CODMAT" foreign-key="RSC_ICMMAT_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.IconoMateria"/>
+        </set>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAMAT" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="TMA_CODMAT" foreign-key="RSC_TMAMAT_FK"/>
+            <index column="TMA_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionMateria">
+                <property name="nombre" length="256" column="TMA_NOMBRE"/>
+                <property name="descripcion" length="4000" column="TMA_DESCRI"/>
+                <property name="palabrasclave" length="4000" column="TMA_PALCLA"/>
+                <many-to-one  cascade="all" name="distribComp" column="TMA_CODDIS" foreign-key="RSC_TMADIS_FK"/>
+                <many-to-one  cascade="all" name="normativa" column="TMA_NORMAT" foreign-key="RSC_TMANOR_FK"/>
+                <many-to-one  cascade="all" name="contenido" column="TMA_CONTEN" foreign-key="RSC_TMACON_FK"/>
+
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

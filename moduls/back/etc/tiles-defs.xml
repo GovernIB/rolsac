@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".main" path="/layout.do">
+        <put name="identificacion" value=".identificacion"/>
+        <put name="menu" value=".menu"/>
+        <put name="contenido" value="/tiles/principal.jsp"/>
+    </definition>
+
+    <!-- ORGANIGRAMA - UNIDAD ADMINISTRATIVA -->
+
+    <definition name=".organigrama.navges.arbol" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ArbolUAController">
+        <put name="contenido" value="/organigrama/navges/arbol.jsp"/>
+    </definition>
+
+	<definition name=".espera" extends=".main">
+        <put name="contenido" value="/pleaseWait.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.navges" extends=".main">
+        <put name="contenido" value=".organigrama.unidad.contenido"/>
+    </definition>
+
+    <definition name=".organigrama.unidad.contenido" path="/layout/blocLayout.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.GuiaController">
+        <putList name="list">
+            <add type="page" value="/organigrama/navges/arbol.jsp" />
+            <add type="page" value="/organigrama/guia/listag.jsp" />
+        </putList>
+    </definition>
+    
+    <definition name=".organigrama.unidad.form" extends=".main">
+        <put name="contenido" value=".organigrama.unidad.form.bloques"/>
+    </definition>
+
+    <definition name=".organigrama.unidad.form.bloques" path="/layout/blocLayout.jsp"
+        controllerClass="org.ibit.rol.sac.back.indra.actions.ListaMicrositesUAAction">
+        <putList name="list">
+    	    <add type="page" value="/organigrama/unidad/formulario.jsp"/>
+	    </putList>
+    </definition>
+	
+	
+    <definition name=".organigrama.unidad.lista" extends=".main">
+        <put name="contenido" value="/organigrama/unidad/lista.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.unidad.baja" extends=".main">
+        <put name="contenido" value="/organigrama/unidad/baja.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.unidad.popedificio" path="/organigrama/unidad/popedificio.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaEdificioController">
+    </definition>
+
+    <definition name=".organigrama.unidad.popmateria" path="/organigrama/unidad/popmateria.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
+    </definition>
+
+    <definition name=".organigrama.unidad.popupfichas" path="/organigrama/unidad/popupfichas.jsp" />
+
+    <definition name=".organigrama.unidad.popusuario" path="/organigrama/unidad/popusuario.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaUsuarioController">
+    </definition>
+
+    <definition name=".organigrama.unidad.popFichaUA" path="/organigrama/unidad/popFichaUA.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaFichaController">
+    </definition>
+
+    <!-- ORGANIGRAMA - GUIA -->
+
+    <definition name=".organigrama.guia.lista" extends=".main">
+        <put name="contenido" value="/organigrama/guia/lista.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.guia.form" extends=".main"
+	    controllerClass="org.ibit.rol.sac.back.controller.PersonalController">
+        <put name="contenido" value="/organigrama/guia/formulario.jsp"/>
+    </definition>
+
+
+
+    <!--UNIDADES MATERIA -->
+   <!-- <definition name=".organigrama.unidad.materia" extends=".main"
+           controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController" >
+           <put name="contenido" value="/organigrama/unidad/materia.jsp"/>
+    </definition>-->
+
+    <definition name=".organigrama.unimat.form" extends=".main"
+            controllerClass= "org.ibit.rol.sac.back.controller.ListaMateriaController">
+           <put name="contenido" value="/organigrama/unidad/unidadmateria.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - TIPO UNIDAD ADMINISTRATIVA -->
+    <definition name=".organigrama.tipua" extends=".main">
+        <put name="contenido" value=".organigrama.tipua.contenido"/>
+    </definition>
+
+    <definition name=".organigrama.tipua.contenido" path="/layout/blocLayout.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaTipuaController">
+        <putList name="list">
+            <add type="page" value="/organigrama/tipua/lista.jsp" />
+            <add type="page" value="/organigrama/tipua/formulario.jsp" />
+        </putList>
+    </definition>
+
+    <definition name=".organigrama.tipua.form" extends=".main">
+        <put name="contenido" value="/organigrama/tipua/formulario.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.tipua.baja" extends=".main">
+        <put name="contenido" value="/organigrama/tipua/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - EDIFICIO -->
+    <definition name=".organigrama.edificio.form" extends=".main">
+        <put name="contenido" value="/organigrama/edificio/formulario.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.edificio.lista" extends=".main">
+        <put name="contenido" value="/organigrama/edificio/lista.jsp"/>
+    </definition>
+
+    <definition name=".organigrama.edificio.baja" extends=".main">
+        <put name="contenido" value="/organigrama/edificio/baja.jsp"/>
+    </definition>
+    
+    <definition name=".organigrama.edificio.popCoordenadas" path="/organigrama/edificio/popCoordenadas.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaCoordenadasController">
+    </definition>    
+
+    <!-- SISTEMA - SECCION -->
+    <definition name=".sistema.seccion.form" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaPerfilController">
+        <put name="contenido" value="/sistema/seccion/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.seccion.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaSeccionController">
+        <put name="contenido" value="/sistema/seccion/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.seccion.baja" extends=".main">
+        <put name="contenido" value="/sistema/seccion/baja.jsp"/>
+    </definition>
+
+    <definition name=".sistema.matfamper" extends=".main">
+        <put name="contenido" value="/sistema/matfamper.jsp"/>
+    </definition>
+    
+    <definition name=".sistema.hevagrpub" extends=".main">
+        <put name="contenido" value="/sistema/hevagrpub.jsp"/>
+    </definition>
+    
+    <!-- SISTEMA - Espacio -->
+    <definition name=".sistema.espacio.form" extends=".main"
+    	controllerClass="org.ibit.rol.sac.back.controller.EspacioController">
+        <put name="contenido" value="/sistema/espacio/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.espacio.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaEspacioController">
+        <put name="contenido" value="/sistema/espacio/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.espacio.baja" extends=".main">
+        <put name="contenido" value="/sistema/espacio/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - MATERIA -->
+    <definition name=".sistema.materia.lista" path="/sistema/materia/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
+    </definition>
+
+    <definition name=".sistema.materia.form" extends=".main">
+        <put name="contenido" value="/sistema/materia/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.materia.baja" extends=".main">
+        <put name="contenido" value="/sistema/materia/baja.jsp"/>
+    </definition>
+
+    <definition name=".sistema.materia.icono" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaPerfilController" >
+        <put name="contenido" value="/sistema/materia/icono.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - FAMILIA -->
+    <definition name=".sistema.familia.lista" path="/sistema/familia/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaFamiliaController">
+    </definition>
+
+    <definition name=".sistema.familia.form" extends=".main">
+        <put name="contenido" value="/sistema/familia/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.familia.baja" extends=".main">
+        <put name="contenido" value="/sistema/familia/baja.jsp"/>
+    </definition>
+
+    <definition name=".sistema.familia.icono" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaPerfilController" >
+        <put name="contenido" value="/sistema/familia/icono.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - PERFIL -->
+    <definition name=".sistema.perfil.lista" path="/sistema/perfil/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaPerfilController">
+    </definition>
+
+    <definition name=".sistema.perfil.form" extends=".main">
+        <put name="contenido" value="/sistema/perfil/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.perfil.baja" extends=".main">
+        <put name="contenido" value="/sistema/perfil/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - USUARIO -->
+    <definition name=".sistema.usuario.form" extends=".main">
+        <put name="contenido" value="/sistema/usuario/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.usuario.lista" extends=".main">
+        <put name="contenido" value="/sistema/usuario/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.usuario.baja" extends=".main">
+        <put name="contenido" value="/sistema/usuario/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - TIPO NORMATIVA -->
+    <definition name=".sistema.tipo.form" extends=".main">
+        <put name="contenido" value="/sistema/tipo/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tipo.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaTipoNormativaController">
+        <put name="contenido" value="/sistema/tipo/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tipo.baja" extends=".main">
+        <put name="contenido" value="/sistema/tipo/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - TIPO AFECTACION -->
+    <definition name=".sistema.tafectacion.form" extends=".main">
+        <put name="contenido" value="/sistema/tafectacion/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tafectacion.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaTipoAfectacionController">
+        <put name="contenido" value="/sistema/tafectacion/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tafectacion.baja" extends=".main">
+        <put name="contenido" value="/sistema/tafectacion/baja.jsp"/>
+    </definition>
+ <!-- SISTEMA - TIPO INICIACION -->
+    <definition name=".sistema.tiniciacion.form" extends=".main">
+        <put name="contenido" value="/sistema/tiniciacion/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tiniciacion.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaTipoIniciacionController">
+        <put name="contenido" value="/sistema/tiniciacion/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.tiniciacion.baja" extends=".main">
+        <put name="contenido" value="/sistema/tiniciacion/baja.jsp"/>
+    </definition>
+    <!-- SISTEMA - TIPO BOLETIN -->
+    <definition name=".sistema.boletin.form" extends=".main">
+        <put name="contenido" value="/sistema/boletin/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.boletin.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaBoletinController">
+        <put name="contenido" value="/sistema/boletin/lista.jsp"/>
+    </definition>
+
+    <definition name=".sistema.boletin.baja" extends=".main">
+        <put name="contenido" value="/sistema/boletin/baja.jsp"/>
+    </definition>
+
+    <!-- SISTEMA - HECHO VITAL -->
+    <definition name=".sistema.hechovital.form" extends=".main">
+        <put name="contenido" value="/sistema/hechovital/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.hechovital.lista" path="/sistema/hechovital/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaHechoVitalController">
+    </definition>
+
+    <definition name=".sistema.hechovital.baja" extends=".main">
+        <put name="contenido" value="/sistema/hechovital/baja.jsp"/>
+    </definition>
+
+    <definition name=".sistema.hechovital.popproc" path="/sistema/hechovital/popproc.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaProcedimientoController">
+    </definition>
+    
+    <!-- SISTEMA - AGRUPACION HECHO VITAL -->
+    <definition name=".sistema.agrupacion.form" extends=".main"
+    	controllerClass="org.ibit.rol.sac.back.controller.AgrupacionHVController">
+        <put name="contenido" value="/sistema/agrupacionhv/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.agrupacion.lista" path="/sistema/agrupacionhv/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaAgrupacionHVController">
+    </definition>
+
+    <definition name=".sistema.agrupacion.pophecho" path="/sistema/agrupacionhv/pophecho.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaHechoVitalController">
+    </definition>
+    
+    <!-- SISTEMA - AGRUPACION MATERIAS -->
+    <definition name=".sistema.agrupacionm.form" extends=".main"
+    	controllerClass="org.ibit.rol.sac.back.controller.AgrupacionMController">
+        <put name="contenido" value="/sistema/agrupacionm/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.agrupacionm.lista" path="/sistema/agrupacionm/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaAgrupacionMController">
+    </definition>
+
+    <definition name=".sistema.agrupacionm.popmate" path="/sistema/agrupacionm/popmate.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
+    </definition>    
+    
+    <!-- SISTEMA - P�blico Objetivo -->
+    <definition name=".sistema.publico.form" extends=".main">
+        <put name="contenido" value="/sistema/publico/formulario.jsp"/>
+    </definition>
+
+    <definition name=".sistema.publico.lista" path="/sistema/publico/lista.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaPublicoController">
+    </definition>
+    
+    <!-- SISTEMA - .sistema.administracionRemota.lista -->
+    <definition name=".sistema.administracionRemota.form" extends=".main"
+    	controllerClass="org.ibit.rol.sac.back.controller.AdminRemotaController">
+        <put name="contenido" value="/sistema/administracionRemota/formulario.jsp"/>
+    </definition>
+    
+    <definition name=".sistema.administracionRemota.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaAdministracionRemotaController">
+        <put name="contenido" value="/sistema/administracionRemota/lista.jsp"/>
+    </definition>
+    
+    <!-- SISTEMA - .sistema.destinatario.lista -->
+    <definition name=".sistema.destinatario.form" extends=".main">
+        <put name="contenido" value="/sistema/destinatario/formulario.jsp"/>
+    </definition>
+    
+    <definition name=".sistema.destinatario.lista" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaDestinatarioController">
+        <put name="contenido" value="/sistema/destinatario/lista.jsp"/>
+    </definition>
+    
+    <!-- CONTENIDO - NORMATIVA -->
+    <definition name=".contenido.normativa.local" extends=".main">
+        <put name="contenido" value="/contenido/normativa/local.jsp"/>
+    </definition>
+
+    <definition name=".contenido.normativa.externa" extends=".main">
+        <put name="contenido" value="/contenido/normativa/externa.jsp"/>
+    </definition>
+
+    <definition name=".contenido.normativa.lista" extends=".main">
+        <put name="contenido" value="/contenido/normativa/lista.jsp"/>
+    </definition>
+
+    <definition name=".contenido.normativa.baja" extends=".main">
+        <put name="contenido" value="/contenido/normativa/baja.jsp"/>
+    </definition>
+
+    <definition name=".contenido.normativa.popup" path="/contenido/normativa/popup.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.NormativaController">
+    </definition>
+
+    <definition name=".contenido.normativa.popafectacion" path="/contenido/normativa/popafectacion.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.AfectacionController">
+    </definition>
+
+    <definition name=".contenido.normativa.popupcodigo" path="/contenido/normativa/popupcodigo.jsp" />
+
+    <definition name=".contenido.normativa.traspasa" extends=".main">
+    	<put name="contenido" value="/iframe.jsp" />
+    </definition>
+
+	<definition name=".contenido.normativa.searchError" extends=".main">
+    	<put name="contenido" value="../traspasboib/localerror.jsp" />
+    </definition>
+
+	<definition name=".contenido.normativa.searchOne" extends=".main">
+    	<put name="contenido" value="../traspasboib/local.jsp" />
+    </definition>
+
+	<definition name=".contenido.normativa.searchVarios" extends=".main">
+    	<put name="contenido" value="../traspasboib/locallistanormativa.jsp" />
+    </definition>
+
+	<definition name=".contenido.normativa.traspasaEditarOk" extends=".main">
+    	<put name="contenido" value="../traspasboib/resultado.jsp" />
+    </definition>
+
+	<definition name=".contenido.normativa.traspasaEditarError" extends=".main">
+    	<put name="contenido" value="../traspasboib/localerror.jsp" />
+    </definition>
+
+	<definition name=".contenido.procedimiento.baja" extends=".main">
+        <put name="contenido" value="/contenido/procedimiento/baja.jsp"/>
+    </definition>
+
+
+    <!-- CONTENIDO - FICHA -->
+    <definition name=".contenido.ficha.form" extends=".main" controllerClass="org.ibit.rol.sac.back.controller.FichaFormController">
+        <put name="contenido" value="/contenido/ficha/formulario.jsp"/>
+    </definition>
+
+    <definition name=".contenido.ficha.form.Accion" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
+    </definition>    
+
+    <definition name=".contenido.ficha.lista" extends=".main">
+        <put name="contenido" value="/contenido/ficha/lista.jsp"/>
+    </definition>
+
+    <definition name=".contenido.ficha.baja" extends=".main">
+        <put name="contenido" value="/contenido/ficha/baja.jsp"/>
+    </definition>
+
+    <definition name=".contenido.ficha.popmateria" path="/contenido/ficha/popmateria.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
+    </definition>
+    
+    <definition name=".contenido.ficha.pophechovital" path="/contenido/ficha/pophechovital.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ListaHechoVitalController">
+    </definition>
+
+    <definition name=".contenido.ficha.popFichaUA" path="/contenido/ficha/popFichaUA.jsp" />
+
+    <definition name=".contenido.ficha.popupcodigo" path="/contenido/ficha/popupcodigo.jsp" />
+
+    <!-- CONTENIDO - PROCEDIMIENTO -->
+    <definition name=".contenido.procedimiento.form" extends=".main" controllerClass="org.ibit.rol.sac.back.controller.ProcedimientoFormController">
+        <put name="contenido" value="/contenido/procedimiento/formulario.jsp"/>
+    </definition>
+
+    <definition name=".contenido.procedimiento.lista" extends=".main">
+        <put name="contenido" value="/contenido/procedimiento/lista.jsp"/>
+    </definition>
+
+    <definition name=".contenido.procedimiento.baja" extends=".main">
+        <put name="contenido" value="/contenido/procedimiento/baja.jsp"/>
+    </definition>
+
+    <definition name=".contenido.procedimiento.popup" path="/contenido/procedimiento/popup.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.ProcedimientoController">
+    </definition>
+
+    <definition name=".contenido.procedimiento.popupnormativas" path="/contenido/procedimiento/popupnormativas.jsp" />
+
+    <definition name=".contenido.procedimiento.popupcodigo" path="/contenido/procedimiento/popupcodigo.jsp" />
+
+    <!-- CONTENIDO - PROCEDIMIENTO -->
+    <definition name=".index.ua" extends=".main">
+        <put name="contenido" value="/index/indexconfirmua.jsp"/>
+    </definition>
+    
+    <definition name=".index.ficha" extends=".main">
+        <put name="contenido" value="/index/indexconfirmficha.jsp"/>
+    </definition>
+
+    <definition name=".index.normativa" extends=".main">
+        <put name="contenido" value="/index/indexconfirmnorm.jsp"/>
+    </definition>
+
+    <definition name=".index.procedimiento" extends=".main">
+        <put name="contenido" value="/index/indexconfirmproc.jsp"/>
+    </definition>
+
+     <definition name=".index.finaliza" extends=".main">
+        <put name="contenido" value="/index/finalizado.jsp"/>
+    </definition>
+
+    <!-- ESTADISTICAS -->
+    
+    <definition name=".estadisticas.lista" extends=".main" controllerClass="org.ibit.rol.sac.back.controller.ArbolUAController" >
+        <put name="contenido" value="/estadisticas/lista.jsp" />
+    </definition>
+
+    <definition name=".estadisticas.visualizar" extends=".main">
+        <put name="contenido" value="/estadisticas/visualizar.jsp" />
+    </definition>
+
+    <definition name=".estadisticas.materias" extends=".main">
+        <put name="contenido" value="/estadisticas/listamats.jsp" />
+    </definition>
+
+    <definition name=".estadisticasmateria.visualizar" extends=".main">
+        <put name="contenido" value="/estadisticas/visualizarMateria.jsp" />
+    </definition>
+
+    <!-- CONTENIDO - COMENTARIOS -->
+    <definition name=".include.comentarios" path="/contenido/comentario/lista.jsp"
+                controllerClass="org.ibit.rol.sac.back.controller.ListaComentariosController">
+        <put name="idRel" value="0"/><!-- id de ficha o procedimiento relacionado -->
+        <put name="tipo" value="procedimiento"/> <!-- "ficha" o "procedimiento" -->
+    </definition>
+
+    <definition name=".popup.comentarios" path="/contenido/comentario/show.jsp" />
+
+    <!-- CONTENIDO - DOCUMENTO -->
+    <definition name=".contenido.documento.form" extends=".main">
+        <put name="contenido" value="/contenido/documento/formulario.jsp"/>
+    </definition>
+
+    <!-- CONTENIDO - ENLACE -->
+    <definition name=".contenido.enlace.form" extends=".main">
+        <put name="contenido" value="/contenido/enlace/formulario.jsp"/>
+    </definition>
+   
+    <!-- CONTENIDO - TRAMITE -->
+    <definition name=".contenido.tramite.form" extends=".main">
+        <put name="contenido" value="/contenido/tramite/formulario.jsp"/>
+    </definition>
+
+	<definition name=".contenido.tramite.vuds.popupCodisVuds" path="/contenido/tramite/vuds/popupCodisVuds.jsp" />
+
+	<definition name=".contenido.tramite.vuds.popupNormativasVuds" path="/contenido/tramite/vuds/popupNormativasVuds.jsp" />
+
+
+	<definition name=".contenido.tramite.vuds.popupVisorVuds" path="/contenido/tramite/vuds/popupVisorVuds.jsp" />
+
+
+    <!-- CONTENIDO - FORMULARIO -->
+    <definition name=".contenido.formulario.form" extends=".main">
+        <put name="contenido" value="/contenido/formulario/formulario.jsp"/>
+    </definition>
+
+    <!-- CONTENIDO - TAXA -->
+    <definition name=".contenido.taxa.form" extends=".main">
+        <put name="contenido" value="/contenido/taxa/formulario.jsp"/>
+    </definition>
+
+
+    <!-- CONTENIDO - AUDITORIAS -->
+
+    <definition name=".auditoria.busqueda" extends=".main">
+        <put name="contenido" value="/auditoria/fechas.jsp" />
+    </definition>
+
+    <definition name=".auditoria.navges.arbol" extends=".main"
+        controllerClass="org.ibit.rol.sac.back.controller.ArbolUAController">
+        <put name="contenido" value="/auditoria/arbol.jsp" />
+    </definition>
+
+    <definition name=".auditoria.lista" extends=".main">
+        <put name="contenido" value="/auditoria/lista.jsp"/>
+    </definition>
+
+    <definition name=".auditoria.visualizar" extends=".main">
+        <put name="contenido" value="/auditoria/auditorias.jsp"/>
+    </definition>
+
+    <definition name=".auditoria.detalle" extends=".main">
+        <put name="contenido" value="/auditoria/detalleAuditorias.jsp"/>
+    </definition>
+
+</tiles-definitions>

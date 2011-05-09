@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.GrupoSuscripcion" table="RSC_SCRGRP">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="SGR_COD">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQSGR</param>
+            </generator>
+        </id>
+        
+        <property name="identificador" column="SGR_IDENT"/>
+                
+        <set name="suscriptores" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="SCR_SGRCOD" foreign-key="RSC_SGRSCR_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.Suscriptor"/>
+        </set>
+
+        <many-to-one name="tipoSuscripcion" not-null="true" column="SGR_STPCOD" foreign-key="RSC_STPSGR_FK"/>                
+        
+        
+        <map name="traducciones" cascade="all" table="RSC_SCRGID">
+            <cache usage="read-write"/>
+            <key column="SGI_SGRCOD" foreign-key="RSC_SGRSGI_FK"/>
+            <index column="SGI_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionGrupoSuscripcion">
+                <property name="nombre" length="100" column="SGI_NOM"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

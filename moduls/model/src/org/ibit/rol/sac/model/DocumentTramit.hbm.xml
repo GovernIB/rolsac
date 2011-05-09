@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.DocumentTramit" table="RSC_DOCTRA">
+        <cache usage="read-write"/>
+        
+        <id name="id" unsaved-value="null" column="DOC_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <many-to-one name="tramit" column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
+        <many-to-one name="archivo" cascade="all" column="DOC_CODARC" foreign-key="RSC_DOCARC_FK"/>
+        <property name="orden" column="ORDEN" />
+        <property name="tipus" column="TIPUS" />
+
+        <map name="traducciones" cascade="all" table="RSC_TRADOCTRA">
+            <cache usage="read-write"/>
+            <key column="TDO_CODTRA" foreign-key="RSC_TDODOCTRA_FK"/>
+            <index column="TDO_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionDocumento">
+                <property name="titulo" length="256" column="TDO_TITULO"/>
+                <property name="descripcion" length="4000" column="TDO_DESCRI"/>
+                <many-to-one name="archivo" column="TDO_CODARC" cascade="all" foreign-key="RSC_TDOARC_FK"/>                
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

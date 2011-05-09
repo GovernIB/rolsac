@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Taxa" table="RSC_TAXA">
+    
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="TAX_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        
+        <many-to-one name="tramit" column="TAX_CODTRA" foreign-key="RSC_TAXTRA_FK"/>
+        
+        <map name="traducciones" cascade="all" table="RSC_TRATAX">
+            <cache usage="read-write"/>
+            <key column="TTAX_CODI" foreign-key="RSC_TRATAX_FK"/>
+            <index column="COD_IDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionTaxa">
+                <property name="codificacio"   length="256"  column="TAX_ID"/>
+                <property name="descripcio"    length="4000" column="DESCRI"/>
+                <property name="formaPagament" length="4000" column="FORMPAG"/>
+            </composite-element>
+        </map>
+
+    </class>
+</hibernate-mapping>

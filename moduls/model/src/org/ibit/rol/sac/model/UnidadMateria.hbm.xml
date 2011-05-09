@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.UnidadMateria" table="RSC_UNAMAT">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column= "UNM_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+		<property name="unidadPrincipal" length="1" column="UNM_UNAPRN"/>
+		
+        <many-to-one name="materia" column="UNM_CODMAT" foreign-key="RSC_UNMMAT_FK"/>
+        <many-to-one name="unidad" column="UNM_CODUNA" foreign-key="RSC_UNMUNA_FK"/>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAUNM">
+            <cache usage="read-write"/>
+            <key column="TRN_CODUNM" foreign-key="RSC_TRNUNM_FK"/>
+            <index column="TRN_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionUnidadMateria">
+                <property name="urlUnidadMateria" length="256" column="TRN_URLUM"/>                
+            </composite-element>
+        </map>
+
+    </class>
+</hibernate-mapping>

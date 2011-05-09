@@ -1,0 +1,35 @@
+<action path="/editar" name="normativaTraspasaForm"  type="es.caib.traspasa.actions.EditarAction" unknown="false">
+  <forward name="success" path="/resultado.jsp"/>
+  <forward name="forwerror" path="/localerror.jsp"/>
+</action>
+<action name="SearchnormativaActionForm" path="/searchnormativa" type="es.caib.traspasa.actions.SearchnormativaAction">
+  <forward name="successOne" path="/local.jsp"/>
+  <forward name="successError" path="/localerror.jsp"/>
+  <forward name="successVarios" path="/locallistanormativa.jsp"/>
+</action>
+
+<action
+    path="/traspasa"
+    type="org.apache.struts.actions.ForwardAction"
+    parameter=".contenido.normativa.traspasa"/>
+
+
+<action
+      path="/contenido/tramite/vuds/buscarNormativas"
+      type="org.ibit.rol.sac.back.action.contenido.tramite.vuds.BuscarNormativasAction"
+      name="BusquedaNormativasVudsForm"
+      scope="request"
+      unknown="false"
+      validate="false"
+    >
+      <forward
+        name="success"
+        path="/popupNormativasVuds.jsp"
+        redirect="false"
+      />
+      <forward
+        name="fail"
+        path="/popupNormativasVuds.jsp"
+        redirect="false"
+      />
+</action>
