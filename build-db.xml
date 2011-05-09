@@ -43,7 +43,8 @@
 	
 	<target name="schemaupdate">
 			<replace dir="${model.hbm}">
-			     <replacefilter token="@db.texttype@" value="${db.texttype}"/>
+			     <replacefilter token="@db.texttype.descri@" value="${db.texttype.descri}"/>
+			     <replacefilter token="@db.texttype.desabr@" value="${db.texttype.desabr}"/>
 			</replace>
 
 			<taskdef name="schemaupdate"
