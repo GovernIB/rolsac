@@ -1,0 +1,1195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
+                               "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+ <data-sources/>
+ <!-- ========== Data Sources Definitions =================================== 
+
+    Define your Struts data sources in a file called struts-data-sources.xml and place
+    it in your merge directory.
+  
+ ========== Form Bean Definitions =================================== -->
+ <form-beans>
+  <form-bean className="org.ibit.rol.sac.back.config.TraFormBeanConfig"
+   name="procedimientoForm" type="org.ibit.rol.sac.back.form.ProcedimientoForm">
+   <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionProcedimientoLocal"/>
+   <form-property name="id" type="java.lang.Long"/>
+   <form-property name="signatura" type="java.lang.String"/>
+   <form-property name="validacion" type="java.lang.Integer"/>
+   <form-property name="textoFechaCaducidad" type="java.lang.String"/>
+   <form-property name="textoFechaPublicacion" type="java.lang.String"/>
+   <form-property name="textoFechaActualizacion" type="java.lang.String"/>
+   <form-property name="idUA" type="java.lang.Long"/>
+   <form-property name="nombreUA" type="java.lang.String"/>
+   <form-property name="idFamilia" type="java.lang.Long"/>
+   <form-property name="indicador" type="java.lang.String"/>
+   <form-property name="ventana" type="java.lang.String"/>
+   <form-property name="idIniciacion" type="java.lang.Long"/>
+   <form-property name="info" type="java.lang.String"/>
+   <form-property name="nombreFamilia" type="java.lang.String"/>
+   <form-property name="nombreIniciacion" type="java.lang.String"/>
+   <form-property name="tramite" type="java.lang.String"/>
+   <form-property name="version" type="java.lang.Long"/>
+   <form-property name="url" type="java.lang.String"/>
+   <form-property name="traducciones" type="java.util.ArrayList"/>
+   <form-property name="idUAResol" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUAResol" 	type="java.lang.String" initial=""/>
+    <form-property name="resultat" type="java.lang.String" initial=""/>
+    <form-property name="taxa" type="java.lang.String"/>
+  </form-bean>
+  <form-bean className="org.ibit.rol.sac.back.config.TraFormBeanConfig"
+   name="documentoForm" type="org.ibit.rol.sac.back.form.DocumentoForm">
+   <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionDocumento"/>
+   <form-property name="id" type="java.lang.Long"/>
+   <form-property name="nombreFichero" type="java.lang.String"/>
+   <form-property name="fichero" type="org.apache.struts.upload.FormFile"/>
+   <form-property name="traducciones" type="java.util.ArrayList"/>
+   <form-property name="fichers" type="org.apache.struts.upload.FormFile[]"/>
+  </form-bean>
+  <form-bean className="org.ibit.rol.sac.back.config.TraFormBeanConfig"
+   name="enlaceForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm">
+   <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionEnlace"/>
+   <form-property name="id" type="java.lang.Long"/>
+   <form-property name="titulo" type="java.lang.String"/>
+   <form-property name="enlace" type="java.lang.String"/>
+   <form-property name="traducciones" type="java.util.ArrayList"/>
+  </form-bean>
+  
+  <form-bean name="tramiteForm"
+    type="org.ibit.rol.sac.back.form.TramiteForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTramite"/>
+    <form-property name="codiVuds" type="java.lang.String" initial=""/>
+    <form-property name="descCodiVuds" type="java.lang.String" initial=""/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="fase" type="java.lang.Integer" initial=""/>
+    <form-property name="validacio" type="java.lang.Integer" initial=""/>
+    <form-property name="textoFechaCaducidad" type="java.lang.String" initial=""/>
+    <form-property name="textoFechaPublicacion" type="java.lang.String" initial=""/>
+    <form-property name="textoFechaActualizacion" type="java.lang.String" initial=""/>
+    <form-property name="idOrganCompetent" type="java.lang.Long" initial=""/>
+    <form-property name="nomOrganCompetent" type="java.lang.String" initial=""/>
+    <form-property name="descTaxa" type="java.lang.String" initial=""/>
+    <form-property name="codiTaxa" type="java.lang.String" initial=""/>
+    <form-property name="formaPagamentTaxa" type="java.lang.String" initial=""/>
+    <form-property name="idTraTel" type="java.lang.String" initial=""/>
+    <form-property name="versio" type="java.lang.Long" initial=""/>
+    <form-property name="urlExterna" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="taxaForm"
+    type="org.ibit.rol.sac.back.form.TaxaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTaxa"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+
+  <form-bean name="formularioForm" type="org.apache.struts.validator.DynaValidatorForm">
+   <form-property name="id" type="java.lang.Long"/>
+   <form-property name="nombre" type="java.lang.String"/>
+   <form-property name="url" type="java.lang.String"/>
+   <form-property name="urlManual" type="java.lang.String"/>
+   <form-property name="nombreFichero" type="java.lang.String"/>
+   <form-property name="fichero" type="org.apache.struts.upload.FormFile"/>
+   <form-property name="nombreManual" type="java.lang.String"/>
+   <form-property name="ficheroManual" type="org.apache.struts.upload.FormFile"/>
+  </form-bean>
+  <!-- FORM BEANS PARA WEB SERVICES -->
+  <form-bean name="especificacionForm" type="org.apache.struts.validator.DynaValidatorForm">
+   <form-property name="clave" type="java.lang.String"/>
+   <form-property name="nombre" type="java.lang.String"/>
+   <form-property name="descripcion" type="java.lang.String"/>
+   <form-property name="descripcionDocumento" type="java.lang.String"/>
+   <form-property name="urlDocumento" type="java.lang.String"/>
+  </form-bean>
+  <form-bean name="servicioForm" type="org.apache.struts.validator.DynaValidatorForm">
+   <form-property name="clave" type="java.lang.String"/>
+   <form-property name="nombre" type="java.lang.String"/>
+   <form-property name="descripcion" type="java.lang.String"/>
+   <form-property name="puntoAcceso" type="java.lang.String"/>
+   <form-property name="claveEspecificacion" type="java.lang.String"/>
+   <form-property name="claveOrganismo" type="java.lang.String"/>
+  </form-bean>
+  <form-bean name="organismoForm" type="org.apache.struts.validator.DynaValidatorForm">
+   <form-property name="clave" type="java.lang.String"/>
+   <form-property name="idUnidad" type="java.lang.Long"/>
+   <form-property name="nombre" type="java.lang.String"/>
+   <form-property name="descripcion" type="java.lang.String"/>
+   <form-property name="nivel" type="java.lang.Integer"/>
+   <form-property name="responsable" type="java.lang.String"/>
+   <form-property name="telefono" type="java.lang.String"/>
+   <form-property name="email" type="java.lang.String"/>
+  </form-bean>
+  <!--  FORM BEANS DEL TRASPASO DEL BOIB A NORMATIVA -->
+  <form-bean name="EditarActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.EditarActionForm"/>
+  <form-bean name="PoplistanormativaActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.PoplistanormativaActionForm"/>
+  <form-bean name="SearchnormativaActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.SearchnormativaActionForm"/>
+ </form-beans>
+ <!-- ========== Global Exceptions Definitions =================================== -->
+ <global-exceptions>
+  <exception
+   handler="org.ibit.rol.sac.back.action.DelegateExceptionHandler"
+   key="errors.delegate" path="/moduls/fail.jsp" type="org.ibit.rol.sac.persistence.delegate.DelegateException"/>
+  <exception
+   handler="org.ibit.rol.sac.back.subscripcions.action.ExcepcionGlobalHandler"
+   key="errors.excepcion" path="/sacback/subscripcions/error.jsp" type="java.lang.Exception"/>
+ </global-exceptions>
+ <!-- ========== Global Forward Definitions =================================== -->
+ <global-forwards>
+  <forward name="main" path="/main.do"/>
+  <forward name="pleaseWait" path=".espera"/>
+  <forward name="info" path="/subscripcions/info.jsp"/>
+ </global-forwards>
+ <!-- ========== Action Mapping Definitions =================================== -->
+ <action-mappings>
+  <action path="/unidad/foto/logoh"
+   type="org.ibit.rol.sac.back.action.archivo.UnidadLogoHorizontalAction" validate="false"/>
+  <action input=".organigrama.edificio.form" name="edificioForm"
+   parameter="action" path="/organigrama/edificio/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.edificio.EditarEdificioAction" validate="true">
+   <forward name="success" path=".organigrama.edificio.form" redirect="false"/>
+   <forward name="cancel" path=".organigrama.edificio.form" redirect="false"/>
+   <forward name="lista" path=".organigrama.edificio.lista" redirect="false"/>
+  </action>
+  <action name="edificioForm" parameter="action"
+   path="/organigrama/edificio/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.edificio.EditarEdificioAction" validate="false">
+   <forward name="success" path=".organigrama.edificio.form" redirect="false"/>
+   <forward name="cancel" path=".organigrama.edificio.form" redirect="false"/>
+   <forward name="lista" path=".organigrama.edificio.lista" redirect="false"/>
+  </action>
+  <action name="organismoForm" path="/ws/organismo/borrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.BorrarOrganismoAction" validate="false">
+   <forward name="success" path=".ws.organismo.lista" redirect="false"/>
+  </action>
+  <action path="/materia/contenido"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaContenidoAction" validate="false"/>
+  <action path="/icono/familia"
+   type="org.ibit.rol.sac.back.action.archivo.IconoFamiliaAction" validate="false"/>
+  <action parameter="action" path="/estadisticas/materias"
+   type="org.ibit.rol.sac.back.action.estadisticas.EditarEstadisticasMateriaAction" validate="false">
+   <forward name="success" path=".estadisticas.materias" redirect="false"/>
+  </action>
+  <action path="/icono/materia"
+   type="org.ibit.rol.sac.back.action.archivo.IconoMateriaAction" validate="false"/>
+  <action name="servicioForm" path="/ws/servicio/borrar" scope="request"
+   type="org.ibit.rol.sac.back.action.ws.BorrarServicioAction" validate="false">
+   <forward name="success" path=".ws.servicio.lista" redirect="false"/>
+  </action>
+  <action path="/hechovital/foto"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalFotoAction" validate="false"/>
+  <action path="/index/ua/reiniciar"
+   type="org.ibit.rol.sac.back.action.index.ReindexarIndexUAAction" validate="false">
+   <forward name="success" path=".index.finaliza" redirect="false"/>
+  </action>
+  <action path="/ficha/baner"
+   type="org.ibit.rol.sac.back.action.archivo.FichaBanerAction" validate="false"/>
+  <action path="/normativa/archivo"
+   type="org.ibit.rol.sac.back.action.archivo.NormativaArchivoAction" validate="false"/>
+  <action input=".ws.organismo.editar" name="organismoForm"
+   path="/ws/organismo/guardar" scope="request"
+   type="org.ibit.rol.sac.back.action.ws.GuardarOrganismoAction" validate="true">
+   <forward name="success" path=".ws.organismo.lista" redirect="false"/>
+   <forward name="cancel" path=".ws.organismo.lista" redirect="false"/>
+  </action>
+  <action input=".sistema.hechovital.form" name="hechoVitalForm"
+   parameter="action" path="/sistema/hechovital/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.hechovital.EditarHechoVitalAction" validate="true">
+   <forward name="success" path=".sistema.hechovital.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.hevagrpub" redirect="false"/>
+  </action>
+  <action name="hechoVitalForm" parameter="action"
+   path="/sistema/hechovital/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.hechovital.EditarHechoVitalAction" validate="false">
+   <forward name="success" path=".sistema.hechovital.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.hevagrpub" redirect="false"/>
+  </action>
+  <action input=".organigrama.tipua.form" name="tipuaForm"
+   parameter="action" path="/organigrama/tipua/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.tipua.EditarTipuaAction" validate="true">
+   <forward name="success" path=".organigrama.tipua.form" redirect="false"/>
+   <forward name="cancel" path="/organigrama/tipua.do" redirect="false"/>
+   <forward name="lista" path=".organigrama.tipua.lista" redirect="false"/>
+  </action>
+  <action name="servicioForm" path="/ws/servicio/mostrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.MostrarServicioAction" validate="false">
+   <forward name="success" path=".ws.servicio.editar" redirect="false"/>
+  </action>
+  <action input=".contenido.normativa.local" name="normativaForm"
+   parameter="action" path="/contenido/normativa/local/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.normativa.EditarLocalAction" validate="true">
+   <forward name="success" path=".contenido.normativa.local" redirect="false"/>
+   <forward name="cancel" path="/contenido/normativa/local.do" redirect="false"/>
+   <forward name="lista" path=".contenido.normativa.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.normativa.baja" redirect="false"/>
+  </action>
+  <action name="normativaForm" parameter="action"
+   path="/contenido/normativa/local/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.normativa.EditarLocalAction" validate="false">
+   <forward name="success" path=".contenido.normativa.local" redirect="false"/>
+   <forward name="cancel" path="/contenido/normativa/local.do" redirect="false"/>
+   <forward name="lista" path=".contenido.normativa.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.normativa.baja" redirect="false"/>
+  </action>
+  <action name="auditoriaForm" parameter="action"
+   path="/auditoria/buscar" scope="request"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriasAction" validate="false">
+   <forward name="lista" path=".auditoria.lista" redirect="false"/>
+  </action>
+  <action name="auditoriaForm" parameter="action"
+   path="/auditoria/procedimiento" scope="request"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriasProcedimientoAction" validate="false">
+   <forward name="lista" path=".auditoria.detalle" redirect="false"/>
+  </action>
+  <action path="/formulario/archivo"
+   type="org.ibit.rol.sac.back.action.archivo.FormularioArchivoAction" validate="false"/>
+  <action path="/materia/icono"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaIconoAction" validate="false"/>
+  <action path="/index/normativa/reiniciar"
+   type="org.ibit.rol.sac.back.action.index.ReiniciarIndexNormativaAction" validate="false">
+   <forward name="success" path=".index.finaliza" redirect="false"/>
+  </action>
+  <action input=".sistema.boletin.form" name="boletinForm"
+   parameter="action" path="/sistema/boletin/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.boletin.EditarBoletinAction" validate="true">
+   <forward name="success" path=".sistema.boletin.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/boletin/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.boletin.lista" redirect="false"/>
+  </action>
+  <action name="boletinForm" parameter="action"
+   path="/sistema/boletin/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.boletin.EditarBoletinAction" validate="false">
+   <forward name="success" path=".sistema.boletin.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/boletin/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.boletin.lista" redirect="false"/>
+  </action>
+  <action name="auditoriaForm" parameter="action"
+   path="/auditoria/historico" scope="request"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriaHistoricoAction" validate="false">
+   <forward name="lista" path=".auditoria.detalle" redirect="false"/>
+  </action>
+  <action path="/agrupacion/icono"
+   type="org.ibit.rol.sac.back.action.archivo.AgrupacionIconoAction" validate="false"/>
+  <action path="/formulario/manual"
+   type="org.ibit.rol.sac.back.action.archivo.FormularioManualAction" validate="false"/>
+  <action path="/contenido/comentario/mostrar"
+   type="org.ibit.rol.sac.back.action.contenido.comentario.MostrarComentarioAction" validate="true">
+   <forward name="success" path=".popup.comentarios" redirect="false"/>
+  </action>
+  <action input=".sistema.tipo.form" name="tipoForm" parameter="action"
+   path="/sistema/tipo/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tipo.EditarTipoAction" validate="true">
+   <forward name="success" path=".sistema.tipo.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tipo/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tipo.lista" redirect="false"/>
+  </action>
+  <action name="tipoForm" parameter="action"
+   path="/sistema/tipo/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tipo.EditarTipoAction" validate="false">
+   <forward name="success" path=".sistema.tipo.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tipo/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tipo.lista" redirect="false"/>
+  </action>
+  <action path="/estadisticas/graficonorm"
+   type="org.ibit.rol.sac.back.action.estadisticas.GraficoNormativa" validate="false"/>
+  <!--  
+  type="org.springframework.web.struts.DelegatingActionProxy" validate="true">
+  type="org.ibit.rol.sac.back.action.contenido.tramite.EditarTramiteAction" validate="true">
+  -->
+  <action input=".contenido.tramite.form" name="tramiteForm"
+   parameter="action" path="/contenido/tramite/editar" scope="request"
+   type="org.springframework.web.struts.DelegatingActionProxy" validate="false">
+   <forward name="success" path="/contenido.tramite.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="tramiteForm" parameter="action"
+   path="/contenido/tramite/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.tramite.EditarTramiteAction" validate="false">
+   <forward name="success" path="/contenido.tramite.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+  </action>
+  
+  <action path="/contenido/tramite/vuds/buscarCodis"  
+   		name="buscarCodisVudsForm" parameter="action" scope="request" validate="false"
+		type="org.springframework.web.struts.DelegatingActionProxy">
+   		<forward name="success" path="/contenido.tramite.form" redirect="false"/>
+   		<forward name="cancel" path="/contenido/tramite/seleccionar.do" redirect="false"/>
+  </action>
+
+  <action path="/contenido/tramite/vuds/buscarNormativas"  
+   		name="buscarNormativasForm" parameter="action" scope="request" validate="false"
+ 		type="org.springframework.web.struts.DelegatingActionProxy">
+   		<forward name="success" path="/contenido.normativa.form" redirect="false"/>
+   		<forward name="cancel" path="/contenido/normativa/seleccionar.do" redirect="false"/>
+  </action>
+
+  
+   <action
+      path="/contenido/tramite/vuds/previsualitzar"
+      type="org.ibit.rol.sac.back.action.contenido.tramite.vuds.PrevisualitzarVudsAction"
+      name="previsualitzar"
+      scope="request"
+      unknown="false"
+      validate="false"
+    >
+      <forward
+        name="success"
+        path="/contenido/tramite/vuds/popupVisor"
+        redirect="false"
+      />
+  </action>
+  
+      <action
+      path="/contenido/taxa/editar"
+      type="org.ibit.rol.sac.back.action.contenido.taxa.EditarTaxaAction"
+      name="taxaForm"
+      scope="request"
+      input=".contenido.taxa.form"
+      parameter="action"
+      unknown="false"
+      validate="true"
+    >
+      <forward
+        name="success"
+        path="/contenido.taxa.form"
+        redirect="false"
+      />
+      <forward
+        name="tramite"
+        path="/contenido/tramite/seleccionar.do"
+        redirect="false"
+      />
+    </action>
+    <action
+      path="/contenido/taxa/seleccionar"
+      type="org.ibit.rol.sac.back.action.contenido.taxa.EditarTaxaAction"
+      name="taxaForm"
+      scope="request"
+      parameter="action"
+      unknown="false"
+      validate="false"
+    >
+      <forward
+        name="success"
+        path="/contenido.taxa.form"
+        redirect="false"
+      />
+      <forward
+        name="tramite"
+        path="/contenido/tramite/seleccionar.do"
+        redirect="false"
+      />
+    </action>
+  
+  
+  <action path="/materia/normativa"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaNormativaAction" validate="false"/>
+  <action input=".sistema.agrupacionm.form" name="agrupacionMForm"
+   parameter="action" path="/sistema/agrupacionm/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.agrupacionm.EditarAgrupacionMAction" validate="true">
+   <forward name="success" path=".sistema.agrupacionm.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.agrupacionm.lista" redirect="false"/>
+  </action>
+  <action name="agrupacionMForm" parameter="action"
+   path="/sistema/agrupacionm/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.agrupacionm.EditarAgrupacionMAction" validate="false">
+   <forward name="success" path=".sistema.agrupacionm.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.agrupacionm.lista" redirect="false"/>
+  </action>
+  <action input="formulario.jsp" name="seccionForm" parameter="action"
+   path="/sistema/espacio/arbol" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.espacio.ArbolEspacioTerritorialAction" validate="false">
+   <forward name="success" path="/sistema/espacio/arbol.jsp" redirect="false"/>
+  </action>
+  <action path="/administracionRemota/logop"
+   type="org.ibit.rol.sac.back.action.archivo.AdministracionRemotaLogopAction" validate="false"/>
+  <action name="busquedaFichaForm" path="/ficha/busqueda"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.unidad.BusquedaFichaAction" validate="false">
+   <forward name="popup" path=".organigrama.unidad.popupfichas" redirect="false"/>
+  </action>
+  <action input=".sistema.destinatario.form" name="destinatarioForm"
+   parameter="action" path="/sistema/destinatario/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.destinatario.EditarDestinatarioAction" validate="true">
+   <forward name="success" path=".sistema.destinatario.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/destinatario/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.destinatario.lista" redirect="false"/>
+  </action>
+  <action name="destinatarioForm" parameter="action"
+   path="/sistema/destinatario/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.destinatario.EditarDestinatarioAction" validate="false">
+   <forward name="success" path=".sistema.destinatario.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/destinatario/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.destinatario.lista" redirect="false"/>
+  </action>
+  <action name="comentarioForm" path="/contenido/comentario/borrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.comentario.BorrarComentarioAction" validate="true">
+   <forward name="procedimiento"
+    path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+   <forward name="ficha" path="/contenido/ficha/seleccionar.do" redirect="false"/>
+  </action>
+  <action path="/espacio/logo"
+   type="org.ibit.rol.sac.back.action.archivo.EspacioTerritorialLogoAction" validate="false"/>
+  <action input=".sistema.espacio.form" name="espacioForm"
+   parameter="action" path="/sistema/espacio/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.espacio.EditarEspacioTerritorialAction" validate="true">
+   <forward name="success" path=".sistema.espacio.form" redirect="false"/>
+   <forward name="cancel" path=".sistema.espacio.lista" redirect="false"/>
+   <forward name="lista" path=".sistema.espacio.lista" redirect="false"/>
+  </action>
+  <action name="espacioForm" parameter="action"
+   path="/sistema/espacio/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.espacio.EditarEspacioTerritorialAction" validate="false">
+   <forward name="success" path=".sistema.espacio.form" redirect="false"/>
+   <forward name="cancel" path=".sistema.espacio.lista" redirect="false"/>
+   <forward name="lista" path=".sistema.espacio.lista" redirect="false"/>
+  </action>
+  <action path="/contenido/procedimiento/editar" 
+  		input=".contenido.procedimiento.form" name="procedimientoForm"
+   		parameter="action" 
+   		scope="request"
+   		type="org.ibit.rol.sac.back.action.contenido.procedimiento.EditarProcedimientoAction" validate="true">
+   <forward name="success" path="/contenido.procedimiento.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/procedimiento/form.do" redirect="false"/>
+   <forward name="lista" path="/contenido.procedimiento.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.procedimiento.baja" redirect="false"/>
+   <forward name="popup" path=".contenido.procedimiento.popupnormativas" redirect="false"/>
+  </action>
+  <action name="procedimientoForm" parameter="action"
+   path="/contenido/procedimiento/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.procedimiento.EditarProcedimientoAction" validate="false">
+   <forward name="success" path="/contenido.procedimiento.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/procedimiento/form.do" redirect="false"/>
+   <forward name="lista" path="/contenido.procedimiento.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.procedimiento.baja" redirect="false"/>
+   <forward name="popup" path=".contenido.procedimiento.popupnormativas" redirect="false"/>
+  </action>
+  <action input="formulario.jsp" name="seccionForm" parameter="action"
+   path="/sistema/seccion/arbol" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.seccion.ArbolSeccionAction" validate="false">
+   <forward name="success" path="/sistema/seccion/arbol.jsp" redirect="false"/>
+  </action>
+  <action name="especificacionForm" path="/ws/especificacion/borrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.BorrarEspecificacionAction" validate="false">
+   <forward name="success" path=".ws.especificacion.lista" redirect="false"/>
+  </action>
+  <action path="/agrupacion/foto"
+   type="org.ibit.rol.sac.back.action.archivo.AgrupacionFotoAction" validate="false"/>
+  <action name="dataForm" path="/moduls/calendario" scope="request"
+   type="org.ibit.rol.sac.back.action.CalendariAction" validate="false">
+   <forward name="success" path="/moduls/calendario.jsp" redirect="false"/>
+  </action>
+  <action name="organismoForm" path="/ws/organismo/rellenar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.RellenarOrganismoAction" validate="false">
+   <forward name="success" path=".ws.organismo.editar" redirect="false"/>
+   <forward name="cancel" path=".ws.organismo.lista" redirect="false"/>
+   <forward name="fail" path=".ws.organismo.nuevo" redirect="false"/>
+  </action>
+  <action input=".contenido.enlace.form" name="enlaceForm"
+   parameter="action" path="/contenido/enlace/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.enlace.EditarEnlaceAction" validate="true">
+   <forward name="success" path=".contenido.enlace.form" redirect="false"/>
+   <forward name="procedimiento"
+    path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+   <forward name="ficha" path="/contenido/ficha/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="enlaceForm" parameter="action"
+   path="/contenido/enlace/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.enlace.EditarEnlaceAction" validate="false">
+   <forward name="success" path=".contenido.enlace.form" redirect="false"/>
+   <forward name="procedimiento"
+    path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+   <forward name="ficha" path="/contenido/ficha/seleccionar.do" redirect="false"/>
+  </action>
+  <action path="/materia/distribComp"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaArchivoAction" validate="false"/>
+  <action input="unidadmateria.jsp" name="unidadMateriaForm"
+   parameter="action" path="/organigrama/unimat/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.unidad.EditarUnidadMateriaAction" validate="true">
+   <forward name="success" path=".organigrama.unimat.form" redirect="false"/>
+   <forward name="cancel" path="/organigrama/unidad/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="unidadMateriaForm" parameter="action"
+   path="/organigrama/unimat/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.unidad.EditarUnidadMateriaAction" validate="false">
+   <forward name="success" path=".organigrama.unimat.form" redirect="false"/>
+   <forward name="cancel" path="/organigrama/unidad/seleccionar.do" redirect="false"/>
+  </action>
+  <action parameter="action" path="/estadisticas/seleccionar"
+   type="org.ibit.rol.sac.back.action.estadisticas.EditarEstadisticasAction" validate="false">
+   <forward name="success" path=".estadisticas.visualizar" redirect="false"/>
+  </action>
+  <action path="/edificio/foto/pequenya"
+   type="org.ibit.rol.sac.back.action.archivo.EdificioFotoPequenyaAction" validate="false"/>
+  <action parameter="action" path="/estadisticas/popventana"
+   type="org.ibit.rol.sac.back.action.estadisticas.VentanaEstadisticasAction" validate="false">
+   <forward name="success" path="/estadisticas/popEstadisticas.jsp" redirect="false"/>
+  </action>
+  <action path="/materia/icono/grande"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaIconoGrandeAction" validate="false"/>
+  <action path="/hechovital/icono/grande"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalIconoGrandeAction" validate="false"/>
+  <action input=".sistema.tiniciacion.form" name="tiniciacionForm"
+   parameter="action" path="/sistema/tiniciacion/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tiniciacion.EditarTipoIniciacionAction" validate="true">
+   <forward name="success" path=".sistema.tiniciacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tiniciacion/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tiniciacion.lista" redirect="false"/>
+  </action>
+  <action name="tiniciacionForm" parameter="action"
+   path="/sistema/tiniciacion/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tiniciacion.EditarTipoIniciacionAction" validate="false">
+   <forward name="success" path=".sistema.tiniciacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tiniciacion/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tiniciacion.lista" redirect="false"/>
+  </action>
+  <action input=".sistema.tafectacion.form" name="tafectacionForm"
+   parameter="action" path="/sistema/tafectacion/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tafectacion.EditarTipoAfectacionAction" validate="true">
+   <forward name="success" path=".sistema.tafectacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tafectacion/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tafectacion.lista" redirect="false"/>
+  </action>
+  <action name="tafectacionForm" parameter="action"
+   path="/sistema/tafectacion/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.tafectacion.EditarTipoAfectacionAction" validate="false">
+   <forward name="success" path=".sistema.tafectacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/tafectacion/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.tafectacion.lista" redirect="false"/>
+  </action>
+  <action input=".ws.servicio.editar" name="servicioForm"
+   path="/ws/servicio/guardar" scope="request"
+   type="org.ibit.rol.sac.back.action.ws.GuardarServicioAction" validate="true">
+   <forward name="success" path=".ws.servicio.lista" redirect="false"/>
+   <forward name="cancel" path=".ws.servicio.lista" redirect="false"/>
+  </action>
+  <action input=".contenido.documento.form" name="documentoForm"
+   parameter="action" path="/contenido/documento/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.documento.EditarDocumentoAction" validate="true">
+   <forward name="success" path=".contenido.documento.form" redirect="false"/>
+   <forward name="procedimiento"
+    path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+   <forward name="ficha" path="/contenido/ficha/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="documentoForm" parameter="action"
+   path="/contenido/documento/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.documento.EditarDocumentoAction" validate="false">
+   <forward name="success" path=".contenido.documento.form" redirect="false"/>
+   <forward name="procedimiento"
+    path="/contenido/procedimiento/seleccionar.do" redirect="false"/>
+   <forward name="ficha" path="/contenido/ficha/seleccionar.do" redirect="false"/>
+  </action>
+  <action input=".contenido.documento.form" name="documentoForm"
+   parameter="action" path="/contenido/tramite/document/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.tramite.document.EditarDocumentTramitAction" validate="false">
+   <!-- forward name="success" path=".contenido.documento.form" redirect="false"/ test con tiles no funciona bien -->
+   <forward name="success" path="/contenido/tramite/document/seleccionar" redirect="false"/>
+   <forward name="tramite"
+    path="/contenido.tramite.document.seleccionar" redirect="false"/>
+  </action>
+  <action name="documentoForm" parameter="action"
+   path="/contenido/tramite/document/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.tramite.document.EditarDocumentTramitAction" validate="false">
+   <forward name="success" path="/contenido.documento.form" redirect="false"/>
+  </action>
+  <action input=".sistema.materia.form" name="materiaForm"
+   parameter="action" path="/sistema/materia/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.materia.EditarMateriaAction" validate="true">
+   <forward name="success" path=".sistema.materia.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.materia.lista" redirect="false"/>
+  </action>
+  <action name="materiaForm" parameter="action"
+   path="/sistema/materia/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.materia.EditarMateriaAction" validate="false">
+   <forward name="success" path=".sistema.materia.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.materia.lista" redirect="false"/>
+  </action>
+  <action parameter="action" path="/auditoria/seleccionar"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriasUAAction" validate="false">
+   <forward name="lista" path=".auditoria.visualizar" redirect="false"/>
+  </action>
+  <action path="/hechovital/distribComp"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalArchivoAction" validate="false"/>
+  <action name="unidadForm" parameter="action"
+   path="/organigrama/unidad/poparbol" scope="request"
+   type="org.springframework.web.struts.DelegatingActionProxy" validate="false">
+   <forward name="success" path="/organigrama/unidad/poparbol.jsp" redirect="false"/>
+  </action>
+  <action path="/estadisticas/graficomat"
+   type="org.ibit.rol.sac.back.action.estadisticas.GraficoMateria" validate="false"/>
+  <action input=".sistema.familia.form" name="familiaForm"
+   parameter="action" path="/sistema/familia/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.familia.EditarFamiliaAction" validate="true">
+   <forward name="success" path=".sistema.familia.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.familia.lista" redirect="false"/>
+  </action>
+  <action name="familiaForm" parameter="action"
+   path="/sistema/familia/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.familia.EditarFamiliaAction" validate="false">
+   <forward name="success" path=".sistema.familia.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.familia.lista" redirect="false"/>
+  </action>
+  <action path="/ficha/imagen"
+   type="org.ibit.rol.sac.back.action.archivo.FichaImagenAction" validate="false"/>
+  <action name="organismoForm" path="/ws/organismo/mostrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.MostrarOrganismoAction" validate="false">
+   <forward name="success" path=".ws.organismo.editar" redirect="false"/>
+  </action>
+  <action input=".contenido.formulario.form" name="formularioForm"
+   parameter="action" path="/contenido/formulario/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.formulario.EditarFormularioAction" validate="true">
+   <forward name="success" path=".contenido.formulario.form" redirect="false"/>
+   <forward name="tramite" path="/contenido/tramite/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="formularioForm" parameter="action"
+   path="/contenido/formulario/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.formulario.EditarFormularioAction" validate="false">
+   <forward name="success" path=".contenido.formulario.form" redirect="false"/>
+   <forward name="tramite" path="/contenido/tramite/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="auditoriaForm" parameter="action"
+   path="/auditoria/ficha" scope="request"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriaFichaAction" validate="false">
+   <forward name="lista" path=".auditoria.detalle" redirect="false"/>
+  </action>
+  <action path="/familia/icono"
+   type="org.ibit.rol.sac.back.action.archivo.FamiliaIconoAction" validate="false"/>
+  <action path="/estadisticas/graficopro"
+   type="org.ibit.rol.sac.back.action.estadisticas.GraficoProcedimiento" validate="false"/>
+  <action path="/layout"
+   type="org.ibit.rol.sac.back.action.LayoutAction" validate="true">
+   <forward name="main" path="/layout/mainLayout.jsp" redirect="false"/>
+   <forward name="table" path="/layout/tableLayout.jsp" redirect="false"/>
+  </action>
+  <action path="/estadisticas/graficofi"
+   type="org.ibit.rol.sac.back.action.estadisticas.GraficoFichaInformativa" validate="false"/>
+  <action path="/documento/archivo"
+   type="org.ibit.rol.sac.back.action.archivo.DocumentoArchivoAction" validate="false"/>
+  <action path="/unidad/foto/grande"
+   type="org.ibit.rol.sac.back.action.archivo.UnidadFotoGrandeAction" validate="false"/>
+  <action path="/index/procedimiento/reiniciar"
+   type="org.ibit.rol.sac.back.action.index.ReiniciarIndexProcedimientoAction" validate="false">
+   <forward name="success" path=".index.finaliza" redirect="false"/>
+  </action>
+  <action path="/unidad/foto/logos"
+   type="org.ibit.rol.sac.back.action.archivo.UnidadLogoSaludoAction" validate="false"/>
+  <action input=".ws.especificacion.editar" name="especificacionForm"
+   path="/ws/especificacion/guardar" scope="request"
+   type="org.ibit.rol.sac.back.action.ws.GuardarEspecificacionAction" validate="true">
+   <forward name="success" path=".ws.especificacion.lista" redirect="false"/>
+   <forward name="cancel" path=".ws.especificacion.lista" redirect="false"/>
+  </action>
+  <action input=".organigrama.guia.form" name="personalForm"
+   parameter="action" path="/organigrama/guia/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.guia.EditarGuiaAction" validate="false">
+   <forward name="success" path=".organigrama.guia.form" redirect="false"/>
+   <forward name="cancel" path="/organigrama/guia/form.do" redirect="false"/>
+   <forward name="lista" path=".organigrama.guia.lista" redirect="false"/>
+  </action>
+  <action name="personalForm" parameter="action"
+   path="/organigrama/guia/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.guia.EditarGuiaAction" validate="false">
+   <forward name="success" path=".organigrama.guia.form" redirect="false"/>
+   <forward name="cancel" path="/organigrama/guia/form.do" redirect="false"/>
+   <forward name="lista" path=".organigrama.guia.lista" redirect="false"/>
+  </action>
+  <action path="/edificio/foto/grande"
+   type="org.ibit.rol.sac.back.action.archivo.EdificioFotoGrandeAction" validate="false"/>
+  <action path="/espacio/mapa"
+   type="org.ibit.rol.sac.back.action.archivo.EspacioTerritorialMapaAction" validate="false"/>
+  <action input=".contenido.normativa.externa" name="normativaForm"
+   parameter="action" path="/contenido/normativa/externa/editar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.normativa.EditarExternaAction" validate="true">
+   <forward name="success" path=".contenido.normativa.externa" redirect="false"/>
+   <forward name="cancel" path="/contenido/normativa/externa.do" redirect="false"/>
+   <forward name="lista" path=".contenido.normativa.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.normativa.baja" redirect="false"/>
+  </action>
+  <action name="normativaForm" parameter="action"
+   path="/contenido/normativa/externa/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.normativa.EditarExternaAction" validate="false">
+   <forward name="success" path=".contenido.normativa.externa" redirect="false"/>
+   <forward name="cancel" path="/contenido/normativa/externa.do" redirect="false"/>
+   <forward name="lista" path=".contenido.normativa.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.normativa.baja" redirect="false"/>
+  </action>
+  <action input=".sistema.agrupacion.form" name="agrupacionHVForm"
+   parameter="action" path="/sistema/agrupacion/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.agrupacionhv.EditarAgrupacionHVAction" validate="true">
+   <forward name="success" path=".sistema.agrupacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.agrupacion.lista" redirect="false"/>
+  </action>
+  <action name="agrupacionHVForm" parameter="action"
+   path="/sistema/agrupacion/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.agrupacionhv.EditarAgrupacionHVAction" validate="false">
+   <forward name="success" path=".sistema.agrupacion.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.agrupacion.lista" redirect="false"/>
+  </action>
+  <action path="/sistema/administracionRemota/estado"
+   type="org.ibit.rol.sac.back.action.sistema.administracionremota.EstadoAdministracionAction" validate="true"/>
+  <action input=".sistema.usuario.form" name="usuarioForm"
+   parameter="action" path="/sistema/usuario/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.usuario.EditarUsuarioAction" validate="false">
+   <forward name="success" path=".sistema.usuario.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/usuario/form.do" redirect="false"/>
+   <forward name="lista" path=".sistema.usuario.lista" redirect="false"/>
+  </action>
+  <action name="usuarioForm" parameter="action"
+   path="/sistema/usuario/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.usuario.EditarUsuarioAction" validate="false">
+   <forward name="success" path=".sistema.usuario.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/usuario/form.do" redirect="false"/>
+   <forward name="lista" path=".sistema.usuario.lista" redirect="false"/>
+  </action>
+  <action parameter="action" path="/estadisticasmateria/seleccionar"
+   type="org.ibit.rol.sac.back.action.estadisticas.EditarEstadisticasMateriaDetalle" validate="false">
+   <forward name="success" path=".estadisticasmateria.visualizar" redirect="false"/>
+  </action>
+  <action path="/logout"
+   type="org.ibit.rol.sac.back.action.LogoutAction" validate="true">
+   <forward name="success" path="/logout.html" redirect="true"/>
+  </action>
+  <action path="/administracionRemota/logog"
+   type="org.ibit.rol.sac.back.action.archivo.AdministracionRemotaLogogAction" validate="false"/>
+  <action input=".sistema.perfil.form" name="perfilForm"
+   parameter="action" path="/sistema/perfil/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.perfil.EditarPerfilAction" validate="true">
+   <forward name="success" path=".sistema.perfil.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.perfil.lista" redirect="false"/>
+  </action>
+  <action name="perfilForm" parameter="action"
+   path="/sistema/perfil/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.perfil.EditarPerfilAction" validate="false">
+   <forward name="success" path=".sistema.perfil.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/matfamper.do" redirect="false"/>
+   <forward name="lista" path=".sistema.perfil.lista" redirect="false"/>
+  </action>
+  <action input=".sistema.seccion.form" name="seccionForm"
+   parameter="action" path="/sistema/seccion/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.seccion.EditarSeccionAction" validate="true">
+   <forward name="success" path=".sistema.seccion.form" redirect="false"/>
+   <forward name="cancel" path=".sistema.seccion.lista" redirect="false"/>
+   <forward name="lista" path=".sistema.seccion.lista" redirect="false"/>
+  </action>
+  <action name="seccionForm" parameter="action"
+   path="/sistema/seccion/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.seccion.EditarSeccionAction" validate="false">
+   <forward name="success" path=".sistema.seccion.form" redirect="false"/>
+   <forward name="cancel" path=".sistema.seccion.lista" redirect="false"/>
+   <forward name="lista" path=".sistema.seccion.lista" redirect="false"/>
+  </action>
+  <action path="/hechovital/contenido"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalContenidoAction" validate="false"/>
+  <action path="/agrupacion/icono/grande"
+   type="org.ibit.rol.sac.back.action.archivo.AgrupacionIconoGrandeAction" validate="false"/>
+  <action input=".contenido.ficha.form" name="fichaForm"
+   parameter="action" path="/contenido/ficha/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.ficha.EditarFichaAction" validate="true">
+   <forward name="success" path=".contenido.ficha.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/ficha/form.do" redirect="false"/>
+   <forward name="lista" path=".contenido.ficha.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.ficha.baja" redirect="false"/>
+   <forward name="seccion" path="/sistema/seccion/seleccionar.do" redirect="false"/>
+  </action>
+  <action name="fichaForm" parameter="action"
+   path="/contenido/ficha/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.ficha.EditarFichaAction" validate="false">
+   <forward name="success" path=".contenido.ficha.form" redirect="false"/>
+   <forward name="cancel" path="/contenido/ficha/form.do" redirect="false"/>
+   <forward name="lista" path=".contenido.ficha.lista" redirect="false"/>
+   <forward name="eliminar" path=".contenido.ficha.baja" redirect="false"/>
+   <forward name="seccion" path="/sistema/seccion/seleccionar.do" redirect="false"/>
+  </action>
+  <action input="icono.jsp" name="iconoFamiliaForm" parameter="action"
+   path="/sistema/icofam" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.familia.IconoFamiliaAction" validate="true">
+   <forward name="success" path=".sistema.familia.form" redirect="false"/>
+  </action>
+  <action path="/index/ficha/reiniciar"
+   type="org.ibit.rol.sac.back.action.index.ReiniciarIndexFichaAction" validate="false">
+   <forward name="success" path=".index.finaliza" redirect="false"/>
+  </action>
+  <action path="/materia/foto"
+   type="org.ibit.rol.sac.back.action.archivo.MateriaFotoAction" validate="false"/>
+  <action path="/unidad/foto/logov"
+   type="org.ibit.rol.sac.back.action.archivo.UnidadLogoVerticalAction" validate="false"/>
+  <action path="/ficha/icono"
+   type="org.ibit.rol.sac.back.action.archivo.FichaIconoAction" validate="false"/>
+  <action path="/edificio/plano"
+   type="org.ibit.rol.sac.back.action.archivo.EdificioPlanoAction" validate="false"/>
+  <action path="/estadisticas/graficoua"
+   type="org.ibit.rol.sac.back.action.estadisticas.GraficoUA" validate="false"/>
+  <action input="icono.jsp" name="iconoMateriaForm" parameter="action"
+   path="/sistema/icomat" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.materia.IconoMateriaAction" validate="true">
+   <forward name="success" path=".sistema.materia.form" redirect="false"/>
+  </action>
+  <action input=".sistema.publico.form" name="publicoForm"
+   parameter="action" path="/sistema/publico/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.publico.EditarPublicoAction" validate="true">
+   <forward name="success" path=".sistema.publico.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.hevagrpub" redirect="false"/>
+  </action>
+  <action name="publicoForm" parameter="action"
+   path="/sistema/publico/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.publico.EditarPublicoAction" validate="false">
+   <forward name="success" path=".sistema.publico.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/hevagrpub.do" redirect="false"/>
+   <forward name="lista" path=".sistema.hevagrpub" redirect="false"/>
+  </action>
+  <action path="/hechovital/normativa"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalNormativaAction" validate="false"/>
+  <action name="especificacionForm" path="/ws/especificacion/mostrar"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.ws.MostrarEspecificacionAction" validate="false">
+   <forward name="success" path=".ws.especificacion.editar" redirect="false"/>
+  </action>
+  <action path="/unidad/foto/pequenya"
+   type="org.ibit.rol.sac.back.action.archivo.UnidadFotoPequenyaAction" validate="false"/>
+  <action path="/hechovital/icono"
+   type="org.ibit.rol.sac.back.action.archivo.HechoVitalIconoAction" validate="false"/>
+  <action name="busquedaNormativaForm" path="/normativa/busqueda"
+   scope="request"
+   type="org.ibit.rol.sac.back.action.contenido.normativa.BusquedaNormativaAction" validate="false">
+   <forward name="popup" path=".contenido.procedimiento.popupnormativas" redirect="false"/>
+  </action>
+  <action input=".sistema.administracionRemota.form"
+   name="administracionRemotaForm" parameter="action"
+   path="/sistema/administracionRemota/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.administracionremota.EditarAdministracionRemotaAction" validate="true">
+   <forward name="success" path=".sistema.administracionRemota.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/administracionRemota/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.administracionRemota.lista" redirect="false"/>
+  </action>
+  <action name="administracionRemotaForm" parameter="action"
+   path="/sistema/administracionRemota/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.sistema.administracionremota.EditarAdministracionRemotaAction" validate="false">
+   <forward name="success" path=".sistema.administracionRemota.form" redirect="false"/>
+   <forward name="cancel" path="/sistema/administracionRemota/lista.do" redirect="false"/>
+   <forward name="lista" path=".sistema.administracionRemota.lista" redirect="false"/>
+  </action>
+  <action name="auditoriaForm" parameter="action"
+   path="/auditoria/normativa" scope="request"
+   type="org.ibit.rol.sac.back.action.auditoria.AuditoriasNormativaAction" validate="false">
+   <forward name="lista" path=".auditoria.detalle" redirect="false"/>
+  </action>
+  <action input=".organigrama.unidad.form" name="unidadForm"
+   parameter="action" path="/organigrama/unidad/editar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.unidad.EditarUnidadAction" validate="true">
+   <forward name="success" path=".organigrama.unidad.form" redirect="false"/>
+   <forward name="cancel" path=".organigrama.navges" redirect="false"/>
+   <forward name="lista" path=".organigrama.unidad.lista" redirect="false"/>
+  </action>
+  <action name="unidadForm" parameter="action"
+   path="/organigrama/unidad/seleccionar" scope="request"
+   type="org.ibit.rol.sac.back.action.organigrama.unidad.EditarUnidadAction" validate="false">
+   <forward name="success" path=".organigrama.unidad.form" redirect="false"/>
+   <forward name="cancel" path=".organigrama.navges" redirect="false"/>
+   <forward name="lista" path=".organigrama.unidad.lista" redirect="false"/>
+  </action>
+  <action parameter=".main" path="/main"
+   type="org.apache.struts.actions.ForwardAction" unknown="true"/>
+  <action parameter=".organigrama.navges" path="/organigrama/navges" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.navges.arbol"
+   path="/organigrama/navges/arbol" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.form"
+   path="/organigrama/unidad/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.tipua" path="/organigrama/tipua" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.tipua.form"
+   path="/organigrama/tipua/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.edificio.form"
+   path="/organigrama/edificio/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.edificio.lista"
+   path="/organigrama/edificio/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.edificio.popCoordenadas"
+   path="/organigrama/edificio/popCoordenadas" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.guia.form"
+   path="/organigrama/guia/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.popedificio"
+   path="/organigrama/unidad/popedificio" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.popmateria"
+   path="/organigrama/unidad/popmateria" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.popusuario"
+   path="/organigrama/unidad/popusuario" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.popFichaUA"
+   path="/organigrama/unidad/popFichaUA" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.popupfichas"
+   path="/organigrama/unidad/popupfichas" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unidad.materia"
+   path="/organigrama/unidad/materia" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".organigrama.unimat.form"
+   path="/organigrama/unimat/form" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - SISTEMA                                                  
+ ********************************************************************* -->
+  <action parameter=".sistema.seccion.lista"
+   path="/sistema/seccion/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.seccion.form" path="/sistema/seccion/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.espacio.lista"
+   path="/sistema/espacio/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.espacio.form" path="/sistema/espacio/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.matfamper" path="/sistema/matfamper" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.hevagrpub" path="/sistema/hevagrpub" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.materia.form" path="/sistema/materia/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.materia.icono"
+   path="/sistema/materia/icono" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.perfil.form" path="/sistema/perfil/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.familia.form" path="/sistema/familia/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.familia.icono"
+   path="/sistema/familia/icono" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.usuario.form" path="/sistema/usuario/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tipo.form" path="/sistema/tipo/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tipo.lista" path="/sistema/tipo/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tafectacion.form"
+   path="/sistema/tafectacion/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tafectacion.lista"
+   path="/sistema/tafectacion/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tiniciacion.form"
+   path="/sistema/tiniciacion/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.tiniciacion.lista"
+   path="/sistema/tiniciacion/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.boletin.form" path="/sistema/boletin/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.boletin.lista"
+   path="/sistema/boletin/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.unidad.form" path="/sistema/unidad/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.hechovital.form"
+   path="/sistema/hechovital/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.hechovital.lista"
+   path="/sistema/hechovital/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.hechovital.popproc"
+   path="/sistema/hechovital/popproc" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacion.form"
+   path="/sistema/agrupacion/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacion.lista"
+   path="/sistema/agrupacion/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacion.pophecho"
+   path="/sistema/agrupacion/pophecho" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacionm.form"
+   path="/sistema/agrupacionm/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacionm.lista"
+   path="/sistema/agrupacionm/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.agrupacionm.popmate"
+   path="/sistema/agrupacionm/popmate" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.publico.form" path="/sistema/publico/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.publico.lista"
+   path="/sistema/publico/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.administracionRemota.form"
+   path="/sistema/administracionRemota/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.administracionRemota.lista"
+   path="/sistema/administracionRemota/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.destinatario.form"
+   path="/sistema/destinatario/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".sistema.destinatario.lista"
+   path="/sistema/destinatario/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - CONTENIDO                                                
+ ********************************************************************* -->
+  <action parameter=".contenido.ficha.form" path="/contenido/ficha/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.ficha.lista"
+   path="/contenido/ficha/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".index.ua" path="/index/ua" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".index.ficha" path="/index/ficha" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".index.finaliza" path="/index/finaliza" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".index.procedimiento" path="/index/procedimiento" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".index.normativa" path="/index/normativa" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.ficha.popmateria"
+   path="/contenido/ficha/popmateria" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.ficha.pophechovital"
+   path="/contenido/ficha/pophechovital" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.ficha.popFichaUA"
+   path="/contenido/ficha/popFichaUA" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.ficha.popupcodigo"
+   path="/contenido/ficha/popupcodigo" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.local"
+   path="/contenido/normativa/local" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.externa"
+   path="/contenido/normativa/externa" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.lista"
+   path="/contenido/normativa/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.popup"
+   path="/contenido/normativa/popup" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.popupcodigo"
+   path="/contenido/normativa/popupcodigo" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.normativa.popafectacion"
+   path="/contenido/normativa/popafectacion" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.procedimiento.form"
+   path="/contenido/procedimiento/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.procedimiento.lista"
+   path="/contenido/procedimiento/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.procedimiento.popup"
+   path="/contenido/procedimiento/popup" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.procedimiento.popupnormativas"
+   path="/contenido/procedimiento/popupnormativas" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.procedimiento.popupcodigo"
+   path="/contenido/procedimiento/popupcodigo" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.documento.form"
+   path="/contenido/documento/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.enlace.form"
+   path="/contenido/enlace/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.tramite.form"
+   path="/contenido/tramite/form" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".contenido.formulario.form"
+   path="/contenido/formulario/form" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - MICROSITES (modificado indra)                            
+ ********************************************************************* -->
+  <action parameter=".microsites.lista" path="/microsites/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - ESTADISTCAS                                              
+ ********************************************************************* -->
+  <action parameter=".estadisticas.lista" path="/estadisticas/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - AUDITORIA                                                
+ ********************************************************************* -->
+  <action parameter=".auditoria.busqueda" path="/auditoria/busqueda" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".auditoria.navges.arbol"
+   path="/auditoria/navges/arbol" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".auditoria.lista" path="/auditoria/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".auditoria.visualizar" path="/auditoria/visualizar" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".auditoria.detalle" path="/auditoria/detalle" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - WEB SERVICES                                             
+ ********************************************************************* -->
+  <action parameter=".ws.organismo.lista" path="/ws/organismo/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".ws.organismo.nuevo" path="/ws/organismo/nuevo" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".ws.especificacion.lista"
+   path="/ws/especificacion/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".ws.especificacion.editar"
+   path="/ws/especificacion/editar" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".ws.servicio.lista" path="/ws/servicio/lista" type="org.apache.struts.actions.ForwardAction"/>
+  <action parameter=".ws.servicio.editar" path="/ws/servicio/editar" type="org.apache.struts.actions.ForwardAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - VOLVER DE MICROSITES                                     
+ ********************************************************************* -->
+  <action path="/back" type="org.ibit.rol.sac.back.indra.actions.BackRequestAction"/>
+  <!-- ********************************************************************* 
+    ACTIONS - SUBSCRIPCIONS                                            
+ ********************************************************************* -->
+  <action path="/subscripcions/home" type="org.ibit.rol.sac.back.subscripcions.action.HomeAction">
+   <forward name="inicio" path="/subscripcions/index.jsp"/>
+  </action>
+  <action path="/subscripcions/index" type="org.ibit.rol.sac.back.subscripcions.action.HomeAction">
+   <forward name="inicio" path="/subscripcions/index.jsp"/>
+  </action>
+  <action path="/subscripcions/index_inicio" type="org.ibit.rol.sac.back.subscripcions.action.IndexInicioAction">
+   <forward name="inicio" path="/subscripcions/index_inicio.jsp"/>
+  </action>
+  <!-- ***************************************************************** 
+ ************** Acciones de busqueda y ordenacion **************** 
+ ***************************************************************** -->
+  <action name="BuscaOrdenaTrabajoActionForm"
+   path="/subscripcions/trabajos" type="org.ibit.rol.sac.back.subscripcions.action.buscaordena.buscaordenaTrabajosAction">
+   <forward name="listarTrabajos" path="/subscripcions/listaTrabajos.jsp"/>
+  </action>
+  <action name="BuscaOrdenaGrupoActionForm" path="/subscripcions/grupos" type="org.ibit.rol.sac.back.subscripcions.action.buscaordena.buscaordenaGruposAction">
+   <forward name="listarGrupos" path="/subscripcions/listaGrupos.jsp"/>
+  </action>
+  <action name="BuscaOrdenaSuscriptorActionForm"
+   path="/subscripcions/suscriptores" type="org.ibit.rol.sac.back.subscripcions.action.buscaordena.buscaordenaSuscriptoresAction">
+   <forward name="listarSuscriptores" path="/subscripcions/listaSuscriptores.jsp"/>
+  </action>
+  <action name="listaActionForm" path="/subscripcions/visualizaTrabajo"
+   scope="request" type="org.ibit.rol.sac.back.subscripcions.action.edita.visualizaTrabajoAction">
+   <forward name="visualizaTrabajo" path="/subscripcions/visualizaTrabajo.jsp"/>
+  </action>
+  <!-- ***************************************************************** 
+ ******************* Acciones de EdiciÃ³n ************************* 
+ ***************************************************************** -->
+  <action name="listaActionForm" path="/subscripcions/trabajosAcc"
+   scope="request" type="org.ibit.rol.sac.back.subscripcions.action.lista.listaTrabajosAction">
+   <forward name="detalleTrabajo" path="/subscripcions/detalleTrabajo.jsp"/>
+  </action>
+  <action name="listaActionForm" path="/subscripcions/gruposAcc"
+   scope="request" type="org.ibit.rol.sac.back.subscripcions.action.lista.listaGruposAction">
+   <forward name="detalleGrupo" path="/subscripcions/detalleGrupo.jsp"/>
+  </action>
+  <action name="listaActionForm" path="/subscripcions/suscriptoresAcc"
+   scope="request" type="org.ibit.rol.sac.back.subscripcions.action.lista.listaSuscriptoresAction">
+   <forward name="detalleSuscriptor" path="/subscripcions/detalleSuscriptor.jsp"/>
+  </action>
+  <!-- ***************************************************************** 
+ ******************* Acciones de Multiples *********************** 
+ ***************************************************************** -->
+  <action input="/trabajosAcc.do" name="trabajoForm"
+   path="/subscripcions/trabajoEdita" scope="session" type="org.ibit.rol.sac.back.subscripcions.action.edita.trabajosEditaAction">
+   <forward name="detalle" path="/subscripcions/detalleTrabajo.jsp"/>
+  </action>
+  <action input="/gruposAcc.do" name="grupoForm"
+   path="/subscripcions/grupoEdita" scope="session" type="org.ibit.rol.sac.back.subscripcions.action.edita.gruposEditaAction">
+   <forward name="detalle" path="/subscripcions/detalleGrupo.jsp"/>
+  </action>
+  <action input="/grupoTrabajoAcc.do" name="grupoTrabajoForm"
+   path="/subscripcions/grupoTrabajoEdita" scope="session" type="org.ibit.rol.sac.back.subscripcions.action.edita.grupoTrabajoEditaAction">
+   <forward name="detalle" path="/subscripcions/detalleGrupoTrabajo.jsp"/>
+  </action>
+  <action input="/suscriptorAcc.do" name="suscriptorForm"
+   path="/subscripcions/suscriptorEdita" scope="session" type="org.ibit.rol.sac.back.subscripcions.action.edita.suscriptoresEditaAction">
+   <forward name="detalle" path="/subscripcions/detalleSuscriptor.jsp"/>
+  </action>
+  <!-- ********************************************************************* 
+    ACTIONS - TRASPASO DEL BOIB A NORMATIVA                            
+ ********************************************************************* -->
+  <action parameter=".contenido.normativa.traspasa"
+   path="/contenido/normativa/traspasa" type="org.apache.struts.actions.ForwardAction"/>
+  <action name="SearchnormativaActionForm"
+   path="/contenido/normativa/searchnormativa" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actions.SearchnormativaAction">
+   <forward name="successError" path=".contenido.normativa.searchError"/>
+   <forward name="successOne" path=".contenido.normativa.searchOne"/>
+   <forward name="successVarios" path=".contenido.normativa.searchVarios"/>
+  </action>
+  <action name="normativaForm" path="/contenido/normativa/editar" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actions.EditarAction">
+   <forward name="success" path=".contenido.normativa.traspasaEditarOk"/>
+   <forward name="forwerror" path=".contenido.normativa.traspasaEditarError"/>
+  </action>
+ </action-mappings>
+ <controller>
+   <set-property property="processorClass" value="test.unitario.back.mock.MockCustomRequestProcessor"/>
+  <!-- set-property property="processorClass" value="org.springframework.web.struts.DelegatingTilesRequestProcessor"/-->
+ </controller>
+ <!-- u92770 controller contentType="text/html;charset=UTF-8" debug="3"
+  locale="true" nocache="true" processorClass="org.ibit.rol.sac.back.indra.actions.LongWaitRequestProcessor"/-->
+ <message-resources null="false" parameter="sac-back-messages"/>
+ <message-resources key="menu" null="false" parameter="sac-back-menu"/>
+ <message-resources key="subscripcions" null="false" parameter="sac-subscripcions-messages"/>
+ <plug-in className="org.apache.struts.validator.ValidatorPlugIn">
+  <set-property property="pathnames" value="/WEB-INF/validator-rules.xml,/WEB-INF/validation.xml"/>
+ </plug-in>
+ <plug-in className="org.apache.struts.tiles.TilesPlugin">
+  <set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml,/WEB-INF/tiles-ws-defs.xml,/WEB-INF/tiles-moduls-defs.xml"/>
+  <set-property property="definitions-debug" value="0"/>
+  <set-property property="definitions-parser-details" value="0"/>
+  <set-property property="definitions-parser-validate" value="false"/>
+ </plug-in>
+ <plug-in className="org.ibit.rol.sac.back.plugins.HibernateConverterPlugin"/>
+ <!-- crea una excepcion plug-in className="org.ibit.rol.sac.back.plugins.IdiomaPlugin"/-->
+ <plug-in className="org.springframework.web.struts.ContextLoaderPlugIn">
+  <set-property property="contextConfigLocation" value="/WEB-INF/action-servlet.xml,/WEB-INF/applicationContext-FAIL.xml"/>
+ </plug-in>
+</struts-config>

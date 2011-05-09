@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+                                 "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+<form-validation>
+ <formset>
+  <!-- ************************ SISTEMA ***************************** -->
+  <form name="seccionForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="seccion.nombre"/>
+   </field>
+  </form>
+  <form name="espacioForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="espacio.nombre"/>
+   </field>
+  </form>
+  <form name="usuarioForm">
+   <field depends="required" property="username">
+    <arg0 key="usuario.usuario"/>
+   </field>
+   <field depends="required" property="password">
+    <arg0 key="usuario.password"/>
+   </field>
+   <field depends="required" property="nombre">
+    <arg0 key="usuario.nombre"/>
+   </field>
+   <field depends="maxlength" property="observaciones">
+    <arg0 key="usuario.observaciones"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="perfilForm">
+   <field depends="required" property="pathIconografia">
+    <arg0 key="perfil.iconografia"/>
+   </field>
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="perfil.nombre"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="perfil.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="boletinForm">
+   <field depends="required" property="nombre">
+    <arg0 key="boletin.nombre"/>
+   </field>
+  </form>
+  <form name="hechoVitalForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="hechovital.nombre"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="hechovital.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="agrupacionHVForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="agrupacion.nombre"/>
+   </field>
+   <field depends="required" property="idPublico">
+    <arg0 key="agrupacion.publico"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="agrupacion.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="agrupacionMForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="agrupacion.nombre"/>
+   </field>
+   <field depends="required" property="idSeccion">
+    <arg0 key="agrupacionm.seccion"/>
+   </field>
+  </form>
+  <form name="publicoForm">
+   <field depends="required" property="traducciones[0].titulo">
+    <arg0 key="agrupacion.titulo"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="agrupacion.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="familiaForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="familia.nombre"/>
+   </field>
+  </form>
+  <form name="iconoFamiliaForm">
+   <field depends="required" property="idPerfil">
+    <arg0 key="icofam.perfil"/>
+   </field>
+   <field depends="required" property="file">
+    <arg0 key="icofam.archivo"/>
+   </field>
+  </form>
+  <form name="materiaForm">
+   <field depends="required" property="codiHita">
+    <arg0 key="materia.codihita"/>
+   </field>
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="materia.nombre"/>
+   </field>
+  </form>
+  <form name="iconoMateriaForm">
+   <field depends="required" property="idPerfil">
+    <arg0 key="icomat.perfil"/>
+   </field>
+   <field depends="required" property="file">
+    <arg0 key="icomat.archivo"/>
+   </field>
+  </form>
+  <form name="tipoForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="tipo.nombre"/>
+   </field>
+  </form>
+  <form name="tafectacionForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="tipo.nombre"/>
+   </field>
+  </form>
+  <form name="tiniciacionForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="tipo.nombre"/>
+   </field>
+  </form>
+  <!-- ************************ CONTENIDO ***************************** -->
+  <form name="fichaForm">
+   <field property="textoFechaPublicacion">
+    <arg0 key="ficha.fechaPublicacion"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy HH:mm:ss</var-value>
+    </var>
+   </field>
+   <field property="textoFechaCaducidad">
+    <arg0 key="ficha.fechaCaducidad"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy HH:mm:ss</var-value>
+    </var>
+   </field>
+   <field depends="date" property="textoFechaActualizacion">
+    <arg0 key="ficha.fechaActualizacion"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" property="urlVideo">
+    <arg0 key="ficha.urlVideo"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>1000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" property="urlForo">
+    <arg0 key="ficha.urlForo"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>500</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" property="info">
+    <arg0 key="ficha.info"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="required" property="validacion">
+    <arg0 key="ficha.estado"/>
+   </field>
+   <field depends="required" property="traducciones[0].titulo">
+    <arg0 key="ficha.titulo"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descAbr">
+    <arg0 key="ficha.descabr"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="ficha.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  
+  <form name="normativaForm">
+   <field depends="date" property="textoFecha">
+    <arg0 key="normativa.fecha"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="date" property="textoFechaBoletin">
+    <arg0 key="normativa.fechaBoletin"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="required" property="validacion">
+    <arg0 key="normativa.validacion"/>
+   </field>
+   <field depends="required" property="traducciones[0].titulo">
+    <arg0 key="normativa.titulo"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="observaciones">
+    <arg0 key="normativa.observaciones"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="procedimientoForm">
+   <field depends="required" property="validacion">
+    <arg0 key="procedimiento.validacion"/>
+   </field>
+   <field depends="date" property="textoFechaCaducidad">
+    <arg0 key="procedimiento.fechaCaducidad"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="date" property="textoFechaPublicacion">
+    <arg0 key="procedimiento.fechaPublicacion"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="date" property="textoFechaActualizacion">
+    <arg0 key="procedimiento.fechaActualizacion"/>
+    <var>
+     <var-name>datePatternStrict</var-name>
+     <var-value>dd/MM/yyyy</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" property="info">
+    <arg0 key="procedimiento.info"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="required" property="idUA">
+    <arg0 key="procedimiento.ua"/>
+   </field>
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="procedimiento.nombre"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="resumen">
+    <arg0 key="procedimiento.resumen"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="destinatarios">
+    <arg0 key="procedimiento.destinatarios"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="requisitos">
+    <arg0 key="procedimiento.requisitos"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="plazos">
+    <arg0 key="procedimiento.plazos"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="resolucion">
+    <arg0 key="procedimiento.resolucion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="notificacion">
+    <arg0 key="procedimiento.notificacion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="lugar">
+    <arg0 key="procedimiento.lugar"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="silencio">
+    <arg0 key="procedimiento.silencio"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="observaciones">
+    <arg0 key="procedimiento.observaciones"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="documentoForm">
+   <field depends="required" property="traducciones[0].titulo">
+    <arg0 key="documento.titulo"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="documento.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="required" property="traducciones[0].archivo">
+    <arg0 key="documento.archivo"/>
+   </field>
+  </form>
+  <form name="enlaceForm">
+   <field depends="required" property="traducciones[0].titulo">
+    <arg0 key="enlace.titulo"/>
+   </field>
+  </form>
+  <form name="tramiteForm">
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="tramite.nombre"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="tramite.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="required,intRange" property="validacio">
+    <arg0 key="tramite.validacio"/>
+     <arg1 key="${var:min}" name="intRange" resource="false"/>
+    <arg2 key="${var:max}" name="intRange" resource="false"/>
+    <var>
+     <var-name>min</var-name>
+     <var-value>1</var-value>
+    </var>
+    <var>
+     <var-name>max</var-name>
+     <var-value>3</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="documentacion">
+    <arg0 key="tramite.documentacion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="plazos">
+    <arg0 key="tramite.plazos"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="formularioForm">
+   <field depends="required" property="nombre">
+    <arg0 key="formulario.nombre"/>
+   </field>
+  </form>
+  <!-- ************************ ORGANIGRAMA ***************************** -->
+  <form name="unidadForm">
+   <field depends="required" property="idTratamiento">
+    <arg0 key="ua.tratamiento"/>
+   </field>
+   <field depends="required" property="validacion">
+    <arg0 key="ua.validacion"/>
+   </field>
+   <field depends="required" property="sexoResponsable">
+    <arg0 key="ua.sexoResponsable"/>
+   </field>
+   <field depends="required" property="traducciones[0].nombre">
+    <arg0 key="ua.nombre"/>
+   </field>
+  </form>
+  <form name="unidadMateriaForm">
+   <field depends="required" property="idMateria">
+    <arg0 key="unimat.materia"/>
+   </field>
+  </form>
+  <form name="edificioForm">
+   <field depends="required" property="direccion">
+    <arg0 key="edificio.direccion"/>
+   </field>
+   <field depends="required" property="traducciones[0].descripcion">
+    <arg0 key="edificio.descripcion"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="descripcion">
+    <arg0 key="edificio.descripcion"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>4000</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="personalForm">
+   <field depends="required" property="nombre">
+    <arg0 key="personal.nombre"/>
+   </field>
+   <field depends="required" property="nombreUA">
+    <arg0 key="normativa.ua"/>
+   </field>
+  </form>
+  <form name="tipuaForm">
+   <field depends="required" property="traducciones[0].tipo">
+    <arg0 key="tipua.tipo"/>
+   </field>
+   <field depends="maxlength" indexedListProperty="traducciones" property="tipo">
+    <arg0 key="tipua.tipo"/>
+    <arg1 key="${var:maxlength}" name="maxlength" resource="false"/>
+    <var>
+     <var-name>maxlength</var-name>
+     <var-value>256</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="especificacionForm">
+   <field depends="required" property="nombre">
+    <arg0 key="especificacion.nombre"/>
+   </field>
+   <field depends="required" property="urlDocumento">
+    <arg0 key="especificacion.urlDocumento"/>
+   </field>
+  </form>
+  <form name="organismoForm">
+   <field depends="required" property="nombre">
+    <arg0 key="organismo.nombre"/>
+   </field>
+   <field depends="required,integer,intRange" property="nivel">
+    <arg0 key="organismo.nivel"/>
+    <arg1 key="${var:min}" name="intRange" resource="false"/>
+    <arg2 key="${var:max}" name="intRange" resource="false"/>
+    <var>
+     <var-name>min</var-name>
+     <var-value>1</var-value>
+    </var>
+    <var>
+     <var-name>max</var-name>
+     <var-value>4</var-value>
+    </var>
+   </field>
+  </form>
+  <form name="servicioForm">
+   <field depends="required" property="nombre">
+    <arg0 key="servicio.nombre"/>
+   </field>
+   <field depends="required" property="puntoAcceso">
+    <arg0 key="servicio.puntoAcceso"/>
+   </field>
+   <field depends="required" property="claveOrganismo">
+    <arg0 key="servicio.organismo"/>
+   </field>
+   <field depends="required" property="claveEspecificacion">
+    <arg0 key="servicio.especificacion"/>
+   </field>
+  </form>
+ </formset>
+</form-validation>
