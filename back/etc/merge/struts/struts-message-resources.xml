@@ -1,0 +1,3 @@
+<message-resources parameter="sac-back-messages" null="false"/>
+<message-resources parameter="sac-back-menu" key="menu" null="false"/>
+<message-resources parameter="sac-subscripcions-messages" key="subscripcions" null="false"/>
