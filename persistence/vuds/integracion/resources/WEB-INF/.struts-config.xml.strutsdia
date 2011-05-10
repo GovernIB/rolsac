@@ -1,0 +1,2248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM ID="pleaseWait" NAME="forward0" PATH=".espera"
+  SHAPE="32,17,0,0" TARGET="page0" TITLE="pleaseWait" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="info" NAME="forward1" PATH="/subscripcions/info.jsp"
+  SHAPE="32,129,0,0" TARGET="page1" TITLE="info" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="main" NAME="forward2" PATH="/main.do"
+  SHAPE="32,241,0,0" TARGET="action208" TITLE="main" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="java.lang.Exception" NAME="exception0"
+  PATH="/sacback/subscripcions/error.jsp" SHAPE="32,353,0,0"
+  TARGET="page2" TITLE="Exception" TYPE="exception" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM
+  ID="org.ibit.rol.sac.persistence.delegate.DelegateException"
+  NAME="exception1" PATH="/moduls/fail.jsp" SHAPE="32,465,0,0"
+  TARGET="page3" TITLE="DelegateException" TYPE="exception" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#edificio#foto#pequenya" NAME="action0"
+  PATH="/edificio/foto/pequenya" SHAPE="656,16385,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#agrupacion#pophecho" NAME="action1"
+  PATH="/sistema/agrupacion/pophecho" SHAPE="32,577,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action1"
+   PATH=".sistema.agrupacion.pophecho" TARGET="page4" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#materia#editar" NAME="action2"
+  PATH="/sistema/materia/editar" SHAPE="32,689,0,0" TITLE="materiaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.materia.lista" TARGET="page5" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.materia.form" TARGET="page6" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#tramite#editar" NAME="action3"
+  PATH="/contenido/tramite/editar" SHAPE="304,2897,0,0"
+  TITLE="tramiteForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".contenido.tramite.form" TARGET="page7" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#lista" NAME="action4"
+  PATH="/contenido/ficha/lista" SHAPE="304,3489,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action4" PATH=".contenido.ficha.lista"
+   TARGET="page8" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#popupcodigo" NAME="action5"
+  PATH="/contenido/normativa/popupcodigo" SHAPE="32,5137,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action5"
+   PATH=".contenido.normativa.popupcodigo" TARGET="page9"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ficha#icono" NAME="action6" PATH="/ficha/icono"
+  SHAPE="864,16369,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#espacio#logo" NAME="action7" PATH="/espacio/logo"
+  SHAPE="1072,16385,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#unidad#form" NAME="action8"
+  PATH="/organigrama/unidad/form" SHAPE="272,5265,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action8" PATH=".organigrama.unidad.form"
+   TARGET="page10" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#publico#lista" NAME="action9"
+  PATH="/sistema/publico/lista" SHAPE="32,5937,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action9" PATH=".sistema.publico.lista"
+   TARGET="page11" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacionm#lista" NAME="action10"
+  PATH="/sistema/agrupacionm/lista" SHAPE="32,2257,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action10" PATH=".sistema.agrupacionm.lista"
+   TARGET="page12" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#popup" NAME="action11"
+  PATH="/contenido/procedimiento/popup" SHAPE="32,6049,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action11"
+   PATH=".contenido.procedimiento.popup" TARGET="page13"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#formulario#manual" NAME="action12"
+  PATH="/formulario/manual" SHAPE="656,16561,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#subscripcions#trabajosAcc" NAME="action13"
+  PATH="/subscripcions/trabajosAcc" SHAPE="32,6161,0,0"
+  TITLE="listaActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalleTrabajo" NAME="forward0"
+   PATH="/subscripcions/detalleTrabajo.jsp" TARGET="page14"
+   TITLE="detalleTrabajo" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#buscar" NAME="action14"
+  PATH="/auditoria/buscar" SHAPE="32,6385,0,0" TITLE="auditoriaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.lista" TARGET="page15" TITLE="lista" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#popupcodigo" NAME="action15"
+  PATH="/contenido/ficha/popupcodigo" SHAPE="32,6609,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action15"
+   PATH=".contenido.ficha.popupcodigo" TARGET="page16" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#local#editar" NAME="action16"
+  PATH="/contenido/normativa/local/editar" SHAPE="32,6721,0,0"
+  TITLE="normativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.normativa.lista" TARGET="page17" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/normativa/local.do" TARGET="action182"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward2"
+   PATH=".contenido.normativa.baja" TARGET="page18" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward3"
+   PATH=".contenido.normativa.local" TARGET="page19" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#layout" NAME="action17" PATH="/layout"
+  SHAPE="32,7665,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="table" NAME="forward0"
+   PATH="/layout/tableLayout.jsp" TARGET="page20" TITLE="table"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="main" NAME="forward1"
+   PATH="/layout/mainLayout.jsp" TARGET="page21" TITLE="main"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#lista" NAME="action18"
+  PATH="/contenido/procedimiento/lista" SHAPE="576,4913,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action18"
+   PATH=".contenido.procedimiento.lista" TARGET="page22"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#documento#archivo" NAME="action19"
+  PATH="/documento/archivo" SHAPE="864,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#index#ua#reiniciar" NAME="action20"
+  PATH="/index/ua/reiniciar" SHAPE="32,7921,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".index.finaliza" TARGET="page23" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#index#ua" NAME="action21" PATH="/index/ua"
+  SHAPE="32,8481,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action21" PATH=".index.ua" TARGET="page24"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#edificio#seleccionar" NAME="action22"
+  PATH="/organigrama/edificio/seleccionar" SHAPE="32,8593,0,0"
+  TITLE="edificioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.edificio.lista" TARGET="page25" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".organigrama.edificio.form" TARGET="page26" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.edificio.form" TARGET="page26" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#documento#editar" NAME="action23"
+  PATH="/contenido/documento/editar" SHAPE="32,2881,0,0"
+  TITLE="documentoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="ficha" NAME="forward0"
+   PATH="/contenido/ficha/seleccionar.do" TARGET="action87"
+   TITLE="ficha" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="procedimiento" NAME="forward1"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="procedimiento" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".contenido.documento.form" TARGET="page27" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#especificacion#mostrar" NAME="action24"
+  PATH="/ws/especificacion/mostrar" SHAPE="32,9169,0,0"
+  TITLE="especificacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.especificacion.editar" TARGET="page28" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#index" NAME="action25"
+  PATH="/subscripcions/index" SHAPE="32,9393,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="inicio" NAME="forward0"
+   PATH="/subscripcions/index.jsp" TARGET="page29" TITLE="inicio"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#seccion#seleccionar" NAME="action26"
+  PATH="/sistema/seccion/seleccionar" SHAPE="576,4065,0,0"
+  TITLE="seccionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.seccion.lista" TARGET="page30" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".sistema.seccion.lista" TARGET="page30" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.seccion.form" TARGET="page31" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#organismo#borrar" NAME="action27"
+  PATH="/ws/organismo/borrar" SHAPE="32,9617,0,0" TITLE="organismoForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.organismo.lista" TARGET="page32" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#materia#contenido" NAME="action28"
+  PATH="/materia/contenido" SHAPE="1072,16561,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#usuario#editar" NAME="action29"
+  PATH="/sistema/usuario/editar" SHAPE="32,10385,0,0"
+  TITLE="usuarioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.usuario.lista" TARGET="page33" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/usuario/form.do" TARGET="action193" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.usuario.form" TARGET="page34" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#index#procedimiento#reiniciar" NAME="action30"
+  PATH="/index/procedimiento/reiniciar" SHAPE="32,8033,0,0"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".index.finaliza" TARGET="page23" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#lista" NAME="action31"
+  PATH="/contenido/normativa/lista" SHAPE="32,6929,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action31" PATH=".contenido.normativa.lista"
+   TARGET="page17" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#comentario#mostrar" NAME="action32"
+  PATH="/contenido/comentario/mostrar" SHAPE="32,10737,0,0"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".popup.comentarios" TARGET="page35" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tiniciacion#lista" NAME="action33"
+  PATH="/sistema/tiniciacion/lista" SHAPE="272,10865,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action33" PATH=".sistema.tiniciacion.lista"
+   TARGET="page36" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#hechovital#form" NAME="action34"
+  PATH="/sistema/hechovital/form" SHAPE="32,11313,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action34" PATH=".sistema.hechovital.form"
+   TARGET="page37" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#administracionRemota#lista" NAME="action35"
+  PATH="/sistema/administracionRemota/lista" SHAPE="272,12833,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action35"
+   PATH=".sistema.administracionRemota.lista" TARGET="page38"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#seccion#editar" NAME="action36"
+  PATH="/sistema/seccion/editar" SHAPE="576,4241,0,0"
+  TITLE="seccionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.seccion.lista" TARGET="page30" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".sistema.seccion.lista" TARGET="page30" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.seccion.form" TARGET="page31" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#icono#familia" NAME="action37" PATH="/icono/familia"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#unidad#foto#grande" NAME="action38"
+  PATH="/unidad/foto/grande" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#normativa#archivo" NAME="action39"
+  PATH="/normativa/archivo" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#contenido#tramite#form" NAME="action40"
+  PATH="/contenido/tramite/form" SHAPE="304,4545,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action40" PATH=".contenido.tramite.form"
+   TARGET="page7" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#edificio#form" NAME="action41"
+  PATH="/organigrama/edificio/form" SHAPE="32,8945,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action41" PATH=".organigrama.edificio.form"
+   TARGET="page26" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#perfil#form" NAME="action42"
+  PATH="/sistema/perfil/form" SHAPE="32,1393,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action42" PATH=".sistema.perfil.form"
+   TARGET="page39" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#destinatario#editar" NAME="action43"
+  PATH="/sistema/destinatario/editar" SHAPE="32,13281,0,0"
+  TITLE="destinatarioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.destinatario.lista" TARGET="page40" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/destinatario/lista.do" TARGET="action158"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.destinatario.form" TARGET="page41" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#popupfichas" NAME="action44"
+  PATH="/organigrama/unidad/popupfichas" SHAPE="32,13745,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action44"
+   PATH=".organigrama.unidad.popupfichas" TARGET="page42"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#perfil#seleccionar" NAME="action45"
+  PATH="/sistema/perfil/seleccionar" SHAPE="32,1041,0,0"
+  TITLE="perfilForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.perfil.lista" TARGET="page43" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.perfil.form" TARGET="page39" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#hechovital#seleccionar" NAME="action46"
+  PATH="/sistema/hechovital/seleccionar" SHAPE="32,11425,0,0"
+  TITLE="hechoVitalForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.hevagrpub" TARGET="page44" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.hechovital.form" TARGET="page37" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#externa#editar" NAME="action47"
+  PATH="/contenido/normativa/externa/editar" SHAPE="32,7041,0,0"
+  TITLE="normativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.normativa.lista" TARGET="page17" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/normativa/externa.do" TARGET="action153"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward2"
+   PATH=".contenido.normativa.baja" TARGET="page18" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward3"
+   PATH=".contenido.normativa.externa" TARGET="page45" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#agrupacion#icono" NAME="action48"
+  PATH="/agrupacion/icono" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#index#normativa" NAME="action49"
+  PATH="/index/normativa" SHAPE="32,13969,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action49" PATH=".index.normativa"
+   TARGET="page46" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#grupos" NAME="action50"
+  PATH="/subscripcions/grupos" SHAPE="32,14081,0,0"
+  TITLE="BuscaOrdenaGrupoActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="listarGrupos" NAME="forward0"
+   PATH="/subscripcions/listaGrupos.jsp" TARGET="page47"
+   TITLE="listarGrupos" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#familia#editar" NAME="action51"
+  PATH="/sistema/familia/editar" SHAPE="32,1505,0,0" TITLE="familiaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.familia.lista" TARGET="page48" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.familia.form" TARGET="page49" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unimat#editar" NAME="action52"
+  PATH="/organigrama/unimat/editar" SHAPE="32,5361,0,0"
+  TITLE="unidadMateriaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH="/organigrama/unidad/seleccionar.do" TARGET="action190"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".organigrama.unimat.form" TARGET="page50" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#moduls#calendario" NAME="action53"
+  PATH="/moduls/calendario" SHAPE="32,14193,0,0" TITLE="dataForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="/moduls/calendario.jsp" TARGET="page51" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tafectacion#seleccionar" NAME="action54"
+  PATH="/sistema/tafectacion/seleccionar" SHAPE="32,14305,0,0"
+  TITLE="tafectacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tafectacion.lista" TARGET="page52" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tafectacion/lista.do" TARGET="action239"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tafectacion.form" TARGET="page53" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#suscriptorEdita" NAME="action55"
+  PATH="/subscripcions/suscriptorEdita" SHAPE="32,14769,0,0"
+  TITLE="suscriptorForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalle" NAME="forward0"
+   PATH="/subscripcions/detalleSuscriptor.jsp" TARGET="page54"
+   TITLE="detalle" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#edificio#editar" NAME="action56"
+  PATH="/organigrama/edificio/editar" SHAPE="32,8769,0,0"
+  TITLE="edificioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.edificio.lista" TARGET="page25" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".organigrama.edificio.form" TARGET="page26" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.edificio.form" TARGET="page26" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#traspasa" NAME="action57"
+  PATH="/contenido/normativa/traspasa" SHAPE="32,14993,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action57"
+   PATH=".contenido.normativa.traspasa" TARGET="page55"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#suscriptoresAcc" NAME="action58"
+  PATH="/subscripcions/suscriptoresAcc" SHAPE="32,14881,0,0"
+  TITLE="listaActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalleSuscriptor" NAME="forward0"
+   PATH="/subscripcions/detalleSuscriptor.jsp" TARGET="page54"
+   TITLE="detalleSuscriptor" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#suscriptores" NAME="action59"
+  PATH="/subscripcions/suscriptores" SHAPE="32,15105,0,0"
+  TITLE="BuscaOrdenaSuscriptorActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="listarSuscriptores" NAME="forward0"
+   PATH="/subscripcions/listaSuscriptores.jsp" TARGET="page56"
+   TITLE="listarSuscriptores" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#index#normativa#reiniciar" NAME="action60"
+  PATH="/index/normativa/reiniciar" SHAPE="32,8145,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".index.finaliza" TARGET="page23" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#familia#form" NAME="action61"
+  PATH="/sistema/familia/form" SHAPE="32,1857,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action61" PATH=".sistema.familia.form"
+   TARGET="page49" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#enlace#seleccionar" NAME="action62"
+  PATH="/contenido/enlace/seleccionar" SHAPE="32,3121,0,0"
+  TITLE="enlaceForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="ficha" NAME="forward0"
+   PATH="/contenido/ficha/seleccionar.do" TARGET="action87"
+   TITLE="ficha" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="procedimiento" NAME="forward1"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="procedimiento" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".contenido.enlace.form" TARGET="page57" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#servicio#lista" NAME="action63"
+  PATH="/ws/servicio/lista" SHAPE="32,15217,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action63" PATH=".ws.servicio.lista"
+   TARGET="page58" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#detalle" NAME="action64"
+  PATH="/auditoria/detalle" SHAPE="32,15585,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action64" PATH=".auditoria.detalle"
+   TARGET="page59" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#publico#seleccionar" NAME="action65"
+  PATH="/sistema/publico/seleccionar" SHAPE="32,11601,0,0"
+  TITLE="publicoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.hevagrpub" TARGET="page44" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.publico.form" TARGET="page60" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#visualizar" NAME="action66"
+  PATH="/auditoria/visualizar" SHAPE="32,16145,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action66" PATH=".auditoria.visualizar"
+   TARGET="page61" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#popafectacion" NAME="action67"
+  PATH="/contenido/normativa/popafectacion" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action67"
+   PATH=".contenido.normativa.popafectacion" TARGET="page62"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#organismo#rellenar" NAME="action68"
+  PATH="/ws/organismo/rellenar" SHAPE="32,9729,0,0"
+  TITLE="organismoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="fail" NAME="forward0"
+   PATH=".ws.organismo.nuevo" TARGET="page63" TITLE="fail"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".ws.organismo.lista" TARGET="page32" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".ws.organismo.editar" TARGET="page64" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#seccion#lista" NAME="action69"
+  PATH="/sistema/seccion/lista" SHAPE="576,3649,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action69" PATH=".sistema.seccion.lista"
+   TARGET="page30" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#index#finaliza" NAME="action70"
+  PATH="/index/finaliza" SHAPE="32,8257,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action70" PATH=".index.finaliza"
+   TARGET="page23" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#microsites#lista" NAME="action71"
+  PATH="/microsites/lista" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action71" PATH=".microsites.lista"
+   TARGET="page65" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#index#procedimiento" NAME="action72"
+  PATH="/index/procedimiento" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action72" PATH=".index.procedimiento"
+   TARGET="page66" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#materia#distribComp" NAME="action73"
+  PATH="/materia/distribComp" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#unimat#form" NAME="action74"
+  PATH="/organigrama/unimat/form" SHAPE="32,5537,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action74" PATH=".organigrama.unimat.form"
+   TARGET="page50" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#tipua#editar" NAME="action75"
+  PATH="/organigrama/tipua/editar" SHAPE="32,16369,0,0"
+  TITLE="tipuaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.tipua.lista" TARGET="page67" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/organigrama/tipua.do" TARGET="action126" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.tipua.form" TARGET="page68" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#formulario#editar" NAME="action76"
+  PATH="/contenido/formulario/editar" SHAPE="32,4241,0,0"
+  TITLE="formularioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="tramite" NAME="forward0"
+   PATH="/contenido/tramite/seleccionar.do" TARGET="action78"
+   TITLE="tramite" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".contenido.formulario.form" TARGET="page69" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#materia#normativa" NAME="action77"
+  PATH="/materia/normativa" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#contenido#tramite#seleccionar" NAME="action78"
+  PATH="/contenido/tramite/seleccionar" SHAPE="304,4081,0,0"
+  TITLE="tramiteForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH="/contenido.tramite.form" TARGET="page137" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#publico#form" NAME="action79"
+  PATH="/sistema/publico/form" SHAPE="32,11953,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action79" PATH=".sistema.publico.form"
+   TARGET="page60" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#materia#icono#grande" NAME="action80"
+  PATH="/materia/icono/grande" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#estadisticas#materias" NAME="action81"
+  PATH="/estadisticas/materias" SHAPE="32,16369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".estadisticas.materias" TARGET="page70" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#materia#icono" NAME="action82"
+  PATH="/sistema/materia/icono" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action82" PATH=".sistema.materia.icono"
+   TARGET="page71" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#organismo#lista" NAME="action83"
+  PATH="/ws/organismo/lista" SHAPE="32,10129,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action83" PATH=".ws.organismo.lista"
+   TARGET="page32" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#documento#seleccionar" NAME="action84"
+  PATH="/contenido/documento/seleccionar" SHAPE="32,3649,0,0"
+  TITLE="documentoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="ficha" NAME="forward0"
+   PATH="/contenido/ficha/seleccionar.do" TARGET="action87"
+   TITLE="ficha" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="procedimiento" NAME="forward1"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="procedimiento" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".contenido.documento.form" TARGET="page27" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#materia" NAME="action85"
+  PATH="/organigrama/unidad/materia" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action85"
+   PATH=".organigrama.unidad.materia" TARGET="page72" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#servicio#mostrar" NAME="action86"
+  PATH="/ws/servicio/mostrar" SHAPE="32,16369,0,0" TITLE="servicioForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.servicio.editar" TARGET="page73" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#seleccionar" NAME="action87"
+  PATH="/contenido/ficha/seleccionar" SHAPE="304,3137,0,0"
+  TITLE="fichaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.ficha.lista" TARGET="page8" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/ficha/form.do" TARGET="action198" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="seccion" NAME="forward2"
+   PATH="/sistema/seccion/seleccionar.do" TARGET="action26"
+   TITLE="seccion" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward3"
+   PATH=".contenido.ficha.baja" TARGET="page74" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward4"
+   PATH=".contenido.ficha.form" TARGET="page75" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#trabajoEdita" NAME="action88"
+  PATH="/subscripcions/trabajoEdita" SHAPE="32,6273,0,0"
+  TITLE="trabajoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalle" NAME="forward0"
+   PATH="/subscripcions/detalleTrabajo.jsp" TARGET="page14"
+   TITLE="detalle" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#popFichaUA" NAME="action89"
+  PATH="/contenido/ficha/popFichaUA" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action89"
+   PATH=".contenido.ficha.popFichaUA" TARGET="page76" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#gruposAcc" NAME="action90"
+  PATH="/subscripcions/gruposAcc" SHAPE="32,16369,0,0"
+  TITLE="listaActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalleGrupo" NAME="forward0"
+   PATH="/subscripcions/detalleGrupo.jsp" TARGET="page77"
+   TITLE="detalleGrupo" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#tipua#form" NAME="action91"
+  PATH="/organigrama/tipua/form" SHAPE="32,16545,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action91" PATH=".organigrama.tipua.form"
+   TARGET="page68" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#matfamper" NAME="action92"
+  PATH="/sistema/matfamper" SHAPE="304,881,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action92" PATH=".sistema.matfamper"
+   TARGET="page78" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#edificio#foto#grande" NAME="action93"
+  PATH="/edificio/foto/grande" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ws#organismo#guardar" NAME="action94"
+  PATH="/ws/organismo/guardar" SHAPE="32,10241,0,0"
+  TITLE="organismoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH=".ws.organismo.lista" TARGET="page32" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".ws.organismo.lista" TARGET="page32" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tipo#form" NAME="action95"
+  PATH="/sistema/tipo/form" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action95" PATH=".sistema.tipo.form"
+   TARGET="page79" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#espacio#arbol" NAME="action96"
+  PATH="/sistema/espacio/arbol" SHAPE="32,16369,0,0" TITLE="seccionForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="/sistema/espacio/arbol.jsp" TARGET="page80" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#seleccionar" NAME="action97"
+  PATH="/contenido/procedimiento/seleccionar" SHAPE="576,2881,0,0"
+  TITLE="procedimientoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="popup" NAME="forward0"
+   PATH=".contenido.procedimiento.popupnormativas" TARGET="page81"
+   TITLE="popup" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward1"
+   PATH=".contenido.procedimiento.lista" TARGET="page22" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward2"
+   PATH="/contenido/procedimiento/form.do" TARGET="action219"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward3"
+   PATH=".contenido.procedimiento.baja" TARGET="page82" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward4"
+   PATH=".contenido.procedimiento.form" TARGET="page83" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#publico#editar" NAME="action98"
+  PATH="/sistema/publico/editar" SHAPE="32,11777,0,0"
+  TITLE="publicoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.hevagrpub" TARGET="page44" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.publico.form" TARGET="page60" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#familia#icono" NAME="action99" PATH="/familia/icono"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ws#especificacion#borrar" NAME="action100"
+  PATH="/ws/especificacion/borrar" SHAPE="32,16369,0,0"
+  TITLE="especificacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.especificacion.lista" TARGET="page84" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#popupnormativas"
+  NAME="action101" PATH="/contenido/procedimiento/popupnormativas"
+  SHAPE="576,3361,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action101"
+   PATH=".contenido.procedimiento.popupnormativas" TARGET="page81"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#unidad#foto#pequenya" NAME="action102"
+  PATH="/unidad/foto/pequenya" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#materia#foto" NAME="action103" PATH="/materia/foto"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#espacio#lista" NAME="action104"
+  PATH="/sistema/espacio/lista" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action104" PATH=".sistema.espacio.lista"
+   TARGET="page85" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#popup" NAME="action105"
+  PATH="/contenido/normativa/popup" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action105"
+   PATH=".contenido.normativa.popup" TARGET="page86" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#visualizaTrabajo" NAME="action106"
+  PATH="/subscripcions/visualizaTrabajo" SHAPE="32,16369,0,0"
+  TITLE="listaActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="visualizaTrabajo" NAME="forward0"
+   PATH="/subscripcions/visualizaTrabajo.jsp" TARGET="page87"
+   TITLE="visualizaTrabajo" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#agrupacion#foto" NAME="action107"
+  PATH="/agrupacion/foto" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#subscripcions#home" NAME="action108"
+  PATH="/subscripcions/home" SHAPE="32,9505,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="inicio" NAME="forward0"
+   PATH="/subscripcions/index.jsp" TARGET="page29" TITLE="inicio"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#administracionRemota#form" NAME="action109"
+  PATH="/sistema/administracionRemota/form" SHAPE="32,13169,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action109"
+   PATH=".sistema.administracionRemota.form" TARGET="page88"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#graficonorm" NAME="action110"
+  PATH="/estadisticas/graficonorm" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ws#servicio#borrar" NAME="action111"
+  PATH="/ws/servicio/borrar" SHAPE="32,15329,0,0" TITLE="servicioForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.servicio.lista" TARGET="page58" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#guia#seleccionar" NAME="action112"
+  PATH="/organigrama/guia/seleccionar" SHAPE="32,16369,0,0"
+  TITLE="personalForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.guia.lista" TARGET="page89" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/organigrama/guia/form.do" TARGET="action192" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.guia.form" TARGET="page90" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#logout" NAME="action113" PATH="/logout"
+  SHAPE="32,16369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0" PATH="/logout.html"
+   TARGET="page91" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacionm#form" NAME="action114"
+  PATH="/sistema/agrupacionm/form" SHAPE="32,2545,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action114" PATH=".sistema.agrupacionm.form"
+   TARGET="page92" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tafectacion#editar" NAME="action115"
+  PATH="/sistema/tafectacion/editar" SHAPE="32,14481,0,0"
+  TITLE="tafectacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tafectacion.lista" TARGET="page52" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tafectacion/lista.do" TARGET="action239"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tafectacion.form" TARGET="page53" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#icono#materia" NAME="action116"
+  PATH="/icono/materia" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#tiniciacion#seleccionar" NAME="action117"
+  PATH="/sistema/tiniciacion/seleccionar" SHAPE="32,10849,0,0"
+  TITLE="tiniciacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tiniciacion.lista" TARGET="page36" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tiniciacion/lista.do" TARGET="action33" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tiniciacion.form" TARGET="page93" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#unidad#foto#logoh" NAME="action118"
+  PATH="/unidad/foto/logoh" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#administracionRemota#logop" NAME="action119"
+  PATH="/administracionRemota/logop" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#subscripcions#grupoTrabajoEdita" NAME="action120"
+  PATH="/subscripcions/grupoTrabajoEdita" SHAPE="32,16369,0,0"
+  TITLE="grupoTrabajoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalle" NAME="forward0"
+   PATH="/subscripcions/detalleGrupoTrabajo.jsp" TARGET="page94"
+   TITLE="detalle" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#graficoua" NAME="action121"
+  PATH="/estadisticas/graficoua" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#auditoria#lista" NAME="action122"
+  PATH="/auditoria/lista" SHAPE="32,6497,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action122" PATH=".auditoria.lista"
+   TARGET="page15" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#administracionRemota#logog" NAME="action123"
+  PATH="/administracionRemota/logog" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#materia#icono" NAME="action124"
+  PATH="/materia/icono" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#unidad#foto#logos" NAME="action125"
+  PATH="/unidad/foto/logos" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#tipua" NAME="action126"
+  PATH="/organigrama/tipua" SHAPE="272,16385,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action126" PATH=".organigrama.tipua"
+   TARGET="page95" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#unidad#foto#logov" NAME="action127"
+  PATH="/unidad/foto/logov" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#hechovital#distribComp" NAME="action128"
+  PATH="/hechovital/distribComp" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#boletin#seleccionar" NAME="action129"
+  PATH="/sistema/boletin/seleccionar" SHAPE="32,16369,0,0"
+  TITLE="boletinForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.boletin.lista" TARGET="page96" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/boletin/lista.do" TARGET="action143" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.boletin.form" TARGET="page97" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#servicio#guardar" NAME="action130"
+  PATH="/ws/servicio/guardar" SHAPE="32,15441,0,0" TITLE="servicioForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH=".ws.servicio.lista" TARGET="page58" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".ws.servicio.lista" TARGET="page58" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#seccion#arbol" NAME="action131"
+  PATH="/sistema/seccion/arbol" SHAPE="32,16369,0,0" TITLE="seccionForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="/sistema/seccion/arbol.jsp" TARGET="page98" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#popFichaUA" NAME="action132"
+  PATH="/organigrama/unidad/popFichaUA" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action132"
+   PATH=".organigrama.unidad.popFichaUA" TARGET="page99"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#externa#seleccionar"
+  NAME="action133" PATH="/contenido/normativa/externa/seleccionar"
+  SHAPE="32,7249,0,0" TITLE="normativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.normativa.lista" TARGET="page17" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/normativa/externa.do" TARGET="action153"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward2"
+   PATH=".contenido.normativa.baja" TARGET="page18" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward3"
+   PATH=".contenido.normativa.externa" TARGET="page45" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#espacio#form" NAME="action134"
+  PATH="/sistema/espacio/form" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action134" PATH=".sistema.espacio.form"
+   TARGET="page100" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#edificio#popCoordenadas"
+  NAME="action135" PATH="/organigrama/edificio/popCoordenadas"
+  SHAPE="32,16369,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action135"
+   PATH=".organigrama.edificio.popCoordenadas" TARGET="page101"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#enlace#form" NAME="action136"
+  PATH="/contenido/enlace/form" SHAPE="32,3361,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action136" PATH=".contenido.enlace.form"
+   TARGET="page57" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#especificacion#guardar" NAME="action137"
+  PATH="/ws/especificacion/guardar" SHAPE="32,16369,0,0"
+  TITLE="especificacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH=".ws.especificacion.lista" TARGET="page84" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".ws.especificacion.lista" TARGET="page84" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#hechovital#normativa" NAME="action138"
+  PATH="/hechovital/normativa" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#estadisticas#graficomat" NAME="action139"
+  PATH="/estadisticas/graficomat" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#familia#icono" NAME="action140"
+  PATH="/sistema/familia/icono" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action140" PATH=".sistema.familia.icono"
+   TARGET="page102" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#agrupacion#icono#grande" NAME="action141"
+  PATH="/agrupacion/icono/grande" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#auditoria#busqueda" NAME="action142"
+  PATH="/auditoria/busqueda" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action142" PATH=".auditoria.busqueda"
+   TARGET="page103" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#boletin#lista" NAME="action143"
+  PATH="/sistema/boletin/lista" SHAPE="272,16385,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action143" PATH=".sistema.boletin.lista"
+   TARGET="page96" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#seleccionar" NAME="action144"
+  PATH="/estadisticas/seleccionar" SHAPE="32,16369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".estadisticas.visualizar" TARGET="page104" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#espacio#seleccionar" NAME="action145"
+  PATH="/sistema/espacio/seleccionar" SHAPE="32,16369,0,0"
+  TITLE="espacioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.espacio.lista" TARGET="page85" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".sistema.espacio.lista" TARGET="page85" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.espacio.form" TARGET="page100" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ficha#baner" NAME="action146" PATH="/ficha/baner"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#usuario#seleccionar" NAME="action147"
+  PATH="/sistema/usuario/seleccionar" SHAPE="32,10561,0,0"
+  TITLE="usuarioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.usuario.lista" TARGET="page33" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/usuario/form.do" TARGET="action193" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.usuario.form" TARGET="page34" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#boletin#form" NAME="action148"
+  PATH="/sistema/boletin/form" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action148" PATH=".sistema.boletin.form"
+   TARGET="page97" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#trabajos" NAME="action149"
+  PATH="/subscripcions/trabajos" SHAPE="32,16369,0,0"
+  TITLE="BuscaOrdenaTrabajoActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="listarTrabajos" NAME="forward0"
+   PATH="/subscripcions/listaTrabajos.jsp" TARGET="page105"
+   TITLE="listarTrabajos" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#hechovital#editar" NAME="action150"
+  PATH="/sistema/hechovital/editar" SHAPE="32,12065,0,0"
+  TITLE="hechoVitalForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.hevagrpub" TARGET="page44" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.hechovital.form" TARGET="page37" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#enlace#editar" NAME="action151"
+  PATH="/contenido/enlace/editar" SHAPE="32,3473,0,0" TITLE="enlaceForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="ficha" NAME="forward0"
+   PATH="/contenido/ficha/seleccionar.do" TARGET="action87"
+   TITLE="ficha" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="procedimiento" NAME="forward1"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="procedimiento" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".contenido.enlace.form" TARGET="page57" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#popmateria" NAME="action152"
+  PATH="/contenido/ficha/popmateria" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action152"
+   PATH=".contenido.ficha.popmateria" TARGET="page106" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#externa" NAME="action153"
+  PATH="/contenido/normativa/externa" SHAPE="304,7057,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action153"
+   PATH=".contenido.normativa.externa" TARGET="page45" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#ficha" NAME="action154"
+  PATH="/auditoria/ficha" SHAPE="32,15697,0,0" TITLE="auditoriaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.detalle" TARGET="page59" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#pophechovital" NAME="action155"
+  PATH="/contenido/ficha/pophechovital" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action155"
+   PATH=".contenido.ficha.pophechovital" TARGET="page107"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#guia#editar" NAME="action156"
+  PATH="/organigrama/guia/editar" SHAPE="32,16369,0,0"
+  TITLE="personalForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.guia.lista" TARGET="page89" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/organigrama/guia/form.do" TARGET="action192" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.guia.form" TARGET="page90" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#hechovital#contenido" NAME="action157"
+  PATH="/hechovital/contenido" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#destinatario#lista" NAME="action158"
+  PATH="/sistema/destinatario/lista" SHAPE="272,13297,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action158"
+   PATH=".sistema.destinatario.lista" TARGET="page40" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#destinatario#form" NAME="action159"
+  PATH="/sistema/destinatario/form" SHAPE="32,13633,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action159"
+   PATH=".sistema.destinatario.form" TARGET="page41" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacion#form" NAME="action160"
+  PATH="/sistema/agrupacion/form" SHAPE="32,12705,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action160" PATH=".sistema.agrupacion.form"
+   TARGET="page108" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#icomat" NAME="action161"
+  PATH="/sistema/icomat" SHAPE="32,2657,0,0" TITLE="iconoMateriaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".sistema.materia.form" TARGET="page6" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#editar" NAME="action162"
+  PATH="/contenido/normativa/editar" SHAPE="32,16369,0,0"
+  TITLE="normativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forwerror" NAME="forward0"
+   PATH=".contenido.normativa.traspasaEditarError" TARGET="page109"
+   TITLE="forwerror" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".contenido.normativa.traspasaEditarOk" TARGET="page110"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacionm#seleccionar" NAME="action163"
+  PATH="/sistema/agrupacionm/seleccionar" SHAPE="32,2081,0,0"
+  TITLE="agrupacionMForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.agrupacionm.lista" TARGET="page12" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.agrupacionm.form" TARGET="page92" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#grupoEdita" NAME="action164"
+  PATH="/subscripcions/grupoEdita" SHAPE="32,16369,0,0"
+  TITLE="grupoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="detalle" NAME="forward0"
+   PATH="/subscripcions/detalleGrupo.jsp" TARGET="page77"
+   TITLE="detalle" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#hechovital#popproc" NAME="action165"
+  PATH="/sistema/hechovital/popproc" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action165"
+   PATH=".sistema.hechovital.popproc" TARGET="page111" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#graficopro" NAME="action166"
+  PATH="/estadisticas/graficopro" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#hevagrpub" NAME="action167"
+  PATH="/sistema/hevagrpub" SHAPE="304,11617,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action167" PATH=".sistema.hevagrpub"
+   TARGET="page44" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#navges#arbol" NAME="action168"
+  PATH="/auditoria/navges/arbol" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action168" PATH=".auditoria.navges.arbol"
+   TARGET="page112" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#editar" NAME="action169"
+  PATH="/contenido/ficha/editar" SHAPE="304,3841,0,0" TITLE="fichaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.ficha.lista" TARGET="page8" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/ficha/form.do" TARGET="action198" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="seccion" NAME="forward2"
+   PATH="/sistema/seccion/seleccionar.do" TARGET="action26"
+   TITLE="seccion" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward3"
+   PATH=".contenido.ficha.baja" TARGET="page74" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward4"
+   PATH=".contenido.ficha.form" TARGET="page75" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacion#seleccionar" NAME="action170"
+  PATH="/sistema/agrupacion/seleccionar" SHAPE="32,12241,0,0"
+  TITLE="agrupacionHVForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.agrupacion.lista" TARGET="page113" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.agrupacion.form" TARGET="page108" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#lista" NAME="action171"
+  PATH="/estadisticas/lista" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action171" PATH=".estadisticas.lista"
+   TARGET="page114" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tafectacion#form" NAME="action172"
+  PATH="/sistema/tafectacion/form" SHAPE="32,14657,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action172" PATH=".sistema.tafectacion.form"
+   TARGET="page53" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#administracionRemota#estado"
+  NAME="action173" PATH="/sistema/administracionRemota/estado"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#navges" NAME="action174"
+  PATH="/organigrama/navges" SHAPE="272,5841,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action174" PATH=".organigrama.navges"
+   TARGET="page115" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacionm#editar" NAME="action175"
+  PATH="/sistema/agrupacionm/editar" SHAPE="32,2369,0,0"
+  TITLE="agrupacionMForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.agrupacionm.lista" TARGET="page12" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.agrupacionm.form" TARGET="page92" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tiniciacion#editar" NAME="action176"
+  PATH="/sistema/tiniciacion/editar" SHAPE="32,11025,0,0"
+  TITLE="tiniciacionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tiniciacion.lista" TARGET="page36" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tiniciacion/lista.do" TARGET="action33" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tiniciacion.form" TARGET="page93" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#hechovital#icono#grande" NAME="action177"
+  PATH="/hechovital/icono/grande" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#auditoria#normativa" NAME="action178"
+  PATH="/auditoria/normativa" SHAPE="32,15809,0,0" TITLE="auditoriaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.detalle" TARGET="page59" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#searchnormativa"
+  NAME="action179" PATH="/contenido/normativa/searchnormativa"
+  SHAPE="32,16369,0,0" TITLE="SearchnormativaActionForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="successVarios" NAME="forward0"
+   PATH=".contenido.normativa.searchVarios" TARGET="page116"
+   TITLE="successVarios" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="successOne" NAME="forward1"
+   PATH=".contenido.normativa.searchOne" TARGET="page117"
+   TITLE="successOne" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="successError" NAME="forward2"
+   PATH=".contenido.normativa.searchError" TARGET="page118"
+   TITLE="successError" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#especificacion#lista" NAME="action180"
+  PATH="/ws/especificacion/lista" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action180" PATH=".ws.especificacion.lista"
+   TARGET="page84" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#popmateria" NAME="action181"
+  PATH="/organigrama/unidad/popmateria" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action181"
+   PATH=".organigrama.unidad.popmateria" TARGET="page119"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#local" NAME="action182"
+  PATH="/contenido/normativa/local" SHAPE="304,7473,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action182"
+   PATH=".contenido.normativa.local" TARGET="page19" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#editar" NAME="action183"
+  PATH="/contenido/procedimiento/editar" SHAPE="576,4673,0,0"
+  TITLE="procedimientoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="popup" NAME="forward0"
+   PATH=".contenido.procedimiento.popupnormativas" TARGET="page81"
+   TITLE="popup" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward1"
+   PATH=".contenido.procedimiento.lista" TARGET="page22" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward2"
+   PATH="/contenido/procedimiento/form.do" TARGET="action219"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward3"
+   PATH=".contenido.procedimiento.baja" TARGET="page82" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward4"
+   PATH=".contenido.procedimiento.form" TARGET="page83" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#subscripcions#index_inicio" NAME="action184"
+  PATH="/subscripcions/index_inicio" SHAPE="32,16369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="inicio" NAME="forward0"
+   PATH="/subscripcions/index_inicio.jsp" TARGET="page120"
+   TITLE="inicio" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#destinatario#seleccionar" NAME="action185"
+  PATH="/sistema/destinatario/seleccionar" SHAPE="32,13457,0,0"
+  TITLE="destinatarioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.destinatario.lista" TARGET="page40" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/destinatario/lista.do" TARGET="action158"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.destinatario.form" TARGET="page41" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#formulario#form" NAME="action186"
+  PATH="/contenido/formulario/form" SHAPE="32,4417,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action186"
+   PATH=".contenido.formulario.form" TARGET="page69" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#normativa#local#seleccionar"
+  NAME="action187" PATH="/contenido/normativa/local/seleccionar"
+  SHAPE="32,7457,0,0" TITLE="normativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".contenido.normativa.lista" TARGET="page17" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/contenido/normativa/local.do" TARGET="action182"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="eliminar" NAME="forward2"
+   PATH=".contenido.normativa.baja" TARGET="page18" TITLE="eliminar"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward3"
+   PATH=".contenido.normativa.local" TARGET="page19" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#seleccionar" NAME="action188"
+  PATH="/auditoria/seleccionar" SHAPE="32,16257,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.visualizar" TARGET="page61" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#perfil#editar" NAME="action189"
+  PATH="/sistema/perfil/editar" SHAPE="32,1217,0,0" TITLE="perfilForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.perfil.lista" TARGET="page43" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.perfil.form" TARGET="page39" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#seleccionar" NAME="action190"
+  PATH="/organigrama/unidad/seleccionar" SHAPE="272,5377,0,0"
+  TITLE="unidadForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.unidad.lista" TARGET="page121" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".organigrama.navges" TARGET="page115" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.unidad.form" TARGET="page10" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#back" NAME="action191" PATH="/back"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#guia#form" NAME="action192"
+  PATH="/organigrama/guia/form" SHAPE="272,16385,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action192" PATH=".organigrama.guia.form"
+   TARGET="page90" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#usuario#form" NAME="action193"
+  PATH="/sistema/usuario/form" SHAPE="272,10577,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action193" PATH=".sistema.usuario.form"
+   TARGET="page34" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#familia#seleccionar" NAME="action194"
+  PATH="/sistema/familia/seleccionar" SHAPE="32,1681,0,0"
+  TITLE="familiaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.familia.lista" TARGET="page48" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.familia.form" TARGET="page49" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#historico" NAME="action195"
+  PATH="/auditoria/historico" SHAPE="32,15921,0,0" TITLE="auditoriaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.detalle" TARGET="page59" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unimat#seleccionar" NAME="action196"
+  PATH="/organigrama/unimat/seleccionar" SHAPE="32,5649,0,0"
+  TITLE="unidadMateriaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward0"
+   PATH="/organigrama/unidad/seleccionar.do" TARGET="action190"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".organigrama.unimat.form" TARGET="page50" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#documento#form" NAME="action197"
+  PATH="/contenido/documento/form" SHAPE="32,3825,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action197" PATH=".contenido.documento.form"
+   TARGET="page27" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#ficha#form" NAME="action198"
+  PATH="/contenido/ficha/form" SHAPE="576,3825,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action198" PATH=".contenido.ficha.form"
+   TARGET="page75" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#edificio#lista" NAME="action199"
+  PATH="/organigrama/edificio/lista" SHAPE="32,9057,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action199"
+   PATH=".organigrama.edificio.lista" TARGET="page25" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticasmateria#seleccionar" NAME="action200"
+  PATH="/estadisticasmateria/seleccionar" SHAPE="32,16369,0,0"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".estadisticasmateria.visualizar" TARGET="page122"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#servicio#editar" NAME="action201"
+  PATH="/ws/servicio/editar" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action201" PATH=".ws.servicio.editar"
+   TARGET="page73" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#espacio#mapa" NAME="action202" PATH="/espacio/mapa"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#organigrama#unidad#popusuario" NAME="action203"
+  PATH="/organigrama/unidad/popusuario" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action203"
+   PATH=".organigrama.unidad.popusuario" TARGET="page123"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#administracionRemota#seleccionar"
+  NAME="action204" PATH="/sistema/administracionRemota/seleccionar"
+  SHAPE="32,12817,0,0" TITLE="administracionRemotaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.administracionRemota.lista" TARGET="page38"
+   TITLE="lista" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/administracionRemota/lista.do" TARGET="action35"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.administracionRemota.form" TARGET="page88"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#formulario#archivo" NAME="action205"
+  PATH="/formulario/archivo" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#agrupacion#lista" NAME="action206"
+  PATH="/sistema/agrupacion/lista" SHAPE="32,12417,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action206" PATH=".sistema.agrupacion.lista"
+   TARGET="page113" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#graficofi" NAME="action207"
+  PATH="/estadisticas/graficofi" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#main" NAME="action208" PATH="/main"
+  SHAPE="240,257,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action208" PATH=".main" TARGET="page124"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#organismo#mostrar" NAME="action209"
+  PATH="/ws/organismo/mostrar" SHAPE="32,10017,0,0"
+  TITLE="organismoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".ws.organismo.editar" TARGET="page64" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#edificio#plano" NAME="action210"
+  PATH="/edificio/plano" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#index#ficha" NAME="action211" PATH="/index/ficha"
+  SHAPE="32,16369,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action211" PATH=".index.ficha"
+   TARGET="page125" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#boletin#editar" NAME="action212"
+  PATH="/sistema/boletin/editar" SHAPE="32,16369,0,0"
+  TITLE="boletinForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.boletin.lista" TARGET="page96" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/boletin/lista.do" TARGET="action143" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.boletin.form" TARGET="page97" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#estadisticas#popventana" NAME="action213"
+  PATH="/estadisticas/popventana" SHAPE="32,16369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="/estadisticas/popEstadisticas.jsp" TARGET="page126"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tipo#editar" NAME="action214"
+  PATH="/sistema/tipo/editar" SHAPE="32,16369,0,0" TITLE="tipoForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tipo.lista" TARGET="page127" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tipo/lista.do" TARGET="action238" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tipo.form" TARGET="page79" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#especificacion#editar" NAME="action215"
+  PATH="/ws/especificacion/editar" SHAPE="32,9281,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action215" PATH=".ws.especificacion.editar"
+   TARGET="page28" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ficha#busqueda" NAME="action216"
+  PATH="/ficha/busqueda" SHAPE="32,13857,0,0" TITLE="busquedaFichaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="popup" NAME="forward0"
+   PATH=".organigrama.unidad.popupfichas" TARGET="page42" TITLE="popup"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#espacio#editar" NAME="action217"
+  PATH="/sistema/espacio/editar" SHAPE="32,16369,0,0"
+  TITLE="espacioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.espacio.lista" TARGET="page85" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".sistema.espacio.lista" TARGET="page85" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.espacio.form" TARGET="page100" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#icofam" NAME="action218"
+  PATH="/sistema/icofam" SHAPE="32,1969,0,0" TITLE="iconoFamiliaForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".sistema.familia.form" TARGET="page49" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#form" NAME="action219"
+  PATH="/contenido/procedimiento/form" SHAPE="848,4929,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action219"
+   PATH=".contenido.procedimiento.form" TARGET="page83"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#materia#form" NAME="action220"
+  PATH="/sistema/materia/form" SHAPE="32,2769,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action220" PATH=".sistema.materia.form"
+   TARGET="page6" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#seccion#form" NAME="action221"
+  PATH="/sistema/seccion/form" SHAPE="576,4417,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action221" PATH=".sistema.seccion.form"
+   TARGET="page31" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#formulario#seleccionar" NAME="action222"
+  PATH="/contenido/formulario/seleccionar" SHAPE="32,4529,0,0"
+  TITLE="formularioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="tramite" NAME="forward0"
+   PATH="/contenido/tramite/seleccionar.do" TARGET="action78"
+   TITLE="tramite" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward1"
+   PATH=".contenido.formulario.form" TARGET="page69" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ws#organismo#nuevo" NAME="action223"
+  PATH="/ws/organismo/nuevo" SHAPE="32,9905,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action223" PATH=".ws.organismo.nuevo"
+   TARGET="page63" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#materia#seleccionar" NAME="action224"
+  PATH="/sistema/materia/seleccionar" SHAPE="32,865,0,0"
+  TITLE="materiaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.materia.lista" TARGET="page5" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/matfamper.do" TARGET="action92" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.materia.form" TARGET="page6" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tiniciacion#form" NAME="action225"
+  PATH="/sistema/tiniciacion/form" SHAPE="32,11201,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action225" PATH=".sistema.tiniciacion.form"
+   TARGET="page93" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#poparbol" NAME="action226"
+  PATH="/organigrama/unidad/poparbol" SHAPE="32,16369,0,0"
+  TITLE="unidadForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="/organigrama/unidad/poparbol.jsp" TARGET="page128"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#auditoria#procedimiento" NAME="action227"
+  PATH="/auditoria/procedimiento" SHAPE="32,16033,0,0"
+  TITLE="auditoriaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".auditoria.detalle" TARGET="page59" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#procedimiento#popupcodigo"
+  NAME="action228" PATH="/contenido/procedimiento/popupcodigo"
+  SHAPE="32,16369,0,0" SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action228"
+   PATH=".contenido.procedimiento.popupcodigo" TARGET="page129"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#hechovital#foto" NAME="action229"
+  PATH="/hechovital/foto" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#normativa#busqueda" NAME="action230"
+  PATH="/normativa/busqueda" SHAPE="576,5025,0,0"
+  TITLE="busquedaNormativaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="popup" NAME="forward0"
+   PATH=".contenido.procedimiento.popupnormativas" TARGET="page81"
+   TITLE="popup" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacionm#popmate" NAME="action231"
+  PATH="/sistema/agrupacionm/popmate" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action231"
+   PATH=".sistema.agrupacionm.popmate" TARGET="page130"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#agrupacion#editar" NAME="action232"
+  PATH="/sistema/agrupacion/editar" SHAPE="32,12529,0,0"
+  TITLE="agrupacionHVForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.agrupacion.lista" TARGET="page113" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/hevagrpub.do" TARGET="action167" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.agrupacion.form" TARGET="page108" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#popedificio" NAME="action233"
+  PATH="/organigrama/unidad/popedificio" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action233"
+   PATH=".organigrama.unidad.popedificio" TARGET="page131"
+   TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#comentario#borrar" NAME="action234"
+  PATH="/contenido/comentario/borrar" SHAPE="32,4065,0,0"
+  TITLE="comentarioForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="ficha" NAME="forward0"
+   PATH="/contenido/ficha/seleccionar.do" TARGET="action87"
+   TITLE="ficha" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="procedimiento" NAME="forward1"
+   PATH="/contenido/procedimiento/seleccionar.do" TARGET="action97"
+   TITLE="procedimiento" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#ficha#imagen" NAME="action235" PATH="/ficha/imagen"
+  SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#index#ficha#reiniciar" NAME="action236"
+  PATH="/index/ficha/reiniciar" SHAPE="32,8369,0,0" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH=".index.finaliza" TARGET="page23" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#hechovital#icono" NAME="action237"
+  PATH="/hechovital/icono" SHAPE="32,16545,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#sistema#tipo#lista" NAME="action238"
+  PATH="/sistema/tipo/lista" SHAPE="272,16561,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action238" PATH=".sistema.tipo.lista"
+   TARGET="page127" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tafectacion#lista" NAME="action239"
+  PATH="/sistema/tafectacion/lista" SHAPE="272,14321,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action239"
+   PATH=".sistema.tafectacion.lista" TARGET="page52" TITLE="parameter"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#tipo#seleccionar" NAME="action240"
+  PATH="/sistema/tipo/seleccionar" SHAPE="32,16545,0,0" TITLE="tipoForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.tipo.lista" TARGET="page127" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/tipo/lista.do" TARGET="action238" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.tipo.form" TARGET="page79" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#hechovital#lista" NAME="action241"
+  PATH="/sistema/hechovital/lista" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action241" PATH=".sistema.hechovital.lista"
+   TARGET="page132" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#administracionRemota#editar"
+  NAME="action242" PATH="/sistema/administracionRemota/editar"
+  SHAPE="32,12993,0,0" TITLE="administracionRemotaForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".sistema.administracionRemota.lista" TARGET="page38"
+   TITLE="lista" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH="/sistema/administracionRemota/lista.do" TARGET="action35"
+   TITLE="cancel" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".sistema.administracionRemota.form" TARGET="page88"
+   TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#navges#arbol" NAME="action243"
+  PATH="/organigrama/navges/arbol" SHAPE="32,16369,0,0"
+  SUBTYPE="parameter" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action243" PATH=".organigrama.navges.arbol"
+   TARGET="page133" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#sistema#unidad#form" NAME="action244"
+  PATH="/sistema/unidad/form" SHAPE="32,16369,0,0" SUBTYPE="parameter"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT NAME="action244" PATH=".sistema.unidad.form"
+   TARGET="page134" TITLE="parameter" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#organigrama#unidad#editar" NAME="action245"
+  PATH="/organigrama/unidad/editar" SHAPE="272,5665,0,0"
+  TITLE="unidadForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="lista" NAME="forward0"
+   PATH=".organigrama.unidad.lista" TARGET="page121" TITLE="lista"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="cancel" NAME="forward1"
+   PATH=".organigrama.navges" TARGET="page115" TITLE="cancel"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH=".organigrama.unidad.form" TARGET="page10" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="page0" PATH=".espera" SHAPE="240,34,0,0"
+  SUBTYPE="tile" TITLE=".espera" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page1" PATH="/subscripcions/info.jsp"
+  SHAPE="240,146,0,0" SUBTYPE="jsp" TITLE="info.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page2" PATH="/sacback/subscripcions/error.jsp"
+  SHAPE="240,370,0,0" SUBTYPE="jsp" TITLE="error.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page3" PATH="/moduls/fail.jsp" SHAPE="240,482,0,0"
+  SUBTYPE="jsp" TITLE="fail.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page4" PATH=".sistema.agrupacion.pophecho"
+  SHAPE="240,594,0,0" SUBTYPE="tile"
+  TITLE=".sistema.agrupacion.pophecho" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page5" PATH=".sistema.materia.lista"
+  SHAPE="304,706,0,0" SUBTYPE="tile" TITLE=".sistema.materia.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page6" PATH=".sistema.materia.form"
+  SHAPE="304,1410,0,0" SUBTYPE="tile" TITLE=".sistema.materia.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page7" PATH=".contenido.tramite.form"
+  SHAPE="576,4530,0,0" SUBTYPE="tile" TITLE=".contenido.tramite.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page8" PATH=".contenido.ficha.lista"
+  SHAPE="576,3122,0,0" SUBTYPE="tile" TITLE=".contenido.ficha.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page9" PATH=".contenido.normativa.popupcodigo"
+  SHAPE="240,5154,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.popupcodigo" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page10" PATH=".organigrama.unidad.form"
+  SHAPE="512,5250,0,0" SUBTYPE="tile" TITLE=".organigrama.unidad.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page11" PATH=".sistema.publico.lista"
+  SHAPE="240,5954,0,0" SUBTYPE="tile" TITLE=".sistema.publico.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page12" PATH=".sistema.agrupacionm.lista"
+  SHAPE="304,2098,0,0" SUBTYPE="tile" TITLE=".sistema.agrupacionm.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page13" PATH=".contenido.procedimiento.popup"
+  SHAPE="240,6066,0,0" SUBTYPE="tile"
+  TITLE=".contenido.procedimiento.popup" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page14" PATH="/subscripcions/detalleTrabajo.jsp"
+  SHAPE="256,6178,0,0" SUBTYPE="jsp" TITLE="detalleTrabajo.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page15" PATH=".auditoria.lista"
+  SHAPE="256,6402,0,0" SUBTYPE="tile" TITLE=".auditoria.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page16" PATH=".contenido.ficha.popupcodigo"
+  SHAPE="240,6626,0,0" SUBTYPE="tile"
+  TITLE=".contenido.ficha.popupcodigo" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page17" PATH=".contenido.normativa.lista"
+  SHAPE="304,6738,0,0" SUBTYPE="tile" TITLE=".contenido.normativa.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page18" PATH=".contenido.normativa.baja"
+  SHAPE="304,7266,0,0" SUBTYPE="tile" TITLE=".contenido.normativa.baja"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page19" PATH=".contenido.normativa.local"
+  SHAPE="544,7458,0,0" SUBTYPE="tile" TITLE=".contenido.normativa.local"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page20" PATH="/layout/tableLayout.jsp"
+  SHAPE="256,7682,0,0" SUBTYPE="jsp" TITLE="tableLayout.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page21" PATH="/layout/mainLayout.jsp"
+  SHAPE="256,7826,0,0" SUBTYPE="jsp" TITLE="mainLayout.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page22" PATH=".contenido.procedimiento.lista"
+  SHAPE="848,4690,0,0" SUBTYPE="tile"
+  TITLE=".contenido.procedimiento.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page23" PATH=".index.finaliza" SHAPE="304,7938,0,0"
+  SUBTYPE="tile" TITLE=".index.finaliza" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page24" PATH=".index.ua" SHAPE="240,8498,0,0"
+  SUBTYPE="tile" TITLE=".index.ua" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page25" PATH=".organigrama.edificio.lista"
+  SHAPE="304,8610,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.edificio.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page26" PATH=".organigrama.edificio.form"
+  SHAPE="304,8786,0,0" SUBTYPE="tile" TITLE=".organigrama.edificio.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page27" PATH=".contenido.documento.form"
+  SHAPE="304,3666,0,0" SUBTYPE="tile" TITLE=".contenido.documento.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page28" PATH=".ws.especificacion.editar"
+  SHAPE="256,9186,0,0" SUBTYPE="tile" TITLE=".ws.especificacion.editar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page29" PATH="/subscripcions/index.jsp"
+  SHAPE="256,9410,0,0" SUBTYPE="jsp" TITLE="index.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page30" PATH=".sistema.seccion.lista"
+  SHAPE="848,4082,0,0" SUBTYPE="tile" TITLE=".sistema.seccion.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page31" PATH=".sistema.seccion.form"
+  SHAPE="848,4258,0,0" SUBTYPE="tile" TITLE=".sistema.seccion.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page32" PATH=".ws.organismo.lista"
+  SHAPE="304,9634,0,0" SUBTYPE="tile" TITLE=".ws.organismo.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page33" PATH=".sistema.usuario.lista"
+  SHAPE="272,10402,0,0" SUBTYPE="tile" TITLE=".sistema.usuario.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page34" PATH=".sistema.usuario.form"
+  SHAPE="512,10562,0,0" SUBTYPE="tile" TITLE=".sistema.usuario.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page35" PATH=".popup.comentarios"
+  SHAPE="240,10754,0,0" SUBTYPE="tile" TITLE=".popup.comentarios"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page36" PATH=".sistema.tiniciacion.lista"
+  SHAPE="512,10850,0,0" SUBTYPE="tile"
+  TITLE=".sistema.tiniciacion.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page37" PATH=".sistema.hechovital.form"
+  SHAPE="304,11330,0,0" SUBTYPE="tile" TITLE=".sistema.hechovital.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page38" PATH=".sistema.administracionRemota.lista"
+  SHAPE="512,12818,0,0" SUBTYPE="tile"
+  TITLE=".sistema.administracionRemota.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page39" PATH=".sistema.perfil.form"
+  SHAPE="304,1234,0,0" SUBTYPE="tile" TITLE=".sistema.perfil.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page40" PATH=".sistema.destinatario.lista"
+  SHAPE="512,13458,0,0" SUBTYPE="tile"
+  TITLE=".sistema.destinatario.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page41" PATH=".sistema.destinatario.form"
+  SHAPE="272,13474,0,0" SUBTYPE="tile"
+  TITLE=".sistema.destinatario.form" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page42" PATH=".organigrama.unidad.popupfichas"
+  SHAPE="256,13762,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.popupfichas" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page43" PATH=".sistema.perfil.lista"
+  SHAPE="304,1058,0,0" SUBTYPE="tile" TITLE=".sistema.perfil.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page44" PATH=".sistema.hevagrpub"
+  SHAPE="576,11426,0,0" SUBTYPE="tile" TITLE=".sistema.hevagrpub"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page45" PATH=".contenido.normativa.externa"
+  SHAPE="544,7250,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.externa" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page46" PATH=".index.normativa"
+  SHAPE="240,13986,0,0" SUBTYPE="tile" TITLE=".index.normativa"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page47" PATH="/subscripcions/listaGrupos.jsp"
+  SHAPE="240,14098,0,0" SUBTYPE="jsp" TITLE="listaGrupos.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page48" PATH=".sistema.familia.lista"
+  SHAPE="304,1522,0,0" SUBTYPE="tile" TITLE=".sistema.familia.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page49" PATH=".sistema.familia.form"
+  SHAPE="304,1698,0,0" SUBTYPE="tile" TITLE=".sistema.familia.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page50" PATH=".organigrama.unimat.form"
+  SHAPE="272,5554,0,0" SUBTYPE="tile" TITLE=".organigrama.unimat.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page51" PATH="/moduls/calendario.jsp"
+  SHAPE="240,14210,0,0" SUBTYPE="jsp" TITLE="calendario.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page52" PATH=".sistema.tafectacion.lista"
+  SHAPE="512,14482,0,0" SUBTYPE="tile"
+  TITLE=".sistema.tafectacion.lista" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page53" PATH=".sistema.tafectacion.form"
+  SHAPE="272,14498,0,0" SUBTYPE="tile" TITLE=".sistema.tafectacion.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page54" PATH="/subscripcions/detalleSuscriptor.jsp"
+  SHAPE="256,14786,0,0" SUBTYPE="jsp" TITLE="detalleSuscriptor.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page55" PATH=".contenido.normativa.traspasa"
+  SHAPE="240,15010,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.traspasa" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page56" PATH="/subscripcions/listaSuscriptores.jsp"
+  SHAPE="240,15122,0,0" SUBTYPE="jsp" TITLE="listaSuscriptores.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page57" PATH=".contenido.enlace.form"
+  SHAPE="304,3378,0,0" SUBTYPE="tile" TITLE=".contenido.enlace.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page58" PATH=".ws.servicio.lista"
+  SHAPE="288,15234,0,0" SUBTYPE="tile" TITLE=".ws.servicio.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page59" PATH=".auditoria.detalle"
+  SHAPE="304,15602,0,0" SUBTYPE="tile" TITLE=".auditoria.detalle"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page60" PATH=".sistema.publico.form"
+  SHAPE="304,11794,0,0" SUBTYPE="tile" TITLE=".sistema.publico.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page61" PATH=".auditoria.visualizar"
+  SHAPE="256,16162,0,0" SUBTYPE="tile" TITLE=".auditoria.visualizar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page62" PATH=".contenido.normativa.popafectacion"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.popafectacion" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page63" PATH=".ws.organismo.nuevo"
+  SHAPE="304,9746,0,0" SUBTYPE="tile" TITLE=".ws.organismo.nuevo"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page64" PATH=".ws.organismo.editar"
+  SHAPE="304,9922,0,0" SUBTYPE="tile" TITLE=".ws.organismo.editar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page65" PATH=".microsites.lista"
+  SHAPE="240,16562,0,0" SUBTYPE="tile" TITLE=".microsites.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page66" PATH=".index.procedimiento"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".index.procedimiento"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page67" PATH=".organigrama.tipua.lista"
+  SHAPE="272,16386,0,0" SUBTYPE="tile" TITLE=".organigrama.tipua.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page68" PATH=".organigrama.tipua.form"
+  SHAPE="272,16386,0,0" SUBTYPE="tile" TITLE=".organigrama.tipua.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page69" PATH=".contenido.formulario.form"
+  SHAPE="304,4258,0,0" SUBTYPE="tile" TITLE=".contenido.formulario.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page70" PATH=".estadisticas.materias"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".estadisticas.materias"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page71" PATH=".sistema.materia.icono"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".sistema.materia.icono"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page72" PATH=".organigrama.unidad.materia"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.materia" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page73" PATH=".ws.servicio.editar"
+  SHAPE="256,16386,0,0" SUBTYPE="tile" TITLE=".ws.servicio.editar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page74" PATH=".contenido.ficha.baja"
+  SHAPE="576,3474,0,0" SUBTYPE="tile" TITLE=".contenido.ficha.baja"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page75" PATH=".contenido.ficha.form"
+  SHAPE="848,3842,0,0" SUBTYPE="tile" TITLE=".contenido.ficha.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page76" PATH=".contenido.ficha.popFichaUA"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.ficha.popFichaUA" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page77" PATH="/subscripcions/detalleGrupo.jsp"
+  SHAPE="256,16386,0,0" SUBTYPE="jsp" TITLE="detalleGrupo.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page78" PATH=".sistema.matfamper"
+  SHAPE="512,866,0,0" SUBTYPE="tile" TITLE=".sistema.matfamper"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page79" PATH=".sistema.tipo.form"
+  SHAPE="272,16386,0,0" SUBTYPE="tile" TITLE=".sistema.tipo.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page80" PATH="/sistema/espacio/arbol.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="arbol.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page81"
+  PATH=".contenido.procedimiento.popupnormativas" SHAPE="848,2898,0,0"
+  SUBTYPE="tile" TITLE=".contenido.procedimiento.popupnormativas"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page82" PATH=".contenido.procedimiento.baja"
+  SHAPE="848,4546,0,0" SUBTYPE="tile"
+  TITLE=".contenido.procedimiento.baja" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page83" PATH=".contenido.procedimiento.form"
+  SHAPE="1088,4914,0,0" SUBTYPE="tile"
+  TITLE=".contenido.procedimiento.form" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page84" PATH=".ws.especificacion.lista"
+  SHAPE="288,16386,0,0" SUBTYPE="tile" TITLE=".ws.especificacion.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page85" PATH=".sistema.espacio.lista"
+  SHAPE="304,16386,0,0" SUBTYPE="tile" TITLE=".sistema.espacio.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page86" PATH=".contenido.normativa.popup"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.popup" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page87" PATH="/subscripcions/visualizaTrabajo.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="visualizaTrabajo.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page88" PATH=".sistema.administracionRemota.form"
+  SHAPE="272,13010,0,0" SUBTYPE="tile"
+  TITLE=".sistema.administracionRemota.form" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page89" PATH=".organigrama.guia.lista"
+  SHAPE="272,16386,0,0" SUBTYPE="tile" TITLE=".organigrama.guia.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page90" PATH=".organigrama.guia.form"
+  SHAPE="512,16370,0,0" SUBTYPE="tile" TITLE=".organigrama.guia.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page91" PATH="/logout.html" SHAPE="240,16386,0,0"
+  SUBTYPE="html" TITLE="logout.html" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page92" PATH=".sistema.agrupacionm.form"
+  SHAPE="304,2386,0,0" SUBTYPE="tile" TITLE=".sistema.agrupacionm.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page93" PATH=".sistema.tiniciacion.form"
+  SHAPE="272,11042,0,0" SUBTYPE="tile" TITLE=".sistema.tiniciacion.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page94"
+  PATH="/subscripcions/detalleGrupoTrabajo.jsp" SHAPE="240,16386,0,0"
+  SUBTYPE="jsp" TITLE="detalleGrupoTrabajo.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page95" PATH=".organigrama.tipua"
+  SHAPE="480,16370,0,0" SUBTYPE="tile" TITLE=".organigrama.tipua"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page96" PATH=".sistema.boletin.lista"
+  SHAPE="512,16370,0,0" SUBTYPE="tile" TITLE=".sistema.boletin.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page97" PATH=".sistema.boletin.form"
+  SHAPE="272,16386,0,0" SUBTYPE="tile" TITLE=".sistema.boletin.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page98" PATH="/sistema/seccion/arbol.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="arbol.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page99" PATH=".organigrama.unidad.popFichaUA"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.popFichaUA" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page100" PATH=".sistema.espacio.form"
+  SHAPE="304,16386,0,0" SUBTYPE="tile" TITLE=".sistema.espacio.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page101"
+  PATH=".organigrama.edificio.popCoordenadas" SHAPE="240,16386,0,0"
+  SUBTYPE="tile" TITLE=".organigrama.edificio.popCoordenadas"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page102" PATH=".sistema.familia.icono"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".sistema.familia.icono"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page103" PATH=".auditoria.busqueda"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".auditoria.busqueda"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page104" PATH=".estadisticas.visualizar"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".estadisticas.visualizar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page105" PATH="/subscripcions/listaTrabajos.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="listaTrabajos.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page106" PATH=".contenido.ficha.popmateria"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.ficha.popmateria" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page107" PATH=".contenido.ficha.pophechovital"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.ficha.pophechovital" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page108" PATH=".sistema.agrupacion.form"
+  SHAPE="304,12546,0,0" SUBTYPE="tile" TITLE=".sistema.agrupacion.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page109"
+  PATH=".contenido.normativa.traspasaEditarError" SHAPE="256,16386,0,0"
+  SUBTYPE="tile" TITLE=".contenido.normativa.traspasaEditarError"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page110"
+  PATH=".contenido.normativa.traspasaEditarOk" SHAPE="256,16386,0,0"
+  SUBTYPE="tile" TITLE=".contenido.normativa.traspasaEditarOk"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page111" PATH=".sistema.hechovital.popproc"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".sistema.hechovital.popproc" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page112" PATH=".auditoria.navges.arbol"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".auditoria.navges.arbol"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page113" PATH=".sistema.agrupacion.lista"
+  SHAPE="304,12258,0,0" SUBTYPE="tile" TITLE=".sistema.agrupacion.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page114" PATH=".estadisticas.lista"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".estadisticas.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page115" PATH=".organigrama.navges"
+  SHAPE="512,5650,0,0" SUBTYPE="tile" TITLE=".organigrama.navges"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page116" PATH=".contenido.normativa.searchVarios"
+  SHAPE="272,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.searchVarios" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page117" PATH=".contenido.normativa.searchOne"
+  SHAPE="272,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.searchOne" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page118" PATH=".contenido.normativa.searchError"
+  SHAPE="272,16386,0,0" SUBTYPE="tile"
+  TITLE=".contenido.normativa.searchError" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page119" PATH=".organigrama.unidad.popmateria"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.popmateria" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page120" PATH="/subscripcions/index_inicio.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="index_inicio.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page121" PATH=".organigrama.unidad.lista"
+  SHAPE="512,5362,0,0" SUBTYPE="tile" TITLE=".organigrama.unidad.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page122" PATH=".estadisticasmateria.visualizar"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".estadisticasmateria.visualizar" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page123" PATH=".organigrama.unidad.popusuario"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.popusuario" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page124" PATH=".main" SHAPE="448,242,0,0"
+  SUBTYPE="tile" TITLE=".main" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page125" PATH=".index.ficha" SHAPE="240,16386,0,0"
+  SUBTYPE="tile" TITLE=".index.ficha" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page126" PATH="/estadisticas/popEstadisticas.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="popEstadisticas.jsp"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page127" PATH=".sistema.tipo.lista"
+  SHAPE="512,16546,0,0" SUBTYPE="tile" TITLE=".sistema.tipo.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page128" PATH="/organigrama/unidad/poparbol.jsp"
+  SHAPE="240,16386,0,0" SUBTYPE="jsp" TITLE="poparbol.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page129"
+  PATH=".contenido.procedimiento.popupcodigo" SHAPE="240,16386,0,0"
+  SUBTYPE="tile" TITLE=".contenido.procedimiento.popupcodigo"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page130" PATH=".sistema.agrupacionm.popmate"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".sistema.agrupacionm.popmate" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page131" PATH=".organigrama.unidad.popedificio"
+  SHAPE="240,16386,0,0" SUBTYPE="tile"
+  TITLE=".organigrama.unidad.popedificio" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page132" PATH=".sistema.hechovital.lista"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".sistema.hechovital.lista"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page133" PATH=".organigrama.navges.arbol"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".organigrama.navges.arbol"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page134" PATH=".sistema.unidad.form"
+  SHAPE="240,16386,0,0" SUBTYPE="tile" TITLE=".sistema.unidad.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#contenido#tramite#document#seleccionar"
+  NAME="action246" PATH="/contenido/tramite/document/seleccionar"
+  SHAPE="32,4673,0,0" TITLE="documentoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH="/contenido.documento.form" TARGET="page136" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#contenido#tramite#document#editar" NAME="action247"
+  PATH="/contenido/tramite/document/editar" SHAPE="32,4673,0,0"
+  TITLE="documentoForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward2"
+   PATH="/contenido.documento.form" TARGET="page136" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="tramite/document" NAME="forward0"
+   PATH="/contenido.tramite.document.seleccionar" TARGET="page138"
+   TITLE="tramite/document" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="page136" PATH="/contenido.documento.form"
+  SHAPE="448,4673,0,0" SUBTYPE="other" TITLE="contenido.documento.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page137" PATH="/contenido.tramite.form"
+  SHAPE="720,4081,0,0" SUBTYPE="other" TITLE="contenido.tramite.form"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page138"
+  PATH="/contenido.tramite.document.seleccionar" SHAPE="240,4897,0,0"
+  SUBTYPE="other" TITLE="contenido.tramite.document.seleccionar"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+</PROCESS>

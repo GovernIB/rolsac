@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT) -->
+<serviceGroup>
+    <service name="sistemaInformacionWS">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="es.caib.persistence.vuds.SistemaInformacionWSMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">es.caib.persistence.vuds.SistemaInformacionWSSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="cargarCanalesTramitacion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarCanalesTramitacionRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarCanalesTramitacionResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarFormaJuridica" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarFormaJuridicaRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarFormaJuridicaResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarFormaIniciacion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarFormaIniciacionRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarFormaIniciacionResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarViaPrestacion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarViaPrestacionRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarViaPrestacionResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarAmbitoEjercicio" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarAmbitoEjercicioRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarAmbitoEjercicioResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipoEstablecimiento" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoEstablecimientoRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoEstablecimientoResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarDetalleTramite" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarDetalleTramiteRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarDetalleTramiteResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarTramitePorAmbito" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarTramitePorAmbitoRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarTramitePorAmbitoResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarOrganizacionesAsistenciaVUDS" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarOrganizacionesAsistenciaVUDSRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarOrganizacionesAsistenciaVUDSResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarModosActividad" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarModosActividadRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarModosActividadResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipoRegistros" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoRegistrosRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoRegistrosResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarEstadoTramites" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarEstadoTramitesRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarEstadoTramitesResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarResultadosProceso" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarResultadosProcesoRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarResultadosProcesoResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarActividadesByAreaActividad" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarActividadesByAreaActividadRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarActividadesByAreaActividadResponse</outputActionMapping>
+        </operation>
+        <operation name="guardarTramites" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/guardarTramitesRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/guardarTramitesResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipoSolicitante" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoSolicitanteRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoSolicitanteResponse</outputActionMapping>
+        </operation>
+        <operation name="obtenerOrganismosByUsuario" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/obtenerOrganismosByUsuarioRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/obtenerOrganismosByUsuarioResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipoViaReclamacion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoViaReclamacionRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipoViaReclamacionResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTramitesVuds" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTramitesVudsRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTramitesVudsResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarOrganizacionesAsistenciaAACC" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarOrganizacionesAsistenciaAACCRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarOrganizacionesAsistenciaAACCResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarLocalizacion" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarLocalizacionRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarLocalizacionResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarMapaTramite" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarMapaTramiteRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarMapaTramiteResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarViaReclamacionVUDS" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarViaReclamacionVUDSRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarViaReclamacionVUDSResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipologiaTramites" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipologiaTramitesRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipologiaTramitesResponse</outputActionMapping>
+        </operation>
+        <operation name="consultarRechazosTramites" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarRechazosTramitesRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/consultarRechazosTramitesResponse</outputActionMapping>
+        </operation>
+        <operation name="guardarOrganizacionesAsistencia" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/guardarOrganizacionesAsistenciaRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/guardarOrganizacionesAsistenciaResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarAreasActividad" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarAreasActividadRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarAreasActividadResponse</outputActionMapping>
+        </operation>
+        <operation name="cargarTipologiaOrganizaciones" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://webservice.service.si.vuds.map.es/">
+            <actionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipologiaOrganizacionesRequest</actionMapping>
+            <outputActionMapping>http://webservice.service.si.vuds.map.es/GestorWebserviceBean/cargarTipologiaOrganizacionesResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>
