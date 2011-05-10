@@ -9,8 +9,20 @@
 <script src="<html:rewrite page='/moduls/funcions.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
+
+<logic:present name="alert">
+   function handleAlert() {
+	 alert("<bean:message name='alert' />");
+   }
+ </logic:present>
+
+    function handleBaja() {
+  	 alert("<bean:message key='alerta.baja' />");
+   }
+ 
     function baja(){
-        return confirm("<bean:message key='alerta.baja' />");
+	       	window.setTimeout("handleBaja()",1000)
+        //return confirm("<bean:message key='alerta.baja' />");
     }
 
     function validar(form) {
@@ -70,14 +82,14 @@
 		if(classeUA==1) {
         eval("document.forms[0].idUA.value=id");
         eval("document.forms[0].nombreUA.value=nombre");
-    }
+		}
 		if(classeUA==2) {
         eval("document.forms[0].idUAResol.value=id");
         eval("document.forms[0].nombreUAResol.value=nombre");
 		}
     }
 
-    // Funciï¿½n para abrir la lista de opciones para busqueda o relacion
+    // Función para abrir la lista de opciones para busqueda o relacion
     function listaOpciones(opcion, dato){
         if (opcion == "busqueda"){
             obrir("<html:rewrite page='/contenido/procedimiento/popup.do?accion=busqueda&opcion='/>" + dato, "<bean:message key='boton.seleccionar' />", 538, 140);
@@ -279,7 +291,7 @@
             <html:text styleClass="ctext" property="nombreUA" readonly="true" />
             <div class="botoneraconsulta1">
                 <html:button property="boton" onclick="abrirUAResponsable()" tabindex="10"><bean:message key="boton.seleccionar" /></html:button>
-            </div>
+			</div>
         </div>
         <div class="component">
             <div class="etiqueta"><bean:message key="procedimiento.ua.resolver" /></div>
@@ -310,16 +322,16 @@
         <logic:notEmpty name="mostrarTramite">
         <div class="component">
 			<div class="etiqueta"><bean:message key="procedimiento.identificadorsistra" /></div>
-			<html:text styleClass="ctext" property="tramite" maxlength="256" tabindex="13" />
+			<html:text styleClass="ctext" property="tramite" maxlength="256" tabindex="13"  />
 		</div>        
         <div class="component">
 			<div class="etiqueta"><bean:message key="procedimiento.version" /></div>
 			<html:text styleClass="ctext" property="version" maxlength="256" tabindex="14" />
-		</div>
+		</div>        
         </logic:notEmpty>
         <div class="component">
 			<div class="etiqueta"><bean:message key="procedimiento.urlexterna" /></div>
-			<html:text styleClass="ctext" property="url" maxlength="1024" tabindex="15" />
+			<html:text styleClass="ctext" property="url" maxlength="1024" tabindex="15"  />
 		</div>   
 		<div class="component">
 			<div class="etiqueta"><bean:message key="procedimiento.indicador" /> </div>
@@ -328,7 +340,7 @@
 				 checked
             		 </logic:equal>
 			  >
-			   
+		  
 		<div class="component">
 			<div class="etiqueta"><bean:message key="procedimiento.ventana" /> </div>
 			<input type="checkbox"  class="ctext"  name="ventana" tabindex="17"
@@ -350,21 +362,21 @@
 			<div class="etiqueta"><bean:message key="procedimiento.info" /><br/><br/><br/></div>
 				<html:textarea property="info" rows="3" cols="60" tabindex="19" />
 			</div>
-		</div>
+    	</div>
 		<div class="component">
              <div class="etiqueta"><bean:message key="procedimiento.responsable" /></div> 
             <html:text styleClass="ctext" property="responsable" size="43" maxlength="256" tabindex="19" /> 
         </div>
 		<div class="etiqueta">    
-		      <logic:present name="procedimientoForm" property="id">
+	      <logic:present name="procedimientoForm" property="id">
                 <logic:present name="host">
                     <logic:notEmpty name="host">
-	   		 <a href="javascript:obrirProce('<bean:write name="procedimientoForm" property="id"   />')" class="ctext" onfocus="this.blur()"> previsualizar contenido</a>
+   		 <a href="javascript:obrirProce('<bean:write name="procedimientoForm" property="id"   />')" class="ctext" onfocus="this.blur()"> previsualizar contenido</a>
                     </logic:notEmpty>
-		      </logic:present>
+	      </logic:present>
 		      </logic:present>
 		</div>       
-    </div>
+	</div>  
     <br />
 
     <div id="capes">
@@ -401,7 +413,7 @@
                 </div>
                 <div class="component">
                     <div class="etiqueta"><bean:message key="procedimiento.requisitos" /><br /><br /><br /></div>
-                    <html:textarea name="traducciones" property="requisitos" indexed="true" rows="3" cols="60" tabindex="18"  />
+                    <html:textarea name="traducciones" property="requisitos" indexed="true" rows="3" cols="60" tabindex="18" />
                 </div>
                 <div class="component">
                     <div class="etiqueta"><bean:message key="procedimiento.plazos" /><br /><br /><br /></div>
@@ -462,7 +474,7 @@
                 	  		</logic:notEqual>
                 	  </logic:notEqual>
                 </div>
-                <div class="component">
+				<div class="component">
                     <div class="etiqueta"><bean:message key="procedimiento.resultat" /><br /><br /><br /></div>
 					<input type="hidden" name="msgResultat" id="msgResultat" value="<bean:message key="procedimiento.resultat"/>">
                       <logic:equal name="i" value="0">
@@ -659,7 +671,7 @@
     </center>
 </logic:notPresent>
 
-<!-- XAPUï¿½A -->
+<!-- XAPUÇA -->
 
 <% pageContext.removeAttribute(Globals.XHTML_KEY);%>
 <html:javascript
@@ -693,7 +705,7 @@
 		                    <input type="text" name="orden<bean:write name="tramite" property="id" />" size="4" maxlength="4" value="<bean:write name="tramite" property="orden" />" />
 		                 </td>
 		                 <td>   
-                    <bean:write name="tramite" property="traduccion.nombre" />
+	                    	<bean:write name="tramite" property="traduccion.nombre" />
 	                     </td></tr>
                		 </table> 
                 </div>
@@ -714,7 +726,7 @@
 
 		<script type="text/javascript">
 		
-			//funcio per reemplaï¿½ar totes les ocurrencies del caracter (')
+			//funcio per reemplaçar totes les ocurrencies del caracter (')
 			function reemplazar(str) {
 				str=str.replace(/'/g,"\\'");  
 				return str;
@@ -768,7 +780,7 @@
         </logic:notEmpty>
     </div><br />
     <center>  
-		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/documento/form.do?idProcedimiento=<bean:write name="procedimientoForm" property="id" />&titol=documento.alta','Si ha realizado cambios y no los guarda antes de asignar los documentos, se perderï¿½n. ï¿½Quiere continuar con la inserciï¿½n de documentos?')" ><bean:message key="boton.nuevo" /></a>]    
+		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/documento/form.do?idProcedimiento=<bean:write name="procedimientoForm" property="id" />&titol=documento.alta','Si ha realizado cambios y no los guarda antes de asignar los documentos, se perderán. ¿Quiere continuar con la inserción de documentos?')" ><bean:message key="boton.nuevo" /></a>]    
     </center>
     <!-- /Documentos relacionados -->
 
@@ -780,7 +792,7 @@
             <bean:message key="procedimiento.relacion.materias.titulo" />
         </div>
         <logic:empty name="materiaOptions">
-            <br /><h2><bean:message key="procedimiento.relacion.vacio" /></h2><br />
+            <br /><h2><bean:message key="procedimiento.relacion.materias.vacio" /></h2><br />
         </logic:empty>
         <logic:notEmpty name="materiaOptions">
             <logic:iterate id="materia" name="materiaOptions">
@@ -873,10 +885,12 @@
     
 </logic:present>
 
-<script type="text/javascript">
+
+<logic:present name="alert">
+    <script type="text/javascript">
 <!--
-    <logic:present name="alert">
-	alert("<bean:message name='alert' />");
-    </logic:present>
+	window.setTimeout("handleAlert()",1000)
 -->
-</script>
+	</script>
+ </logic:present>
+

@@ -118,33 +118,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                      if (localCargarTramitesVuds==null){
-                                        java.lang.String namespace = "http://webservice.service.si.vuds.map.es/";
-
-                                        if (! namespace.equals("")) {
-                                            java.lang.String prefix = xmlWriter.getPrefix(namespace);
-
-                                            if (prefix == null) {
-                                                prefix = generatePrefix(namespace);
-
-                                                xmlWriter.writeStartElement(prefix,"cargarTramitesVuds", namespace);
-                                                xmlWriter.writeNamespace(prefix, namespace);
-                                                xmlWriter.setPrefix(prefix, namespace);
-
-                                            } else {
-                                                xmlWriter.writeStartElement(namespace,"cargarTramitesVuds");
-                                            }
-
-                                        } else {
-                                            xmlWriter.writeStartElement("cargarTramitesVuds");
-                                        }
-
-                                        // write the nil attribute
-                                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
-                                        xmlWriter.writeEndElement();
-                                       }else{
-                                         localCargarTramitesVuds.serialize(MY_QNAME,factory,xmlWriter);
-                                       }
+                                 if (localCargarTramitesVuds==null){
+                                   throw new org.apache.axis2.databinding.ADBException("Property cannot be null!");
+                                 }
+                                 localCargarTramitesVuds.serialize(MY_QNAME,factory,xmlWriter);
                             
 
         }
@@ -304,13 +281,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                
-                                if (localCargarTramitesVuds==null){
-                                   return new org.apache.axis2.databinding.utils.reader.NullXMLStreamReader(MY_QNAME);
-                                }else{
-                                   return localCargarTramitesVuds.getPullParser(MY_QNAME);
-                                }
-                            
+                return localCargarTramitesVuds.getPullParser(MY_QNAME);
 
         }
 
@@ -345,17 +316,6 @@
                     reader.next();
 
                 
-                   nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                   if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                         // Skip the element and report the null value.  It cannot have subelements.
-                         while (!reader.isEndElement())
-                             reader.next();
-                         
-                                 return object;
-                             
-
-                   }
-                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -369,15 +329,8 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","cargarTramitesVuds").equals(reader.getName())){
                                 
-                                      nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                      if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                          object.setCargarTramitesVuds(null);
-                                          reader.next();
-                                          
-                                      }else{
-                                    
                                                 object.setCargarTramitesVuds(es.map.vuds.si.service.webservice.CargarTramitesVuds.Factory.parse(reader));
-                                            }
+                                            
                               }  // End of if for expected property start element
                                 
                              else{

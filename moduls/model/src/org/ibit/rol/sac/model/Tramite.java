@@ -5,12 +5,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Tramite extends ElementOrdenat {
+
+public class Tramite extends Ordenable {
 
     public final static int INICIACION = 1;
     public final static int INSTRUCCION = 2;
     public final static int FINALIZACION = 3;
-
+    
 
     //inst vars han de ser instanceof Objects pq el b 
     
@@ -29,7 +30,7 @@ public class Tramite extends ElementOrdenat {
     String	idTraTel;
     Integer versio;  //NUMBER(2)
     String urlExterna; //VARCHAR2(1024 CHAR)
-    
+
     //campos para la ventanilla unica
 
     String codiVuds;  	 
@@ -43,7 +44,7 @@ public class Tramite extends ElementOrdenat {
 
     Set<DocumentTramit> docsInformatius = new HashSet<DocumentTramit>();	//set of documents
     Set<DocumentTramit> formularios = new HashSet<DocumentTramit>();	//set of documents
-    Set<Taxa> taxes = new HashSet<Taxa>();  //set of taxa
+    Set<Taxa> taxes;  //set of taxa
     String dataActualitzacioVuds;  //String: "no enviat"  "data hora"
 
 
@@ -55,7 +56,7 @@ public class Tramite extends ElementOrdenat {
 		this.tramiteVudsValido = tramiteVudsValido;
 	}
 
-    public int getFase() {
+	public int getFase() {
         return fase;
     }
 
@@ -79,12 +80,6 @@ public class Tramite extends ElementOrdenat {
         this.formularios = formularios;
     }
 
-    public void addFormulario(DocumentTramit doc) {
-		doc.setTramit(this);
-		doc.setOrden((long)formularios.size()+1);
-		formularios.add(doc);							
-	}
-    
     /**
      * @deprecated usar removeDocument
      * @param form
@@ -94,7 +89,7 @@ public class Tramite extends ElementOrdenat {
         formularios.remove(form);
     }
 
-	public Date getDataCaducitat() {
+	public Date getDataCaducitat() {	
 		return dataCaducitat;
 	}
 
@@ -134,26 +129,24 @@ public class Tramite extends ElementOrdenat {
 		this.docsInformatius = docsInformatius;
 	}
 
-	public void addDocInformatiu(DocumentTramit doc) {
-		doc.setTramit(this);
-		doc.setOrden((long)docsInformatius.size()+1);
-		docsInformatius.add(doc);							
-	}
-
 	public void addDocument(DocumentTramit doc) {
+		doc.setTramit(this);			//estableix camp 'codi_formrsc'
 		switch(doc.getTipus()) {
-			case DocumentTramit.DOCINFORMATIU: 
-				addDocInformatiu(doc);					
+			case DocumentTramit.DOCINFORMATIU:
+				doc.setOrden((long)docsInformatius.size());
+				docsInformatius.add(doc);
 				break;
-			case DocumentTramit.FORMULARI: 
-				addFormulario(doc);
+			case DocumentTramit.FORMULARI:
+				doc.setOrden((long)formularios.size());
+				formularios.add(doc);
 			break;
 		}
 	}
 
-
+	
+	
 	/** 
-	 * L'ordre es refï¿½ en el TramiteFacadebEJB
+	 * L'ordre es refà en el TramiteFacadebEJB
 	 * @param doc
 	 */
     public void removeDocument(Document doc) {
@@ -262,7 +255,7 @@ public class Tramite extends ElementOrdenat {
 		this.dataActualitzacioVuds = dataActualitzacioVuds;
 	}
 
-	//u92770[enric] aï¿½adido equals para que procedimiento pueda ser testeable con easyMock.
+	//u92770[enric] añadido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Tramite)) return false; 
@@ -276,13 +269,13 @@ public class Tramite extends ElementOrdenat {
 				", codiVuds=" + codiVuds + 
 				", descCodiVuds=" + descCodiVuds +
 				", validacio=" + validacio+
-				", dataActualitzaciï¿½=" + dataActualitzacio +
+				", dataActualització=" + dataActualitzacio +
 				", dataCaducitat=" + dataCaducitat + 
-			//	", taxes=" + taxes +
+				", taxes=" + taxes +
 				", dataPublicacio=" + dataPublicacio + 
-			//	", docsInformatius=" + docsInformatius +
+				", docsInformatius=" + docsInformatius + 
 				", fase=" + fase + 
-			//	", formularios=" + formularios + 
+				", formularios=" + formularios + 
 				", organCompetent=" + organCompetent + 
 				", procedimiento=" + proc +
 				", idTraTel="	+ idTraTel +
@@ -290,5 +283,31 @@ public class Tramite extends ElementOrdenat {
 				", traduccion="+ getTraduccion() +
 				"]";
 	}
+
+
+	public String getNombreOrganCompetent(String idioma) {
+		if(!estaTraduitOrganCompetent(idioma))
+			return null;
+		return organCompetent.getNombreUnidadAdministrativa(idioma);
+	}
+
+	public boolean estaTraduitOrganCompetent(String idioma) {
+		return null!=(TraduccionUA)getOrganCompetent().getTraduccion(idioma);
+	}
+
+	public Long obtenerIdUnidadAdministrativa() {
+		return getProcedimiento().getUnidadAdministrativa().getId();
+	}
+
+	public String getNombreUnidadAdministrativa(String idioma) {
+		if(!estaTraduitUnidadAdministrativa(idioma))
+			return null;
+		return procedimiento.getNombreUnidadAdministrativa(idioma);
+	}
+
+	private boolean estaTraduitUnidadAdministrativa(String idioma) {
+		return null!=getProcedimiento().getUnidadAdministrativa().getTraduccion(idioma);
+	}
+
 
 }

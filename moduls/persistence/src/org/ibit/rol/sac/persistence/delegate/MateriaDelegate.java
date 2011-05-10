@@ -16,187 +16,119 @@ import java.util.Set;
 
 /**
  * Business delegate para manipular materias.
+ * 
+ * 
+ * ejaen@dgtic  - u92770
+ * Classe desacoplada del standard EJB per permetre unit testing. 
+ * S'ha definit una classe enlloc d'una interficie per evitar incompabilitats binaria amb les altres
+ * aplicacions corporatives que esperen una classe (produeix un IncompatibleClassChangeError).
+ * 
+ * Recordar: per fer aquestes modificacions cal modificar la classe DelegateUtil. 
+ * 
  */
-public class MateriaDelegate implements StatelessDelegate {
 
-    /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
-    /* ========================================================= */
+ public class MateriaDelegate {
 
-    public Long grabarMateria(Materia materia) throws DelegateException {
-        try {
-            return getFacade().grabarMateria(materia);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+	 
+		MateriaDelegateI impl;
 
-    public List listarMaterias() throws DelegateException {
-        try {
-            return getFacade().listarMaterias();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		
+		public MateriaDelegateI getImpl() {
+			return impl;
+		}	
 
-    public List listarMateriasFront() throws DelegateException {
-        try {
-            return getFacade().listarMateriasFront();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public void setImpl(MateriaDelegateI impl) {
+			this.impl = impl;
+		}
+		
+		public Long grabarMateria(Materia materia) throws DelegateException {
+			return impl.grabarMateria(materia);
+		}
 
-    public List listarMateriasFrontDestacadas(String lang) throws DelegateException {
-        try {
-            return getFacade().listarMateriasFrontDestacadas(lang);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public List listarMaterias() throws DelegateException {
+			return impl.listarMaterias();
+		}
 
-    public Materia obtenerMateria(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerMateria(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public List listarMateriasFront() throws DelegateException {
+			return impl.listarMateriasFront();
+		}
 
-    public boolean tieneProcedimientosOFichas(Long id) throws DelegateException {
-        try {
-            return getFacade().tieneProcedimientosOFichas(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public List listarMateriasFrontDestacadas(String lang)
+				throws DelegateException {
+			return impl.listarMateriasFrontDestacadas(lang);
+		}
 
-    public List<Materia> listarMateriasbyUA (Long ua) throws DelegateException {
-        try {
-            return getFacade().listarMateriasbyUA(ua);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria) throws DelegateException{
-        try {
-            return getFacade().obtenerGruposMateria(idmateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }    
-    
-    public void borrarMateria(Long id) throws DelegateException {
-        try {
-            getFacade().borrarMateria(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    public Archivo obtenerDistribComp(Long id, String lang, boolean useDefault) throws DelegateException {
-        try {
-            return getFacade().obtenerDistribComp(id, lang, useDefault);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public Materia obtenerMateria(Long id) throws DelegateException {
+			return impl.obtenerMateria(id);
+		}
 
-    public Archivo obtenerNormativa(Long id, String lang, boolean useDefault) throws DelegateException {
-        try {
-            return getFacade().obtenerNormativa(id, lang, useDefault);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public boolean tieneProcedimientosOFichas(Long id)
+				throws DelegateException {
+			return impl.tieneProcedimientosOFichas(id);
+		}
 
-    public Archivo obtenerContenido(Long id, String lang, boolean useDefault) throws DelegateException {
-        try {
-            return getFacade().obtenerContenido(id, lang, useDefault);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public List<Materia> listarMateriasbyUA(Long ua)
+				throws DelegateException {
+			return impl.listarMateriasbyUA(ua);
+		}
 
-    public Archivo obtenerFoto(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerFoto(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public Set<MateriaAgrupacionM> obtenerGruposMateria(Long idmateria)
+				throws DelegateException {
+			return impl.obtenerGruposMateria(idmateria);
+		}
 
-    public Archivo obtenerIcono(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerIcono(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public void borrarMateria(Long id) throws DelegateException {
+			impl.borrarMateria(id);
+		}
 
-    public Archivo obtenerIconoGrande(Long id) throws DelegateException {
-        try {
-            return getFacade().obtenerIconoGrande(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-	public Set<Materia> obtenerMateriasCE(final String[] codigosEstandarMateria) throws DelegateException{
-    	try {
-            return getFacade().obtenerMateriasCE(codigosEstandarMateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public Archivo obtenerDistribComp(Long id, String lang,
+				boolean useDefault) throws DelegateException {
+			return impl.obtenerDistribComp(id, lang, useDefault);
+		}
 
-    public Materia obtenerMateriaCE(final String codigosEstandarMateria) throws DelegateException{
-    	try {
-            return getFacade().obtenerMateriaCE(codigosEstandarMateria);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    public List<Materia> buscar(final String busqueda, final String idioma) throws DelegateException {
-    	try {
-            return getFacade().buscar(busqueda,idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    public Materia obtenerMateriaFichasProced (Long id) throws DelegateException{
-    	try {
-            return getFacade().obtenerMateriaFichasProced(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
-    
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
+		public Archivo obtenerNormativa(Long id, String lang, boolean useDefault)
+				throws DelegateException {
+			return impl.obtenerNormativa(id, lang, useDefault);
+		}
 
-    private Handle facadeHandle;
+		public Archivo obtenerContenido(Long id, String lang, boolean useDefault)
+				throws DelegateException {
+			return impl.obtenerContenido(id, lang, useDefault);
+		}
 
-    private MateriaFacade getFacade() throws RemoteException {
-        return (MateriaFacade) facadeHandle.getEJBObject();
-    }
+		public Archivo obtenerFoto(Long id) throws DelegateException {
+			return impl.obtenerFoto(id);
+		}
 
-    protected MateriaDelegate() throws DelegateException {
-        try {
-            MateriaFacadeHome home = MateriaFacadeUtil.getHome();
-            MateriaFacade remote = home.create();
-            facadeHandle = remote.getHandle();
-        } catch (NamingException e) {
-            throw new DelegateException(e);
-        } catch (CreateException e) {
-            throw new DelegateException(e);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+		public Archivo obtenerIcono(Long id) throws DelegateException {
+			return impl.obtenerIcono(id);
+		}
+
+		public Archivo obtenerIconoGrande(Long id) throws DelegateException {
+			return impl.obtenerIconoGrande(id);
+		}
+
+		public Set<Materia> obtenerMateriasCE(String[] codigosEstandarMateria)
+				throws DelegateException {
+			return impl.obtenerMateriasCE(codigosEstandarMateria);
+		}
+
+		public Materia obtenerMateriaCE(String codigosEstandarMateria)
+				throws DelegateException {
+			return impl.obtenerMateriaCE(codigosEstandarMateria);
+		}
+
+		public List<Materia> buscar(String busqueda, String idioma)
+				throws DelegateException {
+			return impl.buscar(busqueda, idioma);
+		}
+
+		public Materia obtenerMateriaFichasProced(Long id)
+				throws DelegateException {
+			return impl.obtenerMateriaFichasProced(id);
+		}
+
+		
+		
+
 }

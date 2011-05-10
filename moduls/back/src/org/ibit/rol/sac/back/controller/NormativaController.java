@@ -5,8 +5,11 @@
  */
 package org.ibit.rol.sac.back.controller;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.tiles.ComponentContext;
+import org.ibit.rol.sac.back.action.contenido.ficha.EditarFichaAction;
 import org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
@@ -24,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NormativaController implements Controller {
+
+	protected static Log log = LogFactory.getLog(NormativaController.class);
 
     public void perform(ComponentContext tilesContext,
                         HttpServletRequest request,
@@ -74,6 +79,8 @@ public class NormativaController implements Controller {
                 propi2.put("visible","%S%");
                 request.setAttribute("elementOptions", delegate.listarMicrositesFiltro(usu, propi2));
                 request.setAttribute("opcion", "Micro");
+                request.setAttribute("portalUrl", obtenerUrlBase());
+                
             }
 
 
@@ -82,5 +89,15 @@ public class NormativaController implements Controller {
         }
 
     }
+
+	private String obtenerUrlBase() throws Exception {
+		String url = System.getProperty("es.caib.rolsac.portal.url");
+		if(null==url) {
+			String msg = "falta definir la propietat: es.caib.rolsac.portal.url";
+			log.error(msg);
+			throw new Exception(msg);
+		}
+		return url;
+	}
 
 }

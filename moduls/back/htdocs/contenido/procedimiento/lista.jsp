@@ -75,9 +75,9 @@
                     <logic:notEqual name="procedimiento" property="validacion" value="1">
 	                    <img src="<%=context%>/img/fichaNoP.gif" alt="No <bean:message key="validacion.publica"/>"/>&nbsp;
                     </logic:notEqual>
-
+                
                     <logic:notEmpty name="procedimiento" property="traduccion">
-                        <bean:write name="procedimiento" property="traduccion.nombre" />&nbsp;(<bean:message key="procedimiento.id" />:<bean:write name="procedimiento" property="id" />)
+                    <bean:write name="procedimiento" property="traduccion.nombre" />&nbsp;(<bean:message key="procedimiento.id" />:<bean:write name="procedimiento" property="id" />)
                     </logic:notEmpty>
                     <logic:empty name="procedimiento" property="traduccion">
                         <bean:write name="procedimiento" property="id" /> - <bean:message key="ua.procedimiento.noTraduccion" />

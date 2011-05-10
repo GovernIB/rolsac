@@ -25,6 +25,7 @@
         <many-to-one name="plano" cascade="all" column="EDI_PLANO" foreign-key="RSC_EDIPLA_FK"/>
         <property name="latitud" length="15" column="EDI_LAT"/>
         <property name="longitud" length="15" column="EDI_LNG"/>
+        
         <set name="unidadesAdministrativas" table="RSC_UNAEDI" lazy="true">
 	        <cache usage="read-write"/>
             <key column="UNE_CODEDI" foreign-key="RSC_UNEEDI_FK"/>

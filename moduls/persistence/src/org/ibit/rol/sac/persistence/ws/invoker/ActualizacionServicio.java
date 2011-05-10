@@ -16,7 +16,12 @@ public class ActualizacionServicio extends IdInvoker {
     private static final String WEB_SERVICE = "http://org.ibit.rol.sac.integracion.ws";
 
 
-    public ActualizacionServicio(String endPoint, String idRemoto) throws WSInvocatorException {
+    public static ActualizacionServicio createActualizacionServicio(
+			String endPoint, String idRemoto) throws WSInvocatorException {
+		return new ActualizacionServicio(endPoint, idRemoto);
+	}
+    private ActualizacionServicio(String endPoint, String idRemoto) throws WSInvocatorException {
+
 		super(endPoint, WEB_SERVICE, NAMESPACEURI, idRemoto);
 
         registerArrayTypeMapping(new QName(WEB_SERVICE, "ArrayOf_xsd_long"),
@@ -104,7 +109,7 @@ public class ActualizacionServicio extends IdInvoker {
 			throw new WSInvocatorException(e);
 		}
 	}
-	
+
 	public Boolean actualizarEdificio(EdificioTransferible edifT)throws WSInvocatorException {
 		try {
 			
@@ -164,8 +169,8 @@ public class ActualizacionServicio extends IdInvoker {
 			throw new WSInvocatorException(e);
 		}
 	}
-
-
+	
+	
     public Boolean actualizarNormativa(NormativaTransferible normT)throws WSInvocatorException {
 		try {
 

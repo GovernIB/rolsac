@@ -8,16 +8,16 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Modificado para (PORMAD)
  */
-
-public class ProcedimientoLocal extends Traducible implements Procedimiento, Indexable, Validable {
+ 
+public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
     private String signatura;
     private List<Tramite> tramites;
-    private List<Documento> documentos = new ArrayList<Documento>();
-    private Set<Normativa> normativas = new HashSet();
+    private List<Documento> documentos;
+    private Set<Normativa> normativas;
     private Date fechaCaducidad;
     private Date fechaPublicacion;
     private Date fechaActualizacion;
@@ -30,7 +30,6 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
     private Long orden3;
     private Integer validacion;
     private UnidadAdministrativa unidadAdministrativa;  //organisme responsable
-    private Set<Materia> materias;
     private Familia familia;
     private Iniciacion iniciacion;
     private String indicador;
@@ -40,10 +39,9 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
     private Set<HechoVitalProcedimiento> hechosVitalesProcedimientos;
 
     private String taxa;
-    private UnidadAdministrativa organResolutori; 
-
-
-
+    private UnidadAdministrativa organResolutori;
+    
+    
     //Constructores
     public ProcedimientoLocal(Long id) {
 		super();
@@ -81,9 +79,9 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
     }
 
     public void addTramite(Tramite tramite) {
-        tramite.setProcedimiento(this);
+    	tramite.setProcedimiento(this);
         tramite.setOrden((long)tramites.size());
-        tramites.add(tramite);
+    	tramites.add(tramite);
 
     }
 
@@ -175,14 +173,6 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
         this.unidadAdministrativa = unidadAdministrativa;
     }
 
-    public Set<Materia> getMaterias() {
-        return materias;
-    }
-
-    public void setMaterias(Set<Materia> materias) {
-        this.materias = materias;
-    }
-
     public Familia getFamilia() {
         return familia;
     }
@@ -216,6 +206,7 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
         hechosVitalesProcedimientos.remove(hechovp);
     }
 
+    
     public IndexObject indexObject() {
         final IndexObject io = new IndexObject();
         // io.setId(getId());
@@ -303,44 +294,30 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
 		return orden3;
 	} 
 	public void setOrden3(Long orden3) {
-
 		this.orden3 = orden3;
 	}
 	
 	
 	@Override
 	public String toString() {
-		String pid=null==id?null:id.toString();
-		return "ProcedimientoLocal [id="+pid+ "]";
-/*				
-		return "ProcedimientoLocal [documentos=" + documentos + ", familia="
-				+ familia + ", fechaActualizacion=" + fechaActualizacion
-				+ ", fechaCaducidad=" + fechaCaducidad + ", fechaPublicacion="
-				+ fechaPublicacion + ", hechosVitalesProcedimientos="
-				+ hechosVitalesProcedimientos + ", id=" + id + ", indicador="
-				+ indicador + ", info=" + info + ", iniciacion=" + iniciacion
-				+ ", materias=" + materias + ", normativas=" + normativas
-				+ ", orden=" + orden + ", orden2=" + orden2 + ", orden3="
-				+ orden3 + ", signatura=" + signatura + ", tramite=" + tramite
-				+ ", tramites=" + tramites + ", unidadAdministrativa="
-				+ unidadAdministrativa + ", url=" + url + ", validacion="
-				+ validacion + ", ventanillaUnica=" + ventanillaUnica
-				+ ", version=" + version + "]";
-				*/
+		String pid=obtenirId();
+		String nombre = obtenerNombre();
+		return "ProcedimientoLocal [id="+pid+ 
+				" nombre="+nombre+ "]";
+	}
+	
+	private String obtenerNombre() {
+		TraduccionProcedimientoLocal traduccion = (TraduccionProcedimientoLocal)getTraduccion();
+		if(null==traduccion) return null;
+
+		return traduccion.getNombre();
 	}
 
-	/*
-	public String toString(){
-		StringBuffer salida = new StringBuffer("---ProcedimientoLocal---\n");
-		salida.append("  -id: ");
-		salida.append(id);
-		salida.append("\n  -nombre: ");
-		if(getTraduccion()!=null)
-			salida.append(((TraduccionProcedimientoLocal)getTraduccion()).getNombre());
-		salida.append("\n");
-		return salida.toString();
+	private String obtenirId() {
+		return null==id? null : id.toString();
 	}
-*/
+	
+
 	public String getUrl() {
 		return url;
 	}
@@ -348,7 +325,7 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public String getResponsable() {
 		return responsable;
 	}
@@ -379,4 +356,12 @@ public class ProcedimientoLocal extends Traducible implements Procedimiento, Ind
 		ProcedimientoLocal other=(ProcedimientoLocal)obj;
 		return (other instanceof ProcedimientoLocal) && id.equals(other.id);
 	}
+
+	String getNombreUnidadAdministrativa(String idioma) {
+		return ((TraduccionUA)unidadAdministrativa.getTraduccion(idioma)).getNombre();
+	}
+
+	
+	
+	
 }

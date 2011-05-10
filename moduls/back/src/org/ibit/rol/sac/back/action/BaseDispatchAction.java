@@ -7,6 +7,7 @@ import org.apache.struts.actions.LookupDispatchAction;
 import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.RequestUtils;
+import org.ibit.rol.sac.back.action.contenido.common.ActionParameters;
 import org.ibit.rol.sac.model.Archivo;
 
 import javax.servlet.http.HttpServletRequest;
@@ -102,4 +103,9 @@ public abstract class BaseDispatchAction extends LookupDispatchAction {
         }
         return request.isUserInRole((String)roles.get(i));
     }
+
+
+    public ActionForward dispatchMethod(ActionParameters actionParams, String dispatchTo) throws Exception {
+		return dispatchMethod(actionParams.mapping, actionParams.form, actionParams.request, actionParams.response, dispatchTo);
+	}
 }

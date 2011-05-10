@@ -12,7 +12,7 @@ public class TraduccionSeccion implements Traduccion {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-
+    
     public String getDescripcion() {
 		return descripcion;
 	}
@@ -21,7 +21,7 @@ public class TraduccionSeccion implements Traduccion {
 		this.descripcion = descripcion;
 	}
 
-    private String nombre;
+	private String nombre;
     // atributo privado introducido para poder añadir un
     //texto descriptivo (opcional) en todas las secciones.
     private String descripcion;

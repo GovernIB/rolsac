@@ -56,8 +56,8 @@
                                     public static final java.lang.String _Pendiente =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Pendiente");
                                 
-                                    public static final java.lang.String _En_Curso =
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("En_Curso");
+                                    public static final java.lang.String _Validado =
+                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Validado");
                                 
                                     public static final java.lang.String _Cargado =
                                         org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Cargado");
@@ -68,8 +68,8 @@
                                 public static final EstadoTramite Pendiente =
                                     new EstadoTramite(_Pendiente,true);
                             
-                                public static final EstadoTramite En_Curso =
-                                    new EstadoTramite(_En_Curso,true);
+                                public static final EstadoTramite Validado =
+                                    new EstadoTramite(_Validado,true);
                             
                                 public static final EstadoTramite Cargado =
                                     new EstadoTramite(_Cargado,true);

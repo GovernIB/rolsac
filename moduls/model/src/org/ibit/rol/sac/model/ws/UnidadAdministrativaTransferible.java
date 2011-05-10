@@ -19,8 +19,10 @@ import org.ibit.rol.sac.model.Validacion;
  * Time: 15:21:25
  * Clase que representa la información traducida a transferir de una UA(PORMAD)
  */
-public class UnidadAdministrativaTransferible implements Serializable {
-	
+public class UnidadAdministrativaTransferible extends ActuacionTransferible implements Serializable {
+
+	public static final String URL_UA = "es.caib.rolsac.model.ws.urlUnidad";
+
 	
     private UnidadMateriaTransferible[] unidadesMaterias;
     private String codigoEstandarTratamiento;
@@ -271,9 +273,9 @@ public class UnidadAdministrativaTransferible implements Serializable {
 		//this.setLogos(ArchivoTransferible.generar(unidad.getLogos()));
 		//this.setLogot(ArchivoTransferible.generar(unidad.getLogot()));
 		
-		String url = ResourceBundle.getBundle("url").getString("urlUnidad");
-		this.setUrlRemota(url.replaceAll("%id%", unidad.getId().toString()));
 		
+		this.setUrlRemota(establecerIdEnUrl(unidad.getId().toString(), obtenerUrl(URL_UA)));
+
 
         //Relleno el id del padre
         if(unidad.getPadre()!=null)
@@ -323,7 +325,7 @@ public class UnidadAdministrativaTransferible implements Serializable {
         }
         this.setTraducciones(traducciones.toArray(new TraduccionUATransferible[0] ));
     }
-    
+
     public static UnidadAdministrativaTransferible generar(UnidadAdministrativa unidad){
     	UnidadAdministrativaTransferible unidadT =  new UnidadAdministrativaTransferible();
     	if(unidad!=null){

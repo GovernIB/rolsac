@@ -37,7 +37,7 @@ import java.util.*;
 public class ArbolUAAction extends BaseDispatchAction{
 
     protected static Log log = LogFactory.getLog(ArbolUAAction.class);
-
+    
     
 
     protected Map getKeyMethodMap() {
@@ -57,7 +57,7 @@ public class ArbolUAAction extends BaseDispatchAction{
         List tieneHijos = new ArrayList();
 
     	request.setAttribute("idUA",new Long(request.getParameter("idUA")));
-
+        
         List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
         request.setAttribute("raizOptions", raices);
 
@@ -113,11 +113,11 @@ public class ArbolUAAction extends BaseDispatchAction{
         List tieneHijos = new ArrayList();
 
     	request.setAttribute("idUA",new Long(request.getParameter("idUA")));
-
+        
         List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
 
         UnidadAdministrativaDelegate uaDelegate = null==this.uaDelegate? DelegateUtil.getUADelegate() : this.uaDelegate;
-
+        
         for (int i = 0; i < raices.size(); i++) {
             UnidadAdministrativa raizActual = (UnidadAdministrativa) raices.get(i);
             if (!uaDelegate.listarHijosUA(raizActual.getId()).isEmpty()){
@@ -173,7 +173,7 @@ public class ArbolUAAction extends BaseDispatchAction{
 
         if (request.getParameter("idUA") != null){
         	request.setAttribute("idUA",new Long(request.getParameter("idUA")));
-
+            
             List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
 
             

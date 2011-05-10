@@ -148,6 +148,49 @@ public class Materia extends Traducible {
     private String codigoEstandar;
     private boolean destacada;
     private Set<MateriaAgrupacionM> materiasAgrupacionM;
+	public static final String CE_SENSECLASSIFICAR = "SENSECLA";
+
+	public boolean equals(Object materia) {
+
+		if (noEsDelTipusMateria(materia)) 
+			return false;
+
+		if (noTeIdPeroMateriaSi(materia)) 
+			return false;
+
+		if (sonIdsDiferents(materia) ) 
+			return false;
+
+		return true;
+	}
 
 
+	private boolean noEsDelTipusMateria(Object o) {
+		return !(o instanceof Materia);
+	}
+	
+	private boolean noTeIdPeroMateriaSi(Object materia) {
+		return id==null && ((Materia) materia).id != null;
+	}
+
+
+	private boolean sonIdsDiferents(Object materia) {
+		return !id.equals(((Materia)materia).id);
+	}
+    
+
+    public int hashCode() {
+        return (id != null ? id.hashCode() : 0);
+    }
+
+
+    @Override
+	public String toString() {
+		return "Materia [id=" + id + ", codiHita=" + codiHita
+				+ ", codigoEstandar=" + codigoEstandar + ", destacada="
+				+ destacada + "]";
+	}
+
+
+    
 }

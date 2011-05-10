@@ -279,7 +279,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
                 	hijos.remove(i);
             }
         }
-    }      
+    }    
     
     public void darDeBajaHijosUA(UnidadAdministrativa ua) {
             
@@ -360,7 +360,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     public void removeUnidadMateria(UnidadMateria unidadMateria) {
         unidadesMaterias.remove(unidadMateria);
     }
-
+    
     public void addProcedimientoLocal(ProcedimientoLocal procedimientoLocal){
         procedimientos.add(procedimientoLocal);
     }
@@ -480,7 +480,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
     }
-    
+
     
     private Set<FichaUA> todasfichas;
 
@@ -530,7 +530,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	public void setNumfoto4(Integer numfoto4) {
 		this.numfoto4 = numfoto4;
 	}
-    
+
 	public Set<Tramite> getTramites() {
 		return tramites;
 	}
@@ -567,6 +567,10 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	  		idsList.add(normaLocal.getId());
 	  	}
 	  	return idsList;
+	}
+
+	String getNombreUnidadAdministrativa(String idioma) {
+		return ((TraduccionUA)getTraduccion(idioma)).getNombre();
 	}
  
  

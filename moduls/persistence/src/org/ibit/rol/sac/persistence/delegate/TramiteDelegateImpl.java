@@ -7,8 +7,8 @@ import org.ibit.rol.sac.persistence.intf.TramiteFacade;
 import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
 import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
 
-import es.caib.vuds.ActualizacionVudsException;
-import es.caib.vuds.ValidateVudsException;
+import es.caib.persistence.vuds.ActualizacionVudsException;
+import es.caib.persistence.vuds.ValidateVudsException;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;

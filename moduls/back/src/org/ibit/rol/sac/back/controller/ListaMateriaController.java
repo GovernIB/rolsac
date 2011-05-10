@@ -7,6 +7,7 @@ package org.ibit.rol.sac.back.controller;
 
 import org.apache.struts.tiles.Controller;
 import org.apache.struts.tiles.ComponentContext;
+import org.ibit.rol.sac.back.negocio.BuscadorMaterias;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -28,11 +29,24 @@ public class ListaMateriaController implements Controller {
             throws ServletException, IOException {
 
         try {
-            MateriaDelegate delegate = DelegateUtil.getMateriaDelegate();
-            request.setAttribute("materiaOptions", delegate.listarMaterias());
+            request.setAttribute("materiaOptions", getBuscadorMaterias().listarTodasMateriasFiltrandoSinClasificar());
         } catch (DelegateException e) {
             throw new ServletException(e);
         }
 
     }
+    
+
+	BuscadorMaterias buscadorMaterias;
+	
+	public BuscadorMaterias getBuscadorMaterias() {
+		if(null==buscadorMaterias) buscadorMaterias = new BuscadorMaterias();
+		return buscadorMaterias;
+	}
+
+	public void setBuscadorMaterias(BuscadorMaterias listadorMaterias) {
+		this.buscadorMaterias = listadorMaterias;
+	}
+
+    
 }

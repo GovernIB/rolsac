@@ -18,7 +18,7 @@
 	function activarCapa(capa, n) {
         for (i = 0; i < n; i++) {
             capeta = document.getElementById("capa" + i);
-            if (i == capa) {
+            if (i == capa) {	
                 capeta.style.visibility="visible";
             } else {
                 capeta.style.visibility="hidden";
@@ -52,10 +52,10 @@
 	    <bean:define id="action" value="/contenido/documento/editar"  toScope="page"/>
 	</logic:present>
 
-
+	
 	<html:form action='<%= (String)pageContext.getAttribute("action") %>' styleId="documentoForm" method="POST" enctype="multipart/form-data">
     <logic:present name="documentoForm" property="id">
-     <html:hidden property="id"  />
+        <html:hidden property="id" />
     </logic:present>
 
     <logic:present parameter="idProcedimiento">
@@ -69,7 +69,7 @@
     </logic:present>
 
     <logic:present parameter="idTramite">
-       <input type="hidden" name="idTramite" value="<%=request.getParameter("idTramite")%>" />
+        <input type="hidden" name="idTramite" value="<%=request.getParameter("idTramite")%>" />
     </logic:present>
 
 	<logic:present parameter="tipus">
@@ -109,11 +109,11 @@
                     <div class="etiqueta"><bean:message key="documento.descripcion" /><br /><br /><br /></div>
                     <html:textarea name="traducciones" property="descripcion" indexed="true" rows="3" cols="60" tabindex="3"  />
                 </div>
-
+			
     		<logic:notPresent parameter="noFile">
-                <div class="component">
-                    <div class="etiqueta"><bean:message key="documento.archivo" /></div>
-                    <logic:present name="traducciones" property="archivo">
+			<div class="component">
+			<div class="etiqueta"><bean:message key="documento.archivo" /></div>
+			<logic:present name="traducciones" property="archivo">
 				<logic:present parameter="idTramite">
 					<html:link page='<%="/documento/archivo.do?lang=" + idioma%>' 
 						paramId="idDocumentTramit" paramName="documentoForm"
@@ -134,13 +134,13 @@
 						name="<%="borrarfichero_" + idioma%>" value="true" /><bean:message
 						key="boton.eliminar" /></div>
 				</logic:notPresent>
-                    </logic:present>
-                    <logic:notPresent name="traducciones" property="archivo">
+			</logic:present> 
+			<logic:notPresent name="traducciones" property="archivo">
 				<input type="text" id="aux" class="ctext" readonly="readonly"
 					value='- <bean:message key="documento.vacio" /> -' />
 			</logic:notPresent></div>
-                <div class="component">
-                    <div class="etiqueta"><bean:message key="documento.archivo" /></div>
+			<div class="component">
+			<div class="etiqueta"><bean:message key="documento.archivo" /></div>
 			<html:file styleClass="bfile" name="documentoForm"
 				property='<%="fichers[" + i + "]"%>' size="43"
 				style="font-family: verdana, arial, helvetica, sans-serif;font-size:9pt"

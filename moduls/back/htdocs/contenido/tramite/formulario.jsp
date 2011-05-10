@@ -37,7 +37,7 @@
 	}
 
 function validar(form) {
-       return validateTramiteForm(form);
+   return validateTramiteForm(form);
 }
 
 
@@ -197,14 +197,14 @@ function validar(form) {
 			
 			
         </div>		
-        <div class="component">
+       <div class="component">
             <div class="etiqueta"><bean:message key="tramite.estado" /></div>
             <html:select property="fase" tabindex="11">
                 <html:option value="1" key="tramite.iniciacion" />
                 <html:option value="2" key="tramite.instruccion" />
                 <html:option value="3" key="tramite.finalizacion" />
             </html:select>
-        </div>
+       </div>
 
 		
 <br>    
@@ -282,15 +282,15 @@ function validar(form) {
             <html:text styleClass="ctext" property="descCodiVuds"  />
             <div class="botoneraconsulta4">
                 <html:button property="boton" onclick="obrirCodisVuds()" tabindex="1"><bean:message key="boton.seleccionar" /></html:button>
-		</div>       
+            </div>
 		</div>
 
-		        
+
 		 <div class="component">
             <div class="etiqueta"><bean:message key="tramite.dataActualitzacioVuds" /></div>
             <html:text styleClass="ctext" property="dataActualitzacioVuds" tabindex="19"/>
-    </div>
-
+        </div>
+        
         <div class="etiqueta" style="width: 240px;">
 	   		 <!-- a href="javascript:obrirTramit('<bean:write name="tramiteForm" property="id"   />')" class="ctext" onfocus="this.blur()"> <bean:message key="tramite.vuds.previ" /></a-->
         </div>
@@ -346,7 +346,7 @@ function validar(form) {
             </div>
         </div>
     </logic:iterate>
-    </div>
+    </div>  
 
     <div class="botonera">
          <logic:present name="traductor">
@@ -383,7 +383,7 @@ function validar(form) {
 <logic:present name="tramiteForm" property="id">
 
 <logic:present name="taxa">
-    <br /><br />
+ 	<br /><br />
 
     
     <!-- Taxes relacionades -->
@@ -449,7 +449,7 @@ function validar(form) {
     <br /><br />
    
 
-</logic:present>
+</logic:present>   
 
 
 <!-- ejaen@dgtic. Els alerts es posen en una funcio que es crida un cop carregada la pagina.
@@ -458,13 +458,12 @@ function validar(form) {
 					  
  -->   
 <logic:present name="alertVuds">
-    <script type="text/javascript">
+	<script type="text/javascript">
 <!--
 	window.setTimeout("handleAlertVuds()",1000)
 -->
-</script>
-  vuuuuu
-    </logic:present>
+	</script>
+ </logic:present>
 
 
 <logic:present name="alert">
@@ -472,7 +471,6 @@ function validar(form) {
 <!--
 	window.setTimeout("handleAlert()",1000)
 -->
-</script>
-
+	</script>
  </logic:present>
 

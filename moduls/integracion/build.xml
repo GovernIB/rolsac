@@ -38,7 +38,7 @@
     	</fileset>
         <fileset dir="${lib.dir}/jwebunit">
         		<include name="**/*.jar" /> 
-        </fileset>
+        </fileset> 
         <fileset dir="${jar.product}">
             <include name="model.jar"/>
             <include name="sac-persistence-client.jar"/>
@@ -83,7 +83,7 @@
             </fileset>
         </jar>
     </target>
-
+	
 	
     <target name="jar.war" depends="jar.jar">
     	
@@ -99,8 +99,13 @@
         	
         	<lib dir="${lib.dir}/axis2-1.5">
         	  <include name="*jar" />
+        	   <exclude name="commons-logging-1.1.1.jar"/>
+			</lib>
+
+        	<lib dir="${lib.dir}">
+            	<include name="commons-collections.jar"/>
         	</lib>
-        	
+
         	<lib dir="${lib.dir}/jboss">
         	  <include name="commons-httpclient-3.1.jar" />
         	</lib>
@@ -126,5 +131,12 @@
 
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
     <target name="main" depends="jar.war" description="Construye el jar"/>
+	
+	
+	<target   name="module.package"   depends="jar.jar"/>
+	<path       id="module.classpath"   refid="jar.class.path"/>
+	<property name="module.classes"  location="${jar.classes}"/>
+	
+	<import file="../build_test.xml"/>
 	
 </project>

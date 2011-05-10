@@ -39,7 +39,7 @@ public class VOUtils {
         }
         vo.setTraduccionMap(traduccions);
     }
-
+    
     //u92770[enric] - metode afegit per fer populate testejable (IdiomaDelegate es conecta amb Dependency Injection)
     //TODO cambiar aquest metode a no static i posar idiomadelegate com una propietat. Aixo facilitaria el testing.
     public static void populate(Traducible vo, TraDynaValidatorForm form, IdiomaDelegate idiomaDelegate) throws Exception {
@@ -54,7 +54,7 @@ public class VOUtils {
         vo.setTraduccionMap(traduccions);
     }
 
-    public static void describe(DynaActionForm form, ValueObject vo) throws Exception {
+	public static void describe(DynaActionForm form, ValueObject vo) throws Exception {
         testBeanUtils();
         BeanUtils.populate(form, BeanUtils.describe(vo));
     }
@@ -78,7 +78,11 @@ public class VOUtils {
     //TODO cambiar aquest metode a no static i posar idiomadelegate com una propietat. Aixo facilitaria el testing.
     public static void describe(TraDynaValidatorForm form, Traducible vo, IdiomaDelegate idiomaDelegate) throws Exception {
         testBeanUtils();
+        
+        //Explicacio del populate(). form es un DynaActionForm de struts, i struts obté 
+        //el mapa de camps que estan definits en struts-config.xml amb tipus de la classe de form.
         BeanUtils.populate(form, BeanUtils.describe(vo));
+        
         List traducciones = (List) form.get("traducciones");
         idiomaDelegate=idiomaDelegate==null?DelegateUtil.getIdiomaDelegate(): idiomaDelegate;
         List langs = idiomaDelegate.listarLenguajes();
@@ -90,7 +94,7 @@ public class VOUtils {
             }
         }
     }
-
+    
     private static void testBeanUtils() {
         Converter currentConverter = ConvertUtils.lookup(String.class);
         if (!(currentConverter instanceof HibernateDelegateConverter)) {

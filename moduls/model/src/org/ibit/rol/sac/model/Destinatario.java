@@ -1,10 +1,12 @@
 package org.ibit.rol.sac.model;
 
+
 /**
  * Bean que representa los datos de un destinatario al que hay que notificar
  * las actualizaciones de la información(PORMAD)
+ * TODO hacer esta clase abstracta
  */
-public class Destinatario implements ValueObject {
+public class Destinatario implements ValueObject, Comparable<Destinatario>{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -51,5 +53,18 @@ public class Destinatario implements ValueObject {
 	}
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public boolean calActualizar(Object elem) {
+		return true;
+	}
+
+	
+	@Override
+	public boolean equals(Object obj) {
+		return ((Destinatario)obj).nombre.equals(nombre);
+	}
+	public int compareTo(Destinatario to) {
+		return nombre.compareTo(to.nombre);
 	}
 }

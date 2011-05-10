@@ -39,6 +39,12 @@
                         
                                     protected es.map.vuds.si.service.webservice.Tramite[] localTramite ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localTramiteTracker = false ;
+                           
 
                            /**
                            * Auto generated getter method
@@ -58,10 +64,6 @@
                                */
                               protected void validateTramite(es.map.vuds.si.service.webservice.Tramite[] param){
                              
-                              if ((param != null) && (param.length < 1)){
-                                throw new java.lang.RuntimeException();
-                              }
-                              
                               }
 
 
@@ -74,6 +76,14 @@
                                    validateTramite(param);
 
                                
+                                          if (param != null){
+                                             //update the setting tracker
+                                             localTramiteTracker = true;
+                                          } else {
+                                             localTramiteTracker = false;
+                                                 
+                                          }
+                                      
                                       this.localTramite=param;
                               }
 
@@ -89,6 +99,9 @@
                                    }
 
                             
+                                 //update the setting tracker
+                                localTramiteTracker = true;
+                            
 
                                java.util.List list =
                             org.apache.axis2.databinding.utils.ConverterUtil.toList(localTramite);
@@ -99,50 +112,6 @@
 
                              }
                              
-
-                        /**
-                        * field for Idioma
-                        */
-
-                        
-                                    protected es.map.vuds.si.service.webservice.Idioma localIdioma ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localIdiomaTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.Idioma
-                           */
-                           public  es.map.vuds.si.service.webservice.Idioma getIdioma(){
-                               return localIdioma;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Idioma
-                               */
-                               public void setIdioma(es.map.vuds.si.service.webservice.Idioma param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localIdiomaTracker = true;
-                                       } else {
-                                          localIdiomaTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localIdioma=param;
-                                    
-
-                               }
-                            
 
      /**
      * isReaderMTOMAware
@@ -240,15 +209,15 @@
 
                
                    }
-               
+                if (localTramiteTracker){
                                        if (localTramite!=null){
                                             for (int i = 0;i < localTramite.length;i++){
                                                 if (localTramite[i] != null){
-                                                 localTramite[i].serialize(new javax.xml.namespace.QName("","tramite"),
+                                                 localTramite[i].serialize(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","tramite"),
                                                            factory,xmlWriter);
                                                 } else {
                                                    
-                                                           throw new org.apache.axis2.databinding.ADBException("tramite cannot be null!!");
+                                                        // we don't have to do any thing since minOccures is zero
                                                     
                                                 }
 
@@ -258,13 +227,7 @@
                                                throw new org.apache.axis2.databinding.ADBException("tramite cannot be null!!");
                                         
                                     }
-                                  if (localIdiomaTracker){
-                                            if (localIdioma==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                            }
-                                           localIdioma.serialize(new javax.xml.namespace.QName("","idioma"),
-                                               factory,xmlWriter);
-                                        }
+                                 }
                     xmlWriter.writeEndElement();
                
 
@@ -426,17 +389,17 @@
                  java.util.ArrayList elementList = new java.util.ArrayList();
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
-                
+                 if (localTramiteTracker){
                              if (localTramite!=null) {
                                  for (int i = 0;i < localTramite.length;i++){
 
                                     if (localTramite[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                           "tramite"));
                                          elementList.add(localTramite[i]);
                                     } else {
                                         
-                                               throw new org.apache.axis2.databinding.ADBException("tramite cannot be null !!");
+                                                // nothing to do
                                             
                                     }
 
@@ -447,16 +410,7 @@
                                     
                              }
 
-                         if (localIdiomaTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "idioma"));
-                            
-                            
-                                    if (localIdioma==null){
-                                         throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                    }
-                                    elementList.add(localIdioma);
-                                }
+                        }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -537,7 +491,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","tramite").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","tramite").equals(reader.getName())){
                                 
                                     
                                     
@@ -559,7 +513,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone1 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","tramite").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","tramite").equals(reader.getName())){
                                                                     list1.add(es.map.vuds.si.service.webservice.Tramite.Factory.parse(reader));
                                                                         
                                                                 }else{
@@ -576,26 +530,10 @@
                                                             
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idioma").equals(reader.getName())){
-                                
-                                                object.setIdioma(es.map.vuds.si.service.webservice.Idioma.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
                                     else {
                                         
-                                }
-                              
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

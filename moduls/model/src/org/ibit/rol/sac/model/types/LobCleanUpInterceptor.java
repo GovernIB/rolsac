@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -63,9 +64,16 @@ public class LobCleanUpInterceptor implements Interceptor {
         try {
             for (Iterator iter = tempLobs.iterator(); iter.hasNext();) {
                 Object lob = iter.next();
+                log.info("lob="+lob);
+                if (lob instanceof oracle.sql.CLOB )
+					try {
+						log.info("is lob temporary="+((oracle.sql.CLOB)lob).isTemporary());
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
                 Method freeTemporary = lob.getClass().getMethod("freeTemporary", new Class[0]);
                 freeTemporary.invoke(lob, new Object[0]);
-                //log.info("lob cleaned");
+                log.info("lob cleaned");
             }
         } catch (SecurityException e) {
             log.error("clean LOB failed: " + e.getMessage(), e);

@@ -2,6 +2,7 @@ package org.ibit.rol.sac.back.action.sistema.seccion;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.ibit.rol.sac.back.action.BaseDispatchAction;
 import org.ibit.rol.sac.back.form.TraDynaValidatorForm;
 import org.ibit.rol.sac.back.utils.VOUtils;
+import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
@@ -135,7 +137,15 @@ public class EditarSeccionAction extends BaseDispatchAction {
                 dForm.set("idPadre", seccion.getPadre().getId());
                 request.setAttribute("padre", seccion.getPadre());
             }
-            request.setAttribute("listaFichas", seccion.getFichasUA());
+            Set setFichasUA = seccion.getFichasUA();
+            Object[] fichasUA = setFichasUA.toArray(); 
+            for(Object o : fichasUA) {
+            		FichaUA fichaUA =(FichaUA)o;
+            		if(null==fichaUA.getFicha())
+            			log.info("fichaUA id="+fichaUA.getId()+" no tiene ficha");
+            }
+            
+			request.setAttribute("listaFichas", fichasUA);
 
             //Comprobamos que esté definida la UA raiz en las propiedades,
             // si no existe no se podran crear fichas desde la sección.

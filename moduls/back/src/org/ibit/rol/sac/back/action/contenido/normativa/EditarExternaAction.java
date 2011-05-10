@@ -89,7 +89,7 @@ public class EditarExternaAction  extends BaseDispatchAction {
         NormativaExterna normativaOld;
 
         try {        
-
+        
         if ((Long) dForm.get("id") == null) {
         	normativaOld = null;
         	if (!normativaDelegate.autorizaCrearNormativa((Integer) dForm.get("validacion")))
@@ -98,10 +98,10 @@ public class EditarExternaAction  extends BaseDispatchAction {
         	normativaOld = (NormativaExterna)normativaDelegate.obtenerNormativa((Long) dForm.get("id"));
         	if (!normativaDelegate.autorizaModificarNormativa(normativaOld.getId()))
         		throw new SecurityException("Aviso: No tiene privilegios para modificar la normativa");
-            normativa.setAfectadas(normativaOld.getAfectadas());
+        	normativa.setAfectadas(normativaOld.getAfectadas());
             normativa.setProcedimientos(normativaOld.getProcedimientos());
-        }
-
+        }        
+	
         VOUtils.populate(normativa, dForm);
 
         Iterator aux =  Arrays.asList((FormFile[]) dForm.get("ficheros")).iterator();
@@ -135,8 +135,8 @@ public class EditarExternaAction  extends BaseDispatchAction {
         if (dForm.get("idBoletin") != null)
             normativa.setBoletin(boletinDelegate.obtenerBoletin((Long) dForm.get("idBoletin")));
 
-            request.setAttribute("afectacionOptions", normativa.getAfectadas());
-            request.setAttribute("procedimientoOptions", normativa.getProcedimientos());
+        request.setAttribute("afectacionOptions", normativa.getAfectadas());
+        request.setAttribute("procedimientoOptions", normativa.getProcedimientos());
         
         
        //     if (request.getParameter("action").equals(getResources(request).getMessage(request.getLocale(), "boton.traducir"))) traducir(request,dForm);
@@ -146,7 +146,7 @@ public class EditarExternaAction  extends BaseDispatchAction {
 	            if(dForm.get("id") != null) request.setAttribute("alert", "confirmacion.modificacion");
 	              else request.setAttribute("alert", "confirmacion.alta");
        //     }
-
+        
         dForm.set("id", normativa.getId());
         request.setAttribute("normativaForm", dForm);    
         log.info("Creat/Actualitzat " + normativa.getId());
@@ -201,7 +201,7 @@ public class EditarExternaAction  extends BaseDispatchAction {
        log.info("Traducción Normativa Externa - Id: " + (Long) dForm.get("id"));
     	
     }
-
+    
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
@@ -212,12 +212,12 @@ public class EditarExternaAction  extends BaseDispatchAction {
         Long id = (Long) dForm.get("id");
 
         if(normativaDelegate.autorizaModificarNormativa(id)) {
-        normativaDelegate.borrarNormativa(id);
-        log.info("Eliminada Normativa Externa: " + id);
-        request.setAttribute("alert", "confirmacion.baja");
-        dForm.reset(mapping, request);
+	        normativaDelegate.borrarNormativa(id);
+	        log.info("Eliminada Normativa Externa: " + id);
+	        request.setAttribute("alert", "confirmacion.baja");
+	        dForm.reset(mapping, request);
 	        request.setAttribute("normativaForm", dForm);
-        return mapping.findForward("cancel");
+	        return mapping.findForward("cancel");
         } else {    	
 	        request.setAttribute("alert", "normativa.aviso.privilegio.eliminar");
 	        request.setAttribute("idSelect", id);

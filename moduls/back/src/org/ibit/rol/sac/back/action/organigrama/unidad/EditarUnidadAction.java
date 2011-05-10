@@ -424,13 +424,14 @@ public class EditarUnidadAction extends BaseDispatchAction {
                 dForm.set("idPadre", null);
                 request.removeAttribute("padre");
             }
-            if(mostrarLogosUA()){
+
                 if (uni.getFotop() != null) {
                     dForm.set("nombrefotop", uni.getFotop().getNombre());
                 }
                 if (uni.getFotog() != null) {
                     dForm.set("nombrefotog", uni.getFotog().getNombre());
                 }
+            if(mostrarLogosUA()){
                 if (uni.getLogoh() != null) {
                     dForm.set("nombrelogoh", uni.getLogoh().getNombre());
                 }
@@ -452,6 +453,8 @@ public class EditarUnidadAction extends BaseDispatchAction {
             }
 
             request.setAttribute("edificioOptions", uni.getEdificios());
+            log.info("edificioOptions ->"+Arrays.toString(uni.getEdificios().toArray()));
+
             request.setAttribute("unidadesmateriasOptions", uni.getUnidadesMaterias());
             request.setAttribute("usuarioOptions", uni.getUsuarios());
             //request.setAttribute("fichaUAOptions", unidad.getFichasUA());

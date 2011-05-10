@@ -25,14 +25,14 @@ public class DocumentoArchivoAction extends ArchivoAction {
 
         //obtener archivo concreto con el delegate
         
-        String lang = request.getParameter("lang");
-
+    	String lang = request.getParameter("lang");
+        
         if(null!=request.getParameter("idDocumento")) {
         	Long idDoc = new Long(request.getParameter("idDocumento"));
         	DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
-        return docDelegate.obtenerArchivoDocumento(idDoc, lang, false);
-    }
-
+        	return docDelegate.obtenerArchivoDocumento(idDoc, lang, false);
+        }
+        
         if(null!=request.getParameter("idDocumentTramit")) {
         	Long idDoc = new Long(request.getParameter("idDocumentTramit"));
         	TramiteDelegate tramDelegate = DelegateUtil.getTramiteDelegate();

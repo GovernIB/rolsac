@@ -33,47 +33,86 @@
 
                         /**
                         * field for ActividadEconomica
+                        * This was an Array!
                         */
 
                         
-                                    protected es.map.vuds.si.service.webservice.ActividadEconomica localActividadEconomica ;
+                                    protected es.map.vuds.si.service.webservice.ActividadEconomica[] localActividadEconomica ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.ActividadEconomica
+                           * @return es.map.vuds.si.service.webservice.ActividadEconomica[]
                            */
-                           public  es.map.vuds.si.service.webservice.ActividadEconomica getActividadEconomica(){
+                           public  es.map.vuds.si.service.webservice.ActividadEconomica[] getActividadEconomica(){
                                return localActividadEconomica;
                            }
 
                            
                         
-                            /**
-                               * Auto generated setter method
-                               * @param param ActividadEconomica
-                               */
-                               public void setActividadEconomica(es.map.vuds.si.service.webservice.ActividadEconomica param){
-                            
-                                            this.localActividadEconomica=param;
-                                    
 
-                               }
+
+                               
+                              /**
+                               * validate the array for ActividadEconomica
+                               */
+                              protected void validateActividadEconomica(es.map.vuds.si.service.webservice.ActividadEconomica[] param){
+                             
+                              if ((param != null) && (param.length < 1)){
+                                throw new java.lang.RuntimeException();
+                              }
+                              
+                              }
+
+
+                             /**
+                              * Auto generated setter method
+                              * @param param ActividadEconomica
+                              */
+                              public void setActividadEconomica(es.map.vuds.si.service.webservice.ActividadEconomica[] param){
+                              
+                                   validateActividadEconomica(param);
+
+                               
+                                      this.localActividadEconomica=param;
+                              }
+
+                               
+                             
+                             /**
+                             * Auto generated add method for the array for convenience
+                             * @param param es.map.vuds.si.service.webservice.ActividadEconomica
+                             */
+                             public void addActividadEconomica(es.map.vuds.si.service.webservice.ActividadEconomica param){
+                                   if (localActividadEconomica == null){
+                                   localActividadEconomica = new es.map.vuds.si.service.webservice.ActividadEconomica[]{};
+                                   }
+
                             
+
+                               java.util.List list =
+                            org.apache.axis2.databinding.utils.ConverterUtil.toList(localActividadEconomica);
+                               list.add(param);
+                               this.localActividadEconomica =
+                             (es.map.vuds.si.service.webservice.ActividadEconomica[])list.toArray(
+                            new es.map.vuds.si.service.webservice.ActividadEconomica[list.size()]);
+
+                             }
+                             
 
                         /**
                         * field for Ambito
                         */
 
                         
-                                    protected es.map.vuds.si.service.webservice.Ambito localAmbito ;
+                                    protected es.map.vuds.si.service.webservice.AmbitoEjercicio localAmbito ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.Ambito
+                           * @return es.map.vuds.si.service.webservice.AmbitoEjercicio
                            */
-                           public  es.map.vuds.si.service.webservice.Ambito getAmbito(){
+                           public  es.map.vuds.si.service.webservice.AmbitoEjercicio getAmbito(){
                                return localAmbito;
                            }
 
@@ -83,7 +122,7 @@
                                * Auto generated setter method
                                * @param param Ambito
                                */
-                               public void setAmbito(es.map.vuds.si.service.webservice.Ambito param){
+                               public void setAmbito(es.map.vuds.si.service.webservice.AmbitoEjercicio param){
                             
                                             this.localAmbito=param;
                                     
@@ -241,6 +280,36 @@
                                }
                             
 
+                        /**
+                        * field for TipoSolicitante
+                        */
+
+                        
+                                    protected long localTipoSolicitante ;
+                                
+
+                           /**
+                           * Auto generated getter method
+                           * @return long
+                           */
+                           public  long getTipoSolicitante(){
+                               return localTipoSolicitante;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param TipoSolicitante
+                               */
+                               public void setTipoSolicitante(long param){
+                            
+                                            this.localTipoSolicitante=param;
+                                    
+
+                               }
+                            
+
      /**
      * isReaderMTOMAware
      * @return true if the reader supports MTOM
@@ -338,12 +407,24 @@
                
                    }
                
-                                            if (localActividadEconomica==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null!!");
+                                       if (localActividadEconomica!=null){
+                                            for (int i = 0;i < localActividadEconomica.length;i++){
+                                                if (localActividadEconomica[i] != null){
+                                                 localActividadEconomica[i].serialize(new javax.xml.namespace.QName("","actividadEconomica"),
+                                                           factory,xmlWriter);
+                                                } else {
+                                                   
+                                                           throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null!!");
+                                                    
+                                                }
+
                                             }
-                                           localActividadEconomica.serialize(new javax.xml.namespace.QName("","actividadEconomica"),
-                                               factory,xmlWriter);
+                                     } else {
                                         
+                                               throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null!!");
+                                        
+                                    }
+                                 
                                             if (localAmbito==null){
                                                  throw new org.apache.axis2.databinding.ADBException("ambito cannot be null!!");
                                             }
@@ -492,6 +573,35 @@
                                            localTipologia.serialize(new javax.xml.namespace.QName("","tipologia"),
                                                factory,xmlWriter);
                                         
+                                    namespace = "";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"tipoSolicitante", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"tipoSolicitante");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("tipoSolicitante");
+                                    }
+                                
+                                               if (localTipoSolicitante==java.lang.Long.MIN_VALUE) {
+                                           
+                                                         throw new org.apache.axis2.databinding.ADBException("tipoSolicitante cannot be null!!");
+                                                      
+                                               } else {
+                                                    xmlWriter.writeCharacters(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTipoSolicitante));
+                                               }
+                                    
+                                   xmlWriter.writeEndElement();
+                             
                     xmlWriter.writeEndElement();
                
 
@@ -654,15 +764,27 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                 
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "actividadEconomica"));
-                            
-                            
-                                    if (localActividadEconomica==null){
-                                         throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null!!");
+                             if (localActividadEconomica!=null) {
+                                 for (int i = 0;i < localActividadEconomica.length;i++){
+
+                                    if (localActividadEconomica[i] != null){
+                                         elementList.add(new javax.xml.namespace.QName("",
+                                                                          "actividadEconomica"));
+                                         elementList.add(localActividadEconomica[i]);
+                                    } else {
+                                        
+                                               throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null !!");
+                                            
                                     }
-                                    elementList.add(localActividadEconomica);
-                                
+
+                                 }
+                             } else {
+                                 
+                                        throw new org.apache.axis2.databinding.ADBException("actividadEconomica cannot be null!!");
+                                    
+                             }
+
+                        
                             elementList.add(new javax.xml.namespace.QName("",
                                                                       "ambito"));
                             
@@ -717,6 +839,12 @@
                                     }
                                     elementList.add(localTipologia);
                                 
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "tipoSolicitante"));
+                                 
+                                elementList.add(
+                                   org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTipoSolicitante));
+                            
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -792,15 +920,48 @@
                     
                     reader.next();
                 
+                        java.util.ArrayList list1 = new java.util.ArrayList();
+                    
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","actividadEconomica").equals(reader.getName())){
                                 
-                                                object.setActividadEconomica(es.map.vuds.si.service.webservice.ActividadEconomica.Factory.parse(reader));
-                                              
-                                        reader.next();
                                     
+                                    
+                                    // Process the array and step past its final element's end.
+                                    list1.add(es.map.vuds.si.service.webservice.ActividadEconomica.Factory.parse(reader));
+                                                                
+                                                        //loop until we find a start element that is not part of this array
+                                                        boolean loopDone1 = false;
+                                                        while(!loopDone1){
+                                                            // We should be at the end element, but make sure
+                                                            while (!reader.isEndElement())
+                                                                reader.next();
+                                                            // Step out of this element
+                                                            reader.next();
+                                                            // Step to next element event.
+                                                            while (!reader.isStartElement() && !reader.isEndElement())
+                                                                reader.next();
+                                                            if (reader.isEndElement()){
+                                                                //two continuous end elements means we are exiting the xml structure
+                                                                loopDone1 = true;
+                                                            } else {
+                                                                if (new javax.xml.namespace.QName("","actividadEconomica").equals(reader.getName())){
+                                                                    list1.add(es.map.vuds.si.service.webservice.ActividadEconomica.Factory.parse(reader));
+                                                                        
+                                                                }else{
+                                                                    loopDone1 = true;
+                                                                }
+                                                            }
+                                                        }
+                                                        // call the converter utility  to convert and set the array
+                                                        
+                                                        object.setActividadEconomica((es.map.vuds.si.service.webservice.ActividadEconomica[])
+                                                            org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
+                                                                es.map.vuds.si.service.webservice.ActividadEconomica.class,
+                                                                list1));
+                                                            
                               }  // End of if for expected property start element
                                 
                                 else{
@@ -813,7 +974,7 @@
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","ambito").equals(reader.getName())){
                                 
-                                                object.setAmbito(es.map.vuds.si.service.webservice.Ambito.Factory.parse(reader));
+                                                object.setAmbito(es.map.vuds.si.service.webservice.AmbitoEjercicio.Factory.parse(reader));
                                               
                                         reader.next();
                                     
@@ -906,6 +1067,25 @@
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","tipologia").equals(reader.getName())){
                                 
                                                 object.setTipologia(es.map.vuds.si.service.webservice.TipologiaOrganizaciones.Factory.parse(reader));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                else{
+                                    // A start element we are not expecting indicates an invalid parameter was passed
+                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+                                }
+                            
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","tipoSolicitante").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setTipoSolicitante(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToLong(content));
                                               
                                         reader.next();
                                     

@@ -924,9 +924,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             Hibernate.initialize(ua.getHijos());
             Hibernate.initialize(ua.getUnidadesMaterias());
 
-            ua.getEdificios().add(edificio);  				//sin inverse=true 
-            //edificio.getUnidadesAdministrativas().add(ua);  	//con inverse=true 
-
+ 
+            edificio.getUnidadesAdministrativas().add(ua);  	//con inverse=true 
+            
+            ua.getEdificios().add(edificio);  				//sin inverse=true
+            
             session.flush();
             Actualizador.actualizar(edificio,ua.getId());
         } catch (HibernateException e) {

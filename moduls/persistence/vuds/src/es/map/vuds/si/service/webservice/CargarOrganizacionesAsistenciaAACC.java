@@ -31,50 +31,6 @@
 
         
 
-                        /**
-                        * field for Idioma
-                        */
-
-                        
-                                    protected es.map.vuds.si.service.webservice.Idioma localIdioma ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localIdiomaTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.Idioma
-                           */
-                           public  es.map.vuds.si.service.webservice.Idioma getIdioma(){
-                               return localIdioma;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Idioma
-                               */
-                               public void setIdioma(es.map.vuds.si.service.webservice.Idioma param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localIdiomaTracker = true;
-                                       } else {
-                                          localIdiomaTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localIdioma=param;
-                                    
-
-                               }
-                            
-
      /**
      * isReaderMTOMAware
      * @return true if the reader supports MTOM
@@ -171,13 +127,7 @@
 
                
                    }
-                if (localIdiomaTracker){
-                                            if (localIdioma==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                            }
-                                           localIdioma.serialize(new javax.xml.namespace.QName("","idioma"),
-                                               factory,xmlWriter);
-                                        }
+               
                     xmlWriter.writeEndElement();
                
 
@@ -339,16 +289,7 @@
                  java.util.ArrayList elementList = new java.util.ArrayList();
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
-                 if (localIdiomaTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "idioma"));
-                            
-                            
-                                    if (localIdioma==null){
-                                         throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                    }
-                                    elementList.add(localIdioma);
-                                }
+                
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -424,28 +365,6 @@
                     
                     reader.next();
                 
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idioma").equals(reader.getName())){
-                                
-                                                object.setIdioma(es.map.vuds.si.service.webservice.Idioma.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                  
-                            while (!reader.isStartElement() && !reader.isEndElement())
-                                reader.next();
-                            
-                                if (reader.isStartElement())
-                                // A start element we are not expecting indicates a trailing invalid property
-                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                            
 
 
 

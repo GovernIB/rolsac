@@ -118,33 +118,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                      if (localConsultarMapaTramiteResponse==null){
-                                        java.lang.String namespace = "http://webservice.service.si.vuds.map.es/";
-
-                                        if (! namespace.equals("")) {
-                                            java.lang.String prefix = xmlWriter.getPrefix(namespace);
-
-                                            if (prefix == null) {
-                                                prefix = generatePrefix(namespace);
-
-                                                xmlWriter.writeStartElement(prefix,"consultarMapaTramiteResponse", namespace);
-                                                xmlWriter.writeNamespace(prefix, namespace);
-                                                xmlWriter.setPrefix(prefix, namespace);
-
-                                            } else {
-                                                xmlWriter.writeStartElement(namespace,"consultarMapaTramiteResponse");
-                                            }
-
-                                        } else {
-                                            xmlWriter.writeStartElement("consultarMapaTramiteResponse");
-                                        }
-
-                                        // write the nil attribute
-                                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
-                                        xmlWriter.writeEndElement();
-                                       }else{
-                                         localConsultarMapaTramiteResponse.serialize(MY_QNAME,factory,xmlWriter);
-                                       }
+                                 if (localConsultarMapaTramiteResponse==null){
+                                   throw new org.apache.axis2.databinding.ADBException("Property cannot be null!");
+                                 }
+                                 localConsultarMapaTramiteResponse.serialize(MY_QNAME,factory,xmlWriter);
                             
 
         }
@@ -304,13 +281,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                
-                                if (localConsultarMapaTramiteResponse==null){
-                                   return new org.apache.axis2.databinding.utils.reader.NullXMLStreamReader(MY_QNAME);
-                                }else{
-                                   return localConsultarMapaTramiteResponse.getPullParser(MY_QNAME);
-                                }
-                            
+                return localConsultarMapaTramiteResponse.getPullParser(MY_QNAME);
 
         }
 
@@ -345,17 +316,6 @@
                     reader.next();
 
                 
-                   nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                   if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                         // Skip the element and report the null value.  It cannot have subelements.
-                         while (!reader.isEndElement())
-                             reader.next();
-                         
-                                 return object;
-                             
-
-                   }
-                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -369,15 +329,8 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","consultarMapaTramiteResponse").equals(reader.getName())){
                                 
-                                      nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                      if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                          object.setConsultarMapaTramiteResponse(null);
-                                          reader.next();
-                                          
-                                      }else{
-                                    
                                                 object.setConsultarMapaTramiteResponse(es.map.vuds.si.service.webservice.ConsultarMapaTramiteResponse.Factory.parse(reader));
-                                            }
+                                            
                               }  // End of if for expected property start element
                                 
                              else{

@@ -41,7 +41,6 @@
 
     <property name="jar.product" location="${output.dir}/moduls"/>
 
-	
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
@@ -64,6 +63,8 @@
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
         	<include name="boib.jar"/>
+        	<include name="lucene-caib.jar"/>
+        	<include name="dom4j.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
@@ -125,6 +126,8 @@
         <mkdir dir="${web.webapp}"/>
         <mkdir dir="${web.doc.api}"/>
         <mkdir dir="${web.product}"/>
+    	<!--mkdir dir="${test.classes}"/>
+    	<mkdir dir="${test.gen.unit.etc}"/-->
     </target>
 
 	 <target name="jar.jar" depends="web.compile">
@@ -222,18 +225,29 @@
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
-            	<attribute name="Class-Path" value="sac-${modul}.jar"/>
+            	<attribute name="Created-By" value="Fundació IBIT"/>
+            	<!--attribute name="Class-Path" value="sac-${modul}.jar"/-->
             	
             </manifest>
 
         	<!--ejaenv classes dir="${web.classes}"/-->
         	
             <classes dir="${web.resources}" includes="*.properties"/>
-
+        	
+            <lib dir="${web.product}">
+            	<include name="sac-back.jar"/>
+            </lib>
+            	
+        	
         	<lib dir="${lib.dir}">
 	         <include name="struts.jar"/>
         	 <include name="commons-lang-2.4.jar"/>
+           	 <include name="commons-collections.jar"/>
+           	 <include name="commons-beanutils.jar"/>
+        	 <include name="commons-validator.jar"/>
+        	 <include name="quartz.jar"/>
+        	 <include name="mail.jar"/>
+
         	 <!--include name="axis2-1.5/*jar" /-->
     		</lib>
 
@@ -335,8 +349,15 @@
         </javadoc>
 
     </target>
-
+	
+	
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
     <target name="main" depends="web.war" description="Construye el war"/>
 
+	<target   name="module.package"   depends="jar.jar"/>
+	<path       id="module.classpath"   refid="web.class.path"/>
+	<property name="module.classes"  location="${web.classes}"/>
+		
+	<import file="../build_test.xml"/>
+	
 </project>

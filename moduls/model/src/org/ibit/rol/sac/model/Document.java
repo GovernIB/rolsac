@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 
 	
-public abstract class Document extends ElementOrdenat {
+public abstract class Document extends Ordenable {
 	public static final int DOCINFORMATIU=0; 
 	public static final int FORMULARI=1;
 	//public static final int DOCPRESENTAR=2;

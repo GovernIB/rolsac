@@ -4,7 +4,7 @@ package org.ibit.rol.sac.model;
 
 public class TraduccionFicha implements Traduccion {
 
-    public String getTitulo() {
+	public String getTitulo() {
         return titulo;
     }
 
@@ -35,7 +35,7 @@ public class TraduccionFicha implements Traduccion {
     public void setUrl(String url) {
         this.url = url;
     }
-
+    
     private String titulo;
     private String descAbr;
     private String descripcion;

@@ -1,4 +1,4 @@
-<%@ page import="org.apache.commons.lang.StringEscapeUtils"%>
+<%@ page import="org.apache.commons.lang.StringUtils"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java"%>
 <%@ taglib prefix="bean" uri="http://jakarta.apache.org/struts/tags-bean" %>
@@ -77,7 +77,7 @@
                <ul>
                    <bean:define id="idFicha" name="ficha" property="id"/>
                    <bean:define id="nombre" name="ficha" property="traduccion.titulo" type="java.lang.String"/>
-                   <li><html:link page="#" onclick='<%="relaciona("+idFicha+",'"+ StringEscapeUtils.escapeJavaScript(nombre.replace( "\\"", ""))+"')"%>'>
+                   <li><html:link page="#" onclick='<%="relaciona("+idFicha+",'"+ StringUtils.escape(nombre.replace( "\\"", ""))+"')"%>'>
                         <html:img page="/img/trasparent.gif" width="15" height="9" border="0" /><bean:write name="ficha" property="traduccion.titulo"/>
                     </html:link></li>
                </ul>

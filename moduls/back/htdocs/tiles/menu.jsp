@@ -31,14 +31,14 @@
             </logic:present>
          <% } else{
                 if (menuname.equals("microsites") && !microsites.equals("N")) {%>
-                    <logic:present role="<%=roles%>">
-                    <li>
-                        <logic:notEmpty name="action"><html:link action="<%=action%>"><bean:message name="opcio" property="tooltip" bundle="menu" /></html:link></logic:notEmpty>
-                        <logic:empty name="action"><bean:message name="opcio" property="tooltip" bundle="menu" /></logic:empty>
-                        <tiles:insert definition=".menu" flush="false"><tiles:put name="root" beanName="opcio" beanProperty="value"/></tiles:insert>
-                    </li>
-                    </logic:present>
-                <% } %>
+        <logic:present role="<%=roles%>">
+        <li>
+            <logic:notEmpty name="action"><html:link action="<%=action%>"><bean:message name="opcio" property="tooltip" bundle="menu" /></html:link></logic:notEmpty>
+            <logic:empty name="action"><bean:message name="opcio" property="tooltip" bundle="menu" /></logic:empty>
+            <tiles:insert definition=".menu" flush="false"><tiles:put name="root" beanName="opcio" beanProperty="value"/></tiles:insert>
+        </li>
+        </logic:present>
+        <% } %>
                <% if (menuname.equals("contenidos.normativas.traspasa") && !traspasboib.equals("N")) {%>
                     <logic:present role="<%=roles%>">
                     <li>

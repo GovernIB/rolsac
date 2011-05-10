@@ -6,8 +6,8 @@ import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 
-import es.caib.vuds.ActualizacionVudsException;
-import es.caib.vuds.ValidateVudsException;
+import es.caib.persistence.vuds.ActualizacionVudsException;
+import es.caib.persistence.vuds.ValidateVudsException;
 
 public interface TramiteDelegateI {
 

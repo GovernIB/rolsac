@@ -22,7 +22,7 @@
         <property name="fecha" column="COM_FECHA"/>
         <property name="contenido" length="4000" column="COM_CONTEN"/>
 		<property name="subsanado" column="COM_SUBSAN" />
-		
+
         <property name="autor" length="256" column="COM_AUTOR"/>
         <many-to-one name="usuario" cascade="none" outer-join="false" column="COM_CODUSU" foreign-key="RSC_COMUSU_FK"/>
 

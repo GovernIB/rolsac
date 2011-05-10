@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="test" basedir=".">
+	
+	<property name="test.unitario.src.dir" location="${home.dir}/test/${modul}/unitario/java"/>
+	<property name="test.unitario.etc.dir" location="${home.dir}/test/${modul}/unitario/resources"/>
+	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
+	<property name="test.integracion.etc.dir" location="${home.dir}/test/${modul}/integracion/resources"/>
+    <property name="test.common.lib.dir" location="${home.dir}/test/common/resources/lib"/>
+    <property name="test.classes" location="${modul.output.dir}/test/classes"/>
+	<property name="test.unitario.resources" location="${modul.output.dir}/test/unitario/resources"/>
+	<property name="test.integracion.resources" location="${modul.output.dir}/test/integracion/resources"/>
+
+    <target name="prepare.test">
+    	<mkdir dir="${test.classes}"/>
+    	<mkdir dir="${test.unitario.resources}"/>
+    	<copy todir="${test.unitario.resources}" overwrite="true">
+    	    	<fileset dir="${test.unitario.etc.dir}" /> 
+    	</copy>
+    </target>
+	
+	
+	<path id="test.common.classpath">
+		<path refid="module.classpath"/>
+		<pathelement location="${module.classes}" />
+		<pathelement location="${test.classes}" />
+		<pathelement location="${test.resources}" />
+		<fileset dir="${test.common.lib.dir}">
+		    <include name="junit-4.8.2.jar"/>
+		</fileset>
+		<fileset dir="${test.common.lib.dir}"/>
+		<fileset dir="${output.dir}/moduls">
+		    <include name="test_utils.jar"/>
+		</fileset>
+	</path>	
+
+	
+	<path id="test.unitario.classpath">
+		<path refid="test.common.classpath"/>
+		<pathelement location="${test.unitario.resources}" />
+	</path>	
+
+
+	<path id="test.integracion.classpath">
+		<path refid="test.common.classpath"/>
+		<pathelement location="${test.integracion.resources}" />
+	</path>	
+
+	<target name="module.package"/>  
+	
+	<target name="test.unitario.compile" depends="prepare.test, module.package">
+	        <javac
+	            destdir="${test.classes}"
+	        	classpathref="test.unitario.classpath"
+	            debug="${javac.debug}"
+	            deprecation="${javac.deprecation}"
+	            optimize="${javac.optimize}"
+	        	encoding="${javac.encoding}">
+	            <src path="${test.unitario.src.dir}"/>
+	        </javac>
+	</target>
+	
+	<target name="test.integracion.compile" depends="module.package">
+		        <javac
+		            destdir="${test.classes}"
+		        	classpathref="test.integracion.classpath"
+		            debug="${javac.debug}"
+		            deprecation="${javac.deprecation}"
+		            optimize="${javac.optimize}"
+		        	encoding="${javac.encoding}">
+		            <src path="${test.integracion.src.dir}"/>
+		        </javac>
+		</target>
+		
+
+	<target name="test.unitario" depends="test.unitario.compile">
+		<junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="no">
+		<formatter type="plain" usefile="false"/>
+		<batchtest todir="${test.output.dir}">
+		      <fileset dir="${test.unitario.src.dir}">
+		      	<include name="**/*Test.java"/>
+		       </fileset>
+		</batchtest>
+		<classpath refid="test.unitario.classpath"/>
+		</junit>
+	</target>	
+	
+	<target name="test.integracion" depends="test.integracion.compile">
+			<junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="no" >
+			<formatter type="plain" usefile="false"/>
+			<sysproperty key="home.dir" value="${home.dir}"/>
+			<batchtest todir="${test.output.dir}">
+			      <fileset dir="${test.integracion.src.dir}">
+			      	<include name="**/*Test.java"/>
+			       </fileset>
+			</batchtest>
+			<classpath refid="test.integracion.classpath"/>
+			</junit>
+		</target>	
+	
+
+</project>

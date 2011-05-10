@@ -17,7 +17,7 @@ import java.util.List;
  * Time: 13:43:57
  * To change this template use File | Settings | File Templates.
  */
-public class TramiteTransferible  implements Serializable {
+public class TramiteTransferible  extends ActuacionTransferible implements Serializable {
 
     private Long id;
     private String codiVuds;

@@ -334,7 +334,7 @@
         controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
     </definition>    
     
-    <!-- SISTEMA - Pï¿½blico Objetivo -->
+    <!-- SISTEMA - Público Objetivo -->
     <definition name=".sistema.publico.form" extends=".main">
         <put name="contenido" value="/sistema/publico/formulario.jsp"/>
     </definition>
@@ -424,7 +424,7 @@
     <definition name=".contenido.ficha.form" extends=".main" controllerClass="org.ibit.rol.sac.back.controller.FichaFormController">
         <put name="contenido" value="/contenido/ficha/formulario.jsp"/>
     </definition>
-
+        
     <definition name=".contenido.ficha.form.Accion" extends=".main"
         controllerClass="org.ibit.rol.sac.back.controller.ListaMateriaController">
     </definition>    

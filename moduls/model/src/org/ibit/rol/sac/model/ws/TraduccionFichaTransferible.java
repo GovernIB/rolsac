@@ -52,5 +52,14 @@ public class TraduccionFichaTransferible extends AbstractTraduccion implements S
     private String url;
     //TRADUCCIONFICHA
 
+	@Override
+	public String toString() {
+		return "TraduccionFichaTransferible [titulo=" + titulo + ", descAbr="
+				+ descAbr + ", descripcion=" + descripcion + ", url=" + url
+				+ "]";
+	}
+
+
+    
 
 }

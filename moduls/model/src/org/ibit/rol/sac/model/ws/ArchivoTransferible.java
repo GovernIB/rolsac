@@ -59,6 +59,7 @@ public class ArchivoTransferible implements Serializable {
     
     public static ArchivoTransferible generar(final Archivo archivo){
     	ArchivoTransferible archivoTransferible = null;
+
     	if(archivo!=null){
     		archivoTransferible = new ArchivoTransferible();
     		archivoTransferible.setDatos(archivo.getDatos());

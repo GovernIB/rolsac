@@ -59,7 +59,10 @@ public final class DelegateUtil {
     }
     
     public static MateriaDelegate getMateriaDelegate() {
-        return (MateriaDelegate) DelegateFactory.getDelegate(MateriaDelegate.class);
+        MateriaDelegateI impl= (MateriaDelegateImpl) DelegateFactory.getDelegate(MateriaDelegateImpl.class);
+        MateriaDelegate del = new MateriaDelegate();
+    	del.setImpl(impl);
+    	return del;
     }
 
     public static IconoFamiliaDelegate getIconoFamiliaDelegate() {
@@ -91,7 +94,10 @@ public final class DelegateUtil {
     }
 
     public static FichaDelegate getFichaDelegate(){
-        return (FichaDelegate) DelegateFactory.getDelegate(FichaDelegate.class);
+        FichaDelegateI impl= (FichaDelegateImpl) DelegateFactory.getDelegate(FichaDelegateImpl.class);
+        FichaDelegate del = new FichaDelegate();
+    	del.setImpl(impl);
+    	return del;
     }
 
     public static NormativaDelegate getNormativaDelegate(){

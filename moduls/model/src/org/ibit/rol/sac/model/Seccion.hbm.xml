@@ -38,7 +38,7 @@
             <composite-element class="org.ibit.rol.sac.model.TraduccionSeccion">
                 <property name="nombre" length="256" column="TSE_TITULO"/>
                 <property name="descripcion" length="4000" column="TSE_DESCRI"/>
-            </composite-element>
+            </composite-element>  
         </map>
         
     </class>

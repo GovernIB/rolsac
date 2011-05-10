@@ -158,9 +158,9 @@
 
 <script type="text/javascript">
 <!--
-    <logic:present name="alert">
+	<logic:present name="alert">
 	alert("<bean:message name='alert' />");
-    </logic:present>
+	</logic:present>
 -->
 </script>
 

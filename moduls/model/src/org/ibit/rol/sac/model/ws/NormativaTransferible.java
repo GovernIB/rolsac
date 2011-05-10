@@ -12,7 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 
-public class NormativaTransferible implements Serializable {
+public class NormativaTransferible extends ActuacionTransferible implements Serializable {
 
     protected static final Log log = LogFactory.getLog(NormativaTransferible.class);
 	//VUDS

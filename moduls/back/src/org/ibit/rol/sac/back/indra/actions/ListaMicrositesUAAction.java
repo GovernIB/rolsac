@@ -50,9 +50,9 @@ public class ListaMicrositesUAAction extends org.ibit.rol.sac.back.controller.UA
 	        	//recoger usuario 
 	        	//UsuarioDelegate usudel=org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUsuarioDelegate();
 	        	//Usuario usu = usudel.obtenerUsuariobyUsername(request.getRemoteUser());
-
+	                       
 	            if(ident != null){
-                    Long id = new Long(ident);
+	                Long id = new Long(ident);
                     request.setAttribute("micrositeOptions", obtenirMicrosites(id));
 	            } else {
 	                request.setAttribute("micrositeOptions", Collections.EMPTY_LIST);

@@ -15,12 +15,11 @@
         
         public  class TipoRegistro
         implements org.apache.axis2.databinding.ADBBean{
-        
-                public static final javax.xml.namespace.QName MY_QNAME = new javax.xml.namespace.QName(
-                "http://webservice.service.si.vuds.map.es/",
-                "tipoRegistro",
-                "ns1");
-
+        /* This type was generated from the piece of schema that had
+                name = tipoRegistro
+                Namespace URI = http://webservice.service.si.vuds.map.es/
+                Namespace Prefix = ns1
+                */
             
 
         private static java.lang.String generatePrefix(java.lang.String namespace) {
@@ -33,63 +32,92 @@
         
 
                         /**
-                        * field for TipoRegistro
+                        * field for IdTipoRegistro
                         */
 
                         
-                                    protected java.lang.String localTipoRegistro ;
+                                    protected java.lang.String localIdTipoRegistro ;
                                 
-                            private static java.util.HashMap _table_ = new java.util.HashMap();
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localIdTipoRegistroTracker = false ;
+                           
 
-                            // Constructor
-                            
-                                protected TipoRegistro(java.lang.String value, boolean isRegisterValue) {
-                                    localTipoRegistro = value;
-                                    if (isRegisterValue){
-                                        
-                                               _table_.put(localTipoRegistro, this);
-                                           
-                                    }
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getIdTipoRegistro(){
+                               return localIdTipoRegistro;
+                           }
 
-                                }
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param IdTipoRegistro
+                               */
+                               public void setIdTipoRegistro(java.lang.String param){
                             
-                                    public static final java.lang.String _Alta =
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Alta");
-                                
-                                    public static final java.lang.String _Modificacion =
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Modificacion");
-                                
-                                    public static final java.lang.String _Baja =
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Baja");
-                                
-                                    public static final java.lang.String _Excepcion =
-                                        org.apache.axis2.databinding.utils.ConverterUtil.convertToString("Excepcion");
-                                
-                                public static final TipoRegistro Alta =
-                                    new TipoRegistro(_Alta,true);
-                            
-                                public static final TipoRegistro Modificacion =
-                                    new TipoRegistro(_Modificacion,true);
-                            
-                                public static final TipoRegistro Baja =
-                                    new TipoRegistro(_Baja,true);
-                            
-                                public static final TipoRegistro Excepcion =
-                                    new TipoRegistro(_Excepcion,true);
-                            
-
-                                public java.lang.String getValue() { return localTipoRegistro;}
-
-                                public boolean equals(java.lang.Object obj) {return (obj == this);}
-                                public int hashCode() { return toString().hashCode();}
-                                public java.lang.String toString() {
-                                
-                                        return localTipoRegistro.toString();
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localIdTipoRegistroTracker = true;
+                                       } else {
+                                          localIdTipoRegistroTracker = false;
+                                              
+                                       }
+                                   
+                                            this.localIdTipoRegistro=param;
                                     
 
-                                }
+                               }
+                            
+
+                        /**
+                        * field for Descripcion
+                        */
 
                         
+                                    protected java.lang.String localDescripcion ;
+                                
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localDescripcionTracker = false ;
+                           
+
+                           /**
+                           * Auto generated getter method
+                           * @return java.lang.String
+                           */
+                           public  java.lang.String getDescripcion(){
+                               return localDescripcion;
+                           }
+
+                           
+                        
+                            /**
+                               * Auto generated setter method
+                               * @param param Descripcion
+                               */
+                               public void setDescripcion(java.lang.String param){
+                            
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localDescripcionTracker = true;
+                                       } else {
+                                          localDescripcionTracker = false;
+                                              
+                                       }
+                                   
+                                            this.localDescripcion=param;
+                                    
+
+                               }
+                            
 
      /**
      * isReaderMTOMAware
@@ -119,15 +147,15 @@
 
 
         
-                org.apache.axiom.om.OMDataSource dataSource =
-                       new org.apache.axis2.databinding.ADBDataSource(this,MY_QNAME){
+               org.apache.axiom.om.OMDataSource dataSource =
+                       new org.apache.axis2.databinding.ADBDataSource(this,parentQName){
 
                  public void serialize(org.apache.axis2.databinding.utils.writer.MTOMAwareXMLStreamWriter xmlWriter) throws javax.xml.stream.XMLStreamException {
-                       TipoRegistro.this.serialize(MY_QNAME,factory,xmlWriter);
+                       TipoRegistro.this.serialize(parentQName,factory,xmlWriter);
                  }
                };
                return new org.apache.axiom.om.impl.llom.OMSourcedElementImpl(
-               MY_QNAME,factory,dataSource);
+               parentQName,factory,dataSource);
             
        }
 
@@ -145,56 +173,119 @@
             throws javax.xml.stream.XMLStreamException, org.apache.axis2.databinding.ADBException{
             
                 
-                //We can safely assume an element has only one type associated with it
+
+
+                java.lang.String prefix = null;
+                java.lang.String namespace = null;
                 
-                            java.lang.String namespace = parentQName.getNamespaceURI();
-                            java.lang.String localName = parentQName.getLocalPart();
-                        
-                            if (! namespace.equals("")) {
-                                java.lang.String prefix = xmlWriter.getPrefix(namespace);
 
-                                if (prefix == null) {
-                                    prefix = generatePrefix(namespace);
+                    prefix = parentQName.getPrefix();
+                    namespace = parentQName.getNamespaceURI();
 
-                                    xmlWriter.writeStartElement(prefix, localName, namespace);
-                                    xmlWriter.writeNamespace(prefix, namespace);
-                                    xmlWriter.setPrefix(prefix, namespace);
-
-                                } else {
-                                    xmlWriter.writeStartElement(namespace, localName);
-                                }
-
-                            } else {
-                                xmlWriter.writeStartElement(localName);
+                    if ((namespace != null) && (namespace.trim().length() > 0)) {
+                        java.lang.String writerPrefix = xmlWriter.getPrefix(namespace);
+                        if (writerPrefix != null) {
+                            xmlWriter.writeStartElement(namespace, parentQName.getLocalPart());
+                        } else {
+                            if (prefix == null) {
+                                prefix = generatePrefix(namespace);
                             }
 
-                            // add the type details if this is used in a simple type
-                               if (serializeType){
-                                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://webservice.service.si.vuds.map.es/");
-                                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
-                                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                                           namespacePrefix+":tipoRegistro",
-                                           xmlWriter);
-                                   } else {
-                                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
-                                           "tipoRegistro",
-                                           xmlWriter);
-                                   }
-                               }
-                            
-                                          if (localTipoRegistro==null){
-                                            
-                                                     throw new org.apache.axis2.databinding.ADBException("Value cannot be null !!");
-                                                
-                                         }else{
-                                        
-                                                       xmlWriter.writeCharacters(localTipoRegistro);
-                                            
-                                         }
-                                    
-                            xmlWriter.writeEndElement();
+                            xmlWriter.writeStartElement(prefix, parentQName.getLocalPart(), namespace);
+                            xmlWriter.writeNamespace(prefix, namespace);
+                            xmlWriter.setPrefix(prefix, namespace);
+                        }
+                    } else {
+                        xmlWriter.writeStartElement(parentQName.getLocalPart());
+                    }
+                
+                  if (serializeType){
+               
 
-                    
+                   java.lang.String namespacePrefix = registerPrefix(xmlWriter,"http://webservice.service.si.vuds.map.es/");
+                   if ((namespacePrefix != null) && (namespacePrefix.trim().length() > 0)){
+                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+                           namespacePrefix+":tipoRegistro",
+                           xmlWriter);
+                   } else {
+                       writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","type",
+                           "tipoRegistro",
+                           xmlWriter);
+                   }
+
+               
+                   }
+                if (localIdTipoRegistroTracker){
+                                    namespace = "";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"idTipoRegistro", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"idTipoRegistro");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("idTipoRegistro");
+                                    }
+                                
+
+                                          if (localIdTipoRegistro==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("idTipoRegistro cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localIdTipoRegistro);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             } if (localDescripcionTracker){
+                                    namespace = "";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"descripcion", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"descripcion");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("descripcion");
+                                    }
+                                
+
+                                          if (localDescripcion==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("descripcion cannot be null!!");
+                                                  
+                                          }else{
+
+                                        
+                                                   xmlWriter.writeCharacters(localDescripcion);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             }
+                    xmlWriter.writeEndElement();
+               
 
         }
 
@@ -351,14 +442,32 @@
 
 
         
-                
-                //We can safely assume an element has only one type associated with it
-                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(MY_QNAME,
-                            new java.lang.Object[]{
-                            org.apache.axis2.databinding.utils.reader.ADBXMLStreamReader.ELEMENT_TEXT,
-                            org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTipoRegistro)
-                            },
-                            null);
+                 java.util.ArrayList elementList = new java.util.ArrayList();
+                 java.util.ArrayList attribList = new java.util.ArrayList();
+
+                 if (localIdTipoRegistroTracker){
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "idTipoRegistro"));
+                                 
+                                        if (localIdTipoRegistro != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localIdTipoRegistro));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("idTipoRegistro cannot be null!!");
+                                        }
+                                    } if (localDescripcionTracker){
+                                      elementList.add(new javax.xml.namespace.QName("",
+                                                                      "descripcion"));
+                                 
+                                        if (localDescripcion != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localDescripcion));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("descripcion cannot be null!!");
+                                        }
+                                    }
+
+                return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
+            
+            
 
         }
 
@@ -371,39 +480,6 @@
 
         
         
-                public static TipoRegistro fromValue(java.lang.String value)
-                      throws java.lang.IllegalArgumentException {
-                    TipoRegistro enumeration = (TipoRegistro)
-                       
-                               _table_.get(value);
-                           
-
-                    if (enumeration==null) throw new java.lang.IllegalArgumentException();
-                    return enumeration;
-                }
-                public static TipoRegistro fromString(java.lang.String value,java.lang.String namespaceURI)
-                      throws java.lang.IllegalArgumentException {
-                    try {
-                       
-                                       return fromValue(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(value));
-                                   
-
-                    } catch (java.lang.Exception e) {
-                        throw new java.lang.IllegalArgumentException();
-                    }
-                }
-
-                public static TipoRegistro fromString(javax.xml.stream.XMLStreamReader xmlStreamReader,
-                                                                    java.lang.String content) {
-                    if (content.indexOf(":") > -1){
-                        java.lang.String prefix = content.substring(0,content.indexOf(":"));
-                        java.lang.String namespaceUri = xmlStreamReader.getNamespaceContext().getNamespaceURI(prefix);
-                        return TipoRegistro.Factory.fromString(content,namespaceUri);
-                    } else {
-                       return TipoRegistro.Factory.fromString(content,"");
-                    }
-                }
-            
 
         /**
         * static method to create the object
@@ -413,11 +489,8 @@
         *                If this object is a complex type, the reader is positioned at the end element of its outer element
         */
         public static TipoRegistro parse(javax.xml.stream.XMLStreamReader reader) throws java.lang.Exception{
-            TipoRegistro object = null;
-                // initialize a hash map to keep values
-                java.util.Map attributeMap = new java.util.HashMap();
-                java.util.List extraAttributeList = new java.util.ArrayList();
-            
+            TipoRegistro object =
+                new TipoRegistro();
 
             int event;
             java.lang.String nillableValue = null;
@@ -429,6 +502,32 @@
                     reader.next();
 
                 
+                if (reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","type")!=null){
+                  java.lang.String fullTypeName = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance",
+                        "type");
+                  if (fullTypeName!=null){
+                    java.lang.String nsPrefix = null;
+                    if (fullTypeName.indexOf(":") > -1){
+                        nsPrefix = fullTypeName.substring(0,fullTypeName.indexOf(":"));
+                    }
+                    nsPrefix = nsPrefix==null?"":nsPrefix;
+
+                    java.lang.String type = fullTypeName.substring(fullTypeName.indexOf(":")+1);
+                    
+                            if (!"tipoRegistro".equals(type)){
+                                //find namespace for the prefix
+                                java.lang.String nsUri = reader.getNamespaceContext().getNamespaceURI(nsPrefix);
+                                return (TipoRegistro)es.map.vuds.si.service.webservice.ExtensionMapper.getTypeObject(
+                                     nsUri,type,reader);
+                              }
+                        
+
+                  }
+                
+
+                }
+
+                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -436,29 +535,53 @@
                 java.util.Vector handledAttributes = new java.util.Vector();
                 
 
+                 
                     
-                while(!reader.isEndElement()) {
-                    if (reader.isStartElement()  || reader.hasText()){
+                    reader.next();
                 
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idTipoRegistro").equals(reader.getName())){
+                                
                                     java.lang.String content = reader.getElementText();
                                     
-                                        if (content.indexOf(":") > 0) {
-                                            // this seems to be a Qname so find the namespace and send
-                                            prefix = content.substring(0, content.indexOf(":"));
-                                            namespaceuri = reader.getNamespaceURI(prefix);
-                                            object = TipoRegistro.Factory.fromString(content,namespaceuri);
-                                        } else {
-                                            // this seems to be not a qname send and empty namespace incase of it is
-                                            // check is done in fromString method
-                                            object = TipoRegistro.Factory.fromString(content,"");
-                                        }
+                                              object.setIdTipoRegistro(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
                                         
+                                    }
+                                
+                                    
+                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
+                                
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","descripcion").equals(reader.getName())){
+                                
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setDescripcion(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
+                                              
+                                        reader.next();
+                                    
+                              }  // End of if for expected property start element
+                                
+                                    else {
                                         
-                             } else {
+                                    }
+                                  
+                            while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
-                             }  
-                           }  // end of while loop
-                        
+                            
+                                if (reader.isStartElement())
+                                // A start element we are not expecting indicates a trailing invalid property
+                                throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
+                            
 
 
 

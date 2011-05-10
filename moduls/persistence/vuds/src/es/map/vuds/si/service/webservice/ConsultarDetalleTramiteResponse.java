@@ -175,7 +175,7 @@
                                             if (local_return==null){
                                                  throw new org.apache.axis2.databinding.ADBException("return cannot be null!!");
                                             }
-                                           local_return.serialize(new javax.xml.namespace.QName("","return"),
+                                           local_return.serialize(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","return"),
                                                factory,xmlWriter);
                                         }
                     xmlWriter.writeEndElement();
@@ -340,7 +340,7 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                  if (local_returnTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
+                            elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "return"));
                             
                             
@@ -427,7 +427,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","return").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","return").equals(reader.getName())){
                                 
                                                 object.set_return(es.map.vuds.si.service.webservice.Tramite.Factory.parse(reader));
                                               

@@ -36,10 +36,10 @@ import org.ibit.rol.sac.persistence.delegate.TramiteDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.vuds.ActualizacionVudsException;
-import es.caib.vuds.TramiteValidado;
-import es.caib.vuds.ValidateVudsException;
-import es.caib.vuds.VentanillaUnica;
+import es.caib.persistence.vuds.ActualizacionVudsException;
+import es.caib.persistence.vuds.TramiteValidado;
+import es.caib.persistence.vuds.ValidateVudsException;
+import es.caib.persistence.vuds.VentanillaUnica;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;

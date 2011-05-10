@@ -131,7 +131,7 @@ public class SubscripcionsPortalJob extends JobAutomatico{
 			       		List suscriptores = susDe.listarPorEstadoCombinacion(Suscriptor.TIPO_ACTIVO,combinacion);
 			    		tos = new HashSet();
 						addSuscriptores(tos,suscriptores);
-						enviar(tos,"Butlletí diari",contenidoHtml,ts);
+					 	enviar(tos,"Butlletí diari",contenidoHtml,ts);
 					}
 					log.debug("Despues de Generar Contenidos Combinaciones");
 					

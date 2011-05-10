@@ -1,0 +1,661 @@
+<?xml version='1.0' encoding='UTF-8'?><definitions name="sistemaInformacionWS" targetNamespace="http://webservice.service.si.vuds.map.es/" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://webservice.service.si.vuds.map.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+<xsd:schema xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://webservice.service.si.vuds.map.es/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="http://webservice.service.si.vuds.map.es/" schemaLocation="http://89.140.20.218:65003/sistemaInformacion-authwsse?xsd=xsd/sistemaInformacionWS-server.xsd" /> 
+  </xsd:schema>
+  </types>
+  <message name="cargarFormaJuridicaResponse">
+    <part element="tns:cargarFormaJuridicaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarAreasActividad">
+    <part element="tns:cargarAreasActividad" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipologiaOrganizaciones">
+    <part element="tns:cargarTipologiaOrganizaciones" name="parameters">
+    </part>
+  </message>
+  <message name="cargarFormaIniciacion">
+    <part element="tns:cargarFormaIniciacion" name="parameters">
+    </part>
+  </message>
+  <message name="cargarActividadesByAreaActividadResponse">
+    <part element="tns:cargarActividadesByAreaActividadResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarCanalesTramitacion">
+    <part element="tns:cargarCanalesTramitacion" name="parameters">
+    </part>
+  </message>
+  <message name="cargarCanalesTramitacionResponse">
+    <part element="tns:cargarCanalesTramitacionResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarAmbitoEjercicioResponse">
+    <part element="tns:cargarAmbitoEjercicioResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoViaReclamacionResponse">
+    <part element="tns:cargarTipoViaReclamacionResponse" name="parameters">
+    </part>
+  </message>
+  <message name="obtenerOrganismosByUsuario">
+    <part element="tns:obtenerOrganismosByUsuario" name="parameters">
+    </part>
+  </message>
+  <message name="consultarTramitePorAmbito">
+    <part element="tns:consultarTramitePorAmbito" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoRegistrosResponse">
+    <part element="tns:cargarTipoRegistrosResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarOrganizacionesAsistenciaVUDSResponse">
+    <part element="tns:cargarOrganizacionesAsistenciaVUDSResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarDetalleTramite">
+    <part element="tns:consultarDetalleTramite" name="parameters">
+    </part>
+  </message>
+  <message name="cargarOrganizacionesAsistenciaAACC">
+    <part element="tns:cargarOrganizacionesAsistenciaAACC" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoRegistros">
+    <part element="tns:cargarTipoRegistros" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoEstablecimiento">
+    <part element="tns:cargarTipoEstablecimiento" name="parameters">
+    </part>
+  </message>
+  <message name="guardarTramitesResponse">
+    <part element="tns:guardarTramitesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarFormaIniciacionResponse">
+    <part element="tns:cargarFormaIniciacionResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipologiaOrganizacionesResponse">
+    <part element="tns:cargarTipologiaOrganizacionesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarActividadesByAreaActividad">
+    <part element="tns:cargarActividadesByAreaActividad" name="parameters">
+    </part>
+  </message>
+  <message name="consultarEstadoTramitesResponse">
+    <part element="tns:consultarEstadoTramitesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarRechazosTramitesResponse">
+    <part element="tns:consultarRechazosTramitesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarMapaTramiteResponse">
+    <part element="tns:consultarMapaTramiteResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarModosActividad">
+    <part element="tns:cargarModosActividad" name="parameters">
+    </part>
+  </message>
+  <message name="cargarViaPrestacion">
+    <part element="tns:cargarViaPrestacion" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipologiaTramitesResponse">
+    <part element="tns:cargarTipologiaTramitesResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarFormaJuridica">
+    <part element="tns:cargarFormaJuridica" name="parameters">
+    </part>
+  </message>
+  <message name="obtenerOrganismosByUsuarioResponse">
+    <part element="tns:obtenerOrganismosByUsuarioResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarAreasActividadResponse">
+    <part element="tns:cargarAreasActividadResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarTramitePorAmbitoResponse">
+    <part element="tns:consultarTramitePorAmbitoResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarOrganizacionesAsistenciaAACCResponse">
+    <part element="tns:cargarOrganizacionesAsistenciaAACCResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTramitesVuds">
+    <part element="tns:cargarTramitesVuds" name="parameters">
+    </part>
+  </message>
+  <message name="cargarResultadosProceso">
+    <part element="tns:cargarResultadosProceso" name="parameters">
+    </part>
+  </message>
+  <message name="cargarViaReclamacionVUDS">
+    <part element="tns:cargarViaReclamacionVUDS" name="parameters">
+    </part>
+  </message>
+  <message name="guardarOrganizacionesAsistenciaResponse">
+    <part element="tns:guardarOrganizacionesAsistenciaResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTramitesVudsResponse">
+    <part element="tns:cargarTramitesVudsResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarModosActividadResponse">
+    <part element="tns:cargarModosActividadResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoEstablecimientoResponse">
+    <part element="tns:cargarTipoEstablecimientoResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarLocalizacion">
+    <part element="tns:consultarLocalizacion" name="parameters">
+    </part>
+  </message>
+  <message name="cargarResultadosProcesoResponse">
+    <part element="tns:cargarResultadosProcesoResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarRechazosTramites">
+    <part element="tns:consultarRechazosTramites" name="parameters">
+    </part>
+  </message>
+  <message name="cargarOrganizacionesAsistenciaVUDS">
+    <part element="tns:cargarOrganizacionesAsistenciaVUDS" name="parameters">
+    </part>
+  </message>
+  <message name="consultarDetalleTramiteResponse">
+    <part element="tns:consultarDetalleTramiteResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoSolicitante">
+    <part element="tns:cargarTipoSolicitante" name="parameters">
+    </part>
+  </message>
+  <message name="consultarEstadoTramites">
+    <part element="tns:consultarEstadoTramites" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipologiaTramites">
+    <part element="tns:cargarTipologiaTramites" name="parameters">
+    </part>
+  </message>
+  <message name="consultarLocalizacionResponse">
+    <part element="tns:consultarLocalizacionResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarAmbitoEjercicio">
+    <part element="tns:cargarAmbitoEjercicio" name="parameters">
+    </part>
+  </message>
+  <message name="guardarTramites">
+    <part element="tns:guardarTramites" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoSolicitanteResponse">
+    <part element="tns:cargarTipoSolicitanteResponse" name="parameters">
+    </part>
+  </message>
+  <message name="guardarOrganizacionesAsistencia">
+    <part element="tns:guardarOrganizacionesAsistencia" name="parameters">
+    </part>
+  </message>
+  <message name="cargarTipoViaReclamacion">
+    <part element="tns:cargarTipoViaReclamacion" name="parameters">
+    </part>
+  </message>
+  <message name="cargarViaPrestacionResponse">
+    <part element="tns:cargarViaPrestacionResponse" name="parameters">
+    </part>
+  </message>
+  <message name="cargarViaReclamacionVUDSResponse">
+    <part element="tns:cargarViaReclamacionVUDSResponse" name="parameters">
+    </part>
+  </message>
+  <message name="consultarMapaTramite">
+    <part element="tns:consultarMapaTramite" name="parameters">
+    </part>
+  </message>
+  <portType name="GestorWebserviceBean">
+    <operation name="consultarMapaTramite">
+      <input message="tns:consultarMapaTramite">
+    </input>
+      <output message="tns:consultarMapaTramiteResponse">
+    </output>
+    </operation>
+    <operation name="guardarOrganizacionesAsistencia">
+      <input message="tns:guardarOrganizacionesAsistencia">
+    </input>
+      <output message="tns:guardarOrganizacionesAsistenciaResponse">
+    </output>
+    </operation>
+    <operation name="guardarTramites">
+      <input message="tns:guardarTramites">
+    </input>
+      <output message="tns:guardarTramitesResponse">
+    </output>
+    </operation>
+    <operation name="cargarOrganizacionesAsistenciaAACC">
+      <input message="tns:cargarOrganizacionesAsistenciaAACC">
+    </input>
+      <output message="tns:cargarOrganizacionesAsistenciaAACCResponse">
+    </output>
+    </operation>
+    <operation name="cargarFormaIniciacion">
+      <input message="tns:cargarFormaIniciacion">
+    </input>
+      <output message="tns:cargarFormaIniciacionResponse">
+    </output>
+    </operation>
+    <operation name="cargarTramitesVuds">
+      <input message="tns:cargarTramitesVuds">
+    </input>
+      <output message="tns:cargarTramitesVudsResponse">
+    </output>
+    </operation>
+    <operation name="cargarCanalesTramitacion">
+      <input message="tns:cargarCanalesTramitacion">
+    </input>
+      <output message="tns:cargarCanalesTramitacionResponse">
+    </output>
+    </operation>
+    <operation name="cargarResultadosProceso">
+      <input message="tns:cargarResultadosProceso">
+    </input>
+      <output message="tns:cargarResultadosProcesoResponse">
+    </output>
+    </operation>
+    <operation name="consultarRechazosTramites">
+      <input message="tns:consultarRechazosTramites">
+    </input>
+      <output message="tns:consultarRechazosTramitesResponse">
+    </output>
+    </operation>
+    <operation name="consultarEstadoTramites">
+      <input message="tns:consultarEstadoTramites">
+    </input>
+      <output message="tns:consultarEstadoTramitesResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipoSolicitante">
+      <input message="tns:cargarTipoSolicitante">
+    </input>
+      <output message="tns:cargarTipoSolicitanteResponse">
+    </output>
+    </operation>
+    <operation name="cargarAreasActividad">
+      <input message="tns:cargarAreasActividad">
+    </input>
+      <output message="tns:cargarAreasActividadResponse">
+    </output>
+    </operation>
+    <operation name="cargarActividadesByAreaActividad">
+      <input message="tns:cargarActividadesByAreaActividad">
+    </input>
+      <output message="tns:cargarActividadesByAreaActividadResponse">
+    </output>
+    </operation>
+    <operation name="cargarAmbitoEjercicio">
+      <input message="tns:cargarAmbitoEjercicio">
+    </input>
+      <output message="tns:cargarAmbitoEjercicioResponse">
+    </output>
+    </operation>
+    <operation name="cargarOrganizacionesAsistenciaVUDS">
+      <input message="tns:cargarOrganizacionesAsistenciaVUDS">
+    </input>
+      <output message="tns:cargarOrganizacionesAsistenciaVUDSResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipoViaReclamacion">
+      <input message="tns:cargarTipoViaReclamacion">
+    </input>
+      <output message="tns:cargarTipoViaReclamacionResponse">
+    </output>
+    </operation>
+    <operation name="cargarViaReclamacionVUDS">
+      <input message="tns:cargarViaReclamacionVUDS">
+    </input>
+      <output message="tns:cargarViaReclamacionVUDSResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipoEstablecimiento">
+      <input message="tns:cargarTipoEstablecimiento">
+    </input>
+      <output message="tns:cargarTipoEstablecimientoResponse">
+    </output>
+    </operation>
+    <operation name="cargarViaPrestacion">
+      <input message="tns:cargarViaPrestacion">
+    </input>
+      <output message="tns:cargarViaPrestacionResponse">
+    </output>
+    </operation>
+    <operation name="cargarFormaJuridica">
+      <input message="tns:cargarFormaJuridica">
+    </input>
+      <output message="tns:cargarFormaJuridicaResponse">
+    </output>
+    </operation>
+    <operation name="consultarLocalizacion">
+      <input message="tns:consultarLocalizacion">
+    </input>
+      <output message="tns:consultarLocalizacionResponse">
+    </output>
+    </operation>
+    <operation name="consultarTramitePorAmbito">
+      <input message="tns:consultarTramitePorAmbito">
+    </input>
+      <output message="tns:consultarTramitePorAmbitoResponse">
+    </output>
+    </operation>
+    <operation name="consultarDetalleTramite">
+      <input message="tns:consultarDetalleTramite">
+    </input>
+      <output message="tns:consultarDetalleTramiteResponse">
+    </output>
+    </operation>
+    <operation name="obtenerOrganismosByUsuario">
+      <input message="tns:obtenerOrganismosByUsuario">
+    </input>
+      <output message="tns:obtenerOrganismosByUsuarioResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipologiaOrganizaciones">
+      <input message="tns:cargarTipologiaOrganizaciones">
+    </input>
+      <output message="tns:cargarTipologiaOrganizacionesResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipologiaTramites">
+      <input message="tns:cargarTipologiaTramites">
+    </input>
+      <output message="tns:cargarTipologiaTramitesResponse">
+    </output>
+    </operation>
+    <operation name="cargarTipoRegistros">
+      <input message="tns:cargarTipoRegistros">
+    </input>
+      <output message="tns:cargarTipoRegistrosResponse">
+    </output>
+    </operation>
+    <operation name="cargarModosActividad">
+      <input message="tns:cargarModosActividad">
+    </input>
+      <output message="tns:cargarModosActividadResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="GestorWebserviceBeanPortBinding" type="tns:GestorWebserviceBean">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="consultarMapaTramite">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="guardarOrganizacionesAsistencia">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="guardarTramites">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarOrganizacionesAsistenciaAACC">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarFormaIniciacion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTramitesVuds">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarCanalesTramitacion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarResultadosProceso">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="consultarRechazosTramites">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="consultarEstadoTramites">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipoSolicitante">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarAreasActividad">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarActividadesByAreaActividad">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarAmbitoEjercicio">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarOrganizacionesAsistenciaVUDS">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipoViaReclamacion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarViaReclamacionVUDS">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipoEstablecimiento">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarViaPrestacion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarFormaJuridica">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="consultarLocalizacion">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="consultarTramitePorAmbito">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="consultarDetalleTramite">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="obtenerOrganismosByUsuario">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipologiaOrganizaciones">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipologiaTramites">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarTipoRegistros">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="cargarModosActividad">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="sistemaInformacionWS">
+    <port binding="tns:GestorWebserviceBeanPortBinding" name="GestorWebserviceBeanPort">
+      <soap:address location="http://89.140.20.218:65003/sistemaInformacion-authwsse" />
+    </port>
+  </service>
+</definitions>

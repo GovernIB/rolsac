@@ -24,13 +24,18 @@
     <property name="jar.product" location="${output.dir}/moduls"/>
 	<property name="jar.gen.etc" location="${modul.output.dir}/gen-etc"/>
 
+	
     <path id="jar.class.path">
         <fileset dir="${lib.dir}">
             <include name="poi.jar"/>
             <include name="pdfbox.jar"/>
         	<include name="jericho-html-2.5.jar"/>
+        	<include name="Tidy.jar"/>
+        	<include name="taw.jar"/>
+        	<include name="wai.jar"/>
         	<include name="aclibico.jar"/>
         	<include name="img.jar"/>
+        	<include name="lax.jar"/>
         	<include name="htmlparser.jar"/>
         </fileset>
     </path>
@@ -81,8 +86,16 @@
             <link href="http://java.sun.com/j2se/1.4.1/docs/api/"/>
         </javadoc>
     </target>
+	
+
 
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
     <target name="main" depends="jar.jar" description="Construye el jar"/>
 
+	<target name="module.package" depends="jar.jar"/>
+	<path id="module.classpath" refid="jar.class.path"/>
+	<property name="module.classes"  location="${jar.classes}"/>
+
+	<import file="../build_test.xml"/>
+	
 </project>

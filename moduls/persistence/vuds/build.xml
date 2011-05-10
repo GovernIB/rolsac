@@ -60,7 +60,8 @@ Descomentar para usar axis 1-4
 
 <!--property name="wsdl.url" value="vuds.wsdl"/-->
 <!--property name="wsdl.url" value="http://89.140.20.218:65003/ServiciosExternos/sistemaInformacionWS?wsdl"/-->
-<property name="wsdl.url" value="vuds03sep10.wsdl"/>
+<property name="wsdl.url" value="http://89.140.20.218:65003/sistemaInformacion-authwsse?wsdl"/>
+<!--property name="wsdl.url" value="vuds03sep10.wsdl"/-->
 <property name="namespace" value="http://webservice.service.si.vuds.map.es"/>
 <property name="package" value="es.caib.persistence.vuds"/>
 	
@@ -71,7 +72,6 @@ Descomentar para usar axis 1-4
 </target>
 	
 <target name="wsdl2java" depends="prepare">
-
   
     <wsdl2java url="${wsdl.url}"
                output="${gen.src}"

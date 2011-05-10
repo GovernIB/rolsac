@@ -32,56 +32,18 @@
         
 
                         /**
-                        * field for Idioma
-                        */
-
-                        
-                                    protected es.map.vuds.si.service.webservice.Idioma localIdioma ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localIdiomaTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.Idioma
-                           */
-                           public  es.map.vuds.si.service.webservice.Idioma getIdioma(){
-                               return localIdioma;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Idioma
-                               */
-                               public void setIdioma(es.map.vuds.si.service.webservice.Idioma param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localIdiomaTracker = true;
-                                       } else {
-                                          localIdiomaTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localIdioma=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for Localizacion
                         */
 
                         
                                     protected long localLocalizacion ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localLocalizacionTracker = false ;
+                           
 
                            /**
                            * Auto generated getter method
@@ -99,6 +61,15 @@
                                */
                                public void setLocalizacion(long param){
                             
+                                       // setting primitive attribute tracker to true
+                                       
+                                               if (param==java.lang.Long.MIN_VALUE) {
+                                           localLocalizacionTracker = false;
+                                              
+                                       } else {
+                                          localLocalizacionTracker = true;
+                                       }
+                                   
                                             this.localLocalizacion=param;
                                     
 
@@ -112,6 +83,12 @@
                         
                                     protected java.lang.String localIdTramite ;
                                 
+                           /*  This tracker boolean wil be used to detect whether the user called the set method
+                          *   for this attribute. It will be used to determine whether to include this field
+                           *   in the serialized XML
+                           */
+                           protected boolean localIdTramiteTracker = false ;
+                           
 
                            /**
                            * Auto generated getter method
@@ -129,6 +106,14 @@
                                */
                                public void setIdTramite(java.lang.String param){
                             
+                                       if (param != null){
+                                          //update the setting tracker
+                                          localIdTramiteTracker = true;
+                                       } else {
+                                          localIdTramiteTracker = false;
+                                              
+                                       }
+                                   
                                             this.localIdTramite=param;
                                     
 
@@ -231,14 +216,8 @@
 
                
                    }
-                if (localIdiomaTracker){
-                                            if (localIdioma==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                            }
-                                           localIdioma.serialize(new javax.xml.namespace.QName("","idioma"),
-                                               factory,xmlWriter);
-                                        }
-                                    namespace = "";
+                if (localLocalizacionTracker){
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -266,8 +245,8 @@
                                                }
                                     
                                    xmlWriter.writeEndElement();
-                             
-                                    namespace = "";
+                             } if (localIdTramiteTracker){
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -300,7 +279,7 @@
                                           }
                                     
                                    xmlWriter.writeEndElement();
-                             
+                             }
                     xmlWriter.writeEndElement();
                
 
@@ -462,23 +441,14 @@
                  java.util.ArrayList elementList = new java.util.ArrayList();
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
-                 if (localIdiomaTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "idioma"));
-                            
-                            
-                                    if (localIdioma==null){
-                                         throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                    }
-                                    elementList.add(localIdioma);
-                                }
-                                      elementList.add(new javax.xml.namespace.QName("",
+                 if (localLocalizacionTracker){
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "Localizacion"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localLocalizacion));
-                            
-                                      elementList.add(new javax.xml.namespace.QName("",
+                            } if (localIdTramiteTracker){
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "idTramite"));
                                  
                                         if (localIdTramite != null){
@@ -486,7 +456,7 @@
                                         } else {
                                            throw new org.apache.axis2.databinding.ADBException("idTramite cannot be null!!");
                                         }
-                                    
+                                    }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -565,22 +535,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idioma").equals(reader.getName())){
-                                
-                                                object.setIdioma(es.map.vuds.si.service.webservice.Idioma.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","Localizacion").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","Localizacion").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -591,15 +546,16 @@
                                     
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
+                                    else {
+                                        
+                                               object.setLocalizacion(java.lang.Long.MIN_VALUE);
+                                           
+                                    }
+                                
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idTramite").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","idTramite").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -610,11 +566,10 @@
                                     
                               }  // End of if for expected property start element
                                 
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                              
+                                    else {
+                                        
+                                    }
+                                  
                             while (!reader.isStartElement() && !reader.isEndElement())
                                 reader.next();
                             

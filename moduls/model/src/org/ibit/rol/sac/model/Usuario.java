@@ -76,7 +76,7 @@ public class Usuario implements ValueObject {
         }
         return false;
     }
-    
+
 
 	public String getEmail() {
 		return email;
@@ -87,7 +87,7 @@ public class Usuario implements ValueObject {
 	}
 
 
-	private Long id;
+    private Long id;
     private String username;
     private String password;
     private String nombre;

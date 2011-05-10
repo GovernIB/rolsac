@@ -8,11 +8,11 @@ import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.TraduccionEdificio;
 
 
-public class EdificioTransferible implements Serializable {
+public class EdificioTransferible extends ActuacionTransferible implements Serializable {
+	
 
 
-
-	public String getDireccion() {
+    public String getDireccion() {
         return direccion;
     }
 
@@ -92,7 +92,7 @@ public class EdificioTransferible implements Serializable {
 
 
 	private Long id;
-	private String direccion;
+    private String direccion;
     private String codigoPostal;
     private String poblacion;
     private String telefono;

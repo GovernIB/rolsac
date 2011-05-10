@@ -18,7 +18,7 @@ import java.util.Collection;
  * Time: 10:17:02
  * To change this template use File | Settings | File Templates.
  */
-public class DocumentoTransferible implements Serializable{
+public class DocumentoTransferible extends ActuacionTransferible implements Serializable{
 
     private Long id;
 

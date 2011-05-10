@@ -19,8 +19,8 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
-import es.caib.vuds.TramiteValidado;
-import es.caib.vuds.VentanillaUnica;
+import es.caib.persistence.vuds.TramiteValidado;
+import es.caib.persistence.vuds.VentanillaUnica;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,7 +53,7 @@ public class PrevisualitzarVudsAction extends Action{
 		this.procDelegate = procDelegate;
 	}
 
-    public TramiteDelegate getTramiteDelegate() {
+	public TramiteDelegate getTramiteDelegate() {
 		return tramiteDelegate;
 	}
 
@@ -97,7 +97,7 @@ public class PrevisualitzarVudsAction extends Action{
         request.setAttribute("areaTramitadora", t_vuds.getAreaTramitadora());
         request.setAttribute("organismoCompetente", t_vuds.getOrganismoCompetente());
         request.setAttribute("canalTramitacion", t_vuds.getCanalTramitacion());
-        request.setAttribute("codigoIdentificador", t_vuds.getCodigoIdentificador());
+//FIXME temporal        request.setAttribute("codigoIdentificador", t_vuds.getCodigoIdentificador());
         request.setAttribute("denominacionTramite", t_vuds.getDenominacionTramite());
         request.setAttribute("descripcionTramite", t_vuds.getDescripcionTramite());
         request.setAttribute("formaIniciacion", t_vuds.getFormaIniciacion());

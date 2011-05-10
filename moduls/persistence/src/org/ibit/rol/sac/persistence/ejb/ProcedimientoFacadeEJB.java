@@ -33,6 +33,16 @@ import java.util.*;
 /**
  * SessionBean para mantener y consultar Procedimientos.
  *
+ *  TODO (enricjaen@dgtic) 03.03.2011
+ *  Aquesta clase te mes de 1000 linias de codi i 47 procediments. 
+ *  Te masses responsabilitats, que haurien de dividir-se. Per exemple: 
+ *  - insertar, borrar procediment
+ *  - buscar procediment
+ *  - indexar procediment
+ *  - ordenar procediments
+ *  - actualitzar a altres administracions
+ *  
+ *
  * @ejb.bean
  *  name="sac/persistence/ProcedimientoFacade"
  *  jndi-name="org.ibit.rol.sac.persistence.ProcedimientoFacade"
@@ -136,7 +146,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
 
-    /**
+   
+	/**
      * Actualiza los ordenes de los procedimientos de una ua por conselleria
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -441,7 +452,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         
         return procedimiento;
     }
-    
+        
     /**
      * Obtiene un procedimiento Local.{PORMAD}
      * @ejb.interface-method
@@ -470,7 +481,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
    		ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
 		Comparator comp = new DocsProcedimientoComparator();
 	  	Collections.sort(listaOrdenada, comp);
-	  	procedimiento.setDocumentos(listaOrdenada);    
+	  	procedimiento.setDocumentos(listaOrdenada);                   
         
         return procedimiento;
     }
@@ -494,26 +505,26 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
   
     /**
-     * Dice si existe un procedimiento Local.   PSALUT
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public boolean existeProcedimiento(Long id) {
-        Session session = getSession();
-        try {
-           // ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-            Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
-            criteri.add(Expression.eq("id", id));
-            ProcedimientoLocal procedimiento = (ProcedimientoLocal)criteri.uniqueResult();
-            return procedimiento != null;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+	 * Dice si existe un procedimiento Local.   PSALUT
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public boolean existeProcedimiento(Long id) {
+	    Session session = getSession();
+	    try {
+	       // ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+	        Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
+	        criteri.add(Expression.eq("id", id));
+	        ProcedimientoLocal procedimiento = (ProcedimientoLocal)criteri.uniqueResult();
+	        return procedimiento != null;
+	    } catch (HibernateException he) {
+	        throw new EJBException(he);
+	    } finally {
+	        close(session);
+	    }
+	}
 
-    /**
+	/**
      * Busca todas los Procedimientos que cumplen los criterios de b�squeda
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1202,7 +1213,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 List<Tramite>tramites = procedimiento.getTramites();
                 for (Iterator iter = tramites.iterator(); iter.hasNext();) {
                     Tramite tramite = (Tramite) iter.next();
-                    Hibernate.initialize(tramite.getFormularios());
+                    Hibernate.initialize(tramite.getFormularios()); 
                     Hibernate.initialize(tramite.getDocsInformatius());
                     Hibernate.initialize(tramite.getTaxes());
                 }
@@ -1456,8 +1467,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
    		close(session);
    		
 		return filter;
-	}
-	
+	}        
+
 	
 	
     /**
@@ -1474,7 +1485,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     		proc = obtenerProcedimiento(proc.getId()); 
     		
 	    	if (filter==null) filter = obtenerFilterObject(proc);  	
-	    	String tipo = tipoProcedimiento (proc,false);
+	    	String tipo = tipoProcedimiento (proc,false); 
 	    	String tipoDoc = tipoProcedimiento (proc,true); 	    	
 			for (Iterator iterator = proc.getLangs().iterator(); iterator.hasNext();) {
 				String idi = (String) iterator.next();
@@ -1653,7 +1664,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		
 	}
 	
-	
+
 	
     /**
      * 
@@ -1727,7 +1738,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		if (!doc) {
 			if (proc.getUrl()!=null && proc.getUrl().length()>0)			tipo=Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO;
 			else if ((proc.getVersion()==null && proc.getTramite()==null) || (proc.getVersion()==null && proc.getTramite()!=null && proc.getTramite().length()==0 )){tipo=Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO;} 	
-			else tipo=Catalogo.SRVC_PROCEDIMIENTOS_SISTRA;
+			else															tipo=Catalogo.SRVC_PROCEDIMIENTOS_SISTRA;
 		} else {
 			if (proc.getUrl()!=null && proc.getUrl().length()>0)			tipo=Catalogo.SRVC_PROCEDIMIENTOS_EXTERNO_DOCUMENTOS;
 			else if (proc.getVersion()==null && proc.getTramite()==null) 	tipo=Catalogo.SRVC_PROCEDIMIENTOS_NOTELEMATICO_DOCUMENTOS;

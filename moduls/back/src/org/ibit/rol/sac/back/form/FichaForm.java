@@ -21,7 +21,7 @@ public class FichaForm extends TraDynaValidatorForm{
 	 */
 	private static final long serialVersionUID = 2450403088329368184L;
 	
-    protected static Log log = LogFactory.getLog(FichaForm.class);
+	protected static Log log = LogFactory.getLog(FichaForm.class);
 
     /**
      * Setters y Getters
@@ -51,7 +51,7 @@ public class FichaForm extends TraDynaValidatorForm{
             set("textoFechaActualizacion", df.format(fechaActualizacion));
         }
     }    
-    
+
     public Date getFechaPublicacion() {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
@@ -77,8 +77,8 @@ public class FichaForm extends TraDynaValidatorForm{
         } catch (ParseException pe) {
             return null;
         }
-    }    
-
+    }   
+    
     public void initialize(ActionMapping actionMapping) {
         super.initialize(actionMapping);
 

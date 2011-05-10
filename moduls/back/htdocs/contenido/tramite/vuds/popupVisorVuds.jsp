@@ -26,8 +26,8 @@
   </head>
 	
   <body>
-		
-		<br>
+  	
+  		<br>
 		<br>
   		<h2> Els següents camps no han estat traduits: </h2>
 		<br>

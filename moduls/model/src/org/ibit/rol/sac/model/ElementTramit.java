@@ -4,7 +4,7 @@ package org.ibit.rol.sac.model;
 
 
 
-public class ElementTramit extends ElementOrdenat  {
+public class ElementTramit extends Ordenable  {
     private Tramite tramite;
 
     

@@ -132,4 +132,8 @@ public class Edificio extends Traducible {
   
 
     
+    @Override
+    public String toString() {
+    	return "\""+direccion+"\"";
+    }
 }

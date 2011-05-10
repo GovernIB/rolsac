@@ -30,9 +30,9 @@ public class IdiomaDelegate implements StatelessDelegate {
     private String porDefecto = null;
     private long timeDef = 0L;
 	IdiomaDelegateI impl;
-
-    private static long maxtime = 60000L; // 60 segundos
-
+	
+	private static long maxtime = 60000L; // 60 segundos
+	
     private boolean timeout(long time) {
         return ((System.currentTimeMillis() - time) > maxtime);
     }
@@ -43,7 +43,7 @@ public class IdiomaDelegate implements StatelessDelegate {
 	public void setImpl(IdiomaDelegateI impl) {
 		this.impl = impl;
 	}
-
+	
 	
     public List listarLenguajesTraductor() throws DelegateException {
             if (lenguajesTraductor == null || timeout(timeLen)) {
@@ -51,23 +51,23 @@ public class IdiomaDelegate implements StatelessDelegate {
                 timeLen = System.currentTimeMillis();
             }
             return lenguajesTraductor;
-    }
+    }    
 
-    public String lenguajePorDefecto() throws DelegateException {
+	public String lenguajePorDefecto() throws DelegateException {
 		return impl.lenguajePorDefecto();
-    }
+	}
 
-     public List<Idioma> listarIdiomas() throws DelegateException {
+	public List<Idioma> listarIdiomas() throws DelegateException {
 		return impl.listarIdiomas();
-    }
+	}
 
 	public List listarLenguajes() throws DelegateException {
             if (lenguajes == null || timeout(timeLen)) {
                 lenguajes = impl.listarLenguajes();
                 timeLen = System.currentTimeMillis();
-     }
+            }
             return lenguajes;
-     
-    }
+   
+	}
 
 }

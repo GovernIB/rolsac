@@ -213,7 +213,7 @@
                                        if (local_return!=null){
                                             for (int i = 0;i < local_return.length;i++){
                                                 if (local_return[i] != null){
-                                                 local_return[i].serialize(new javax.xml.namespace.QName("","return"),
+                                                 local_return[i].serialize(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","return"),
                                                            factory,xmlWriter);
                                                 } else {
                                                    
@@ -394,7 +394,7 @@
                                  for (int i = 0;i < local_return.length;i++){
 
                                     if (local_return[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
+                                         elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                           "return"));
                                          elementList.add(local_return[i]);
                                     } else {
@@ -491,7 +491,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","return").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","return").equals(reader.getName())){
                                 
                                     
                                     
@@ -513,7 +513,7 @@
                                                                 //two continuous end elements means we are exiting the xml structure
                                                                 loopDone1 = true;
                                                             } else {
-                                                                if (new javax.xml.namespace.QName("","return").equals(reader.getName())){
+                                                                if (new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","return").equals(reader.getName())){
                                                                     list1.add(es.map.vuds.si.service.webservice.DetalleTramite.Factory.parse(reader));
                                                                         
                                                                 }else{

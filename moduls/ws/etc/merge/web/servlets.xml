@@ -29,7 +29,7 @@
         org.apache.axis.transport.http.AxisServlet
     </servlet-class>
 </servlet>
-
+<!-- 
 <servlet>
     <servlet-name>AdminServlet</servlet-name>
     <display-name>Axis Admin Servlet</display-name>
@@ -51,3 +51,4 @@
     </init-param>
     <load-on-startup>100</load-on-startup>
 </servlet>
+-->

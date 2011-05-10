@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class Taxa extends ElementOrdenat {
+public class Taxa extends Ordenable {
 
 	
 	private Tramite tramit;

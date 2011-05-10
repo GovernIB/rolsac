@@ -346,50 +346,6 @@
                                }
                             
 
-                        /**
-                        * field for Idioma
-                        */
-
-                        
-                                    protected es.map.vuds.si.service.webservice.Idioma localIdioma ;
-                                
-                           /*  This tracker boolean wil be used to detect whether the user called the set method
-                          *   for this attribute. It will be used to determine whether to include this field
-                           *   in the serialized XML
-                           */
-                           protected boolean localIdiomaTracker = false ;
-                           
-
-                           /**
-                           * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.Idioma
-                           */
-                           public  es.map.vuds.si.service.webservice.Idioma getIdioma(){
-                               return localIdioma;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param Idioma
-                               */
-                               public void setIdioma(es.map.vuds.si.service.webservice.Idioma param){
-                            
-                                       if (param != null){
-                                          //update the setting tracker
-                                          localIdiomaTracker = true;
-                                       } else {
-                                          localIdiomaTracker = false;
-                                              
-                                       }
-                                   
-                                            this.localIdioma=param;
-                                    
-
-                               }
-                            
-
      /**
      * isReaderMTOMAware
      * @return true if the reader supports MTOM
@@ -487,7 +443,7 @@
                
                    }
                 if (localTipoPrestadorTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -516,7 +472,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localAgrupacionTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -545,7 +501,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localActividadTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -574,7 +530,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localLocalizacionTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -603,7 +559,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localEstablecimientoTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -632,7 +588,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localFormaJuridicaTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -661,7 +617,7 @@
                                     
                                    xmlWriter.writeEndElement();
                              } if (localViaPrestacionTracker){
-                                    namespace = "";
+                                    namespace = "http://webservice.service.si.vuds.map.es/";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
 
@@ -689,13 +645,7 @@
                                                }
                                     
                                    xmlWriter.writeEndElement();
-                             } if (localIdiomaTracker){
-                                            if (localIdioma==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                            }
-                                           localIdioma.serialize(new javax.xml.namespace.QName("","idioma"),
-                                               factory,xmlWriter);
-                                        }
+                             }
                     xmlWriter.writeEndElement();
                
 
@@ -858,57 +808,48 @@
                  java.util.ArrayList attribList = new java.util.ArrayList();
 
                  if (localTipoPrestadorTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "TipoPrestador"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTipoPrestador));
                             } if (localAgrupacionTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "Agrupacion"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localAgrupacion));
                             } if (localActividadTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "Actividad"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localActividad));
                             } if (localLocalizacionTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "Localizacion"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localLocalizacion));
                             } if (localEstablecimientoTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "Establecimiento"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localEstablecimiento));
                             } if (localFormaJuridicaTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "FormaJuridica"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localFormaJuridica));
                             } if (localViaPrestacionTracker){
-                                      elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/",
                                                                       "viaPrestacion"));
                                  
                                 elementList.add(
                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localViaPrestacion));
-                            } if (localIdiomaTracker){
-                            elementList.add(new javax.xml.namespace.QName("",
-                                                                      "idioma"));
-                            
-                            
-                                    if (localIdioma==null){
-                                         throw new org.apache.axis2.databinding.ADBException("idioma cannot be null!!");
-                                    }
-                                    elementList.add(localIdioma);
-                                }
+                            }
 
                 return new org.apache.axis2.databinding.utils.reader.ADBXMLStreamReaderImpl(qName, elementList.toArray(), attribList.toArray());
             
@@ -987,7 +928,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","TipoPrestador").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","TipoPrestador").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1007,7 +948,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","Agrupacion").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","Agrupacion").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1027,7 +968,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","Actividad").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","Actividad").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1047,7 +988,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","Localizacion").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","Localizacion").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1067,7 +1008,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","Establecimiento").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","Establecimiento").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1087,7 +1028,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","FormaJuridica").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","FormaJuridica").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1107,7 +1048,7 @@
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","viaPrestacion").equals(reader.getName())){
+                                    if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","viaPrestacion").equals(reader.getName())){
                                 
                                     java.lang.String content = reader.getElementText();
                                     
@@ -1122,21 +1063,6 @@
                                         
                                                object.setViaPrestacion(java.lang.Long.MIN_VALUE);
                                            
-                                    }
-                                
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","idioma").equals(reader.getName())){
-                                
-                                                object.setIdioma(es.map.vuds.si.service.webservice.Idioma.Factory.parse(reader));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                    else {
-                                        
                                     }
                                   
                             while (!reader.isStartElement() && !reader.isEndElement())

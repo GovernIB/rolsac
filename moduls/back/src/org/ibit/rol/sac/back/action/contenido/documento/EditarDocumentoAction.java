@@ -153,7 +153,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
 
             return mapping.findForward("procedimiento");
         }
-
+        
         if (request.getParameter("idFicha") != null){
             Long id = new Long(request.getParameter("idFicha"));
             docDelegate.grabarDocumento(documento, null, id);
@@ -164,7 +164,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
 
             return mapping.findForward("ficha");
         }
-
+        
 /*
         if (request.getParameter("idDocInfTramite") != null){   // param definido en documento/formulario.jsp#form 
             Long id = new Long(request.getParameter("idDocInfTramite"));
@@ -229,7 +229,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
             TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
             dForm.reset(mapping, request);
 
-
+            
             String fwd=null;
             id=null;
             if (request.getParameter("idProcedimiento") != null) {
@@ -246,7 +246,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
                 id= new Long(request.getParameter("idFicha"));
                 fwd="ficha";
             }
-
+            
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
             return mapping.findForward(fwd);

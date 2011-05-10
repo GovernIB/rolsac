@@ -82,4 +82,4 @@
     <display-name>Quartz crawler Servlet</display-name>
     <servlet-class>org.ibit.rol.sac.back.crawler.job.CrawlerSchedulerServlet</servlet-class>
     <load-on-startup>2</load-on-startup>
-</servlet>
+</servlet>  

@@ -118,33 +118,10 @@
                 
                 //We can safely assume an element has only one type associated with it
                 
-                                      if (localCargarFormaJuridicaResponse==null){
-                                        java.lang.String namespace = "http://webservice.service.si.vuds.map.es/";
-
-                                        if (! namespace.equals("")) {
-                                            java.lang.String prefix = xmlWriter.getPrefix(namespace);
-
-                                            if (prefix == null) {
-                                                prefix = generatePrefix(namespace);
-
-                                                xmlWriter.writeStartElement(prefix,"cargarFormaJuridicaResponse", namespace);
-                                                xmlWriter.writeNamespace(prefix, namespace);
-                                                xmlWriter.setPrefix(prefix, namespace);
-
-                                            } else {
-                                                xmlWriter.writeStartElement(namespace,"cargarFormaJuridicaResponse");
-                                            }
-
-                                        } else {
-                                            xmlWriter.writeStartElement("cargarFormaJuridicaResponse");
-                                        }
-
-                                        // write the nil attribute
-                                        writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
-                                        xmlWriter.writeEndElement();
-                                       }else{
-                                         localCargarFormaJuridicaResponse.serialize(MY_QNAME,factory,xmlWriter);
-                                       }
+                                 if (localCargarFormaJuridicaResponse==null){
+                                   throw new org.apache.axis2.databinding.ADBException("Property cannot be null!");
+                                 }
+                                 localCargarFormaJuridicaResponse.serialize(MY_QNAME,factory,xmlWriter);
                             
 
         }
@@ -304,13 +281,7 @@
         
                 
                 //We can safely assume an element has only one type associated with it
-                
-                                if (localCargarFormaJuridicaResponse==null){
-                                   return new org.apache.axis2.databinding.utils.reader.NullXMLStreamReader(MY_QNAME);
-                                }else{
-                                   return localCargarFormaJuridicaResponse.getPullParser(MY_QNAME);
-                                }
-                            
+                return localCargarFormaJuridicaResponse.getPullParser(MY_QNAME);
 
         }
 
@@ -345,17 +316,6 @@
                     reader.next();
 
                 
-                   nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                   if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                         // Skip the element and report the null value.  It cannot have subelements.
-                         while (!reader.isEndElement())
-                             reader.next();
-                         
-                                 return object;
-                             
-
-                   }
-                
 
                 
                 // Note all attributes that were handled. Used to differ normal attributes
@@ -369,15 +329,8 @@
                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("http://webservice.service.si.vuds.map.es/","cargarFormaJuridicaResponse").equals(reader.getName())){
                                 
-                                      nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                      if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                          object.setCargarFormaJuridicaResponse(null);
-                                          reader.next();
-                                          
-                                      }else{
-                                    
                                                 object.setCargarFormaJuridicaResponse(es.map.vuds.si.service.webservice.CargarFormaJuridicaResponse.Factory.parse(reader));
-                                            }
+                                            
                               }  // End of if for expected property start element
                                 
                              else{

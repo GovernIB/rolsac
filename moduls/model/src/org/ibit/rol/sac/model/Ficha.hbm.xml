@@ -24,7 +24,7 @@
         <property name="validacion" column="FIC_VALIDA"/>
         <!-- Nuevo campo INFO para informadores -->
 		<property name="info" column="FIC_INFO" length="4000"/> 
-        <property name="responsable" column="FIC_RESPON" length="256"/>
+		<property name="responsable" column="FIC_RESPON" length="256"/>
         <property name="urlVideo" column="FIC_URLVID"/> 
         <property name="urlForo" column="FIC_URLFOR"/>     
         <property name="foro_tema" column="FIC_FORTEM" length="1"/>     
@@ -68,8 +68,10 @@
             <index column="TFI_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionFicha">
                 <property name="titulo" length="256" column="TFI_TITULO"/>
-                <property name="descAbr" type="@db.texttype@" length="4000" column="TFI_DESABR"/>
-                <property name="descripcion" type="@db.texttype@" length="4000" column="TFI_DESCRI"/>
+
+                <property name="descAbr" type="@db.texttype.desabr@" length="4000" column="TFI_DESABR"/>
+                <property name="descripcion" type="@db.texttype.descri@" length="4000" column="TFI_DESCRI"/>
+
                 <property name="url" length="512" column="TFI_URL"/>
             </composite-element>
         </map>

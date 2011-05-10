@@ -12,6 +12,7 @@
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
+	<property name="test.output.dir" location="${output.dir}/test"/>
 
     <property name="lib.dir" location="${home.dir}/lib"/>
     <property name="etc.dir" location="${home.dir}/etc"/>
@@ -37,7 +38,7 @@
 	
     <path id="ejb.class.path">
         <fileset dir="${lib.dir}">
-            <include name="hibernate2.jar"/>
+	    	<include name="hibernate2.jar"/>
             <include name="cglib2.jar"/>
             <include name="dom4j.jar"/>
             <include name="ejb-2_0.jar"/>
@@ -194,11 +195,13 @@
             optimize="${javac.optimize}"
         	encoding="${javac.encoding}">
             <src path="${ejb.src}"/>
-        	<src path="${vuds.src}"/>
+			<src path="${vuds.src}"/>
             <src path="${ejb.gen.src}"/>
         </javac>
     </target>
-
+	
+		
+	
     <target name="ejb.jar" depends="ejb.compile">
         <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
         <jar
@@ -267,7 +270,7 @@
 			</fileset>
 	    </path>
 
-	
+
 	<target name="schemaexport">
 		<taskdef name="schemaexport"
 			classname="net.sf.hibernate.tool.hbm2ddl.SchemaExportTask"
@@ -311,7 +314,8 @@
 	
 	<target name="schemaupdate">
 		  <replace file="${hbm.dir}/Ficha.hbm.xml">
-                    <replacefilter token="@db.texttype@" value="${db.texttype}"/>
+		            <replacefilter token="@db.texttype.descri@" value="${db.texttype.descri}"/>
+		            <replacefilter token="@db.texttype.desabr@" value="${db.texttype.desabr}"/>
 		   </replace>
 
 		<taskdef name="schemaupdate"
@@ -329,4 +333,11 @@
 	</target>
 	<!---->
 			
+	
+	<target   name="module.package"   depends="ejb.jar"/>
+	<path       id="module.classpath"   refid="ejb.class.path"/>
+	<property name="module.classes"  location="${ejb.classes}"/>
+	
+	<import file="../build_test.xml"/>
+	
 </project>

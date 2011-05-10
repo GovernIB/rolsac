@@ -14,7 +14,7 @@
 	    return confirm("<bean:message key='traduccion.inicio' />");
 	}
 
-    function baja(){
+	function baja(){
         return confirm("<bean:message key='alerta.baja' />");
     }
 
@@ -95,7 +95,7 @@
 	    if (capa== 2) {document.getElementById("langTrad").value="en";}
 	    if (capa== 3) {document.getElementById("langTrad").value="de";}
 	    if (capa== 4) {document.getElementById("langTrad").value="fr";}
-        for (i = 0; i < n; i++) {
+	    for (i = 0; i < n; i++) {
             capeta = document.getElementById("capa" + i);
             if (i == capa) {
                 capeta.style.visibility="visible";
@@ -410,8 +410,8 @@
 
 <script type="text/javascript">
 <!--
-    <logic:present name="alert">
+	<logic:present name="alert">
 	alert("<bean:message name='alert' />");
-    </logic:present>
+	</logic:present>
 -->
 </script>

@@ -23,9 +23,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 
-import es.caib.vuds.ActualizacionVudsException;
-import es.caib.vuds.ValidateVudsException;
-import es.caib.vuds.VentanillaUnica;
+import es.caib.persistence.vuds.ActualizacionVudsException;
+import es.caib.persistence.vuds.ValidateVudsException;
+import es.caib.persistence.vuds.VentanillaUnica;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +43,8 @@ import org.ibit.rol.sac.model.TraduccionUA;
 
 /**
  * Action para editar un Documento
- *
- * @struts.action
+ * 
+ *  @struts.action
  *  name="tramiteForm"
  *  scope="request"
  *  validate="true"
@@ -124,8 +124,8 @@ public class EditarTramiteAction extends BaseDispatchAction{
     ProcedimientoDelegate procedimientoDelegate;
     TramiteDelegate tramiteDelegate;
     IdiomaDelegate idiomaDelegate;
-
-    public ActionForward editar(ActionMapping mapping, ActionForm form,
+	
+	public ActionForward editar(ActionMapping mapping, ActionForm form,
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
@@ -159,7 +159,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
             	throw new SecurityException("Aviso: No tiene privilegios para modificar el trámite");
     		tramite.setOperativa(Tramite.Operativa.MODIFICA);
         }
-
+       
         VOUtils.populate(tramite, dForm, idiomaDelegate);
 
         if (request.getParameter("action").equals(getResources(request).getMessage(request.getLocale(), "boton.traducir"))) {
@@ -184,7 +184,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
         	Long idOC = (Long) dForm.get("idOrganCompetent");
 
         	tramite.setProcedimiento(procDelegate.obtenerProcedimiento(idProcedimiento));
-        	
+
         	
 //ejaen@dgtic - TODO si es un tramit de ventanilla unica, comprobem que el procediment i el tramit estan traduits al castella
 //        	
@@ -208,20 +208,20 @@ public class EditarTramiteAction extends BaseDispatchAction{
         	if (isNew) {
 //        		tramite.setOperativa(Tramite.Operativa.CREA);
 //        		tramite.setOrden(0L);
-            request.setAttribute("alert", "confirmacion.alta");
-            procDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
+        		request.setAttribute("alert", "confirmacion.alta");
+        		procDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
         	} else {
         		request.setAttribute("alert", "confirmacion.modificacion");
-        }
-        dForm.set("id",tramite.getId());
-        log.info("Creat/Actualitzat " + tramite.getId());
+        	}
+        	dForm.set("id",tramite.getId());
+        	log.info("Creat/Actualitzat " + tramite.getId());
 
-        request.setAttribute("formularioOptions", tramite.getFormularios());
+        	request.setAttribute("formularioOptions", tramite.getFormularios());
         	request.setAttribute("docInformatiuOptions", tramite.getDocsInformatius());
         	request.setAttribute("taxesOptions", tramite.getTaxes());
-        request.setAttribute("idProcedimiento", idProcedimiento);
-        request.setAttribute("idSelect", tramite.getId());
-        return dispatchMethod(mapping, form, request, response, "seleccionar");
+        	request.setAttribute("idProcedimiento", idProcedimiento);
+        	request.setAttribute("idSelect", tramite.getId());
+        	return dispatchMethod(mapping, form, request, response, "seleccionar");
 
         }
 
@@ -244,7 +244,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
 	    	if(null!=tramite.getId()) {
 	    		request.setAttribute("idSelect", tramite.getId());
 	    		return dispatchMethod(mapping, form, request, response, "seleccionar");
-	    }
+	    	}
 	    	else
 	    		return dispatchMethod(mapping, form, request, response, "crear");
 
@@ -302,7 +302,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
 
                 log.info("Traducción trámite - Id: " + (Long) dForm.get("id"));
         	
-    }
+        }        
 
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
@@ -316,8 +316,8 @@ public class EditarTramiteAction extends BaseDispatchAction{
         Long id = null;
 
         if (request.getParameter("idSelect") != null)	//mirem parametres 
-            id = new Long(request.getParameter("idSelect"));
-
+            id = new Long(request.getParameter("idSelect")); 
+        
         if (request.getAttribute("idSelect") != null)	//mirem atributs
             id = (Long) request.getAttribute("idSelect");
 
@@ -354,11 +354,11 @@ public class EditarTramiteAction extends BaseDispatchAction{
             	request.setAttribute("vuds","on");
             }
 
-
+            
         } else {
             return mapping.findForward("fail");
         }
-
+        
         if (request.getAttribute("idSelect") != null)
         	request.setAttribute("tramiteForm", dForm);
 
@@ -404,7 +404,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
 
         return mapping.findForward("cancel");
     }
-
+    
     public ActionForward operarDocumentsTramit(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception { 

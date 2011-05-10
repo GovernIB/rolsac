@@ -19,8 +19,6 @@
             <one-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal"/>
         </set>
 
-
-
         <map name="traducciones" cascade="all" table="RSC_TRAINI">
             <cache usage="read-write"/>
             <key column="TIN_CODINI" foreign-key="RSC_TRAINI_FK"/>

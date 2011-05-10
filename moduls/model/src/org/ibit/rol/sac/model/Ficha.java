@@ -9,10 +9,28 @@ import java.util.Iterator;
  * Bean que representa a una ficha. Modificado para (PORMAD)
  */
 
-public class Ficha extends Traducible implements Indexable, Validable {
+public class Ficha extends Classificable implements Indexable, Validable {
 
 	private static final long serialVersionUID = 1L;
-	
+	private Long id;
+	private Date fechaPublicacion;
+	private Date fechaCaducidad;
+	private Date fechaActualizacion;
+	private String urlVideo;   
+	private String urlForo;      
+	private String foro_tema;
+	private Archivo icono;
+	private Archivo imagen;
+	private Archivo baner;
+	private Integer validacion;
+	private List<Documento> documentos;
+	private List<Enlace> enlaces;
+	private Set<FichaUA> fichasua;
+	private Set<HechoVital> hechosVitales;
+	private String info;
+	private String responsable;
+	 
+
 	//Constructores
 	
 
@@ -84,14 +102,6 @@ public class Ficha extends Traducible implements Indexable, Validable {
 		this.foro_tema = foro_tema;
 	}
 	
-    public Set<Materia> getMaterias() {
-        return materias;
-    }
-
-    public void setMaterias(Set<Materia> materias) {
-        this.materias = materias;
-    }
-
     public Archivo getIcono() {
         return icono;
     }
@@ -216,26 +226,30 @@ public class Ficha extends Traducible implements Indexable, Validable {
 		this.responsable = responsable;
 	}
 
+	@Override
+	public String toString() {
+		return "Ficha [id=" + id + ", fechaPublicacion=" + fechaPublicacion
+				+ ", fechaCaducidad=" + fechaCaducidad
+				+ ", fechaActualizacion=" + fechaActualizacion 
+				+ ", urlVideo="	+ urlVideo 
+				+ ", urlForo=" + urlForo 
+				+ ", foro_tema=" + foro_tema 
+				//+ ", icono=" + icono 
+				//+ ", imagen=" + imagen
+				//+ ", baner=" + baner 
+				+ ", validacion=" + validacion
+				//+ ", documentos=" + documentos + ", enlaces=" + enlaces
+				//+ ", fichasua=" + fichasua 
+				//+ ", hechosVitales=" + hechosVitales
+				+ ", info=" + info 
+				+ ", responsable=" + responsable
+				//+ ", materias(" + getMaterias().size() + ")=" + getMaterias() 
+				+ "]";
+	}
 
+	
 
-	private Long id;
-    private Date fechaPublicacion;
-    private Date fechaCaducidad;
-    private Date fechaActualizacion;
-    private String urlVideo;   
-    private String urlForo;      
-    private String foro_tema;
-    private Set<Materia> materias;
-    private Archivo icono;
-    private Archivo imagen;
-    private Archivo baner;
-    private Integer validacion;
-    private List<Documento> documentos;
-    private List<Enlace> enlaces;
-    private Set<FichaUA> fichasua;
-    private Set<HechoVital> hechosVitales;
-    private String info;
-    private String responsable;
+ 
     /*
     public IndexObject indexObject() {
         final IndexObject io = new IndexObject();
@@ -253,17 +267,7 @@ public class Ficha extends Traducible implements Indexable, Validable {
     }
     */
     
-    public String toString(){
-		StringBuffer salida = new StringBuffer("---Ficha---\n");
-		salida.append("  -id: ");
-		salida.append(id);
-		salida.append("\n  -nombre: ");
-		if(getTraduccion()!=null)
-			salida.append(((TraduccionFicha)getTraduccion()).getTitulo());
-		salida.append("\n");
-		return salida.toString();
-	}
-
+ 
 
 
 

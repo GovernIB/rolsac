@@ -1,9 +1,9 @@
 package org.ibit.rol.sac.back.action.contenido.procedimiento;
 
 import org.ibit.rol.sac.back.action.BaseDispatchAction;
-import org.ibit.rol.sac.back.form.FichaForm;
+import org.ibit.rol.sac.back.action.contenido.common.ActionParameters;
+import org.ibit.rol.sac.back.action.contenido.common.BaseAction;
 import org.ibit.rol.sac.back.form.ProcedimientoForm;
-import org.ibit.rol.sac.back.utils.VOUtils;
 import org.ibit.rol.sac.persistence.delegate.*;
 import org.ibit.rol.sac.model.*;
 import org.apache.commons.beanutils.BeanUtils;
@@ -12,9 +12,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
-
-import es.indra.rol.sac.integracion.traductor.Traductor;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
@@ -54,14 +51,25 @@ import java.util.*;
  *  name="popup" path=".contenido.procedimiento.popupnormativas"
  *  
  *  
+ *  TODO  (ejaen@dgtic)
+ *  Esta clase era muy grande (aprox 640 lineas), 
+ *  Se ha refactorizado parcialmente pues tiene demasiadas responsabilidades: 
+ *  	- editar, borrar, seleccionar, traducir, ... 
+ *  	- realiza las tareas de control y negocio 
  *  
+ *  Las ventajas de esta refactorizacion serian:
+ *  	- SRP -> hacer un cambio no afecta a toda la funcionalidad
+ *  	- clases mas pequeñas -> mas testeables
+ *  	- posibilidad de reutilizar metodos
  *  
+ *   (ejaen@dgtic) Por el momento se ha refactorizado las actions editar, seleccionar, traducir
+ *   
  */
 public class EditarProcedimientoAction extends BaseDispatchAction {
 
     protected static Log log = LogFactory.getLog(EditarProcedimientoAction.class);
 
-    /**
+   /**
      * 	<input type="hidden" name="procedimiento" value='247' /> 
 		<input type="hidden" name="action" value='Llistat de Documents Informatius Relacionats' />  --> action "documento" 
 		<input type="hidden" name="operacion" value='actualizar_orden' />                   	
@@ -72,17 +80,20 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
         Map<String,String> map = new HashMap<String,String>();
         map.put("boton.insertar", "editar");
         map.put("boton.modificar", "editar");
-        map.put("boton.traducir", "editar");
+        map.put("boton.traducir", "traducir");
         map.put("boton.busqueda", "busqueda");
         map.put("boton.eliminar", "eliminar");
         map.put("boton.seleccionar", "seleccionar");
         map.put("procedimiento.relacion.normativas", "normativa");
-        map.put("procedimiento.relacion.materias", "materia");
+        map.put("procedimiento.relacion.materias", "relacionarMateria");
         map.put("procedimiento.relacion.tramites", "tramite");
         map.put("procedimiento.relacion.documentos", "documento");
         
         return map;
     }
+
+    
+	// getters and setters
 
     //u92770[enric] afegit setters dels delegate per fer unit testing del metode editar() (Dependency Injection)
     ProcedimientoDelegate procedimientoDelegate;
@@ -90,8 +101,49 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
     IniciacionDelegate iniciacionDelegate;
     IdiomaDelegate idiomaDelegate;
     UnidadAdministrativaDelegate uaDelegate;
+	private BaseAction baseProcedimentoAction;
+	private SeleccionarProcedimientoAction seleccionarProcedimientoAction;
+	private GuardarProcedimientoAction guardarProcedimientoAction;
+	private TraducirProcedimientoAction traducirProcedimientoAction;
+	
+	
+	public void setTraducirProcedimientoAction(
+			TraducirProcedimientoAction traducirProcedimientoAction) {
+		this.traducirProcedimientoAction = traducirProcedimientoAction;
+	}
 
-    public void setProcedimientoDelegate(ProcedimientoDelegate delegate) {this.procedimientoDelegate=delegate;}
+	private TraducirProcedimientoAction getTraducirProcedimientoAction() {
+    	if(null==traducirProcedimientoAction) traducirProcedimientoAction=new TraducirProcedimientoAction();
+		return traducirProcedimientoAction;
+	}
+	
+	public GuardarProcedimientoAction getGuardarProcedimientoAction() {
+    	if(null==guardarProcedimientoAction) guardarProcedimientoAction=new GuardarProcedimientoAction();
+		return guardarProcedimientoAction;
+	}
+	public void setGuardarProcedimientoAction(
+			GuardarProcedimientoAction guardarProcedimientoAction) {
+		this.guardarProcedimientoAction = guardarProcedimientoAction;
+	}
+
+
+    public BaseAction getBaseProcedimentoAction() {
+    	if(null==baseProcedimentoAction) baseProcedimentoAction=new BaseAction();
+		return baseProcedimentoAction;
+	}
+	public void setBaseProcedimentoAction(
+			BaseAction baseProcedimentoAction) {
+		this.baseProcedimentoAction = baseProcedimentoAction;
+	}
+	public SeleccionarProcedimientoAction getSeleccionarProcedimientoAction() {
+    	if (null==seleccionarProcedimientoAction) seleccionarProcedimientoAction = new SeleccionarProcedimientoAction();
+    	return seleccionarProcedimientoAction;
+	}
+	public void setSeleccionarProcedimientoAction(SeleccionarProcedimientoAction seleccionarAction) {
+		this.seleccionarProcedimientoAction = seleccionarAction;
+	}
+
+	public void setProcedimientoDelegate(ProcedimientoDelegate delegate) {this.procedimientoDelegate=delegate;}
     public void setFamiliaDelegate(FamiliaDelegate familiaDelegate) {
 		this.familiaDelegate = familiaDelegate;
 	}
@@ -103,147 +155,51 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
 	}
 
     public UnidadAdministrativaDelegate getUaDelegate() {
-		return uaDelegate;
-	}
-	public void setUaDelegate(UnidadAdministrativaDelegate uaDelegate) {
-		this.uaDelegate = uaDelegate;
-	}
-    public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-                                  HttpServletResponse response) throws Exception {
+    	return uaDelegate;
+    }
+    public void setUaDelegate(UnidadAdministrativaDelegate uaDelegate) {
+    	this.uaDelegate = uaDelegate;
+    }
 
-        log.info("Entramos en editar");
-        String servidor="";
-        String value = System.getProperty("es.indra.caib.rolsac.oficina");
-        ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
-        
-        if ((value == null) || value.equals("N"))
-        	servidor=System.getProperty("es.caib.rolsac.portal.url");
-        else //INDRA
-        	servidor = "http://"+request.getServerName()+":"+request.getServerPort();
-    	request.setAttribute("host", servidor);
-        ProcedimientoForm dForm = (ProcedimientoForm) form;
-        ProcedimientoDelegate procedimientoDelegate = null!=this.procedimientoDelegate? this.procedimientoDelegate: DelegateUtil.getProcedimientoDelegate();  //u92770[enric]
-        FamiliaDelegate familiaDelegate = null!=this.familiaDelegate? this.familiaDelegate: DelegateUtil.getFamiliaDelegate();
-        IniciacionDelegate iniacionDelegate = null!=this.iniciacionDelegate? this.iniciacionDelegate: DelegateUtil.getIniciacionDelegate();
-        UnidadAdministrativaDelegate uaDelegate = null!=this.uaDelegate? this.uaDelegate: DelegateUtil.getUADelegate();
-        IdiomaDelegate idiomaDelegate = null!=this.idiomaDelegate? this.idiomaDelegate: DelegateUtil.getIdiomaDelegate();
-        ProcedimientoLocal procedimiento;
-        
-        Object o = dForm.get("id");
-        boolean isNew = o==null || (o instanceof Long && ((Long)o)==0); 
-        
-        if (isNew) {
-            procedimiento = new ProcedimientoLocal();
-        } else { 
-            procedimiento = procedimientoDelegate.consultarProcedimiento(((Long) dForm.get("id")));
-        }
+	private RelacionarMateriaAction relacionarMateriaAction; 
 
-        VOUtils.populate(procedimiento, dForm,idiomaDelegate);  //u92770[enric] afegit metode VOUtils.populate testejable
-        procedimiento.setFechaActualizacion(dForm.getFechaActualizacion());
-        procedimiento.setFechaCaducidad(dForm.getFechaCaducidad());
-        procedimiento.setFechaPublicacion(dForm.getFechaPublicacion());
-        if((""+dForm.get("indicador").toString()).equals("on"))
-        	procedimiento.setIndicador("1");
-        else
-        	procedimiento.setIndicador("0"); 
-        
-        if((dForm.get("ventana").toString()).equals("on"))
-        	procedimiento.setVentanillaUnica("1");  //VUDS
-        else
-        	procedimiento.setVentanillaUnica("0"); 
+    public void setProcedimientoRelacionarMateriaAction(RelacionarMateriaAction relacionarMateriaAction) {
+    	this.relacionarMateriaAction = relacionarMateriaAction;
+    }
 
-        if (dForm.get("idFamilia") != null) {
-            procedimiento.setFamilia(familiaDelegate.obtenerFamilia((Long) dForm.get("idFamilia")));
-        }
-        if (dForm.get("idIniciacion") != null) {
-            procedimiento.setIniciacion(iniacionDelegate.obtenerIniciacion((Long) dForm.get("idIniciacion")));
-        }
-
-        if (request.getParameter("action").equals(getResources(request).getMessage(request.getLocale(), "boton.traducir"))) {
-
-		        	traducir (request, dForm);
-			        dForm.set("id", procedimiento.getId());
-			        dForm.set("indicador",procedimiento.getIndicador());  //1
-			        dForm.set("ventana",procedimiento.getVentanillaUnica()); //1
-		            request.setAttribute("materiaOptions", procedimiento.getMaterias());
-		            request.setAttribute("normativaOptions", procedimiento.getNormativas());
-		            request.setAttribute("tramiteOptions", procedimiento.getTramites());
-		            request.setAttribute("documentoOptions", procedimiento.getDocumentos());
-			        request.setAttribute("procedimientoForm", dForm);
-	                return mapping.findForward("success");
-		 } 
-
-
-        Long idUA = (Long) dForm.get("idUA");
-
-        Long idUAResol = (Long) dForm.get("idUAResol");
-        if(null!=idUAResol && 0!=idUAResol) {
-        	UnidadAdministrativa uaResol = uaDelegate.obtenerUnidadAdministrativa(idUAResol);
-        	procedimiento.setOrganResolutori(uaResol);
-        }
-        Long procid=procedimientoDelegate.grabarProcedimiento(procedimiento, idUA);
-        procedimiento.setId(procid);
-        /*
-        procedimientoDelegate.grabarProcedimiento(procedimiento, idUA);
-        */
-
-        dForm.set("id", procedimiento.getId());
-        log.info("Creat/Actualitzat " + procedimiento.getId());
-
-        if(dForm.get("id") != null){
-            request.setAttribute("alert", "confirmacion.modificacion");
-            request.setAttribute("idSelect", procedimiento.getId());
-            return dispatchMethod(mapping, form, request, response, "seleccionar");
-
-        } else {
-            request.setAttribute("alert", "confirmacion.alta");
-        }
-        return mapping.findForward("success");
+    public RelacionarMateriaAction getProcedimientoRelacionarMateriaAction() {
+    	if(relacionarMateriaAction==null) 
+    		relacionarMateriaAction=new RelacionarMateriaAction();
+    	return relacionarMateriaAction;
     }
 
 
-   /**
-     * Método que traduce un formulario de Procedimiento
-     * @author - Indra 
-     * @param request - petición de usuario
-     * @param dForm - formulario dinámico enviado por el usuario
-     * @throws Exception
-     */
-    private void traducir (HttpServletRequest request, ProcedimientoForm dForm) throws Exception  {	
+	// editar
 
-    	
-		Traductor traductor = (Traductor) request.getSession().getAttribute("traductor");
-		String idiomaOrigen = "ca";
+	
+	public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                                  HttpServletResponse response) throws Exception {
+ 
+		/*
+		 * se ha refactorizado editar() por tener demasiadas responsabilidades
+		 * - se ha dividido en editar y traducir
+		 * - se ha separado la capa de controlador de negocio 
+		 * - se ha separado la action de la capa de controlador 
+		 */
 
-        TraduccionProcedimientoLocal procOrigen = (TraduccionProcedimientoLocal)dForm.get("traducciones", 0);        	
+        return getGuardarProcedimientoAction().guardar(this, new ActionParameters(mapping, form, request, response));
+    }
+	
+	
+	public ActionForward traducir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
 
-        Iterator itTradprocs = ((ArrayList) dForm.get("traducciones")).iterator();                
-        Iterator<String> itLang = traductor.getListLang().iterator(); 
-        
-        while (itLang.hasNext()){
-            
-        	TraduccionProcedimientoLocal procDesti = (TraduccionProcedimientoLocal) itTradprocs.next();
-        	String idiomaDesti = itLang.next();
-        	
-        	if (!idiomaOrigen.equals(idiomaDesti)) 
-        	{
-        		traductor.setDirTraduccio(idiomaOrigen, idiomaDesti);
-        		
-        		if (traductor.traducir(procOrigen, procDesti)){
-        			request.setAttribute("alert", "traduccion.confirmacion");
-        			request.setAttribute("booleanCheckValidar", "false");
-        		}else {
-        			request.setAttribute("alert", "traduccion.error");
-        			break;
-        		}
-        		
-        	}
-        }
-        
-        log.info("Traducción procedimiento - Id: " + (Long) dForm.get("id"));
+		return getTraducirProcedimientoAction().traducir(new ActionParameters(mapping, form, request, response));
+		
 
-    }    
+	}
 
+	
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
@@ -257,85 +213,15 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
-    }
+    } 
 
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
-        String servidor="";
-        String value = System.getProperty("es.indra.caib.rolsac.oficina");
-        ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
-        
-        if ((value == null) || value.equals("N"))
-        	
-        	servidor=System.getProperty("es.caib.rolsac.portal.url");
-        else
-        	servidor = "http://"+request.getServerName()+":"+request.getServerPort();
-
-    	request.setAttribute("host", servidor);
-        ProcedimientoForm dForm = (ProcedimientoForm) form;
-        ProcedimientoDelegate procedimientoDelegate = null!=this.procedimientoDelegate? this.procedimientoDelegate: DelegateUtil.getProcedimientoDelegate();  //u92770[enric]
-        IdiomaDelegate idiomaDelegate = null!=this.idiomaDelegate? this.idiomaDelegate: DelegateUtil.getIdiomaDelegate();  //u92770[enric]
-        Long id = null;
-
-        if (request.getParameter("idSelect") != null)
-            id = new Long(request.getParameter("idSelect"));
-
-        if (request.getAttribute("idSelect") != null)
-            id = (Long) request.getAttribute("idSelect");
-
-        if (id != null){
-            Procedimiento procedimiento = procedimientoDelegate.obtenerProcedimiento(id);
-            if(procedimiento instanceof ProcedimientoRemotoAntiguo){
-                return mapping.findForward("fail");
-            }
-
-            ProcedimientoLocal procedimientoLocal = (ProcedimientoLocal)procedimiento;
-            VOUtils.describe(dForm, procedimientoLocal,idiomaDelegate);
-            dForm.setFechaActualizacion(procedimientoLocal.getFechaActualizacion());
-            dForm.setFechaCaducidad(procedimientoLocal.getFechaCaducidad());
-            dForm.setFechaPublicacion(procedimientoLocal.getFechaPublicacion());
-            dForm.set("indicador",procedimientoLocal.getIndicador());
-            dForm.set("ventana",procedimientoLocal.getVentanillaUnica());
-            if (procedimientoLocal.getUnidadAdministrativa() != null){
-                dForm.set("idUA", procedimientoLocal.getUnidadAdministrativa().getId());
-                String nombreUA=((TraduccionUA)procedimientoLocal.getUnidadAdministrativa().getTraduccion()).getNombre();
-                //FIXME nombreUA=nombreUA.replaceAll("'","\\'");
-                dForm.set("nombreUA", nombreUA);
-            }
-            if (procedimientoLocal.getFamilia() != null){
-                dForm.set("idFamilia", procedimientoLocal.getFamilia().getId());
-                dForm.set("nombreFamilia", ((TraduccionFamilia)procedimientoLocal.getFamilia().getTraduccion()).getNombre());
-            }
-            if (procedimientoLocal.getIniciacion() != null){
-                dForm.set("idIniciacion", procedimientoLocal.getIniciacion().getId());
-                dForm.set("nombreIniciacion", ((TraduccionIniciacion)procedimientoLocal.getIniciacion().getTraduccion()).getNombre());
-            }
-            
-              if (request.getAttribute("idSelect") != null)
-            	request.setAttribute("procedimientoForm", dForm);
-            	
-            request.setAttribute("materiaOptions", procedimientoLocal.getMaterias());
-            request.setAttribute("normativaOptions", procedimientoLocal.getNormativas());
-            request.setAttribute("tramiteOptions", procedimientoLocal.getTramites());
-            request.setAttribute("documentoOptions", procedimientoLocal.getDocumentos());
-            if (null!= procedimientoLocal.getOrganResolutori()){
-                dForm.set("idUAResol", procedimientoLocal.getOrganResolutori().getId());
-                String nombreUA=((TraduccionUA)procedimientoLocal.getOrganResolutori().getTraduccion()).getNombre();
-                //FIXME nombreUA=nombreUA.replaceAll("'","\\'");
-                dForm.set("nombreUAResol", nombreUA);
-            }
-
-
-        } else {
-            return mapping.findForward("fail");
-        }
-
-        return mapping.findForward("success");
+        return getSeleccionarProcedimientoAction().seleccionar(mapping, form, request);
     }
-
-
+    
+	
     
     public ActionForward busqueda(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request,
@@ -347,7 +233,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
         
         if ((value == null) || value.equals("N"))
-        	servidor=System.getProperty("es.caib.01rolsac.portal.url");
+        	servidor=System.getProperty("es.caib.rolsac.portal.url");
         else
         	servidor = "http://"+request.getServerName()+":"+request.getServerPort();
     	request.setAttribute("host", servidor);
@@ -361,7 +247,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
             Iterator itTrad = ((ArrayList) dForm.get("traducciones")).iterator();
             Iterator itLang = idiomaDelegate.listarLenguajes().iterator();
 
-            // Parámetros generales                                                   
+            // Parámetros generales
             paramMap.put("signatura", dForm.get("signatura").toString().toUpperCase());
 
             if (request.isUserInRole("sacoper")){
@@ -375,7 +261,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
             if((""+dForm.get("ventana").toString()).equals("on"))
             	paramMap.put("ventana",1); 
             if (dForm.get("idIniciacion") != null)
-            paramMap.put("iniciacion", dForm.get("idIniciacion"));
+            	paramMap.put("iniciacion", dForm.get("idIniciacion"));
             
             paramMap.put("fechaCaducidad", dForm.getFechaCaducidad());
             paramMap.put("fechaPublicacion", dForm.getFechaPublicacion());
@@ -383,8 +269,8 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
             
             //anyadido por vroca
             if(mostrarTramite()){
-                paramMap.put("tramite", dForm.get("tramite"));
-                paramMap.put("version", dForm.get("version"));
+            paramMap.put("tramite", dForm.get("tramite"));
+            paramMap.put("version", dForm.get("version"));
             }
             
             if (null!=dForm.get("idUA"))
@@ -392,34 +278,34 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
 
             if (null!=dForm.get("idFamilia"))
             	paramMap.put("familia",(Long) dForm.get("idFamilia"));
-
+            
             // Parámetros traducibles
             tradMap.put("idioma", idiomaDelegate.lenguajePorDefecto());
             while (itLang.hasNext()){
-                TraduccionProcedimientoLocal tProcedimiento = (TraduccionProcedimientoLocal) itTrad.next();
+            	TraduccionProcedimientoLocal tProcedimiento = (TraduccionProcedimientoLocal) itTrad.next();
             	prepareProcedimiento(tProcedimiento);
-                int x = 0;
-                x += tProcedimiento.getNombre().length();
-                x += tProcedimiento.getResumen().length();
-                x += tProcedimiento.getDestinatarios().length();
-                x += tProcedimiento.getLugar().length();
-                x += tProcedimiento.getPlazos().length();
-                x += tProcedimiento.getResolucion().length();
-                x += tProcedimiento.getNotificacion().length();
-                x += tProcedimiento.getRequisitos().length();
-                x += tProcedimiento.getSilencio().length();
-                x += tProcedimiento.getObservaciones().length();
-                if (x > 0){
-                    tradMap.put("idioma", itLang.next().toString());
-                    tradMap.put("resumen", tProcedimiento.getResumen().toUpperCase());
-                    tradMap.put("nombre", tProcedimiento.getNombre().toUpperCase());
-                    tradMap.put("destinatarios", tProcedimiento.getDestinatarios().toUpperCase());
-                    tradMap.put("requisitos", tProcedimiento.getRequisitos().toUpperCase());
-                    tradMap.put("plazos", tProcedimiento.getPlazos().toUpperCase());
-                    tradMap.put("resolucion", tProcedimiento.getResolucion().toUpperCase());
-                    tradMap.put("notificacion", tProcedimiento.getNotificacion().toUpperCase());
-                    tradMap.put("silencio", tProcedimiento.getSilencio().toUpperCase());
-                    tradMap.put("observaciones", tProcedimiento.getObservaciones().toUpperCase());
+            	int x = 0;
+            	x += tProcedimiento.getNombre().length();
+            	x += tProcedimiento.getResumen().length();
+            	x += tProcedimiento.getDestinatarios().length();
+            	x += tProcedimiento.getLugar().length();
+            	x += tProcedimiento.getPlazos().length();
+            	x += tProcedimiento.getResolucion().length();
+            	x += tProcedimiento.getNotificacion().length();
+            	x += tProcedimiento.getRequisitos().length();
+            	x += tProcedimiento.getSilencio().length();
+            	x += tProcedimiento.getObservaciones().length();
+            	if (x > 0){
+            		tradMap.put("idioma", itLang.next().toString());
+            		tradMap.put("resumen", tProcedimiento.getResumen().toUpperCase());
+            		tradMap.put("nombre", tProcedimiento.getNombre().toUpperCase());
+            		tradMap.put("destinatarios", tProcedimiento.getDestinatarios().toUpperCase());
+            		tradMap.put("requisitos", tProcedimiento.getRequisitos().toUpperCase());
+            		tradMap.put("plazos", tProcedimiento.getPlazos().toUpperCase());
+            		tradMap.put("resolucion", tProcedimiento.getResolucion().toUpperCase());
+            		tradMap.put("notificacion", tProcedimiento.getNotificacion().toUpperCase());
+            		tradMap.put("silencio", tProcedimiento.getSilencio().toUpperCase());
+            		tradMap.put("observaciones", tProcedimiento.getObservaciones().toUpperCase());
                     tradMap.put("lugar", tProcedimiento.getLugar().toUpperCase());
                     break;
                 } else {
@@ -427,7 +313,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
                 }
             }
 
-            listaProcedimientos = procedimientoDelegate.buscarProcedimientos(paramMap, tradMap);
+       listaProcedimientos = procedimientoDelegate.buscarProcedimientos(paramMap, tradMap);
 
         if (listaProcedimientos.size() == 1) {
             request.setAttribute("idSelect", ((ProcedimientoLocal) listaProcedimientos.get(0)).getId());
@@ -466,7 +352,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
      * @return
      * @throws Exception
      */
-    public ActionForward documento(ActionMapping mapping, ActionForm form,
+	public ActionForward documento(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
@@ -493,31 +379,17 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
 			request.setAttribute("idSelect", idProcedimiento);
 			return dispatchMethod(mapping, form, request, response, "seleccionar");
 	}
-    public ActionForward materia(ActionMapping mapping, ActionForm form,
+    public ActionForward relacionarMateria(ActionMapping mapping, ActionForm form,
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en materia");
-        ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-
-        if (request.getParameter("procedimiento") != null && request.getParameter("materia") != null){
-            Long idProcedimiento = new Long(request.getParameter("procedimiento"));
-            Long idMateria = new Long(request.getParameter("materia"));
-
-            if ("alta".equals(request.getParameter("operacion")))
-                procedimientoDelegate.anyadirMateria(idMateria, idProcedimiento);
-            if ("baja".equals(request.getParameter("operacion")))
-                procedimientoDelegate.eliminarMateria(idMateria, idProcedimiento);
-
-            request.setAttribute("idSelect", idProcedimiento);
-            return dispatchMethod(mapping, form, request, response, "seleccionar");
-
-        }
-
-        return mapping.findForward("cancel");
+        return getProcedimientoRelacionarMateriaAction().relacionarMateria(this, new ActionParameters(mapping, form, request, response));
     }
 
-    public ActionForward normativa(ActionMapping mapping, ActionForm form,
+
+  
+
+	public ActionForward normativa(ActionMapping mapping, ActionForm form,
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 

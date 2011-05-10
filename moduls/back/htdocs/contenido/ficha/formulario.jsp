@@ -11,6 +11,13 @@
 <script type="text/javascript">
 <!--
 
+
+<logic:present name="alert">
+   function handleAlert() {
+		 alert("<bean:message name='alert' />");
+   }
+ </logic:present>
+
 	function inicioTraduccion(){
 	    return confirm("<bean:message key='traduccion.inicio' />");
 	}
@@ -83,8 +90,8 @@
     }
 
 	// Fija la url del microsite (MODIFICADO INDRA)
-    function actualizaDato(id, nombre, dir) {
-    	var url = "/sacmicrofront/index.do?mkey="+id;
+    function actualizaDato(id, nombre, portalUrl) {
+    	var url = portalUrl+"/sacmicrofront/index.do?mkey="+id;
     	eval("document.getElementById('titulo').value=nombre");
         eval("document.getElementById('url').value=url");
     }
@@ -187,8 +194,7 @@
 		obrir("/gforumback/popupForos.do", "Seleccionar", 538, 440);
 			
 	}
-	
-// -->
+// -->	
 </script>
 
 	<!-- tinyMCE -->
@@ -392,7 +398,7 @@
                 <html:button property="boton" onclick="abrirForoTema()" tabindex="3"><bean:message key="boton.seleccionar" /></html:button>
             </div>
         </div>         
-        
+ 
         </logic:notEmpty>
         
         <div class="component">
@@ -622,7 +628,7 @@
             <bean:message key="ficha.relacion.materias" />
         </div>
         <logic:empty name="materiaOptions">
-            <br /><h2><bean:message key="ficha.relacion.vacio" /></h2><br />
+            <br /><h2><bean:message key="ficha.relacion.materias.vacio" /></h2><br />
         </logic:empty>
         <logic:notEmpty name="materiaOptions">
             <logic:iterate id="materia" name="materiaOptions">
@@ -769,7 +775,7 @@
 	</logic:present>
 	
 	<logic:present name="alert">
-	alert("<bean:message name='alert' />");
+	   	window.setTimeout("handleAlert()",1000)
 	</logic:present>
 -->
 </script>

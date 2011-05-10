@@ -208,7 +208,7 @@
          </javascript>
 
       </validator>
-
+      
       <validator name="mLthTradDesc"
             classname="org.apache.struts.validator.FieldChecks"
                method="validateMaxLength"

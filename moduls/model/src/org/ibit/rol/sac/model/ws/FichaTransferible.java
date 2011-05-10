@@ -2,6 +2,7 @@ package org.ibit.rol.sac.model.ws;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -19,8 +20,10 @@ import org.ibit.rol.sac.model.TraduccionFicha;
  * Time: 15:02:24
  * Clase que representa la información a transferir de una Ficha(PORMAD)
  */
-public class FichaTransferible implements Serializable {
+public class FichaTransferible extends ActuacionTransferible implements Serializable {
 
+	
+	public static final String URL_FICHA = "es.caib.rolsac.model.ws.urlFicha";
 	
 	//Ficha
     private Long id;
@@ -197,8 +200,8 @@ public class FichaTransferible implements Serializable {
 			this.setCodigoEstandarHV(hechos.toArray(new String[0]));
         }
         
-        String url = ResourceBundle.getBundle("url").getString("urlFicha");
-		this.setUrlRemota(url.replaceAll("%id%", ficha.getId().toString()));
+		this.setUrlRemota(establecerIdEnUrl(ficha.getId().toString(), obtenerUrl(URL_FICHA)));
+
 		
         //Relleno las traducciones
         final List<TraduccionFichaTransferible> traducciones = new ArrayList<TraduccionFichaTransferible>(); 
@@ -225,4 +228,23 @@ public class FichaTransferible implements Serializable {
 		}
 		return fichaTransferible;
 	}
+
+
+	@Override
+	public String toString() {
+		return "FichaTransferible [id=" + id + ", fechaCaducidad="
+				+ fechaCaducidad + ", fechaActualizacion=" + fechaActualizacion
+				+ ", fechaPublicacion=" + fechaPublicacion + ", icono=" + icono
+				+ ", imagen=" + imagen + ", baner=" + baner + ", validacion="
+				+ validacion + ", info=" + info + ", codigoEstandarMaterias="
+				+ Arrays.toString(codigoEstandarMaterias)
+				+ ", codigoEstandarHV=" + Arrays.toString(codigoEstandarHV)
+				+ ", traducciones=" + Arrays.toString(traducciones)
+				+ ", urlRemota=" + urlRemota + ", fichasUA="
+				+ Arrays.toString(fichasUA) + ", responsable=" + responsable
+				+ "]";
+	}
+	
+	
+	
 }

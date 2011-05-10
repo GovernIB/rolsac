@@ -17,7 +17,7 @@
         <property name="observaciones" length="4000" column="USU_OBSERV"/>
         <property name="perfil" length="64" column="USU_PERFIL"/>
 		<property name="email" column="USU_EMAIL" length="256"/>
-		
+
         <set name="unidadesAdministrativas" table="RSC_UNAUSU" lazy="true">
             <cache usage="read-write"/>
             <key column="UNU_CODUSU" foreign-key="RSC_UNUUSU_FK"/>

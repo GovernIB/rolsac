@@ -23,21 +23,21 @@ public class LongWaitRequestProcessor extends BackRequestProcessor {
 				return super.processValidate(request, response, form, mapping);
 			}else{
 				
-			javax.servlet.http.HttpSession session = request.getSession(true);
+				javax.servlet.http.HttpSession session = request.getSession(true);
 				
-			if (session.getAttribute("action_path_key") == null) {
-				return super.processValidate(request,response, form, mapping);
-			} else {
-				// Retrieve the saved form, it's not null, that means the previous request was
-				// sent via POST and we'll need this form because the current one has had
-				// all its values reset to null
-				ActionForm nonResetForm = (ActionForm)session.getAttribute("current_form_key");
-				if (nonResetForm != null) {
-					return super.processValidate(request, response, nonResetForm, mapping);
+				if (session.getAttribute("action_path_key") == null) {
+					return super.processValidate(request,response, form, mapping);
 				} else {
-					return super.processValidate(request, response, form, mapping);
+					// Retrieve the saved form, it's not null, that means the previous request was
+					// sent via POST and we'll need this form because the current one has had
+					// all its values reset to null
+					ActionForm nonResetForm = (ActionForm)session.getAttribute("current_form_key");
+					if (nonResetForm != null) {
+						return super.processValidate(request, response, nonResetForm, mapping);
+					} else {
+						return super.processValidate(request, response, form, mapping);
+					}
 				}
-			}
 			}
 		}else {
 			
@@ -47,9 +47,9 @@ public class LongWaitRequestProcessor extends BackRequestProcessor {
 			if (nonResetForm != null) {
 				String mappingName = mapping.getName(); 
 				return super.processValidate(request, response, nonResetForm, mapping);
-		} else {
-			return super.processValidate(request, response, form, mapping);
-		}
+			} else {
+				return super.processValidate(request, response, form, mapping);
+			}
 	
 		}
 	}
@@ -74,14 +74,14 @@ public class LongWaitRequestProcessor extends BackRequestProcessor {
 			}else{
 
 				javax.servlet.http.HttpSession session = request.getSession(true);
-			if (session.getAttribute("action_path_key") == null) {
+				if (session.getAttribute("action_path_key") == null) {
 							
-				ForwardActionBean b = new ForwardActionBean();
-				
-				String parametros = "";
+					ForwardActionBean b = new ForwardActionBean();
+
+					String parametros = "";
 					
-				Enumeration enumera = request.getParameterNames();
-				boolean mas = enumera.hasMoreElements();
+					Enumeration enumera = request.getParameterNames();
+					boolean mas = enumera.hasMoreElements();
 					
 					String requestUri = request.getRequestURI();
 					if	((requestUri.indexOf("procedimiento") != -1
@@ -89,14 +89,14 @@ public class LongWaitRequestProcessor extends BackRequestProcessor {
 							|| requestUri.indexOf("normativa")!= -1
 							|| requestUri.indexOf("tramite")!= -1) && requestUri.indexOf("editar.do") != -1){
 					
-				if (mas) parametros="?";
+						if (mas) parametros="?";
 						while (mas){
 							String name = (String)enumera.nextElement();
 							String valor = request.getParameter(name);
 									
 							if (name.equals("action") || name.equals("idSeccion") ||name.equals("id") || name.equals("espera") ||
 							name.equals("idProcedimiento")) 
-				{
+							{
 										
 								if (name.equals("espera")) parametros+=name+"="+"no"; 
 								else parametros+=name+"="+valor;
@@ -111,45 +111,45 @@ public class LongWaitRequestProcessor extends BackRequestProcessor {
 							
 							if (mas) parametros="?";
 							while (mas)	{
-					String name = (String)enumera.nextElement();
-					String valor = request.getParameter(name);
-					parametros+=name+"="+valor;
-					mas = enumera.hasMoreElements();
-					if (mas) parametros+="&";
-				}
+								String name = (String)enumera.nextElement();
+								String valor = request.getParameter(name);
+								parametros+=name+"="+valor;
+								mas = enumera.hasMoreElements();
+								if (mas) parametros+="&";
+							}
 					}	
-				
-				b.setActionPath(request.getRequestURI()+parametros);
-				session.setAttribute("action_path_key", b);
+					
+					b.setActionPath(request.getRequestURI()+parametros);
+					session.setAttribute("action_path_key", b);
 
-				if (request.getMethod().equalsIgnoreCase("POST")) {
+					if (request.getMethod().equalsIgnoreCase("POST")) {
 							session.setAttribute("current_form_key",form);
 							
 							//Si existe el objeto traductor en contexto y no está como atributo de sesión lo cargamos
 							if (getServletContext().getAttribute("traductor") != null 
 									& session.getAttribute("traductor") == null)
 									session.setAttribute("traductor", getServletContext().getAttribute("traductor"));
-				}
+					}
 					
-				return mapping.findForward("pleaseWait");
+					return mapping.findForward("pleaseWait");
 		
 				} 
 			}
-			} else {
+		} else  {
 			javax.servlet.http.HttpSession session = request.getSession(true);
 			
-				ActionForm nonResetForm = (ActionForm)session.getAttribute("current_form_key");
+			ActionForm nonResetForm = (ActionForm)session.getAttribute("current_form_key");
 			
-				if (nonResetForm != null) {
-					session.setAttribute("current_form_key", null);
-					return super.processActionPerform(request, response, action, nonResetForm, mapping);
-				} else {
-					return super.processActionPerform(request, response, action, form, mapping);
-				}
+			if (nonResetForm != null) {
+				session.setAttribute("current_form_key", null);
+				return super.processActionPerform(request, response, action, nonResetForm, mapping);
+			} else {
+				return super.processActionPerform(request, response, action, form, mapping);
 			}
+		}
 
-			return super.processActionPerform(request, response, action, form, mapping);
+		return super.processActionPerform(request, response, action, form, mapping);
 		
-	}
+		}
 		
 	}

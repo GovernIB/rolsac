@@ -2,6 +2,7 @@ package org.ibit.rol.sac.model.ws;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -12,8 +13,9 @@ import org.ibit.rol.sac.model.*;
 /**
  * Clase que representa la información a transferir de un Procedimiento(PORMAD)
  */
-public class ProcedimientoTransferible implements Serializable {
-	
+public class ProcedimientoTransferible extends ActuacionTransferible implements Serializable {
+
+	public static final String URL_PROC = "es.caib.rolsac.model.ws.urlProcedimiento";
 	
 	private Long id;
     private String signatura;
@@ -57,8 +59,8 @@ public class ProcedimientoTransferible implements Serializable {
     public void setIdUnidadAdministrativa(Long idUnidadAdministrativa) {
         this.idUnidadAdministrativa = idUnidadAdministrativa;
     }
-
-    public String[] getCodigoEstandarMaterias() {
+    
+	public String[] getCodigoEstandarMaterias() {
 		return codigoEstandarMaterias;
 	}
 	public void setCodigoEstandarMaterias(String[] codigoEstandarMaterias) {
@@ -97,7 +99,7 @@ public class ProcedimientoTransferible implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-    public String getSignatura() {
+	public String getSignatura() {
 		return signatura;
 	}
 	public void setSignatura(String signatura) {
@@ -230,7 +232,7 @@ public class ProcedimientoTransferible implements Serializable {
         this.setTaxa(proc.getTaxa());
         this.setUrl(proc.getUrl());
         this.setIdUnidadAdministrativa(proc.getUnidadAdministrativa()!=null?proc.getUnidadAdministrativa().getId():null);
-		this.setResponsable(proc.getResponsable());  
+		this.setResponsable(proc.getResponsable());
 
         //VUDS
         this.setIdOrganResolutori(proc.getOrganResolutori()!=null?proc.getOrganResolutori().getId():null);
@@ -255,22 +257,22 @@ public class ProcedimientoTransferible implements Serializable {
 		//Relleno los campos con sus Codigos Estandar
 		final List<String> materias = new ArrayList<String>();
         if(proc.getMaterias()!=null){
-            for(final Materia materia : (Collection<Materia>)proc.getMaterias()){
-                materias.add(materia.getCodigoEstandar());
-            }
+		for(final Materia materia : (Collection<Materia>)proc.getMaterias()){
+			materias.add(materia.getCodigoEstandar());
+		}
         }
-        this.setCodigoEstandarMaterias(materias.toArray(new String[0]));
-
-        final List<String> hechos = new ArrayList<String>();
+		this.setCodigoEstandarMaterias(materias.toArray(new String[0]));
+		
+		final List<String> hechos = new ArrayList<String>();
         if(proc.getHechosVitalesProcedimientos()!=null){
-		    for(final HechoVitalProcedimiento hechoProc : (Collection<HechoVitalProcedimiento>)proc.getHechosVitalesProcedimientos()){
-			    hechos.add(hechoProc.getHechoVital().getCodigoEstandar());
-		    }
+		for(final HechoVitalProcedimiento hechoProc : (Collection<HechoVitalProcedimiento>)proc.getHechosVitalesProcedimientos()){
+			hechos.add(hechoProc.getHechoVital().getCodigoEstandar());
+		}
         }
-        this.setCodigoEstandarHV(hechos.toArray(new String[0]));
-
-        String url = ResourceBundle.getBundle("url").getString("urlProcedimiento");
-		this.setUrlRemota(url.replaceAll("%id%", proc.getId().toString()));
+		this.setCodigoEstandarHV(hechos.toArray(new String[0]));
+		
+		this.setUrlRemota(establecerIdEnUrl(proc.getId().toString(), obtenerUrl(URL_PROC)));
+		
         //Relleno las traducciones
 		final List<TraduccionProcedimientoTransferible> traducciones = new ArrayList<TraduccionProcedimientoTransferible>(); 
 		for (final String idioma : (Collection<String>)proc.getLangs()){
@@ -299,6 +301,7 @@ public class ProcedimientoTransferible implements Serializable {
         this.setTraducciones(traducciones.toArray(new TraduccionProcedimientoTransferible[0]));
     }
     
+
     public static ProcedimientoTransferible generar(ProcedimientoLocal proc){
     	ProcedimientoTransferible procT = new ProcedimientoTransferible();
     	if(proc!=null){
@@ -306,4 +309,22 @@ public class ProcedimientoTransferible implements Serializable {
     	}
     	return procT;
     }
+	
+    @Override
+	public String toString() {
+		return "ProcedimientoTransferible [id=" + id + ", signatura="
+				+ signatura + ", fechaCaducidad=" + fechaCaducidad
+				+ ", fechaPublicacion=" + fechaPublicacion
+				+ ", fechaActualizacion=" + fechaActualizacion + ", tramite="
+				+ tramite + ", version=" + version + ", validacion="
+				+ validacion + ", info=" + info + ", idUnidadAdministrativa="
+				+ idUnidadAdministrativa + ", codigoEstandarMaterias="
+				+ Arrays.toString(codigoEstandarMaterias)
+				+ ", codigoEstandarHV=" + Arrays.toString(codigoEstandarHV)
+				+ ", urlRemota=" + urlRemota + ", responsable=" + responsable
+				+ ", traducciones=" + Arrays.toString(traducciones) + "]";
+	}
+
+    
+    
 }

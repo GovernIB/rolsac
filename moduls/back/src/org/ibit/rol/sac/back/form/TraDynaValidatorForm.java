@@ -11,6 +11,7 @@ import org.apache.struts.config.ModuleConfig;
 import org.apache.struts.util.RequestUtils;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.ibit.rol.sac.back.config.TraFormBeanConfig;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 
@@ -35,7 +36,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
     //public static IdiomaDelegate getIdiomaDelegate() {return idiomaDelegate;}
 	//public static void setIdiomaDelegate(IdiomaDelegate idiomaDelegate) {idiomaDelegate = idiomaDelegate;}
 
-    public void reset(ActionMapping mapping, HttpServletRequest request) {
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
         log.info("entramos en reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
         super.reset(mapping, request);
         initialize(mapping);
@@ -59,10 +60,18 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
 
     }
 
+	
+	public Traduccion getCatala() {
+		 List traducciones = (List) this.get("traducciones");
+		 return (Traduccion)traducciones.get(0);
+	}
+	
     private String getTraduccionClassName(HttpServletRequest request, ActionMapping mapping) {
         ModuleConfig config = RequestUtils.getModuleConfig(request, getServlet().getServletContext());
         TraFormBeanConfig beanConfig = (TraFormBeanConfig) config.findFormBeanConfig(mapping.getName());
         String className = beanConfig.getTraduccionClassName();
         return className;
     }
+    
+
 }

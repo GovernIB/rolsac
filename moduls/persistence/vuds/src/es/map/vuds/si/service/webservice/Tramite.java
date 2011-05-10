@@ -106,36 +106,6 @@
                             
 
                         /**
-                        * field for CodigoIdentificador
-                        */
-
-                        
-                                    protected java.lang.String localCodigoIdentificador ;
-                                
-
-                           /**
-                           * Auto generated getter method
-                           * @return java.lang.String
-                           */
-                           public  java.lang.String getCodigoIdentificador(){
-                               return localCodigoIdentificador;
-                           }
-
-                           
-                        
-                            /**
-                               * Auto generated setter method
-                               * @param param CodigoIdentificador
-                               */
-                               public void setCodigoIdentificador(java.lang.String param){
-                            
-                                            this.localCodigoIdentificador=param;
-                                    
-
-                               }
-                            
-
-                        /**
                         * field for DenominacionTramite
                         */
 
@@ -734,14 +704,14 @@
                         */
 
                         
-                                    protected es.map.vuds.si.service.webservice.TipoRegistro localTipoRegistro ;
+                                    protected java.lang.String localTipoRegistro ;
                                 
 
                            /**
                            * Auto generated getter method
-                           * @return es.map.vuds.si.service.webservice.TipoRegistro
+                           * @return java.lang.String
                            */
-                           public  es.map.vuds.si.service.webservice.TipoRegistro getTipoRegistro(){
+                           public  java.lang.String getTipoRegistro(){
                                return localTipoRegistro;
                            }
 
@@ -751,7 +721,7 @@
                                * Auto generated setter method
                                * @param param TipoRegistro
                                */
-                               public void setTipoRegistro(es.map.vuds.si.service.webservice.TipoRegistro param){
+                               public void setTipoRegistro(java.lang.String param){
                             
                                             this.localTipoRegistro=param;
                                     
@@ -1105,40 +1075,6 @@
                                         if (prefix == null) {
                                             prefix = generatePrefix(namespace);
 
-                                            xmlWriter.writeStartElement(prefix,"codigoIdentificador", namespace);
-                                            xmlWriter.writeNamespace(prefix, namespace);
-                                            xmlWriter.setPrefix(prefix, namespace);
-
-                                        } else {
-                                            xmlWriter.writeStartElement(namespace,"codigoIdentificador");
-                                        }
-
-                                    } else {
-                                        xmlWriter.writeStartElement("codigoIdentificador");
-                                    }
-                                
-
-                                          if (localCodigoIdentificador==null){
-                                              // write the nil attribute
-                                              
-                                                     throw new org.apache.axis2.databinding.ADBException("codigoIdentificador cannot be null!!");
-                                                  
-                                          }else{
-
-                                        
-                                                   xmlWriter.writeCharacters(localCodigoIdentificador);
-                                            
-                                          }
-                                    
-                                   xmlWriter.writeEndElement();
-                             
-                                    namespace = "";
-                                    if (! namespace.equals("")) {
-                                        prefix = xmlWriter.getPrefix(namespace);
-
-                                        if (prefix == null) {
-                                            prefix = generatePrefix(namespace);
-
                                             xmlWriter.writeStartElement(prefix,"denominacionTramite", namespace);
                                             xmlWriter.writeNamespace(prefix, namespace);
                                             xmlWriter.setPrefix(prefix, namespace);
@@ -1358,9 +1294,9 @@
                                    namespace = "";
                                    boolean emptyNamespace = namespace == null || namespace.length() == 0;
                                    prefix =  emptyNamespace ? null : xmlWriter.getPrefix(namespace);
-                                            for (int i = 0;i < localNormativa.length;i++){
+                                   for (int i = 0;i < localNormativa.length;i++){
                                         
-                                                if (localNormativa[i] != null){
+                                            if (localNormativa[i] != null){
                                         
                                                 if (!emptyNamespace) {
                                                     if (prefix == null) {
@@ -1385,7 +1321,7 @@
                                               
                                                 } else {
                                                    
-                                                            // write null attribute
+                                                           // write null attribute
                                                             namespace = "";
                                                             if (! namespace.equals("")) {
                                                                 prefix = xmlWriter.getPrefix(namespace);
@@ -1404,42 +1340,42 @@
                                                             } else {
                                                                 xmlWriter.writeStartElement("normativa");
                                                             }
-                                                           writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
-                                                           xmlWriter.writeEndElement();
-                                                    
+                                                            writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
+                                                            xmlWriter.writeEndElement();
+                                                       
                                                 }
 
-                                            }
-                                     } else {
-                                        
+                                   }
+                             } else {
+                                 
                                          // write the null attribute
-                                                // write null attribute
-                                                java.lang.String namespace2 = "";
-                                                if (! namespace2.equals("")) {
-                                                    java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
+                                        // write null attribute
+                                            java.lang.String namespace2 = "";
+                                            if (! namespace2.equals("")) {
+                                                java.lang.String prefix2 = xmlWriter.getPrefix(namespace2);
 
-                                                    if (prefix2 == null) {
-                                                        prefix2 = generatePrefix(namespace2);
+                                                if (prefix2 == null) {
+                                                    prefix2 = generatePrefix(namespace2);
 
-                                                        xmlWriter.writeStartElement(prefix2,"normativa", namespace2);
-                                                        xmlWriter.writeNamespace(prefix2, namespace2);
-                                                        xmlWriter.setPrefix(prefix2, namespace2);
-
-                                                    } else {
-                                                        xmlWriter.writeStartElement(namespace2,"normativa");
-                                                    }
+                                                    xmlWriter.writeStartElement(prefix2,"normativa", namespace2);
+                                                    xmlWriter.writeNamespace(prefix2, namespace2);
+                                                    xmlWriter.setPrefix(prefix2, namespace2);
 
                                                 } else {
-                                                    xmlWriter.writeStartElement("normativa");
+                                                    xmlWriter.writeStartElement(namespace2,"normativa");
                                                 }
 
-                                               // write the nil attribute
-                                               writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
-                                               xmlWriter.writeEndElement();
-                                        
-                                    }
+                                            } else {
+                                                xmlWriter.writeStartElement("normativa");
+                                            }
 
-                                 } if (localObservacionesTracker){
+                                           // write the nil attribute
+                                           writeAttribute("xsi","http://www.w3.org/2001/XMLSchema-instance","nil","1",xmlWriter);
+                                           xmlWriter.writeEndElement();
+                                    
+                             }
+
+                        } if (localObservacionesTracker){
                                     namespace = "";
                                     if (! namespace.equals("")) {
                                         prefix = xmlWriter.getPrefix(namespace);
@@ -1634,12 +1570,40 @@
                                     
                                    xmlWriter.writeEndElement();
                              }
-                                            if (localTipoRegistro==null){
-                                                 throw new org.apache.axis2.databinding.ADBException("tipoRegistro cannot be null!!");
-                                            }
-                                           localTipoRegistro.serialize(new javax.xml.namespace.QName("","tipoRegistro"),
-                                               factory,xmlWriter);
+                                    namespace = "";
+                                    if (! namespace.equals("")) {
+                                        prefix = xmlWriter.getPrefix(namespace);
+
+                                        if (prefix == null) {
+                                            prefix = generatePrefix(namespace);
+
+                                            xmlWriter.writeStartElement(prefix,"tipoRegistro", namespace);
+                                            xmlWriter.writeNamespace(prefix, namespace);
+                                            xmlWriter.setPrefix(prefix, namespace);
+
+                                        } else {
+                                            xmlWriter.writeStartElement(namespace,"tipoRegistro");
+                                        }
+
+                                    } else {
+                                        xmlWriter.writeStartElement("tipoRegistro");
+                                    }
+                                
+
+                                          if (localTipoRegistro==null){
+                                              // write the nil attribute
+                                              
+                                                     throw new org.apache.axis2.databinding.ADBException("tipoRegistro cannot be null!!");
+                                                  
+                                          }else{
+
                                         
+                                                   xmlWriter.writeCharacters(localTipoRegistro);
+                                            
+                                          }
+                                    
+                                   xmlWriter.writeEndElement();
+                             
                                             if (localTipologia==null){
                                                  throw new org.apache.axis2.databinding.ADBException("tipologia cannot be null!!");
                                             }
@@ -1987,15 +1951,6 @@
                                     elementList.add(localCanalTramitacion);
                                 }
                                       elementList.add(new javax.xml.namespace.QName("",
-                                                                      "codigoIdentificador"));
-                                 
-                                        if (localCodigoIdentificador != null){
-                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localCodigoIdentificador));
-                                        } else {
-                                           throw new org.apache.axis2.databinding.ADBException("codigoIdentificador cannot be null!!");
-                                        }
-                                    
-                                      elementList.add(new javax.xml.namespace.QName("",
                                                                       "denominacionTramite"));
                                  
                                         if (localDenominacionTramite != null){
@@ -2075,30 +2030,30 @@
 
                         } if (localNormativaTracker){
                             if (localNormativa!=null){
-                                 for (int i = 0;i < localNormativa.length;i++){
-
-                                    if (localNormativa[i] != null){
-                                         elementList.add(new javax.xml.namespace.QName("",
-                                                                          "normativa"));
+                                  for (int i = 0;i < localNormativa.length;i++){
+                                      
+                                         if (localNormativa[i] != null){
+                                          elementList.add(new javax.xml.namespace.QName("",
+                                                                              "normativa"));
                                           elementList.add(
                                           org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localNormativa[i]));
-                                    } else {
-                                        
-                                                elementList.add(new javax.xml.namespace.QName("",
-                                                                          "normativa"));
-                                                elementList.add(null);
-                                            
-                                    }
+                                          } else {
+                                             
+                                                    elementList.add(new javax.xml.namespace.QName("",
+                                                                              "normativa"));
+                                                    elementList.add(null);
+                                                
+                                          }
+                                      
 
-
-                                 }
-                             } else {
-                                 
-                                        elementList.add(new javax.xml.namespace.QName("",
-                                                                          "normativa"));
+                                  }
+                            } else {
+                              
+                                    elementList.add(new javax.xml.namespace.QName("",
+                                                                              "normativa"));
                                     elementList.add(null);
-                                    
-                             }
+                                
+                            }
 
                         } if (localObservacionesTracker){
                                       elementList.add(new javax.xml.namespace.QName("",
@@ -2164,15 +2119,15 @@
                                            throw new org.apache.axis2.databinding.ADBException("tiempoResolucion cannot be null!!");
                                         }
                                     }
-                            elementList.add(new javax.xml.namespace.QName("",
+                                      elementList.add(new javax.xml.namespace.QName("",
                                                                       "tipoRegistro"));
-                            
-                            
-                                    if (localTipoRegistro==null){
-                                         throw new org.apache.axis2.databinding.ADBException("tipoRegistro cannot be null!!");
-                                    }
-                                    elementList.add(localTipoRegistro);
-                                
+                                 
+                                        if (localTipoRegistro != null){
+                                            elementList.add(org.apache.axis2.databinding.utils.ConverterUtil.convertToString(localTipoRegistro));
+                                        } else {
+                                           throw new org.apache.axis2.databinding.ADBException("tipoRegistro cannot be null!!");
+                                        }
+                                    
                             elementList.add(new javax.xml.namespace.QName("",
                                                                       "tipologia"));
                             
@@ -2311,15 +2266,15 @@
                     
                     reader.next();
                 
-                        java.util.ArrayList list6 = new java.util.ArrayList();
+                        java.util.ArrayList list5 = new java.util.ArrayList();
+                    
+                        java.util.ArrayList list7 = new java.util.ArrayList();
                     
                         java.util.ArrayList list8 = new java.util.ArrayList();
                     
-                        java.util.ArrayList list9 = new java.util.ArrayList();
+                        java.util.ArrayList list11 = new java.util.ArrayList();
                     
-                        java.util.ArrayList list12 = new java.util.ArrayList();
-                    
-                        java.util.ArrayList list20 = new java.util.ArrayList();
+                        java.util.ArrayList list19 = new java.util.ArrayList();
                     
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
@@ -2352,25 +2307,6 @@
                                         
                                     }
                                 
-                                    
-                                    while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
-                                
-                                    if (reader.isStartElement() && new javax.xml.namespace.QName("","codigoIdentificador").equals(reader.getName())){
-                                
-                                    java.lang.String content = reader.getElementText();
-                                    
-                                              object.setCodigoIdentificador(
-                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
-                                              
-                                        reader.next();
-                                    
-                              }  // End of if for expected property start element
-                                
-                                else{
-                                    // A start element we are not expecting indicates an invalid parameter was passed
-                                    throw new org.apache.axis2.databinding.ADBException("Unexpected subelement " + reader.getLocalName());
-                                }
-                            
                                     
                                     while (!reader.isStartElement() && !reader.isEndElement()) reader.next();
                                 
@@ -2420,15 +2356,15 @@
                                     
                                               nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                               if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                  list6.add(null);
+                                                  list5.add(null);
                                                        
                                                   reader.next();
                                               } else {
-                                            list6.add(reader.getElementText());
+                                            list5.add(reader.getElementText());
                                             }
                                             //loop until we find a start element that is not part of this array
-                                            boolean loopDone6 = false;
-                                            while(!loopDone6){
+                                            boolean loopDone5 = false;
+                                            while(!loopDone5){
                                                 // Ensure we are at the EndElement
                                                 while (!reader.isEndElement()){
                                                     reader.next();
@@ -2440,27 +2376,27 @@
                                                     reader.next();
                                                 if (reader.isEndElement()){
                                                     //two continuous end elements means we are exiting the xml structure
-                                                    loopDone6 = true;
+                                                    loopDone5 = true;
                                                 } else {
                                                     if (new javax.xml.namespace.QName("","documento").equals(reader.getName())){
                                                          
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list6.add(null);
+                                                              list5.add(null);
                                                                    
                                                               reader.next();
                                                           } else {
-                                                        list6.add(reader.getElementText());
+                                                        list5.add(reader.getElementText());
                                                         }
                                                     }else{
-                                                        loopDone6 = true;
+                                                        loopDone5 = true;
                                                     }
                                                 }
                                             }
                                             // call the converter utility  to convert and set the array
                                             
                                                     object.setDocumento((java.lang.String[])
-                                                        list6.toArray(new java.lang.String[list6.size()]));
+                                                        list5.toArray(new java.lang.String[list5.size()]));
                                                 
                               }  // End of if for expected property start element
                                 
@@ -2495,14 +2431,14 @@
                                     
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list8.add(null);
+                                                              list7.add(null);
                                                               reader.next();
                                                           } else {
-                                                        list8.add(es.map.vuds.si.service.webservice.Formulario.Factory.parse(reader));
+                                                        list7.add(es.map.vuds.si.service.webservice.Formulario.Factory.parse(reader));
                                                                 }
                                                         //loop until we find a start element that is not part of this array
-                                                        boolean loopDone8 = false;
-                                                        while(!loopDone8){
+                                                        boolean loopDone7 = false;
+                                                        while(!loopDone7){
                                                             // We should be at the end element, but make sure
                                                             while (!reader.isEndElement())
                                                                 reader.next();
@@ -2513,19 +2449,19 @@
                                                                 reader.next();
                                                             if (reader.isEndElement()){
                                                                 //two continuous end elements means we are exiting the xml structure
-                                                                loopDone8 = true;
+                                                                loopDone7 = true;
                                                             } else {
                                                                 if (new javax.xml.namespace.QName("","formulario").equals(reader.getName())){
                                                                     
                                                                       nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                                       if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                                          list8.add(null);
+                                                                          list7.add(null);
                                                                           reader.next();
                                                                       } else {
-                                                                    list8.add(es.map.vuds.si.service.webservice.Formulario.Factory.parse(reader));
+                                                                    list7.add(es.map.vuds.si.service.webservice.Formulario.Factory.parse(reader));
                                                                         }
                                                                 }else{
-                                                                    loopDone8 = true;
+                                                                    loopDone7 = true;
                                                                 }
                                                             }
                                                         }
@@ -2534,7 +2470,7 @@
                                                         object.setFormulario((es.map.vuds.si.service.webservice.Formulario[])
                                                             org.apache.axis2.databinding.utils.ConverterUtil.convertToArray(
                                                                 es.map.vuds.si.service.webservice.Formulario.class,
-                                                                list8));
+                                                                list7));
                                                             
                               }  // End of if for expected property start element
                                 
@@ -2551,50 +2487,50 @@
                                     
                                     // Process the array and step past its final element's end.
                                     
-                                                          nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                                          if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list9.add(null);
+                                              nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
+                                              if ("true".equals(nillableValue) || "1".equals(nillableValue)){
+                                                  list8.add(null);
                                                        
-                                                              reader.next();
-                                                          } else {
-                                            list9.add(reader.getElementText());
-                                                                }
-                                                        //loop until we find a start element that is not part of this array
-                                                        boolean loopDone9 = false;
-                                                        while(!loopDone9){
+                                                  reader.next();
+                                              } else {
+                                            list8.add(reader.getElementText());
+                                            }
+                                            //loop until we find a start element that is not part of this array
+                                            boolean loopDone8 = false;
+                                            while(!loopDone8){
                                                 // Ensure we are at the EndElement
                                                 while (!reader.isEndElement()){
-                                                                reader.next();
+                                                    reader.next();
                                                 }
-                                                            // Step out of this element
-                                                            reader.next();
-                                                            // Step to next element event.
-                                                            while (!reader.isStartElement() && !reader.isEndElement())
-                                                                reader.next();
-                                                            if (reader.isEndElement()){
-                                                                //two continuous end elements means we are exiting the xml structure
-                                                                loopDone9 = true;
-                                                            } else {
-                                                                if (new javax.xml.namespace.QName("","normativa").equals(reader.getName())){
-                                                                    
-                                                                      nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
-                                                                      if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                                          list9.add(null);
+                                                // Step out of this element
+                                                reader.next();
+                                                // Step to next element event.
+                                                while (!reader.isStartElement() && !reader.isEndElement())
+                                                    reader.next();
+                                                if (reader.isEndElement()){
+                                                    //two continuous end elements means we are exiting the xml structure
+                                                    loopDone8 = true;
+                                                } else {
+                                                    if (new javax.xml.namespace.QName("","normativa").equals(reader.getName())){
+                                                         
+                                                          nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
+                                                          if ("true".equals(nillableValue) || "1".equals(nillableValue)){
+                                                              list8.add(null);
                                                                    
-                                                                          reader.next();
-                                                                      } else {
-                                                        list9.add(reader.getElementText());
-                                                                        }
-                                                                }else{
-                                                                    loopDone9 = true;
-                                                                }
-                                                            }
+                                                              reader.next();
+                                                          } else {
+                                                        list8.add(reader.getElementText());
                                                         }
-                                                        // call the converter utility  to convert and set the array
-                                                        
+                                                    }else{
+                                                        loopDone8 = true;
+                                                    }
+                                                }
+                                            }
+                                            // call the converter utility  to convert and set the array
+                                            
                                                     object.setNormativa((java.lang.String[])
-                                                        list9.toArray(new java.lang.String[list9.size()]));
-                                                            
+                                                        list8.toArray(new java.lang.String[list8.size()]));
+                                                
                               }  // End of if for expected property start element
                                 
                                     else {
@@ -2648,15 +2584,15 @@
                                     
                                               nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                               if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                  list12.add(null);
+                                                  list11.add(null);
                                                        
                                                   reader.next();
                                               } else {
-                                            list12.add(reader.getElementText());
+                                            list11.add(reader.getElementText());
                                             }
                                             //loop until we find a start element that is not part of this array
-                                            boolean loopDone12 = false;
-                                            while(!loopDone12){
+                                            boolean loopDone11 = false;
+                                            while(!loopDone11){
                                                 // Ensure we are at the EndElement
                                                 while (!reader.isEndElement()){
                                                     reader.next();
@@ -2668,27 +2604,27 @@
                                                     reader.next();
                                                 if (reader.isEndElement()){
                                                     //two continuous end elements means we are exiting the xml structure
-                                                    loopDone12 = true;
+                                                    loopDone11 = true;
                                                 } else {
                                                     if (new javax.xml.namespace.QName("","requisitosPrevios").equals(reader.getName())){
                                                          
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list12.add(null);
+                                                              list11.add(null);
                                                                    
                                                               reader.next();
                                                           } else {
-                                                        list12.add(reader.getElementText());
+                                                        list11.add(reader.getElementText());
                                                         }
                                                     }else{
-                                                        loopDone12 = true;
+                                                        loopDone11 = true;
                                                     }
                                                 }
                                             }
                                             // call the converter utility  to convert and set the array
                                             
                                                     object.setRequisitosPrevios((java.lang.String[])
-                                                        list12.toArray(new java.lang.String[list12.size()]));
+                                                        list11.toArray(new java.lang.String[list11.size()]));
                                                 
                               }  // End of if for expected property start element
                                 
@@ -2734,7 +2670,10 @@
                                 
                                     if (reader.isStartElement() && new javax.xml.namespace.QName("","tipoRegistro").equals(reader.getName())){
                                 
-                                                object.setTipoRegistro(es.map.vuds.si.service.webservice.TipoRegistro.Factory.parse(reader));
+                                    java.lang.String content = reader.getElementText();
+                                    
+                                              object.setTipoRegistro(
+                                                    org.apache.axis2.databinding.utils.ConverterUtil.convertToString(content));
                                               
                                         reader.next();
                                     
@@ -2824,15 +2763,15 @@
                                     
                                               nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                               if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                  list20.add(null);
+                                                  list19.add(null);
                                                        
                                                   reader.next();
                                               } else {
-                                            list20.add(reader.getElementText());
+                                            list19.add(reader.getElementText());
                                             }
                                             //loop until we find a start element that is not part of this array
-                                            boolean loopDone20 = false;
-                                            while(!loopDone20){
+                                            boolean loopDone19 = false;
+                                            while(!loopDone19){
                                                 // Ensure we are at the EndElement
                                                 while (!reader.isEndElement()){
                                                     reader.next();
@@ -2844,27 +2783,27 @@
                                                     reader.next();
                                                 if (reader.isEndElement()){
                                                     //two continuous end elements means we are exiting the xml structure
-                                                    loopDone20 = true;
+                                                    loopDone19 = true;
                                                 } else {
                                                     if (new javax.xml.namespace.QName("","resultado").equals(reader.getName())){
                                                          
                                                           nillableValue = reader.getAttributeValue("http://www.w3.org/2001/XMLSchema-instance","nil");
                                                           if ("true".equals(nillableValue) || "1".equals(nillableValue)){
-                                                              list20.add(null);
+                                                              list19.add(null);
                                                                    
                                                               reader.next();
                                                           } else {
-                                                        list20.add(reader.getElementText());
+                                                        list19.add(reader.getElementText());
                                                         }
                                                     }else{
-                                                        loopDone20 = true;
+                                                        loopDone19 = true;
                                                     }
                                                 }
                                             }
                                             // call the converter utility  to convert and set the array
                                             
                                                     object.setResultado((java.lang.String[])
-                                                        list20.toArray(new java.lang.String[list20.size()]));
+                                                        list19.toArray(new java.lang.String[list19.size()]));
                                                 
                               }  // End of if for expected property start element
                                 

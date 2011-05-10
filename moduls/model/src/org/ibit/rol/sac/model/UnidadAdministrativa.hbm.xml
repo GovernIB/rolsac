@@ -48,7 +48,7 @@
             <one-to-many class="org.ibit.rol.sac.model.UnidadAdministrativa"/>
         </list>
 
-        <many-to-one name="tratamiento" cascade="none"  column="UNA_CODTRT" foreign-key="RSC_UNATRT_FK"/>
+        <many-to-one name="tratamiento" cascade="none" column="UNA_CODTRT" foreign-key="RSC_UNATRT_FK"/>
 
         <set name="edificios" cascade="none" inverse="true" table="RSC_UNAEDI" lazy="true" order-by="UNE_CODEDI">
             <cache usage="read-write"/>

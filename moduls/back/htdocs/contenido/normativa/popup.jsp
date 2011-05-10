@@ -5,6 +5,7 @@
 <%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 
 <bean:define id="opcion" name="opcion" />
+
 <html:html locale="true" xhtml="true">
 <head>
    <title>SAC Normativa - POPUP</title>
@@ -37,10 +38,11 @@
             }
         </logic:equal>
         <logic:equal name="opcion" value="Micro">
+	        <bean:define id="portalUrl" name="portalUrl" />
             function relaciona(){
                 id = document.forms[0].elemento.options[document.forms[0].elemento.selectedIndex].value;
                 nombre = document.forms[0].elemento.options[document.forms[0].elemento.selectedIndex].text;
-                opener.actualizaDato(id, nombre);
+                opener.actualizaDato(id, nombre,'<%=portalUrl%>');
                 window.close();
             }
         </logic:equal>

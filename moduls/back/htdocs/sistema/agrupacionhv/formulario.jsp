@@ -260,13 +260,13 @@
     <center>
     [<a href="javascript: listaHechosvitales()"><bean:message key="boton.nuevo" /></a>]
     </center>
-</logic:present>
+</logic:present> 
 
 
 <script type="text/javascript">
 <!--
-    <logic:present name="alert">
+	<logic:present name="alert">
 	alert("<bean:message name='alert' />");
-    </logic:present>
+	</logic:present>
 -->
 </script>

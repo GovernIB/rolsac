@@ -76,17 +76,17 @@
             <index column="TPR_CODIDI" type="string" length="2"/>
             <composite-element class="org.ibit.rol.sac.model.TraduccionProcedimientoLocal">
                 <property name="nombre" length="256" column="TPR_NOMBRE"/>
-                <property name="resumen"  type="@db.texttype@" length="4000" column="TPR_RESUME"/>
+                <property name="resumen"  type="@db.texttype.desabr@" length="4000" column="TPR_RESUME"/>
                 <property name="resultat" length="4000" column="TPR_RESULT"/>
-                <property name="destinatarios" type="@db.texttype@" length="4000" column="TPR_DESTIN"/>
-                <property name="requisitos" type="@db.texttype@" length="4000" column="TPR_REQUIS"/>
-                <property name="plazos" type="@db.texttype@" length="4000" column="TPR_PLAZOS"/>
-                <property name="silencio" type="@db.texttype@" length="4000" column="TPR_SILEN"/>
+                <property name="destinatarios" type="@db.texttype.desabr@" length="4000" column="TPR_DESTIN"/>
+                <property name="requisitos" type="@db.texttype.desabr@" length="4000" column="TPR_REQUIS"/>
+                <property name="plazos" type="@db.texttype.desabr@" length="4000" column="TPR_PLAZOS"/>
+                <property name="silencio" type="@db.texttype.desabr@" length="4000" column="TPR_SILEN"/>
                 <property name="resolucion" length="4000" column="TPR_RESOLUCION"/>
                 <property name="notificacion" length="4000" column="TPR_NOTIFICACION"/>
-                <property name="recursos" type="@db.texttype@" length="4000" column="TPR_RECURS"/>
-                <property name="observaciones" type="@db.texttype@" length="4000" column="TPR_OBSERV"/>
-                <property name="lugar"  type="@db.texttype@" length="4000" column="TPR_LUGAR"/>
+                <property name="recursos" type="@db.texttype.desabr@" length="4000" column="TPR_RECURS"/>
+                <property name="observaciones" type="@db.texttype.desabr@" length="4000" column="TPR_OBSERV"/>
+                <property name="lugar"  type="@db.texttype.desabr@" length="4000" column="TPR_LUGAR"/>
             </composite-element>
         </map>
 

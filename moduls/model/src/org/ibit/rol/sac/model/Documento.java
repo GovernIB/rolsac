@@ -72,7 +72,7 @@ public class Documento extends Traducible implements Indexable {
 
     
     
-    public IndexObject indexObject() {
+	public IndexObject indexObject() {
         final IndexObject io = new IndexObject();
     //    io.setId(id);
     //    io.setClassName(Documento.class.getName());

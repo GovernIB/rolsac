@@ -355,7 +355,7 @@ tinyMCE.init({
                 <html:options collection="listaEspacios" property="id" labelProperty="traduccion.nombre" />
             </html:select>
         </div>
-
+        
         <logic:notEmpty name="mostrarFotosTipo">
         
         <div class="component">
@@ -381,7 +381,7 @@ tinyMCE.init({
             <div class="etiqueta"><bean:message key="ua.numfototipo" /> 4</div>
             <html:text styleClass="btext" property="numfoto4" maxlength="3" tabindex="17" size="4" />
         </div>
-
+        
         </logic:notEmpty>
     </div>
     <br/>
@@ -516,7 +516,7 @@ tinyMCE.init({
                 <html:link action='<%="/organigrama/edificio/seleccionar?action=" + etiquetaSelect%>'
                            paramId="idSelect" paramName="edificio"paramProperty="id">
                     <logic:notEmpty name="edificio" property="traduccion">
-                        <bean:write name="edificio" property="traduccion.descripcion" />
+                    <bean:write name="edificio" property="traduccion.descripcion" />
                     </logic:notEmpty>
                      <logic:empty name="edificio" property="traduccion">
                         <bean:message key="ua.edificio.noTraduccion" />
@@ -615,7 +615,7 @@ tinyMCE.init({
 		}
 	 -->
 	 </script>
-		
+
         <logic:notEmpty name="fichaUAOptions">
 
             <logic:iterate id="entry" name="fichaUAOptions">       
@@ -685,7 +685,7 @@ tinyMCE.init({
                             <%--<bean:write name="fichaUA" property="ficha.traduccion.titulo" />--%>
 
                             <logic:notEmpty name="fichaUA" property="ficha.traduccion">
-                                <bean:write name="fichaUA" property="ficha.traduccion.titulo" />
+                            <bean:write name="fichaUA" property="ficha.traduccion.titulo" />
                             </logic:notEmpty>
                              <logic:empty name="fichaUA" property="ficha.traduccion">
                             	<bean:message key="ua.ficha.noTraduccion" />
@@ -778,7 +778,7 @@ tinyMCE.init({
 		                 </td>
 		                 <td>   
 	                         <logic:notEmpty name="procedimiento" property="traduccion">                                                       
-	                         	<bean:write name="procedimiento" property="traduccion.nombre" />
+	                    		<bean:write name="procedimiento" property="traduccion.nombre" />
                             </logic:notEmpty>
                             <logic:empty name="procedimiento" property="traduccion">
                             	<bean:write name="procedimiento" property="id" /> - <bean:message key="ua.procedimiento.noTraduccion" />
@@ -826,8 +826,8 @@ tinyMCE.init({
 
 <script type="text/javascript">
 <!--
-    <logic:present name="alert">
+	<logic:present name="alert">
 	alert("<bean:message name='alert' />");
-    </logic:present>
+	</logic:present>
 -->
 </script>
