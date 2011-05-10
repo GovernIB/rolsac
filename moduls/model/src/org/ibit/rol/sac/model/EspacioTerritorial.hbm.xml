@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.ibit.rol.sac.model.EspacioTerritorial" table="RSC_ESPTER" batch-size="10">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column= "ESP_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="nivel" column="ESP_NIVEL" not-null="true"/>
+        <property name="coordenadas" column="ESP_COORDE" />
+        
+        <many-to-one  cascade="all" name="mapa" column="ESP_MAPA" foreign-key="RSC_ESPMAP_FK"/>
+        <many-to-one  cascade="all" name="logo" column="ESP_LOGO" foreign-key="RSC_ESPLOG_FK"/>
+		<many-to-one name="padre" cascade="none" column="ESP_CODESP" foreign-key="RSC_ESPESP_FK"/>
+
+        <set name="hijos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="ESP_CODESP" foreign-key="RSC_ESPESP_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.EspacioTerritorial"/>
+        </set>
+        
+        <set name="unidades" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="UNA_CODESP" foreign-key="RSC_UNAESP_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.UnidadAdministrativa"/>
+        </set>
+
+        <set name="adminRemotas" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="ADM_CODESP" foreign-key="RSC_ADMESP_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.AdministracionRemota"/>
+        </set>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAESP">
+            <cache usage="read-write"/>
+            <key column="TES_CODESP" foreign-key="RSC_TESESP_FK"/>
+            <index column="TES_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionEspacioTerritorial">
+                <property name="nombre" length="256" column="TES_NOMBRE"/>
+            </composite-element>
+        </map>
+        
+	</class>
+
+    <query name="espacio.byname">
+        <![CDATA[select esp from EspacioTerritorial as esp, trad in esp.traducciones where esp.nombre = :nombre]]>
+    </query>
+    
+    <query name="espacio.root">
+        <![CDATA[select esp from EspacioTerritorial as esp where esp.padre is null]]>
+    </query>
+
+    <query name="espacio.padre">
+        <![CDATA[select esp.padre from EspacioTerritorial as esp where esp.id = :id]]>
+    </query>
+	
+</hibernate-mapping>

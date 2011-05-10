@@ -1,0 +1,21 @@
+/* Document CSS */
+
+html { overflow:hidden; }
+body { font:normal 75%  Arial, Helvetica, sans-serif; background-color:#fff; color:#494949; }
+* { margin:0; padding:0; }
+
+#volverROLSAC { float:right; color:#fff; font-size:.9em; font-weight:bold; margin:2px 10px; }
+#cUsuari { float:right; clear:right; width:40%; font-size:.9em; text-align:right; padding:0 10px; color:#000; }
+#cTitulo { background:url(../img/marcosup/fons.gif) repeat-x left bottom #dfdfe7; font-size:1.5em; padding:10px; color:#fff; border-bottom:1px solid #be6200; }
+#cMenu { width:100%; border:0; background-color:#e57700; border-bottom:1px solid #be6200; }
+#cMenu td { width:16%; text-align:center; border-right:1px solid #be6200; border-collapse:collapse; padding:2px; }
+#cMenu td a { display:block; text-decoration:none; color:#494949; width:100%; padding:5px 0; outline:none; color:#fff; font-weight:bold; }
+#cMenu td a:hover { background-color:#be6200; }
+
+.submenu { display:none; position:absolute; top:0; left:0; background-color:#fff; border:1px solid #9c5000; z-index:2; text-align:center; }
+.submenu p { padding:7px 0; color:#fff; background-color:#9c5000; }
+.submenu a { display:block; padding:4px 0; font-size:.9em; width:100%; text-decoration:none; color:#000; }
+.submenu a:hover { background-color:#f2e6d9; }
+
+#escritori { width:90%; border:0; overflow:auto; }
+

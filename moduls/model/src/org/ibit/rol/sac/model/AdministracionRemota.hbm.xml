@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping package="org.ibit.rol.sac.model">
+    <class name="org.ibit.rol.sac.model.AdministracionRemota" table="RSC_ADMREM">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="ADM_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="endpoint" length="512" column="ADM_ENDPOI"/>
+        <property name="nombre" length="512" column="ADM_NOMBRE"/>
+        <property name="profundidad" column="ADM_NIVPRO"/>
+        <property name="codigoEstandarUA" length="512" column="ADM_CODSUA"/>
+        <property name="idRemoto" unique="true" not-null="true" length="512" column="ADM_IDREMO"/>
+		<property name="responsable" column="ADM_RESPON" length="256"/>
+		<property name="version" column="ADM_VERSIO"/>
+		
+        <many-to-one name="espacioTerrit" column="ADM_CODESP" foreign-key="RSC_ADMESP_FK" />
+
+        <many-to-one name="logop" cascade="all" column="ADM_LOGOP" foreign-key="RSC_ADMLOP_FK"/>
+        <many-to-one name="logog" cascade="all" column="ADM_LOGOG" foreign-key="RSC_ADMLOG_FK"/>
+
+        <set name="unidadesRemotas" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="UNR_CODADM" foreign-key="RSC_UNRADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.UnidadAdministrativaRemota"/>
+        </set>
+
+        <set name="fichasRemotas" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="FIR_CODADM" foreign-key="RSC_FIRADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.FichaRemota"/>
+        </set>
+
+        <set name="procedimientosRemotos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="PRR_CODADM" foreign-key="RSC_PRRADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.ProcedimientoRemoto"/>
+        </set>
+        
+        <set name="edificiosRemotos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="EDR_CODADM" foreign-key="RSC_EDRADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.EdificioRemoto"/>
+        </set>
+        
+        <set name="tramitesRemotos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="TRR_CODADM" foreign-key="RSC_TRRADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.TramiteRemoto"/>
+        </set>
+
+        <set name="normativasExternasRemotas" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="NER_CODADM" foreign-key="RSC_NERADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.NormativaExternaRemota"/>
+        </set>
+
+        <set name="documentosRemotos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="DOR_CODADM" foreign-key="RSC_DORADM_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.DocumentoRemoto"/>
+        </set>
+
+    </class>
+</hibernate-mapping>

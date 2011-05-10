@@ -1,0 +1,670 @@
+<form-bean name="dataForm" type="org.ibit.rol.sac.back.form.DataForm" />
+
+<form-bean name="seccionForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionSeccion"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="idPadre" type="java.lang.Long" initial=""/>
+    <form-property name="perfil" type="java.lang.String" initial=""/>
+    <form-property name="codigoEstandard" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="espacioForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionEspacioTerritorial"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="idPadre" type="java.lang.Long" initial=""/>
+    <form-property name="coordenadas" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="mapafile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarmapa" type="boolean" initial="false" />
+    <form-property name="nombremapa" type="java.lang.String" />
+    <form-property name="logofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogo" type="boolean" initial="false" />
+    <form-property name="nombrelogo" type="java.lang.String" />
+</form-bean>
+
+<form-bean name="usuarioForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="username" type="java.lang.String" initial=""/>
+    <form-property name="password" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String"/>
+    <form-property name="observaciones" type="java.lang.String" initial=""/>
+    <form-property name="perfil" type="java.lang.String" initial=""/>
+</form-bean>
+
+	<!-- ***************************************************************** -->
+    <!-- ****************** Formularios de búsquedas ********************* -->
+	<!-- ***************************************************************** -->
+	
+	<form-bean name="BuscaOrdenaTrabajoActionForm" type="org.ibit.rol.sac.back.subscripcions.actionform.busca.BuscaOrdenaTrabajoActionForm"/>
+	<form-bean name="BuscaOrdenaGrupoActionForm" type="org.ibit.rol.sac.back.subscripcions.actionform.busca.BuscaOrdenaGrupoActionForm"/>				
+	<form-bean name="BuscaOrdenaSuscriptorActionForm" type="org.ibit.rol.sac.back.subscripcions.actionform.busca.BuscaOrdenaSuscriptorActionForm"/>					
+	<!-- Formulario de listado general -->
+	<form-bean name="listaActionForm" type="org.ibit.rol.sac.back.subscripcions.actionform.listaActionForm"/>    
+
+	<!-- ***************************************************************** -->
+    <!-- ******************* Formularios de detalle ********************** -->
+	<!-- ***************************************************************** -->
+
+
+	<form-bean name="trabajoForm" type="org.ibit.rol.sac.back.subscripcions.actionform.formulario.trabajoForm"
+    	className="org.apache.struts.action.ActionFormBean">
+    	<form-property name="id" type="java.lang.Long"/>
+	    <form-property name="fechaEnvio" type="java.lang.String"/>
+	    <form-property name="fechaEnviado" type="java.lang.String"/>
+	    <form-property name="asunto" type="java.lang.String"/>
+	    <form-property name="titulo" type="java.lang.String"/>
+	    <form-property name="estado" type="java.lang.String"/>
+	    <form-property name="activo" type="java.lang.String"/>
+	    <form-property name="contenidoHtml" type="java.lang.String"/>
+	    <form-property name="idSeccion" type="java.lang.Long"/>
+	    <form-property name="seccion" type="java.lang.String"/>
+	    <form-property name="canalEnvio" type="java.lang.String"/>
+	    <form-property name="tipo" type="java.lang.String"/>
+	    <form-property name="fechaAlta" type="java.lang.String"/>
+	    <form-property name="usuarioAlta" type="java.lang.String"/>
+	    <form-property name="fechaModificacion" type="java.lang.String"/>
+	    <form-property name="usuarioModificacion" type="java.lang.String"/>
+	    <form-property name="fechaBaja" type="java.lang.String"/>
+      	<form-property name="lineasgrupo" type="java.util.ArrayList"/>
+       	<form-property name="seleccionados" type="java.lang.String[]"/>
+	</form-bean>
+
+	<form-bean name="grupoTrabajoForm" type="org.ibit.rol.sac.back.subscripcions.actionform.formulario.grupoTrabajoForm">
+   	    <form-property name="idtrabajo" type="java.lang.Long"/>
+   	    <form-property name="id" type="java.lang.Long"/>
+   	    <form-property name="nombre" type="java.lang.String" initial=""/>
+	</form-bean>
+
+	<form-bean name="grupoForm" type="org.ibit.rol.sac.back.subscripcions.actionform.formulario.grupoForm"
+    	className="org.ibit.rol.sac.back.subscripcions.config.TraFormBeanConfig">
+	    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionGrupoSuscripcion"/>
+    	<form-property name="id" type="java.lang.Long"/>
+	    <form-property name="identificador" type="java.lang.String"/>
+       	<form-property name="seleccionados" type="java.lang.String[]"/>
+       	<form-property name="traducciones" type="java.util.ArrayList"/>
+	</form-bean>
+
+	<form-bean name="suscriptorForm" type="org.ibit.rol.sac.back.subscripcions.actionform.formulario.suscriptorForm"
+		className="org.apache.struts.action.ActionFormBean">
+    	<form-property name="id" type="java.lang.Long"/>
+	    <form-property name="nombre" type="java.lang.String"/>
+	    <form-property name="apellido1" type="java.lang.String"/>
+	    <form-property name="apellido2" type="java.lang.String"/>
+	    <form-property name="email" type="java.lang.String"/>
+	    <form-property name="sms" type="java.lang.String"/>
+	    <form-property name="telefono" type="java.lang.String"/>
+	    <form-property name="tipo" type="java.lang.String"/>
+	    <form-property name="nombreEntidad" type="java.lang.String"/>
+	    <form-property name="nombreArea" type="java.lang.String"/>
+	    <form-property name="departamentoEntidad" type="java.lang.String"/>
+	    <form-property name="cargo" type="java.lang.String"/>
+	    <form-property name="boletin" type="java.lang.String"/>
+	    <form-property name="alertas" type="java.lang.String"/>
+	    <form-property name="estudios" type="java.lang.String"/>
+	    <form-property name="estado" type="java.lang.String"/>
+	    <form-property name="origen" type="java.lang.String"/>
+	    <form-property name="referenciaTramite" type="java.lang.String"/>
+	    <form-property name="usuarioAlta" type="java.lang.Long"/>
+	    <form-property name="fechaAlta" type="java.lang.String"/>
+	    <form-property name="fechaModificacion" type="java.lang.String"/>
+	    <form-property name="fechaBaja" type="java.lang.String"/>
+   	    <form-property name="grupo" type="java.lang.Long" initial=""/>
+       	<form-property name="seleccionados" type="java.lang.String[]"/>	
+    </form-bean>
+
+
+<form-bean name="perfilForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionPerfilCiudadano"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="codigoEstandard" type="java.lang.String" initial=""/>
+    <form-property name="pathIconografia" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="tipuaForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm" className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTratamiento"/>
+    <form-property name="id" type="java.lang.Long"/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="unidadForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property
+        property="traduccionClassName"
+        value="org.ibit.rol.sac.model.TraduccionUA"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="claveHita" type="java.lang.String" initial=""/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+    <form-property name="dominio" type="java.lang.String" initial=""/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="responsable" type="java.lang.String" initial=""/>
+    <form-property name="telefono" type="java.lang.String" initial=""/>
+    <form-property name="fax" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String" initial=""/>
+    <form-property name="sexoResponsable" type="java.lang.Integer" initial=""/>
+    <form-property name="fotopfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfotop" type="boolean" initial="false" />
+    <form-property name="nombrefotop" type="java.lang.String" />
+    <form-property name="fotogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfotog" type="boolean" initial="false"/>
+    <form-property name="nombrefotog" type="java.lang.String" />
+    <form-property name="logohfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogoh" type="boolean" initial="false" />
+    <form-property name="nombrelogoh" type="java.lang.String" />
+    <form-property name="logovfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogov" type="boolean" initial="false" />
+    <form-property name="nombrelogov" type="java.lang.String" />
+    <form-property name="logosfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogos" type="boolean" initial="false" />
+    <form-property name="nombrelogos" type="java.lang.String" />
+    <form-property name="logotfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogot" type="boolean" initial="false" />
+    <form-property name="nombrelogot" type="java.lang.String" />
+    <form-property name="idPadre" type="java.lang.Long" initial=""/>
+    <form-property name="idHijos" type="java.util.ArrayList"/>
+    <form-property name="idTratamiento" type="java.lang.Long" initial=""/>
+    <form-property name="idEdificios" type="java.util.ArrayList"/>
+    <form-property name="idPersonal" type="java.util.ArrayList"/>
+    <form-property name="idNormativas" type="java.util.ArrayList"/>
+    <form-property name="idProcedimientos" type="java.util.ArrayList"/>
+    <form-property name="idUsuarios" type="java.util.ArrayList"/>
+    <form-property name="idFichasUA" type="java.util.ArrayList"/>
+    <form-property name="idEspacioTerrit" type="java.lang.Long"/>
+    <form-property name="numfoto1" type="java.lang.Integer" initial=""/>
+    <form-property name="numfoto2" type="java.lang.Integer" initial=""/>
+    <form-property name="numfoto3" type="java.lang.Integer" initial=""/>
+    <form-property name="numfoto4" type="java.lang.Integer" initial=""/>            
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="edificioForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property
+        property="traduccionClassName"
+        value="org.ibit.rol.sac.model.TraduccionEdificio"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="direccion" type="java.lang.String" initial=""/>
+    <form-property name="codigoPostal" type="java.lang.String" initial=""/>
+    <form-property name="poblacion" type="java.lang.String" initial=""/>
+    <form-property name="telefono" type="java.lang.String" initial=""/>
+    <form-property name="fax" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String" initial=""/>
+    <form-property name="fotopfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfotop" type="boolean" initial="false" />
+    <form-property name="nombrefotop" type="java.lang.String" />
+    <form-property name="fotogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfotog" type="boolean" initial="false" />
+    <form-property name="nombrefotog" type="java.lang.String" />
+    <form-property name="planofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="latitud" type="java.lang.String" initial=""/>
+    <form-property name="longitud" type="java.lang.String" initial=""/>
+    <form-property name="borrarplano" type="boolean" initial="false" />
+    <form-property name="nombreplano" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="unidadMateriaForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+     className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+     <set-property
+        property="traduccionClassName"
+        value="org.ibit.rol.sac.model.TraduccionUnidadMateria"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="idMateria" type="java.lang.Long" initial=""/>
+    <form-property name="idUnidad" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="familiaForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionFamilia"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="iconoFamiliaForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="idFamilia" type="java.lang.Long" initial=""/>
+    <form-property name="idPerfil" type="java.lang.Long" initial=""/>
+    <form-property name="file" type="org.apache.struts.upload.FormFile"/>
+</form-bean>
+
+<form-bean name="materiaForm"
+    type="org.ibit.rol.sac.back.form.MateriaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionMateria"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="codiHita" type="java.lang.String" initial=""/>
+    <form-property name="idUAPrincipal" type="java.lang.Long" initial=""/>
+    <form-property name="destacada" type="boolean" initial="false"/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="fotofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfoto" type="boolean" initial="false" />
+    <form-property name="nombrefoto" type="java.lang.String" />
+    <form-property name="iconofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borraricono" type="boolean" initial="false" />
+    <form-property name="nombreicono" type="java.lang.String" />
+    <form-property name="iconogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrariconog" type="boolean" initial="false" />
+    <form-property name="nombreiconog" type="java.lang.String" />        
+    <form-property name="distribs" type="org.apache.struts.upload.FormFile[]" />
+    <form-property name="normats" type="org.apache.struts.upload.FormFile[]" />
+    <form-property name="contens" type="org.apache.struts.upload.FormFile[]" />  
+</form-bean>
+
+<form-bean name="personalForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="username" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="funciones" type="java.lang.String" initial=""/>
+    <form-property name="cargo" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String" initial=""/>
+
+    <form-property name="extensionPublica" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoPublico" type="java.lang.String" initial=""/>
+    <form-property name="extensionPrivada" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoPrivado" type="java.lang.String" initial=""/>
+    <form-property name="extensionMovil" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoMovil" type="java.lang.String" initial=""/>
+
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUA" type="java.lang.String" initial=""/>
+    
+</form-bean>
+
+<form-bean name="personalForm2" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="username" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="funciones" type="java.lang.String" initial=""/>
+    <form-property name="cargo" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String" initial=""/>
+
+    <form-property name="extensionPublica" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoPublico" type="java.lang.String" initial=""/>
+    <form-property name="extensionPrivada" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoPrivado" type="java.lang.String" initial=""/>
+    <form-property name="extensionMovil" type="java.lang.String" initial=""/>
+    <form-property name="numeroLargoMovil" type="java.lang.String" initial=""/>
+
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+</form-bean>
+<form-bean name="iconoMateriaForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="idMateria" type="java.lang.Long" initial=""/>
+    <form-property name="idPerfil" type="java.lang.Long" initial=""/>
+    <form-property name="file" type="org.apache.struts.upload.FormFile"/>
+</form-bean>
+
+<form-bean name="tipoForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTipo"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="tafectacionForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTipoAfectacion"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+<form-bean name="tiniciacionForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionIniciacion"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="boletinForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="enlace" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="hechoVitalForm"
+    type="org.ibit.rol.sac.back.form.HechoVitalForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionHechoVital"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="fotofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfoto" type="boolean" initial="false" />
+    <form-property name="nombrefoto" type="java.lang.String" />
+    <form-property name="iconofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borraricono" type="boolean" initial="false" />
+    <form-property name="nombreicono" type="java.lang.String" />
+    <form-property name="iconogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrariconog" type="boolean" initial="false" />
+    <form-property name="nombreiconog" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="distribs" type="org.apache.struts.upload.FormFile[]" />
+    <form-property name="normats" type="org.apache.struts.upload.FormFile[]" />
+    <form-property name="contens" type="org.apache.struts.upload.FormFile[]" />
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="agrupacionHVForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionAgrupacionHV"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="fotofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarfoto" type="boolean" initial="false" />
+    <form-property name="nombrefoto" type="java.lang.String" />
+    <form-property name="iconofile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borraricono" type="boolean" initial="false" />
+    <form-property name="nombreicono" type="java.lang.String" />
+    <form-property name="iconogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrariconog" type="boolean" initial="false" />
+    <form-property name="nombreiconog" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+    <form-property name="idPublico" type="java.lang.Long" initial=""/>
+</form-bean>
+
+<form-bean name="agrupacionMForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionAgrupacionM"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+    <form-property name="idSeccion" type="java.lang.Long" initial=""/>
+</form-bean>
+
+<form-bean name="publicoForm"
+    type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionPublicoObjetivo"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="codigoEstandar" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="administracionRemotaForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="endpoint" type="java.lang.String" initial=""/>
+    <form-property name="profundidad" type="java.lang.Integer"/>
+    <form-property name="codigoEstandarUA" type="java.lang.String"/>
+    <form-property name="idEspacioTerrit" type="java.lang.Long"/>
+    <form-property name="idRemoto" type="java.lang.String"/>
+    <form-property name="logopfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogop" type="boolean" initial="false" />
+    <form-property name="nombrelogop" type="java.lang.String" />
+    <form-property name="logogfile" type="org.apache.struts.upload.FormFile" />
+    <form-property name="borrarlogog" type="boolean" initial="false" />
+    <form-property name="nombrelogog" type="java.lang.String" />
+    <form-property name="responsable" type="java.lang.String"/>
+    <form-property name="version" type="java.lang.Long"/>
+</form-bean>
+
+<form-bean name="destinatarioForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="endpoint" type="java.lang.String" initial=""/>
+    <form-property name="idRemoto" type="java.lang.String"/>
+    <form-property name="email" type="java.lang.String"/>
+</form-bean>
+
+<form-bean name="fichaForm"
+    type="org.ibit.rol.sac.back.form.FichaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionFicha"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="textoFechaPublicacion" type="java.lang.String"/>    
+    <form-property name="textoFechaCaducidad" type="java.lang.String"/>
+    <form-property name="textoFechaActualizacion" type="java.lang.String"/>    
+    <form-property name="urlVideo" type="java.lang.String"/>     
+    <form-property name="responsable" type="java.lang.String"/>   
+	<form-property name="urlForo" type="java.lang.String"/>
+    <form-property name="info" type="java.lang.String" initial=""/>
+	<form-property name="foro_tema" type="java.lang.String"/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="fileicono" type="org.apache.struts.upload.FormFile"/>
+    <form-property name="borraricono" type="boolean" initial="false" />
+    <form-property name="nombreicono" type="java.lang.String" initial=""/>
+    <form-property name="filebanner" type="org.apache.struts.upload.FormFile"/>
+    <form-property name="borrarbanner" type="boolean" initial="false" />
+    <form-property name="nombrebanner" type="java.lang.String" initial=""/>
+    <form-property name="fileimagen" type="org.apache.struts.upload.FormFile"/>
+    <form-property name="borrarimagen" type="boolean" initial="false" />
+    <form-property name="nombreimagen" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="normativaForm"
+    type="org.ibit.rol.sac.back.form.NormativaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionNormativaExterna"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="idTipo" type="java.lang.Long" initial=""/>
+    <form-property name="codiVuds" type="java.lang.Long" initial=""/>
+    <form-property name="descCodiVuds" type="java.lang.String" initial=""/>
+    <form-property name="nombreTipo" type="java.lang.String" initial=""/>
+    <form-property name="idBoletin" type="java.lang.Long" initial=""/>
+    <form-property name="nombreBoletin" type="java.lang.String" initial=""/>
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUA" type="java.lang.String" initial=""/>
+    <form-property name="valorNumero" type="java.lang.Long" initial=""/>
+    <form-property name="valorRegistro" type="java.lang.Long" initial=""/>
+    <form-property name="ley" type="java.lang.String" initial=""/>
+    <form-property name="textoFecha" type="java.lang.String"/>
+    <form-property name="textoFechaBoletin" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="ficheros" type="org.apache.struts.upload.FormFile[]" />
+</form-bean>
+
+<form-bean name="busquedaNormativaForm"
+    type="org.ibit.rol.sac.back.form.BusquedaNormativaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <form-property name="textoFecha" type="java.lang.String"/>
+    <form-property name="textoFechaBoletin" type="java.lang.String" />
+    <form-property name="titulo" type="java.lang.String"/>
+</form-bean>
+
+<form-bean name="busquedaFichaForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="titulo" type="java.lang.String" initial=""/>
+    <form-property name="descripcion" type="java.lang.String" initial=""/>
+</form-bean>
+
+	<form-bean name="procedimientoForm"
+    type="org.ibit.rol.sac.back.form.ProcedimientoForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionProcedimientoLocal"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="signatura" type="java.lang.String" initial=""/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="textoFechaCaducidad" type="java.lang.String"/>
+    <form-property name="textoFechaPublicacion" type="java.lang.String"/>
+    <form-property name="textoFechaActualizacion" type="java.lang.String" />
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUA" type="java.lang.String" initial=""/>
+    <form-property name="idFamilia" type="java.lang.Long" initial=""/>
+    <form-property name="indicador" type="java.lang.String" initial=""/>
+    <form-property name="ventana" type="java.lang.String" initial=""/>
+    <form-property name="idIniciacion" type="java.lang.Long" initial=""/>
+    <form-property name="info" type="java.lang.String" initial=""/>
+    <form-property name="responsable" type="java.lang.String"/>
+    <form-property name="nombreFamilia" type="java.lang.String" initial=""/>
+    <form-property name="nombreIniciacion" type="java.lang.String" initial=""/>
+    <form-property name="tramite" type="java.lang.String" initial=""/>
+    <form-property name="version" type="java.lang.Long" initial=""/>
+    <!-- form-property name="sectorActivitat" type="java.lang.String" initial=""/-->
+    <form-property name="idUAResol" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUAResol" 	type="java.lang.String" initial=""/>
+    <form-property name="url" type="java.lang.String" initial=""/>
+    <form-property name="taxa" type="java.lang.String"/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<form-bean name="documentoForm"
+    type="org.ibit.rol.sac.back.form.DocumentoForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionDocumento"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="nombreFichero" type="java.lang.String" />
+    <form-property name="fichero" type="org.apache.struts.upload.FormFile" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="fichers" type="org.apache.struts.upload.FormFile[]" />    
+</form-bean>
+
+<form-bean name="enlaceForm" type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName"  value="org.ibit.rol.sac.model.TraduccionEnlace"/>
+	<form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="titulo" type="java.lang.String" />
+    <form-property name="enlace" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+<!--type="org.ibit.rol.sac.back.form.TraDynaValidatorForm"-->
+    
+<form-bean name="tramiteForm"
+    type="org.ibit.rol.sac.back.form.TramiteForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTramite"/>
+    <form-property name="codiVuds" type="java.lang.String" initial=""/>
+    <form-property name="descCodiVuds" type="java.lang.String" initial=""/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="fase" type="java.lang.Integer" initial=""/>
+    <form-property name="validacio" type="java.lang.Integer" initial=""/>
+    <form-property name="textoFechaCaducidad" type="java.lang.String" initial=""/>
+    <form-property name="textoFechaPublicacion" type="java.lang.String" initial=""/>
+    <form-property name="textoFechaActualizacion" type="java.lang.String" initial=""/>
+    <form-property name="idOrganCompetent" type="java.lang.Long" initial=""/>
+    <form-property name="nomOrganCompetent" type="java.lang.String" initial=""/>
+    <form-property name="descTaxa" type="java.lang.String" initial=""/>
+    <form-property name="codiTaxa" type="java.lang.String" initial=""/>
+    <form-property name="formaPagamentTaxa" type="java.lang.String" initial=""/>
+    <form-property name="versio" type="java.lang.String" initial=""/>
+    <form-property name="idTraTel" type="java.lang.String" initial=""/>
+    <form-property name="urlExterna" type="java.lang.String" initial=""/>
+    <form-property name="dataActualitzacioVuds" type="java.lang.String" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+
+<form-bean name="BusquedaCodisVudsForm"
+	type="org.ibit.rol.sac.back.form.BusquedaCodisVudsForm">
+    <form-property name="codiVuds" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="BusquedaNormativasVudsForm"
+	type="org.ibit.rol.sac.back.form.BusquedaCodisVudsForm">
+    <form-property name="codiVuds" type="java.lang.String" initial=""/>
+</form-bean>
+
+
+<form-bean name="taxaForm"
+    type="org.ibit.rol.sac.back.form.TaxaForm"
+    className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionTaxa"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+</form-bean>
+
+
+<form-bean name="formularioForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="url" type="java.lang.String" initial=""/>
+    <form-property name="urlManual" type="java.lang.String" initial=""/>
+    <form-property name="nombreFichero" type="java.lang.String" />
+    <form-property name="fichero" type="org.apache.struts.upload.FormFile" />
+    <form-property name="nombreManual" type="java.lang.String" />
+    <form-property name="ficheroManual" type="org.apache.struts.upload.FormFile" />
+</form-bean>
+
+<form-bean name="auditoriaForm"
+    type="org.ibit.rol.sac.back.form.AuditoriaForm">
+    <form-property name="textoFechaIni" type="java.lang.String"/>
+    <form-property name="textoFechaFin" type="java.lang.String"/>
+</form-bean>
+
+<form-bean name="comentarioForm" type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="idComentario" type="java.lang.Long" initial=""/>
+    <form-property name="tipo" type="java.lang.String" initial="ficha"/>
+    <form-property name="idRel" type="java.lang.Long" initial=""/>
+</form-bean>
+
+<!-- FORM BEANS PARA WEB SERVICES -->
+
+<form-bean name="especificacionForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="clave" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="descripcion" type="java.lang.String" initial=""/>
+    <form-property name="descripcionDocumento" type="java.lang.String" initial=""/>
+    <form-property name="urlDocumento" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="servicioForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="clave" type="java.lang.String" initial=""/>
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="descripcion" type="java.lang.String" initial=""/>
+    <form-property name="puntoAcceso" type="java.lang.String" initial=""/>
+    <form-property name="claveEspecificacion" type="java.lang.String" initial=""/>
+    <form-property name="claveOrganismo" type="java.lang.String" initial=""/>
+</form-bean>
+
+<form-bean name="organismoForm"
+    type="org.apache.struts.validator.DynaValidatorForm">
+    <form-property name="clave" type="java.lang.String" initial=""/>
+    <form-property name="idUnidad" type="java.lang.Long" />
+    <form-property name="nombre" type="java.lang.String" initial=""/>
+    <form-property name="descripcion" type="java.lang.String" initial=""/>
+    <form-property name="nivel" type="java.lang.Integer"/>
+    <form-property name="responsable" type="java.lang.String" initial=""/>
+    <form-property name="telefono" type="java.lang.String" initial=""/>
+    <form-property name="email" type="java.lang.String" initial=""/>
+</form-bean>
+
+<!--  FORM BEANS DEL TRASPASO DEL BOIB A NORMATIVA -->
+
+<form-bean name="EditarActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.EditarActionForm"/>
+
+<form-bean name="PoplistanormativaActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.PoplistanormativaActionForm"/>
+
+<form-bean name="normativaForm" type="org.ibit.rol.sac.back.form.NormativaForm" className="org.ibit.rol.sac.back.config.TraFormBeanConfig">
+    <set-property property="traduccionClassName" value="org.ibit.rol.sac.model.TraduccionNormativaExterna"/>
+    <form-property name="id" type="java.lang.Long" initial=""/>
+    <form-property name="validacion" type="java.lang.Integer" initial=""/>
+    <form-property name="codiVuds" type="java.lang.Long" initial=""/>
+    <form-property name="descCodiVuds" type="java.lang.String" initial=""/>
+    <form-property name="idTipo" type="java.lang.Long" initial=""/>
+    <form-property name="nombreTipo" type="java.lang.String" initial=""/>
+    <form-property name="idBoletin" type="java.lang.Long" initial=""/>
+    <form-property name="nombreBoletin" type="java.lang.String" initial=""/>
+    <form-property name="idUA" type="java.lang.Long" initial=""/>
+    <form-property name="nombreUA" type="java.lang.String" initial=""/>
+    <form-property name="valorNumero" type="java.lang.Long" initial=""/>
+    <form-property name="valorRegistro" type="java.lang.Long" initial=""/>
+    <form-property name="ley" type="java.lang.String" initial=""/>
+    <form-property name="textoFecha" type="java.lang.String"/>
+    <form-property name="textoFechaBoletin" type="java.lang.String" />
+    <form-property name="traducciones" type="java.util.ArrayList"/>
+    <form-property name="ficheros" type="org.apache.struts.upload.FormFile[]" />
+</form-bean>    
+
+<form-bean name="SearchnormativaActionForm" type="org.ibit.rol.sac.back.action.contenido.normativa.traspasa.actionsform.SearchnormativaActionForm"/>
+

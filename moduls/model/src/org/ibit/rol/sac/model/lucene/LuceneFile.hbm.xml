@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="org.ibit.lucene.hibernate.LuceneFile"
+        table="RSC_LUCFIL"
+    >
+
+        <id
+            name="name"
+            column="LUF_NAME"
+            type="java.lang.String"
+            length="255"
+            unsaved-value="any"
+        >
+            <generator class="assigned" />
+        </id>
+
+        <property
+            name="modified"
+            type="long"
+            column="LUF_MODIFI"
+        />
+
+        <property
+            name="length"
+            type="long"
+            column="LUF_LENGTH"
+        />
+
+        <property
+            name="data"
+            type="blob"
+            column="LUF_DATA"
+        />
+
+    </class>
+
+</hibernate-mapping>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Ficha" table="RSC_FICHA" discriminator-value="ficha" batch-size="100">
+        <cache usage="read-write"/>
+
+        <id name="id" unsaved-value="null" column="FIC_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <discriminator column="FIC_TYPE" type="string" length="64"/>
+
+        <property name="fechaPublicacion" column="FIC_FECPUB"/>
+        <property name="fechaCaducidad" column="FIC_FECCAD"/>
+        <property name="fechaActualizacion" column="FIC_FECACT"/>        
+        <many-to-one name="icono" cascade="all" column="FIC_ICONO" foreign-key="RSC_FICICO_FK"/>
+        <many-to-one name="imagen" cascade="all" column="FIC_IMAGEN" foreign-key="RSC_FICIMA_FK"/>
+        <many-to-one name="baner" cascade="all" column="FIC_BANER" foreign-key="RSC_FICBAN_FK"/>
+        <property name="validacion" column="FIC_VALIDA"/>
+        <!-- Nuevo campo INFO para informadores -->
+		<property name="info" column="FIC_INFO" length="4000"/> 
+		<property name="responsable" column="FIC_RESPON" length="256"/>
+        <property name="urlVideo" column="FIC_URLVID"/> 
+        <property name="urlForo" column="FIC_URLFOR"/>     
+        <property name="foro_tema" column="FIC_FORTEM" length="1"/>     
+        
+
+        <list name="documentos" cascade="delete" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="DOC_CODFIC" foreign-key="RSC_DOCFIC_FK"/>
+            <index column="DOC_ORDEN"/>
+            <one-to-many class="org.ibit.rol.sac.model.Documento"/>
+        </list>
+
+       <list name="enlaces" cascade="delete" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="ENL_CODFIC" foreign-key="RSC_ENLFIC_FK"/>
+            <index column="ENL_ORDEN"/>
+            <one-to-many class="org.ibit.rol.sac.model.Enlace"/>
+        </list>
+
+        <set name="materias" cascade="none" lazy="false" table="RSC_FICMAT" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="FIM_CODFIC" foreign-key="RSC_FIMFIC_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Materia" column="FIM_CODMAT" foreign-key="RSC_FIMMAT_FK" />
+        </set>
+
+        <set name="hechosVitales" cascade="none" lazy="false" table="RSC_FICHEV" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="FIH_CODFIC" foreign-key="RSC_FIHFIC_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.HechoVital" column="FIH_CODHEV" foreign-key="RSC_FIHHEV_FK" />
+        </set>
+
+        <set name="fichasua" cascade="all" lazy="false" batch-size="200">
+            <cache usage="read-write"/>
+            <key column="FUA_CODFIC" foreign-key="RSC_FUAFIC_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.FichaUA"/>
+        </set>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAFIC" batch-size="200">
+            <cache usage="read-write"/>
+            <key column="TFI_CODFIC" foreign-key="RSC_TFIFIC_FK"/>
+            <index column="TFI_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionFicha">
+                <property name="titulo" length="256" column="TFI_TITULO"/>
+
+                <property name="descAbr" type="@db.texttype.desabr@" length="4000" column="TFI_DESABR"/>
+                <property name="descripcion" type="@db.texttype.descri@" length="4000" column="TFI_DESCRI"/>
+
+                <property name="url" length="512" column="TFI_URL"/>
+            </composite-element>
+        </map>
+
+
+        <subclass name="org.ibit.rol.sac.model.FichaRemota" discriminator-value="fichaRemota">
+            <property name="idExterno" column="FIR_IDEXTE"/>
+            <property name="urlRemota" length="512" column="FIR_URLREM"/>
+            <many-to-one name="administracionRemota" column="FIR_CODADM" foreign-key="RSC_FIRADM_FK" />
+
+        </subclass>
+
+    </class>
+</hibernate-mapping>

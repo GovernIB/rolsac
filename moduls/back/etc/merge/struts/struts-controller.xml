@@ -1,0 +1,7 @@
+<controller
+    contentType="text/html;charset=UTF-8"
+    debug="3"
+    locale="true"
+    nocache="true"
+    processorClass="org.ibit.rol.sac.back.indra.actions.LongWaitRequestProcessor"
+  />

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+	<class name="org.ibit.rol.sac.model.HechoVital" table="RSC_HECVIT">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column= "HEV_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="orden" column="HEV_ORDEN"/>
+        <property name="codigoEstandar" column="HEV_CODEST"/>
+
+        <many-to-one name="icono" cascade="all" column="HEV_ICONO" foreign-key="RSC_HEVICO_FK"/>
+        <many-to-one name="foto" cascade="all" column="HEV_FOTO" foreign-key="RSC_HEVFOT_FK"/>
+        <many-to-one name="iconoGrande" cascade="all" column="HEV_ICOGRA" foreign-key="RSC_HEVICG_FK"/>
+
+
+        <list name="hechosVitalesProcedimientos" cascade="all" inverse="true" lazy="true">
+            <cache usage="read-write"/>
+            <key column="HVP_CODHEV" foreign-key="RSC_HVPHEV_FK"/>
+            <index column="HVP_ORDEN"/>
+            <one-to-many class="org.ibit.rol.sac.model.HechoVitalProcedimiento"/>
+        </list>
+
+        <set name="fichas" cascade="none" inverse="true" lazy="true" table="RSC_FICHEV">
+            <key column="FIH_CODHEV" foreign-key="RSC_FIHHEV_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Ficha" column="FIH_CODFIC" foreign-key="RSC_FIHFIC_FK" />
+        </set>
+		
+        <set name="hechosVitalesAgrupacionHV" cascade="all" lazy="true" inverse="true">
+            <cache usage="read-write"/>
+            <key column="HVA_CODHEV" foreign-key="RSC_HVAHEV_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.HechoVitalAgrupacionHV"/>
+        </set>
+
+        <map name="traducciones" cascade="all" table="RSC_TRAHEV" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="THE_CODHEV" foreign-key="RSC_THEHEV_FK"/>
+            <index column="THE_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionHechoVital">
+                <property name="nombre" length="256" column="THE_NOMBRE"/>
+                <property name="descripcion" length="4000" column="THE_DESCRI"/>
+                <property name="palabrasclave" length="4000" column="THE_PALCLA"/>
+                <many-to-one  cascade="all" name="distribComp" column="THE_CODDIS" foreign-key="RSC_THEDIS_FK"/>
+                <many-to-one  cascade="all" name="normativa" column="THE_NORMAT" foreign-key="RSC_THENOR_FK"/>
+                <many-to-one  cascade="all" name="contenido" column="THE_CONTEN" foreign-key="RSC_THECON_FK"/>
+
+            </composite-element>
+        </map>
+	</class>
+
+    <query name="hechos.byname">
+        <![CDATA[select hec from HechoVital as hec, trad in hec.traducciones where trad.nombre = :nombre]]>
+    </query>
+	
+</hibernate-mapping>

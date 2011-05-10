@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.ActivacionSuscripcion" table="RSC_SCRKEY">
+        <cache usage="read-write"/>
+        <id name="email" unsaved-value="null" column="SCK_EMAIL">
+            <generator class="assigned" /> 
+        </id>
+        
+        <property name="idImagen" column="SCK_IDIMG"/>
+        <property name="clave" column="SCK_IDACT"/>
+        <property name="numeroEnvios" column="SCK_NUMENV"/>
+        <property name="fechaEnvio" column="SCK_FCENV"/>
+
+        <many-to-one name="tipoSuscripcion" not-null="true" column="SCK_STPCOD" foreign-key="RSC_STPSCK_FK"/>                
+        
+        
+    </class>
+</hibernate-mapping>

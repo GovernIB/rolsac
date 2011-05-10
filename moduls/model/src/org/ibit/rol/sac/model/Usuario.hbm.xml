@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Usuario" table="RSC_USUARI">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="USU_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="username" length="128" not-null="true" unique="true" column="USU_USERNA"/>
+        <property name="password" length="128" column="USU_PASSWO"/>
+        <property name="nombre" length="256" column="USU_NOMBRE"/>
+        <property name="observaciones" length="4000" column="USU_OBSERV"/>
+        <property name="perfil" length="64" column="USU_PERFIL"/>
+		<property name="email" column="USU_EMAIL" length="256"/>
+
+        <set name="unidadesAdministrativas" table="RSC_UNAUSU" lazy="true">
+            <cache usage="read-write"/>
+            <key column="UNU_CODUSU" foreign-key="RSC_UNUUSU_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.UnidadAdministrativa" column="UNU_CODUNA" foreign-key="RSC_UNUUNA_FK"/>
+        </set>
+
+    </class>
+</hibernate-mapping>

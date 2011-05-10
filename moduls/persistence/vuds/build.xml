@@ -1,0 +1,158 @@
+<?xml version="1.0" ?>
+<!DOCTYPE project [
+
+<!-- Descomentar para usar axis 1-4
+        <!ENTITY properties SYSTEM "../etc/axis1.4_xmls/properties.xml" 
+        <!ENTITY paths  SYSTEM "../etc/axis1.4_xmls/path_refs.xml">
+        <!ENTITY taskdefs SYSTEM "../etc/axis1.4_xmls/taskdefs.xml">
+        <!ENTITY taskdefs_post_compile SYSTEM "../etc/axis1.4_xmls/taskdefs_post_compile.xml">
+        <!ENTITY targets SYSTEM "../etc/axis1.4_xmls/targets.xml">
+-->
+
+]>
+
+<!-- ===================================================================
+<description>
+   Test/Sample Component file for Axis
+
+Notes:
+   This is a build file for use with the Jakarta Ant build tool.
+
+Prerequisites:
+
+   jakarta-ant from http://jakarta.apache.org
+
+Build Instructions:
+   To compile
+        ant compile
+   To execute
+        ant run
+
+Author:
+	Enric Jaen
+
+</description>
+==================================================================== -->
+
+<project name="vuds" basedir=".">
+<property name="axis.home" location="C:\j2ee-developer\webservices\axis-1_4" />
+<property name="axis2.home" location="C:\j2ee-developer\webservices\axis2-1.5" />
+<property name="axis2.services.dir" value="${axis2.home}/repository/services" />	
+<property name="componentName" value="samples/addr" />
+<property name="home.dir" location="${basedir}/../../.."/>
+<property name="modulvuds" value="persistence/vuds"/>
+<property name="output.dir" location="${home.dir}/output"/>
+<property name="modul.output.dir" location="${output.dir}/${modulvuds}"/>
+<property name="gen.src" location="${modul.output.dir}/gen-src"/>
+<property name="service.src" value="${home.dir}/test/vuds/java"/>
+<property name="modulvuds.src" value="${home.dir}/moduls/${modulvuds}/src"/>
+<property name="resources.dir" value="${home.dir}/test/vuds/resources"/>
+	
+<!--
+Descomentar para usar axis 1-4
+
+        &properties;  
+		&paths;
+        &taskdefs;
+        &taskdefs_post_compile;
+        &targets;
+-->
+
+<!--property name="wsdl.url" value="vuds.wsdl"/-->
+<!--property name="wsdl.url" value="http://89.140.20.218:65003/ServiciosExternos/sistemaInformacionWS?wsdl"/-->
+<property name="wsdl.url" value="http://89.140.20.218:65003/sistemaInformacion-authwsse?wsdl"/>
+<!--property name="wsdl.url" value="vuds03sep10.wsdl"/-->
+<property name="namespace" value="http://webservice.service.si.vuds.map.es"/>
+<property name="package" value="es.caib.persistence.vuds"/>
+	
+<target name="clean"/>
+
+<target name="prepare">
+        <mkdir dir="${gen.src}"/>
+</target>
+	
+<target name="wsdl2java" depends="prepare">
+  
+    <wsdl2java url="${wsdl.url}"
+               output="${gen.src}"
+               deployscope="session"
+               serverSide="yes"
+               skeletonDeploy="no"
+               noimports="no"
+               verbose="no"
+               typeMappingVersion="1.1"
+               testcase="yes">
+        <mapping namespace="${namespace}" 
+        		  package="${package}"/>
+    </wsdl2java>
+
+</target>
+
+
+<path id="class.path">
+	<fileset dir="../../../lib/axis2-1.5">
+		<include name="**/*.jar" />
+	</fileset>
+</path>
+	
+<target name="wsdl2java_axis2" depends="prepare">
+	
+	<!-- http://ws.apache.org/axis2/tools/1_0/CodegenToolReference.html -->
+	<java classname="org.apache.axis2.wsdl.WSDL2Java">
+			<arg value="-uri" />
+			<arg value="${wsdl.url}" />
+            <arg value="-ap" />
+			<arg value="-sd" />
+			<arg value="-ss" />
+			<arg value="-t" />
+			<arg value="-g" />
+			<arg value="-p" />
+			<arg value="${package}" />
+			<arg value="-o" />
+			<arg value="${gen.src}" />
+			<classpath refid="class.path" />
+		</java>
+</target>
+	
+
+<target  name="build.aar">
+		<mkdir dir="${modul.output.dir}/classes" />
+		<javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" 
+			   destdir="${modul.output.dir}/classes" >
+			<classpath refid="class.path"/>
+		    <src path="${modulvuds.src}/es/caib/persistence/vuds"/> <!-- skeleton generated -->
+			<src path="${modulvuds.src}/es/map/vuds/si/service/webservice"/> <!-- classes generated -->
+
+		</javac>
+		<javac debug="on" memoryMaximumSize="256m" memoryInitialSize="256m" fork="true" 
+			   destdir="${modul.output.dir}/classes" >
+			<classpath refid="class.path"/>
+	   		<src path="${service.src}/test/webservice"/>
+			<include name="VUDS_ServiceImplAxis2.java"/>
+		</javac>
+
+		<copy toDir="${modul.output.dir}/classes/META-INF" failonerror="false" overwrite="true">
+			<fileset dir="${resources.dir}">
+				<include name="services.xml"/>
+			</fileset>
+			<fileset dir="${gen.src}/resources">
+				<include name="*.wsdl"/>
+				<include name="*.xsd"/>
+			</fileset>
+		</copy>
+
+		<jar destfile="${modul.output.dir}/vuds_service.aar">
+			<fileset excludes="**/Test.class" dir="${modul.output.dir}/classes"/>
+		</jar>
+
+</target>
+	
+<target name="deploy.aar" depends="build.aar">
+	<copy file="${modul.output.dir}/vuds_service.aar" toDir="${axis2.services.dir}" overwrite="true"/>
+</target>
+
+<target name="run"/>
+
+<target name="undeploy"/>
+
+</project>

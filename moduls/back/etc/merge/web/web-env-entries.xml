@@ -1,0 +1,136 @@
+<env-entry>
+  <description>Tipo normativa 0</description>
+  <env-entry-name>norma_0</env-entry-name>
+  <env-entry-value>73508.Varis</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+
+<env-entry>
+  <description>Tipo normativa 1</description>
+  <env-entry-name>norma_1</env-entry-name>
+  <env-entry-value>1.Ley</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+<env-entry>
+  <description>Tipo normativa 2</description>
+  <env-entry-name>norma_2</env-entry-name>
+  <env-entry-value>2.Decreto</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+  <env-entry>
+  <description>Tipo normativa 3</description>
+  <env-entry-name>norma_3</env-entry-name>
+  <env-entry-value>20.Decreto del President</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+  <env-entry>
+  <description>Tipo normativa 4</description>
+  <env-entry-name>norma_4</env-entry-name>
+  <env-entry-value>4.Orden</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+  <env-entry>
+  <description>Tipo normativa 5</description>
+  <env-entry-name>norma_5</env-entry-name>
+  <env-entry-value>11.Resolucion</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+  <env-entry>
+  <description>Tipo normativa 6</description>
+  <env-entry-name>norma_6</env-entry-name>
+  <env-entry-value>9.Acuerdo</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+  <env-entry>
+  <description>Tipo normativa 7</description>
+  <env-entry-name>norma_7</env-entry-name>
+  <env-entry-value>21.Acuerdo del Consell</env-entry-value>
+  <env-entry-type>java.lang.String</env-entry-type>    
+</env-entry>
+
+  <env-entry>
+    <description>Tipo normativa 1</description>
+    <env-entry-name>norma_1_1</env-entry-name>
+    <env-entry-value>1.Llei</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+  <env-entry>
+    <description>Tipo normativa 2</description>
+    <env-entry-name>norma_2_1</env-entry-name>
+    <env-entry-value>2.Decret</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 3</description>
+    <env-entry-name>norma_3_1</env-entry-name>
+    <env-entry-value>20.Decret del President</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 4</description>
+    <env-entry-name>norma_4_1</env-entry-name>
+    <env-entry-value>4.Ordre</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 5</description>
+    <env-entry-name>norma_5_1</env-entry-name>
+    <env-entry-value>11.Resolucio</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 6</description>
+    <env-entry-name>norma_6_1</env-entry-name>
+    <env-entry-value>9.Acord</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 7</description>
+    <env-entry-name>norma_7_1</env-entry-name>
+    <env-entry-value>21.Acord del Consell</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+
+  <env-entry>
+    <description>Tipo normativa 1</description>
+    <env-entry-name>norma_1_2</env-entry-name>
+    <env-entry-value>1.Ley</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+  <env-entry>
+    <description>Tipo normativa 2</description>
+    <env-entry-name>norma_2_2</env-entry-name>
+    <env-entry-value>2.Decreto</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 3</description>
+    <env-entry-name>norma_3_2</env-entry-name>
+    <env-entry-value>20.Decreto del President</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 4</description>
+    <env-entry-name>norma_4_2</env-entry-name>
+    <env-entry-value>4.Orden</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 5</description>
+    <env-entry-name>norma_5_2</env-entry-name>
+    <env-entry-value>11.Resolucion</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 6</description>
+    <env-entry-name>norma_6_2</env-entry-name>
+    <env-entry-value>9.Acuerdo</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+    <env-entry>
+    <description>Tipo normativa 7</description>
+    <env-entry-name>norma_7_2</env-entry-name>
+    <env-entry-value>21.Acuerdo del Consell</env-entry-value>
+    <env-entry-type>java.lang.String</env-entry-type>    
+  </env-entry>
+

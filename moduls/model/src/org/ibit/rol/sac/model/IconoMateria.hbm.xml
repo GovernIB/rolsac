@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.IconoMateria" table="RSC_ICMATE">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="ICM_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <many-to-one name="materia" cascade="none" column="ICM_CODMAT" foreign-key="RSC_ICMMAT_FK"/>
+        <many-to-one name="perfil" cascade="none" column="ICM_CODPEC" foreign-key="RSC_ICMPEC_FK"/>
+        <many-to-one name="icono" cascade="all" column="ICM_ICONO" foreign-key="RSC_ICMICO_FK"/>
+    </class>
+</hibernate-mapping>

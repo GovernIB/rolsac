@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.Seccion" table="RSC_SECCIO">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="SEC_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+
+        <property name="codigoEstandard" length="20" column="SEC_CODEST"/>
+        <property name="perfil" length="128" column="SEC_PERFIL"/>
+        <property name="orden" column="SEC_ORDEN"/>
+
+        <many-to-one name="padre" cascade="all" column="SEC_CODSEC" foreign-key="RSC_SECSEC_FK"/>
+
+
+        <list name="hijos" cascade="all" inverse="true" lazy="true">
+            <key column="SEC_CODSEC" foreign-key="RSC_SECSEC_FK"/>
+            <index column="SEC_ORDEN"/>
+            <one-to-many class="org.ibit.rol.sac.model.Seccion"/>
+        </list>
+
+        <set name="fichasUA" cascade="all" inverse="true" lazy="true" order-by="FUA_ORDSEC">
+            <cache usage="read-write"/>
+            <key column="FUA_CODSEC" foreign-key="RSC_FUASEC_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.FichaUA"/>
+        </set>
+
+        <map name="traducciones" cascade="all" table="RSC_TRASEC">
+            <cache usage="read-write"/>
+            <key column="TSE_CODSEC" foreign-key="RSC_TSESEC_FK"/>
+            <index column="TSE_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionSeccion">
+                <property name="nombre" length="256" column="TSE_TITULO"/>
+                <property name="descripcion" length="4000" column="TSE_DESCRI"/>
+            </composite-element>  
+        </map>
+        
+    </class>
+
+    <query name="secciones.root">
+        <![CDATA[select sec from Seccion as sec where sec.padre is null order by sec.orden]]>
+    </query>
+
+    <query name="secciones.root.count">
+        <![CDATA[select count(sec) from Seccion as sec where sec.padre is null]]>
+    </query>
+
+    <query name="secciones.padre">
+        <![CDATA[select sec.padre from Seccion as sec where sec.id = :id]]>
+    </query>
+
+    <query name="secciones.byname">
+        <![CDATA[select sec from Seccion as sec, trad in sec.traducciones where trad.nombre = :nombre]]>
+    </query>
+
+</hibernate-mapping>
