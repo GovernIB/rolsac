@@ -7,19 +7,18 @@
 	<classpathentry kind="src" path="moduls/persistence/src"/>
 	<classpathentry kind="src" path="moduls/traspas-boib/src"/>
 	<classpathentry kind="src" path="moduls/ws/src"/>
-	<classpathentry kind="src" path="test/common/java"/>
-	<classpathentry kind="src" path="test/common/resources"/>
-	<classpathentry kind="src" path="test/model/java"/>
-	<classpathentry kind="src" path="test/model/resources"/>
-	<classpathentry kind="src" path="test/model/unitario/java"/>
+	<classpathentry kind="src" path="output/persistence/gen-src"/>
+	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
 	<classpathentry kind="src" path="test/back/unitario/java"/>
 	<classpathentry kind="src" path="test/back/unitario/resources"/>
+	<classpathentry kind="src" path="test/common/java"/>
+	<classpathentry kind="src" path="test/common/resources"/>
+	<classpathentry kind="src" path="test/integracion/unitario/java"/>
+	<classpathentry kind="src" path="test/integracion/unitario/resources"/>
+	<classpathentry kind="src" path="test/model/java"/>
+	<classpathentry kind="src" path="test/model/resources"/>
 	<classpathentry kind="src" path="test/persistence/unitario/java"/>
 	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
-	<classpathentry kind="src" path="output/persistence/gen-src"/>
-	<classpathentry kind="src" path="test/persistence/integracion/java"/>
-	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
-	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/aclibico.jar"/>
