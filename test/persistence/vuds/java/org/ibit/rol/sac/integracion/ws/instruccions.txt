@@ -1,0 +1,21 @@
+
+_______________________________________
+Passos per executar el test amb Axis2
+
+1. establir variables entorn
+Using AXIS2_HOME:   C:\j2ee-developer\webservices\axis2-1.5
+Using JAVA_HOME:    C:\Archivos de programa\Java\jre1.5.0_19
+
+
+2. executar wsdl2java.exe
+
+C:\j2ee-developer\webservices\axis2-1.5\bin\axis2-1.5\bin>wsdl2java.bat -uri fil
+e:///C:\dgtic\workspace\rolsac\moduls\integracion\vuds\AACCWebService.wsdl -o c:
+\dgtic\workspace\rolsac\test\gen-src -p org.ibit.rol.sac.integracion.ws.vuds -s
+-g -t
+
+la opcio -t genera un test automaticament
+
+3. copiar CCAAWebServiceServiceStub.java (generat en test/gen-src)
+en test/java/modus/integracion/src/vuds
+
