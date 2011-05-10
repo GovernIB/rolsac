@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+          "-//Apache Software Foundation//DTD Tiles Configuration 1.1//EN"
+          "http://jakarta.apache.org/struts/dtds/tiles-config_1_1.dtd">
+
+<tiles-definitions>
+
+    <definition name=".menu"
+        path="/tiles/menu.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.MenuController">
+
+        <put name="root" value="opcions"/>
+
+        <putList name="opcions">
+            <item value="organigrama" link="" tooltip="organigrama.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="sistema" link="" tooltip="sistema.label" icon="sacsystem,sacadmin" />
+            <item value="contenidos" link="" tooltip="contenidos.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="microsites" link=""  tooltip="microsites.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="index" link=""  tooltip="index.label" icon="sacsystem"/>
+            <item value="estadisticas" link="" tooltip="estadisticas.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="auditorias" link="" tooltip="auditorias.label" icon="sacsystem,sacadmin"/>
+           <!-- <item value="ws" link="" tooltip="ws.label" icon="sacsystem,sacadmin"/>-->
+        </putList>
+
+        <putList name="organigrama">
+            <item value="organigrama.navges" link="/organigrama/navges" tooltip="organigrama.navges.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="organigrama.edificios" link="/organigrama/edificio/form" tooltip="organigrama.edificios.label" icon="sacsystem,sacadmin" />
+            <item value="organigrama.tipua" link="/organigrama/tipua" tooltip="organigrama.tipua.label" icon="sacsystem,sacadmin" />
+        </putList>
+
+        <putList name="sistema">
+            <item value="sistema.secciones" link="/sistema/seccion/lista" tooltip="sistema.secciones.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.espacios" link="/sistema/espacio/lista" tooltip="sistema.espacios.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.matfamper" link="/sistema/matfamper" tooltip="sistema.matfamper.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.usuarios" link="/sistema/usuario/form" tooltip="sistema.usuarios.label" icon="sacsystem,sacadmin"/>
+
+            <item value="organigrama.guia.form" link="/organigrama/guia/form" tooltip="organigrama.guiaper.label" icon="sacsystem,sacadmin"/>             
+             
+            <item value="sistema.tipnor" link="/sistema/tipo/lista" tooltip="sistema.tipnor.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.tipafe" link="/sistema/tafectacion/lista" tooltip="sistema.tipafe.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.tipini" link="/sistema/tiniciacion/lista" tooltip="sistema.tipini.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.tipbol" link="/sistema/boletin/lista" tooltip="sistema.tipbol.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.hevagrpub" link="/sistema/hevagrpub" tooltip="sistema.hevagrpub.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.administracionRemota" link="/sistema/administracionRemota/lista" tooltip="sistema.administracionRemota.label" icon="sacsystem,sacadmin"/>
+            <item value="sistema.destinatario" link="/sistema/destinatario/lista" tooltip="sistema.destinatario.label" icon="sacsystem,sacadmin"/>
+        </putList>
+
+        <putList name="contenidos">
+            <item value="contenidos.fichas" link="/contenido/ficha/form" tooltip="contenidos.fichas.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="contenidos.normativas" link="" tooltip="contenidos.normativas.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="contenidos.procedimientos" link="/contenido/procedimiento/form" tooltip="contenidos.procedimientos.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+        </putList>
+
+        <!-- MICROSITES (modificado indra)-->
+        <putList name="microsites">
+            <item value="contenidos.lista" link="../sacmicroback/index.do" tooltip="microsites.lista.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+        </putList>
+        
+        <putList name="index">
+            <item value="index.ua" link="/index/ua"  tooltip="index.ua.label" icon="sacsystem"/>        
+            <item value="index.fichas" link="/index/ficha"  tooltip="index.fichas.label" icon="sacsystem"/>
+            <item value="index.normativa" link="/index/normativa" tooltip="index.normativas.label" icon="sacsystem"/>
+            <item value="index.procedimientos" link="/index/procedimiento" tooltip="index.procedimientos.label" icon="sacsystem"/>
+        </putList>
+
+        <putList name="contenidos.normativas">
+            <item value="contenidos.normativas.local" link="/contenido/normativa/local" tooltip="contenidos.normativas.local.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="contenidos.normativas.externa" link="/contenido/normativa/externa" tooltip="contenidos.normativas.externa.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="contenidos.normativas.traspasa" link="/contenido/normativa/traspasa" tooltip="contenidos.normativas.traspaso.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+        </putList>
+
+        <putList name="estadisticas">
+            <item value="estadisticas.ua" link="/estadisticas/lista" tooltip="estadisticas.ua.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="estadisticas.materias" link="/estadisticas/materias" tooltip="estadisticas.materia.label" icon="sacsystem,sacadmin,sacsuper"/>
+        </putList>
+
+        <putList name="auditorias">
+            <item value="auditorias.busqueda" link="/auditoria/busqueda" tooltip="auditorias.busqueda.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+            <item value="auditorias.navges.arbol" link="/auditoria/navges/arbol" tooltip="auditorias.navges.label" icon="sacsystem,sacadmin,sacoper,sacsuper"/>
+        </putList>
+
+      <!--  <putList name="ws">
+            <item value="ws.especificacion" link="/ws/especificacion/lista" tooltip="ws.especificacion.label" icon="sacsystem,sacadmin"/>
+            <item value="ws.servicio" link="/ws/servicio/lista" tooltip="ws.servicio.label" icon="sacsystem,sacadmin"/>
+            <item value="ws.organismo" link="/ws/organismo/lista" tooltip="ws.organismo.label" icon="sacsystem,sacadmin"/>
+        </putList> -->
+
+    </definition>
+
+    <definition name=".identificacion"
+        path="/tiles/identificacion.jsp"
+        controllerClass="org.ibit.rol.sac.back.controller.IdentificacionController">
+        <put name="username" value=""/>
+        <put name="rolenames" value=""/>
+    </definition>
+
+</tiles-definitions>

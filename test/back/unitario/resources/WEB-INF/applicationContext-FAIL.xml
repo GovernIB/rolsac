@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+               http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+        default-autowire="byName"
+       >
+
+  <bean name="procedimientoDelegate" 
+      class="test.unitario.back.mock.MockProcedimientoDelegateFail">
+  </bean>
+
+
+  <bean id="tramiteFacadeEJB" 
+      class="test.unitario.back.mock.MockTramiteFacadeEJB">
+  </bean>
+  
+    <bean id="documentoFacadeEJB" 
+      class="test.unitario.back.mock.MockDocumentoFacadeEJB">
+  </bean>
+    
+    <bean id="idiomaDelegate" 
+      class="test.unitario.back.mock.MockIdiomaDelegate">
+  </bean>
+  
+   <bean name="tramiteDelegate" 
+      class="test.unitario.back.mock.MockTramiteDelegate">
+  </bean>
+  
+    <bean name="materiaDelegate" 
+      class="test.unitario.back.mock.MockMateriaDelegate">
+  </bean>
+  
+
+    <bean name="familiaDelegate" 
+      class="test.unitario.back.mock.MockFamiliaDelegate">
+  </bean>
+  
+  <bean name="iniciacionDelegate" 
+      class="test.unitario.back.mock.MockIniciacionDelegate">
+  </bean>
+  
+  <bean name="uaResponsableDelegate" 
+      class="test.unitario.back.mock.MockUnidadAdministrativaDelegate">
+  </bean>
+
+
+  <bean name="uaDelegate" 
+      class="test.unitario.back.mock.MockUnidadAdministrativaDelegate">
+  </bean>
+
+  <bean name="destinatarioDelegate" 
+      class="test.unitario.back.mock.MockDestinatarioDelegate">
+  </bean>
+
+  <bean name="grabadorProcedimiento" 
+      class="org.ibit.rol.sac.back.negocio.GrabadorProcedimiento">
+  </bean>
+
+   <bean name="buscadorProcedimiento" 
+      class="org.ibit.rol.sac.back.negocio.BuscadorProcedimiento">
+  </bean>
+
+<bean name="seleccionarProcedimientoAction" 
+      class="org.ibit.rol.sac.back.action.contenido.procedimiento.SeleccionarProcedimientoAction">
+  </bean>
+
+    <bean name="guardarProcedimientoAction" 
+      class="org.ibit.rol.sac.back.action.contenido.procedimiento.GuardarProcedimientoAction">
+  </bean>
+  
+  
+</beans>
