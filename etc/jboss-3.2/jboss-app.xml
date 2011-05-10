@@ -3,5 +3,13 @@
     "http://www.jboss.org/j2ee/dtd/jboss-app_3_2.dtd">
 
 <jboss-app>
+  
+  <!--  
+	<loader-repository>
+		es.caib.aplicacion:loader=caib
+	<loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+</loader-repository>
 
+-->
 </jboss-app>
+	

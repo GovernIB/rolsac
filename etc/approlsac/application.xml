@@ -8,7 +8,7 @@
 
 	     	<module><java>extractor.jar</java></module>
     		<module><java>model.jar</java></module>
-
+    		
     	<!--	<module><java>integracion.jar</java></module> -->
 
 			<module>
@@ -20,20 +20,21 @@
 
   			<!-- BACK -->
     		<module><ejb>sac-persistence.jar</ejb></module>
+    		<module><java>hibernate2.jar</java></module>
+    		<module><java>ehcache.jar</java></module>
+    		
 
-    		<module><java>sac-back.jar</java></module>
+    		<!--  module><java>sac-back.jar</java></module-->
 
 			<module>
         		<web>
     	      	<web-uri>sac-back.war</web-uri>
-        	  	<!-- <context-root>sacback</context-root> -->
 	  	        <context-root>@context.back@</context-root>
         		</web>
     		</module>
 			<module>
         		<web>
     	      	<web-uri>sac-ws.war</web-uri>
-    	      	<!--<context-root>ws</context-root>-->
     	  	    <context-root>@context.ws@</context-root>
         		</web>
     		</module>
