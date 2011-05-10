@@ -9,16 +9,6 @@
 	<classpathentry kind="src" path="moduls/ws/src"/>
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
 	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
-	<classpathentry kind="src" path="test/back/unitario/java"/>
-	<classpathentry kind="src" path="test/back/unitario/resources"/>
-	<classpathentry kind="src" path="test/common/java"/>
-	<classpathentry kind="src" path="test/common/resources"/>
-	<classpathentry kind="src" path="test/integracion/unitario/java"/>
-	<classpathentry kind="src" path="test/integracion/unitario/resources"/>
-	<classpathentry kind="src" path="test/model/java"/>
-	<classpathentry kind="src" path="test/model/resources"/>
-	<classpathentry kind="src" path="test/persistence/unitario/java"/>
-	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/aclibico.jar"/>
@@ -84,14 +74,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/caib-utilities.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/jwebunit-core-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/mock/easymock-2.5.1.jar"/>
-	<classpathentry kind="lib" path="lib/mock/easymockclassextension.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-adb-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-kernel-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axiom-api-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axiom-impl-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/jwebunit-htmlunit-plugin-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-adb-codegen-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-codegen-1.5.jar"/>
@@ -99,27 +85,6 @@
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-mtompolicy-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-transport-http-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-transport-local-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-collections-3.2.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-io-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/cssparser-0.9.5.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/htmlunit-2.5.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/htmlunit-core-js-2.5.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/junit-3.8.2.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/log4j-1.2.13.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/nekohtml-1.9.12.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/regexp-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/sac-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/serializer-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/servlet-api-2.4.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/slf4j-api-1.5.0.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/slf4j-log4j12-1.5.0.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/xalan-2.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/xercesImpl-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jwebunit/lib/xml-apis-1.3.04.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/httpcore-4.0.jar"/>
@@ -140,13 +105,6 @@
 	<classpathentry kind="lib" path="lib/jasper/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/odmg-3.0.jar"/>
-	<classpathentry kind="lib" path="lib/mock/cglib-nodep-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/mock/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="lib/mock/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/mock/spring-test.jar"/>
-	<classpathentry kind="lib" path="lib/mock/spring-webmvc-struts.jar"/>
-	<classpathentry kind="lib" path="lib/mock/spring.jar"/>
-	<classpathentry kind="lib" path="lib/mock/strutstest-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-apache-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-ejb-module-1.2.3.jar"/>
