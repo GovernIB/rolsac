@@ -51,7 +51,7 @@
 				classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
 				classpathref="db.classpath"/>
 			<schemaupdate
-				properties="${basedir}/config_dgtic.properties"
+				properties="${basedir}/config.properties"
 				text="yes"
 				quiet="no">
 
