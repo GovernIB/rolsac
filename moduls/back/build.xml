@@ -72,12 +72,6 @@
     	<fileset dir="${lib.dir}/axis-1.4">
     	    <include name="**/*.jar" />
     	</fileset>
-    	<fileset dir="${lib.dir}/mock">
-    		<include name="**/*.jar" />
-    	</fileset>
-    	<fileset dir="${lib.dir}/jwebunit">
-    		<include name="**/*.jar" />
-    	</fileset>
         <fileset dir="${web.product}">
             <include name="model.jar"/>
             <include name="integracion.jar"/>
