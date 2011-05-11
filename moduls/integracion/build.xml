@@ -36,9 +36,6 @@
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
     	</fileset>
-        <fileset dir="${lib.dir}/jwebunit">
-        		<include name="**/*.jar" /> 
-        </fileset> 
         <fileset dir="${jar.product}">
             <include name="model.jar"/>
             <include name="sac-persistence-client.jar"/>
