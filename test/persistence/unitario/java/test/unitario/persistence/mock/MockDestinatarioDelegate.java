@@ -32,6 +32,9 @@ public class MockDestinatarioDelegate extends DestinatarioDelegate {
 
 	@Override
 	public List<Destinatario> listarDestinatarios() throws DelegateException {
+		
+		return destinatarios;
+		/*
 		Destinatario dest = new Destinatario();
 		dest.setEmail("cualquier@dgtic.caib.es");
 		dest.setEndpoint("http://127.0.0.1:18080/axis2/services/GestorWebserviceBeanService");
@@ -39,5 +42,17 @@ public class MockDestinatarioDelegate extends DestinatarioDelegate {
 		List<Destinatario> dests = new ArrayList<Destinatario>();
 		dests.add(dest);
 		return dests;
+		*/
 	}
+	
+	
+	 List<Destinatario> destinatarios;
+
+
+	public MockDestinatarioDelegate(List<Destinatario> destinatarios) {
+		this.destinatarios = destinatarios;
+	}
+
+
+	 
 }
