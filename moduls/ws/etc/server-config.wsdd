@@ -96,6 +96,18 @@
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionUATransferible"
                  qname="ns1:TraduccionUATransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionTramiteTransferible"
+                 qname="ns1:TraduccionTramiteTransferible"
+                 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionTaxaTransferible"
+                 qname="ns1:TraduccionTaxaTransferible"
+                 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+   <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionDocumentoTransferible"
+                 qname="ns1:TraduccionDocumentoTransferible"
+                 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TraduccionNormativaTransferible"
+                 qname="ns1:TraduccionNormativaTransferible"
+                 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
 
     <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.UnidadAdministrativaTransferible"
                  qname="ns1:UnidadAdministrativaTransferible"
@@ -108,5 +120,20 @@
 	<beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.EdificioTransferible"
                  qname="ns1:EdificioTransferible"
                  xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>                 
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TramiteTransferible"
+				 qname="ns1:TramiteTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+	<beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.TaxaTransferible"
+				 qname="ns1:TaxaTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>    
+	<beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.DocumentTramitTransferible"
+				 qname="ns1:DocumentTramitTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
+	<beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.NormativaTransferible"
+				 qname="ns1:NormativaTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>     
+    <beanMapping languageSpecificType="java:org.ibit.rol.sac.model.ws.DocumentoTransferible"
+				 qname="ns1:DocumentoTransferible"
+				 xmlns:ns1="http://ws.model.sac.rol.ibit.org/beans"/>
 
 </deployment>
