@@ -53,7 +53,7 @@ public class TraductorInitializer implements ServletContextListener {
 	}
 	
 	private boolean traductorHabilitat() {
-		return System.getProperty("es.caib.gusites.integracion.traductor").equals("S");
+		return System.getProperty("es.caib.rolsac.integracion.traductor").equals("S");
 	}
 
 	
