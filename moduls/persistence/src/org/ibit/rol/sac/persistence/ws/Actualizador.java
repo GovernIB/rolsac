@@ -1,26 +1,20 @@
 package org.ibit.rol.sac.persistence.ws;
 
-import java.beans.DesignMode;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.*;
 import org.ibit.rol.sac.model.Tramite.Operativa;
 import org.ibit.rol.sac.model.ws.*;
-import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
-import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
-import org.ibit.rol.sac.persistence.ws.invoker.ActualizacionServicio;
+import org.ibit.rol.sac.persistence.portal.PortalDestinatario;
+import org.ibit.rol.sac.persistence.portal.PortalDestinatarioFactory;
 import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
 import es.caib.persistence.vuds.VentanillaUnica;
@@ -88,15 +82,6 @@ public final class Actualizador {
 		Actualizador.actualizar(actualizar, new Object[0]);
 	}
 
-	public static List<String> actualizarSync(final Object actualizar) {
-		if(!(actualizar instanceof Remoto)){
-			final ActualizadorThread act = new Actualizador().new ActualizadorThread(
-					actualizar, false, new Object[0]);
-			act.run();  //fem run() enlloc de start() per no crear el thread.
-			return act.destinatarisOK;
-		}
-		return null;
-	}
 	
 	/**
 	 * Lanza un Proceso encargado de borrar el Objeto.
@@ -193,7 +178,6 @@ public final class Actualizador {
 				DelegateUtil.getDestinatarioDelegate() : Actualizador.destDelegate;
 			try {
 				destinatarios = destDelegate.listarDestinatarios();
-				actualizadorBase.setDestinatarios(destinatarios);
 				
 			} catch (final DelegateException e) {
 				e.printStackTrace();
@@ -204,11 +188,37 @@ public final class Actualizador {
 		@Override
 		public void run() {
 			
-				if(borrar)
-					actualizadorBase.borrar();
-				else
-					actualizadorBase.actualizar();
-			}
+			for (final Destinatario destinatario : destinatarios) {
+				try{
+					if (calActualizarElDestinatari()) {
+						PortalDestinatario portal = PortalDestinatarioFactory.creaPortalDestinatario(destinatario);
+						if(borrar)
+							portal.borrarActuacion(actualizadorBase);
+						else
+							portal.actualizarActuacion(actualizadorBase);
+					}
+				} catch (WSInvocatorException e) {
+					enviarEmailFalloDestinatario(destinatario, e);			
+				}
+			}	
+		}
+		
+		public boolean calActualizarElDestinatari() {
+			if (estemOficinaIndra()) return false;
+			return true;
+		}
+		
+		boolean estemOficinaIndra() {
+			String value = System.getProperty("es.indra.caib.rolsac.oficina");
+			return (value != null) && value.equals("S");
+		}
+
+		private void enviarEmailFalloDestinatario(
+				final Destinatario destinatario, WSInvocatorException e) {
+			ReportarFallo.reportar(actualizadorBase.getActuacion(), false, destinatario, e);
+			log.error("error actualizando -> "+ e.getMessage());
+		}
+		
 		}
 		
 

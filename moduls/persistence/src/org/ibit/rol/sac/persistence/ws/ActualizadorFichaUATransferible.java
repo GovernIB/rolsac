@@ -16,12 +16,14 @@ public class ActualizadorFichaUATransferible extends ActualizadorBase {
 	}
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		// TODO Auto-generated method stub
@@ -34,27 +36,17 @@ public class ActualizadorFichaUATransferible extends ActualizadorBase {
 		return null;
 	}
 
+	
 	@Override
-	void borrar() {
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
 		final long idFicha = fichaUA.getIdFicha();
 		final long idUA = fichaUA.getIdUnidadAdministrativa();
 		final String codEs = fichaUA.getCodigoEstandarSeccion();
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-				if(calActualizarElDestinatari()) {
-					log.info("Al Destinatario: "+destinatario.getNombre());
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-							destinatario.getEndpoint(), destinatario.getIdRemoto());
-						actualizacion.borrarFichaUA(idFicha, idUA, codEs);
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(fichaUA, true, destinatario, e);
-				log.error(e);
-			}
-		}
-
+		actualizacionSvc.borrarFichaUA(idFicha, idUA, codEs);
+		
 	}
+	
 
 	
 	FichaUATransferible fichaUA;

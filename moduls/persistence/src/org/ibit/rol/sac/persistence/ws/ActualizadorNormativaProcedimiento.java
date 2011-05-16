@@ -17,11 +17,13 @@ public class ActualizadorNormativaProcedimiento extends ActualizadorBase {
 	}
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return NormativaTransferible.generar(norm);
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		actualizacionSvc.actualizarNormativaProcedimiento((NormativaTransferible) elemTransf,idProc);
@@ -32,22 +34,14 @@ public class ActualizadorNormativaProcedimiento extends ActualizadorBase {
 		return norm;
 	}
 
+	
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-		        if (calActualizarElDestinatari()) {
-					final ActualizacionServicio actualizacion =ActualizacionServicio.createActualizacionServicio(
-						destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarNormativaProcedimiento(norm.getId(),idProc);
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(norm, true, destinatario, e);
-				log.error(e);
-			}
-		}
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
+		
+		actualizacionSvc.borrarNormativaProcedimiento(norm.getId(),idProc);
 	}
+	
 
 	Normativa norm;
 	Long idProc;

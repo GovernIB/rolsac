@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ibit.rol.sac.model.Auditoria;
-import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.ws.ActuacionTransferible;
@@ -24,13 +23,16 @@ public class ActualizadorProcedimiento extends ActualizadorBase {
 
 	
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 
+		log.info("actualizando procedimiento");
 		actualizacionSvc.actualizarProcedimiento((ProcedimientoTransferible) elemTransf);
 	}
 	
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		ProcedimientoTransferible procT = ProcedimientoTransferible.generar(proc);
 		if(procT.getResponsable() == null || procT.getResponsable().trim().length()<= 0){
@@ -99,24 +101,14 @@ public class ActualizadorProcedimiento extends ActualizadorBase {
     	return responsables.toString();
     }
 	
-	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-				if(calActualizarElDestinatari()) {
-					log.info("Al Destinatario: "+destinatario.getNombre());	
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-							destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarProcedimiento(proc.getId());
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(proc, true, destinatario, e);
-				log.error(e);
-			}
-		}
-
-	}
-
+    
+    @Override
+    public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+    		throws WSInvocatorException {
+    	actualizacionSvc.borrarProcedimiento(proc.getId());
+    	
+    }
+    
+	
 	ProcedimientoLocal proc;
 }

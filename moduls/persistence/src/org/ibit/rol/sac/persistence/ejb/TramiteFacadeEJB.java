@@ -26,7 +26,6 @@ import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.Tramite.Operativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
@@ -34,6 +33,7 @@ import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.persistence.vuds.ActualizacionVudsException;
@@ -100,6 +100,8 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
          return (getAccesoManager().tieneAccesoTramite(idTramite));
     }   
     
+    
+    
 	/**
 	 * Crea o actualiza un tramite.
 	 * @throws ValidateVudsException 
@@ -112,74 +114,19 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 	 */
 	public Long grabarTramite(Tramite tramite, Long idOC) throws ValidateVudsException, ActualizacionVudsException {
 		
+		
         Session session = getSession();
-		Date fechaActualizacionBD = new Date(); 
- 
+
         try {
-            if (tramite.getId() != null) {
-                if (!getAccesoManager().tieneAccesoTramite(tramite.getId())) {
-                    throw new SecurityException("No tiene acceso al trï¿½mite");
-                }
-				else {
-					Tramite tramiteBD = obtenerTramite(tramite.getId());
-					fechaActualizacionBD = tramiteBD.getDataActualitzacio();
-					//FIXME ejaen@dgtic this.indexBorraProcedimiento(procedimientoBD);
-				}
-            }
-			log.debug(tramite);
-
-			
-			 //Se alimenta la fecha de actualizaciï¿½n de forma automï¿½tica si  no se ha introducido dato 
-			 if (tramite.getDataActualitzacio() == null || DateUtils.isSameDay(fechaActualizacionBD,tramite.getDataActualitzacio())) {
-			  tramite.setDataActualitzacio( new Date()); }
-			 
-			UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(
-					UnidadAdministrativa.class, idOC);
-			tramite.setOrganCompetent(unidad);
-
-			// si es un tramite de ventanilla unica, se valida antes de guardarlo
-			if(null!=tramite.getId() && "1".equals(tramite.getProcedimiento().getVentanillaUnica())) {
-					String[] camposSinValidar=VentanillaUnica.validarTramiteVuds(tramite, "es").getSinTraducir();
-					if(0<camposSinValidar.length)
-						throw new ValidateVudsException(camposSinValidar);
-			}
-
-			//guardem canvis
-            session.saveOrUpdate(tramite);
-            session.flush();
-
-			//actualitzem admins remota
-			if("1".equals(tramite.getProcedimiento().getVentanillaUnica())  ) {
-				//TODO si no estï¿½ definit el destinatari vuds, es genera una excepcio
-					
-					// DestinatarioDelegate destDelegate = null==destDelegate?
-					//		org.ibit.rol.sac.persistence.delegate.DelegateUtil.getDestinatarioDelegate() : destDelegate;
-					
-				
-				//s'actualiza la ventanilla unica
-				if(Actualizador.actualizarSync(tramite).contains("VUDS")) {
-					tramite.setDataActualitzacioVuds(org.ibit.rol.sac.persistence.util.DateUtils.formatearddMMyyyyHHmm(new Date()));
-					session.saveOrUpdate(tramite);
-					session.flush();
-				}
-				else if(Operativa.MODIFICA==tramite.getOperativa())throw new ActualizacionVudsException();
-			}
-			else {
-				Actualizador.actualizar(tramite);
-				publico(tramite);
-				/* VUDS : Comprobamos que el trámite sea público */
-				if(publico(tramite)){
-					Actualizador.actualizar(tramite,true);
-				}
-			}
-
-            return tramite.getId();
+    		return getTramiteSaver().grabarTramite(tramite,idOC,session);
+    		
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
     }
+
 	
 	
     /**
@@ -697,12 +644,31 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 	}*/
 	
     protected boolean publico(Tramite tram) {
-        final Date now = new Date();
-        boolean noCaducado = (tram.getDataCaducitat() == null || tram.getDataCaducitat().after(now));
-        boolean publicado = (tram.getDataPublicacio() == null || tram.getDataPublicacio().before(now));
-        boolean visible = (tram.getValidacio() == null || Validacion.PUBLICA.equals(Integer.valueOf(tram.getValidacio().toString())));
-        return visible && noCaducado && publicado;
-    }
+		return tram.esPublico();
+	}
+
+    
+
+	public boolean tieneAccesoTramite( Tramite tramite) {
+		if(null==tramite.getId()) return true;
+		
+		return getAccesoManager().tieneAccesoTramite(tramite.getId());
+	}
+
+    
+    
+    TramiteSaver tramiteSaver;
+
+	public TramiteSaver getTramiteSaver() {
+		if(null==tramiteSaver) 
+			tramiteSaver=new TramiteSaver(this); 
+		return tramiteSaver;
+	}
+
+	public void setTramiteSaver(TramiteSaver tramiteSaver) {
+		this.tramiteSaver = tramiteSaver;
+	}
+ 
 
 
 }

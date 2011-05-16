@@ -16,11 +16,13 @@ public class ActualizadorEdificioUA extends ActualizadorBase {
 	}
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return EdificioTransferible.generar(edif);
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		
@@ -33,22 +35,13 @@ public class ActualizadorEdificioUA extends ActualizadorBase {
 		return edif;
 	}
 
+	
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-		        if (calActualizarElDestinatari()) {					
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-							destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarEdificioUA(edif.getId(),idUA);
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(edif, true, destinatario, e);
-				log.error(e);
-			}
-		}
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc) throws WSInvocatorException {
+		actualizacionSvc.borrarEdificioUA(edif.getId(),idUA);
 	}
+	
+	
 
 	Edificio edif;
 	Long idUA;

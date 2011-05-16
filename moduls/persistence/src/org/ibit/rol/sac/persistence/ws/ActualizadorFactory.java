@@ -11,7 +11,7 @@ import org.ibit.rol.sac.model.ws.FichaUATransferible;
 
 public class ActualizadorFactory {
 
-	public static ActualizadorBase creaActualizador(Object actuacion, Object[] params)  {
+	public static ActualizadorBase creaActualizador(Object actuacion, Object... params)  {
 
 		if (actuacion instanceof Tramite && params.length==0) 
 			return new ActualizadorTramite((Tramite)actuacion);

@@ -310,4 +310,15 @@ public class Tramite extends Ordenable {
 	}
 
 
+	public boolean esVentanillaUnica() {
+		 return "1".equals(getProcedimiento().getVentanillaUnica());
+	}
+
+	public boolean esPublico() {
+	    final Date now = new Date();
+	    boolean noCaducado = (getDataCaducitat() == null || getDataCaducitat().after(now));
+	    boolean publicado = (getDataPublicacio() == null || getDataPublicacio().before(now));
+	    boolean visible = (getValidacio() == null || Validacion.PUBLICA.equals(Integer.valueOf(getValidacio().toString())));
+	    return visible && noCaducado && publicado;
+	}
 }

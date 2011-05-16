@@ -30,6 +30,7 @@ public class ActualizadorFicha extends ActualizadorBase {
 	
 	
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		final FichaTransferible fichaT = FichaTransferible.generar(ficha);
 		fichaT.setFichasUA(FichaUATransferible.generar(ficha.getFichasua()));
@@ -42,6 +43,7 @@ public class ActualizadorFicha extends ActualizadorBase {
 	}
 	
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		actualizacionSvc.actualizarFicha((FichaTransferible) elemTransf);
@@ -56,25 +58,13 @@ public class ActualizadorFicha extends ActualizadorBase {
 	
 
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-				if(calActualizarElDestinatari()) {
-					log.info("Al Destinatario: "+destinatario.getNombre());
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-							destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarFicha(ficha.getId());
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(ficha, true, destinatario, e);
-				log.error(e);
-			}
-		}
-
-
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
+		actualizacionSvc.borrarFicha(ficha.getId());
+		
 	}
-
+	
+	
 	  private String obtenerResponsableHistorico(Long id){
 	    	String numResponsables =System.getProperty("es.caib.rolsac.numResponsables");
 	    	StringBuffer responsables = new StringBuffer();

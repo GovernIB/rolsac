@@ -394,6 +394,10 @@ public class VentanillaUnica {
 		}
 */
 	}
+
+	public static boolean estaVentanillaAbierta() {
+		return null != System.getProperty("es.caib.rolsac.vuds.endpoint");
+	}
 	
 	
 

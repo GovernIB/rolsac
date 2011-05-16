@@ -33,6 +33,9 @@
 		es.caib.rolsac.model.ws.urlProcedimiento=https://proves.caib.es/govern/sac/visor_proc.do?codi=%id%&lang=
 
 				
+		es.caib.rolsac.persistence.portal.vuds=VUDS
+		es.caib.rolsac.persistence.portal.pma=Portal de l'Informador		
+				
 <!--
 es.caib.rolsac.codiEstandarUAArrel
 es.caib.rolsac.crawler.responsable.errorReIndexacion

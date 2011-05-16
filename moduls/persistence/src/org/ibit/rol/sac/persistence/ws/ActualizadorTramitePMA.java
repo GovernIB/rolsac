@@ -15,6 +15,7 @@ public class ActualizadorTramitePMA extends ActualizadorTramite {
 
 	
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return TramiteTransferible.generar(tramite);
 	}
@@ -22,6 +23,7 @@ public class ActualizadorTramitePMA extends ActualizadorTramite {
 	
 	
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible actuacionTransferible) throws WSInvocatorException {
 		log.info("actualizando un TramitePMA");
@@ -30,15 +32,16 @@ public class ActualizadorTramitePMA extends ActualizadorTramite {
 	}
 	
 	@Override
-	Object getActuacion() {
+	public Object getActuacion() {
 		return tramite;
 	}
-	
-	
-	
+
 	@Override
-	void borrar() {
-		// TODO Auto-generated method stub
-		super.borrar();
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
+		
+		super.borrarActuacion(actualizacionSvc);
 	}
+	
+	
 }

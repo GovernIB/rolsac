@@ -19,11 +19,13 @@ public class ActualizadorDocumentoProcedimiento extends ActualizadorBase {
 	
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return DocumentoTransferible.generar(doc);
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		actualizacionSvc.actualizarDocumentoProcedimiento((DocumentoTransferible) elemTransf,idProc);
@@ -35,24 +37,13 @@ public class ActualizadorDocumentoProcedimiento extends ActualizadorBase {
 		return doc; 
 	}
 
+	
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-		        if (calActualizarElDestinatari()) {
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-						destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarDocumentoProcedimiento(doc.getId());
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(doc, true, destinatario, e);
-				log.error(e);
-			}
-		}
-
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
+		actualizacionSvc.borrarDocumentoProcedimiento(doc.getId());
+		
 	}
-
 	
 
 	Documento doc;

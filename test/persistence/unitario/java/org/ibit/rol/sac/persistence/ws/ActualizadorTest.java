@@ -18,11 +18,13 @@ import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Tramite.Operativa;
 import org.ibit.rol.sac.model.ws.FichaTransferible;
 import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
+import org.ibit.rol.sac.model.ws.TramiteTransferible;
 import org.ibit.rol.sac.persistence.delegate.AuditoriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
+import org.ibit.rol.sac.persistence.portal.PortalDestinatarioPMA;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 import org.ibit.rol.sac.persistence.ws.ReportarFallo;
 import org.ibit.rol.sac.persistence.ws.invoker.ActualizacionServicio;
@@ -48,17 +50,18 @@ import es.caib.test.common.LogSpy;
 
 @RunWith(PowerMockRunner.class)
 @PowerMockIgnore("org.apache.commons.logging")
-@PrepareForTest({ReportarFallo.class,ActualizacionServicio.class})
+@PrepareForTest({ReportarFallo.class,ActualizacionServicio.class, ActualizadorFactory.class})
 public class ActualizadorTest extends junit.framework.TestCase {
 
-	DestinatarioDelegate destDelegateMock = EasyMock.createMock(DestinatarioDelegate.class);
-
-
-	List<Destinatario> destinatarios=new ArrayList<Destinatario>();
-	Destinatario dest;
 	
 	@Override
 	protected void setUp() throws Exception {
+		System.setProperty("es.caib.rolsac.persistence.portal.pma", "Portal de l'Informador");
+		System.setProperty("es.caib.rolsac.persistence.portal.vuds", "VUDS");
+		destinatarios=new ArrayList<Destinatario>();
+		
+		log = obtenerLoggerActualizador();
+		establecerLogs(log);
 	}
 	
 	public void test_TODO_ActualitzarProcedimentoEnvia2Responsables() {
@@ -78,11 +81,7 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		
 		System.setProperty("es.caib.rolsac.numResponsables", "2");
 		
-		//mock log
-		LogSpy log=new LogSpy();
-		Actualizador.setLog(log);
-		ActualizadorFicha.log=log;
-
+		
 		
 		//mock Ficha
 		Ficha ficha=new Ficha();
@@ -143,9 +142,10 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		//mock FichaUATransferible.generar()
 		
 		
+		Destinatario dest =creaDestinatarioPMA();
+		destinatarios.add(dest);
+		setDestinatarios();
 		
-		set0Destinatarios();
-
 		Actualizador.actualizar(ficha);
 		
 		//ens sincronitzem amb el final del thread. 
@@ -164,11 +164,8 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		
 		Actualizador actualizador = new Actualizador();
 		
-		dest=new Destinatario();
-		dest.setNombre("PortalInformador");
-		dest.setEndpoint("miendpoint");
-		dest.setEmail("bustia@rolsac");
-
+		dest=creaDestinatarioPMA();
+		
 		ProcedimientoLocal procLocal = new ProcedimientoLocal();
 		assertTrue(actualizador.calActualizarElDestinatari(dest, procLocal));
 		
@@ -221,7 +218,87 @@ public class ActualizadorTest extends junit.framework.TestCase {
 	
 	public void testActualizarProcedimientoPMA_OK() throws InterruptedException {
 
-		MockActualizarProcedimiento ok = new MockActualizarProcedimiento() {
+    	
+    	Destinatario dest = creaDestinatarioPMA();
+    	destinatarios.add(dest);
+		
+		MockActualizarProcedimiento ok = crearMockActualizarProcedimientoOK();
+		establecerMocksActualizador(ok);
+		
+		establecerUrlProcedimientoTransferible();
+
+		ProcedimientoLocal p = crearProcedimiento();
+		Actualizador.actualizar(p);
+		esperarFinActualizador();
+		assertTrue(log.containsInfoMsg("actualizando el destinatario: Portal de l'Informador"));
+		assertTrue(log.containsInfoMsg("actualizando procedimiento"));
+		assertTrue(log.containsInfoMsg("actualizacion enviada OK"));
+		
+	}
+
+
+	
+
+	
+	public void testActualizarProcedimientoPMA_FAIL() throws InterruptedException {
+
+		
+    	Destinatario dest = creaDestinatarioPMA();
+    	destinatarios.add(dest);
+		
+		MockActualizarProcedimiento fail = crearMockActualizarProcedimientoFail();
+    	establecerMocksActualizador(fail);
+    	
+		establecerUrlProcedimientoTransferible();
+
+		ProcedimientoLocal p = crearProcedimiento();
+		Actualizador.actualizar(p);
+		esperarFinActualizador();
+
+		assertTrue(log.containsInfoMsg("actualizando el destinatario: Portal de l'Informador"));
+		assertFalse(log.containsInfoMsg("actualizacion enviada OK"));
+		assertTrue(log.containsErrorMsg("error actualizando -> "+"java.lang.Exception: "+MSG_EXCEPCION ));
+		
+	}
+
+	
+	
+	
+	public void testActualizarTramitePMA_OK() throws InterruptedException {
+
+    	
+    	Destinatario dest = creaDestinatarioPMA();
+    	destinatarios.add(dest);
+		
+		Tramite t = crearTramite();
+		
+		actualizadorBase = new ActualizadorTramitePMA(t) {
+			
+			public org.ibit.rol.sac.model.ws.ActuacionTransferible generarActuacionTransferible() {
+				return new TramiteTransferible();
+			}
+
+		};
+
+		MockActualizarTramite ok = crearMockActualizarTramiteOK();
+
+		establecerMocksActualizador(ok);
+		
+	
+		
+		establecerUrlProcedimientoTransferible();
+
+		Actualizador.actualizar(t,true);
+		esperarFinActualizador();
+		assertTrue(log.containsInfoMsg("actualizando el destinatario: Portal de l'Informador"));
+		assertTrue(log.containsInfoMsg("actualizando un TramitePMA"));
+		assertTrue(log.containsInfoMsg("actualizacion enviada OK"));
+		
+	}
+	
+	
+	private MockActualizarProcedimiento crearMockActualizarProcedimientoOK() {
+		return new MockActualizarProcedimiento() {
     		@Override
     		void tryActualizarProcedimiento (ActualizacionServicio actServ)
     				throws WSInvocatorException {
@@ -229,25 +306,11 @@ public class ActualizadorTest extends junit.framework.TestCase {
 				andReturn(true);
     		}
     	};
-		establecerMocksActualizador(ok);
-		LogSpy log = obtenerLoggerActualizador();
-		ActualizadorProcedimiento.log=log;
-		
-		establecerUrlProcedimientoTransferible();
-
-		ProcedimientoLocal p = crearProcedimiento();
-		Actualizador.actualizar(p);
-		esperarFinActualizador();
-
-		assertTrue(log.containsInfoMsg("actualizando el destinatario: VUDS"));
-		assertTrue(log.containsInfoMsg("actualizacion enviada OK"));
-		
 	}
 
 	
-	public void testActualizarProcedimientoPMA_FAIL() throws InterruptedException {
-
-		MockActualizarProcedimiento fail = new MockActualizarProcedimiento() {
+	private MockActualizarProcedimiento crearMockActualizarProcedimientoFail() {
+		return new MockActualizarProcedimiento() {
     		@Override
     		void tryActualizarProcedimiento (ActualizacionServicio actServ)
     				throws WSInvocatorException {
@@ -257,23 +320,26 @@ public class ActualizadorTest extends junit.framework.TestCase {
     							andThrow(e);
     		}
     	};
-		establecerMocksActualizador(fail);
-		LogSpy log = obtenerLoggerActualizador();
-		ActualizadorProcedimiento.log=log;
-
-		establecerUrlProcedimientoTransferible();
-
-		ProcedimientoLocal p = crearProcedimiento();
-		Actualizador.actualizar(p);
-		esperarFinActualizador();
-
-		assertTrue(log.containsInfoMsg("actualizando el destinatario: VUDS"));
-		assertFalse(log.containsInfoMsg("actualizacion enviada OK"));
-		assertTrue(log.containsErrorMsg("error actualizando -> "+"java.lang.Exception: "+MSG_EXCEPCION ));
-		
 	}
-	
-	final String MSG_EXCEPCION = "mi error";
+
+	private MockActualizarTramite crearMockActualizarTramiteOK() {
+		return new MockActualizarTramite() {
+    		@Override
+    		void tryActualizarTramite(ActualizacionServicio actServ)
+    				throws WSInvocatorException {
+    			EasyMock.expect(actServ.actualizarTramite((TramiteTransferible)EasyMock.anyObject())).
+				andReturn(true);
+    		}
+    	};
+	}
+
+	private void establecerLogs(LogSpy log) {
+		ActualizadorTramitePMA.log=log;
+		PortalDestinatarioPMA.log=log;
+		ActualizadorProcedimiento.log=log;
+		ActualizadorFicha.log=log;
+	}
+
 	
 	private void establecerUrlProcedimientoTransferible() {
 		System.setProperty(ProcedimientoTransferible.URL_PROC,"http://miurl");
@@ -297,15 +363,37 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		return p;
 	}
 
+	
+	private Tramite crearTramite() {
+		return new Tramite();
+	}
+
+	private Destinatario creaDestinatarioPMA() {
+		Destinatario dest = new Destinatario();
+		dest.setEmail("ejaen@dgtic.caib.es");
+		dest.setEndpoint("https://proves.caib.es/rolsacpmaesb/services/actualiza");
+		dest.setNombre("Portal de l'Informador");
+		return dest;
+	}
+	
 	private void establecerMocksActualizador(MockActualizarProcedimiento  mockActProc) {
-		crearMockDestinatarioDelegate();
+		crearMockDestinatarioDelegate(destinatarios);
     	crearMockMetodoStatic_reportar();
     	
     	ActualizacionServicio mockActServ = mockActProc.crearMockActualizacionServicio() ;
 	    crearMockMetodoStatic_createActualizacionServicio(mockActServ);
 	}
 
-	
+	private void establecerMocksActualizador(MockActualizarTramite mockActProc) {
+		crearMockDestinatarioDelegate(destinatarios);
+    	crearMockMetodoStatic_reportar();
+    	
+    	ActualizacionServicio mockActServ = mockActProc.crearMockActualizacionServicio() ;
+	    crearMockMetodoStatic_createActualizacionServicio(mockActServ);
+	    if (null!=actualizadorBase) 		
+	    	crearMockMetodoStatic_crearActualizador(actualizadorBase);
+ 
+	}
 	
 
 	private void crearMockMetodoStatic_createActualizacionServicio(
@@ -346,6 +434,31 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		}
 
 		abstract void tryActualizarProcedimiento (ActualizacionServicio actServ) throws WSInvocatorException;
+		
+		
+
+	}
+
+	abstract class MockActualizarTramite {
+		
+		private ActualizacionServicio crearMockActualizacionServicio() {
+			ActualizacionServicio mockActServ = EasyMock.createMock(ActualizacionServicio.class);
+
+			try {
+				tryActualizarTramite (mockActServ);
+
+			} catch (WSInvocatorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			EasyMock.replay(mockActServ);
+
+
+			return mockActServ;
+		}
+
+		abstract void tryActualizarTramite (ActualizacionServicio actServ) throws WSInvocatorException;
 
 	}
 
@@ -360,8 +473,17 @@ public class ActualizadorTest extends junit.framework.TestCase {
     	PowerMock.replay(ReportarFallo.class);
 	}
 
-	private void crearMockDestinatarioDelegate() {
-		Actualizador.setDestDelegate(new MockDestinatarioDelegate());
+	private void crearMockMetodoStatic_crearActualizador(ActualizadorBase base) {
+		PowerMock.mockStatic(ActualizadorFactory.class);
+		EasyMock.expect(ActualizadorFactory.creaActualizador(EasyMock.anyObject(), EasyMock.anyObject())).andReturn(base);
+    	PowerMock.replay(ActualizadorFactory.class);
+	}
+
+	
+	
+	
+	private void crearMockDestinatarioDelegate(List<Destinatario> destinatarios) {
+		Actualizador.setDestDelegate(new MockDestinatarioDelegate(destinatarios));
 	}
 
 	private LogSpy obtenerLoggerActualizador() {
@@ -375,14 +497,13 @@ public class ActualizadorTest extends junit.framework.TestCase {
 		Actualizador.getThreadActualizador().join();
 	}
 	
-	
-	private void set0Destinatarios() throws DelegateException {
-		destinatarios=new ArrayList<Destinatario>();
+
+	private void setDestinatarios() throws DelegateException {
+		DestinatarioDelegate destDelegateMock = EasyMock.createMock(DestinatarioDelegate.class);
 		EasyMock.expect(destDelegateMock.listarDestinatarios()).andReturn(destinatarios).times(2);
 		EasyMock.replay(destDelegateMock);
 		Actualizador.setDestDelegate(destDelegateMock);
 	}
-
 	
 	private void _(Object o)  { System.out.println(o); }
 	
@@ -390,5 +511,14 @@ public class ActualizadorTest extends junit.framework.TestCase {
 	//ver otros tests en la version 1.1.2.1
 	
 	
+	ActualizadorBase actualizadorBase;
+	
+	final String MSG_EXCEPCION = "mi error";
 
+	DestinatarioDelegate destDelegateMock = EasyMock.createMock(DestinatarioDelegate.class);
+	List<Destinatario> destinatarios=new ArrayList<Destinatario>();
+	Destinatario dest;
+	LogSpy log ;
+
+	
 }

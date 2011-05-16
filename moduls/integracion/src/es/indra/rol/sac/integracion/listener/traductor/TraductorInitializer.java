@@ -30,20 +30,20 @@ public class TraductorInitializer implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent event) {
 
+		if(!traductorHabilitat()) return;
 		try {
-			if (System.getProperty("es.caib.rolsac.integracion.traductor").equals("S")) {
-					Traductor traductor = new Traductor();
-					
-					if (System.getProperty("es.caib.rolsac.integracion.traductor.servidor") != null) 
-						traductor.setTranslationServerUrl(System.getProperty("es.caib.rolsac.integracion.traductor.servidor"));
 
-					//El objeto de traductor se guarda como atributo de contexto que podrá ser utilizado en
-					//ámbito de aplicación
-					event.getServletContext().setAttribute("traductor", traductor);
-					
-					log.info("Carregant Rolsac amb traducció automàtica");
-					log.info("URL de servidor de traducció: " + traductor.getTranslationServerUrl());
-			} else log.info("Carregant Rolsac sense traducció automàtica");
+			Traductor traductor = new Traductor();
+
+			if (System.getProperty("es.caib.rolsac.integracion.traductor.servidor") != null) 
+				traductor.setTranslationServerUrl(System.getProperty("es.caib.rolsac.integracion.traductor.servidor"));
+
+			//El objeto de traductor se guarda como atributo de contexto que podrá ser utilizado en
+			//ámbito de aplicación
+			event.getServletContext().setAttribute("traductor", traductor);
+
+			log.info("Carregant Rolsac amb traducció automàtica");
+			log.info("URL de servidor de traducció: " + traductor.getTranslationServerUrl());
 
 		} catch (Exception e) {
 			log.info("No s'ha trobat paràmetre d' inicialització de traducció automàtica");
@@ -51,6 +51,11 @@ public class TraductorInitializer implements ServletContextListener {
 		}
 
 	}
+	
+	private boolean traductorHabilitat() {
+		return System.getProperty("es.caib.gusites.integracion.traductor").equals("S");
+	}
+
 	
 	/* (non-Javadoc)
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)

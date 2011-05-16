@@ -16,11 +16,13 @@ public class ActualizadorNormativa extends ActualizadorBase {
 	}
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return NormativaTransferible.generar(norm);
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		actualizacionSvc.actualizarNormativa((NormativaTransferible) elemTransf);
@@ -32,21 +34,12 @@ public class ActualizadorNormativa extends ActualizadorBase {
 	}
 
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-		        if (calActualizarElDestinatari()) {
-					final ActualizacionServicio actualizacion =ActualizacionServicio.createActualizacionServicio(
-						destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarNormativa(norm.getId());
-		        }
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo al destinatario
-				ReportarFallo.reportar(norm, true, destinatario, e);
-				log.error(e);
-			}
-		}
-	}
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
 
+		actualizacionSvc.borrarNormativa(norm.getId());
+
+	}
+	
 	Normativa norm;
 }

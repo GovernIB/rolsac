@@ -16,11 +16,13 @@ public class ActualizadorUnidadAdministrativa extends ActualizadorBase {
 	}
 
 	@Override
+	public
 	ActuacionTransferible generarActuacionTransferible() {
 		return UnidadAdministrativaTransferible.generar(unidad);
 	}
 
 	@Override
+	public
 	void actualizarActuacion(ActualizacionServicio actualizacionSvc,
 			ActuacionTransferible elemTransf) throws WSInvocatorException {
 		actualizacionSvc.actualizarUnidadAdministrativa((UnidadAdministrativaTransferible) elemTransf);
@@ -33,24 +35,11 @@ public class ActualizadorUnidadAdministrativa extends ActualizadorBase {
 	}
 
 	@Override
-	void borrar() {
-		for (final Destinatario destinatario : destinatarios) {
-			try{
-				if(calActualizarElDestinatari()) {
-					log.info("Al Destinatario: "+destinatario.getNombre());
-					final ActualizacionServicio actualizacion = ActualizacionServicio.createActualizacionServicio(
-							destinatario.getEndpoint(), destinatario.getIdRemoto());
-					actualizacion.borrarUnidadAdministrativa(unidad.getId());
-				}
-			} catch (WSInvocatorException e) {
-				//Si falla mando un Email informando del fallo
-				ReportarFallo.reportar(unidad, true, destinatario, e);
-				log.error(e);
-			}
-		}
-
+	public void borrarActuacion(ActualizacionServicio actualizacionSvc)
+			throws WSInvocatorException {
+		actualizacionSvc.borrarUnidadAdministrativa(unidad.getId());
 	}
-
+	
 	
 	UnidadAdministrativa unidad;
 
