@@ -1,45 +1,125 @@
-package es.caib.persistence.vuds;
+package org.ibit.rol.sac.persistence.remote.vuds;
 
-import org.ibit.rol.sac.model.Tramite;
+//FIXME import es.caib.persistence.vuds.GestorWebserviceBeanServiceStub;
+import es.map.vuds.si.service.webservice.CanalTramitacion;
+import es.map.vuds.si.service.webservice.CargarTramitesVuds;
+import es.map.vuds.si.service.webservice.CargarTramitesVudsE;
+import es.map.vuds.si.service.webservice.CargarTramitesVudsResponse;
+import es.map.vuds.si.service.webservice.CargarTramitesVudsResponseE;
+import es.map.vuds.si.service.webservice.FormaIniciacion;
+import es.map.vuds.si.service.webservice.Formulario;
+import es.map.vuds.si.service.webservice.GuardarTramites;
+import es.map.vuds.si.service.webservice.GuardarTramitesE;
+//FIXME import es.map.vuds.si.service.webservice.Idioma;
+import es.map.vuds.si.service.webservice.OrganismoCompetente;
+import es.map.vuds.si.service.webservice.Tasa;
+import es.map.vuds.si.service.webservice.TipoRegistro;
+import es.map.vuds.si.service.webservice.TipologiaTramite;
+import es.map.vuds.si.service.webservice.Tramite;
+import es.map.vuds.si.service.webservice.TramiteVuds;
+
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.axis2.transport.http.HttpTransportProperties;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Taxa;
+import org.ibit.rol.sac.model.TraduccionDocumentTramit;
+import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionIniciacion;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionProcedimiento;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionTaxa;
+import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Tramite.Operativa;
+import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
 
+/**
+ * @author u92770
+ * He escollit el patró Adapter perque cal adaptar un tramit rolsac a un tramit vuds
+ * (patró Facade no seria adecuat perque cal adaptar el tramit)  
+ *
+ */
+public class VentanillaUnicaAdapter {
+	protected static Log log = LogFactory.getLog(VentanillaUnicaAdapter.class);
+	//private static String endpoint = "http://epreinf45:18080/axis2/services/GestorWebserviceBeanService";
+	String endpoint = "http://89.140.20.218:65003/ServiciosExternos/sistemaInformacionWS";  //TODO parametritzar 
 
-public class TramiteVUDSValidator {
+	public static final String CATALA="ca";
+	public static final String CASTELLA="es";
+	
+	//codigos forma inciacion devueltos por el webservice:
+	private static final long PRESENCIAL = 1L;   
+	private static final long TELEMATICO = 2L;
+	private static final String PRESENCIAL_STR = "presencial";   
+	private static final String TELEMATICO_STR = "presencial y telematico";
+	private static final String NOREQS_STR = "No hay requisitos";
+	private static final String NODOCS_STR = "No hay documentos";
+	private static final String NOFORM_STR = "No hay formularios";
+	private static final String VACIO_STR = "-vacio-";
+	private static final String TAXAMULTIPLE = "Ver campo descripción.";
+	private static final Long INICIACION_SOLICITANTE = 1L;
+	private static final Long INICIACION_OFICIO = 2L;
+	private static final Long INICIACION_AMBAS = 3L;
+	
+	private static final String ALTA = "alta";
+	private static final String MODIFICACION = "modificacion";
+	private static final String BAJA = "baja";
+	
+	
+	
+	//private final String endpoint_webcaib = "http://www.caib.es";
+	private final static String endpoint_webcaib = "https://proves.caib.es";
 
-	public TramiteValidado validarTramiteCumpleRequisitosVUDS(Tramite t_rolsac, String idioma)
+	private HashMap<String,String> idiomes=new HashMap<String, String>();
+
 	{
-		return null;
-		/*
-		//en la validacio, no existeix encara cap codigoIdentificador del tramite.
+		idiomes.put(CATALA, "ca_ES Catala");
+		idiomes.put(CASTELLA, "es_ES Castellano");
+
+		/*	altres idiomes:
+		  		eu_ES Euskera	
+				gl_ES Galego
+				va_ES Valencià
+				en_US English
+				fr_FR Français
+				de_DE Deutsch
+				
+		*/
+	}
+	
+	
+	public VentanillaUnicaAdapter(){}
+	
+	public VentanillaUnicaAdapter(String ep){ endpoint=ep;	}
+
+	org.ibit.rol.sac.model.Tramite t_rolsac;
+	public String idioma;
+
+	
+	public TramiteValidado convertirTramitRolsacl2TramiteVUDS(org.ibit.rol.sac.model.Tramite t_rolsac, String idioma)
+	{
+		this.t_rolsac=t_rolsac;
+		this.idioma=idioma;
 		
 		TramiteValidado traval = new TramiteValidado();
 		
 		List<String> sinTraducir = new ArrayList<String>();
 		
 		Tramite t = new Tramite();
-		TramiteVuds tramiteVuds = new TramiteVuds();
-		tramiteVuds.setDescripcionTramiteVuds(t_rolsac.getDescCodiVuds());
-		tramiteVuds.setIdTramiteVuds(t_rolsac.getCodiVuds());
-		
-		String areaTramitadora ="";
-		TraduccionUA traua= (TraduccionUA)t_rolsac.getOrganCompetent().getTraduccion(idioma);
-		if(null!=traua)	areaTramitadora = traua.getNombre();
-
-		//si AT no existeix en castella, es posa en catala
-		String areaTramitadora_ca = ((TraduccionUA)t_rolsac.getOrganCompetent().getTraduccion("ca")).getNombre();
-		if("".equals(areaTramitadora) && null!=areaTramitadora_ca  && !"".equals(areaTramitadora_ca)) areaTramitadora = areaTramitadora_ca;
-		
-		OrganismoCompetente organismoCompetente = new OrganismoCompetente();
-		organismoCompetente.setIdOrganismo(t_rolsac.getProcedimiento().getUnidadAdministrativa().getId().toString());
-
-		String descOC=""; 
-		traua = (TraduccionUA)t_rolsac.getProcedimiento().getUnidadAdministrativa().getTraduccion(idioma);
-		if(null!=traua) descOC = traua.getNombre();
-		organismoCompetente.setDescripcionOrganismo(descOC);
-
-		//si OC no existeix en castella, es posa en catala  
-		String descOC_ca = ((TraduccionUA)t_rolsac.getProcedimiento().getUnidadAdministrativa().getTraduccion("ca")).getNombre();
-		if("".equals(descOC) && null!=descOC_ca && !"".equals(descOC_ca)) organismoCompetente.setDescripcionOrganismo(descOC_ca); 
 		
 		long canal = (null == t_rolsac.getId() || null == t_rolsac.getVersio()) && null == t_rolsac.getUrlExterna() ? PRESENCIAL : TELEMATICO;
 		CanalTramitacion canalTramitacion = new CanalTramitacion();
@@ -80,7 +160,9 @@ public class TramiteVUDSValidator {
 		if("".equals(docsPresentar) && null!= tratra_ca.getDocumentacion() && !"".equals(tratra_ca.getDocumentacion())) sinTraducir.add("documentació");
 		if("".equals(requisits) && null!= tratra_ca.getRequisits() && !"".equals(tratra_ca.getRequisits())) sinTraducir.add("requisits");
 		if("".equals(observaciones) && null!= trapro_ca.getObservaciones() && !"".equals(trapro_ca.getObservaciones())) sinTraducir.add("observacions (procediment)");
-		if("".equals(resultat) && null!= trapro_ca.getResultat() && !"".equals(trapro_ca.getResultat())) sinTraducir.add("resultat (procedimient)");
+		
+		if("".equals(resultat) && null!= trapro_ca.getResultat() && !"".equals(trapro_ca.getResultat())) 
+			sinTraducir.add("resultat (procedimient)");
 		
 		FormaIniciacion formaIniciacion = new FormaIniciacion();
 		formaIniciacion.setDescripcionFormaIniciacion(VACIO_STR);
@@ -116,7 +198,7 @@ public class TramiteVUDSValidator {
 					desc=tt.getDescripcio();
 					forpag=tt.getFormaPagament();
 
-					tasa.setCodificacion(cod);
+					//tasa.setCodificacion(cod);
 					tasa.setDescripcionTasa(desc);
 					tasa.setModoPago(forpag);
 				}
@@ -143,29 +225,30 @@ public class TramiteVUDSValidator {
 					
 				}
 				
-				tasa.setCodificacion(TAXAMULTIPLE);
+				//tasa.setCodificacion(TAXAMULTIPLE);
 				tasa.setDescripcionTasa(descMultiple.toString());
 				tasa.setModoPago(TAXAMULTIPLE);
 			}
 		}
 		
-		TipoRegistro tipoRegistro;
+		String tipoRegistro;
 		switch(t_rolsac.getOperativa())
 		{
 		case CREA : // '\001'
 		default:
-			tipoRegistro = TipoRegistro.Alta;
+			tipoRegistro = ALTA;
 			break;
 
 		case MODIFICA: // '\002'
-			tipoRegistro = TipoRegistro.Modificacion;
+			tipoRegistro = MODIFICACION;
 			break;
 
 		case BORRA: // '\003'
-			tipoRegistro = TipoRegistro.Baja;
+			tipoRegistro = BAJA;
 			break;
 		}
-		TipologiaTramite tipologia = TipologiaTramite.value1;
+		TipologiaTramite tipologia = new TipologiaTramite();
+		tipologia.setIdTipologiaTra(123L);
 
 		//mapeig de formularis
 		Set<DocumentTramit> rolsac_forms = t_rolsac.getFormularios();
@@ -229,7 +312,7 @@ public class TramiteVUDSValidator {
 
 			}
 		
-		t.setTramiteVuds(tramiteVuds);
+		t.setTramiteVuds(obtenerTramiteVuds());
 		t.setCanalTramitacion(canalTramitacion);
 		t.setDenominacionTramite(denominacionTramite);
 		t.setDescripcionTramite(descripcionTramite);
@@ -248,9 +331,9 @@ public class TramiteVUDSValidator {
 
 		String url=endpoint_webcaib+"/govern/sac/visor_proc.do?codi="+t_rolsac.getProcedimiento().getId();
 		t.setEnlaceConsulta(url);
-		t.setAreaTramitadora(areaTramitadora);
+		t.setAreaTramitadora(obtenerAreaTramitadora());
 
-		t.setOrganismoCompetente(organismoCompetente);
+		t.setOrganismoCompetente(obtenerOrganismoCompetente());
 		t.setResultado(new String[]{resultat});
 
 		traval.tramite = t;
@@ -259,11 +342,33 @@ public class TramiteVUDSValidator {
 		// si falten traduir camps, indiquem que no es un tramit vuds valid
 		if(0>traval.sinTraducir.length) t_rolsac.setTramiteVudsValido(false);
 		return traval;
-		
-		*/
 	}
 
-	
-	
+	private OrganismoCompetente obtenerOrganismoCompetente() {
+		String descOC = t_rolsac.getNombreUnidadAdministrativa(idioma);
+		if(null==descOC) 
+			descOC = t_rolsac.getNombreUnidadAdministrativa("ca");
+
+		OrganismoCompetente organismoCompetente = new OrganismoCompetente();
+		organismoCompetente.setIdOrganismo(t_rolsac.obtenerIdUnidadAdministrativa().toString());
+		organismoCompetente.setDescripcionOrganismo( descOC );
+		
+		return organismoCompetente;
+	}
+
+	private TramiteVuds obtenerTramiteVuds() {
+		//establecer tramite vuds
+		TramiteVuds tramiteVuds = new TramiteVuds();
+		tramiteVuds.setDescripcionTramiteVuds(this.t_rolsac.getDescCodiVuds());
+		tramiteVuds.setIdTramiteVuds(this.t_rolsac.getCodiVuds());
+		return tramiteVuds;
+	}
+
+	private String obtenerAreaTramitadora() {
+		String areaTramitadora = t_rolsac.getNombreOrganCompetent(idioma);
+		if(null!=areaTramitadora) return areaTramitadora;
+		return t_rolsac.getNombreOrganCompetent("ca");
+	}
+
 	
 }

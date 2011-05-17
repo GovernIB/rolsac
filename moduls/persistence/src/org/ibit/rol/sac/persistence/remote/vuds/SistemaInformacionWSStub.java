@@ -5,7 +5,7 @@
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT)
  */
-        package es.caib.persistence.vuds;
+        package org.ibit.rol.sac.persistence.remote.vuds;
 
         
 
@@ -580,7 +580,7 @@
 
                  es.map.vuds.si.service.webservice.CargarCanalesTramitacionE cargarCanalesTramitacion336,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -845,7 +845,7 @@
 
                  es.map.vuds.si.service.webservice.CargarFormaJuridicaE cargarFormaJuridica338,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1110,7 +1110,7 @@
 
                  es.map.vuds.si.service.webservice.CargarFormaIniciacionE cargarFormaIniciacion340,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1375,7 +1375,7 @@
 
                  es.map.vuds.si.service.webservice.CargarViaPrestacionE cargarViaPrestacion342,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1640,7 +1640,7 @@
 
                  es.map.vuds.si.service.webservice.CargarAmbitoEjercicioE cargarAmbitoEjercicio344,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1905,7 +1905,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoEstablecimientoE cargarTipoEstablecimiento346,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2170,7 +2170,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarDetalleTramiteE consultarDetalleTramite348,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2435,7 +2435,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarTramitePorAmbitoE consultarTramitePorAmbito350,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2700,7 +2700,7 @@
 
                  es.map.vuds.si.service.webservice.CargarOrganizacionesAsistenciaVUDSE cargarOrganizacionesAsistenciaVUDS352,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2965,7 +2965,7 @@
 
                  es.map.vuds.si.service.webservice.CargarModosActividadE cargarModosActividad354,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3230,7 +3230,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoRegistrosE cargarTipoRegistros356,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3495,7 +3495,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarEstadoTramitesE consultarEstadoTramites358,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3760,7 +3760,7 @@
 
                  es.map.vuds.si.service.webservice.CargarResultadosProcesoE cargarResultadosProceso360,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4025,7 +4025,7 @@
 
                  es.map.vuds.si.service.webservice.CargarActividadesByAreaActividadE cargarActividadesByAreaActividad362,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4290,7 +4290,7 @@
 
                  es.map.vuds.si.service.webservice.GuardarTramitesE guardarTramites364,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4555,7 +4555,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoSolicitanteE cargarTipoSolicitante366,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4820,7 +4820,7 @@
 
                  es.map.vuds.si.service.webservice.ObtenerOrganismosByUsuarioE obtenerOrganismosByUsuario368,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5085,7 +5085,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoViaReclamacionE cargarTipoViaReclamacion370,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5350,7 +5350,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTramitesVudsE cargarTramitesVuds372,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5615,7 +5615,7 @@
 
                  es.map.vuds.si.service.webservice.CargarOrganizacionesAsistenciaAACCE cargarOrganizacionesAsistenciaAACC374,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5880,7 +5880,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarLocalizacionE consultarLocalizacion376,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6145,7 +6145,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarMapaTramiteE consultarMapaTramite378,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6410,7 +6410,7 @@
 
                  es.map.vuds.si.service.webservice.CargarViaReclamacionVUDSE cargarViaReclamacionVUDS380,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6675,7 +6675,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipologiaTramitesE cargarTipologiaTramites382,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6940,7 +6940,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarRechazosTramitesE consultarRechazosTramites384,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7205,7 +7205,7 @@
 
                  es.map.vuds.si.service.webservice.GuardarOrganizacionesAsistenciaE guardarOrganizacionesAsistencia386,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7470,7 +7470,7 @@
 
                  es.map.vuds.si.service.webservice.CargarAreasActividadE cargarAreasActividad388,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7735,7 +7735,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipologiaOrganizacionesE cargarTipologiaOrganizaciones390,
 
-                  final es.caib.persistence.vuds.SistemaInformacionWSCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.SistemaInformacionWSCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 

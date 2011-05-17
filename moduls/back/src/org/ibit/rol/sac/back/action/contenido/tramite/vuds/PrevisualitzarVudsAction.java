@@ -19,8 +19,8 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
-import es.caib.persistence.vuds.TramiteValidado;
-import es.caib.persistence.vuds.VentanillaUnica;
+import org.ibit.rol.sac.persistence.remote.vuds.TramiteValidado;
+import org.ibit.rol.sac.persistence.remote.vuds.VentanillaUnica;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

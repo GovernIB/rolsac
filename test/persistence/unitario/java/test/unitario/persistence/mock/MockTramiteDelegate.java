@@ -21,10 +21,10 @@ import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegateImpl;
 import org.ibit.rol.sac.persistence.ejb.TramiteFacadeEJB;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
+import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.persistence.vuds.ActualizacionVudsException;
-import es.caib.persistence.vuds.ValidateVudsException;
 
 
 

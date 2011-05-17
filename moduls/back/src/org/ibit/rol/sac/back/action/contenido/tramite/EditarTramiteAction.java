@@ -23,9 +23,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionForm;
 
-import es.caib.persistence.vuds.ActualizacionVudsException;
-import es.caib.persistence.vuds.ValidateVudsException;
-import es.caib.persistence.vuds.VentanillaUnica;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +35,9 @@ import java.util.HashMap;
 import java.util.Enumeration;
 
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
+import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
+import org.ibit.rol.sac.persistence.remote.vuds.VentanillaUnica;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionUA;
 

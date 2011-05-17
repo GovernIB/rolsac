@@ -6,7 +6,7 @@
  * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT)
  */
 
-    package es.caib.persistence.vuds;
+    package org.ibit.rol.sac.persistence.remote.vuds;
 
     /**
      *  GestorWebserviceBeanServiceCallbackHandler Callback class, Users can extend this class and implement

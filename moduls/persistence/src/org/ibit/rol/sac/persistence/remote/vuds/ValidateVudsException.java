@@ -1,4 +1,4 @@
-package es.caib.persistence.vuds;
+package org.ibit.rol.sac.persistence.remote.vuds;
 
 public class ValidateVudsException extends VudsException {
 

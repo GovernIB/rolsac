@@ -1,4 +1,4 @@
-package es.caib.persistence.vuds;
+package org.ibit.rol.sac.persistence.remote.vuds;
 
 import es.map.vuds.si.service.webservice.Tramite;
 

@@ -5,9 +5,12 @@ import java.rmi.RemoteException;
 import javax.ejb.EJBException;
 
 import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.ejb.TramiteFacadeEJB;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+
+import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
 
@@ -52,4 +55,13 @@ public class MockTramiteFacadeEJB extends TramiteFacadeEJB {
 	}
 	
 
+	@Override
+	protected Session getSession() {
+		return null;
+	}
+	
+	@Override
+	public boolean tieneAccesoTramite(Tramite tramite) {
+		return true;
+	}
 }

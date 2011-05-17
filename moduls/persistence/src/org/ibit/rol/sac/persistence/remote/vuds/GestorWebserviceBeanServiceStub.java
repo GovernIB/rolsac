@@ -5,7 +5,7 @@
  * This file was auto-generated from WSDL
  * by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT)
  */
-        package es.caib.persistence.vuds;
+        package org.ibit.rol.sac.persistence.remote.vuds;
 
         
 
@@ -592,7 +592,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarMapaTramiteE consultarMapaTramite348,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -857,7 +857,7 @@
 
                  es.map.vuds.si.service.webservice.CargarIdiomasE cargarIdiomas350,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1122,7 +1122,7 @@
 
                  es.map.vuds.si.service.webservice.CargarAreasActividadE cargarAreasActividad352,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1387,7 +1387,7 @@
 
                  es.map.vuds.si.service.webservice.CargarOrganizacionesAsistenciaAACCE cargarOrganizacionesAsistenciaAACC354,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1652,7 +1652,7 @@
 
                  es.map.vuds.si.service.webservice.GuardarViasReclamacionE guardarViasReclamacion356,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -1917,7 +1917,7 @@
 
                  es.map.vuds.si.service.webservice.GuardarOrganizacionesAsistenciaE guardarOrganizacionesAsistencia358,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2182,7 +2182,7 @@
 
                  es.map.vuds.si.service.webservice.CargarResultadosProcesoE cargarResultadosProceso360,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2447,7 +2447,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTramitesAACCE cargarTramitesAACC362,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2712,7 +2712,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarEstadoTramitesE consultarEstadoTramites364,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -2977,7 +2977,7 @@
 
                  es.map.vuds.si.service.webservice.CargarFormaJuridicaE cargarFormaJuridica366,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3242,7 +3242,7 @@
 
                  es.map.vuds.si.service.webservice.CargarActividadesEconomicasE cargarActividadesEconomicas368,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3507,7 +3507,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTramitesVudsE cargarTramitesVuds370,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -3772,7 +3772,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoViaReclamacionE cargarTipoViaReclamacion372,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4037,7 +4037,7 @@
 
                  es.map.vuds.si.service.webservice.CargarAmbitoEjercicioE cargarAmbitoEjercicio374,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4302,7 +4302,7 @@
 
                  es.map.vuds.si.service.webservice.CargarViaReclamacionVUDSE cargarViaReclamacionVUDS376,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4567,7 +4567,7 @@
 
                  es.map.vuds.si.service.webservice.CargarViasReclamacionAACCE cargarViasReclamacionAACC378,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -4832,7 +4832,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarDetalleTramiteE consultarDetalleTramite380,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5097,7 +5097,7 @@
 
                  es.map.vuds.si.service.webservice.CargarViaPrestacionE cargarViaPrestacion382,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5362,7 +5362,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarRechazosTramitesE consultarRechazosTramites384,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5627,7 +5627,7 @@
 
                  es.map.vuds.si.service.webservice.CargarAreasTramitadoraE cargarAreasTramitadora386,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -5892,7 +5892,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarTramitePorAmbitoE consultarTramitePorAmbito388,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6157,7 +6157,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoSolicitanteE cargarTipoSolicitante390,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6422,7 +6422,7 @@
 
                  es.map.vuds.si.service.webservice.GuardarTramitesE guardarTramites392,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6687,7 +6687,7 @@
 
                  es.map.vuds.si.service.webservice.CargarTipoEstablecimientoE cargarTipoEstablecimiento394,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -6952,7 +6952,7 @@
 
                  es.map.vuds.si.service.webservice.CargarFormaIniciacionE cargarFormaIniciacion396,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7217,7 +7217,7 @@
 
                  es.map.vuds.si.service.webservice.CargarCanalesTramitacionE cargarCanalesTramitacion398,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7482,7 +7482,7 @@
 
                  es.map.vuds.si.service.webservice.CargarOrganizacionAsistenciaVUDSE cargarOrganizacionAsistenciaVUDS400,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -7747,7 +7747,7 @@
 
                  es.map.vuds.si.service.webservice.CargarActividadesByAreaActividadE cargarActividadesByAreaActividad402,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
@@ -8012,7 +8012,7 @@
 
                  es.map.vuds.si.service.webservice.ConsultarLocalizacionE consultarLocalizacion404,
 
-                  final es.caib.persistence.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
+                  final org.ibit.rol.sac.persistence.remote.vuds.GestorWebserviceBeanServiceCallbackHandler callback)
 
                 throws java.rmi.RemoteException{
 
