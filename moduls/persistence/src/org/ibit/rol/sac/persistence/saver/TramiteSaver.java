@@ -12,6 +12,7 @@ import org.ibit.rol.sac.persistence.ejb.TramiteFacadeEJB;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.persistence.vuds.ActualizacionVudsException;
+import es.caib.persistence.vuds.ActualizadorVuds;
 import es.caib.persistence.vuds.ValidateVudsException;
 
 public class TramiteSaver {
@@ -39,7 +40,10 @@ public class TramiteSaver {
 		session.flush();
 
 		if(tramite.esPublico()) 
-				Actualizador.actualizar(tramite,true);
+				Actualizador.actualizar(tramite);
+		
+		if(tramite.esVentanillaUnica())
+				ActualizadorVuds.actualizar(tramite);
 
 		return tramite.getId();
 

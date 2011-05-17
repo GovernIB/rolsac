@@ -53,6 +53,10 @@ public class MockDestinatarioDelegate extends DestinatarioDelegate {
 		this.destinatarios = destinatarios;
 	}
 
+	public MockDestinatarioDelegate() {
+		// TODO Auto-generated constructor stub
+	}
+
 
 	 
 }
