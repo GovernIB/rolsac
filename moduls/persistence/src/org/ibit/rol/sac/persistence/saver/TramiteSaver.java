@@ -7,49 +7,34 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.lang.time.DateUtils;
 import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.dao.saver.TramiteDAOSaver;
 import org.ibit.rol.sac.persistence.ejb.TramiteFacadeEJB;
-import org.ibit.rol.sac.persistence.ws.Actualizador;
+import org.ibit.rol.sac.persistence.remote.ActualizadorPortal;
 
-import es.caib.persistence.vuds.ActualizacionVudsException;
-import es.caib.persistence.vuds.ActualizadorVuds;
-import es.caib.persistence.vuds.ValidateVudsException;
 
 public class TramiteSaver {
 
-	TramiteFacadeEJB tramiteFacadeEJB;
 	
 	public TramiteSaver(TramiteFacadeEJB tramiteFacadeEJB) {
 		this.tramiteFacadeEJB = tramiteFacadeEJB;
 	}
 
-	public Long grabarTramite(Tramite tramite, Long idOC, Session session) throws ValidateVudsException, ActualizacionVudsException, HibernateException {
-
+	public Long grabarTramite(Tramite tramite, Long idOC, Session session) throws HibernateException {
 
 		if (!tramiteFacadeEJB.tieneAccesoTramite(tramite)) 
 			throw new SecurityException("No tiene acceso al tr�mite");
 
 		alimentarFechaActualizacionSiNecesario(tramite);
-		
 
-		UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idOC);
-		tramite.setOrganCompetent(unidad);
+		Long tramId = getTramiteDAOSaver().grabarTramite(tramite,idOC,session);
+		getActualizadorPortal().actualizar(tramite);
 
-		//guardem canvis
-		session.saveOrUpdate(tramite);
-		session.flush();
-
-		if(tramite.esPublico()) 
-				Actualizador.actualizar(tramite);
-		
-		if(tramite.esVentanillaUnica())
-				ActualizadorVuds.actualizar(tramite);
-
-		return tramite.getId();
+		return tramId;
 
 	}
 	
 	
+
 	private void alimentarFechaActualizacionSiNecesario(Tramite tramite) {
 		
 		if(null==tramite.getId()) return;
@@ -67,5 +52,38 @@ public class TramiteSaver {
 		}		
 	}
 
+	
+	TramiteFacadeEJB tramiteFacadeEJB;
+
+	ActualizadorPortal actualizadorPortal;
+	
+	TramiteDAOSaver tramiteDAOSaver;
+	
+	
+	public TramiteFacadeEJB getTramiteFacadeEJB() {
+		return tramiteFacadeEJB;
+	}
+
+	public void setTramiteFacadeEJB(TramiteFacadeEJB tramiteFacadeEJB) {
+		this.tramiteFacadeEJB = tramiteFacadeEJB;
+	}
+
+	public void setActualizadorPortal(ActualizadorPortal actualizadorPortal) {
+		this.actualizadorPortal = actualizadorPortal;
+	}
+
+	public void setTramiteDAOSaver(TramiteDAOSaver tramiteDAOSaver) {
+		this.tramiteDAOSaver = tramiteDAOSaver;
+	}
+
+	public TramiteDAOSaver getTramiteDAOSaver() {
+		if(null==tramiteDAOSaver) tramiteDAOSaver=new TramiteDAOSaver(tramiteFacadeEJB);
+		return tramiteDAOSaver;
+	}
+
+	public ActualizadorPortal getActualizadorPortal() {
+		if(null==actualizadorPortal) actualizadorPortal=new ActualizadorPortal();
+		return actualizadorPortal;
+	}
 
 }
