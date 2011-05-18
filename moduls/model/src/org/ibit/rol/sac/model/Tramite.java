@@ -280,11 +280,11 @@ public class Tramite extends Ordenable {
 				", validacio=" + validacio+
 				", dataActualització=" + dataActualitzacio +
 				", dataCaducitat=" + dataCaducitat + 
-				", taxes=" + taxes +
+			//	", taxes=" + taxes +
 				", dataPublicacio=" + dataPublicacio + 
-				", docsInformatius=" + docsInformatius + 
+			//	", docsInformatius=" + docsInformatius +
 				", fase=" + fase + 
-				", formularios=" + formularios + 
+			//	", formularios=" + formularios + 
 				", organCompetent=" + organCompetent + 
 				", procedimiento=" + proc +
 				", idTraTel="	+ idTraTel +
