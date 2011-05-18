@@ -9,7 +9,7 @@ import org.apache.commons.lang.time.DateUtils;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.dao.saver.TramiteDAOSaver;
 import org.ibit.rol.sac.persistence.ejb.TramiteFacadeEJB;
-import org.ibit.rol.sac.persistence.remote.ActualizadorPortal;
+import org.ibit.rol.sac.persistence.remote.ActualizadorFacade;
 
 
 public class TramiteSaver {
@@ -27,7 +27,7 @@ public class TramiteSaver {
 		alimentarFechaActualizacionSiNecesario(tramite);
 
 		Long tramId = getTramiteDAOSaver().grabarTramite(tramite,idOC,session);
-		getActualizadorPortal().actualizar(tramite);
+		getActualizadorFacade().actualizar(tramite);
 
 		return tramId;
 
@@ -55,7 +55,7 @@ public class TramiteSaver {
 	
 	TramiteFacadeEJB tramiteFacadeEJB;
 
-	ActualizadorPortal actualizadorPortal;
+	ActualizadorFacade actualizadorFacade;
 	
 	TramiteDAOSaver tramiteDAOSaver;
 	
@@ -68,8 +68,8 @@ public class TramiteSaver {
 		this.tramiteFacadeEJB = tramiteFacadeEJB;
 	}
 
-	public void setActualizadorPortal(ActualizadorPortal actualizadorPortal) {
-		this.actualizadorPortal = actualizadorPortal;
+	public void setActualizadorFacade(ActualizadorFacade actualizadorFacade) {
+		this.actualizadorFacade = actualizadorFacade;
 	}
 
 	public void setTramiteDAOSaver(TramiteDAOSaver tramiteDAOSaver) {
@@ -81,9 +81,9 @@ public class TramiteSaver {
 		return tramiteDAOSaver;
 	}
 
-	public ActualizadorPortal getActualizadorPortal() {
-		if(null==actualizadorPortal) actualizadorPortal=new ActualizadorPortal();
-		return actualizadorPortal;
+	public ActualizadorFacade getActualizadorFacade() {
+		if(null==actualizadorFacade) actualizadorFacade=new ActualizadorFacade();
+		return actualizadorFacade;
 	}
 
 }
