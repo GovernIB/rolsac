@@ -44,7 +44,7 @@ public class Tramite extends Ordenable {
 
     Set<DocumentTramit> docsInformatius = new HashSet<DocumentTramit>();	//set of documents
     Set<DocumentTramit> formularios = new HashSet<DocumentTramit>();	//set of documents
-    Set<Taxa> taxes;  //set of taxa
+    Set<Taxa> taxes = new HashSet<Taxa>();  //set of taxa
     String dataActualitzacioVuds;  //String: "no enviat"  "data hora"
 
 
@@ -80,6 +80,12 @@ public class Tramite extends Ordenable {
         this.formularios = formularios;
     }
 
+    public void addFormulario(DocumentTramit doc) {
+		doc.setTramit(this);
+		doc.setOrden((long)formularios.size()+1);
+		formularios.add(doc);							
+	}
+    
     /**
      * @deprecated usar removeDocument
      * @param form
@@ -129,16 +135,19 @@ public class Tramite extends Ordenable {
 		this.docsInformatius = docsInformatius;
 	}
 
+	public void addDocInformatiu(DocumentTramit doc) {
+		doc.setTramit(this);
+		doc.setOrden((long)docsInformatius.size()+1);
+		docsInformatius.add(doc);							
+	}
+
 	public void addDocument(DocumentTramit doc) {
-		doc.setTramit(this);			//estableix camp 'codi_formrsc'
 		switch(doc.getTipus()) {
 			case DocumentTramit.DOCINFORMATIU:
-				doc.setOrden((long)docsInformatius.size());
-				docsInformatius.add(doc);
+				addDocInformatiu(doc);					
 				break;
 			case DocumentTramit.FORMULARI:
-				doc.setOrden((long)formularios.size());
-				formularios.add(doc);
+				addFormulario(doc);
 			break;
 		}
 	}
