@@ -362,6 +362,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	}
 
 	
-	
+	public boolean esVentanillaUnica() {
+		 return "1".equals(getVentanillaUnica());
+	}
 	
 }

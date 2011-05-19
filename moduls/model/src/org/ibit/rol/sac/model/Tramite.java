@@ -320,7 +320,7 @@ public class Tramite extends Ordenable {
 
 
 	public boolean esVentanillaUnica() {
-		 return "1".equals(getProcedimiento().getVentanillaUnica());
+		 return getProcedimiento().esVentanillaUnica();
 	}
 
 	public boolean esPublico() {

@@ -8,7 +8,7 @@ import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.dao.saver.TramiteDAOSaver;
-import org.ibit.rol.sac.persistence.remote.ActualizadorPortal;
+import org.ibit.rol.sac.persistence.remote.ActualizadorFacade;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 import org.junit.runner.RunWith;
@@ -34,7 +34,7 @@ public class TramiteFacadeEJBTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		log = new LogSpy();
-		ActualizadorPortal.log=log;
+		ActualizadorFacade.log=log;
 	}
 	
 	public void testGrabarTramitePMAActualizaPortalPMA() {

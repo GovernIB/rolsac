@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import es.caib.persistence.remote.vuds.ActualizadorVuds;;
+import es.caib.persistence.remote.vuds.ActualizadorVuds;
 
 
 /**

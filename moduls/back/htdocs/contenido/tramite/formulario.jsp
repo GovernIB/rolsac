@@ -154,10 +154,10 @@ function validar(form) {
             <bean:message key="tramite.modificacion" />
         </logic:present>
     </h1>
-    <logic:present name="vuds">
+    <logic:present name="esTramiteVUDS">
     <h2><bean:message key="tramite.vuds.datos" /></h2>
     </logic:present>
-    <logic:notPresent name="vuds">
+    <logic:notPresent name="esTramiteVUDS">
     <h2><bean:message key="tramite.datos" /></h2>
     </logic:notPresent>
 </div>
@@ -270,18 +270,29 @@ function validar(form) {
 
 <br>
 
-<logic:present name="vuds">
+<logic:present name="esTramiteVUDS">
 
 <fieldset>
 <legend>
-<bean:message key="tramite.fieldset.ventanilla" />
+	<logic:present name="estaAbiertaVUDS">
+		<bean:message key="tramite.fieldset.ventanilla.oberta" />
+	</logic:present>
+	<logic:notPresent name="estaAbiertaVUDS">
+		<bean:message key="tramite.fieldset.ventanilla.tancada" />
+	</logic:notPresent>
 </legend>
+
         <div class="component">
           <div class="etiqueta"><bean:message key="tramite.codiVuds" /></div>
             <html:hidden property="codiVuds" />
-            <html:text styleClass="ctext" property="descCodiVuds"  />
+            <html:text styleClass="ctext" property="descCodiVuds"/>
             <div class="botoneraconsulta4">
-                <html:button property="boton" onclick="obrirCodisVuds()" tabindex="1"><bean:message key="boton.seleccionar" /></html:button>
+               <logic:present name="estaAbiertaVUDS">
+               	 <html:button property="boton" onclick="obrirCodisVuds()" tabindex="1"><bean:message key="boton.seleccionar" /></html:button>
+               </logic:present>
+               <logic:notPresent name="estaAbiertaVUDS">
+               	 <html:button property="boton" onclick="obrirCodisVuds()" tabindex="1" disabled="true"><bean:message key="boton.seleccionar" /></html:button>
+               </logic:notPresent>
             </div>
 		</div>
 
@@ -296,6 +307,8 @@ function validar(form) {
         </div>
 
 </fieldset>
+
+
 </logic:present>
 
 <br>

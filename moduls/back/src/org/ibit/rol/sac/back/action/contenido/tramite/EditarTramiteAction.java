@@ -115,11 +115,13 @@ public class EditarTramiteAction extends BaseDispatchAction{
 
     	if ("on".equals(proc.getTaxa())) { request.setAttribute("taxa","on"); }
 
-        if ("1".equals(proc.getVentanillaUnica())) {request.setAttribute("vuds","on"); }
+    	 informarSiEsTramiteVuds(request,proc);
+         habilitarVentanillaUnicaSiEstaAbierta(request,proc);
 
     	return mapping.findForward("success");
     }
-    
+
+	
     //u92770[enric] afegit setters dels delegate per fer unit testing del metode editar() (Dependency Injection)
     ProcedimientoDelegate procedimientoDelegate;
     TramiteDelegate tramiteDelegate;
@@ -171,8 +173,8 @@ public class EditarTramiteAction extends BaseDispatchAction{
         	request.setAttribute("tramiteForm", dForm);
         	request.setAttribute("docInformatiuOptions", tramite.getDocsInformatius());
         	request.setAttribute("taxesOptions", tramite.getTaxes());
-            if ("1".equals(tramite.getProcedimiento().getVentanillaUnica())) {request.setAttribute("vuds","on"); }
-
+        	informarSiEsTramiteVuds(request,tramite.getProcedimiento());
+            habilitarVentanillaUnicaSiEstaAbierta(request,tramite.getProcedimiento());
         	return mapping.findForward("success");
 
         } else {
@@ -349,10 +351,9 @@ public class EditarTramiteAction extends BaseDispatchAction{
             if ("on".equals(tramite.getProcedimiento().getTaxa())) {
             	request.setAttribute("taxa","on");
             }
-
-            if ("1".equals(tramite.getProcedimiento().getVentanillaUnica())) {
-            	request.setAttribute("vuds","on");
-            }
+            
+            informarSiEsTramiteVuds(request,tramite.getProcedimiento());
+            habilitarVentanillaUnicaSiEstaAbierta(request,tramite.getProcedimiento());
 
             
         } else {
@@ -365,6 +366,16 @@ public class EditarTramiteAction extends BaseDispatchAction{
         return mapping.findForward("success");
     }
 
+    private void habilitarVentanillaUnicaSiEstaAbierta(HttpServletRequest request, ProcedimientoLocal proc) {
+		if (proc.esVentanillaUnica() && VentanillaUnica.estaAbierta()) 
+			request.setAttribute("estaAbiertaVUDS","on"); 
+	}
+    
+    private void informarSiEsTramiteVuds(HttpServletRequest request, ProcedimientoLocal proc) {
+		if (proc.esVentanillaUnica()) 
+			request.setAttribute("esTramiteVUDS","on"); 
+	}
+    
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 

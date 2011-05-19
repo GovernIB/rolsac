@@ -25,10 +25,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.client.Options;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.axis2.transport.http.HttpTransportProperties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -97,6 +93,7 @@ public class VentanillaUnica {
 
 	public static TramiteValidado validarTramiteVuds(org.ibit.rol.sac.model.Tramite t_rolsac, String idioma)
 	{
+		//TODO
 		return null;
 		/*
 		//en la validacio, no existeix encara cap codigoIdentificador del tramite.
@@ -356,6 +353,7 @@ public class VentanillaUnica {
 	
 	public Tramite convertirTramitRolsacl2TramiteVUDS(org.ibit.rol.sac.model.Tramite t_rolsac, String idioma)
 	{
+		//TODO
 		return null;
 	}
 
@@ -366,37 +364,20 @@ public class VentanillaUnica {
 	}
 	
 	public int enviarTramit(org.ibit.rol.sac.model.Tramite tramit, String idiomaStr) throws WSInvocatorException {
+		//TODO
 		return 0;
 	}
 
 
 
 	public List<TramiteVuds> cargarCodisVuds(String idiomaStr) 	throws WSInvocatorException {
+		//TODO
 		return null;
-		/*
- 		Idioma idioma=setIdioma(idiomaStr);
- 		CargarTramitesVuds param=new CargarTramitesVuds();
-		param.setIdioma(idioma);
-		CargarTramitesVudsE paramE=new CargarTramitesVudsE();
-		paramE.setCargarTramitesVuds(param);
-
-		CargarTramitesVudsResponseE respE;
-		try {
-			GestorWebserviceBeanServiceStub stub = createServiceInstance(endpoint);
-			respE = stub.cargarTramitesVuds(paramE);
-			CargarTramitesVudsResponse resp = respE.getCargarTramitesVudsResponse();
-			TramiteVuds[] vuds = resp.get_return();
-			return Arrays.asList(vuds);
-			
-		} catch (RemoteException e) {
-			log.error(e);
-			throw new WSInvocatorException(e);
-		}
-*/
+	
 	}
 
-	public static boolean estaVentanillaAbierta() {
-		return null != System.getProperty("es.caib.rolsac.vuds.endpoint");
+	public static boolean estaAbierta() {
+		return "S".equals(System.getProperty("es.caib.rolsac.vuds.endpoint.obert"));
 	}
 	
 	
