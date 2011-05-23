@@ -16,7 +16,7 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.ws.invoker.WSInvocatorException;
 
-import es.caib.persistence.vuds.VentanillaUnica;
+import org.ibit.rol.sac.persistence.remote.vuds.VentanillaUnica;
 import es.map.vuds.si.service.webservice.TramiteVuds;
 
 import javax.servlet.http.HttpServletRequest;

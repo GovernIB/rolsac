@@ -107,7 +107,7 @@ public abstract class HibernateEJB implements SessionBean {
         }
     }
 
-    protected void close(Session session) {
+    public void close(Session session) {
         if (session != null && session.isOpen()) {
             try {
                 if (session.isDirty()) {

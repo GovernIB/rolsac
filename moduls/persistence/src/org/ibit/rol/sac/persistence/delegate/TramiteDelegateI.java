@@ -5,14 +5,13 @@ import java.util.Map;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
+import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 
-import es.caib.persistence.vuds.ActualizacionVudsException;
-import es.caib.persistence.vuds.ValidateVudsException;
 
 public interface TramiteDelegateI {
 
-	public abstract Long grabarTramite(Tramite tramite, Long idOC)
-			throws DelegateException, ValidateVudsException, ActualizacionVudsException;
+	public abstract Long grabarTramite(Tramite tramite, Long idOC) throws DelegateException;
 
 	public abstract Tramite obtenerTramite(Long id) throws DelegateException;
 

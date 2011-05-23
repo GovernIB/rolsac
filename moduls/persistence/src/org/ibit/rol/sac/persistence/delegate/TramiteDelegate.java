@@ -11,10 +11,10 @@ import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.intf.TramiteFacade;
 import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
+import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
+import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
 
-import es.caib.persistence.vuds.ActualizacionVudsException;
-import es.caib.persistence.vuds.ValidateVudsException;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;

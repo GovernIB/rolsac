@@ -20,7 +20,7 @@ public class ActualizacionServicio extends IdInvoker {
 			String endPoint, String idRemoto) throws WSInvocatorException {
 		return new ActualizacionServicio(endPoint, idRemoto);
 	}
-    private ActualizacionServicio(String endPoint, String idRemoto) throws WSInvocatorException {
+    public ActualizacionServicio(String endPoint, String idRemoto) throws WSInvocatorException {
 
 		super(endPoint, WEB_SERVICE, NAMESPACEURI, idRemoto);
 
