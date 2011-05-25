@@ -251,21 +251,47 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 					final FichaTransferible[] fichasTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
 					if(fichasTrans!=null){
 						log.info("Fichas recogidas");
+                        boolean grabarFicha= false;
 						for(FichaTransferible fichaTrans : fichasTrans){
+                            // Condicions afegides per controllar que no es donin d'alta fitxes sense matèries ni fets vitals.
+                            // Controllam que si la llista ens ve amb elements nulls, se descarti la fitxa.
+                            if ((fichaTrans.getCodigoEstandarMaterias() != null && fichaTrans.getCodigoEstandarMaterias().length > 0)
+				                || (fichaTrans.getCodigoEstandarHV() != null && fichaTrans.getCodigoEstandarHV().length > 0)) {
 
-                            if (fichaTrans.getId() != null) {
-                                FichaRemota fichaRemota = fichaRemotaDelegate.obtenerFichaRemota(fichaTrans.getId(), adminRemota.getId());
-                                if(fichaRemota==null){
-                                    log.info("La ficha no existe la creo");
-                                    fichaRemota = new FichaRemota();
-                                }
 
-                                fichaRemota.rellenar(fichaTrans);
-                                fichaRemota.setAdministracionRemota(adminRemota);
-                                fichaRemotaDelegate.grabarFichaRemota(fichaRemota,ua.getId(),seccion.getId(),fichaTrans.getCodigoEstandarMaterias(),fichaTrans.getCodigoEstandarHV());
-                                log.info("FichaUA guardada idExt"+fichaRemota.getIdExterno());
-                            } else {
-                                log.warn("Ficha transferible con 'id' null, ignorando!!!!");
+                                  if(fichaTrans.getCodigoEstandarMaterias()!=null){
+                                    for(String ceMat : fichaTrans.getCodigoEstandarMaterias()){
+                                       if(ceMat != null){
+                                           log.info("entro");
+                                           grabarFicha=true;
+                                       }
+                                    }
+                                  }
+
+                                  if(fichaTrans.getCodigoEstandarHV()!=null){
+                                    for(String ceHV : fichaTrans.getCodigoEstandarHV()){
+                                       if(ceHV!=null){
+                                           grabarFicha=true;
+                                       }
+                                    }
+                                  }
+
+                                  if(grabarFicha){
+                                    if (fichaTrans.getId() != null) {
+                                        FichaRemota fichaRemota = fichaRemotaDelegate.obtenerFichaRemota(fichaTrans.getId(), adminRemota.getId());
+                                        if(fichaRemota==null){
+                                            log.info("La ficha no existe la creo");
+                                            fichaRemota = new FichaRemota();
+                                        }
+
+                                        fichaRemota.rellenar(fichaTrans);
+                                        fichaRemota.setAdministracionRemota(adminRemota);
+                                        fichaRemotaDelegate.grabarFichaRemota(fichaRemota,ua.getId(),seccion.getId(),fichaTrans.getCodigoEstandarMaterias(),fichaTrans.getCodigoEstandarHV());
+                                        log.info("FichaUA guardada idExt"+fichaRemota.getIdExterno());
+                                    } else {
+                                        log.warn("Ficha transferible con 'id' null, ignorando!!!!");
+                                    }
+                                  }
                             }
                         }
 					}
