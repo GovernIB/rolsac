@@ -179,9 +179,9 @@ public class FichaTransferible extends ActuacionTransferible implements Serializ
         this.setInfo(ficha.getInfo());
         this.setResponsable(ficha.getResponsable());
 		//Trasformo los ArchivoTransferible contenidos en Archivo
-		this.setIcono(ArchivoTransferible.generar(ficha.getIcono()));
-		this.setImagen(ArchivoTransferible.generar(ficha.getImagen()));
-		this.setBaner(ArchivoTransferible.generar(ficha.getBaner()));
+	//	this.setIcono(ArchivoTransferible.generar(ficha.getIcono()));
+	//	this.setImagen(ArchivoTransferible.generar(ficha.getImagen()));
+	//	this.setBaner(ArchivoTransferible.generar(ficha.getBaner()));
 
 		//Relleno los campos con sus Codigos Estandar
 		if(ficha.getMaterias()!=null){
