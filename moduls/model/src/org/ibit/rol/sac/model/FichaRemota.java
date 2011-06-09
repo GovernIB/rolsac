@@ -65,9 +65,9 @@ public class FichaRemota extends Ficha implements Remoto{
 		this.setResponsable(fichaTransferible.getResponsable());
 		
 		//Trasformo los ArchivoTransferible contenidos en Archivo
-		this.setIcono(Archivo.generar(fichaTransferible.getIcono()));
-		this.setImagen(Archivo.generar(fichaTransferible.getImagen()));
-		this.setBaner(Archivo.generar(fichaTransferible.getBaner()));
+	//	this.setIcono(Archivo.generar(fichaTransferible.getIcono()));
+	//	this.setImagen(Archivo.generar(fichaTransferible.getImagen()));
+	//	this.setBaner(Archivo.generar(fichaTransferible.getBaner()));
 		this.setUrlRemota(fichaTransferible.getUrlRemota());
 		this.setInfo(fichaTransferible.getInfo());
         //Relleno las traducciones
