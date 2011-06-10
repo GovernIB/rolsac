@@ -18,6 +18,7 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
  */
 public class TraductorInitializer implements ServletContextListener {
 
+	
 	protected static Log log = LogFactory.getLog(TraductorInitializer.class);
 
 	/**
@@ -30,13 +31,15 @@ public class TraductorInitializer implements ServletContextListener {
 	 */
 	public void contextInitialized(ServletContextEvent event) {
 
-		if(!traductorHabilitat()) return;
+		if(!traductorHabilitat()) {
+			log.info("Carregant Rolsac sense traducció automàtica");
+			return;
+		}
 		try {
 
-			Traductor traductor = new Traductor();
-
-			if (System.getProperty("es.caib.rolsac.integracion.traductor.servidor") != null) 
-				traductor.setTranslationServerUrl(System.getProperty("es.caib.rolsac.integracion.traductor.servidor"));
+			Traductor traductor = crearTraductor();
+			
+			establecerServidorTraduccion(traductor);
 
 			//El objeto de traductor se guarda como atributo de contexto que podrá ser utilizado en
 			//ámbito de aplicación
@@ -46,16 +49,49 @@ public class TraductorInitializer implements ServletContextListener {
 			log.info("URL de servidor de traducció: " + traductor.getTranslationServerUrl());
 
 		} catch (Exception e) {
-			log.info("No s'ha trobat paràmetre d' inicialització de traducció automàtica");
 			log.info("Carregant Rolsac sense traducció automàtica");
 		}
 
 	}
-	
-	private boolean traductorHabilitat() {
-		return System.getProperty("es.caib.rolsac.integracion.traductor").equals("S");
+
+	protected Traductor crearTraductor() throws Exception {
+		return new Traductor();
 	}
 
+	private boolean traductorHabilitat() {
+		return flagTraductorHabilitat();
+	}
+
+
+	private boolean flagTraductorHabilitat() {
+		if(propietatNoExisteix(FLAG_TRADUCTOR))
+			return false;
+		return estatFlagTraductor();
+	}
+
+	private boolean estatFlagTraductor() {
+		return llegirPropietat(FLAG_TRADUCTOR).equals("S");
+	}
+	
+	private void establecerServidorTraduccion(Traductor traductor) {
+		if(propietatNoExisteix(SERVIDOR_TRADUCTOR)) 
+			return;
+		traductor.setTranslationServerUrl(llegirPropietat(SERVIDOR_TRADUCTOR));
+	}
+
+	
+	
+	//TODO extraure metode en utils 
+	private boolean propietatNoExisteix(String name) {
+		String value = llegirPropietat(name);
+		return null==value;
+	}
+	
+	//TODO extraure metode en utils
+	private String llegirPropietat(String name) {
+		return System.getProperty(name);
+	}
+	
 	
 	/* (non-Javadoc)
 	 * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
@@ -64,4 +100,8 @@ public class TraductorInitializer implements ServletContextListener {
 		// no es necesario implementar código
 	}	
 
+	
+	static final String SERVIDOR_TRADUCTOR = "es.caib.rolsac.integracion.traductor.servidor";
+	static final String FLAG_TRADUCTOR = "es.caib.rolsac.integracion.traductor";
+	
 }
