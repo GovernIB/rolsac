@@ -62,7 +62,7 @@ public class TraductorInitializerTest extends TestCase {
 
 	}
 	
-	public void test03TraductorInhabilitat() {
+	public void test03TraductorInhabilitatSensePropietat() {
 	
 		initializer = new TraductorInitializer(){
 			protected Traductor crearTraductor() throws Exception {
@@ -77,6 +77,24 @@ public class TraductorInitializerTest extends TestCase {
 		assertTrue(logger.containsInfoMsg("Carregant Rolsac sense traducció automàtica"));
 		
 	}
+
+	public void test04TraductorInhabilitatAmbPropietatFalse() {
+		System.setProperty(TraductorInitializer.FLAG_TRADUCTOR, "N");
+
+		initializer = new TraductorInitializer(){
+			protected Traductor crearTraductor() throws Exception {
+				Traductor mockTraductor=PowerMock.createMock(Traductor.class);
+				EasyMock.expect(mockTraductor.getTranslationServerUrl()).andReturn("");
+				PowerMock.replay(mockTraductor);
+				return mockTraductor;
+			}
+		};
+		initializer.contextInitialized(mockEvent);
+
+		assertTrue(logger.containsInfoMsg("Carregant Rolsac sense traducció automàtica"));
+		
+	}
+
 	
 	
 	private LogSpy logger=null;
