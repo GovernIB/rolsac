@@ -15,6 +15,8 @@
 <tr><td><a href="TestRolsac_buscaFicha.sel">TestRolsac_buscaFicha</a></td></tr>
 <tr><td><a href="TestRolsac_modificaMateriasDeFicha.sel">TestRolsac_modificaMateriasDeFicha</a></td></tr>
 <tr><td><a href="TestRolsac_buscaProcediment.sel">TestRolsac_buscaProcediment</a></td></tr>
+<tr><td><a href="TestRolsac_asociarEdificioAunidadAdmin">TestRolsac_asociarEdificioAunidadAdmin</a></td></tr>
+<tr><td><a href="TestRolsac_previsuConTaxaOn.sel">TestRolsac_previsuConTaxaOn</a></td></tr>
 </tbody></table>
 </body>
 </html>
