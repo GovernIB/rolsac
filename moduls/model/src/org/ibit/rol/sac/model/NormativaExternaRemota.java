@@ -58,6 +58,8 @@ public class NormativaExternaRemota extends NormativaExterna implements Remoto{
             for (final TraduccionNormativaTransferible traduccion : normativaTransferible.getTraducciones()){
                 if (traduccion != null) {
                     final TraduccionNormativaExterna temp =  new TraduccionNormativaExterna();
+                    log.info("TITULO NORMATIVA REMOTA" + traduccion.getTitulo());
+                    log.info("TITULO NORMATIVA REMOTA LENGHT" + traduccion.getTitulo().length());
                     temp.setTitulo(traduccion.getTitulo());
                     traducciones.put(traduccion.getCodigoEstandarIdioma().toLowerCase(), temp);
                 }
