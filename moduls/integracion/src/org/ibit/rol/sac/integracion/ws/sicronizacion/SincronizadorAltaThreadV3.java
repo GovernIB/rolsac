@@ -283,7 +283,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
                         }
                         normativaExternaRemota.rellenar(normativaTransferible);
 
-
+                        log.info("Normativa que vamos a guardar con idExt "+ normativaTransferible.getId());
                         normativaExternaRemota.setAdministracionRemota(adminRemota);
                         normativaExternaRemotaDelegate.grabarNormativaExternaRemota(normativaExternaRemota);
                         normativaExternaRemotaDelegate.anyadirProcedimiento(proc.getId(), normativaExternaRemota.getId());
