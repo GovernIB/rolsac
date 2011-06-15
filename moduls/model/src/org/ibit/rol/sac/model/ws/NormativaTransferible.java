@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.model.ws;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -69,8 +70,11 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
                 final TraduccionNormativa traduccion = (TraduccionNormativa)normativa.getTraduccion(idioma);
                 if(traduccion!=null){
                     final TraduccionNormativaTransferible temp =  new TraduccionNormativaTransferible();
-                    log.info("TITULO NORMATIVA ORIGINAL" + traduccion.getTitulo());
-                    log.info("TITULO NORMATIVA ORIGINAL LENGHT" + traduccion.getTitulo().length());
+                    if(null!=traduccion.getTitulo()) {
+                    	log.info("charset encoding="+Charset.defaultCharset());
+                    	log.info("TITULO NORMATIVA ORIGINAL" + traduccion.getTitulo());
+                    	log.info("TITULO NORMATIVA ORIGINAL LENGHT" + traduccion.getTitulo().length());
+                    }
                     temp.setTitulo(traduccion.getTitulo());
                     temp.setCodigoEstandarIdioma(idioma);
                     traducciones.add(temp);
