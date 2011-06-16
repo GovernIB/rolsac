@@ -82,7 +82,7 @@
                     <property name="apartado" length="256" column="TNE_APARTA"/>
                     <property name="paginaInicial" column="TNE_PAGINI"/>
                     <property name="paginaFinal" column="TNE_PAGFIN"/>
-                    <property name="titulo" length="512" column="TNE_TITULO"/>
+                    <property name="titulo" length="1024" column="TNE_TITULO"/>
                     <property name="enlace" length="512" column="TNE_ENLACE"/>
                     <property name="responsable" length="512" column="TNE_RESPON"/>
                     <many-to-one  cascade="all" name="archivo" column="TNE_CODARC" foreign-key="RSC_TNEARC_FK"/>
