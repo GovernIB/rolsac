@@ -239,48 +239,6 @@
 	
 
 
-/*
-var uriBorrar="trabajoEdita.do?modifica=null&anyade=null&borrar";
-var alert1="<bean:message  bundle="subscripcions" key="trabajo.grupalert1"/>";
-var alert2="<bean:message  bundle="subscripcions" key="trabajo.grupalert2"/>";
-
-
-	
-	function previsualizar() {
-		<logic:present name="trabajoForm" property="id">
-			abrirWindow('visualizaTrabajo.do?id=<bean:write name="trabajoForm" property="id"/>');
-		</logic:present>	
-	}
-
- 	function abrirSeccion() {
-        poprealcion = obrir("../sacback/sistema/seccion/arbol.do?idSeccion=0&action=&ficha=true", "<bean:message  bundle="subscripcions" key='boton.seleccionar'/>", 538, 440);
-    }
-    function obrir(url, name, x, y) {
-   		nombre = window.open(url, name, 'scrollbars=no, resizable=yes, width=' + x + ',height=' + y);
-   		return nombre;
-	}
-	
-	function actualizaSeccion(id, nombre){
-            document.forms[0].idSeccion.value = id;
-            document.forms[0].seccion.value = nombre;
-        }
-
-
-    var Rcajatemp;
-    function Rpopupurl(obj) {
-    	Rcajatemp=document.trabajoForm[obj];
-		window.open('recursos.do','recursos','scrollbars=yes,width=700,height=400');
-    }
-	
-	function Rmeterurl(laurl) {
-		Rcajatemp.value=laurl;
-	}
-	
-	function nuevoGrupo(idtrabajo) {
-		document.location.href="grupoTrabajoEdita.do?idtrabajo="+idtrabajo;
-}
-
-*/
 
 	var alertEmailNoValido="<bean:message  bundle="subscripcions" key="error.suscriptor.mail"/>";
 	var alertSubmitForm="<bean:message  bundle="subscripcions" key="error.suscriptor.eleccion"/>";

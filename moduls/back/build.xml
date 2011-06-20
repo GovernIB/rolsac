@@ -257,6 +257,11 @@
         	   <include name="**/*.jar" />
         	</lib>
         	
+        	<lib dir="${lib.dir}/jstl">
+        	   <include name="**/*.jar" />
+        	</lib>
+
+        	
             <webinf dir="${web.etc}" includes="*.xml"/>
         	<webinf dir="${web.etc}" includes="*.tld"/>
             <webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml,webinc.xml"/>

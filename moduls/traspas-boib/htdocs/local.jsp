@@ -168,11 +168,6 @@ function ValidaFecha(oTxt){
           document.SearchnormativaActionForm.submit();
     }    
 
-    // Llamada al popup para seleccionar la fecha de un campo
-    function abrirCalendario(field) {
-        obrirFixa("https://intranet.caib.es/sacback/moduls/calendario.do?field=" + field);
-    }
-
  
     function abrirDato(opcion) {
         obrir("popnormativa.do", "Seleccionar", 538, 140);

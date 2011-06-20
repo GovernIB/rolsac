@@ -3,8 +3,11 @@
 	<%@ taglib prefix="logic" uri="http://jakarta.apache.org/struts/tags-logic" %>
 	<%@ taglib prefix="html" uri="http://jakarta.apache.org/struts/tags-html" %>
 	<%@ taglib prefix="tiles" uri="http://jakarta.apache.org/struts/tags-tiles" %>
+	<%@ taglib prefix="bean-el" uri="/WEB-INF/struts-bean-el.tld"   %>
+	<%@ taglib prefix="c" uri="/WEB-INF/c.tld"  %>
+	
 	<html:xhtml/>
-
+	
 
 	<div class="bloc">
 			<div class="titolbloc">
@@ -31,12 +34,13 @@
 					<div class="botoneraconsulta2">
 						<!--  la url aqui nomes es fa servir per apuntar a la clase Action, pero qui diu que s'executa es el param 'action'   -->
 						<logic:present parameter="paramsNouElement">
-							<input type="button" value="<bean:message key="boton.seleccionar" />" name="<bean:message key="boton.seleccionar" />" onclick='document.location.href="/sacback<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.seleccionar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>&titol=<%= request.getParameter("modifElement") %>";' />                	
-							<input type="button" value="<bean:message key="boton.eliminar" />"    name="<bean:message key="boton.eliminar" />"    onclick='document.location.href="/sacback<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.eliminar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>";' />
+							<input type="button" value="<bean:message key="boton.seleccionar" />" name="<bean:message key="boton.seleccionar" />" onclick='document.location.href="<c:out value="${pageContext.request.contextPath}"/><%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.seleccionar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>&titol=<%= request.getParameter("modifElement") %>";' />                	
+							<input type="button" value="<bean:message key="boton.eliminar" />"    name="<bean:message key="boton.eliminar" />"    onclick='document.location.href="/${pageContext.request.contextPath}<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.eliminar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>";' />
 						</logic:present>
 						<logic:notPresent parameter="paramsNouElement">
-							<input type="button" value="<bean:message key="boton.seleccionar" />" name="<bean:message key="boton.seleccionar" />" onclick='document.location.href="/sacback<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.seleccionar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />&titol=<%= request.getParameter("modifElement") %>";' />                	
-							<input type="button" value="<bean:message key="boton.eliminar" />"    name="<bean:message key="boton.eliminar" />"    onclick='document.location.href="/sacback<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.eliminar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />";' />                	
+						
+							<input type="button" value="<bean:message key="boton.seleccionar" />" name="<bean:message key="boton.seleccionar" />" onclick='document.location.href="<c:out value="${pageContext.request.contextPath}"/><%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.seleccionar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />&titol=<%= request.getParameter("modifElement") %>";' />                	
+							<input type="button" value="<bean:message key="boton.eliminar" />"    name="<bean:message key="boton.eliminar" />"    onclick='document.location.href="/${pageContext.request.contextPath}<%= request.getParameter("urlBotonera") %>?action=<bean:message key="boton.eliminar" />&idSelect=<bean:write name="element" property="id" />&<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />";' />                	
 						</logic:notPresent>
 						                	
 					</div>
@@ -54,10 +58,10 @@
 		<!-- Alta document -->
 		<center>  
 		<logic:present parameter="paramsNouElement">
-				[<a href="/sacback/contenido/<%= request.getParameter("formName") %>/form.do?<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>&titol=<%= request.getParameter("altaElement") %>" ><bean:message key="<%= request.getParameter("texteNouElement") %>" /></a>]    
+				[<a href="<c:out value='${pageContext.request.contextPath}'/>/contenido/<%= request.getParameter("formName") %>/form.do?<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" /><%= request.getParameter("paramsNouElement") %>&titol=<%= request.getParameter("altaElement") %>" ><bean:message key="<%= request.getParameter("texteNouElement") %>" /></a>]    
 		</logic:present>
 		<logic:notPresent parameter="paramsNouElement">
-				[<a href="/sacback/contenido/<%= request.getParameter("formName") %>/form.do?<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />&titol=<%= request.getParameter("altaElement") %>" ><bean:message key="<%= request.getParameter("texteNouElement") %>" /></a>]    
+				[<a href="<c:out value='${pageContext.request.contextPath}'/>/contenido/<%= request.getParameter("formName") %>/form.do?<%= request.getParameter("containerFormId") %>=<bean:write name="<%= request.getParameter("containerFormName") %>" property="id" />&titol=<%= request.getParameter("altaElement") %>" ><bean:message key="<%= request.getParameter("texteNouElement") %>" /></a>]    
 		</logic:notPresent>
 		
 		</center>
