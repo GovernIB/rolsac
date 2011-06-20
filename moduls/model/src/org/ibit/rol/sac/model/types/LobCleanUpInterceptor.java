@@ -65,12 +65,6 @@ public class LobCleanUpInterceptor implements Interceptor {
             for (Iterator iter = tempLobs.iterator(); iter.hasNext();) {
                 Object lob = iter.next();
                 log.info("lob="+lob);
-                if (lob instanceof oracle.sql.CLOB )
-					try {
-						log.info("is lob temporary="+((oracle.sql.CLOB)lob).isTemporary());
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
                 Method freeTemporary = lob.getClass().getMethod("freeTemporary", new Class[0]);
                 freeTemporary.invoke(lob, new Object[0]);
                 log.info("lob cleaned");
