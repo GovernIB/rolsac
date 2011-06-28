@@ -313,10 +313,6 @@
 	-->
 	
 	<target name="schemaupdate">
-		  <replace file="${hbm.dir}/Ficha.hbm.xml">
-		            <replacefilter token="@db.texttype.descri@" value="${db.texttype.descri}"/>
-		            <replacefilter token="@db.texttype.desabr@" value="${db.texttype.desabr}"/>
-		   </replace>
 
 		<taskdef name="schemaupdate"
 			classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"

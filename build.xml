@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="01rolsac" default="usage">
+<project name="01rolsacpmaback" default="usage">
 	
 	<property name="projecte" value="${ant.project.name}"/>
 	<property name="home" value="."/>
@@ -19,15 +19,16 @@
 	<property name="moduls.dir" location="${output.dir}/moduls"/>
 	<property name="doc.dir" location="${output.dir}/doc"/>
 	
-	<property name="projecte.name.rolsac" value="rolsac"/>	
+	<property name="projecte.name.rolsac" value="rolsacpmaback"/>	
 
 	<property name="etc.approlsac" value="${etc}/approlsac"/>	
 
 
-	<!--<property name="deploy.dir" value="D:\servers\slave1-jboss-3.2.8-caib4\server\default\deploycaib"/>-->
+	<property name="deploy.dir" value="D:\servers\slave1-jboss-3.2.8-caib4\server\default\deploycaib"/>
+	<property name="deploy2.dir" value="D:\servers\jboss-3.2.8-caib9.1\server\default\deploycaib"/>
 
-	<property environment="env"/>
-	<property name="deploy.dir" value="${env.DEPLOY_DIR}"/>
+	<!--<property environment="env"/>
+	<property name="deploy.dir" value="${env.DEPLOY_DIR}"/>-->
 
 	
 
@@ -289,8 +290,9 @@
 	
 
 	  <target name="deploy01ROLSAC">
-	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>	  
-	  </target>		  	
+	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
+	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy2.dir}"/>	  
+	  </target>
 
 	<target name="copiarAOTROS">
 		<copy file="${moduls.dir}/model.jar" todir="${home}/../02microsites/lib"/>

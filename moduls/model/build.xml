@@ -67,8 +67,6 @@
 		
 		<replace dir="${jar.gen.etc}" includes="**/*.hbm.xml">			
 			<replacefilter token="RSC_" value="${db.prefix}"/>
-            <replacefilter token="@db.texttype.descri@" value="${db.texttype.descri}"/>
-			<replacefilter token="@db.texttype.desabr@" value="${db.texttype.desabr}"/>
 		</replace>
 		
     	<replace file="${jar.gen.etc}/url.properties">
