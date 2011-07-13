@@ -388,8 +388,10 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
         ua.getUsuarios().clear();
 
         for (FichaUA ficha : ua.getFichasUA()) {
-            Seccion seccion = ficha.getSeccion();
-            seccion.removeFichaUA(ficha);
+            if(ficha != null){
+                Seccion seccion = ficha.getSeccion();
+                seccion.removeFichaUA(ficha);
+            }
         }
 
         ua.getPadre().removeHijo(ua);
@@ -424,8 +426,10 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
         usuario.getUnidadesAdministrativas().remove(ua);
 
         for (FichaUA ficha : ua.getFichasUA()) {
-            Seccion seccion = ficha.getSeccion();
-            seccion.removeFichaUA(ficha);
+            if(ficha !=null){
+                Seccion seccion = ficha.getSeccion();
+                seccion.removeFichaUA(ficha);
+            }
         }
 
         for (UnidadMateria uniMat : (Set<UnidadMateria>)ua.getUnidadesMaterias()) {

@@ -352,10 +352,12 @@ public abstract class FichaRemotaFacadeEJB extends HibernateEJB {
 			if (seccion != null && uaRemota != null && fichaRemota != null) {
 				final FichaUA fichaUA = RemotoUtils.recogerFichaUA(session,
 						uaRemota.getId(), fichaRemota.getId(), seccion.getId());
-				seccion.removeFichaUA(fichaUA);
-				uaRemota.removeFichaUA(fichaUA);
-				fichaRemota.removeFichaUA(fichaUA);
-				session.delete(fichaUA);
+                if(fichaUA!=null){
+				    seccion.removeFichaUA(fichaUA);
+				    uaRemota.removeFichaUA(fichaUA);
+				    fichaRemota.removeFichaUA(fichaUA);
+				    session.delete(fichaUA);
+                }
 			}
 			session.flush();
 		} catch (final HibernateException e) {
