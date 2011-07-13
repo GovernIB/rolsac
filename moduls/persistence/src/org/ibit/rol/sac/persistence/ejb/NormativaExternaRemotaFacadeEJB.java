@@ -172,7 +172,9 @@ public abstract class NormativaExternaRemotaFacadeEJB extends HibernateEJB {
 	            Normativa normativa = (Normativa) session.load(Normativa.class, id);
 	            for (Iterator iterator = normativa.getProcedimientos().iterator(); iterator.hasNext();) {
 	                ProcedimientoLocal procedimiento = (ProcedimientoLocal) iterator.next();
-	                procedimiento.getNormativas().remove(normativa);
+                    if(procedimiento!= null){
+	                    procedimiento.getNormativas().remove(normativa);
+                    }
 	            }
 	            if(normativa instanceof NormativaExternaRemota){
 	                AdministracionRemota admin = ((NormativaExternaRemota)normativa).getAdministracionRemota();
