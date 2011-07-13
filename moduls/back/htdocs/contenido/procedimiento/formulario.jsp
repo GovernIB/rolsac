@@ -69,13 +69,13 @@
 	
     function abrirUAResponsable() {
 		classeUA=1;
-        poprealcion = obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&", "<bean:message key='boton.seleccionar' />", 538, 440);
+        poprealcion = obrirScroll("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&", "<bean:message key='boton.seleccionar' />", 538, 440);
     }
 
 
     function abrirUAResolver() {
 		classeUA=2;
-        poprealcion = obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&padres", "<bean:message key='boton.seleccionar' />", 538, 440);
+        poprealcion = obrirScroll("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&padres", "<bean:message key='boton.seleccionar' />", 538, 440);
     }
 	
     function actualizaUA(id, nombre) {

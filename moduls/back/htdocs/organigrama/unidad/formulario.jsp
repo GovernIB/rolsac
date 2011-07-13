@@ -43,7 +43,7 @@
        obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
     }
     function popUA(){
-            poprealcion = obrir(context+"/organigrama/unidad/poparbol.do?idUA=0&action=&ficha=true", "Relacionar", 538, 440);
+            poprealcion = obrirScroll(context+"/organigrama/unidad/poparbol.do?idUA=0&action=&ficha=true", "Relacionar", 538, 440);
         }
 
     function actualizaUA(id, nombre) {
