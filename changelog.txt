@@ -1,0 +1,4 @@
+13.jul.2011
+- correcció d'un bug en el contextPath del link 'eliminar' de elementOrdenat.jsp (afecta a docs i forms del tramit)
+- elimninats alguns logs posats temporalment
+- canviats a nivell DEBUG tots els logs INFO.
