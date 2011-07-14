@@ -59,7 +59,7 @@ public class ProcedimientoRemoto extends ProcedimientoLocal implements Remoto{
 	public void rellenear(ProcedimientoTransferible procTransferible){
     	//Relleno los campos
 		this.setIdExterno(procTransferible.getId());
-        log.info(procTransferible.getId());
+        log.debug(procTransferible.getId());
 		this.setSignatura(procTransferible.getSignatura());
 		this.setFechaCaducidad(procTransferible.getFechaCaducidad());
 		this.setFechaPublicacion(procTransferible.getFechaPublicacion());

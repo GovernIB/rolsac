@@ -69,7 +69,7 @@ public class EditarPerfilAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PerfilCiudadano perfil = new PerfilCiudadano();
         VOUtils.populate(perfil, dForm);
@@ -86,7 +86,7 @@ public class EditarPerfilAction extends BaseDispatchAction {
         perfil = perfilDelegate.obtenerPerfil((Long) dForm.get("id"));
         request.setAttribute("iconosFamilia", perfil.getIconosFamilia());
         request.setAttribute("iconosMateria", perfil.getIconosMateria());
-        log.info("Creado/Actualizado " + perfil.getId());
+        log.debug("Creado/Actualizado " + perfil.getId());
 
         return mapping.findForward("success");
     }
@@ -94,13 +94,13 @@ public class EditarPerfilAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado Perfil: " + id);
+        log.debug("Eliminado Perfil: " + id);
         perfilDelegate.borrarPerfil(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -111,7 +111,7 @@ public class EditarPerfilAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
 
@@ -128,7 +128,7 @@ public class EditarPerfilAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -138,7 +138,7 @@ public class EditarPerfilAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

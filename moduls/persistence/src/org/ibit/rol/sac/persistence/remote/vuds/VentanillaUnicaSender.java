@@ -89,7 +89,7 @@ public class VentanillaUnicaSender {
 
 
 	public int enviarTramit(String endpoint, org.ibit.rol.sac.model.Tramite tramit, String idioma) throws WSInvocatorException {
-		log.info("enviant tramit.."+" ep="+endpoint+" tramit="+tramit+" idioma="+idioma);
+		log.debug("enviant tramit.."+" ep="+endpoint+" tramit="+tramit+" idioma="+idioma);
 		this.endpoint = endpoint;
 		enviarTramit(tramit);
 		return 0;

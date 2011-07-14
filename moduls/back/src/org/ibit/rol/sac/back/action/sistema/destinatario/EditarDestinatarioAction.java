@@ -62,7 +62,7 @@ public class EditarDestinatarioAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         DestinatarioDelegate destinatarioDelegate = DelegateUtil.getDestinatarioDelegate();
         
@@ -77,20 +77,20 @@ public class EditarDestinatarioAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", destinatario.getId());
-        log.info("Creado/Actualizado " + destinatario.getId());
+        log.debug("Creado/Actualizado " + destinatario.getId());
         return mapping.findForward("success");
     }
 
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         DestinatarioDelegate destinatarioDelegate = DelegateUtil.getDestinatarioDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado Destinatario: " + id);
+        log.debug("Eliminado Destinatario: " + id);
         destinatarioDelegate.borrarDestinatario(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -101,7 +101,7 @@ public class EditarDestinatarioAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         DestinatarioDelegate destinatarioDelegate = DelegateUtil.getDestinatarioDelegate();
         Long id = null;
@@ -126,7 +126,7 @@ public class EditarDestinatarioAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         dForm.reset(mapping, request);
         
@@ -139,7 +139,7 @@ public class EditarDestinatarioAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

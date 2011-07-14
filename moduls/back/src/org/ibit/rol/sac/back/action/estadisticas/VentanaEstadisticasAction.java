@@ -33,7 +33,7 @@ public class VentanaEstadisticasAction extends Action{
     protected static Log log = LogFactory.getLog(VentanaEstadisticasAction.class);
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        log.info("Entramos en execute");
+        log.debug("Entramos en execute");
 
         String idProcedimiento = request.getParameter("idProcedimiento");
         String idNormativa = request.getParameter("idNormativa");

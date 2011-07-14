@@ -39,7 +39,7 @@ public class SubscripcionsSchedulerServlet implements Servlet {
 			
 			trigger.setCronExpression( horaExecucioJobTreball ); //en los minutos 1 y 30, de 6 a 18 horas
 			sched.scheduleJob(jobDetail, trigger);
-			log.info("Job Refresco de suscripciones programado...");
+			log.debug("Job Refresco de suscripciones programado...");
 			
 			
 			//JOB SUBSCRIPCIONES PORTAL
@@ -53,7 +53,7 @@ public class SubscripcionsSchedulerServlet implements Servlet {
 			}
 			trigger.setCronExpression( horaExecucioJobPortal );
 			sched.scheduleJob(jobDetail, trigger);
-			log.info("Job Refresco de suscripciones del portal programado...");
+			log.debug("Job Refresco de suscripciones del portal programado...");
 			
 			
 		} catch (Exception ex){

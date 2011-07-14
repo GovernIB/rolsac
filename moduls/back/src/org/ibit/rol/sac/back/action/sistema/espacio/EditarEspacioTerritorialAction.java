@@ -64,7 +64,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                 HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 
         EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
@@ -83,7 +83,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
         if (archivoValido(mapafile)) {
         	espacio.setMapa(populateArchivo(espacio.getMapa(), mapafile));
         } else if (((Boolean) dForm.get("borrarmapa")).booleanValue()) {
-            log.info("entram borrar Mapa");
+            log.debug("entram borrar Mapa");
             espacioDelegate.borrarMapa(idEspacio);
             espacio.setMapa(null);
         }
@@ -98,7 +98,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
         if (archivoValido(logofile)) {
         	espacio.setLogo(populateArchivo(espacio.getLogo(), logofile));
         } else if (((Boolean) dForm.get("borrarlogo")).booleanValue()) {
-            log.info("entram borrar Logo");
+            log.debug("entram borrar Logo");
             espacioDelegate.borrarLogo(idEspacio);
             espacio.setLogo(null);
         }
@@ -123,7 +123,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
         if (espacio.getPadre() != null) {
             request.setAttribute("padre", espacio.getPadre());
         }
-        log.info("Creado/Actualizado " + espacio.getId());
+        log.debug("Creado/Actualizado " + espacio.getId());
 
         return mapping.findForward("success");
     }
@@ -131,13 +131,13 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado EspacioTerritorial: " + id);
+        log.debug("Eliminado EspacioTerritorial: " + id);
         espacioDelegate.borrarEspacioTerritorial(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -148,7 +148,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
         Long id = null;
@@ -184,7 +184,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
 
@@ -195,7 +195,7 @@ public class EditarEspacioTerritorialAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

@@ -56,7 +56,7 @@ public class SeleccionarProcedimientoAction extends BaseAction {
 	protected ActionForward seleccionar(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request) throws DelegateException, Exception {
 		
-		log.info("Entramos en seleccionar");
+		log.debug("Entramos en seleccionar");
 
         ProcedimientoLocal procedimientoLocal = buscarProcedimientoSeleccionado(mapping, request);
         if (null==procedimientoLocal) 	return forwardFallo(mapping);

@@ -20,7 +20,7 @@ public class TraducirProcedimientoAction extends GuardarProcedimientoAction{
 	protected static Log log = LogFactory.getLog(TraducirProcedimientoAction.class);
 
 	public ActionForward traducir(ActionParameters actionParameters) throws Exception {
-		log.info("Entramos en traducir");
+		log.debug("Entramos en traducir");
 
 		ProcedimientoForm dForm = (ProcedimientoForm) actionParameters.form;
 
@@ -79,7 +79,7 @@ public class TraducirProcedimientoAction extends GuardarProcedimientoAction{
         	}
         }
         
-        log.info("Traducción procedimiento - Id: " + (Long) dForm.get("id"));
+        log.debug("Traducción procedimiento - Id: " + (Long) dForm.get("id"));
 
     }    
 

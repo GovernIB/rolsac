@@ -51,40 +51,40 @@ public class TestServlet extends HttpServlet {
 			List<Materia> materias = DelegateUtil.getMateriaDelegate().buscar(busqueda, idioma);
 		
 			List<HechoVital> hechos = DelegateUtil.getHechoVitalDelegate().buscar(busqueda, idioma);
-			log.info("inicio normal");
+			log.debug("inicio normal");
 			Map map = DelegateUtil.getUADelegate().listarProcFichSecHV((long)3272, (long)58, "INFO");
-			log.info("fin normal");
+			log.debug("fin normal");
 			if(map!=null){
 				List<ProcedimientoLocal> procs = (List<ProcedimientoLocal>)map.get("PROCEDIMIENTOS");
 				
 				List<Ficha> fichas = (List<Ficha>)map.get("FICHAS");
 				
-				log.info("Procedimientos Encontradas: " + procs.size());
+				log.debug("Procedimientos Encontradas: " + procs.size());
 				for (ProcedimientoLocal proc : procs) {
-					log.info("encontrado el Procedimiento " + ((TraduccionProcedimientoLocal)proc.getTraduccion()).getNombre());
+					log.debug("encontrado el Procedimiento " + ((TraduccionProcedimientoLocal)proc.getTraduccion()).getNombre());
 				}
 				
-				log.info("Fichas Encontradas: " + fichas.size());
+				log.debug("Fichas Encontradas: " + fichas.size());
 				for (Ficha ficha : fichas) {
-					log.info("encontrado la Ficha " + ((TraduccionFicha)ficha.getTraduccion()).getTitulo());
+					log.debug("encontrado la Ficha " + ((TraduccionFicha)ficha.getTraduccion()).getTitulo());
 				}
 			}
 			
 			List<UnidadAdministrativa> unis = DelegateUtil.getUADelegate().buscar(busqueda, idioma);
 			
-			log.info("Hechos Encontrados: " + hechos.size());
+			log.debug("Hechos Encontrados: " + hechos.size());
 			for (HechoVital hechoVital : hechos) {
-				log.info("encontrado el hecho " + ((TraduccionHechoVital)hechoVital.getTraduccion()).getNombre());
+				log.debug("encontrado el hecho " + ((TraduccionHechoVital)hechoVital.getTraduccion()).getNombre());
 			}
 			
-			log.info("Materias Encontradas: " + materias.size());
+			log.debug("Materias Encontradas: " + materias.size());
 			for (Materia materia : materias) {
-				log.info("encontrado la materia " + ((TraduccionMateria)materia.getTraduccion()).getNombre());
+				log.debug("encontrado la materia " + ((TraduccionMateria)materia.getTraduccion()).getNombre());
 			}
 			
-			log.info("Unidades Encontradas: " + unis.size());
+			log.debug("Unidades Encontradas: " + unis.size());
 			for (UnidadAdministrativa uni : unis) {
-				log.info("encontrado la Unidad " + ((TraduccionUA)uni.getTraduccion()).getNombre());
+				log.debug("encontrado la Unidad " + ((TraduccionUA)uni.getTraduccion()).getNombre());
 			}
 		} catch (DelegateException e) {
 			// TODO Auto-generated catch block

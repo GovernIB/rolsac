@@ -89,7 +89,7 @@ public class HTMLDocument {
 									 }
 								}	
 								if(tempContenido.length()>0){
-									log.info("[IndexInsertarFicha:" + idFicha + "] Se ha encontrado contenido , procedemos a indexarlo");
+									log.debug("[IndexInsertarFicha:" + idFicha + "] Se ha encontrado contenido , procedemos a indexarlo");
 									contenido = new StringReader(tempContenido.toString());	
 								}
 								else{

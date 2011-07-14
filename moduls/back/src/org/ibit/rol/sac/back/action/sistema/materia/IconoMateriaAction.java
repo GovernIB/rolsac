@@ -57,7 +57,7 @@ public class IconoMateriaAction extends BaseDispatchAction{
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         IconoMateriaDelegate iconoDelegate = DelegateUtil.getIconoMateriaDelegate();
         IconoMateria icono = new IconoMateria();
@@ -85,7 +85,7 @@ public class IconoMateriaAction extends BaseDispatchAction{
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         IconoMateriaDelegate iconoDelegate = DelegateUtil.getIconoMateriaDelegate();
         Long id = (Long) dForm.get("id");
@@ -106,7 +106,7 @@ public class IconoMateriaAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         Long idMateria = (Long) dForm.get("idMateria");
         dForm.initialize(mapping);
@@ -125,7 +125,7 @@ public class IconoMateriaAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

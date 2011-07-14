@@ -39,7 +39,7 @@ public class CalendariAction extends BaseAction {
                                 HttpServletRequest request, HttpServletResponse response)
                          throws Exception {
 
-         log.info("Entramos en calendario");
+         log.debug("Entramos en calendario");
          Calendar calendari = new GregorianCalendar();
          int anyActual = calendari.get(Calendar.YEAR);
 

@@ -51,7 +51,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
 
 
     public void rellenar(final TramiteTransferible tramiteTransferible){
-    	log.info("Relleno Tramite Remoto: "+tramiteTransferible.getId());
+    	log.debug("Relleno Tramite Remoto: "+tramiteTransferible.getId());
         this.setIdExterno(tramiteTransferible.getId());
         this.setCodiVuds(tramiteTransferible.getCodiVuds());
         this.setDescCodiVuds(tramiteTransferible.getDescCodiVuds());
@@ -66,7 +66,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
         
         //Relleno las taxas
         if(tramiteTransferible.getTaxes()!=null){
-            log.info("Recojo taxas: "+tramiteTransferible.getTaxes().length);
+            log.debug("Recojo taxas: "+tramiteTransferible.getTaxes().length);
 			TaxaTransferible[] taxaTransferible = tramiteTransferible.getTaxes();
 			
 			Set<Taxa> listaTaxes = this.getTaxes();
@@ -87,7 +87,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
         //Relleno los documentos informativos
         
         if(tramiteTransferible.getDocumentInformatiu()!=null){
-        	log.info("Recojo Documentos Informativos: "+tramiteTransferible.getDocumentInformatiu().length);
+        	log.debug("Recojo Documentos Informativos: "+tramiteTransferible.getDocumentInformatiu().length);
             DocumentTramitTransferible[] documentInformatiuTransferible = tramiteTransferible.getDocumentInformatiu();
 			
 			Set<DocumentTramit> listaDocumentosInf = this.getDocsInformatius();
@@ -108,7 +108,7 @@ public class TramiteRemoto  extends Tramite implements Remoto{
         //Relleno los Formularios
         
         if(tramiteTransferible.getFormularios()!=null){
-        	log.info("Recojo Formularios: "+tramiteTransferible.getFormularios().length);
+        	log.debug("Recojo Formularios: "+tramiteTransferible.getFormularios().length);
 
             DocumentTramitTransferible[] formularioTransferible = tramiteTransferible.getFormularios();
 			Set<DocumentTramit> listaFormularios = this.getFormularios();

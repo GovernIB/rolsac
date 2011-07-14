@@ -123,7 +123,7 @@ public class Sincronizador {
 		}
 		
 		
-		log.info("Constructor completado");
+		log.debug("Constructor completado");
 	}
 	
 	//------------------------Funciones Publicas-----------------------------------
@@ -137,14 +137,14 @@ public class Sincronizador {
 	 * tambien son recogidos.
 	 */
 	public void alta() throws UnidadAdminCENoEncontradaException, ComunicacionException, CapaDeDatosException{
-		log.info("Comienza la transferencia");
+		log.debug("Comienza la transferencia");
 		UnidadAdministrativaTransferible uaTrans;
 		try {
-			log.info("Recogiendo la UARaiz con CE: "+adminRemota.getCodigoEstandarUA());
+			log.debug("Recogiendo la UARaiz con CE: "+adminRemota.getCodigoEstandarUA());
 			//Recojo la UARaiz
 			uaTrans = sincInvoker.recogerUnidadAdministrativaByCodigoEstandar(adminRemota.getCodigoEstandarUA());
 			if(uaTrans!=null){
-				log.info("La UARaiz ha sido recogida con exito");
+				log.debug("La UARaiz ha sido recogida con exito");
 				//Si existe comienzo el proceso de adquisicion de datos
 				recogerUnidadesAdministrativas(uaTrans,null);
 			}else{
@@ -155,7 +155,7 @@ public class Sincronizador {
 		} catch (WSInvocatorException e) {
 			throw new ComunicacionException(e);
 		}
-		log.info("Transferencia finalizada con exito");
+		log.debug("Transferencia finalizada con exito");
 	}
 	
 	/**
@@ -165,19 +165,19 @@ public class Sincronizador {
 	 * @throws CapaDeDatosException
 	 */
 	public void baja() throws CapaDeDatosException{
-		log.info("Comenzando la funcion de BAJA");
+		log.debug("Comenzando la funcion de BAJA");
 		
 		try {
-			log.info("Borrando Fichas");
+			log.debug("Borrando Fichas");
 			borrarFichas();
-			log.info("Borrando Procedimientos");
+			log.debug("Borrando Procedimientos");
 			borrarProcedimientos();
-			log.info("Borrando UAs");
+			log.debug("Borrando UAs");
 			borrarUA();
 		} catch (DelegateException e) {
 			throw new CapaDeDatosException(e);
 		}
-		log.info("BAJA realizada con exito");
+		log.debug("BAJA realizada con exito");
 	}
 	
 	//------------------------Funciones Privadas de Recogida-----------------------------------
@@ -194,10 +194,10 @@ public class Sincronizador {
 		profundidad++;
 		
 		try{
-			log.info("rellenando la UARemota a partir de la transferible");
+			log.debug("rellenando la UARemota a partir de la transferible");
 			final UnidadAdministrativaRemota uaRemota = UnidadAdministrativaRemota.generar(uaTrans);
 			uaRemota.setAdministracionRemota(adminRemota);
-			log.info("guardo la UARemota de nombre "+((TraduccionUA)uaRemota.getTraduccion()).getNombre()+" e idExterno "+uaRemota.getIdExterno());
+			log.debug("guardo la UARemota de nombre "+((TraduccionUA)uaRemota.getTraduccion()).getNombre()+" e idExterno "+uaRemota.getIdExterno());
 			
 			Long idPadre = null;
 			if(padre!=null){
@@ -211,11 +211,11 @@ public class Sincronizador {
 			recogerProcedimientos(uaRemota);
 			
 			if(profundidad<adminRemota.getProfundidad()){
-				log.info("no se alcanzo la profundidad deseada, recogiendo hijos");
+				log.debug("no se alcanzo la profundidad deseada, recogiendo hijos");
 				final int temp = profundidad;
 				if(uaTrans.getIdHijos()!=null){
 					for(Long idUA : uaTrans.getIdHijos()){
-						log.info("Recogido Hijo");
+						log.debug("Recogido Hijo");
 						final UnidadAdministrativaTransferible uahTrans = sincInvoker.recogerUnidadAdministrativa(idUA);
 						if(uahTrans!=null)
 							recogerUnidadesAdministrativas(uahTrans ,uaRemota);
@@ -241,28 +241,28 @@ public class Sincronizador {
 	@SuppressWarnings("unchecked")
 	private void recogerFichas(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo fichas relacionadas");
+			log.debug("Recogiendo fichas relacionadas");
 			//TODO: Se han de listar todas las secciones que tengan codigoEstandar
 			final List<Seccion> secciones = DelegateUtil.getSeccionDelegate().listarSecciones();
 			
 			for(Seccion seccion : secciones){
 				if(seccion.getCodigoEstandard()!=null && !"".equals(seccion.getCodigoEstandard().trim())){
-					log.info("Recoginedo fichas de la seccion: "+ ((TraduccionSeccion)seccion.getTraduccion()).getNombre());
+					log.debug("Recoginedo fichas de la seccion: "+ ((TraduccionSeccion)seccion.getTraduccion()).getNombre());
 					final FichaTransferible[] fichasTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
 					if(fichasTrans!=null){
-						log.info("Fichas recogidas");
+						log.debug("Fichas recogidas");
 						for(FichaTransferible fichaTrans : fichasTrans){
 							
 							FichaRemota fichaRemota = fichaRemotaDelegate.obtenerFichaRemota(fichaTrans.getId(), adminRemota.getId()); 
 							if(fichaRemota==null){
-								log.info("La ficha no existe la creo");
+								log.debug("La ficha no existe la creo");
 								fichaRemota = new FichaRemota();
 							}
 							
 							fichaRemota.rellenar(fichaTrans);
 							fichaRemota.setAdministracionRemota(adminRemota);
 							fichaRemotaDelegate.grabarFichaRemota(fichaRemota,ua.getId(),seccion.getId(),fichaTrans.getCodigoEstandarMaterias(),fichaTrans.getCodigoEstandarHV());
-							log.info("FichaUA guardada idExt"+fichaRemota.getIdExterno());
+							log.debug("FichaUA guardada idExt"+fichaRemota.getIdExterno());
 						}
 					}
 				}
@@ -284,11 +284,11 @@ public class Sincronizador {
 	 */
 	private void recogerProcedimientos(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Procedimientos relacionados");
+			log.debug("Recogiendo Procedimientos relacionados");
 			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
 			
 			if(procsTransferibles!=null){
-				log.info("Procedimientos recogidos");
+				log.debug("Procedimientos recogidos");
 				
 				for(ProcedimientoTransferible procTransferible : procsTransferibles){
 					
@@ -304,7 +304,7 @@ public class Sincronizador {
 					procRemoto.setAdministracionRemota(adminRemota);
 					
 					procRemotoDelegate.grabarProcedimientoRemoto(procRemoto,procTransferible.getCodigoEstandarMaterias(),procTransferible.getCodigoEstandarHV());
-					log.info("Procedimiento guardado idExt "+ procTransferible.getId());
+					log.debug("Procedimiento guardado idExt "+ procTransferible.getId());
 				}
 			}
 		} catch (DelegateException e) {

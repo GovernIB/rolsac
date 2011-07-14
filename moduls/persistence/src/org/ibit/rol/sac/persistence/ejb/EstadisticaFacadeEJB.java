@@ -156,7 +156,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         */
 
         if (result.isEmpty()) {
-            //log.info("Creant nova estadistica per " + historico.getId());
+            //log.debug("Creant nova estadistica per " + historico.getId());
             Estadistica estadistica = new Estadistica();
             estadistica.setFecha(periodo.getFechaInicio());
             estadistica.setContador(1);

@@ -105,7 +105,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                 HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
 
@@ -264,7 +264,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
         }
         
         dForm.set("id", unidad.getId());
-        log.info("Creado/Actualizado " + unidad.getId());
+        log.debug("Creado/Actualizado " + unidad.getId());
 
         return mapping.findForward("success");
     }
@@ -281,7 +281,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws SecurityException,Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
 
@@ -305,11 +305,11 @@ public class EditarUnidadAction extends BaseDispatchAction {
 
         	dForm.reset(mapping, request);
 	        request.setAttribute("alert", "confirmacion.baja");
-	        log.info("Eliminada Unidad Administrativa: " + id);
+	        log.debug("Eliminada Unidad Administrativa: " + id);
 
         } else {
 	        request.setAttribute("alert", "microsites.ua.asociados");
-	        log.info("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
+	        log.debug("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
         	
         }
         return mapping.findForward("cancel");
@@ -392,7 +392,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
 
@@ -453,7 +453,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
             }
 
             request.setAttribute("edificioOptions", uni.getEdificios());
-            log.info("edificioOptions ->"+Arrays.toString(uni.getEdificios().toArray()));
+            log.debug("edificioOptions ->"+Arrays.toString(uni.getEdificios().toArray()));
 
             request.setAttribute("unidadesmateriasOptions", uni.getUnidadesMaterias());
             request.setAttribute("usuarioOptions", uni.getUsuarios());
@@ -515,7 +515,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
@@ -586,7 +586,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en edificio");
+        log.debug("Entramos en edificio");
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
 
         if (request.getParameter("unidad") != null && request.getParameter("edificio") != null){
@@ -609,7 +609,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en materia");
+        log.debug("Entramos en materia");
         UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
 
         if (request.getParameter("unidad") != null && request.getParameter("materia") != null){
@@ -632,7 +632,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en usuario");
+        log.debug("Entramos en usuario");
 
         if (request.getParameter("unidad") != null && request.getParameter("usuario") != null){
             Long idUnidad = new Long(request.getParameter("unidad"));
@@ -657,7 +657,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en ficha");
+        log.debug("Entramos en ficha");
         FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
         Long idUA = new Long(request.getParameter("ua"));
 
@@ -779,7 +779,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping,request);
 
@@ -790,7 +790,7 @@ public class EditarUnidadAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
     

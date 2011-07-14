@@ -34,7 +34,7 @@ public class BusquedaFichaAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en fichabusqueda");
+        log.debug("Entramos en fichabusqueda");
         FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 
@@ -56,7 +56,7 @@ public class BusquedaFichaAction extends Action {
         	paramtrad.put("descripcion", fichaForm.get("descripcion").toString().toUpperCase());
             try {
             	fichas.addAll(fichaDelegate.buscarFichas(paramnotrad, paramtrad));            	
-            } catch (Exception e) {log.info("Error busqueda fichas " + e.getMessage());}
+            } catch (Exception e) {log.debug("Error busqueda fichas " + e.getMessage());}
         }
         
         request.setAttribute("fichas", fichas);

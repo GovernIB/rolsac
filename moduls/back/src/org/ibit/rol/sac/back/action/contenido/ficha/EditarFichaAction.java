@@ -97,7 +97,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("entramos en editar");
+		log.debug("entramos en editar");
 
 		FichaForm dForm = (FichaForm) form;
 		FichaDelegate fichaDelegate = getFichaDelegate();
@@ -194,7 +194,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 
 					request.setAttribute("alert", "confirmacion.modificacion");
 					request.setAttribute("idSelect", ficha.getId());
-					log.info("Modificada ficha - Id: " + ficha.getId());
+					log.debug("Modificada ficha - Id: " + ficha.getId());
 					return dispatchMethod(mapping, form, request, response, "seleccionar");
 
 				} else {
@@ -214,7 +214,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 
 					request.setAttribute("alert", "confirmacion.alta");
 					request.setAttribute("idSelect", ficha.getId());
-					log.info("Creada ficha nueva - Id: " + ficha.getId());			        	
+					log.debug("Creada ficha nueva - Id: " + ficha.getId());			        	
 					return dispatchMethod(mapping, form, request, response, "seleccionar");
 				}
 
@@ -302,7 +302,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			}
 		}
 
-		log.info("Traducción ficha - Id: " + (Long) dForm.get("id"));
+		log.debug("Traducción ficha - Id: " + (Long) dForm.get("id"));
 	}
 
 
@@ -310,7 +310,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception{
 
-		log.info("entramos en busqueda");
+		log.debug("entramos en busqueda");
 
 
 		String servidor="";
@@ -330,12 +330,12 @@ public class EditarFichaAction extends BaseDispatchAction{
 
 		if (request.getParameter("materia") != null){
 			Long idMateria = new Long(request.getParameter("materia"));
-			log.info("busqueda por materia : " + idMateria);
+			log.debug("busqueda por materia : " + idMateria);
 			fichas = fichaDelegate.buscarFichasMateria(idMateria);
 
 		} else if (request.getParameter("hechovital") != null){
 			Long idHechovital = new Long(request.getParameter("hechovital"));
-			log.info("busqueda por hechovital : " + idHechovital);
+			log.debug("busqueda por hechovital : " + idHechovital);
 			fichas = fichaDelegate.buscarFichasHechoVital(idHechovital);
 
 		} else {
@@ -400,14 +400,14 @@ public class EditarFichaAction extends BaseDispatchAction{
 	public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en eliminar");
+		log.debug("Entramos en eliminar");
 		FichaForm dForm = (FichaForm) form;
 		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
 		Long id = (Long) dForm.get("id");
 
 		if(fichaDelegate.autorizaModificarFicha(id)) {
-			log.info("Eliminada Ficha: " + id);
+			log.debug("Eliminada Ficha: " + id);
 			fichaDelegate.borrarFicha(id);
 			request.setAttribute("alert", "confirmacion.baja");
 			dForm.reset(mapping, request);
@@ -433,7 +433,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 	public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en seleccionar");
+		log.debug("Entramos en seleccionar");
 
 		String servidor="";
 		String value = System.getProperty("es.indra.caib.rolsac.oficina");
@@ -504,7 +504,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en fichaUA");
+		log.debug("Entramos en fichaUA");
 		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
 		if (request.getParameter("ficha") != null){
@@ -564,7 +564,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en documento");
+		log.debug("Entramos en documento");
 		DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
 
 		Long idFicha = new Long(request.getParameter("ficha"));
@@ -592,7 +592,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en enlace");
+		log.debug("Entramos en enlace");
 		EnlaceDelegate enlaceDelegate = DelegateUtil.getEnlaceDelegate();
 
 		Long idFicha = new Long(request.getParameter("ficha"));
@@ -620,7 +620,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en hechovital");
+		log.debug("Entramos en hechovital");
 		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
 		if (request.getParameter("ficha") != null && request.getParameter("hechovital") != null){
@@ -644,7 +644,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en huerfanas");
+		log.debug("Entramos en huerfanas");
 		FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
 		List fichas = fichaDelegate.buscarFichasHuerfanas();
@@ -663,7 +663,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) {
 
-		log.info("Entramos en cancelar");
+		log.debug("Entramos en cancelar");
 		TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
 		dForm.reset(mapping, request);
 
@@ -680,7 +680,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en cancelled");
+		log.debug("Entramos en cancelled");
 		TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
 		dForm.reset(mapping, request);
 
@@ -691,7 +691,7 @@ public class EditarFichaAction extends BaseDispatchAction{
 			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en unspecified");
+		log.debug("Entramos en unspecified");
 		return null;
 	}
 

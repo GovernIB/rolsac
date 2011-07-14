@@ -76,7 +76,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         HechoVitalForm dForm = (HechoVitalForm) form;
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
         HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
@@ -98,7 +98,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
         Iterator contens =  Arrays.asList((FormFile[]) dForm.get("contens")).iterator();
         //iteram per tots els idiomes
         while (lang.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile distribComp = (FormFile) distribs.next();
             FormFile normativa = (FormFile) normats.next();
             FormFile contenido = (FormFile) contens.next();
@@ -200,7 +200,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", hechoVital.getId());
-        log.info("Creado/Actualizado " + hechoVital.getId());
+        log.debug("Creado/Actualizado " + hechoVital.getId());
         //si no mostra els procediments associats
         request.setAttribute("listaProcedimientos", hechoVital.getHechosVitalesProcedimientos());
     	request.setAttribute("idSelect", hechoVital.getId());
@@ -210,13 +210,13 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado Hecho Vital: " + id);
+        log.debug("Eliminado Hecho Vital: " + id);
         hechoVitalDelegate.borrarHechoVital(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -227,7 +227,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
         Long id = null;
@@ -260,7 +260,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
     public ActionForward subir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en subir");
+        log.debug("Entramos en subir");
         HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
 
         Long idHecho = new Long(request.getParameter("idSelect"));
@@ -273,7 +273,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en procedimiento");
+        log.debug("Entramos en procedimiento");
         HechoVitalProcedimientoDelegate hechoProcDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
 
         if (request.getParameter("hecho") != null){
@@ -305,7 +305,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -315,7 +315,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

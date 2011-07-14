@@ -69,7 +69,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
 
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
-    	log.info("Entramos en editar");
+    	log.debug("Entramos en editar");
     	IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
     	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
     	
@@ -92,7 +92,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
         Iterator contens =  Arrays.asList((FormFile[]) dForm.get("contens")).iterator();
         //iteram per tots els idiomes
         while (lang.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile distribComp = (FormFile) distribs.next();
             FormFile normativa = (FormFile) normats.next();
             FormFile contenido = (FormFile) contens.next();
@@ -140,7 +140,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
         if (archivoValido(fotofile)) {
             materia.setFoto(populateArchivo(materia.getFoto(), fotofile));
         } else if (((Boolean) dForm.get("borrarfoto")).booleanValue()) {
-            log.info("entram borrarfoto");
+            log.debug("entram borrarfoto");
             materia.setFoto(null);
         }else if (modificant){
             if(materiaOld.getFoto()!=null){
@@ -157,7 +157,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
         if (archivoValido(iconofile)) {
             materia.setIcono(populateArchivo(materia.getIcono(), iconofile));
         } else if (((Boolean) dForm.get("borraricono")).booleanValue()) {
-            log.info("Entram borraricono");
+            log.debug("Entram borraricono");
             materia.setIcono(null);
         } else if (modificant){
             if(materiaOld.getIcono()!=null){
@@ -174,7 +174,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
         if (archivoValido(iconogfile)) {
             materia.setIconoGrande(populateArchivo(materia.getIconoGrande(), iconogfile));
         } else if (((Boolean) dForm.get("borrariconog")).booleanValue()) {
-            log.info("entram borrariconogrande");
+            log.debug("entram borrariconogrande");
             materia.setIconoGrande(null);
         } else if (modificant){
             if(materiaOld.getIconoGrande()!=null){
@@ -204,7 +204,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
         materia = materiaDelegate.obtenerMateria((Long) dForm.get("id"));
         request.setAttribute("iconosMateria", materia.getIconos());
         request.setAttribute("listaUAsMateria", materia.getUnidadesmaterias());
-        log.info("Creado/Actualizado " + materia.getId());
+        log.debug("Creado/Actualizado " + materia.getId());
 
         return mapping.findForward("success");
     }
@@ -212,7 +212,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 
@@ -223,7 +223,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
             request.setAttribute("idSelect", id);
             return dispatchMethod(mapping, form, request, response, "seleccionar");
         } else {
-            log.info("Eliminada Materia: " + id);
+            log.debug("Eliminada Materia: " + id);
             materiaDelegate.borrarMateria(id);
             request.setAttribute("alert", "confirmacion.baja");
             dForm.reset(mapping, request);
@@ -235,7 +235,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
         Long id = null;
@@ -280,7 +280,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -290,7 +290,7 @@ public class EditarMateriaAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

@@ -25,7 +25,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
 
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        //log.info("reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
+        //log.debug("reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
         super.reset(mapping, request);
         initialize(mapping);
 

@@ -61,15 +61,15 @@ public class CrawlerQueueEJB implements MessageDrivenBean, MessageListener {
 			   //ejecutamos el crawler
 			   if(operacionCrawler.getTipo().equals("I")&& operacionCrawler.getIdObjeto()!=null){
 				   
-				   log.info("Entro en la cola con Ficha: "+operacionCrawler.getIdObjeto());
+				   log.debug("Entro en la cola con Ficha: "+operacionCrawler.getIdObjeto());
 				   Crawler crawler=new Crawler(path,operacionCrawler.getIdObjeto(),operacionCrawler.getUrls());
 				   crawler.desindexarURLFicha();
 				   crawler.indexarURLFicha();
-				   log.info("Saliendo de la cola con Ficha: "+operacionCrawler.getIdObjeto()); 
+				   log.debug("Saliendo de la cola con Ficha: "+operacionCrawler.getIdObjeto()); 
 			   }
 			   //Optimizamos el indice
 			   else if(operacionCrawler.getTipo().equals("O")){
-				   log.info("Entro en la cola para optimizar el indice del crawler");
+				   log.debug("Entro en la cola para optimizar el indice del crawler");
 				   Crawler crawler = new Crawler(path);
 				   crawler.optimizarIndiceCrawler();
 			   }

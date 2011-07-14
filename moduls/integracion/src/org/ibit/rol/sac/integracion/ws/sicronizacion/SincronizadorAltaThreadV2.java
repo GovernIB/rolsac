@@ -34,10 +34,10 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 	protected void recogerUnidadesAdministrativas(final UnidadAdministrativaTransferible uaTrans, UnidadAdministrativaRemota padre) throws CapaDeDatosException, ComunicacionException {
 		profundidad++;
 		try{
-			log.info("rellenando la UARemota a partir de la transferible");
+			log.debug("rellenando la UARemota a partir de la transferible");
 			final UnidadAdministrativaRemota uaRemota = UnidadAdministrativaRemota.generar(uaTrans);
 			uaRemota.setAdministracionRemota(adminRemota);
-			log.info("guardo la UARemota de codigo "+ uaRemota.getCodigoEstandar() +" e idExterno "+uaRemota.getIdExterno());
+			log.debug("guardo la UARemota de codigo "+ uaRemota.getCodigoEstandar() +" e idExterno "+uaRemota.getIdExterno());
 			
 			Long idPadre = null;
 			if(padre!=null){
@@ -56,11 +56,11 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 
 			
 			if(profundidad<adminRemota.getProfundidad()){
-				log.info("no se alcanzo la profundidad deseada, recogiendo hijos");
+				log.debug("no se alcanzo la profundidad deseada, recogiendo hijos");
 				final int temp = profundidad;
 				if(uaTrans.getIdHijos()!=null){
 					for(Long idUA : uaTrans.getIdHijos()){
-						log.info("Recogido Hijo");
+						log.debug("Recogido Hijo");
 						final UnidadAdministrativaTransferible uahTrans = sincInvoker.recogerUnidadAdministrativa(idUA);
 						if(uahTrans!=null)
 							recogerUnidadesAdministrativas(uahTrans ,uaRemota);
@@ -85,16 +85,16 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 	 */
 	private void recogerEdificios(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Edificios relacionados para la UA: "+ua);
+			log.debug("Recogiendo Edificios relacionados para la UA: "+ua);
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
 			
 			if(edificioTransferibles!=null){
-				log.info("Edificios recogidos tamaño: "+edificioTransferibles.length);
+				log.debug("Edificios recogidos tamaño: "+edificioTransferibles.length);
 				
 				for(EdificioTransferible edificioTransferible : edificioTransferibles){
-					log.info("getId: "+edificioTransferible.getId());
-					log.info("getDireccion: "+edificioTransferible.getDireccion());
-					log.info("getPoblacion: "+edificioTransferible.getPoblacion());
+					log.debug("getId: "+edificioTransferible.getId());
+					log.debug("getDireccion: "+edificioTransferible.getDireccion());
+					log.debug("getPoblacion: "+edificioTransferible.getPoblacion());
 					if (edificioTransferible.getId() != null) {
 						EdificioRemoto edificioRemoto = uaRemotaDelegate.obtenerEdificioRemoto(edificioTransferible.getId(),adminRemota.getId());
                         if(edificioRemoto==null){
@@ -104,7 +104,7 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
                         edificioRemoto.getUnidadesAdministrativas().add(ua);
                         edificioRemoto.setAdministracionRemota(adminRemota);
                         uaRemotaDelegate.grabarEdificioRemoto(edificioRemoto);
-                        log.info("Edificio guardado idExt "+ edificioTransferible.getId());
+                        log.debug("Edificio guardado idExt "+ edificioTransferible.getId());
                     } else {
                         log.warn("Edificio transferible con 'id' null, ignorando!!!!");
                     }

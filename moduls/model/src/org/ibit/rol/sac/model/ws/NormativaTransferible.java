@@ -71,9 +71,9 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
                 if(traduccion!=null){
                     final TraduccionNormativaTransferible temp =  new TraduccionNormativaTransferible();
                     if(null!=traduccion.getTitulo()) {
-                    	log.info("charset encoding="+Charset.defaultCharset());
-                    	log.info("TITULO NORMATIVA ORIGINAL" + traduccion.getTitulo());
-                    	log.info("TITULO NORMATIVA ORIGINAL LENGHT" + traduccion.getTitulo().length());
+                    	log.debug("charset encoding="+Charset.defaultCharset());
+                    	log.debug("TITULO NORMATIVA ORIGINAL" + traduccion.getTitulo());
+                    	log.debug("TITULO NORMATIVA ORIGINAL LENGHT" + traduccion.getTitulo().length());
                     }
                     temp.setTitulo(traduccion.getTitulo());
                     temp.setCodigoEstandarIdioma(idioma);

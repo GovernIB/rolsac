@@ -12,7 +12,7 @@ public class ServiceFactory {
     protected static Log log = LogFactory.getLog(ServiceFactory.class);
 
     public static ProcedimientoService getProcedimientoService(String endPoint) {
-        log.info("Creando ProcedimientoService para " + endPoint);
+        log.debug("Creando ProcedimientoService para " + endPoint);
 
         AxisInterceptor interceptor = new AxisInterceptor(endPoint, ProcedimientoService.types);
         ProcedimientoService client = (ProcedimientoService) Enhancer.create(ProcedimientoService.class, interceptor);

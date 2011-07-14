@@ -21,10 +21,10 @@ public class ActualizadorFacade {
 	public void actualizar(Object actuacion) {
  
 		if(esPublico(actuacion)) {
-			log.info("actualizando en actualizador pma");
+			log.debug("actualizando en actualizador pma");
 			Actualizador.actualizar(actuacion);
 			if(esTramiteVUDS(actuacion)) {
-				log.info("actualizando en actualizador vuds");
+				log.debug("actualizando en actualizador vuds");
 				ActualizadorVuds.actualizar((Tramite)actuacion);
 			}
 		}

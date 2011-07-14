@@ -37,7 +37,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
 	//public static void setIdiomaDelegate(IdiomaDelegate idiomaDelegate) {idiomaDelegate = idiomaDelegate;}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-        log.info("entramos en reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
+        log.debug("entramos en reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
         super.reset(mapping, request);
         initialize(mapping);
 
@@ -56,7 +56,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
         } catch (Throwable t) {
             log.error("Error creando traducciones", t);
         }
-        log.info("salimos del reset");
+        log.debug("salimos del reset");
 
     }
 

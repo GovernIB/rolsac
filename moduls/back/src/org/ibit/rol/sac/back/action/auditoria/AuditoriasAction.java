@@ -38,7 +38,7 @@ public class AuditoriasAction extends BaseDispatchAction{
                                      HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         AuditoriaForm dForm = (AuditoriaForm)form;
         AuditoriaDelegate auditoriaDelegate = DelegateUtil.getAuditoriaDelegate();
 

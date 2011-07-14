@@ -63,12 +63,12 @@ public abstract class PaginatedHibernateEJB implements SessionBean {
     }
 
     public void ejbCreate() throws CreateException {
-        //log.info("ejbCreate: " + this.getClass() + this.getClass().hashCode());
+        //log.debug("ejbCreate: " + this.getClass() + this.getClass().hashCode());
         sf = HibernateLocator.getSessionFactory();
     }
 
     public void ejbRemove() {
-        //log.info("ejbRemove: " + this.getClass());
+        //log.debug("ejbRemove: " + this.getClass());
         sf = null;
     }
 

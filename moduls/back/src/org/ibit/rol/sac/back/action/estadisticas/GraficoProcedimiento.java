@@ -34,7 +34,7 @@ public class GraficoProcedimiento extends Action{
                                  HttpServletResponse response)
             throws Exception {
 
-        log.info("Entramos en execute");
+        log.debug("Entramos en execute");
 
         String identificador = request.getParameter("id");
         if (identificador!=null){

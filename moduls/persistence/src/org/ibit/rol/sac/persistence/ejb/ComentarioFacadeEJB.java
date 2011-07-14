@@ -88,7 +88,7 @@ public abstract class ComentarioFacadeEJB extends HibernateEJB {
                 Ficha ficha = (Ficha) session.load(Ficha.class, id);
                 if(ficha instanceof FichaRemota){
                     if("ERROR".equals(motivo)){
-                    	log.info("Se ha reportado un error en la ficha :"+ficha.getId());
+                    	log.debug("Se ha reportado un error en la ficha :"+ficha.getId());
                     	ReportarErrorComentario.reportarError(ficha,titulo,contenido,informador,idioma);
                     }
                 }
@@ -99,10 +99,10 @@ public abstract class ComentarioFacadeEJB extends HibernateEJB {
         	
         	 else if ("procedimiento".equals(tipo)) {
                  ProcedimientoLocal proc = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-                log.info("*************************proc: "+proc.getResponsable());
+                log.debug("*************************proc: "+proc.getResponsable());
                  if(proc instanceof ProcedimientoRemoto){
                      if("ERROR".equals(motivo)){
-                     	log.info("Se ha reportado un error en el procedimiento :"+proc.getId());
+                     	log.debug("Se ha reportado un error en el procedimiento :"+proc.getId());
                      	ReportarErrorComentario.reportarError(proc,titulo,contenido,informador,idioma);
                      }
                  }

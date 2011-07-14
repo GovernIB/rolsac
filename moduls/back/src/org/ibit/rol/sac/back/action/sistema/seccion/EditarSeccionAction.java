@@ -68,7 +68,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                 HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
@@ -94,7 +94,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
             request.setAttribute("padre", seccion.getPadre());
         }
         request.setAttribute("iconosFamilia", seccion.getFichasUA());
-        log.info("Creado/Actualizado " + seccion.getId());
+        log.debug("Creado/Actualizado " + seccion.getId());
 
         return mapping.findForward("success");
     }
@@ -102,13 +102,13 @@ public class EditarSeccionAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminada Seccion: " + id);
+        log.debug("Eliminada Seccion: " + id);
         seccionDelegate.borrarSeccion(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -119,7 +119,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
         Long id = null;
@@ -142,7 +142,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
             for(Object o : fichasUA) {
             		FichaUA fichaUA =(FichaUA)o;
             		if(null==fichaUA.getFicha())
-            			log.info("fichaUA id="+fichaUA.getId()+" no tiene ficha");
+            			log.debug("fichaUA id="+fichaUA.getId()+" no tiene ficha");
             }
             
 			request.setAttribute("listaFichas", fichasUA);
@@ -151,7 +151,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
             // si no existe no se podran crear fichas desde la sección.
 
             String codiEstandarUAArrel = System.getProperty("es.caib.rolsac.codiEstandarUAArrel");
-            log.info(codiEstandarUAArrel);
+            log.debug(codiEstandarUAArrel);
             if(!"".equals(codiEstandarUAArrel) && codiEstandarUAArrel !=null){
                 request.setAttribute("mostrarNuevaFicha" , "mostrarNuevaFicha");
             }
@@ -165,7 +165,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
     public ActionForward subir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en subir");
+        log.debug("Entramos en subir");
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
         Long idSubir = new Long(request.getParameter("idSubir"));
         seccionDelegate.subirOrden(idSubir);
@@ -177,7 +177,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en actualizar_orden");
+		log.debug("Entramos en actualizar_orden");
 		SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
 		
 		Long id = null;
@@ -203,7 +203,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
 
@@ -214,7 +214,7 @@ public class EditarSeccionAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

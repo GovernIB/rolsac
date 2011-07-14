@@ -44,13 +44,13 @@ public class UAController implements Controller {
 
             if(id != null){
                 //System.out.println("idUA " + id);
-                log.info("idUA " + id);
+                log.debug("idUA " + id);
                 UnidadAdministrativa ua = uadelegate.obtenerUnidadAdministrativa(id);
 
                 EdificioDelegate edifDelegate = DelegateUtil.getEdificioDelegate();
                 Set edificios = edifDelegate.listarEdificiosUnidad(id);
                 request.setAttribute("ua", ua);
-                log.info("ua :"+ ua);
+                log.debug("ua :"+ ua);
                 request.setAttribute("edificios", edificios);
                 log.debug("edificios :"+ edificios);
 

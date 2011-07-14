@@ -22,7 +22,7 @@ public class CrawlerSchedulerServlet implements Servlet {
 		try {
 				String tiempoReIndexacion = System.getProperty("es.caib.rolsac.crawler.tiempoReIndexacion");
                 if(tiempoReIndexacion!=null){
-                	log.info("[Crawler Job] Configurando la reIndexación del crawler para que se ejecute según la siguiente expresión : "+tiempoReIndexacion);
+                	log.debug("[Crawler Job] Configurando la reIndexación del crawler para que se ejecute según la siguiente expresión : "+tiempoReIndexacion);
     				SchedulerFactory schedFact =new org.quartz.impl.StdSchedulerFactory();
                     Scheduler sched = schedFact.getScheduler();
                     sched.start();
@@ -30,7 +30,7 @@ public class CrawlerSchedulerServlet implements Servlet {
                     CronTrigger trigger = new CronTrigger("Crawler","reIndexar");
                     trigger.setCronExpression(tiempoReIndexacion);
                     sched.scheduleJob(jobDetail, trigger);
-                    log.info("Job de reIndexación del crawler programado...");
+                    log.debug("Job de reIndexación del crawler programado...");
                 }
 
 

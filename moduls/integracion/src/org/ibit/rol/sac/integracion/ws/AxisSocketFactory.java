@@ -28,7 +28,7 @@ public class AxisSocketFactory extends DefaultSocketFactory {
 
     public Socket create(String host, int port, StringBuffer otherHeaders, BooleanHolder useFullURL)
             throws Exception {
-        log.info("Create socket " + host + ":" + port);
+        log.debug("Create socket " + host + ":" + port);
 
         TransportClientProperties tcp = TransportClientPropertiesFactory.create("http");
         boolean hostInNonProxyList = isHostInNonProxyList(host, tcp.getNonProxyHosts());

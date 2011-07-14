@@ -75,7 +75,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         Personal persona = new Personal();
         VOUtils.populate(persona, dForm);
@@ -101,13 +101,13 @@ public class EditarGuiaAction extends BaseDispatchAction {
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", persona.getId());
-        log.info("Creado/Actualizado " + persona.getId());
+        log.debug("Creado/Actualizado " + persona.getId());
 
         return mapping.findForward("success");
     	  	
     	
     	/*
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
 
         PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
@@ -134,7 +134,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", persona.getId());
-        log.info("Creado/Actualizado " + persona.getId());
+        log.debug("Creado/Actualizado " + persona.getId());
 
         return mapping.findForward("success");
         */
@@ -143,7 +143,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         PersonalDelegate personaDelegate = DelegateUtil.getPersonalDelegate();
 
@@ -152,7 +152,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
         dForm.reset(mapping, request);
 
         request.setAttribute("alert", "confirmacion.baja");
-        log.info("Eliminada Persona: " + id);
+        log.debug("Eliminada Persona: " + id);
 
         dForm.initialize(mapping);
         
@@ -162,7 +162,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
 
@@ -183,7 +183,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         
         PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
@@ -216,7 +216,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
 
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         dForm.initialize(mapping);
@@ -228,7 +228,7 @@ public class EditarGuiaAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-    	 log.info("Entramos en unspecified");
+    	 log.debug("Entramos en unspecified");
          return null;
     }
     

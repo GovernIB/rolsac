@@ -30,9 +30,9 @@ public class AuditoriaUAController implements Controller{
 
         try{
             if(request.getParameter("idSelect")!=null){
-                log.info("entro aqui UA controller");
+                log.debug("entro aqui UA controller");
                 Long idUnidad = new Long(request.getParameter("idSelect"));
-                log.info("idunidad"+idUnidad);
+                log.debug("idunidad"+idUnidad);
                 List auditorias = auditoriaDelegate.listarAuditoriasUnidadAdministrativa(idUnidad);
                 request.setAttribute("listaAuditoriasUA", auditorias);
             }

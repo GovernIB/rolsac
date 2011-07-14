@@ -65,7 +65,7 @@ public class EditarFormularioAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm)form;
         FormularioDelegate formDelegate = DelegateUtil.getFormularioDelegate();
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
@@ -117,7 +117,7 @@ public class EditarFormularioAction extends BaseDispatchAction{
             Long idFormulario = formDelegate.grabarFormulario(formulario);
             //@Deprecated tramiteDelegate.anyadirFormulario(idTramite, idFormulario);
             dForm.set("id",formulario.getId());
-            log.info("Creat/Actualitzat " + formulario.getId());
+            log.debug("Creat/Actualitzat " + formulario.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -130,7 +130,7 @@ public class EditarFormularioAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         FormularioDelegate formDelegate = DelegateUtil.getFormularioDelegate();
 
@@ -155,14 +155,14 @@ public class EditarFormularioAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         FormularioDelegate formDelegate = DelegateUtil.getFormularioDelegate();
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 
         if (request.getParameter("idSelect") != null && request.getParameter("idTramite") != null){
             Long id = new Long(request.getParameter("idSelect"));
             Long idTramite = new Long(request.getParameter("idTramite"));
-            log.info("Eliminado Formulario: " + id);
+            log.debug("Eliminado Formulario: " + id);
           //@Deprecated tramiteDelegate.eliminarFormulario(idTramite, id);
             formDelegate.borrarFormulario(id);
             DynaValidatorForm dForm = (DynaValidatorForm) form;
@@ -181,7 +181,7 @@ public class EditarFormularioAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        log.info("Entramos en cancelar");
+        log.debug("Entramos en cancelar");
         DynaValidatorForm dForm = (DynaValidatorForm)form;
 
         if (request.getParameter("idTramite") != null){
@@ -200,7 +200,7 @@ public class EditarFormularioAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

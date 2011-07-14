@@ -47,7 +47,7 @@ public class IdInvoker {
                               javax.xml.rpc.ParameterMode.IN);
 
 
-            log.info("Fin Constructor");
+            log.debug("Fin Constructor");
 
         } catch(ServiceException e) {
             throw new WSInvocatorException(e);

@@ -37,14 +37,14 @@ public class CrawlerJob implements Job{
 			
 				FichaDelegate ficdel = DelegateUtil.getFichaDelegate();
 				IndexerDelegate indexer = DelegateUtil.getIndexerDelegate();
-				log.info("Reindexando indece Lucene");
+				log.debug("Reindexando indece Lucene");
 				//Reindexamos procedimientos
 				indexer.reindexarProcedimentos();
 				//Reindexamos UA
 				indexer.reindexarUOsPMA();
 				//Reindexamos fichas
 				indexer.reindexarFichasPMA();
-				log.info("Reindexando indece Lucene Crawler");
+				log.debug("Reindexando indece Lucene Crawler");
 				//Listamos fichas y lanzamos el crawler por cada una
 				List<Ficha> listaFichas = ficdel.listarFichasCrawler();
 				for (Ficha ficha : listaFichas) {

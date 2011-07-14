@@ -32,13 +32,13 @@ public class BorrarComentarioAction extends BaseAction {
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         ComentarioDelegate comentarioDelegate = DelegateUtil.getComentarioDelegate();
 
         DynaActionForm dForm = (DynaActionForm) form;
 
         Long idComentario = (Long) dForm.get("idComentario");
-        log.info("Eliminando comentario: " + idComentario);
+        log.debug("Eliminando comentario: " + idComentario);
         comentarioDelegate.borrarComentario(idComentario);
 
         request.setAttribute("idSelect", dForm.get("idRel"));

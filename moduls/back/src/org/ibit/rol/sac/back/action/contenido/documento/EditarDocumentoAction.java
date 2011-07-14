@@ -77,7 +77,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         DocumentoForm dForm = (DocumentoForm)form;
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();        
         DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
@@ -103,7 +103,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
         Iterator fichers =  Arrays.asList((FormFile[]) dForm.get("fichers")).iterator();
         //iteram per tots els idiomes
         while (lang.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile fichero = (FormFile) fichers.next();
             String idioma = (String) lang.next();
             TraduccionDocumento traduccion = (TraduccionDocumento) documento.getTraduccion(idioma);
@@ -147,7 +147,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idProcedimiento"));
             docDelegate.grabarDocumento(documento, id, null);
             dForm.set("id",documento.getId());
-            log.info("Creat/Actualitzat " + documento.getId());
+            log.debug("Creat/Actualitzat " + documento.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -158,7 +158,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idFicha"));
             docDelegate.grabarDocumento(documento, null, id);
             dForm.set("id",documento.getId());
-            log.info("Creat/Actualitzat " + documento.getId());
+            log.debug("Creat/Actualitzat " + documento.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -170,7 +170,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idDocInfTramite"));
             docDelegate.grabarDocumento(documento, null, null, id, null);
             dForm.set("id",documento.getId());
-            log.info("Creat/Actualitzat " + documento.getId());
+            log.debug("Creat/Actualitzat " + documento.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -181,7 +181,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idDocPreTramite"));
             docDelegate.grabarDocumento(documento, null, null, null, id);
             dForm.set("id",documento.getId());
-            log.info("Creat/Actualitzat " + documento.getId());
+            log.debug("Creat/Actualitzat " + documento.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -197,7 +197,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
 
@@ -219,12 +219,12 @@ public class EditarDocumentoAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
 
         if (request.getParameter("idSelect") != null){
             Long id = new Long(request.getParameter("idSelect"));
-            log.info("Eliminado Documento: " + id);
+            log.debug("Eliminado Documento: " + id);
             docDelegate.borrarDocumento(id);
             TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
             dForm.reset(mapping, request);
@@ -259,7 +259,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         dForm.reset(mapping, request);
 
@@ -285,7 +285,7 @@ public class EditarDocumentoAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

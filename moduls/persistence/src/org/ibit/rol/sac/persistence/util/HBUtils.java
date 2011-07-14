@@ -80,7 +80,7 @@ public final class HBUtils {
                             newValue = inicialitzat ? new HashMap((Map) value) : Collections.EMPTY_MAP;
                             break;
                         default:
-                            //log.info("Tipus desconegut? " + clazz.getName());
+                            //log.debug("Tipus desconegut? " + clazz.getName());
                             newValue = null;
                             break;
                     }

@@ -67,7 +67,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 
         UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
@@ -84,11 +84,11 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
 
         Long idUnidad = new Long(request.getParameter("idUnidad"));
         Long idMateria = (Long) dForm.get("idMateria");
-        log.info("IdMateria "+ idMateria);
-        log.info("IdUnidad "+ idUnidad);
+        log.debug("IdMateria "+ idMateria);
+        log.debug("IdUnidad "+ idUnidad);
 
          if ((idUnidad != null) && (idMateria != null)) {
-            log.info("entro en grabar");
+            log.debug("entro en grabar");
             unidadMateria.setUnidadPrincipal("N");
             unidadMateriaDelegate.grabarUnidadMateria(unidadMateria, idUnidad, idMateria);
             if(dForm.get("id") != null){
@@ -97,7 +97,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                 request.setAttribute("alert", "confirmacion.alta");
             }
         } else {
-            log.info("entro en fail");
+            log.debug("entro en fail");
             return mapping.findForward("fail");
         }
 
@@ -114,7 +114,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
 
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
@@ -135,7 +135,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
 
@@ -160,7 +160,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         Long idUnidad = (Long) dForm.get("idUnidad");
         dForm.reset(mapping, request);
@@ -175,7 +175,7 @@ public class EditarUnidadMateriaAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 }

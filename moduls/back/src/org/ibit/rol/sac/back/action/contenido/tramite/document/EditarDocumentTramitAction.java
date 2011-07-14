@@ -98,7 +98,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         DocumentoForm dForm = (DocumentoForm)form;
         IdiomaDelegate idiomaDelegate = null==this.idiomaDelegate?  DelegateUtil.getIdiomaDelegate() : this.idiomaDelegate;        
         TramiteDelegate tramDelegate = null==this.tramiteDelegate? DelegateUtil.getTramiteDelegate() : this.tramiteDelegate;
@@ -106,7 +106,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
         Long id=((Long)dForm.get("id"));
         int tipus= new Integer(request.getParameter("tipus"));
         Long tid = new Long(request.getParameter("idTramite"));
-        log.info("tid="+tid);
+        log.debug("tid="+tid);
 
 
         boolean modificant=id==null?false:true;
@@ -136,7 +136,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
         Iterator fichers =  Arrays.asList((FormFile[]) dForm.get("fichers")).iterator();
         //iteram per tots els idiomes
         while (lang.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile fichero = (FormFile) fichers.next();
             String idioma = (String) lang.next();
             TraduccionDocumento traduccion = (TraduccionDocumento) documentTramit.getTraduccion(idioma);
@@ -156,7 +156,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
         }
         
         Long docId=tramDelegate.grabarDocument(documentTramit, tid);
-        log.info("docId="+docId);
+        log.debug("docId="+docId);
         request.setAttribute("idSelect", tid);  //ens redirigim al tramite
         request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
         return mapping.findForward("tramite");
@@ -166,23 +166,23 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
-        log.info(idiomaDelegate);
+        log.debug(idiomaDelegate);
         IdiomaDelegate idiomaDelegate = null==this.idiomaDelegate?  DelegateUtil.getIdiomaDelegate() : this.idiomaDelegate;        
         TramiteDelegate tramDelegate = null==this.tramiteDelegate? DelegateUtil.getTramiteDelegate() : this.tramiteDelegate;
 
-        log.info(idiomaDelegate);
+        log.debug(idiomaDelegate);
 		Long docId=null;
         if(null!=request.getParameter("idSelect"))
         	docId = Long.valueOf(request.getParameter("idSelect"));
         else if(null!=request.getAttribute("idSelect"))
         	docId = (Long)request.getAttribute("idSelect");
         if (docId != null){
-            log.info("idSelect="+docId);
+            log.debug("idSelect="+docId);
             DocumentTramit documentTramit = tramDelegate.obtenirDocument(docId);
-            log.info(documentTramit);
-            log.info(request.getParameterMap());
+            log.debug(documentTramit);
+            log.debug(request.getParameterMap());
             VOUtils.describe(dForm, documentTramit,idiomaDelegate);
             
 //FIXME - enric - error: fichers[0] no es propietat. cal aquest bucle?
@@ -195,7 +195,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
 //            }
 
         } else {
-            log.info("failed");
+            log.debug("failed");
             return mapping.findForward("fail");
         }
 
@@ -205,7 +205,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
         TramiteDelegate tramDelegate = null==this.tramiteDelegate? DelegateUtil.getTramiteDelegate() : this.tramiteDelegate;
         if (request.getParameter("idSelect") != null){
@@ -215,7 +215,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
             dForm.reset(mapping, request);
 
             
-            log.info("Eliminado Documento: " + id);
+            log.debug("Eliminado Documento: " + id);
 
             id= new Long(request.getParameter("idTramite"));
             request.setAttribute("idSelect", id);
@@ -246,7 +246,7 @@ public class EditarDocumentTramitAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

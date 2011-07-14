@@ -218,7 +218,7 @@ public class suscriptoresEditaAction extends BaseAction
 
        	delegate.grabarEnvio(envio);
 
-       	//log.info("Creado/Actualizado " + age.getId());
+       	//log.debug("Creado/Actualizado " + age.getId());
       	*/
        	if(request.getParameter("anyade")!=null) 
        		addMessage(request, "mensa.nuevosuscriptor");

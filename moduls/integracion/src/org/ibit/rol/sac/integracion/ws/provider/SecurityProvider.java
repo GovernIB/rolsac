@@ -19,7 +19,7 @@ public class SecurityProvider{
 		new LoginContext("seycon", handler).login();
 		loginContext = new LoginContext("client-login", handler);
 		loginContext.login();
-		log.info("Logueado con exito");
+		log.debug("Logueado con exito");
 	}
 
 	protected void logout() throws LoginException{

@@ -78,7 +78,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         NormativaForm dForm = (NormativaForm) form;
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         TipoNormativaDelegate tipoNormativaDelegate = DelegateUtil.getTipoNormativaDelegate();
@@ -109,7 +109,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
         Iterator lang = idiomaDelegate.listarLenguajes().iterator();
 
         while (aux.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile fichero = (FormFile) aux.next();
             String idioma = (String) lang.next();
             TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(idioma);
@@ -152,7 +152,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
 
         dForm.set("id", normativa.getId());
         request.setAttribute("normativaForm", dForm); 
-        log.info("Creat/Actualitzat " + normativa.getId());
+        log.debug("Creat/Actualitzat " + normativa.getId());
 
         return mapping.findForward("success");
         
@@ -202,14 +202,14 @@ public class EditarLocalAction  extends BaseDispatchAction {
         	}
         }
         
-       log.info("Traducción normativa local - Id: " + (Long) dForm.get("id"));
+       log.debug("Traducción normativa local - Id: " + (Long) dForm.get("id"));
     	
     }
 
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         NormativaForm dForm = (NormativaForm) form;
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
@@ -217,7 +217,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
 
         if(normativaDelegate.autorizaModificarNormativa(id)) {
         normativaDelegate.borrarNormativa(id);
-        log.info("Eliminada Normativa Local: " + id);
+        log.debug("Eliminada Normativa Local: " + id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
 	        request.setAttribute("normativaForm", dForm);
@@ -232,7 +232,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         NormativaForm dForm = (NormativaForm) form;
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         Long id = null;
@@ -286,7 +286,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         NormativaForm dForm = (NormativaForm)form;
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
@@ -379,7 +379,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                       HttpServletRequest request,
                                       HttpServletResponse response) throws Exception {
 
-           log.info("Entramos en norelacionadas");
+           log.debug("Entramos en norelacionadas");
            NormativaDelegate normaDelegate = DelegateUtil.getNormativaDelegate();
 
            List normativas = normaDelegate.buscarNormativasNoRelacionadas(TIPO_NORM);
@@ -400,7 +400,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en procedimiento");
+        log.debug("Entramos en procedimiento");
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
         if (request.getParameter("normativa") != null && request.getParameter("procedimiento") != null){
@@ -424,7 +424,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en afectacion");
+        log.debug("Entramos en afectacion");
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 
         if (request.getParameter("normativa1") != null
@@ -451,7 +451,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         NormativaForm dForm = (NormativaForm)form;
         dForm.reset(mapping, request);
 
@@ -462,7 +462,7 @@ public class EditarLocalAction  extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

@@ -61,7 +61,7 @@ public class Crawler{
         		String idi = (String) iterator.next();
         		String url= urls.get(idi);
         		
-        		log.info("[IndexInsertarFicha:" + idFicha + "] Traduccion para el idioma: "+idi+" con URL: "+url);
+        		log.debug("[IndexInsertarFicha:" + idFicha + "] Traduccion para el idioma: "+idi+" con URL: "+url);
             	dominio = getDomimio(url);
             	if(dominio!=""){
             	    if(!comprobarFormato(url)){
@@ -73,7 +73,7 @@ public class Crawler{
         		        	//comprobarMicrosite(trad.getUrl());
         		        	if(isMicrosite(url)){
         		        		profundidadMS=Integer.parseInt(System.getProperty("es.caib.rolsac.crawler.profundidadMS"));
-        		        		log.info("[IndexInsertarFicha:" + idFicha + "] Indexamos un Microsite:"+url+" con clave: "+valorMicrosite+" con Profundidad Max.: "+profundidadMS);
+        		        		log.debug("[IndexInsertarFicha:" + idFicha + "] Indexamos un Microsite:"+url+" con clave: "+valorMicrosite+" con Profundidad Max.: "+profundidadMS);
         		        		//log.debug("Iniciando analisis arbol URLS...");
         		        		indexMS(padre,0,idFicha.toString(),idi);
         		        		//log.debug("Finalizando analisis arbol URLS...");
@@ -130,7 +130,7 @@ public class Crawler{
     private void guardarResultadosIndice(String url,String idioma) throws Exception {
         try{
         
-        		log.info("[IndexInsertarFicha:" + idFicha + "] Analisis URLS concluido. Nos disponemos a indexar los resultados");
+        		log.debug("[IndexInsertarFicha:" + idFicha + "] Analisis URLS concluido. Nos disponemos a indexar los resultados");
         		//log.debug("Crawling...");
     	    	Directory directory = getHibernateDirectory(idioma);
 

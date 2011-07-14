@@ -109,26 +109,26 @@ public class UDDICache {
     private static Map timerMap = new HashMap();
 
     private static List getObjects(List keys) {
-        log.info("Cercant llista " + keys);
+        log.debug("Cercant llista " + keys);
         List objects = new ArrayList(keys.size());
         for (int i = 0; i < keys.size(); i++) {
             String key = (String) keys.get(i);
             Object object = getObject(key);
             if (object == null) {
-                log.info("Ha fallat llista per " + key);
+                log.debug("Ha fallat llista per " + key);
                 return null;
             }
 
             objects.add(object);
         }
 
-        log.info("Hit de la llista " + keys);
+        log.debug("Hit de la llista " + keys);
 
         return objects;
     }
 
     private static void putObjects(List keys, Object[] objects) {
-        log.info("Cacheant llista " + keys);
+        log.debug("Cacheant llista " + keys);
         for (int i = 0; i < keys.size(); i++) {
             String key = (String) keys.get(i);
             putObject(key, objects[i]);
@@ -137,25 +137,25 @@ public class UDDICache {
 
     private static Object getObject(String key) {
         if (!timerMap.containsKey(key)) {
-            log.info("No cache per " + key);
+            log.debug("No cache per " + key);
             return null;
         }
 
         long cachedTime = ((Long) timerMap.get(key)).longValue();
         if (maxTime < System.currentTimeMillis() - cachedTime) {
-            log.info("Cache expirat per " + key);
+            log.debug("Cache expirat per " + key);
             timerMap.remove(key);
             cacheMap.remove(key);
             return null;
         }
 
         Object result = cacheMap.get(key);
-        log.info("Hit per " + key);
+        log.debug("Hit per " + key);
         return result;
     }
 
     private static void putObject(String key, Object object) {
-        log.info("Cacheant " + key);
+        log.debug("Cacheant " + key);
         cacheMap.put(key, object);
         timerMap.put(key, new Long(System.currentTimeMillis()));
     }

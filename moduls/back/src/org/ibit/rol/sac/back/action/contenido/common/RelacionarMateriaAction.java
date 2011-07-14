@@ -16,7 +16,7 @@ public abstract class RelacionarMateriaAction extends BaseAction {
 
 	public ActionForward relacionarMateria(BaseDispatchAction action, ActionParameters params)
 			throws DelegateException, Exception {
-				log.info("Entramos en relacionar materia");
+				log.debug("Entramos en relacionar materia");
 			
 				if (faltanParametres(params))
 					return forwardError(params);

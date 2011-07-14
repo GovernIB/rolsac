@@ -64,10 +64,10 @@ public class LobCleanUpInterceptor implements Interceptor {
         try {
             for (Iterator iter = tempLobs.iterator(); iter.hasNext();) {
                 Object lob = iter.next();
-                log.info("lob="+lob);
+                log.debug("lob="+lob);
                 Method freeTemporary = lob.getClass().getMethod("freeTemporary", new Class[0]);
                 freeTemporary.invoke(lob, new Object[0]);
-                log.info("lob cleaned");
+                log.debug("lob cleaned");
             }
         } catch (SecurityException e) {
             log.error("clean LOB failed: " + e.getMessage(), e);

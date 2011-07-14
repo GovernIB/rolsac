@@ -65,7 +65,7 @@ public class PrevisualitzarVudsAction extends Action{
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entrem en previsualitzar tramit vuds");
+        log.debug("Entrem en previsualitzar tramit vuds");
         
         TramiteDelegate tramiteDelegate = null!=this.tramiteDelegate? this.tramiteDelegate: DelegateUtil.getTramiteDelegate();  //u92770[enric]
         ProcedimientoDelegate procDelegate = null!=this.procDelegate? this.procDelegate: DelegateUtil.getProcedimientoDelegate();  //u92770[enric]

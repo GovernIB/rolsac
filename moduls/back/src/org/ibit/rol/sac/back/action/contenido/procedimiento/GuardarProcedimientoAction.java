@@ -32,12 +32,12 @@ public class GuardarProcedimientoAction extends BaseAction {
 	  
 	protected ActionForward guardar(EditarProcedimientoAction action, ActionParameters params) throws DelegateException, Exception {
 
-		log.info("Entramos en action guardar");
+		log.debug("Entramos en action guardar");
 		ProcedimientoForm dForm = (ProcedimientoForm) params.form;
 		ProcedimientoLocal procedimiento = crearProcedimientoRellenadoConCamposFormulario(dForm);
 		procedimiento = getGrabadorProcedimiento().guardar(dForm, procedimiento); 
 		dForm.set("id", procedimiento.getId());
-		log.info("Creat/Actualitzat " + procedimiento.getId());
+		log.debug("Creat/Actualitzat " + procedimiento.getId());
 		params.setAttribute("host", establecerAtributoServidor(params.request));
 		
 		 

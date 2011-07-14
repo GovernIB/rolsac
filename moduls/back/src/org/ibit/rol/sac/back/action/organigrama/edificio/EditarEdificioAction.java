@@ -68,7 +68,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                 HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
 
@@ -131,7 +131,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
         }
         dForm.set("id", edificio.getId());
 
-        log.info("Creado/Actualizado " + edificio.getId());
+        log.debug("Creado/Actualizado " + edificio.getId());
         
         request.setAttribute("unidadOptions", edificio.getUnidadesAdministrativas());
 
@@ -141,7 +141,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
 
@@ -150,7 +150,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
         dForm.reset(mapping, request);
 
         request.setAttribute("alert", "confirmacion.baja");
-        log.info("Eliminado Edificio: " + id);
+        log.debug("Eliminado Edificio: " + id);
 
         return mapping.findForward("cancel");
     }
@@ -158,7 +158,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
         Long id = null;
@@ -199,7 +199,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
@@ -252,7 +252,7 @@ public class EditarEdificioAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         dForm.reset(mapping, request);
 
@@ -263,14 +263,14 @@ public class EditarEdificioAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
     
     public ActionForward unidades(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-    	log.info("Entramos en unidades");
+    	log.debug("Entramos en unidades");
     	EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
 
     	if (request.getParameter("edificio") != null && request.getParameter("unidad") != null){

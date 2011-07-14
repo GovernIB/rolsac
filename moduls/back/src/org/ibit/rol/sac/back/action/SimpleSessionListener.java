@@ -20,13 +20,13 @@ public class SimpleSessionListener implements HttpSessionListener {
 	
 	public void sessionCreated(HttpSessionEvent event) {
 		sessions.incrementAndGet();
-		log.info("\nCreated session: " + event.getSession().getId() +
+		log.debug("\nCreated session: " + event.getSession().getId() +
 				"\nActive sessions: " + sessions.get() );		
 	}
 
 	public void sessionDestroyed(HttpSessionEvent event) {
 		sessions.decrementAndGet();
-		log.info("\nDestroy session: " + event.getSession().getId() +
+		log.debug("\nDestroy session: " + event.getSession().getId() +
 				"\nActive sessions: " + sessions.get() );				
 	}
 }

@@ -54,19 +54,19 @@ public class UDDIManager {
         try {
             auth = proxy.getAuthToken(user, password).getAuthInfo();
         } catch (RegistryException re) {
-            log.info("No ha sido posible obtener autorización", re);
+            log.debug("No ha sido posible obtener autorización", re);
         }
 
         try {
             initNivelAdministrativo();
         } catch (RegistryException re) {
-            log.info("Error en la inicialización", re);
+            log.debug("Error en la inicialización", re);
         }
     }
 
     public UDDIManager() {
         proxy = new RegistryProxy();
-        log.info(proxy.getInquiryURL());
+        log.debug(proxy.getInquiryURL());
     }
 
     protected void finalize() throws Throwable {

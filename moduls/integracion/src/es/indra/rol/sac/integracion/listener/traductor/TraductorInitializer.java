@@ -32,7 +32,7 @@ public class TraductorInitializer implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 
 		if(!traductorHabilitat()) {
-			log.info("Carregant Rolsac sense traducció automàtica");
+			log.debug("Carregant Rolsac sense traducció automàtica");
 			return;
 		}
 		try {
@@ -45,11 +45,11 @@ public class TraductorInitializer implements ServletContextListener {
 			//ámbito de aplicación
 			event.getServletContext().setAttribute("traductor", traductor);
 
-			log.info("Carregant Rolsac amb traducció automàtica");
-			log.info("URL de servidor de traducció: " + traductor.getTranslationServerUrl());
+			log.debug("Carregant Rolsac amb traducció automàtica");
+			log.debug("URL de servidor de traducció: " + traductor.getTranslationServerUrl());
 
 		} catch (Exception e) {
-			log.info("Carregant Rolsac sense traducció automàtica");
+			log.debug("Carregant Rolsac sense traducció automàtica");
 		}
 
 	}

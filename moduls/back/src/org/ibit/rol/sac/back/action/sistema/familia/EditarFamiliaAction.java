@@ -65,7 +65,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         Familia familia = new Familia();
         VOUtils.populate(familia, dForm);
@@ -81,7 +81,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
 
         familia = familiaDelegate.obtenerFamilia((Long) dForm.get("id"));
         request.setAttribute("iconosFamilia", familia.getIconos());
-        log.info("Creado/Actualizado " + familia.getId());
+        log.debug("Creado/Actualizado " + familia.getId());
 
         return mapping.findForward("success");
     }
@@ -89,7 +89,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
 
@@ -100,7 +100,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
                 request.setAttribute("idSelect", id);
                 return dispatchMethod(mapping, form, request, response, "seleccionar");
         } else {
-            log.info("Eliminada Familia: " + id);
+            log.debug("Eliminada Familia: " + id);
             familiaDelegate.borrarFamilia(id);
             request.setAttribute("alert", "confirmacion.baja");
             dForm.reset(mapping, request);
@@ -112,7 +112,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
         Long id = null;
@@ -137,7 +137,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -147,7 +147,7 @@ public class EditarFamiliaAction  extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

@@ -37,7 +37,7 @@ public class SecurityInvoker {
         	
             call = (Call) new Service().createCall();
             call.setTargetEndpointAddress(new URL(endPoint));
-            log.info("Fin Constructor");
+            log.debug("Fin Constructor");
         } catch(ServiceException e) {
             throw new WSInvocatorException(e);
         } catch(MalformedURLException e) {

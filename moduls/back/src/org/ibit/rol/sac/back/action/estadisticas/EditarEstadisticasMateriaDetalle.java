@@ -31,7 +31,7 @@ public class EditarEstadisticasMateriaDetalle extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en execute");
+        log.debug("Entramos en execute");
 
         Long id = new Long(request.getParameter("idSelect"));
 

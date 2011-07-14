@@ -53,7 +53,7 @@ public class ArbolUAAction extends BaseDispatchAction{
     public ActionForward expandir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en expandir");
+        log.debug("Entramos en expandir");
         List tieneHijos = new ArrayList();
 
     	request.setAttribute("idUA",new Long(request.getParameter("idUA")));
@@ -109,7 +109,7 @@ public class ArbolUAAction extends BaseDispatchAction{
     public ActionForward contraer(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en contraer");
+        log.debug("Entramos en contraer");
         List tieneHijos = new ArrayList();
 
     	request.setAttribute("idUA",new Long(request.getParameter("idUA")));
@@ -168,7 +168,7 @@ public class ArbolUAAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         List tieneHijos = new ArrayList();
 
         if (request.getParameter("idUA") != null){

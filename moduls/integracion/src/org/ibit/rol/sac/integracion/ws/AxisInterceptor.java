@@ -77,9 +77,9 @@ public final class AxisInterceptor implements MethodInterceptor {
                 ret = call.invoke(objects);
 
                 if (ret == null) {
-                    log.info("Ha retornat null");
+                    log.debug("Ha retornat null");
                 } else {
-                    log.info(ret.getClass().getName());
+                    log.debug(ret.getClass().getName());
                 }
 
             } catch (ServiceException e) {

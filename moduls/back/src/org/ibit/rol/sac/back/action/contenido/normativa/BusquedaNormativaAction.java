@@ -36,7 +36,7 @@ public class BusquedaNormativaAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en normativabusqueda");
+        log.debug("Entramos en normativabusqueda");
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 
@@ -60,10 +60,10 @@ public class BusquedaNormativaAction extends Action {
                 paramtrad.put("titulo", normativaForm.get("titulo").toString().toUpperCase());
                 try {
                 	normativasLocales.addAll(normativaDelegate.buscarNormativas(paramnotrad, paramtrad, "local"));
-                } catch (Exception e) {log.info("Error busqueda normativa local" + e.getMessage());}
+                } catch (Exception e) {log.debug("Error busqueda normativa local" + e.getMessage());}
                 try {
                 	normativasExternas.addAll(normativaDelegate.buscarNormativas(paramnotrad, paramtrad, "externa"));
-                } catch (Exception e) {log.info("Error busqueda normativa externa" + e.getMessage());}
+                } catch (Exception e) {log.debug("Error busqueda normativa externa" + e.getMessage());}
         }
 
 

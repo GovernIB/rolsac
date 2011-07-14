@@ -67,7 +67,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en editar");
+		log.debug("Entramos en editar");
 		TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 		AgrupacionMDelegate agrupacionMDelegate = DelegateUtil.getAgrupacionMDelegate();
 		
@@ -96,20 +96,20 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
 			request.setAttribute("alert", "confirmacion.alta");
 		}
 		dForm.set("id", agrupacionm.getId());
-		log.info("Creado/Actualizado " + agrupacionm.getId());
+		log.debug("Creado/Actualizado " + agrupacionm.getId());
 		return mapping.findForward("success");
 	}
 	
 	public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	            HttpServletResponse response) throws Exception {
 	
-		log.info("Entramos en eliminar");
+		log.debug("Entramos en eliminar");
 		TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 		AgrupacionMDelegate agrupacionMDelegate = DelegateUtil.getAgrupacionMDelegate();
 		
 		Long id = (Long) dForm.get("id");
 		
-		log.info("Eliminado Agrupacion Materia: " + id);
+		log.debug("Eliminado Agrupacion Materia: " + id);
 		agrupacionMDelegate.borrarAgrupacionM(id);
 		request.setAttribute("alert", "confirmacion.baja");
 		dForm.reset(mapping, request);
@@ -120,7 +120,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
 	public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	            HttpServletResponse response) throws Exception {
 	
-		log.info("Entramos en seleccionar");
+		log.debug("Entramos en seleccionar");
 		TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
 		AgrupacionMDelegate agrupacionMDelegate = DelegateUtil.getAgrupacionMDelegate();
 		Long id = null;
@@ -149,7 +149,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
 	public ActionForward subir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 	            HttpServletResponse response) throws Exception {
 	
-		log.info("Entramos en subir");
+		log.debug("Entramos en subir");
 		MateriaAgrupacionMDelegate materiaAgrupacionMDelegate = DelegateUtil.getMateriaAgrupacionMDelegate();
 		
 		Long idAgru = new Long(request.getParameter("idSelect"));
@@ -162,7 +162,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
 	             HttpServletRequest request,
 	             HttpServletResponse response) throws Exception {
 	
-		log.info("Entramos en materia");
+		log.debug("Entramos en materia");
 		MateriaAgrupacionMDelegate matAgruDelegate = DelegateUtil.getMateriaAgrupacionMDelegate();
 		
 		if (request.getParameter("agru") != null){
@@ -194,7 +194,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -204,7 +204,7 @@ public class EditarAgrupacionMAction extends BaseDispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en unspecified");
+		log.debug("Entramos en unspecified");
 		return null;
 	}	
     

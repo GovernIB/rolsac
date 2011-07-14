@@ -203,13 +203,13 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         ProcedimientoForm dForm = (ProcedimientoForm) form;
         ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
         Long id = (Long) dForm.get("id");
 
         procedimientoDelegate.borrarProcedimiento(id);
-        log.info("Eliminado Procedimiento: " + id);
+        log.debug("Eliminado Procedimiento: " + id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -227,7 +227,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         String servidor="";
         String value = System.getProperty("es.indra.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
@@ -356,7 +356,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-			log.info("Entramos en documento");
+			log.debug("Entramos en documento");
 			DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
 			
 			Long idProcedimiento = new Long(request.getParameter("procedimiento"));
@@ -393,7 +393,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en normativa");
+        log.debug("Entramos en normativa");
         ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 
         if (request.getParameter("procedimiento") != null && request.getParameter("normativa") != null){
@@ -417,7 +417,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         if (request.getAttribute("idSelect") != null){
             this.seleccionar(mapping, form, request, response);
         }
@@ -431,7 +431,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-			log.info("Entramos en relacion de tramites");
+			log.debug("Entramos en relacion de tramites");
 			ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 			
 			
@@ -459,7 +459,7 @@ public class EditarProcedimientoAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
 
         return null;
     }

@@ -1069,7 +1069,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             indexBorraFicha(ficha.getId());
             indexInsertaFicha(ficha,null);
             if(borrar)
-                log.info("Entro en borrar remoto ficha UA");
+                log.debug("Entro en borrar remoto ficha UA");
             	Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1900,7 +1900,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	resultado =  new ArrayList<FichaCrawler>();
             	
                 int max = 100;
-                log.info("Buscando por: " + busqueda+" en el path: "+index);
+                log.debug("Buscando por: " + busqueda+" en el path: "+index);
                 
                 IndexSearcher is   = new IndexSearcher(index);
                 QueryParser parser = new QueryParser("contents", getAnalizador(idioma));
@@ -1910,7 +1910,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 TopDocs topDocs = collector.topDocs();
                 ScoreDoc[] hits = topDocs.scoreDocs;
 
-                log.info(" results: " + hits.length + " of total " + topDocs.totalHits);
+                log.debug(" results: " + hits.length + " of total " + topDocs.totalHits);
 
                 for (int i = 0; i < hits.length; i++) {
                 	FichaCrawler fichaCrawler=new FichaCrawler();
@@ -1919,12 +1919,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     String tituloURL = is.doc(hits[i].doc).getField("title").stringValue();
                     String idFicha = is.doc(hits[i].doc).getField("idFicha").stringValue();
                     String modified = is.doc(hits[i].doc).getField("timestamp").stringValue();
-                    //log.info("No " + (i+1) + " with relevance " + relevance + "% : "+ url+ " (" + modified + ')');
-                    //log.info("IdFicha : "+idFicha);
-                    //log.info("Titulo : "+tituloURL);
+                    //log.debug("No " + (i+1) + " with relevance " + relevance + "% : "+ url+ " (" + modified + ')');
+                    //log.debug("IdFicha : "+idFicha);
+                    //log.debug("Titulo : "+tituloURL);
                     Ficha ficha = obtenerFicha(Long.valueOf(idFicha));
                     if(ficha.getFechaPublicacion()!=null &&dataInici!=null&&dataFi!=null){
-                    	log.info("Buscada Crawler entre fechas: Fecha Publicación: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
+                    	log.debug("Buscada Crawler entre fechas: Fecha Publicación: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
                     	if(ficha.getFechaPublicacion().before(dataFi)&&ficha.getFechaPublicacion().after(dataInici)){
                     		fichaCrawler.setTituloURL(tituloURL);
                             fichaCrawler.setURL(url);

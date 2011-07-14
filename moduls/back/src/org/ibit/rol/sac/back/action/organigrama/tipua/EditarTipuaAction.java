@@ -58,7 +58,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         Tratamiento tipua = new Tratamiento();
         VOUtils.populate(tipua,dForm);
@@ -72,7 +72,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
         }
 
         dForm.set("id", tipua.getId());
-        log.info("Creat/Actualitzat " + tipua.getId());
+        log.debug("Creat/Actualitzat " + tipua.getId());
 
         return mapping.findForward("success");
     }
@@ -80,7 +80,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         TratamientoDelegate tipuaDelegate = DelegateUtil.getTratamientoDelegate();
 
@@ -90,12 +90,12 @@ public class EditarTipuaAction extends BaseDispatchAction {
                 request.setAttribute("idTipua", id);
                 return dispatchMethod(mapping, form, request, response, "seleccionar");
         } else {
-            log.info("Eliminada Familia: " + id);
+            log.debug("Eliminada Familia: " + id);
             tipuaDelegate.borrarTratamiento(id);
             request.setAttribute("alert", "confirmacion.baja");
             dForm.reset(mapping, request);
         }
-        log.info("Eliminado Tipo UA: " + id);
+        log.debug("Eliminado Tipo UA: " + id);
 
         return mapping.findForward("cancel");
     }
@@ -103,7 +103,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         TratamientoDelegate tipuaDelegate = DelegateUtil.getTratamientoDelegate();
 
@@ -127,7 +127,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         TratamientoDelegate tipuaDelegate = DelegateUtil.getTratamientoDelegate();
 
         List tipuas = tipuaDelegate.listarTratamientos();
@@ -141,7 +141,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         dForm.reset(mapping, request);
 
@@ -152,7 +152,7 @@ public class EditarTipuaAction extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 }

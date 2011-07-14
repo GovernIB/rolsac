@@ -67,7 +67,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         AgrupacionHVDelegate agrupacionHVDelegate = DelegateUtil.getAgrupacionHVDelegate();
 
@@ -136,20 +136,20 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", agrupacion.getId());
-        log.info("Creado/Actualizado " + agrupacion.getId());
+        log.debug("Creado/Actualizado " + agrupacion.getId());
         return mapping.findForward("success");
     }
 
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         AgrupacionHVDelegate agrupacionHVDelegate = DelegateUtil.getAgrupacionHVDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado Agrupacion Hecho Vital: " + id);
+        log.debug("Eliminado Agrupacion Hecho Vital: " + id);
         agrupacionHVDelegate.borrarAgrupacionHV(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -160,7 +160,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         AgrupacionHVDelegate agrupacionHVDelegate = DelegateUtil.getAgrupacionHVDelegate();
         Long id = null;
@@ -198,7 +198,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
     public ActionForward subir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en subir");
+        log.debug("Entramos en subir");
         HechoVitalAgrupacionHVDelegate hechoVitalAgrupacionHVDelegate = DelegateUtil.getHechoVitalAgrupacionHVDelegate();
         
         Long idAgru = new Long(request.getParameter("idSelect"));
@@ -211,7 +211,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en hechovital");
+        log.debug("Entramos en hechovital");
         HechoVitalAgrupacionHVDelegate hechoAgruDelegate = DelegateUtil.getHechoVitalAgrupacionHVDelegate();
 
         if (request.getParameter("agru") != null){
@@ -243,7 +243,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -253,7 +253,7 @@ public class EditarAgrupacionHVAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

@@ -90,10 +90,10 @@ public class ReportarFallo {
 			try {
 			
 				String mensaje=generarMensaje(administracion,destinatario.getNombre());
-				log.info("asunto:"+asunto);
-				log.info("mensaje:"+mensaje);
-				log.info("de:"+email);
-				log.info("para:"+destinatario.getEmail());
+				log.debug("asunto:"+asunto);
+				log.debug("mensaje:"+mensaje);
+				log.debug("de:"+email);
+				log.debug("para:"+destinatario.getEmail());
 
 				//Genero el EmailUtils con sus parametros necesarios
 				EmailUtils emailUtils = new EmailUtils(jndi);

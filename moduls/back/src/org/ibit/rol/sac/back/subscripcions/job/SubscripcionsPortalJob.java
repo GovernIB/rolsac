@@ -136,7 +136,7 @@ public class SubscripcionsPortalJob extends JobAutomatico{
 					log.debug("Despues de Generar Contenidos Combinaciones");
 					
 			} else {
-				log.info("El jboss en donde está la aplicación no es el principal.");
+				log.debug("El jboss en donde está la aplicación no es el principal.");
 			}
 		}catch (Exception ex){
 			log.error("Error al realizar el enviar Correos: " + ex.getMessage(),ex);			

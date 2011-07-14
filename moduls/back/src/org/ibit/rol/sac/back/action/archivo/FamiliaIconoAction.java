@@ -23,7 +23,7 @@ public class FamiliaIconoAction extends ArchivoAction {
 
         Long idFam = new Long(request.getParameter("idFam"));
         Long idPerfil = new Long(request.getParameter("idPerfil"));
-        log.info("idFam" + idFam);
+        log.debug("idFam" + idFam);
 
         IconoFamiliaDelegate icoFamDelegate = DelegateUtil.getIconoFamiliaDelegate();
         IconoFamilia iconoFamilia = icoFamDelegate.obtenerIconoFamilia(idPerfil, idFam);

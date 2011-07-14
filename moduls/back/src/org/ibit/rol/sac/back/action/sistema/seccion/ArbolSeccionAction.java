@@ -47,7 +47,7 @@ public class ArbolSeccionAction extends BaseDispatchAction{
     public ActionForward expandir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en expandir");
+        log.debug("Entramos en expandir");
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
         List tieneHijos = new ArrayList();
         List tieneAcceso = new ArrayList();
@@ -68,7 +68,7 @@ public class ArbolSeccionAction extends BaseDispatchAction{
         }
 
         if (request.getParameter("idSelect") != null) {
-            log.info("idSelect= " + request.getParameter("idSelect"));
+            log.debug("idSelect= " + request.getParameter("idSelect"));
             Long id = new Long(request.getParameter("idSelect"));
             Iterator antecesores = seccionDelegate.listarAntecesoresSeccion(id).iterator();
             while (antecesores.hasNext()){
@@ -104,7 +104,7 @@ public class ArbolSeccionAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
         List tieneHijos = new ArrayList();
         List tieneAcceso = new ArrayList();

@@ -42,7 +42,7 @@ public class ArbolEspacioTerritorialAction extends BaseDispatchAction{
     public ActionForward expandir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                      HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en expandir");
+        log.debug("Entramos en expandir");
         EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
         List<Long> tieneHijos = new ArrayList<Long>();
         List<Long> tieneAcceso = new ArrayList<Long>();
@@ -60,7 +60,7 @@ public class ArbolEspacioTerritorialAction extends BaseDispatchAction{
         }
 
         if (request.getParameter("idSelect") != null) {
-            log.info("idSelect= " + request.getParameter("idSelect"));
+            log.debug("idSelect= " + request.getParameter("idSelect"));
             Long id = new Long(request.getParameter("idSelect"));
             List<EspacioTerritorial> antecesores = espacioDelegate.listarAntecesoresEspacioTerritorial(id);
             for (EspacioTerritorial antecesor : antecesores){
@@ -93,7 +93,7 @@ public class ArbolEspacioTerritorialAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         EspacioTerritorialDelegate espacioDelegate = DelegateUtil.getEspacioTerritorialDelegate();
         List<Long> tieneHijos = new ArrayList<Long>();
         List<Long> tieneAcceso = new ArrayList<Long>();

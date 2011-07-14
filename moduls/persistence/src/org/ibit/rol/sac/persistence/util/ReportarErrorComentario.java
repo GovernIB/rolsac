@@ -95,14 +95,14 @@ public class ReportarErrorComentario {
 		public void run() {
 			//Leo el archivo con las propiedades del mail
 			ResourceBundle resource = ResourceBundle.getBundle(BUNDLE_PATH);
-            log.info("RESOURCE: " + resource);
+            log.debug("RESOURCE: " + resource);
 			
 			//Recojo los parametros necesarios del archivo d propiedades
 			String jndi = resource.getString("jndi");
-            log.info("JNDI: " + jndi);
+            log.debug("JNDI: " + jndi);
 			//Obtenemos los e-mails del emisor(informador) y del receptor (responsable de la ficha/procedimiento)
 			String emisor = usuario.getEmail();
-            log.info("MAIL EMISOR: " + emisor);
+            log.debug("MAIL EMISOR: " + emisor);
             
 			String[] aDestinatario=null;
 			
@@ -114,11 +114,11 @@ public class ReportarErrorComentario {
 						if(ficha.getAdministracionRemota()!=null){
 							if(ficha.getAdministracionRemota().getResponsable()!=null){
 								aDestinatario=obtenerResponsables(ficha.getAdministracionRemota().getResponsable());
-								log.info("Opcion 2 : Obtenemos el E-mail del destinatario del responsable de la Unidad Adminitrativa Remota de la Ficha : "+aDestinatario.toString());
+								log.debug("Opcion 2 : Obtenemos el E-mail del destinatario del responsable de la Unidad Adminitrativa Remota de la Ficha : "+aDestinatario.toString());
 							}
 						}	
 					}
-					else{log.info("Opcion 1 : Obtenemos el E-mail del destinatario del responsable de la Ficha : "+aDestinatario.toString());}
+					else{log.debug("Opcion 1 : Obtenemos el E-mail del destinatario del responsable de la Ficha : "+aDestinatario.toString());}
 				}
 				
 			}
@@ -131,11 +131,11 @@ public class ReportarErrorComentario {
 						if(procedimiento.getAdministracionRemota()!=null){
 							if(procedimiento.getAdministracionRemota().getResponsable()!=null && procedimiento.getAdministracionRemota().getResponsable().trim().length()>0){
 								aDestinatario=obtenerResponsables(procedimiento.getAdministracionRemota().getResponsable());
-								log.info("Opcion 2 : Obtenemos el E-mail del destinatario del responsable de la Unidad Adminitrativa Remota del procedimiento: "+aDestinatario.toString());
+								log.debug("Opcion 2 : Obtenemos el E-mail del destinatario del responsable de la Unidad Adminitrativa Remota del procedimiento: "+aDestinatario.toString());
 							}
 						}	
 					}
-					else{log.info("Opcion 1 : Obtenemos el E-mail del destinatario del responsable del procedimiento : "+aDestinatario.toString());}
+					else{log.debug("Opcion 1 : Obtenemos el E-mail del destinatario del responsable del procedimiento : "+aDestinatario.toString());}
 				}
 			}
 			//Una vez pasado por el proceso para obtener el destinatario, si lo ha encontrado mandará un mail reportanto el error, en caso contrario se le comunicará la imposibilidad de realizarlo.
@@ -146,8 +146,8 @@ public class ReportarErrorComentario {
 				try {
 					//Genero el EmailUtils con sus parametros necesarios
 					EmailUtils emailUtils = new EmailUtils(jndi);
-					log.info("ENVIANDO E-MAIL COMUNICANDO ERROR EN UNA FICHA/COMENTARIO");
-					log.info("DATOS: ** Emisor: "+emisor+" **Receptor: "+aDestinatario.toString() + " **Nombre informador: "+usuario.getNombre()+" **tituloComentario: "+tituloComentario);
+					log.debug("ENVIANDO E-MAIL COMUNICANDO ERROR EN UNA FICHA/COMENTARIO");
+					log.debug("DATOS: ** Emisor: "+emisor+" **Receptor: "+aDestinatario.toString() + " **Nombre informador: "+usuario.getNombre()+" **tituloComentario: "+tituloComentario);
 					//Envio el Email
 					emailUtils.postMail(asunto, generarMensaje(object,emisor,usuario,tituloComentario,contenidoComentario,idioma),emisor,aDestinatario);
 				} catch (MessagingException e) {

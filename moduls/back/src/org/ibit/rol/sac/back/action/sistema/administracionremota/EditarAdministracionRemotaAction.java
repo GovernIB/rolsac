@@ -69,7 +69,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         AdministracionRemotaDelegate adminDelegate = DelegateUtil.getAdministracionRemotaDelegate();
         
@@ -94,7 +94,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
         if (archivoValido(logopfile)) {
         	admin.setLogop(populateArchivo(admin.getLogop(), logopfile));
         } else if (((Boolean) dForm.get("borrarlogop")).booleanValue()) {
-            log.info("entram borrar Logop");
+            log.debug("entram borrar Logop");
             adminDelegate.borrarLogop(idAdmin);
             admin.setLogop(null);
         }
@@ -109,7 +109,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
         if (archivoValido(logogfile)) {
         	admin.setLogog(populateArchivo(admin.getLogog(), logogfile));
         } else if (((Boolean) dForm.get("borrarlogog")).booleanValue()) {
-        	log.info("entram borrar Logog");
+        	log.debug("entram borrar Logog");
         	adminDelegate.borrarLogog(idAdmin);
         	admin.setLogog(null);
         }
@@ -128,7 +128,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", admin.getId());
-        log.info("Creado/Actualizado " + admin.getId());
+        log.debug("Creado/Actualizado " + admin.getId());
         
         if(adminDelegate.isEmpty(admin.getId()))
         	request.setAttribute("admBacia", "admBacia");
@@ -139,14 +139,14 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         AdministracionRemotaDelegate administracionRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
         
         Long id = (Long) dForm.get("id");
         
         if(administracionRemotaDelegate.isEmpty(id)){
-        	log.info("Eliminado AdministracionRemota: " + id);
+        	log.debug("Eliminado AdministracionRemota: " + id);
         	administracionRemotaDelegate.borrarAdministracionRemota(id);
         	request.setAttribute("alert", "confirmacion.baja");
         	dForm.reset(mapping, request);
@@ -160,7 +160,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         AdministracionRemotaDelegate administracionRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
 
@@ -207,7 +207,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     		return mapping.findForward("cancel");
     	}
     	
-    	log.info("Entramos en Alta");
+    	log.debug("Entramos en Alta");
     	DynaValidatorForm dForm = (DynaValidatorForm) form;
     	
     	AdministracionRemotaDelegate administracionRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
@@ -243,7 +243,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     		return mapping.findForward("cancel");
     	}
     	
-    	log.info("Entramos en Baja");
+    	log.debug("Entramos en Baja");
     	DynaValidatorForm dForm = (DynaValidatorForm) form;
     	
     	AdministracionRemotaDelegate administracionRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
@@ -270,7 +270,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
     public ActionForward clean(ActionMapping mapping, ActionForm form,
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-    	log.info("Entramos en Clean");
+    	log.debug("Entramos en Clean");
     	
     	if(!SincronizadorSingleton.Estado.Error.equals(SincronizadorSingleton.running())){
     		return mapping.findForward("cancel");
@@ -312,7 +312,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         dForm.reset(mapping, request);
         
@@ -323,7 +323,7 @@ public class EditarAdministracionRemotaAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

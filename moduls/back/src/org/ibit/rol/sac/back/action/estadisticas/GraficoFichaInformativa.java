@@ -35,7 +35,7 @@ public class GraficoFichaInformativa extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en execute");
+        log.debug("Entramos en execute");
 
         String identificador = request.getParameter("id");
         

@@ -59,7 +59,7 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 		normativaRemotaDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
 		edificioDelegate = DelegateUtil.getEdificioDelegate();
 
-		log.info("Constructor completado");
+		log.debug("Constructor completado");
 	}
 	
 	//------------------------Funciones Principales-----------------------------------
@@ -83,26 +83,26 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 	 * @throws CapaDeDatosException
 	 */
 	private void baja() throws CapaDeDatosException{
-		log.info("Comenzando la funcion de BAJA");
+		log.debug("Comenzando la funcion de BAJA");
 		
 		try {
-			log.info("Borrando Fichas");
+			log.debug("Borrando Fichas");
 			borrarFichas();
-			log.info("Borrando Tramites");
+			log.debug("Borrando Tramites");
 			borrarTramites();
-			log.info("Borrando Procedimientos");
+			log.debug("Borrando Procedimientos");
 			borrarProcedimientos();
-			log.info("Borrando Edificios");
+			log.debug("Borrando Edificios");
 			borrarEdificios();
-            log.info("Borrando Normativas");
+            log.debug("Borrando Normativas");
 			borrarNormativas();
-			log.info("Borrando UAs");
+			log.debug("Borrando UAs");
 			borrarUA();
 
 		} catch (DelegateException e) {
 			throw new CapaDeDatosException(e);
 		}
-		log.info("BAJA realizada con exito");
+		log.debug("BAJA realizada con exito");
 	}	
 	
 	/**
@@ -169,7 +169,7 @@ public class SincronizadorBajaThread extends SincronizadorThreadAbstract {
 		}
 		if(uaRemota.getFichasUA()!=null){
 			for (FichaUA fichaua : uaRemota.getFichasUA()) {
-                log.info("FICHAS UA " + uaRemota.getFichasUA().size());
+                log.debug("FICHAS UA " + uaRemota.getFichasUA().size());
                 if(fichaua !=null){
 				    fichaDelegate.borrarFichaUA(fichaua.getId());
                 }

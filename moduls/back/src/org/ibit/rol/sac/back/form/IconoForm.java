@@ -32,13 +32,13 @@ public class IconoForm extends DynaValidatorForm {
 
 
     protected DynaProperty getDynaProperty(String s) {
-        log.info("detDynaProperty >>>>>>>> " + s);
+        log.debug("detDynaProperty >>>>>>>> " + s);
         return super.getDynaProperty(s);
     }
 
 
     public Object get(String s) {
-        log.info("get >>>>>>>>>>>>>>>" + s);
+        log.debug("get >>>>>>>>>>>>>>>" + s);
         if ("icono".equals(s)) {
             return getIcono();
         } else {
@@ -48,7 +48,7 @@ public class IconoForm extends DynaValidatorForm {
 
 
     public void set(String s, Object o) {
-        log.info("set >>>>>>>>>>>>>" + s);
+        log.debug("set >>>>>>>>>>>>>" + s);
         if ("icono".equals(s)) {
             setIcono((FormFile) o);
         } else {
@@ -59,7 +59,7 @@ public class IconoForm extends DynaValidatorForm {
 
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        log.info("reset >>>>>>>>>>>>>>");
+        log.debug("reset >>>>>>>>>>>>>>");
         super.initialize(mapping);
         super.reset(mapping, request);
         this.icono = null;

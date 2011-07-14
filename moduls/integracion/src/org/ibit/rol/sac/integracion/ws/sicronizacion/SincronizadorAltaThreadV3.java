@@ -31,10 +31,10 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	protected void recogerUnidadesAdministrativas(final UnidadAdministrativaTransferible uaTrans, UnidadAdministrativaRemota padre) throws CapaDeDatosException, ComunicacionException {
 		profundidad++;
 		try{
-			log.info("rellenando la UARemota a partir de la transferible");
+			log.debug("rellenando la UARemota a partir de la transferible");
 			final UnidadAdministrativaRemota uaRemota = UnidadAdministrativaRemota.generar(uaTrans);
 			uaRemota.setAdministracionRemota(adminRemota);
-			log.info("guardo la UARemota de codigo "+ uaRemota.getCodigoEstandar() +" e idExterno "+uaRemota.getIdExterno());
+			log.debug("guardo la UARemota de codigo "+ uaRemota.getCodigoEstandar() +" e idExterno "+uaRemota.getIdExterno());
 			
 			Long idPadre = null;
 			if(padre!=null){
@@ -55,11 +55,11 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 
 			
 			if(profundidad<adminRemota.getProfundidad()){
-				log.info("no se alcanzo la profundidad deseada, recogiendo hijos");
+				log.debug("no se alcanzo la profundidad deseada, recogiendo hijos");
 				final int temp = profundidad;
 				if(uaTrans.getIdHijos()!=null){
 					for(Long idUA : uaTrans.getIdHijos()){
-						log.info("Recogido Hijo");
+						log.debug("Recogido Hijo");
 						final UnidadAdministrativaTransferible uahTrans = sincInvoker.recogerUnidadAdministrativa(idUA);
 						if(uahTrans!=null)
 							recogerUnidadesAdministrativas(uahTrans ,uaRemota);
@@ -84,16 +84,16 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 */
 	private void recogerEdificios(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Edificios relacionados para la UA: "+ua);
+			log.debug("Recogiendo Edificios relacionados para la UA: "+ua);
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
 			
 			if(edificioTransferibles!=null){
-				log.info("Edificios recogidos tamaño: "+edificioTransferibles.length);
+				log.debug("Edificios recogidos tamaño: "+edificioTransferibles.length);
 				
 				for(EdificioTransferible edificioTransferible : edificioTransferibles){
-					log.info("getId: "+edificioTransferible.getId());
-					log.info("getDireccion: "+edificioTransferible.getDireccion());
-					log.info("getPoblacion: "+edificioTransferible.getPoblacion());
+					log.debug("getId: "+edificioTransferible.getId());
+					log.debug("getDireccion: "+edificioTransferible.getDireccion());
+					log.debug("getPoblacion: "+edificioTransferible.getPoblacion());
 					if (edificioTransferible.getId() != null) {
 						EdificioRemoto edificioRemoto = uaRemotaDelegate.obtenerEdificioRemoto(edificioTransferible.getId(),adminRemota.getId());
                         if(edificioRemoto==null){
@@ -103,7 +103,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
                         edificioRemoto.getUnidadesAdministrativas().add(ua);
                         edificioRemoto.setAdministracionRemota(adminRemota);
                         uaRemotaDelegate.grabarEdificioRemoto(edificioRemoto);
-                        log.info("Edificio guardado idExt "+ edificioTransferible.getId());
+                        log.debug("Edificio guardado idExt "+ edificioTransferible.getId());
                     } else {
                         log.warn("Edificio transferible con 'id' null, ignorando!!!!");
                     }
@@ -126,10 +126,10 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 */
 	protected void recogerProcedimientos(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Procedimientos relacionados");
+			log.debug("Recogiendo Procedimientos relacionados");
 			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
 			if(procsTransferibles!=null){
-				log.info("Procedimientos recogidos tamaño: "+procsTransferibles.length);
+				log.debug("Procedimientos recogidos tamaño: "+procsTransferibles.length);
 				for(ProcedimientoTransferible procTransferible : procsTransferibles){
 					if (procTransferible.getId() != null) {
                         ProcedimientoRemoto procRemoto = procRemotoDelegate.obtenerProcedimientoRemoto(procTransferible.getId(),adminRemota.getId());
@@ -159,12 +159,12 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 
                         
                         procRemotoDelegate.grabarProcedimientoRemoto(procRemoto,procTransferible.getCodigoEstandarMaterias(),procTransferible.getCodigoEstandarHV());
-                        log.info("Procedimiento guardado idExt "+ procTransferible.getId());    
+                        log.debug("Procedimiento guardado idExt "+ procTransferible.getId());    
 
                         //recogemos documentos Informativos (uno a uno)
                         if(procTransferible.getIdsDocsInfor()!=null){
                             for(Long idDoc : procTransferible.getIdsDocsInfor()){
-                                log.info("recogiendo documento remoto");
+                                log.debug("recogiendo documento remoto");
                                 DocumentoTransferible docTrans = sincInvoker.recogerDocumento(idDoc);
                                 //Convertir a Remoto y relacionarlo con el procedimiento
 
@@ -230,7 +230,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 */
 	private void recogerTramites(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Tramites relacionados para el procedimiento: "+proc.getIdExterno());
+			log.debug("Recogiendo Tramites relacionados para el procedimiento: "+proc.getIdExterno());
 			final TramiteTransferible[] tramiteTransferibles = sincInvoker.recogerTramitesRelacionados(proc.getIdExterno());
 
 			if(tramiteTransferibles!=null){
@@ -245,7 +245,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
                         
                         tramiteRemoto.setAdministracionRemota(adminRemota);
                         tramiteRemotoDelegate.grabarTramiteRemoto(tramiteRemoto,proc.getId(),tramiteTransferible.getIdOrganCompetent());
-                        log.info("Tramite guardado idExt "+ tramiteTransferible.getId());
+                        log.debug("Tramite guardado idExt "+ tramiteTransferible.getId());
                     } else {
                         log.warn("Tramite transferible con 'id' null, ignorando!!!!");
                     }
@@ -269,7 +269,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 */
 	private void recogerNormativas(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
 		try {
-			log.info("Recogiendo Normativas relacionados para el procedimiento: "+proc.getIdExterno());
+			log.debug("Recogiendo Normativas relacionados para el procedimiento: "+proc.getIdExterno());
 			final NormativaTransferible[] normativaTransferibles = sincInvoker.recogerNormativasRelacionadas(proc.getIdExterno());
 
 			if(normativaTransferibles!=null){
@@ -278,16 +278,16 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 					if (normativaTransferible.getId() != null) {
 						NormativaExternaRemota normativaExternaRemota = normativaExternaRemotaDelegate.obtenerNormativaExternaRemota(normativaTransferible.getId(),adminRemota.getId());
                         if(normativaExternaRemota==null){
-                            log.info("Entro aqui");
+                            log.debug("Entro aqui");
                         	normativaExternaRemota= new NormativaExternaRemota();
                         }
                         normativaExternaRemota.rellenar(normativaTransferible);
 
-                        log.info("Normativa que vamos a guardar con idExt "+ normativaTransferible.getId());
+                        log.debug("Normativa que vamos a guardar con idExt "+ normativaTransferible.getId());
                         normativaExternaRemota.setAdministracionRemota(adminRemota);
                         normativaExternaRemotaDelegate.grabarNormativaExternaRemota(normativaExternaRemota);
                         normativaExternaRemotaDelegate.anyadirProcedimiento(proc.getId(), normativaExternaRemota.getId());
-                        log.info("Normativa guardada idExt "+ normativaTransferible.getId());
+                        log.debug("Normativa guardada idExt "+ normativaTransferible.getId());
                     } else {
                         log.warn("Normativa transferible con 'id' null, ignorando!!!!");
                     }

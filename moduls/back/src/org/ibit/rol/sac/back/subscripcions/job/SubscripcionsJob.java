@@ -49,7 +49,7 @@ public class SubscripcionsJob extends JobAutomatico{
 					delegate.actualizaComoEnviado(envio.getId());
 				}
 			} else {
-				log.info("El jboss en donde está la aplicación no es el principal.");
+				log.debug("El jboss en donde está la aplicación no es el principal.");
 			}
 		}catch (Exception ex){
 			log.error("Error al realizar el enviar Correos: " + ex.getMessage(),ex);			

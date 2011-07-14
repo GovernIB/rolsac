@@ -262,7 +262,7 @@ public class ActualizacionServicio{
 
 		if (!DelegateUtil.getAdministracionRemotaDelegate().isEmpty(idRemoto)) {
 
-			log.info("Recibido Documento para actualizar");
+			log.debug("Recibido Documento para actualizar");
 
 
 			ProcedimientoRemotoDelegate procDelegate = DelegateUtil.getProcedimientoRemotoDelegate();

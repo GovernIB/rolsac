@@ -239,7 +239,7 @@ final public class Actualizador {
 		 */
 		private void actualizarFicha(final Ficha ficha){
 			
-			log.info("Actualizando una ficha");
+			log.debug("Actualizando una ficha");
 			
 			//La transformo en transferible
 			final FichaTransferible fichaT = FichaTransferible.generar(ficha);
@@ -254,7 +254,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try {
 					if(calActualizar(destinatario, ficha)) {
-						log.info("Al Destinatario: "+destinatario.getNombre());
+						log.debug("Al Destinatario: "+destinatario.getNombre());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.actualizarFicha(fichaT);
@@ -272,7 +272,7 @@ final public class Actualizador {
 		 * @param proc
 		 */
 		private void actualizarProcedimiento(final ProcedimientoLocal proc){
-			log.info("Actualizando un Procedimiento");
+			log.debug("Actualizando un Procedimiento");
 			
 			//La transformo en transferible
 			ProcedimientoTransferible procT =null;
@@ -286,7 +286,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 						if(calActualizar(destinatario, proc)) {
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.actualizarProcedimiento(procT);
@@ -308,7 +308,7 @@ final public class Actualizador {
 		 * @throws ActualizadorException 
 		 */
 		private void actualizarTramite(final Tramite tramit) {
-			log.info("Actualizando un TramitePMA");
+			log.debug("Actualizando un TramitePMA");
 			
 			//La transformo en transferible
 			final TramiteTransferible tramT = TramiteTransferible.generar(tramit);
@@ -338,7 +338,7 @@ final public class Actualizador {
 		 */
 		private void actualizarUnidadAdministrativa(
 				final UnidadAdministrativa unidad){
-			log.info("Actualizando una Unidad");
+			log.debug("Actualizando una Unidad");
 			
 			//La transformo en transferible
 			final UnidadAdministrativaTransferible uaT = UnidadAdministrativaTransferible.generar(unidad);
@@ -347,7 +347,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if(calActualizar(destinatario, unidad)) {
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.actualizarUnidadAdministrativa(uaT);
@@ -365,7 +365,7 @@ final public class Actualizador {
 		 * @param edif
 		 */
 		private void actualizarEdificio(final Edificio edif){
-			log.info("Actualizando un Edificio");
+			log.debug("Actualizando un Edificio");
 			
 			//La transformo en transferible
 			final EdificioTransferible edifT = EdificioTransferible.generar(edif);
@@ -373,7 +373,7 @@ final public class Actualizador {
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 			        if (calActualizar(destinatario, edif)) {
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());
@@ -393,7 +393,7 @@ final public class Actualizador {
 		 * @param id Unidad Administrativa
 		 */
 		private void actualizarEdificioUA(final Edificio edif, final Long idUA){
-			log.info("Actualizando la UA de un Edificio");
+			log.debug("Actualizando la UA de un Edificio");
 			
 			//La transformo en transferible
 			final EdificioTransferible edifT = EdificioTransferible.generar(edif);
@@ -401,7 +401,7 @@ final public class Actualizador {
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 			        if (calActualizar(destinatario, edif)) {
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());
@@ -423,7 +423,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if(calActualizar(destinatario, ficha)) {
-						log.info("Al Destinatario: "+destinatario.getNombre());
+						log.debug("Al Destinatario: "+destinatario.getNombre());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.borrarFicha(ficha.getId());
@@ -447,7 +447,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if(calActualizar(destinatario, fichaUA)) {
-						log.info("Al Destinatario: "+destinatario.getNombre());
+						log.debug("Al Destinatario: "+destinatario.getNombre());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 							actualizacion.borrarFichaUA(idFicha, idUA, codEs);
@@ -468,7 +468,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if(calActualizar(destinatario, proc)) {
-						log.info("Al Destinatario: "+destinatario.getNombre());	
+						log.debug("Al Destinatario: "+destinatario.getNombre());	
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.borrarProcedimiento(proc.getId());
@@ -510,8 +510,8 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if ((value == null) || value.equals("N")) {		
-				        	log.info("Actualizo para el destinario : "+destinatario.getIdRemoto());
-				        	log.info("Actualizo para end point : "+destinatario.getEndpoint());
+				        	log.debug("Actualizo para el destinario : "+destinatario.getIdRemoto());
+				        	log.debug("Actualizo para end point : "+destinatario.getEndpoint());
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.borrarTramite(tram.getId());
@@ -553,7 +553,7 @@ final public class Actualizador {
 			for (final Destinatario destinatario : destinatarios) {
 				try{
 					if(calActualizar(destinatario, unidad)) {
-						log.info("Al Destinatario: "+destinatario.getNombre());
+						log.debug("Al Destinatario: "+destinatario.getNombre());
 					final ActualizacionServicio actualizacion = new ActualizacionServicio(
 							destinatario.getEndpoint(), destinatario.getIdRemoto());
 					actualizacion.borrarUnidadAdministrativa(unidad.getId());
@@ -653,7 +653,7 @@ final public class Actualizador {
 		 * @param norm
 		 */
 		private void actualizarNormativa(final Normativa norm){
-			log.info("Actualizando una Normativa");
+			log.debug("Actualizando una Normativa");
 
 			//La transformo en transferible
 			final NormativaTransferible normT = NormativaTransferible.generar(norm);
@@ -661,7 +661,7 @@ final public class Actualizador {
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 			        if (calActualizar(destinatario, norm)) {
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());
@@ -702,7 +702,7 @@ final public class Actualizador {
 		 * @param idProc
 		 */
 		private void actualizarNormativaProcedimiento(final Normativa norm, final Long idProc){
-			log.info("Actualizando el proc de una Normativa");
+			log.debug("Actualizando el proc de una Normativa");
 
 			//La transformo en transferible
 			final NormativaTransferible normT = NormativaTransferible.generar(norm);
@@ -710,9 +710,9 @@ final public class Actualizador {
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 			        if (calActualizar(destinatario, norm)) {
-                        log.info("3");
+                        log.debug("3");
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());
 						actualizacion.actualizarNormativaProcedimiento(normT,idProc);
@@ -752,7 +752,7 @@ final public class Actualizador {
 		 * @param idProc
 		 */
 		private void actualizarDocumentoProcedimiento(final Documento doc, final Long idProc){
-			log.info("Actualizando el documento de un procedimiento");
+			log.debug("Actualizando el documento de un procedimiento");
 
 			//La transformo en transferible
 			final DocumentoTransferible docT = DocumentoTransferible.generar(doc);
@@ -760,7 +760,7 @@ final public class Actualizador {
 			//Y voy destinatario a destinatario mandando la actualizacion
 			for (final Destinatario destinatario : destinatarios) {
 				try{
-					log.info("Al Destinatario: "+destinatario.getNombre());
+					log.debug("Al Destinatario: "+destinatario.getNombre());
 			        if (calActualizar(destinatario, doc)) {
 						final ActualizacionServicio actualizacion = new ActualizacionServicio(
 								destinatario.getEndpoint(), destinatario.getIdRemoto());

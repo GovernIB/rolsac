@@ -61,7 +61,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EnlaceDelegate enlDelegate = DelegateUtil.getEnlaceDelegate();
@@ -88,7 +88,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
         Iterator fichers =  Arrays.asList((FormFile[]) dForm.get("fichers")).iterator();
         //iteram per tots els idiomes
         while (lang.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile fichero = (FormFile) fichers.next();
             String idioma = (String) lang.next();
             TraduccionDocumento traduccion = (TraduccionDocumento) documento.getTraduccion(idioma);
@@ -119,7 +119,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idProcedimiento"));
             docDelegate.grabarDocumento(documento, id, null);
             dForm.set("id",documento.getId());
-            log.info("Creat/Actualitzat " + documento.getId());
+            log.debug("Creat/Actualitzat " + documento.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -131,7 +131,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
             Long id = new Long(request.getParameter("idFicha"));
             enlDelegate.grabarEnlace(enlace, null, id);
             dForm.set("id", enlace.getId());
-            log.info("Creat/Actualitzat " + enlace.getId());
+            log.debug("Creat/Actualitzat " + enlace.getId());
             request.setAttribute("idSelect", id);
             request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
 
@@ -144,7 +144,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         EnlaceDelegate enlDelegate = DelegateUtil.getEnlaceDelegate();
 
@@ -163,12 +163,12 @@ public class EditarEnlaceAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         EnlaceDelegate enlDelegate = DelegateUtil.getEnlaceDelegate();
 
         if (request.getParameter("idSelect") != null){
             Long id = new Long(request.getParameter("idSelect"));
-            log.info("Eliminado Enlace: " + id);
+            log.debug("Eliminado Enlace: " + id);
             enlDelegate.borrarEnlace(id);
             TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
             dForm.reset(mapping, request);
@@ -200,7 +200,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         dForm.reset(mapping, request);
 
@@ -228,7 +228,7 @@ public class EditarEnlaceAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

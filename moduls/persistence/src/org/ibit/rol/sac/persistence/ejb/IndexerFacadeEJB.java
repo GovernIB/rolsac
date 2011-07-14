@@ -267,7 +267,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 	    			}
 					
 					if (!urls.isEmpty()) {
-						log.info("Envio a la cola del crawler --> Tipo:"+tipo+" Ficha: "+ficha.getId());
+						log.debug("Envio a la cola del crawler --> Tipo:"+tipo+" Ficha: "+ficha.getId());
 						
 		    			OperacionCrawler operacionCrawler = new OperacionCrawler(tipo,ficha.getId(),"ficha",urls);
 		                InitialContext ctx = new InitialContext();
@@ -414,7 +414,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         
         try {
         	
-        	log.info("Inicio indexacion PROCEDIMIENTOS ");
+        	log.debug("Inicio indexacion PROCEDIMIENTOS ");
         	
         	String hql="";
         	net.sf.hibernate.Query query;
@@ -438,7 +438,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             	//ProcedimientoLocal proc2 = procdel.obtenerProcedimiento(proc1.getId());
             	stlog.append(((ProcedimientoLocal)obj).getId() + " ");
             }
-            log.info("Fin indexacion PROCEDIMIENTOS [" + stlog.toString() + "]");        	
+            log.debug("Fin indexacion PROCEDIMIENTOS [" + stlog.toString() + "]");        	
    
 	        
         } catch (DelegateException e) {
@@ -463,7 +463,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         
         try {
         	
-        	log.info("Inicio indexacion NORMATIVA ");
+        	log.debug("Inicio indexacion NORMATIVA ");
         	
         	String hql="";
         	net.sf.hibernate.Query query;
@@ -479,7 +479,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             	normadel.indexBorraNormativa(nor);
             	normadel.indexInsertaNormativa(nor, null);
             }
-            log.info("index NORMATIVAS LOCALES");     
+            log.debug("index NORMATIVAS LOCALES");     
             
         	//normativa externa
             hql="from NormativaExterna as nor";
@@ -498,8 +498,8 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             		confeccionaDiccionario(""+langs.get(i));
            	}
             
-            log.info("index NORMATIVAS EXTERNAS");              
-            log.info("Fin indexacion NORMATIVAS");
+            log.debug("index NORMATIVAS EXTERNAS");              
+            log.debug("Fin indexacion NORMATIVAS");
 	        
         } catch (DelegateException e) {
             throw new EJBException(e);
@@ -523,7 +523,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 
         try {
         	
-        	log.info("Inicio indexacion FICHAS ");
+        	log.debug("Inicio indexacion FICHAS ");
         	
         	List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	String hql="";
@@ -559,7 +559,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             		confeccionaDiccionario(""+langs.get(i));
            	}
            	
-           	log.info("Fin indexacion FICHAS");
+           	log.debug("Fin indexacion FICHAS");
 	        
         } catch (DelegateException e) {
             throw new EJBException(e);
@@ -584,7 +584,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 
           try {
 
-              log.info("Inicio indexacion FICHAS ");
+              log.debug("Inicio indexacion FICHAS ");
 
               List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
               String hql="";
@@ -622,7 +622,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
                       confeccionaDiccionario(""+langs.get(i));
                  }
 
-                 log.info("Fin indexacion FICHAS");
+                 log.debug("Fin indexacion FICHAS");
 
           } catch (DelegateException e) {
               throw new EJBException(e);
@@ -647,7 +647,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 
         try {
         	
-        	log.info("Inicio indexacion UOs");
+        	log.debug("Inicio indexacion UOs");
         	
         	List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	String hql="";
@@ -671,7 +671,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
                     session.clear();
                     //session.reconnect();
                 }
-            	log.info("index " + ua.getId() + " " + (count++));
+            	log.debug("index " + ua.getId() + " " + (count++));
             }
                     	
         	
@@ -681,7 +681,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             		confeccionaDiccionario(""+langs.get(i));
            	}
            	
-           	log.info("Fin indexacion UOs");
+           	log.debug("Fin indexacion UOs");
 	        
         } catch (DelegateException e) {
             throw new EJBException(e);
@@ -705,7 +705,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 
         try {
 
-        	log.info("Inicio indexacion UOs");
+        	log.debug("Inicio indexacion UOs");
 
         	List langs = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	String hql="";
@@ -730,7 +730,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 	                    session.clear();
 	                    //session.reconnect();
 	                }
-	            	log.info("index " + ua.getId() + " " + (count++));
+	            	log.debug("index " + ua.getId() + " " + (count++));
             	}
             }
 
@@ -741,7 +741,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             		confeccionaDiccionario(""+langs.get(i));
            	}
 
-           	log.info("Fin indexacion UOs");
+           	log.debug("Fin indexacion UOs");
 
         } catch (DelegateException e) {
             throw new EJBException(e);

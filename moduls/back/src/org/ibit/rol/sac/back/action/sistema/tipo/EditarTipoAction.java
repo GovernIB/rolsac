@@ -68,7 +68,7 @@ public class EditarTipoAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         Tipo tipo = new Tipo();
         VOUtils.populate(tipo, dForm);
@@ -81,7 +81,7 @@ public class EditarTipoAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", tipo.getId());
-        log.info("Creado/Actualizado " + tipo.getId());
+        log.debug("Creado/Actualizado " + tipo.getId());
 
         return mapping.findForward("success");
     }
@@ -89,7 +89,7 @@ public class EditarTipoAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         TipoNormativaDelegate tipoDelegate = DelegateUtil.getTipoNormativaDelegate();
 
@@ -100,7 +100,7 @@ public class EditarTipoAction extends BaseDispatchAction{
             request.setAttribute("alert", "tipo.relacion");
             return mapping.findForward("success");
         } else {
-            log.info("Eliminado Tipo: " + id);
+            log.debug("Eliminado Tipo: " + id);
             tipoDelegate.borrarTipoNormativa(id);
             request.setAttribute("alert", "confirmacion.baja");
             dForm.reset(mapping, request);
@@ -112,7 +112,7 @@ public class EditarTipoAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         TipoNormativaDelegate tipoDelegate = DelegateUtil.getTipoNormativaDelegate();
 
@@ -127,7 +127,7 @@ public class EditarTipoAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -137,7 +137,7 @@ public class EditarTipoAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

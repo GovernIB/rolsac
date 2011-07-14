@@ -74,7 +74,7 @@ public class EditarTaxaAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         TaxaForm dForm = (TaxaForm)form;
 
         IdiomaDelegate idiomaDelegate = null==this.idiomaDelegate?  DelegateUtil.getIdiomaDelegate() : this.idiomaDelegate;        
@@ -104,29 +104,29 @@ public class EditarTaxaAction extends BaseDispatchAction{
         dForm.set("id",taxId);
         request.setAttribute("idSelect", tid);  //ens redirigim al tramite
         request.setAttribute("action", this.getResources(request).getMessage("boton.seleccionar"));
-        log.info("success");
+        log.debug("success");
         return mapping.findForward("tramite");
     }
 
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
-        log.info(idiomaDelegate);
+        log.debug(idiomaDelegate);
         IdiomaDelegate idiomaDelegate = null==this.idiomaDelegate?  DelegateUtil.getIdiomaDelegate() : this.idiomaDelegate;        
         TramiteDelegate tramDelegate = null==this.tramiteDelegate? DelegateUtil.getTramiteDelegate() : this.tramiteDelegate;
 
-        log.info(idiomaDelegate);
+        log.debug(idiomaDelegate);
         Long taxId = Long.valueOf(request.getParameter("idSelect"));
         if (taxId != null){
-            log.info("idSelect="+taxId);
+            log.debug("idSelect="+taxId);
             Taxa taxa = tramDelegate.obtenirTaxa(taxId);
-            log.info(taxa);
+            log.debug(taxa);
             VOUtils.describe(dForm, taxa,idiomaDelegate);
             
         } else {
-            log.info("failed");
+            log.debug("failed");
             return mapping.findForward("fail");
         }
 
@@ -137,7 +137,7 @@ public class EditarTaxaAction extends BaseDispatchAction{
                                  HttpServletResponse response) throws Exception {
 
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
         TramiteDelegate tramDelegate = null==this.tramiteDelegate? DelegateUtil.getTramiteDelegate() : this.tramiteDelegate;
         if (request.getParameter("idSelect") != null){
@@ -147,7 +147,7 @@ public class EditarTaxaAction extends BaseDispatchAction{
             dForm.reset(mapping, request);
 
             
-            log.info("Eliminado taxa: " + id);
+            log.debug("Eliminado taxa: " + id);
 
             id= new Long(request.getParameter("idTramite"));
             request.setAttribute("idSelect", id);
@@ -178,7 +178,7 @@ public class EditarTaxaAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

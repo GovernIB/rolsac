@@ -68,7 +68,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         Boletin boletin = new Boletin();
         VOUtils.populate(boletin, dForm);
@@ -81,7 +81,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", boletin.getId());
-        log.info("Creado/Actualizado " + boletin.getId());
+        log.debug("Creado/Actualizado " + boletin.getId());
 
         return mapping.findForward("success");
     }
@@ -89,7 +89,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         BoletinDelegate boletinDelegate = DelegateUtil.getBoletinDelegate();
 
@@ -98,7 +98,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
             request.setAttribute("alert", "boletin.relacion");
             return mapping.findForward("success");
         } else {
-            log.info("Eliminado Boletin: " + id);
+            log.debug("Eliminado Boletin: " + id);
             boletinDelegate.borrarBoletin(id);
             request.setAttribute("alert", "confirmacion.baja");
             dForm.reset(mapping, request);
@@ -110,7 +110,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         BoletinDelegate boletinDelegate = DelegateUtil.getBoletinDelegate();
 
@@ -125,7 +125,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         DynaValidatorForm dForm = (DynaValidatorForm) form;
         dForm.initialize(mapping);
         return mapping.findForward("cancel");
@@ -135,7 +135,7 @@ public class EditarBoletinAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

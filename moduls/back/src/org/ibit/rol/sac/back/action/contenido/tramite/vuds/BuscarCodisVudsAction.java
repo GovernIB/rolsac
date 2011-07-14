@@ -48,7 +48,7 @@ public class BuscarCodisVudsAction extends Action{
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entrem en llistar codis vuds");
+        log.debug("Entrem en llistar codis vuds");
         
         List<TramiteVuds> codis=new ArrayList<TramiteVuds>();
         
@@ -63,7 +63,7 @@ public class BuscarCodisVudsAction extends Action{
         if(null==codis) {
         	VentanillaUnica vuds=new VentanillaUnica(ep);
 
-        	log.info(System.getProperty("java.class.path"));
+        	log.debug(System.getProperty("java.class.path"));
         	try {
         		codis=vuds.cargarCodisVuds("es");
         		request.getSession().setAttribute("codisTram", codis);
@@ -75,7 +75,7 @@ public class BuscarCodisVudsAction extends Action{
         		return mapping.findForward("fail");
         	}
         }
-        log.info("num de codis descarregats = "+codis.size());
+        log.debug("num de codis descarregats = "+codis.size());
         
         String desc=request.getParameter("filtre");
         

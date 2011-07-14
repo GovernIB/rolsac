@@ -85,17 +85,17 @@ public class RingBuffer {
     public void print() {
     	/*
         if (log.isInfoEnabled()) {
-            log.info("========= Status de la cola de urls ================");
+            log.debug("========= Status de la cola de urls ================");
             int index = 0;
             for (Iterator it = ringBuffer.iterator(); it.hasNext();) {
                 ArrayEntry entry = (ArrayEntry) it.next();
                 if (log.isInfoEnabled()) {
-                    log.info("Id " + index++ + " = " + entry.getValue());
+                    log.debug("Id " + index++ + " = " + entry.getValue());
                 }
             }
-            log.info("El actual index es : " + actIndex);
-            log.info("El ultimo index es : " + endPoint);
-            log.info("======== END Status de la cola de urls =============");
+            log.debug("El actual index es : " + actIndex);
+            log.debug("El ultimo index es : " + endPoint);
+            log.debug("======== END Status de la cola de urls =============");
         }
         */
     }
@@ -130,7 +130,7 @@ public class RingBuffer {
         if (ringBuffer.size() == this.maxEntries) {
         	/*
             if (log.isInfoEnabled()) {
-                log.info("Overflow, borrando la última entrada.");
+                log.debug("Overflow, borrando la última entrada.");
             }
             */
             ringBuffer.remove(0);
@@ -145,7 +145,7 @@ public class RingBuffer {
         if ((ringBuffer.size() > 0) && (actIndex != (ringBuffer.size() - 1))) {
             /*
         	if (log.isInfoEnabled()) {
-                log.info("Corrigiendo entradas entre el indice y el final del buffer.");
+                log.debug("Corrigiendo entradas entre el indice y el final del buffer.");
             }
             */
             while (actIndex != ringBuffer.size() - 1) {
@@ -157,7 +157,7 @@ public class RingBuffer {
         ringBuffer.add(entry);
         /*
         if (log.isInfoEnabled()) {
-            log.info("Guardada url: " + entry.getValue() + ".");
+            log.debug("Guardada url: " + entry.getValue() + ".");
         }
         */
         if (actIndex == -1) {

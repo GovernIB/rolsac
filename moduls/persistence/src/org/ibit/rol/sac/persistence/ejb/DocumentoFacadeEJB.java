@@ -153,7 +153,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                 try {            	
                 	pldel.indexBorraProcedimiento(procedimiento);
                 	pldel.indexInsertaProcedimiento(procedimiento,null);   
-                    log.info("Actualizamos documento del procedimiento");
+                    log.debug("Actualizamos documento del procedimiento");
                     Actualizador.actualizar(documento, procedimiento.getId());
                 } catch (DelegateException e) {
                     log.error("Error indexando procedimiento", e);
@@ -191,7 +191,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
 		    	List<Documento> docs = procedimiento.getDocumentos();
 		        for (Documento docInformatiu : procedimiento.getDocumentos()) {
 			        for (final String idioma : (Collection<String>)procedimiento.getLangs()){
-			        	log.info("entra: "+docInformatiu.getId());
+			        	log.debug("entra: "+docInformatiu.getId());
 		                final TraduccionDocumento traduccion = (TraduccionDocumento)docInformatiu.getTraduccion(idioma);
 		                 if(traduccion!=null){
 				            Hibernate.initialize(traduccion.getArchivo());

@@ -62,7 +62,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PublicoObjetivoDelegate publicoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 
@@ -84,7 +84,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
             request.setAttribute("alert", "confirmacion.alta");
         }
         dForm.set("id", publico.getId());
-        log.info("Creado/Actualizado " + publico.getId());
+        log.debug("Creado/Actualizado " + publico.getId());
         
         return mapping.findForward("success");
     }
@@ -92,13 +92,13 @@ public class EditarPublicoAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PublicoObjetivoDelegate publicoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 
         Long id = (Long) dForm.get("id");
 
-        log.info("Eliminado Público Objetivo: " + id);
+        log.debug("Eliminado Público Objetivo: " + id);
         publicoDelegate.borrarPublicoObjetivo(id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
@@ -109,7 +109,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         PublicoObjetivoDelegate publicoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
         Long id = null;
@@ -132,7 +132,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
     public ActionForward subir(ActionMapping mapping, ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-		log.info("Entramos en subir");
+		log.debug("Entramos en subir");
 		PublicoObjetivoDelegate publicoObjetivoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 		
 		Long idPubl = new Long(request.getParameter("idSelect"));
@@ -145,7 +145,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         dForm.reset(mapping, request);
         return mapping.findForward("cancel");
@@ -155,7 +155,7 @@ public class EditarPublicoAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

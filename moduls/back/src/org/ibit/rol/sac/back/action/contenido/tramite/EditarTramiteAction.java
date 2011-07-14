@@ -99,15 +99,15 @@ public class EditarTramiteAction extends BaseDispatchAction{
             HttpServletRequest request,
             HttpServletResponse response) throws Exception{
 
-        log.info("entramos en crear");
+        log.debug("entramos en crear");
         
-   	 	log.info(request.getCharacterEncoding());
+   	 	log.debug(request.getCharacterEncoding());
         
         ProcedimientoDelegate procDelegate = null!=this.procedimientoDelegate? this.procedimientoDelegate: DelegateUtil.getProcedimientoDelegate();  //u92770[enric]
         
         Long idProcedimiento = new Long(request.getParameter("idProcedimiento"));
     	ProcedimientoLocal proc = procDelegate.obtenerProcedimiento(idProcedimiento);
-    	log.info(proc);
+    	log.debug(proc);
     	request.setAttribute("idUA",proc.getUnidadAdministrativa().getId());
     	String nombreUA=((TraduccionUA)proc.getUnidadAdministrativa().getTraduccion()).getNombre();
     	request.setAttribute("nombreUA",nombreUA);
@@ -131,7 +131,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
                                 HttpServletRequest request,
                                 HttpServletResponse response) throws Exception{
 
-        log.info("entramos en editar");
+        log.debug("entramos en editar");
         TramiteForm dForm = (TramiteForm)form;
         ProcedimientoDelegate procDelegate = null!=this.procedimientoDelegate? this.procedimientoDelegate: DelegateUtil.getProcedimientoDelegate();  //u92770[enric]
         TramiteDelegate tramiteDelegate = null!=this.tramiteDelegate? this.tramiteDelegate: DelegateUtil.getTramiteDelegate();  //u92770[enric]
@@ -141,7 +141,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
         
         try {
 
-        log.info("id="+dForm.get("id"));
+        log.debug("id="+dForm.get("id"));
 
         //boolean isNew = dForm.get("id") == null || dForm.get("id").equals("0");
         Object o = dForm.get("id");
@@ -216,7 +216,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
         		request.setAttribute("alert", "confirmacion.modificacion");
         	}
         	dForm.set("id",tramite.getId());
-        	log.info("Creat/Actualitzat " + tramite.getId());
+        	log.debug("Creat/Actualitzat " + tramite.getId());
 
         	request.setAttribute("formularioOptions", tramite.getFormularios());
         	request.setAttribute("docInformatiuOptions", tramite.getDocsInformatius());
@@ -302,14 +302,14 @@ public class EditarTramiteAction extends BaseDispatchAction{
                 		}
                 	}
 
-                log.info("Traducción trámite - Id: " + (Long) dForm.get("id"));
+                log.debug("Traducción trámite - Id: " + (Long) dForm.get("id"));
         	
         }        
 
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         //TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
         TramiteForm dForm = (TramiteForm)form;
         TramiteDelegate tramiteDelegate = null!=this.tramiteDelegate? this.tramiteDelegate: DelegateUtil.getTramiteDelegate();  //u92770[enric]
@@ -323,10 +323,10 @@ public class EditarTramiteAction extends BaseDispatchAction{
         if (request.getAttribute("idSelect") != null)	//mirem atributs
             id = (Long) request.getAttribute("idSelect");
 
-        log.info("id="+id);
+        log.debug("id="+id);
         if (id != null){
             Tramite tramite = tramiteDelegate.obtenerTramite(id);
-            log.info("tramite="+tramite);
+            log.debug("tramite="+tramite);
             VOUtils.describe(dForm, tramite, idiomaDelegate);
             dForm.setDataActualitzacio(tramite.getDataActualitzacio());
             dForm.setDataCaducitat(tramite.getDataCaducitat());
@@ -379,14 +379,14 @@ public class EditarTramiteAction extends BaseDispatchAction{
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
         ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
 
         if (request.getParameter("idSelect") != null && request.getParameter("idProcedimiento") != null){
             Long id = new Long(request.getParameter("idSelect"));
             Long idProcedimiento = new Long(request.getParameter("idProcedimiento"));
-            log.info("Eliminado Tramite: " + id);
+            log.debug("Eliminado Tramite: " + id);
             procDelegate.eliminarTramite(id, idProcedimiento);  //quita el tramite de la lista
             tramiteDelegate.borrarTramite(id);  //borra el tramite
             TraDynaValidatorForm dForm = (TraDynaValidatorForm) form;
@@ -405,7 +405,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         TraDynaValidatorForm dForm = (TraDynaValidatorForm)form;
         dForm.reset(mapping, request);
 
@@ -420,7 +420,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
             HttpServletRequest request,
             HttpServletResponse response) throws Exception { 
 
-    	log.info("Entramos en operar documentsTramit");
+    	log.debug("Entramos en operar documentsTramit");
     	Long idTramite = new Long(request.getParameter("idTramite"));
     	if ("actualizar_orden".equals(request.getParameter("operacion")))
     	{
@@ -446,7 +446,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
             HttpServletRequest request,
             HttpServletResponse response) throws Exception { 
 
-    	log.info("Entramos en operar taxes Tramit");
+    	log.debug("Entramos en operar taxes Tramit");
     	/*  TODO u92770[enric] - cal reordenar les taxes? 
     	 
     	Long idTramite = new Long(request.getParameter("idTramite"));
@@ -475,7 +475,7 @@ public class EditarTramiteAction extends BaseDispatchAction{
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
         return null;
     }
 

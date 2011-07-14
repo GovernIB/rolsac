@@ -31,7 +31,7 @@ public class SincronizadorSingleton {
 	 */
 	public synchronized void alta(AdministracionRemota adminRemota) throws CapaDeDatosException, ComunicacionException, SincronizacionTrabajadoException, UnidadAdminCENoEncontradaException{
 		if(sinc==null){
-            log.info("Inicio proceso de alta con la versión del sincronizador: "+adminRemota.getVersion());
+            log.debug("Inicio proceso de alta con la versión del sincronizador: "+adminRemota.getVersion());
 
             if(adminRemota.getVersion()==null || adminRemota.getVersion()==1){
                 sinc = new SincronizadorAltaThread(adminRemota);

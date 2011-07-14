@@ -240,7 +240,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
             session.flush();
 			if(actualizar){tramite = cargaTramite(session, tid);}
 			if (null != tramite.getProcedimiento()){
-				log.info("Grabar Documento: Lanzo el actualizador");
+				log.debug("Grabar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite,true);
 			}
 			/*
@@ -296,7 +296,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			session.flush();
 			if(actualizar){tramite = cargaTramite(session, tid);}
 			if (null != tramite.getProcedimiento()){
-				log.info("Grabar Taxa: Lanzo el actualizador ");
+				log.debug("Grabar Taxa: Lanzo el actualizador ");
 				Actualizador.actualizar(tramite,true);
 			}
 
@@ -394,7 +394,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			 */
 
 			if (null != tramite.getProcedimiento()){
-				log.info("Borro Taxa: Lanzo el actualizador");
+				log.debug("Borro Taxa: Lanzo el actualizador");
 				Actualizador.actualizar(tramite,true);
 			}
 
@@ -488,7 +488,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			actualitzarDocumentsPerOrdreNatural(session, docs);
 
 			if (null != tramite.getProcedimiento()){
-				log.info("Borrar Documento: Lanzo el actualizador");
+				log.debug("Borrar Documento: Lanzo el actualizador");
 				Actualizador.actualizar(tramite,true);
 			}
 		} catch (HibernateException he) {
@@ -544,7 +544,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			// 4. Actualizamos WS
 			Tramite tramite =cargaTramite(session,tid);
 			if(tramite.getProcedimiento()!=null){
-				log.info("Cambio Orden Document: Lanzo el actualizador");
+				log.debug("Cambio Orden Document: Lanzo el actualizador");
 				Actualizador.actualizar(tramite,true);
 			}
 		} catch (HibernateException he) {
@@ -628,7 +628,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 
 		/*
 		 * debug List<DocumentTramit> list = q.list();
-		 * if(1==tipus)for(DocumentTramit dt:list) { log.info(dt); }
+		 * if(1==tipus)for(DocumentTramit dt:list) { log.debug(dt); }
 		 */
 
 		return q.list();
@@ -640,7 +640,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 				new DocOrdenComparator());
 		for (DocumentTramit dt : list) {
 			boolean b = set.add(dt);
-		}// if(!b) log.info(dt); }
+		}// if(!b) log.debug(dt); }
 		return set;
 	}*/
 	

@@ -18,7 +18,7 @@ public class SincronizacionServicio {
     private static final Log log = LogFactory.getLog(SincronizacionServicio.class);
 
     public UnidadAdministrativaTransferible recogerUnidadAdministrativaByCodigoEstandar(final String codEstUA) throws Exception {
-    	log.info("recogerUnidadAdministrativaByCodigoEstandar");
+    	log.debug("recogerUnidadAdministrativaByCodigoEstandar");
         try{
             final UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
             final UnidadAdministrativa unidad = unidadAdministrativaDelegate.obtenerUnidadAdministrativaPorCodEstandar(codEstUA);
@@ -28,7 +28,7 @@ public class SincronizacionServicio {
                 //transformar a transferible
                 unidadTransferible = UnidadAdministrativaTransferible.generar(unidad);
             }
-            log.info("recogerUnidadAdministrativaByCodigoEstandar fin");
+            log.debug("recogerUnidadAdministrativaByCodigoEstandar fin");
             return unidadTransferible;
         } catch (Exception e) {
 			log.error("error", e);            
@@ -40,7 +40,7 @@ public class SincronizacionServicio {
 
     @SuppressWarnings("unchecked")
 	public FichaTransferible[] recogerFichasUASeccion(final String codEstSecc, final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
-    	log.info("recogerFichasUASeccion");
+    	log.debug("recogerFichasUASeccion");
         try{
             final FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
@@ -60,7 +60,7 @@ public class SincronizacionServicio {
                 }
                 fichasTransArray = fichasTrans.toArray(new FichaTransferible[0]);
             }
-            log.info("recogerFichasUASeccion fin");
+            log.debug("recogerFichasUASeccion fin");
             return fichasTransArray;
         } catch (Exception e) {
 			log.error("error", e);
@@ -70,7 +70,7 @@ public class SincronizacionServicio {
 
 
     public UnidadAdministrativaTransferible recogerUnidadAdministrativa(final Long idUA) throws Exception{
-    	log.info("recogerUnidadAdministrativa");
+    	log.debug("recogerUnidadAdministrativa");
     	try {
 	    	final UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 	        UnidadAdministrativa unidad = unidadAdministrativaDelegate.consultarUnidadAdministrativa(idUA);
@@ -80,7 +80,7 @@ public class SincronizacionServicio {
 	        if(unidad!=null){
 		        unidadTransferible = UnidadAdministrativaTransferible.generar(unidad);
 	        }
-            log.info("recogerUnidadAdministrativa fin");
+            log.debug("recogerUnidadAdministrativa fin");
             return unidadTransferible;
     	} catch (Exception e) {
 			log.error("error", e);
@@ -91,7 +91,7 @@ public class SincronizacionServicio {
 
     @SuppressWarnings("unchecked")
 	public ProcedimientoTransferible[] recogerProcedimientosRelacionados(final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
-    	log.info("recogerProcedimientosRelacionados");
+    	log.debug("recogerProcedimientosRelacionados");
     	try {
             final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
             final List<ProcedimientoLocal> procs = procedimientoDelegate.listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
@@ -112,7 +112,7 @@ public class SincronizacionServicio {
 
                 procsTransArray = procsTrans.toArray(new ProcedimientoTransferible[0]);
             }
-            log.info("recogerProcedimientosRelacionados fin");
+            log.debug("recogerProcedimientosRelacionados fin");
             return  procsTransArray;
         } catch (Exception e) {
 			log.error("error", e);
@@ -122,7 +122,7 @@ public class SincronizacionServicio {
     
     @SuppressWarnings("unchecked")
 	public EdificioTransferible[] recogerEdificiosRelacionados(final Long idUA) throws Exception {
-    	log.info("recogerEdificiosRelacionados");
+    	log.debug("recogerEdificiosRelacionados");
     	try {
             final UARemotaDelegate uaRemotaDelegate = DelegateUtil.getUARemotaDelegate();
 
@@ -136,7 +136,7 @@ public class SincronizacionServicio {
                 }
                 edificiosTransArray = edificiosTrans.toArray(new EdificioTransferible[0]);
             }
-            log.info("recogerEdificiosRelacionados fin");
+            log.debug("recogerEdificiosRelacionados fin");
             return  edificiosTransArray;
         } catch (Exception e) {
 			log.error("error", e);
@@ -146,7 +146,7 @@ public class SincronizacionServicio {
     
     @SuppressWarnings("unchecked")
 	public NormativaTransferible[] recogerNormativasRelacionadas(final Long idProcedimiento) throws Exception {
-    	log.info("recogerNormativasRelacionados");
+    	log.debug("recogerNormativasRelacionados");
     	try {
             final NormativaExternaRemotaDelegate normativaExternaRemotaDelegate = DelegateUtil.getNormativaExternaRemotaDelegate();
 
@@ -160,7 +160,7 @@ public class SincronizacionServicio {
                 }
                 normativasTransArray = normativasTrans.toArray(new NormativaTransferible[0]);
             }
-            log.info("recogerNormaticasRelacionadas fin");
+            log.debug("recogerNormaticasRelacionadas fin");
             return  normativasTransArray;
         } catch (Exception e) {
 			log.error("error", e);
@@ -172,7 +172,7 @@ public class SincronizacionServicio {
     
     @SuppressWarnings("unchecked")
 	public TramiteTransferible[] recogerTramitesRelacionados(final Long idProcedimiento) throws Exception {
-    	log.info("recogerTramitesRelacionados");
+    	log.debug("recogerTramitesRelacionados");
     	try {
             final TramiteRemotoDelegate tramiteRemotoDelegate = DelegateUtil.getTramiteRemotoDelegate();
             final List<Tramite> tramites = tramiteRemotoDelegate.obtenerTramitesProcedimiento(idProcedimiento);
@@ -186,7 +186,7 @@ public class SincronizacionServicio {
                 }
                 tramitesTransArray = tramitesTrans.toArray(new TramiteTransferible[0]);
             }
-            log.info("recogerTramitesRelacionados fin");
+            log.debug("recogerTramitesRelacionados fin");
             return  tramitesTransArray;
         } catch (Exception e) {
 			log.error("error", e);
@@ -251,7 +251,7 @@ public class SincronizacionServicio {
 
      public DocumentoTransferible recogerDocumento(final Long idDoc) throws Exception {
         try{
-            log.info("recogerDocumento");
+            log.debug("recogerDocumento");
             final DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
             final Documento doc = docDelegate.obtenerDocumento(idDoc);
 
@@ -262,7 +262,7 @@ public class SincronizacionServicio {
                 documentoTransferible = DocumentoTransferible.generar(doc);
 
             }
-            log.info("recogerDocumento fin");
+            log.debug("recogerDocumento fin");
             return documentoTransferible;
         } catch (Exception e) {
 			log.error("error", e);

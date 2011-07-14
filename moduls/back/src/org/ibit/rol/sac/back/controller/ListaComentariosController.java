@@ -24,10 +24,10 @@ public class ListaComentariosController implements Controller {
 
     public void perform(ComponentContext tileContext, HttpServletRequest request,
                         HttpServletResponse response, ServletContext servletContext) throws ServletException, IOException {
-        log.info("Entro en ListaComentariosController...");
+        log.debug("Entro en ListaComentariosController...");
         Long idRel = (Long) tileContext.getAttribute("idRel");
         String tipo = (String) tileContext.getAttribute("tipo");
-        log.info("Obtengo comentarios de " + tipo + "(" + idRel + ")");
+        log.debug("Obtengo comentarios de " + tipo + "(" + idRel + ")");
 
         ComentarioDelegate comentarioDelegate = DelegateUtil.getComentarioDelegate();
         List comentarios = null;

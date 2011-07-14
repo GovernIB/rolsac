@@ -36,7 +36,7 @@ public class StandardInvoker {
             call.setSOAPVersion(org.apache.axis.soap.SOAPConstants.SOAP11_CONSTANTS);
             call.setEncodingStyle(org.apache.axis.Constants.URI_SOAP11_ENC);
 
-            log.info("Fin Constructor");
+            log.debug("Fin Constructor");
         } catch(ServiceException e) {
             throw new WSInvocatorException(e);
         } catch(MalformedURLException e) {
