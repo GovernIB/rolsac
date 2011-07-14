@@ -26,7 +26,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
 
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
-        log.info("reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
+        log.debug("reset. name=" + mapping.getName() + ", path=" + mapping.getPath());
         super.reset(mapping, request);
         initialize(mapping);
 
@@ -48,7 +48,7 @@ public class TraDynaValidatorForm extends DynaValidatorForm {
 
     private String getTraduccionClassName(HttpServletRequest request, ActionMapping mapping) {
         ModuleConfig config = RequestUtils.getModuleConfig(request, getServlet().getServletContext());
-        log.info(config);
+        log.debug(config);
         TraFormBeanConfig beanConfig = (TraFormBeanConfig) config.findFormBeanConfig(mapping.getName());
         String className = beanConfig.getTraduccionClassName();
         return className;

@@ -77,7 +77,7 @@ public class EditarAction extends BaseDispatchAction
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         NormativaForm dForm = (NormativaForm) form;
         NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         TipoNormativaDelegate tipoNormativaDelegate = DelegateUtil.getTipoNormativaDelegate();
@@ -101,7 +101,7 @@ public class EditarAction extends BaseDispatchAction
         Iterator lang = idiomaDelegate.listarLenguajes().iterator();
 
         while (aux.hasNext()){
-            log.info("Entro en el while de ficheros");
+            log.debug("Entro en el while de ficheros");
             FormFile fichero = (FormFile) aux.next();
             String idioma = (String) lang.next();
             TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(idioma);
@@ -133,7 +133,7 @@ public class EditarAction extends BaseDispatchAction
         normativaDelegate.grabarNormativaLocal(normativa, idUA);
 
         if(modificant){
-            log.info("Entro en el if de confirmacion de modificacion");
+            log.debug("Entro en el if de confirmacion de modificacion");
             request.setAttribute("alert", "confirmacion.modificacion");
             request.setAttribute("afectacionOptions", normativa.getAfectadas());
             request.setAttribute("procedimientoOptions", normativa.getProcedimientos());
@@ -142,7 +142,7 @@ public class EditarAction extends BaseDispatchAction
         }
 
         dForm.set("id", normativa.getId());
-        log.info("Creat/Actualitzat " + normativa.getId());
+        log.debug("Creat/Actualitzat " + normativa.getId());
 
         return mapping.findForward("success");
     }
