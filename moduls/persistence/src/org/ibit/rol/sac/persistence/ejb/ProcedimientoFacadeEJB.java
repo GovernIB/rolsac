@@ -17,9 +17,7 @@ import org.ibit.rol.sac.model.*;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
-import org.ibit.rol.sac.persistence.ejb.DocumentoFacadeEJB.DocsFichaComparator;
 
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
