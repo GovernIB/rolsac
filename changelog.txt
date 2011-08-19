@@ -2,3 +2,11 @@
 - correcció d'un bug en el contextPath del link 'eliminar' de elementOrdenat.jsp (afecta a docs i forms del tramit)
 - elimninats alguns logs posats temporalment
 - canviats a nivell DEBUG tots els logs INFO.
+- posar scroll a la finestra abrirUA (proced, unidad)
+- reordenació camps CLOB als mappings hibernate per evitar l'error ORA-24816: Se han proporcionado datos de enlace no LONG 
+después de la columna LONG o LOB real
+- restauració de la constant Idioma.DEFAULT perquè la usa el webcaib
+
+16.ago.2011
+- evitar que el usuari pugui modificar una UA posant com a pare a si mateixa
+
