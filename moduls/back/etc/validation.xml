@@ -6,7 +6,25 @@
 
 <form-validation>
 
-    <formset>
+
+	<global>
+		<validator name="twoFieldsNotEqual" 
+			classname="org.ibit.rol.sac.back.form.StrutsCustomValidator"
+			method="validateTwoFieldsNotEqual"
+			methodParams="java.lang.Object,
+                 org.apache.commons.validator.ValidatorAction,
+                 org.apache.commons.validator.Field,
+                 org.apache.struts.action.ActionErrors,
+                 javax.servlet.http.HttpServletRequest"
+			msg="errors.twoFieldsEqual">
+
+		</validator>
+
+	</global>
+
+
+	<formset>
+
 
         <!-- ************************ SISTEMA ***************************** -->
         <form name="seccionForm">
@@ -571,6 +589,15 @@
             <field property="traducciones[0].nombre" depends="required">
                 <arg0 key="ua.nombre" />
             </field>
+            <field property="idPadre" depends="twoFieldsNotEqual">
+				<arg0 key="ua.padre.recursivo"/>
+				<var>
+					<var-name>secondProperty</var-name>
+					<var-value>id</var-value>
+				</var>
+
+			</field>
+            
         </form>
 
         <form name="unidadMateriaForm">
