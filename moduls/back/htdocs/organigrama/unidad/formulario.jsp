@@ -824,10 +824,24 @@ tinyMCE.init({
 />
 <% pageContext.setAttribute(Globals.XHTML_KEY, "true");%>
 
-<script type="text/javascript">
-<!--
-	<logic:present name="alert">
-	alert("<bean:message name='alert' />");
-	</logic:present>
--->
-</script>
+
+<!--  enric@dgtic Modificat el alert per poder ser capturat per Selenium -->
+
+<logic:present name="alert">
+	<script type="text/javascript">
+	<!--
+      function handleAlert() {
+			 alert("<bean:message name='alert' />");
+	  }
+	-->
+	</script>
+ </logic:present>
+
+<logic:present name="alert">
+	<script type="text/javascript">
+	<!--
+	window.setTimeout("handleAlert()",1000)
+	-->
+	</script>
+</logic:present>
+
