@@ -182,8 +182,8 @@ AbstractTransactionalSpringContextTests {
 		_(Actualizador.getThreadActualizador());
 		Actualizador.getThreadActualizador().join();
 		
-		assertTrue(log.containsInfoMsg("Actualizando un Procedimiento"));
-		assertTrue(log.containsInfoMsg(responsable));	
+		assertTrue(log.containsDebugMsg("Actualizando un Procedimiento"));
+		assertTrue(log.containsDebugMsg(responsable));	
 		_(Arrays.toString(log.getInfoMsgs().toArray()));
 	}
 	*/

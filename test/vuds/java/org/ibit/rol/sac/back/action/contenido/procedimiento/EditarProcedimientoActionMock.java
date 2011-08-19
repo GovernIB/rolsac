@@ -88,7 +88,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
 	public ActionForward editar(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		log.info("dins de procedimientoMock editar");
+		log.debug("dins de procedimientoMock editar");
 		
 		return action.editar(mapping, form, request, response);
 	}
@@ -222,7 +222,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
     public ActionForward editar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en editar");
+        log.debug("Entramos en editar");
         String servidor="";
         String value = System.getProperty("es.indra.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
@@ -273,7 +273,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
         
 
         dForm.set("id", procedimiento.getId());
-        log.info("Creat/Actualitzat " + procedimiento.getId());
+        log.debug("Creat/Actualitzat " + procedimiento.getId());
 
  
         char accio='a';  //'a'lta, 'm'odificacio, 'b'aixa
@@ -305,13 +305,13 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
     public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en eliminar");
+        log.debug("Entramos en eliminar");
         ProcedimientoForm dForm = (ProcedimientoForm) form;
         ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
         Long id = (Long) dForm.get("id");
 
         procedimientoDelegate.borrarProcedimiento(id);
-        log.info("Eliminado Procedimiento: " + id);
+        log.debug("Eliminado Procedimiento: " + id);
         request.setAttribute("alert", "confirmacion.baja");
         dForm.reset(mapping, request);
 
@@ -321,7 +321,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
     public ActionForward seleccionar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en seleccionar");
+        log.debug("Entramos en seleccionar");
         String servidor="";
         String value = System.getProperty("es.indra.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
@@ -382,7 +382,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
                                   HttpServletRequest request,
                                   HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en busqueda");
+        log.debug("Entramos en busqueda");
         String servidor="";
         String value = System.getProperty("es.indra.caib.rolsac.oficina");
         ResourceBundle rb =	ResourceBundle.getBundle("sac-back-messages");
@@ -487,7 +487,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
             HttpServletRequest request,
             HttpServletResponse response) throws Exception {
 
-			log.info("Entramos en documento");
+			log.debug("Entramos en documento");
 			DocumentoDelegate documentoDelegate = DelegateUtil.getDocumentoDelegate();
 			
 			Long idProcedimiento = new Long(request.getParameter("procedimiento"));
@@ -514,7 +514,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en materia");
+        log.debug("Entramos en materia");
         ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 
         if (request.getParameter("procedimiento") != null && request.getParameter("materia") != null){
@@ -538,7 +538,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en normativa");
+        log.debug("Entramos en normativa");
         ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 
         if (request.getParameter("procedimiento") != null && request.getParameter("normativa") != null){
@@ -562,7 +562,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
                                    HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en cancelled");
+        log.debug("Entramos en cancelled");
         if (request.getAttribute("idSelect") != null){
             this.seleccionar(mapping, form, request, response);
         }
@@ -576,7 +576,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
     		HttpServletRequest request,
     		HttpServletResponse response) throws Exception {
 
-    	log.info("Entramos en traduir");
+    	log.debug("Entramos en traduir");
     	
     	
     	
@@ -597,7 +597,7 @@ public class EditarProcedimientoActionMock extends BaseDispatchAction {
                                         HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
 
-        log.info("Entramos en unspecified");
+        log.debug("Entramos en unspecified");
 
         return null;
     }

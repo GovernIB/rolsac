@@ -29,7 +29,7 @@ public class TraductorInitializerTest extends TestCase {
 		initializer.contextInitialized(mockEvent);
 
 		
-		assertTrue(logger.containsInfoMsg("Carregant Rolsac amb traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducció automàtica"));
 		assertNotNull(mockEvent.getServletContext().getAttribute("traductor"));
 
 	}
@@ -56,8 +56,8 @@ public class TraductorInitializerTest extends TestCase {
 		initializer.contextInitialized(mockEvent);
 		
 		
-		assertTrue(logger.containsInfoMsg("Carregant Rolsac amb traducció automàtica"));
-		assertTrue(logger.containsInfoMsg("URL de servidor de traducció: host"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac amb traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("URL de servidor de traducció: host"));
 		assertNotNull(mockEvent.getServletContext().getAttribute("traductor"));
 
 	}
@@ -74,7 +74,7 @@ public class TraductorInitializerTest extends TestCase {
 		};
 		initializer.contextInitialized(mockEvent);
 
-		assertTrue(logger.containsInfoMsg("Carregant Rolsac sense traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducció automàtica"));
 		
 	}
 
@@ -91,7 +91,7 @@ public class TraductorInitializerTest extends TestCase {
 		};
 		initializer.contextInitialized(mockEvent);
 
-		assertTrue(logger.containsInfoMsg("Carregant Rolsac sense traducció automàtica"));
+		assertTrue(logger.containsDebugMsg("Carregant Rolsac sense traducció automàtica"));
 		
 	}
 

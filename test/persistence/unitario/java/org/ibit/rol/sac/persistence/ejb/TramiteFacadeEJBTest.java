@@ -62,8 +62,8 @@ public class TramiteFacadeEJBTest extends TestCase {
 		
 		
 		assertEquals(tramId,tramiteFacadeMock.grabarTramite(tramite, idOC));
-		assertTrue(log.containsInfoMsg("actualizando en actualizador pma"));
-		assertFalse(log.containsInfoMsg("actualizando en actualizador vuds"));
+		assertTrue(log.containsDebugMsg("actualizando en actualizador pma"));
+		assertFalse(log.containsDebugMsg("actualizando en actualizador vuds"));
 	}
 	
 	
@@ -94,8 +94,8 @@ public class TramiteFacadeEJBTest extends TestCase {
 		
 		
 		assertEquals(tramId,tramiteFacadeMock.grabarTramite(tramite, idOC));
-		assertTrue(log.containsInfoMsg("actualizando en actualizador vuds"));
-		assertTrue(log.containsInfoMsg("actualizando en actualizador pma"));
+		assertTrue(log.containsDebugMsg("actualizando en actualizador vuds"));
+		assertTrue(log.containsDebugMsg("actualizando en actualizador pma"));
 	}
 	
 	

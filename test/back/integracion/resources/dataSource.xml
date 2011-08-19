@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.springframework.org/schema/beans 
+               http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <!-- 
+    Loads externalized configuration details from db.properties.
+   -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <!--  property name="location" value="classpath:/db.properties" /-->
+    <property name="locations">
+     	<list>
+     		<value>classpath:/db.properties</value>
+     		<!-- value>classpath:/db.seycon.properties</value-->
+		</list>
+	</property>    
+  </bean>
+ 
+  <!--
+    A DriverManagerDataSource, as described in section 5.2.3 
+   -->
+  <bean id="dataSource" 
+      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${db.driver}" />
+    <property name="url" value="${db.url}" />
+    <property name="username" value="${db.username}" />
+    <property name="password" value="${db.password}" />
+  </bean>
+  
+  <bean id="sessionFactory"
+  class="org.springframework.orm.hibernate.LocalSessionFactoryBean">
+  <!-- spring-hibernate-1.2.6.jar -->
+
+    <property name="dataSource" ref="dataSource" />
+    <property name="mappingResources">
+      <list>
+      
+      	<!--  value>Tramite.hbm.xml</value-->
+        <!-- value>org/ibit/rol/sac/model/Tramite.hbm.xml</value-->
+<!--
+        <value>org/ibit/rol/sac/model/Formulario.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Archivo.oracle.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Procedimiento.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Documento.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/HechoVitalProcedimiento.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Ficha.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Enlace.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/FichaUA.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/AdministracionRemota.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/UnidadAdministrativa.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Personal.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/Normativa.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/UnidadMateria.hbm.xml</value>
+        <value>org/ibit/rol/sac/model/EspacioTerritorial.hbm.xml</value>
+-->
+        
+        <value>org/ibit/rol/sac/model/Taxa.hbm.xml</value>
+        <!--  value>org/ibit/rol/sac/model/Archivo.oracle.hbm.xml</value-->
+        <value>org/ibit/rol/sac/model/Archivo.hbm.xml</value>
+        
+        <value> org/ibit/rol/sac/model/Auditoria.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Boletin.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Comentario.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Documento.hbm.xml </value>
+        
+        <value> org/ibit/rol/sac/model/DocumentTramit.hbm.xml </value>
+        
+        <value> org/ibit/rol/sac/model/Edificio.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Estadistica.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Familia.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Iniciacion.hbm.xml </value>
+        <value> mapping/Ficha.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/FichaUA.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Formulario.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/HechoVital.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/HechoVitalProcedimiento.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Historico.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/IconoFamilia.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/IconoMateria.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Idioma.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Materia.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/UnidadMateria.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Normativa.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/PerfilCiudadano.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Personal.hbm.xml </value>
+        <value> mapping/Procedimiento.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Seccion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Tipo.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/TipoAfectacion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Tramite.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Tratamiento.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/UnidadAdministrativa.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Usuario.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/AgrupacionHechoVital.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/HechoVitalAgrupacionHV.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/AdministracionRemota.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/PublicoObjetivo.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/EspacioTerritorial.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Destinatario.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/AgrupacionMateria.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/MateriaAgrupacionM.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Enlace.hbm.xml </value>
+
+        <value> org/ibit/rol/sac/model/GrupoSuscripcion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/TipoSuscripcion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/Suscriptor.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/SuscriptorClave.hbm.xml </value>        
+        <value> org/ibit/rol/sac/model/EnvioSuscripcion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/ActivacionSuscripcion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/GrupoGenericoSuscripcion.hbm.xml </value>
+        <value> org/ibit/rol/sac/model/HistoricoEnvio.hbm.xml </value>
+   
+      </list>
+    </property>
+   
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+        <prop key="hibernate.connection.autocommit">false</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="use_outer_join">true</prop>
+        <prop key="jdbc.batch_size">50</prop>
+        <prop key="hibernate.cache.use_second_level_cache">false</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
+        <prop key="hibernate.cache.provider_class">net.sf.hibernate.cache.HashtableCacheProvider</prop> 
+
+        <!-- property name="transaction.factory_class">net.sf.hibernate.transaction.JTATransactionFactory</property-->
+        <!-- property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property-->
+        <!-- property name="cglib.use_reflection_optimizer">@hibernate.cglib@</property-->
+      </props>
+    </property>    
+  </bean>
+  
+   <bean id="transactionManager" 
+      class="org.springframework.orm.hibernate.HibernateTransactionManager">  
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>       
+  
+</beans>

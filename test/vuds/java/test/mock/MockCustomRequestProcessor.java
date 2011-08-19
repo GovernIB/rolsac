@@ -44,12 +44,12 @@ public class MockCustomRequestProcessor extends DelegatingTilesRequestProcessor 
             if (BaseDispatchAction.class.isAssignableFrom(mappingClass)) {
                 String action = request.getParameter("action");
                 if (action != null) {
-                    log.info("action=" + action);
+                    log.debug("action=" + action);
                     MessageResources resources = (MessageResources) request.getAttribute(Globals.MESSAGES_KEY);
                     String insertar = resources.getMessage("boton.insertar");
                     String modificar = resources.getMessage("boton.modificar");
                     if (action.equals(insertar) || action.equals(modificar)) {
-                        log.info("processValidate");
+                        log.debug("processValidate");
                         return super.processValidate(request, response, form, mapping);
                     } else {
                         return true;
