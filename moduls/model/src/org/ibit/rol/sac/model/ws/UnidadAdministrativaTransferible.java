@@ -39,7 +39,8 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     private String telefono;
     private String fax;
     private String email;
-    
+    private int nivel;
+
     private Integer sexoResponsable;
     private ArchivoTransferible fotop;
     private ArchivoTransferible fotog;
@@ -247,8 +248,16 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     		EdificioTransferible[] edificiosTransferibles) {
     	this.edificiosTransferibles = edificiosTransferibles;
     }
-    
-    
+
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
+
+
     //Funciones Extra
     
 	@SuppressWarnings("unchecked")
@@ -278,8 +287,16 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
 
 
         //Relleno el id del padre
-        if(unidad.getPadre()!=null)
-            this.setIdPadre(unidad.getPadre().getId());        
+        if(unidad.getPadre()!=null){
+            this.setIdPadre(unidad.getPadre().getId());
+        }
+        int niv =1;
+        UnidadAdministrativa padre = unidad.getPadre();
+        while (padre!= null){
+            niv++;
+            padre= padre.getPadre();
+        }
+        this.setNivel(niv);
 
         //Relleno el id de los hijos
 		final List<UnidadAdministrativa> hijos = unidad.getHijos();

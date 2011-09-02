@@ -46,27 +46,32 @@ public class ActualizacionServicio{
 	public Boolean actualizarUnidadAdministrativa(final String idRemoto,
 			UnidadAdministrativaTransferible uaT)
 			throws DelegateException {
+
 		if(!DelegateUtil.getAdministracionRemotaDelegate().isEmpty(idRemoto)){
 			log.debug("Recibida UA para actualizar");
-			
+
+
 			UARemotaDelegate delegate = DelegateUtil.getUARemotaDelegate();
-	
+
+            AdministracionRemota adminRemota = delegate.obtenerAdministracionRemota(idRemoto);
 			UnidadAdministrativaRemota unidad = delegate.obtenerUARemota(idRemoto,uaT
 					.getId());
-			
-			Long idPadre= null;
-			if(uaT.getIdPadre()!=null)
-				idPadre = delegate.obtenerUARemota(idRemoto,uaT.getIdPadre()).getId();
-	
-			if (unidad == null){
-				if(idPadre==null){
-					return null;
-				}
-				
-				unidad = new UnidadAdministrativaRemota();
-			}
-			unidad.rellenar(uaT);
-			delegate.grabarUARemota(idRemoto,unidad, idPadre, uaT.getCodigoEstandarTratamiento() ,uaT.getCodigoEstandarMaterias());
+
+            if(uaT.getNivel()<=adminRemota.getProfundidad()){
+                Long idPadre= null;
+                if(uaT.getIdPadre()!=null)
+                    idPadre = delegate.obtenerUARemota(idRemoto,uaT.getIdPadre()).getId();
+
+                if (unidad == null){
+                    if(idPadre==null){
+                        return null;
+                    }
+
+                    unidad = new UnidadAdministrativaRemota();
+                }
+                unidad.rellenar(uaT);
+                delegate.grabarUARemota(idRemoto,unidad, idPadre, uaT.getCodigoEstandarTratamiento() ,uaT.getCodigoEstandarMaterias());
+            }
 		}
 		return null;
 	}

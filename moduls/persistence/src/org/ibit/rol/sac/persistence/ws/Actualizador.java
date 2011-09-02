@@ -88,9 +88,9 @@ final public class Actualizador {
 		//altres casos -> false
 
     	String value = System.getProperty("es.indra.caib.rolsac.oficina");
-        if ((value == null) || value.equals("N")) 
+        if ((value == null) || value.equals("N")){
         	return true;
-        
+        }
         return false;
 	}
 	
