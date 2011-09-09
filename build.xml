@@ -21,13 +21,9 @@
 	
 	<property name="projecte.name.rolsac" value="rolsac"/>	
 
-	<property name="etc.approlsac" value="${etc}/approlsac"/>	
-
-
-	<!--<property name="deploy.dir" value="D:\servers\slave1-jboss-3.2.8-caib4\server\default\deploycaib"/>-->
+	<property name="etc.approlsac" value="${etc}/approlsac"/>
 
 	<property environment="env"/>
-	<property name="deploy.dir" value="${env.DEPLOY_DIR}"/>
 
 	
 
@@ -286,10 +282,9 @@
   <!-- ================================================================== -->
   <!-- deploy                                                                                                                              -->
   <!-- ================================================================== -->
-	
 
-	  <target name="deploy01ROLSAC">
-	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>	  
+	   <target name="deploy01ROLSAC" if="env.DEPLOY_DIR">
+          <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${env.DEPLOY_DIR}"/>
 	  </target>		  	
 
 	<target name="copiarAOTROS">
