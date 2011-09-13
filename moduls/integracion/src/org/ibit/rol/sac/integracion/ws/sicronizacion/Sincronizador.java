@@ -240,7 +240,7 @@ public class Sincronizador {
 	 */
 	@SuppressWarnings("unchecked")
 	private void recogerFichas(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
-		try {
+		/*try {
 			log.debug("Recogiendo fichas relacionadas");
 			//TODO: Se han de listar todas las secciones que tengan codigoEstandar
 			final List<Seccion> secciones = DelegateUtil.getSeccionDelegate().listarSecciones();
@@ -271,7 +271,7 @@ public class Sincronizador {
 			throw new CapaDeDatosException(e);
 		} catch (WSInvocatorException e) {
 			throw new ComunicacionException("Fallo en la invocacion del webservice recogerFichasUASeccion",e);
-		}
+		}*/
 	}
 	
 	/**

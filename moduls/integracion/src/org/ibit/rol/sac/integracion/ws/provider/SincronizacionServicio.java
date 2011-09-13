@@ -39,26 +39,19 @@ public class SincronizacionServicio {
 
 
     @SuppressWarnings("unchecked")
-	public FichaTransferible[] recogerFichasUASeccion(final String codEstSecc, final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
+	public Long[] recogerFichasUASeccion(final String codEstSecc, final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
     	log.debug("recogerFichasUASeccion");
         try{
             final FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
 
             final List<Ficha> fichas = fichaDelegate.listarFichasSeccionUA(idUA, codEstSecc, codEstHV, codEstMat);
-            FichaTransferible[] fichasTransArray = null;
+            Long[] fichasTransArray = null;
             if(fichas!=null && !fichas.isEmpty()){
-                List<FichaTransferible> fichasTrans = new ArrayList<FichaTransferible>();
+                List<Long> fichasTrans = new ArrayList<Long>();
                 for(final Ficha ficha: fichas){
-                    final FichaTransferible fichaTrans = new FichaTransferible();
-                    fichaTrans.rellenar(ficha);
-                    /** Obtengo el responsable del histórico**/
-        			if(fichaTrans.getResponsable() == null || fichaTrans.getResponsable().trim().length()<= 0){
-        				String responsables = obtenerResponsableHistorico(ficha.getId(),"ficha");
-        				if (responsables!=null && responsables.length()>0)fichaTrans.setResponsable(responsables);
-        			}
-                    fichasTrans.add(fichaTrans);
+                    fichasTrans.add(ficha.getId());
                 }
-                fichasTransArray = fichasTrans.toArray(new FichaTransferible[0]);
+                fichasTransArray = fichasTrans.toArray(new Long[0]);
             }
             log.debug("recogerFichasUASeccion fin");
             return fichasTransArray;
@@ -68,6 +61,35 @@ public class SincronizacionServicio {
 		}
     }
 
+    public FichaTransferible recogerFicha(final Long idFicha) throws Exception {
+        try{
+            log.debug("recogerFicha");
+            final FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+            final Ficha ficha = fichaDelegate.obtenerFicha(idFicha);
+
+
+            FichaTransferible fichaTransferible = null;
+            if(ficha!=null){
+                //transformar a transferible
+                fichaTransferible = FichaTransferible.generar(ficha);
+                //obtenemos responsable
+                if(fichaTransferible.getResponsable() == null || fichaTransferible.getResponsable().trim().length()<= 0){
+                    String responsables = obtenerResponsableHistorico(ficha.getId(),"ficha");
+                    if (responsables!=null && responsables.length()>0)fichaTransferible.setResponsable(responsables);
+                }
+
+            }
+            log.debug("recogerFicha fin");
+            return fichaTransferible;
+
+
+        }catch(Exception e){
+           log.error("error", e);
+           throw e;
+        }
+
+
+    }
 
     public UnidadAdministrativaTransferible recogerUnidadAdministrativa(final Long idUA) throws Exception{
     	log.debug("recogerUnidadAdministrativa");

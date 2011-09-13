@@ -69,7 +69,7 @@ public class SincronizacionServicio extends StandardInvoker{
     }
 
 
-    public FichaTransferible[] recogerFichasUASeccion(String codEstSecc, Long idUA, String[] codEstHV, String[] codEstMat) throws WSInvocatorException {
+    public Long[] recogerFichasUASeccion(String codEstSecc, Long idUA, String[] codEstHV, String[] codEstMat) throws WSInvocatorException {
         try {
             setOperationName("recogerFichasUASeccion");
 
@@ -86,11 +86,30 @@ public class SincronizacionServicio extends StandardInvoker{
 							   org.apache.axis.Constants.SOAP_ARRAY,
 			                   javax.xml.rpc.ParameterMode.IN);
 
-            setReturnType(new QName("http://org.ibit.rol.sac.integracion.ws", "ArrayOf_FichaTransferible"));
-            setReturnClass(FichaTransferible[].class);
+            setReturnType(new QName("http://org.ibit.rol.sac.integracion.ws", "ArrayOf_Long"));
+            setReturnClass(Long[].class);
             setReturnQName(new QName("", "recogerFichasUASeccionReturn"));
 
-            return (FichaTransferible[]) invoke(codEstSecc, idUA, codEstHV, codEstMat);
+            return (Long[]) invoke(codEstSecc, idUA, codEstHV, codEstMat);
+        } catch(RemoteException e) {
+            throw new WSInvocatorException(e);
+        }
+    }
+
+     public FichaTransferible recogerFicha(Long idFicha) throws WSInvocatorException {
+        try {
+            setOperationName("recogerFicha");
+
+            addParameter("idFicha",
+            		  		  org.apache.axis.Constants.XSD_LONG,
+            		  		  javax.xml.rpc.ParameterMode.IN);
+
+
+            setReturnType(NAMESPACEURI, FichaTransferible.class);
+            setReturnQName(new QName("", "recogerFichaReturn"));
+
+            return (FichaTransferible) invoke(idFicha);
+
         } catch(RemoteException e) {
             throw new WSInvocatorException(e);
         }

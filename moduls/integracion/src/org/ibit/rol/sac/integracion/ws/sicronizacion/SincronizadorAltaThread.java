@@ -248,13 +248,14 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 			for(Seccion seccion : secciones){
 				if(seccion.getCodigoEstandard()!=null && !"".equals(seccion.getCodigoEstandard().trim())){
 					log.debug("Recoginedo fichas de la seccion: "+ ((TraduccionSeccion)seccion.getTraduccion()).getNombre());
-					final FichaTransferible[] fichasTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
-					if(fichasTrans!=null){
+					final Long[] idsFichaTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
+					if(idsFichaTrans!=null){
 						log.debug("Fichas recogidas");
                         boolean grabarFicha= false;
-						for(FichaTransferible fichaTrans : fichasTrans){
+						for(Long idFichaTrans : idsFichaTrans){
                             // Condicions afegides per controllar que no es donin d'alta fitxes sense matèries ni fets vitals.
                             // Controllam que si la llista ens ve amb elements nulls, se descarti la fitxa.
+                            FichaTransferible fichaTrans = sincInvoker.recogerFicha(idFichaTrans);
                             if ((fichaTrans.getCodigoEstandarMaterias() != null && fichaTrans.getCodigoEstandarMaterias().length > 0)
 				                || (fichaTrans.getCodigoEstandarHV() != null && fichaTrans.getCodigoEstandarHV().length > 0)) {
 
