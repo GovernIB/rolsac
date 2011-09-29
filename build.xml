@@ -104,7 +104,7 @@
   <!-- ================================================================== -->
   <!-- prepare                                                                                                                         -->
   <!-- ================================================================== -->
-  <target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
+  <target name="prepare" description="Crea los directorios necesarios para la construccin de la aplicacin">
   	<mkdir dir="${output.dir}"/>
      <mkdir dir="${product.dir}"/>
      <mkdir dir="${moduls.dir}"/>
@@ -114,7 +114,7 @@
   <!-- ================================================================== -->
   <!-- doc                                                                                                                        -->
   <!-- ================================================================== -->
-  <target name="doc" depends="prepare" description="Genera la documentación">
+  <target name="doc" depends="prepare" description="Genera la documentacin">
   	<antcall target="propagate">
      	<param name="task" value="doc"/>
      </antcall>
@@ -126,7 +126,7 @@
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
   
-	<target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
+	<target name="update.XDOCLET" description="Actualiza los mdulos que generan clases con XDOCLET.">
 		<antcall target="update.extractor"/>
 		<antcall target="update.model"/>
 		<antcall target="update.persistence"/>
@@ -150,16 +150,20 @@
 		<ant dir="moduls/integracion" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.back" description="Actualizar el módulo web de backoffice">
+	<target name="update.back" description="Actualizar el modulo web legacy de backoffice">
 		<ant dir="moduls/back" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.ws" description="Actualitar el módulo web de webservices">
+	<target name="update.back2" description="Actualizar el modulo web de backoffice">
+		<ant dir="moduls/back2" target="main" inheritall="false"/>
+	</target>
+
+	<target name="update.ws" description="Actualitar el mdulo web de webservices">
 		<ant dir="moduls/ws" target="main" inheritall="false"/>
 	</target>
 
 	<!--Traspas boib afegit marilen-->
-    <target name="update.traspasboib" description="Actualitar el módulo traspas-boib">
+    <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
 		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
 	</target>
 
@@ -196,6 +200,7 @@
 
         <replace file="${output.dir}/application.xml">
             <replacefilter token="@context.back@" value="${context.back}"/>
+			<replacefilter token="@context.back2@" value="${context.back2}"/>
             <replacefilter token="@context.ws@" value="${context.ws}"/>
         </replace>
 
@@ -206,7 +211,7 @@
   <!-- ================================================================== -->
 
 
-	<target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac.">
+	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac.">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
@@ -216,14 +221,15 @@
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
-			<!-- Incluimos los .war y .jar generados con la aplicación para rolsac-->
+			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
 				<include name="extractor.jar" />
 				<include name="model.jar" />
 				<include name="integracion.war" />
 				<include name="sac-persistence.jar" />				
 				<include name="sac-persistence-client.jar" />
-				<!--include name="sac-back.jar" /-->
+				<include name="sac-back2-persistence.jar" />
+				<include name="sac-back2.war" />
 				<include name="sac-back.war" />
 				<include name="sac-ws.war" />
 				<include name="traspasboib.war" />
@@ -239,13 +245,25 @@
 			-->
 			
 			<!-- Incluimos los .jar dependientes -->
-			<fileset dir="${lib}">
-				<include name="hibernate2.jar" />
-				<include name="ehcache.jar" />
-			</fileset>
-
+            <fileset dir="${lib}">
+                <include name="hibernate2.jar" />
+                <include name="ehcache.jar" />
+            </fileset>
+			
+			<!-- Incluimos el .sar de propiedades del sistema -->						
+            <fileset dir="${home}">
+                <include name="01${projecte.name.rolsac}.sar" />
+            </fileset>
     	</ear>
   </target>	
+	
+	<target name="makeSar" description="Genera el archivo SAR para el despliegue.">
+		<delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
+		<jar
+			jarfile="${home}/01${projecte.name.rolsac}.sar">
+			<metainf dir="${home}" includes="jboss-service.xml"/>					           
+	    </jar>
+	</target>
 	
   <!-- ================================================================== -->
   <!-- main                                                                                                                              -->
@@ -254,7 +272,7 @@
   
 
 
-	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construcción de ROLSAC">
+	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
@@ -275,6 +293,7 @@
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
 		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
 		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
 		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
 	  </target>	
  	
@@ -282,6 +301,7 @@
   <!-- ================================================================== -->
   <!-- deploy                                                                                                                              -->
   <!-- ================================================================== -->
+	
 
 	   <target name="deploy01ROLSAC" if="env.DEPLOY_DIR">
           <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${env.DEPLOY_DIR}"/>

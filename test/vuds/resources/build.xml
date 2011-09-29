@@ -106,7 +106,7 @@
   <!-- ================================================================== -->
   <!-- prepare                                                                                                                         -->
   <!-- ================================================================== -->
-  <target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
+  <target name="prepare" description="Crea los directorios necesarios para la construccin de la aplicacin">
   	<mkdir dir="${output.dir}"/>
      <mkdir dir="${product.dir}"/>
      <mkdir dir="${moduls.dir}"/>
@@ -116,7 +116,7 @@
   <!-- ================================================================== -->
   <!-- doc                                                                                                                        -->
   <!-- ================================================================== -->
-  <target name="doc" depends="prepare" description="Genera la documentación">
+  <target name="doc" depends="prepare" description="Genera la documentacin">
   	<antcall target="propagate">
      	<param name="task" value="doc"/>
      </antcall>
@@ -128,7 +128,7 @@
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
   
-	<target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
+	<target name="update.XDOCLET" description="Actualiza los mdulos que generan clases con XDOCLET.">
 		<antcall target="update.extractor"/>
 		<antcall target="update.model"/>
 		<antcall target="update.persistence"/>
@@ -152,11 +152,11 @@
 		<ant dir="moduls/integracion" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.back" description="Actualizar el módulo web de backoffice">
+	<target name="update.back" description="Actualizar el mdulo web de backoffice">
 		<ant dir="moduls/back" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.ws" description="Actualitar el módulo web de webservices">
+	<target name="update.ws" description="Actualitar el mdulo web de webservices">
 		<ant dir="moduls/ws" target="main" inheritall="false"/>
 	</target>
 
@@ -175,7 +175,7 @@
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
-			<!-- Incluimos los .war y .jar generados con la aplicación para rolsac-->
+			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
  				<include name="extractor.jar" />
 				<include name="model.jar" />
@@ -201,7 +201,7 @@
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
-			<!-- Incluimos los .war y .jar generados con la aplicación para rolsac-->
+			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
 				<include name="extractor.jar" />
 				<include name="model.jar" />
@@ -230,7 +230,7 @@
   
 
 
-	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construcción de ROLSAC">
+	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
@@ -241,7 +241,7 @@
 	  </target>	
 
 
-	  <target name="main01ROLSACStandAlone" depends="prepare" description="Realiza todo el proceso de construcción de ROLSAC Stand Alone">
+	  <target name="main01ROLSACStandAlone" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC Stand Alone">
 
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
