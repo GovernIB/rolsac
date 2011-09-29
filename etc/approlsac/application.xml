@@ -34,6 +34,12 @@
     		</module>
 			<module>
         		<web>
+    	      	<web-uri>sac-back2.war</web-uri>
+	  	        <context-root>@context.back2@</context-root>
+        		</web>
+    		</module>
+			<module>
+        		<web>
     	      	<web-uri>sac-ws.war</web-uri>
     	  	    <context-root>@context.ws@</context-root>
         		</web>
