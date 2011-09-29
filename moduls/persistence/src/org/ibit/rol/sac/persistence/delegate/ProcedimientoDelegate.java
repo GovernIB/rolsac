@@ -2,7 +2,11 @@ package org.ibit.rol.sac.persistence.delegate;
 
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
+import org.ibit.rol.sac.model.webcaib.ActuacioModel;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +84,11 @@ public class ProcedimientoDelegate {
 	public List buscarProcedimientos(Map param, Map trad)
 			throws DelegateException {
 		return impl.buscarProcedimientos(param, trad);
+	}
+	
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves)
+			throws DelegateException {
+		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves);
 	}
 
 	public List buscarProcedimientosFamilia(Long id) throws DelegateException {
@@ -196,6 +205,55 @@ public class ProcedimientoDelegate {
     	return impl.obtenerProcedimientoPM(id);
     }
 
-	
 
+    //WEBCAIB//
+    
+    public ActuacioModel getActuacio ( String code, String idioma, String previ ) throws DelegateException {
+    	return impl.getActuacio(code, idioma, previ);
+    }
+    
+    public Collection actuacionsByMateria ( Long codiMateria, String idioma ) throws DelegateException {
+    	return impl.actuacionsByMateria(codiMateria, idioma);
+    }
+    
+    public Collection actuacionsByUORSS ( Long codiUO, String idioma ) throws DelegateException {
+    	return impl.actuacionsByUORSS(codiUO, idioma);
+    }
+
+    public Collection actuacionsByUO ( Long codiUO, String idioma ) throws DelegateException {
+    	return impl.actuacionsByUO(codiUO, idioma);
+    }    
+    
+    public Collection actuacionsMasVisto () throws DelegateException {
+    	return impl.actuacionsMasVisto();
+    }
+    
+    public Collection actuacionsByWord ( String words, String idioma, String solovigor ) throws DelegateException {
+    	return impl.actuacionsByWord(words, idioma, solovigor);
+    }
+    
+    public Integer cuentaActuacionsByUO ( Long codiUO, String idioma ) throws DelegateException {
+    	return impl.cuentaActuacionsByUO(codiUO, idioma);
+    }
+    
+    public Integer cuentaActuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException {
+    	return impl.cuentaActuacionsByFamiliaUO(codiFamilia, coduo, idioma);
+    }
+    
+    public Collection actuacionsByAvanzado ( String condi, String idioma, String uo, String solovigor, String idisel ) throws DelegateException {
+    	return impl.actuacionsByAvanzado (condi, idioma, uo, solovigor, idisel);
+    }
+    
+    public Collection actuacionsByFamilia ( Long codiFamilia, String idioma ) throws DelegateException {
+    	return impl.actuacionsByFamilia(codiFamilia, idioma);
+    }
+    
+    public Collection<ActuacioMinModel> actuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException {
+    	return impl.actuacionsByFamiliaUO(codiFamilia, coduo, idioma);
+    }
+    
+    public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) throws DelegateException {
+    	return impl.actuacionsByFamiliaMat(codiFamilia, codiMateria, idioma);
+    }
+    
 }

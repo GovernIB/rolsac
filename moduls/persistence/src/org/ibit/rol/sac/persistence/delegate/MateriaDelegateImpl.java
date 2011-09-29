@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.webcaib.MateriaModel;
 import org.ibit.rol.sac.persistence.intf.MateriaFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
@@ -11,6 +12,7 @@ import javax.ejb.Handle;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -240,6 +242,33 @@ import java.util.Set;
             throw new DelegateException(e);
         }
     }
+    
+    
+	public MateriaModel getMateria(Long codi, String idioma) throws DelegateException {
+    	try {
+            return getFacade().getMateria(codi, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }		
+	}
+	
+	
+	public Collection getMateries ( String idioma ) throws DelegateException {
+    	try {
+            return getFacade().getMateries(idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }		
+	}
+    
+	public MateriaModel getIcones ( Long codi, Long perfil ) throws DelegateException {
+    	try {
+            return getFacade().getIcones(codi, perfil);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }		
+	}
+	
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

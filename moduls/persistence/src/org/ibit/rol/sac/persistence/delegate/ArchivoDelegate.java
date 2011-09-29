@@ -8,12 +8,17 @@ import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
+
+import java.io.ByteArrayOutputStream;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
 
 public class ArchivoDelegate  implements StatelessDelegate {
 
+	
+        
+        	
 	/* ========================================================= */
     /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
@@ -25,6 +30,49 @@ public class ArchivoDelegate  implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+	
+	
+	/* ========================================================= */
+    /* ================= MÉTODOS DE NEGOCIO WEBCAIB ============ */
+    /* ========================================================= */	
+	
+    public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
+    	try {
+    		return getFacade().getFitxer(id);
+    	
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    	
+    }
+    
+
+    public String getMime(Long id) throws DelegateException {    
+    	try {
+    		return getFacade().getMime(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+
+    }
+    
+
+    public long getPes(Long id) throws DelegateException {       	
+    	try {
+    		return getFacade().getPes(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }    
+    
+
+    public String getNombre(Long id) throws DelegateException {
+    	try {
+    		return getFacade().getNombre(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }	
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

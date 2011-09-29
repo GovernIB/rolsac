@@ -36,17 +36,22 @@
                 <bean:define id="idActual" name="raiz" property="id" type="java.lang.Long" />
                 <bean:define id="actual" name="raiz" property="id" type="java.lang.Long" />
                 <%if (!idActual.equals(inicial)){%>
+               // <%="valor actual :"+actual.toString()%>
                     <logic:present name="<%=actual.toString()%>">
+                 // <%="valor actual present :"+actual.toString()%>	
                         ex.push(new init_ex(1,true,"<bean:write name='raiz' property='traduccion.nombre' />",true,"<bean:write name='raiz' property='id' />"));
                     </logic:present>
                     <logic:notPresent name="<%=actual.toString()%>">
+                 // <%="valor actual NOT present :"+actual.toString()%>
                         <% if (tieneHijos.contains(actual)) { %>
                             ex.push(new init_ex(1,false,"<bean:write name='raiz' property='traduccion.nombre' />",true,"<bean:write name='raiz' property='id' />"));
                         <% } else {%>
                             ex.push(new init_ex(1,false,"<bean:write name='raiz' property='traduccion.nombre' />",false,"<bean:write name='raiz' property='id' />"));
                         <% }%>
                     </logic:notPresent>
+                 // <%="valor actual NOT EMPTY :"+actual.toString()%>
                     <logic:notEmpty name="<%=actual.toString()%>">
+                 // <%="valor actual dins NOT EMPTY :"+actual.toString()%>   
                         <tiles:insert page="/organigrama/unidad/pophijos.jsp" flush="false" >
                             <tiles:put name="padreActual" value="<%=actual.toString()%>" />
                             <tiles:put name="nivel" value="<%=new Integer(2)%>" />

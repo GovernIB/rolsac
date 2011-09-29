@@ -89,4 +89,9 @@ public class EspacioTerritorial extends Traducible {
     public void setAdminRemotas(Set<AdministracionRemota> adminRemotas) {
         this.adminRemotas = adminRemotas;
     }
+    
+    public String getNombreEspacioTerritorial(String idioma) {
+        TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) getTraduccion(idioma);
+        return tet == null ? null : tet.getNombre();
+    }
 }

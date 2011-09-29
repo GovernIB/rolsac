@@ -23,5 +23,9 @@ public class Tratamiento extends Traducible {
     private Long id;
     private String codigoEstandar;
 
-
+    public String getNombreTratamiento(String idioma) {
+        TraduccionTratamiento ttr = (TraduccionTratamiento) getTraduccion(idioma);
+        return ttr == null ? null : ttr.getTipo();
+    }
+    
 }

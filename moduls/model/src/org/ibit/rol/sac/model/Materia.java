@@ -191,6 +191,10 @@ public class Materia extends Traducible {
 				+ destacada + "]";
 	}
 
+    public String getNombreMateria(String idioma) {
+        TraduccionMateria tma = (TraduccionMateria) getTraduccion(idioma);
+        return tma == null ? null : tma.getNombre();
+    }    
 
     
 }

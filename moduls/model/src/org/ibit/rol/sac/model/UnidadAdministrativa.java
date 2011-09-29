@@ -569,8 +569,14 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	  	return idsList;
 	}
 
-	String getNombreUnidadAdministrativa(String idioma) {
-		return ((TraduccionUA)getTraduccion(idioma)).getNombre();
+	public String getNombreUnidadAdministrativa(String idioma) {
+		TraduccionUA tua = (TraduccionUA) getTraduccion(idioma);
+		return tua == null ? null : tua.getNombre();
+	}
+	
+	public String getNombreUnidadAdministrativa() {
+		TraduccionUA tua = (TraduccionUA) getTraduccion();
+		return tua == null ? null : tua.getNombre();
 	}
  
  

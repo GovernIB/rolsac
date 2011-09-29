@@ -1,33 +1,65 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.model.ws.FichaUATransferible;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Edificio;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoUA;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionEdificio;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionTratamiento;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
+import org.ibit.rol.sac.model.UnidadMateria;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.webcaib.LlocModel;
+import org.ibit.rol.sac.model.webcaib.UOMinModel;
+import org.ibit.rol.sac.model.webcaib.UOModel;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI;
-import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-//import es.caib.moduls.indra.Parametros;
-//import es.caib.sac.indra.moduls.Modulos;
-//import es.caib.sac.unitatOrganica.model.LlocModel;
-//import es.caib.sac.unitatOrganica.model.UOModel;
-import org.ibit.rol.sac.persistence.util.Cadenas;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.*;
 
 /**
  * SessionBean para mantener y consultar Unidades Administrativas.
@@ -45,6 +77,10 @@ import java.util.*;
  */
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
+    /** Nom pel govern de les illes a la taula d'unitats orgàniques */
+    public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";    
+    private static String idioma_per_defecte ="ca";
+    
     /**
      * Obtiene referència al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
@@ -2624,6 +2660,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		query.setParameter("validacion", Validacion.PUBLICA);
 		if(!caducados){query.setParameter("fecha", DateUtils.today());}
 		fichas.addAll(query.list());
+		
     }
 
 
@@ -2738,17 +2775,15 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
   	}
 
     
-	/**
+  /**
 	 * Compone la miga de pan de la unidad administrativa
 	 * @param idua
 	 * @param idioma 
-     * @return String 
-     * 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-
-	
+   * @return String 
+   * 
+   * @ejb.interface-method
+   * @ejb.permission unchecked="true"
+   */
 	public StringBuffer getUaMolla(Long idua, String _idioma) {
 	
 		StringBuffer tmp = new StringBuffer(" ");
@@ -2771,6 +2806,548 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return tmp;
 	}		
 
-	  
-    
+	
+	/**
+	 * Compone la miga de pan de la unidad administrativa para el sacback2
+     * @return String 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public StringBuffer getUaMollaBack2(Long idua, String idioma, String url, String uaIdPlaceholder) {
+		StringBuffer mollapa = new StringBuffer(" ");
+		try {
+			UnidadAdministrativaDelegate uadel = org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate();
+		    UnidadAdministrativa uniadm = uadel.obtenerUnidadAdministrativa(idua);
+			while (uniadm!=null) {
+				StringBuffer ua_sbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
+				Cadenas.initAllTab(ua_sbuf); //primera letra en mayusculas
+				String ua_texto=Cadenas.initTab(ua_sbuf.toString()); // articulos a minusculas
+				if (idua.equals(uniadm.getId())) {
+					mollapa.insert(0, "<li class=\"seleccionat\">" + ua_texto + " </li>");
+				} else {
+					String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
+					mollapa.insert(0, "<li><a href=\"" + uaURL + "\">" + ua_texto + "</a>" + " </li>");
+				}
+				uniadm = uniadm.getPadre();
+			}
+		} catch (DelegateException e) {
+			mollapa = new StringBuffer("&nbsp;");			
+		} 
+		return mollapa;
+	}		
+
+	//WEBCAIB 
+
+    /**
+     * WEBCAIB.
+     * Obtiene el código perteneciente al Govern.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public ByteArrayOutputStream getLogo( String coduo, String logo ) {		
+
+		Session session = getSession();
+	   	String camp = "logoh";
+	   	
+	   	if (logo.equals("v"))
+	   		 camp = "logov";
+	   	if (logo.equals("sh"))
+	  		 camp = "logos";
+	   	if (logo.equals("st"))
+	  		 camp = "logot";		 
+	   	
+		try {
+			Query query = session.createQuery("select uad." + camp + " " +
+											  "from UnidadAdministrativa as uad " +
+											  "where uad.id = :codi ");
+			
+			query.setParameter("codi", coduo);
+			
+			Archivo tmp = (Archivo) query.uniqueResult();
+			
+			if (tmp.getDatos() != null) {
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				baos.write(tmp.getDatos(), 0, tmp.getDatos().length);
+				
+				return baos;				
+			} else 
+				return null;
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		}finally {
+			close(session);
+		}
+	}	
+	
+    /**
+     * WEBCAIB.
+     * Obtiene el código perteneciente al Govern.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public String getCodiGovernIlles() {
+		
+		Session session = getSession();
+		
+		try {
+			
+			Query query = session.createQuery("from UnidadAdministrativa as una " +
+											  "join fetch una.traducciones as tra " +
+											  "where index(tra) = :idioma " +
+											  "and tra.nombre = :nombre");
+
+			query.setString("idioma", idioma_per_defecte);
+			query.setString("nombre", NOM_GOVERN_ILLES);
+			
+			String codigo = ((UnidadAdministrativa) query.uniqueResult()).getId().toString();
+
+			return codigo;			
+			
+	     } catch (HibernateException he) {
+	    	 throw new EJBException(he);
+	     } finally {
+	         close(session);
+	     }	
+	}	
+		
+    /**
+     * WEBCAIB.
+     * Devuelve una lista de los centros de una unidad administrativa a partir de su código.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+     */	
+	public Collection centres( String codi, String idioma ) {
+		
+		Session session = getSession();
+		List<LlocModel> lista =  new ArrayList();
+		
+		try {
+						
+			UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.get(UnidadAdministrativa.class, new Long(codi) );
+			
+			if (unidadAdministrativa == null)
+				return lista; 
+				
+			List<Edificio> listaEdificios = new ArrayList<Edificio>(unidadAdministrativa.getEdificios());				
+			
+			for (Edificio edificio : listaEdificios ) {
+				
+				LlocModel llocModel = new LlocModel();
+				
+				llocModel.setLatitud( edificio.getLatitud() );
+				llocModel.setLongitud( edificio.getLongitud() );
+				llocModel.setAdreça( edificio.getDireccion() );
+				llocModel.setPoblacio( edificio.getPoblacion() );
+				llocModel.setCodiPostal( edificio.getCodigoPostal() );
+				
+				llocModel.setTelefon( edificio.getTelefono() != null ? edificio.getTelefono() : "" );
+				llocModel.setFax( edificio.getFax() != null ? edificio.getFax() : "" );
+				llocModel.setEmail( edificio.getEmail() != null ? edificio.getEmail() : "" );
+	
+				llocModel.setFotoEdifici( edificio.getFotoGrande() != null ? edificio.getFotoGrande().getId().intValue() : 0 );
+				llocModel.setFotoEdificiPetita( edificio.getFotoPequenya() != null ? edificio.getFotoPequenya().getId().intValue() : 0 );
+				llocModel.setMapa( edificio.getPlano() != null ? edificio.getPlano().getId().intValue() : 0);
+				
+				TraduccionEdificio traduccionEdificio = (TraduccionEdificio) edificio.getTraduccion(idioma);
+				TraduccionEdificio traduccionEdificioDef = (TraduccionEdificio) edificio.getTraduccion(idioma_per_defecte);
+				
+				TraduccionUA traduccionUA = (TraduccionUA) unidadAdministrativa.getTraduccion(idioma);
+				TraduccionUA traduccionUADef = (TraduccionUA) unidadAdministrativa.getTraduccion(idioma_per_defecte);
+
+				if ( traduccionEdificio == null )
+					traduccionEdificio = traduccionEdificioDef;											
+				
+				if ( traduccionUA == null )
+					traduccionUA = traduccionUADef;
+				
+				llocModel.setNom( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() );
+				llocModel.setDescripcio( traduccionEdificio.getDescripcion() != null ? traduccionEdificio.getDescripcion() : traduccionEdificioDef.getDescripcion() );
+				
+				lista.add( llocModel );
+			}
+			
+			return lista;
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he); 			
+		} finally {
+			close(session);
+		}		
+	} 
+	
+    /**
+     * WEBCAIB.
+     * Obtiene la lista de unidades administrativas el código de materia indicado
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public Collection getUoByMateria( String pare, String materia, String idioma ) {
+		
+		Session session = getSession();
+		List<UOMinModel> listaUoMinModel = new ArrayList();
+		
+		try {
+
+			//Obtenemos primero la lista de unidades en el idioma por defecto por código y materia
+			Query query = session.createQuery("select uad.id from UnidadAdministrativa as uad " +
+					"join uad.traducciones as tra " +
+					"join uad.unidadesMaterias as uma " +					
+					"where uma.materia = :materia " +
+					"and uma.unidad = uad.id " +
+					"and uad.padre = :codi " +					
+					"and index(tra) = :idiomaPorDefecto ");
+			
+			query.setParameter("codi", new Long(pare));
+			query.setParameter("materia", new Long(materia));
+			query.setParameter("idiomaPorDefecto", idioma_per_defecte);
+			
+			List<Long> listaCodigos = new ArrayList<Long>( query.list() );
+			List<UnidadAdministrativa> listaHijos = new ArrayList();
+			
+			for ( Long codigo : listaCodigos ) {
+				UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codigo);				
+				listaHijos.add( unidadAdministrativa );
+			}
+			
+			for ( UnidadAdministrativa uad : listaHijos ) {
+				
+				UOMinModel uoMinModel = new UOMinModel();				 
+				uoMinModel.setCodi( uad.getId().toString() );
+				 				 
+				TraduccionUA traduccionUA = (TraduccionUA) uad.getTraduccion(idioma);
+				TraduccionUA traduccionUADef = (TraduccionUA) uad.getTraduccion(idioma_per_defecte);
+
+				if (traduccionUA == null)
+					traduccionUA = traduccionUADef;
+				 
+				uoMinModel.setNom( initTab( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre()) );				 
+				uoMinModel.setAbreviatura( traduccionUA.getAbreviatura() != null ? traduccionUA.getAbreviatura() : traduccionUADef.getAbreviatura());				 
+				uoMinModel.setPresentacion( traduccionUA.getPresentacion() != null ? traduccionUA.getPresentacion() : traduccionUADef.getAbreviatura());
+				 
+				if (uoMinModel.getNom() != null && uoMinModel.getNom().length() < 3)
+					uoMinModel.setNom( traduccionUA.getNombre() );
+				 
+				uoMinModel.setCodi( uad.getId().toString() );
+				
+				listaUoMinModel.add( uoMinModel );
+			}
+			
+			return listaUoMinModel;
+				
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		}finally {
+			close(session);
+		}		
+	}	
+	
+    /**
+     * WEBCAIB.
+     * Obtiene información de código, nombre y tipo de las unidades orgánicas dependientes
+     * de la que se pasa por parámetro en el idioma especificado.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+     */	
+	public Collection unitatsOrganiquesFilles(String pare, String criteri, String idioma ) {
+		
+		Session session = getSession();
+		
+		List<UOMinModel> listaUOMinModel = new ArrayList();		
+		Long codiTractament = getCodiTractament();
+		
+		try {
+			
+			String crit = "organisme".equals(criteri) ? "and uad.tratamiento = :trt " : "and uad.tratamiento <> :trt "; 
+
+			//Seleccionamos las UAs de tal manera que no se repitan (i.e. filtrando por idioma)
+			Query query = session.createQuery("select uad.id from UnidadAdministrativa as uad " +
+					"join uad.traducciones as tra " +
+					"where index(tra) = :idiomaPorDefecto " +
+					"and uad.padre.id = :pare " +
+					"and uad.validacion = 1 " +
+					crit + 
+					"order by uad.orden ");			
+		
+			query.setParameter("idiomaPorDefecto", idioma_per_defecte);
+			query.setParameter("pare", new Long(pare));
+			query.setParameter("trt", codiTractament);
+									
+			List<Long> listaCodigos = query.list();
+			List<UnidadAdministrativa> listaHijos = new ArrayList();
+			
+			//Construimos la lista de UAs en las que buscar las traducciones
+			//correspondientes
+			for (Long codigo : listaCodigos) {
+				//UnidadAdministrativa uad = new UnidadAdministrativa();
+				UnidadAdministrativa uad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codigo);				
+				listaHijos.add( uad );
+			}
+							
+			for ( UnidadAdministrativa uad : listaHijos) {
+				 				
+				UOMinModel uoMinModel = new UOMinModel();				 
+				uoMinModel.setCodi( uad.getId().toString() );
+				 				 
+				TraduccionUA traduccionUA = (TraduccionUA) uad.getTraduccion(idioma);
+				TraduccionUA traduccionUADef = (TraduccionUA) uad.getTraduccion(idioma_per_defecte);
+
+				if (traduccionUA == null)
+					traduccionUA = traduccionUADef;
+				 
+				uoMinModel.setNom( initTab( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre()) );				 
+				uoMinModel.setAbreviatura( traduccionUA.getAbreviatura() != null ? traduccionUA.getAbreviatura() : traduccionUADef.getAbreviatura());				 
+				uoMinModel.setPresentacion( traduccionUA.getPresentacion() != null ? traduccionUA.getPresentacion() : traduccionUADef.getAbreviatura());
+				 
+				if (uoMinModel.getNom() != null && uoMinModel.getNom().length() < 3)
+					uoMinModel.setNom( traduccionUA.getNombre() );
+				 
+				 listaUOMinModel.add( uoMinModel );
+			}
+			
+			return listaUOMinModel;
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	} 
+	
+    /**
+     * WEBCAIB.
+     * Obtiene los detalles de una unidad administrativa
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public boolean isMateriaInUo(String codi, String materia) {
+		
+		Session session = getSession();
+		
+		try {
+			
+			Query query = session.createQuery("from ProcedimientoLocal as pro " +
+											  "join pro.unidadAdministrativa as uad " +
+											  "join pro.materias as mat " +
+											  "where uad.id = :codiUA " +
+											  "and mat.id = :codiMat ");
+			
+			query.setParameter("codiUA", Long.parseLong(codi));
+			query.setParameter("codiMat", Long.parseLong(materia));
+			
+			return !query.list().isEmpty();
+						
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+		
+    /**
+     * WEBCAIB.
+     * Obtiene los detalles de una unidad administrativa
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public UOMinModel getParent(String codi, String idioma) {
+		Session session = getSession();
+		
+		try {
+			
+			UnidadAdministrativa uadHija = obtenerUnidadAdministrativa( Long.parseLong(codi) );
+			UnidadAdministrativa uadPadre = uadHija.getPadre();
+			
+			UOMinModel uoMinModel = new UOMinModel();
+			
+			TraduccionUA traduccionUA = (TraduccionUA) uadPadre.getTraduccion(idioma);
+			TraduccionUA traduccionUADef = (TraduccionUA) uadPadre.getTraduccion(idioma_per_defecte);
+			
+			if (traduccionUA == null) 
+				traduccionUA = traduccionUADef;
+			
+			uoMinModel.setCodi( uadPadre.getId().toString() );
+			uoMinModel.setAbreviatura( traduccionUA != null ? traduccionUA.getAbreviatura() : traduccionUADef.getAbreviatura() );
+			uoMinModel.setNom( initTab( traduccionUA != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() ) );			
+			
+			return uoMinModel;
+			
+		} finally {
+			close(session);
+		}
+	}
+	
+    /**
+     * WEBCAIB.
+     * Obtiene los detalles de una unidad administrativa
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	
+	public UOModel getDetails(String codi, String idioma) {
+		
+		Session session = getSession();
+		
+		try {
+			UnidadAdministrativa uad = obtenerUnidadAdministrativa( Long.parseLong(codi) );
+			
+			TraduccionTratamiento traduccionTratamiento = (TraduccionTratamiento) uad.getTratamiento().getTraduccion(idioma);
+			TraduccionTratamiento traduccionTratamientoDef = (TraduccionTratamiento) uad.getTratamiento().getTraduccion(idioma_per_defecte);
+			
+			TraduccionUA traduccionUA = (TraduccionUA) uad.getTraduccion(idioma);
+			TraduccionUA traduccionUADef = (TraduccionUA) uad.getTraduccion(idioma_per_defecte);
+			
+			UOModel uoModel = new UOModel();
+			
+			if (traduccionTratamiento == null)
+				traduccionTratamiento = traduccionTratamientoDef;
+			
+			if (traduccionUA == null)
+				traduccionUA = traduccionUADef;
+
+			//Campos de unidad administrativa
+			uoModel.setCodi( uad.getId().toString() );
+			uoModel.setNomResponsable( uad.getResponsable() );
+			uoModel.setSexe( uad.getSexoResponsable() );
+			uoModel.setEmail( uad.getEmail() != null ? uad.getEmail() : "" );
+			uoModel.setFax( uad.getFax() != null ? uad.getFax() : "" );
+			uoModel.setTelefon( uad.getTelefono() != null ? uad.getTelefono() : "" );
+			uoModel.setUrl( uad.getDominio() != null ? uad.getDominio() : "" );
+			uoModel.setFoto_g( uad.getFotog() != null ? uad.getFotog().getId().intValue() : 0 );
+			uoModel.setFoto_p( uad.getFotop() != null ? uad.getFotop().getId().intValue() : 0 );
+						
+			//Campos de traducción unidad administrativa
+			uoModel.setNom( initTab( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() ) );
+			uoModel.setAbreviatura( traduccionUA.getAbreviatura() != null ? traduccionUA.getAbreviatura() : traduccionUADef.getAbreviatura() );
+			uoModel.setInfo( traduccionUA.getPresentacion() != null ? traduccionUA.getPresentacion() : traduccionUADef.getPresentacion() );
+			
+			//Campos de traducción tratamiento
+			if ( uoModel.getSexe() == 1 ) {
+				uoModel.setTitolResponsable( traduccionTratamiento.getCargoM() != null ? traduccionTratamiento.getCargoM() : traduccionTratamientoDef.getCargoM() );
+				uoModel.setTractamentResponsable( traduccionTratamiento.getTratamientoM() != null ? traduccionTratamiento.getTratamientoM() : traduccionTratamientoDef.getTratamientoM());
+			} else {
+				uoModel.setTitolResponsable( traduccionTratamiento.getCargoF() != null ? traduccionTratamiento.getCargoF() : traduccionTratamientoDef.getCargoF() );
+				uoModel.setTractamentResponsable( traduccionTratamiento.getTratamientoF() != null ? traduccionTratamiento.getTratamientoF() : traduccionTratamiento.getCargoF() );				
+			}
+			
+			uoModel.setTipus( traduccionTratamiento.getTipo() != null ? traduccionTratamiento.getTipo() : traduccionTratamientoDef.getTipo() );
+			
+			return uoModel;
+			
+		} finally {
+			close(session);
+		}		
+	}	
+		
+	//////////////////////////
+	//Métodos privados WEBCAIB
+	//////////////////////////	
+	private Long getCodiTractament() {
+		
+		Session session = getSession();
+		
+		try {
+
+			Query query = session.createQuery("select trt.id from Tratamiento trt " +
+											  "join fetch trt.traducciones ttr " +
+											  "where ttr.tipo like '%Organism%'" +
+											  "and index(ttr) = 'ca' ");
+			
+			Long result = (Long) query.uniqueResult();
+			
+			return result != null ? new Long(1) : 0;
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}	
+	}
+			 
+	private String initTab(String texte) {
+		   		      
+		String[][] canvis = new String[][] { {" I "  , " i "},
+               {" O "  , " o "},
+               {" De " , " de "},
+               {" Del ", " del "},
+               {" D'"  , " d'"},
+               {" A "  , " a "},
+               {" En " , " en "},
+               {" El " , " el "},
+               {" L'"  , " l'"},
+               {" La " , " la "},
+               {" Als ", " als "},
+               {" Els ", " els "},
+               {" Les ", " les "},
+               {" Al " , " al "},
+               {" Amb ", " amb "},
+               {" Que ", " que "},
+               {" Per ", " per "},
+               {"l.L"  , "l·l"},
+               {"l·L"  , "l·l"}
+                };
+		
+		
+		       // evitam nullPointerExceptions
+		       if (texte == null) return null;
+		       
+		       StringBuffer buf = new StringBuffer(texte);
+		       initAllTab(buf);
+		       String original = buf.toString();
+		       for (int i=0; i < canvis.length; i++) {
+		          replace(original, buf, canvis[i][0], canvis[i][1] );
+		       }
+		       
+		       return buf.toString();
+		   }        		
+
+	private void initAllTab (StringBuffer texte) {
+	    
+		final int LONG = texte.length();
+	    boolean primer = true;
+	    char c;
+	    
+	    for (int i=0; i<LONG; i++) {
+	       c = texte.charAt(i);
+	       if ( c == ' ' || c == '.' || c == '\'' || c == '"' ) {
+	          primer = true;
+	       } else {
+	          if (primer) {
+	             texte.setCharAt(i,Character.toUpperCase(c));
+	             primer = false;
+	          } else {
+	             texte.setCharAt(i,Character.toLowerCase(c));
+	          }
+	       }
+	    }	      
+	 } 	
+	
+	private void replace (String original, StringBuffer texte, String patro, String canvi) {
+	       
+		final int LONG_CANVI = canvi.length();
+	       
+	    if ( patro.length() != LONG_CANVI ) {
+	    	throw new RuntimeException ("els patrons de canvis a Format han de tenir la mateixa llargada!");
+	    }
+	   
+	    // per cada ocurrencia del canvi feim el canvi en el texte original
+	    for ( int index = original.indexOf(patro); index != -1; index = original.indexOf(patro,index+LONG_CANVI)) {
+	    	texte.replace( index, index + LONG_CANVI, canvi);
+	    }
+	}	
+	
 }

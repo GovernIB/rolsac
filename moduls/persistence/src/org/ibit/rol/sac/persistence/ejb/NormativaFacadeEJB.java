@@ -1,27 +1,63 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.expression.Expression;
 
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
+import org.ibit.rol.sac.model.Afectacion;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoNormativa;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaExterna;
+import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TipoAfectacion;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.webcaib.AnnexeModel;
+import org.ibit.rol.sac.model.webcaib.DadesNormativaModel;
+import org.ibit.rol.sac.model.webcaib.NormativaModel;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.*;
 
 
 /**
@@ -38,6 +74,8 @@ import java.util.*;
  */
 public abstract class NormativaFacadeEJB extends HibernateEJB {
 
+	private static String idioma_per_defecte ="ca";
+	
     /**
      * Obtiene referéncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
@@ -539,8 +577,9 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     public List listarNormativasUA(Long id) {
         Session session = getSession();
         try {
-            UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
-            Hibernate.initialize(unidadAdministrativa.getNormativas());
+            UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);            
+            Hibernate.initialize(unidadAdministrativa.getNormativas());            
+            
             List result = new ArrayList();
             for (Iterator iterator = unidadAdministrativa.getNormativas().iterator(); iterator.hasNext();) {
                 Normativa norm = (Normativa) iterator.next();
@@ -853,11 +892,251 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		}
 		catch (DelegateException ex) {
 			log.warn("[indexBorraNormativa:" + nor.getId() + "] No se ha podido borrar del indice la normativa. " + ex.getMessage());
-		}
-		
-        
+		}		        
 	}
 
-	
-	
+	//WEBCAIB
+    /**
+     * WEBCAIB.
+     * Obtiene los datos de la normativa
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */
+	 public DadesNormativaModel getDadesNormativa(String codi, String idioma) {
+		 
+		 Session session = getSession();
+		 		 
+		 try {
+			 
+			 NormativaLocal normativaLocal = (NormativaLocal) session.load(NormativaLocal.class, Long.parseLong(codi) );
+			 
+			 Boletin boletin = normativaLocal.getBoletin();						 			 
+			 
+			 DadesNormativaModel dadesNormativaModel = new DadesNormativaModel();			 
+			 
+			 //Datos de boletín
+			 dadesNormativaModel.setNomDiari(boletin.getNombre());			 
+			 dadesNormativaModel.setDataPublicacio(normativaLocal.getFechaBoletin());
+			 
+			 //Datos de normativa local
+			 dadesNormativaModel.setData(normativaLocal.getFecha());			 			 
+			 dadesNormativaModel.setNumDiari( normativaLocal.getNumero().toString() );
+			 dadesNormativaModel.setDataPublicacio(normativaLocal.getFechaBoletin());			 						 
+			 
+			 //Datos de traducción unidad administrativa
+			 UnidadAdministrativa unidadAdministrativa = normativaLocal.getUnidadAdministrativa();
+			 
+			 TraduccionUA traduccionUADef = (TraduccionUA) unidadAdministrativa.getTraduccion(idioma_per_defecte);
+			 TraduccionUA traduccionUA = (TraduccionUA) unidadAdministrativa.getTraduccion(idioma);			 
+			 
+			 TraduccionNormativa traduccionNormativaDef = (TraduccionNormativa) normativaLocal.getTraduccion(idioma_per_defecte);
+			 TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativaLocal.getTraduccion(idioma);
+			 
+			 if (traduccionUA == null)
+				 traduccionUA = traduccionUADef;
+				 
+			 if (traduccionNormativa == null)
+				 traduccionNormativa = traduccionNormativaDef;				 
+			 
+			 dadesNormativaModel.setOrganismePropietari( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() );
+			 dadesNormativaModel.setUoPropietaria( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() );
+			 			 
+			 //Datos de traducción normativa local
+			 if (traduccionNormativa != null) {				 
+				 dadesNormativaModel.setSumari( traduccionNormativa.getTitulo() != null ? traduccionNormativa.getTitulo() : traduccionNormativaDef.getTitulo() );
+				 dadesNormativaModel.setEnllaç( traduccionNormativa.getEnlace() != null ? traduccionNormativa.getEnlace() :  traduccionNormativaDef.getEnlace() );
+				 dadesNormativaModel.setObservacions( traduccionNormativa.getObservaciones() != null ? traduccionNormativa.getObservaciones() : traduccionNormativaDef.getObservaciones() );
+				 dadesNormativaModel.setNumeroPagina( traduccionNormativa.getPaginaInicial() != null ? traduccionNormativa.getPaginaInicial() : ( traduccionNormativaDef.getPaginaInicial() != null ? traduccionNormativaDef.getPaginaInicial() : 0 ) );
+			 }
+				 
+			 return dadesNormativaModel;
+			 			 			
+		 } catch (HibernateException he) {
+	         throw new EJBException(he);			 
+		 } finally {
+			 close(session);
+		 }		 
+	 }		 
+
+	 /**
+	 * WEBCAIB 
+	 * Obtiene los anexos de una normativa
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+	 */
+	 public Collection annexeByNormativa( String codi, String idioma ) {
+		 
+		 Session session = getSession();
+		 
+		 try {
+			 
+			NormativaLocal normativaLocal = (NormativaLocal) session.get(NormativaLocal.class, Long.parseLong(codi));			
+			List<AnnexeModel> listaArchivo = new Vector();
+			
+			if (normativaLocal == null) 
+				return listaArchivo;			
+				
+			TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativaLocal.getTraduccion(idioma);
+			
+			//Si no obtenemos el annexo con el idioma pasado por parámetro, probamos con el idioma por defecto			
+			if (traduccionNormativa == null)
+				traduccionNormativa = (TraduccionNormativa) normativaLocal.getTraduccion(idioma_per_defecte);
+			
+			Archivo archivo = traduccionNormativa != null ? traduccionNormativa.getArchivo() : null;
+												
+			AnnexeModel annexeModel = new AnnexeModel();			
+			
+			if (archivo != null) {
+				annexeModel.setCodi( archivo.getId().intValue() );
+				annexeModel.setArxiu(archivo.getNombre() );			
+			
+				listaArchivo.add(annexeModel);
+		 	}
+		 
+			return  listaArchivo;
+			
+		 } catch (HibernateException he) {
+			 throw new EJBException(he);
+		 } finally {
+			 close(session);
+		 }
+	 }
+	 
+    /**
+     * WEBCAIB.
+     * Obtiene las normativas por código de procedimiento, con el idioma indicado.
+     * Si no existe en dicho idioma se buscarán por el idioma por defecto.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */
+	 public Collection normativesByActuacio( String codiActuacio, String idioma ) {
+		 
+		 Session session = getSession();
+			
+		 try {
+			 
+			Query query = session.createQuery("select nor from Normativa as nor " +
+					"join fetch nor.procedimientos as pro " +
+					"where pro.id = :codi and nor.validacion = 1");
+			
+			query.setString("codi", codiActuacio);
+			
+			//ProcedimientoLocal procedimientoLocal = (ProcedimientoLocal) query.uniqueResult();
+						
+			List<Normativa> listaNormativa = query.list();
+			return getListaNormativaModel(listaNormativa, idioma);			
+						
+	     } catch (HibernateException he) {
+	    	 throw new EJBException(he);
+	     } finally {
+	         close(session);
+	     }		
+	 }
+	 	 
+    /**
+     * WEBCAIB.
+     * Obtiene las normativas por código de procedimiento, con el idioma indicado.
+     * Si no existe en dicho idioma se buscarán por el idioma por defecto.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * 
+     */	 
+	 public Collection normativesByUO( String codiUO, String idioma, String any ) {
+		 
+		 Session session = getSession();
+		 
+		 try {
+
+			 Query query = session.createQuery(
+					"from Normativa as nor " +
+			 		"where to_char(nor.fechaBoletin, 'YYYY') = :any " +
+			 		"order by nor.fechaBoletin desc " );
+			 			 			 
+			 query.setString("any", any);			 
+			 
+			 List<Normativa> listaTmpNormativas = query.list();			 
+			 List<Normativa> listaNormativas = new ArrayList();
+			 
+			 //Descartamos las normativas con id de UA distinto al pasado por parámtro			 
+			 for (Normativa normativa : listaTmpNormativas ) {				 
+				if ( normativa instanceof NormativaLocal &&
+					( (NormativaLocal) normativa).getUnidadAdministrativa() != null && 
+					( (NormativaLocal) normativa).getUnidadAdministrativa().getId().equals( Long.parseLong( codiUO) ) )
+
+					listaNormativas.add( normativa );					 
+			 }
+			 			 	
+			 return getListaNormativaModel(listaNormativas, idioma);
+			
+	     } catch (HibernateException he) {
+	    	 throw new EJBException(he);
+	     } finally {
+	         close(session);
+	     }		
+	 }
+	 	 
+	 /**
+	  * A partir de una lista de objetos Normativa, devuelve su correspondiente lista de 
+	  * objetos NormativaModel, teniendo en cuenta el idioma de traducción.
+	  * 
+	  * @param listaNormativa
+	  * @param idioma
+	  * @return Collection Lista de normativaModel
+	  */
+	 private Collection getListaNormativaModel( List<Normativa> listaNormativa, String idioma ) {
+		List<NormativaModel> listaNormativaModel = new ArrayList();		
+		
+		for (Normativa normativa: listaNormativa) {
+			
+			NormativaModel normativaModel = new NormativaModel();
+			Boletin boletin = normativa.getBoletin();
+			
+			//Campos sin traducción
+			normativaModel.setCodi( normativa.getId().intValue() );
+			normativaModel.setData( normativa.getFecha() != null ? normativa.getFecha() : null );
+			normativaModel.setNumero( normativa.getNumero() != null ? normativa.getNumero().toString() : null );
+			normativaModel.setNumeroBoib( boletin.getId() != null ? boletin.getId().toString() : null);
+			normativaModel.setOrigen( boletin.getNombre() != null ? boletin.getNombre() : null);
+					
+			TraduccionNormativa traduccion = (TraduccionNormativa) normativa.getTraduccion(idioma);
+			TraduccionNormativa traduccionDef = (TraduccionNormativa) normativa.getTraduccion(idioma_per_defecte);
+			
+			if  ("externa".equals(normativa.getTipo()) )
+				traduccion = (TraduccionNormativa) normativa.getTraduccionFront(idioma);
+			
+			if (traduccion == null)
+				traduccion = traduccionDef;
+			
+			//Campos con traducción
+			normativaModel.setSumari( traduccion.getTitulo() != null ? traduccion.getTitulo() : traduccionDef.getTitulo() );
+			
+			Archivo archivo = traduccion.getArchivo();
+			Long idArchivo = null;
+			
+			if (archivo != null && archivo.getId() != null) { 
+				idArchivo = archivo.getId();			
+				normativaModel.setArxiu( idArchivo.intValue() );
+			}			
+			
+			Integer paginaInicial = traduccion.getPaginaInicial() != null ? traduccion.getPaginaInicial() : null;
+			Integer paginaFinal = traduccion.getPaginaInicial() != null ? traduccion.getPaginaInicial() : null;
+			
+			Integer paginaInicialDef = traduccionDef.getPaginaInicial() != null ? traduccionDef.getPaginaInicial() : null;
+			Integer paginaFinalDef = traduccionDef.getPaginaFinal() != null ? traduccionDef.getPaginaFinal() : null;
+			
+			normativaModel.setPagini( paginaInicial != null ? paginaInicial : ( paginaInicialDef != null ? paginaInicialDef : 0)  );
+			normativaModel.setPagfin( paginaFinal != null ? paginaFinal : ( paginaFinalDef != null ? paginaFinalDef : 0) );
+			
+			listaNormativaModel.add(normativaModel);			
+		}
+		
+		return listaNormativaModel;		
+	 } 	 
 }
