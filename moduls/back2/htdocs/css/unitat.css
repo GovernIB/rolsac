@@ -1,0 +1,208 @@
+@charset "utf-8";
+
+/* menu */
+
+#menu_contingut { padding-bottom:.6em; }
+
+/* detall */
+
+#carregantDetall { font-size:1.3em; font-style:italic; padding:1em 0 1em 1.6em; background:#fff url(../img/executant.gif) no-repeat left center; }
+
+#escriptori_detall { display:none; margin:0 0 4em 0; }
+
+#escriptori_detall #modulLateral{
+    margin-top: 0;
+}
+#escriptori_detall #modulLateral div.modul{
+    background-color: #F3F3F3;
+    border: 1px solid #D3D3D3;  
+    overflow: hidden;
+    padding: 15px;
+    margin-bottom: 33px;
+    position:relative;
+    
+    border-radius: 15px 15px 15px 15px;
+}
+#escriptori_detall #modulLateral div.modul a.modul{
+    position:absolute;
+    right: 9px;
+    top: 9px;
+    display:block;
+    text-indent: -1000px;
+    width: 16px;
+    height: 16px;
+    background-image: url(../img/botons/desplegar.png);
+}
+#escriptori_detall #modulLateral .modul fieldset legend{
+    font: bold 11px Verdana, Helvetica, Sans-serif;
+    color: #333333;
+    text-transform: uppercase;
+    display: block;
+    padding-bottom: 15px;
+}
+#escriptori_detall #modulLateral .botonera{
+    border: none;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    float: none;
+    width: auto;
+}
+#escriptori_detall #modulLateral .botonera ul{
+    padding: 0;
+    border: none;
+    border-radius: 0;
+}
+
+
+/* Módulo de materias */
+
+#escriptori_detall #modulLateral .modulMateries .llistat{
+    clear:both;
+    padding-top: 10px;
+	display: none;
+}
+#escriptori_detall #modulLateral .modulMateries .llistat ul{
+    list-style: none;
+}
+#escriptori_detall #modulLateral .modulMateries .llistat li{
+    float: left;
+    width: 49.9%;
+    font-size: 10px;
+}
+#escriptori_detall #modulLateral .modulMateries .llistat li input{
+    float:right;
+    margin-right: 5px;
+}
+#escriptori_detall #modulLateral .modulMateries .llistat li.impar,
+#escriptori_detall #modulLateral .modulMateries .llistat li:nth-child(2n+1){
+    clear:left; 
+}
+#escriptori_detall #modulLateral .modulMateries .botonera{
+    clear: both;
+    padding-top: 10px;
+}
+#escriptori_detall #modulLateral .modulMateries  .botonera .btnGenerico{
+    margin-right: 10px;
+}
+/*
+#escriptori_detall div.modul h2 { float:left; margin-top:0; }
+#escriptori_detall div.modul a.modul { float:right; padding-left:1.3em; margin-right:1em; }
+#escriptori_detall div.modul a.amagat { background:transparent url(../img/botons/mostra.gif) no-repeat left center; }
+#escriptori_detall div.modul a.mostrat { background:transparent url(../img/botons/amaga.gif) no-repeat left center; }
+#escriptori_detall div.modul_continguts { display:none; clear:both; width:100%; }
+#escriptori_detall div.mostrat { display:block !important; }
+
+#escriptori_detall div.modul h2 span.caducat { font-size:.8em; text-transform:uppercase; color:#c00; margin-left:3em; padding-left:2em; background:transparent url(../img/taula_llistat/procediment_caducat.gif) no-repeat left center; }
+#escriptori_detall div.modul h2 span.nombre { font-size:.8em; font-weight:normal; margin-left:1.5em; }
+
+#escriptori_detall div.modul ul.botons { height:2em; list-style:none; padding-top:.2em; }
+#escriptori_detall div.modul ul.botons li { display:inline; margin-right:1em; }
+
+#escriptori_detall h2 { margin-bottom:1em; }
+
+#escriptori_detall h3 { margin-top:0; margin-bottom:1em; }
+
+#escriptori_detall div.fila { overflow:hidden; width:100%; padding:0; margin-bottom:1.5em; }
+#escriptori_detall div.ambColumna { margin-bottom:0; }
+
+#escriptori_detall div.senseMarge { margin-bottom:0 !important; }
+
+#escriptori_detall div.columna { overflow:hidden; float:left; padding:0; margin-right:1.9em; }
+#escriptori_detall div.t50 { width:26em; }
+#escriptori_detall div.columna div.element { width:100%; }
+
+#escriptori_detall div.element { overflow:hidden; float:left; padding:0; margin-right:1.9em; }
+#escriptori_detall div.t20p { width:9em; }
+#escriptori_detall div.t20p input { width:8em; }
+#escriptori_detall div.t25p { width:12em; }
+#escriptori_detall div.t25p input { width:11em; }
+#escriptori_detall div.t33p { width:17em; }
+#escriptori_detall div.t33p input { width:16em; }
+#escriptori_detall div.t50p { width:26em; }
+#escriptori_detall div.t50p input { width:25em; }
+#escriptori_detall div.t66p { width:35.5em; }
+#escriptori_detall div.t66p input { width:34.5em; }
+#escriptori_detall div.t99p { width:55em; }
+#escriptori_detall div.t99p input, #escriptori_detall div.t99p textarea { width:54em; }
+
+table.mceLayout { width:54em !important; }
+
+#escriptori_detall input.t100, #escriptori_detall textarea.t100 { width:95%; }
+#escriptori_detall input.t6 { width:6em !important; }
+#escriptori_detall input.t10 { width:10em !important; }
+#escriptori_detall input.t44 { width:44em !important; }
+
+#escriptori_detall div.etiqueta { font-family:Georgia, "Times New Roman", Times, serif; padding-bottom:.2em; }
+#escriptori_detall div.etiqueta:after { content:":"; }
+
+#escriptori_detall div.control { font-family:Georgia, "Times New Roman", Times, serif; padding:0 0 .2em 0; }
+#escriptori_detall div.control p { line-height:1.4em; }
+
+#escriptori_detall div.text { font-size:1.3em; }
+
+#escriptori_detall div.titol { font-size:1.4em; padding-top:.3em; padding-bottom:.3em; padding-left:.3em; }
+
+#escriptori_detall div.documentos ul { list-style:none; margin:.3em 0 0 .2em; }
+#escriptori_detall div.documentos ul li { padding:.3em 0 .5em 1.8em; background:#fff url(../../administracion-0.0.1/img/comunicaciones/documento.gif) no-repeat 0 .4em; }
+#escriptori_detall div.documentos ul li p { margin:0 0 .3em 0; }
+#escriptori_detall div.documentos ul li p.firmador { font:normal .9em 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#060; }
+
+#escriptori_detall div.botonera { padding:.7em 0; background-color:#ccd7e2; }
+#escriptori_detall div.botonera ul { overflow:hidden; width:100%; height:1.8em; list-style:none; padding:.2em 0; }
+#escriptori_detall div.botonera ul li { float:left; height:1.8em; padding:.1em 0 .1em 2em; }
+#escriptori_detall div.botonera ul li.e { float:right !important; padding-right:2em; }
+
+#escriptori_detall div.botonera button { overflow:visible; font-size:1.1em; font-weight:bold; padding:.2em 1em; margin:0 1em; cursor:pointer; }
+#escriptori_detall div.botonera button img { vertical-align:middle; margin-right:.5em; }
+
+#btnBorrar { color:#c00; }
+
+#escriptori_detall div.rabillo_dalt { height:1em; margin-bottom:2em; background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top; }
+
+#escriptori_detall div.rabillo { height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+
+#escriptori_detall span.obligatori { color:#c00; }
+#escriptori_detall label span.obligatori { font-size:1.3em; font-weight:bold; line-height:.6em; }
+*/
+
+/* idiomes */
+/*
+#escriptori_detall ul.idiomes { overflow:hidden; width:47em; list-style:none; padding:1em 0 0 1em; margin-bottom:1.5em; background-color:#ffecd9; }
+#escriptori_detall ul.idiomes li { float:left; padding:.3em 1em .5em 1em; margin:0; }
+#escriptori_detall ul.idiomes li.seleccionat { background-color:#fff; }
+#escriptori_detall ul.idiomes li.seleccionat a { font-weight:bold; color:#000; text-decoration:none; }
+
+#escriptori_detall ul.idiomes li.desplegar { float:right; }
+#escriptori_detall ul.idiomes li.desplegar a { color:#c00; padding-left:1.3em; background:transparent url(../img/botons/desplegar_off.gif) no-repeat left center; }
+#escriptori_detall ul.idiomes li.desplegar a.on { background:transparent url(../img/botons/desplegar_on.gif) no-repeat left center; }
+
+#escriptori_detall div.idiomes { padding-bottom:0; border-bottom:.2em solid #ffecd9; }
+#escriptori_detall div.idiomes div.idioma { display:none; }
+#escriptori_detall div.idiomes div.seleccionat { display:block !important; }
+#escriptori_detall div.idiomes div.idioma h3 { margin-top:1em !important; }
+*/
+
+/* error */
+
+#error { color:#000; padding:0 1em 1em 7em; margin:3em 0; background:#fff url(../img/missatge/error.gif) no-repeat 1em 0; }
+#error h1 { font-size:1.5em; font-weight:normal; color:#900; padding:0; background:none; }
+
+/* ajuda */
+
+#ajuda { position:fixed; right:.5em; bottom:.5em; width:15em; height:20em; background-color:#fff; border:2px solid #000; }
+
+#ajuda div.botonera { height:2em; text-align:right; background-color:#000; }
+#ajuda div.botonera a { font-size:.9em; color:#fff; margin-right:.5em; }
+#ajuda div.botonera a:hover { color:#ff9; background-color:#000; }
+
+#ajuda iframe { width:15em; height:18em; }
+
+div.modulMateries div.seleccionats ul {
+    list-style: circle outside none;
+    margin-left: 2em;
+}
+
+div.modulMateries div.seleccionats ul li {
+    padding-bottom: 0.4em;
+}

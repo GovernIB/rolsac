@@ -1,0 +1,81 @@
+@charset "utf-8";
+
+/* modul lateral procediments */
+
+div.modulProcediments { padding-bottom:1em; }
+
+div.modulProcediments div.seleccionats ul { list-style:circle; margin-left:2em; }
+div.modulProcediments div.seleccionats ul li { padding-bottom:.4em; }
+div.modulProcediments div.seleccionats ul li:hover { background-color:#ffc; }
+div.modulProcediments div.seleccionats p.info { margin-top:0; }
+
+/* escriptori procediments */
+
+#escriptori_procediments { display:none; margin:0 0 4em 0; }
+#escriptori_procediments h2 { font-size:1.4em; margin-top:0; margin-bottom:.5em; }
+
+#escriptori_procediments div.botonera { clear:both; padding:.7em 0; background-color:#f0f0ee; }
+#escriptori_procediments div.botonera ul { overflow:hidden; width:100%; height:1.8em; list-style:none; padding:.2em 0; }
+#escriptori_procediments div.botonera ul li { float:left; height:1.8em; padding:.1em 0 .1em 2em; }
+#escriptori_procediments div.botonera ul li.e { float:right !important; padding-right:2em; }
+
+#escriptori_procediments div.dalt { margin-top:2em; }
+#escriptori_procediments div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
+#escriptori_procediments div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
+
+/* escriptori llistat */
+
+div.escriptori_items_llistat { overflow:hidden; float:left; width:45em; padding:1em 1em 2em 1em; margin-right:1em; margin-bottom:1em; border:1px solid #f2f2f2; }
+
+div.escriptori_items_cercador { overflow:hidden; padding:1em; margin:0 auto; background-color:#e9eef3; }
+div.escriptori_items_cercador h3 { margin-top:0; margin-bottom:.8em; }
+div.escriptori_items_cercador div.fila { overflow:hidden; width:100%; padding:0; margin-bottom:0; }
+div.escriptori_items_cercador div.element { overflow:hidden; float:left; height:4.3em; margin-right:1em; }
+div.escriptori_items_cercador div.t7 { width:7em; }
+div.escriptori_items_cercador div.t7 input, #cercador div.t7 select { width:6em; }
+div.escriptori_items_cercador div.t8 { width:8em; }
+div.escriptori_items_cercador div.t8 input, #cercador div.t8 select { width:7em; }
+div.escriptori_items_cercador div.t10 { width:10em; }
+div.escriptori_items_cercador div.t10 input, #cercador div.t10 select { width:9em; }
+div.escriptori_items_cercador div.t12 { width:12em; }
+div.escriptori_items_cercador div.t12 input, #cercador div.t12 select { width:11em; }
+div.escriptori_items_cercador div.t15 { width:15em; }
+div.escriptori_items_cercador div.t15 input, #cercador div.t15 select { width:14em; }
+div.escriptori_items_cercador div.t18 { width:18em; }
+div.escriptori_items_cercador div.t18 input, #cercador div.t18 select { width:17em; }
+div.escriptori_items_cercador div.botonera { text-align:center; background-color:#ccd7e2 !important; }
+
+#escriptori_procediments div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+
+div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }
+div.escriptori_items_llistat div.dades p.info { margin-top:1.5em; }
+
+div.procediments div.thead div.nom { width:26em; padding-left:5em; }
+div.procediments div.thead div.publicacio { width:9em; }
+div.procediments div.thead div.caducitat { width:9em; }
+
+div.procediments div.thead div.nom a { width:25em; }
+div.procediments div.thead div.publicacio a { width:8em; }
+div.procediments div.thead div.caducitat a { width:8em; }
+
+div.procediments div.tbody div.nom { width:25em; padding-bottom:1em; padding-left:5.5em; background:transparent url(../img/taula_llistat/procediment.gif) no-repeat 2em .8em; }
+div.procediments div.tbody div.nomCaducat { background:transparent url(../img/taula_llistat/procediment_caducat.gif) no-repeat 2em .8em; }
+div.procediments div.tbody div.publicacio { width:8em; }
+div.procediments div.tbody div.caducitat { width:8em; }
+
+div.procediments div.tbody div.nom a, div.llistat div.tbody div.nom span { font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
+div.procediments div.tbody div.td span.nom { font-style:italic; }
+
+div.escriptori_items_llistat p.paginacio { text-align:center; padding:.5em 1em; background-color:#ffecd9; }
+
+/* escriptori seleccionarts*/
+
+div.escriptori_items_seleccionats { overflow:hidden; float:left; width:26em; padding:1em 1em 2em 1em; margin-bottom:1em; border:1px solid #f2f2f2; }
+
+div.escriptori_items_seleccionats p.botonera { padding:0.5em 1em; margin-bottom:1em; background-color:#ccd7e2; }
+
+div.escriptori_items_seleccionats ul { list-style:circle; margin-left:1.5em; margin-bottom:1em; }
+div.escriptori_items_seleccionats ul li { padding:.2em 0; }
+div.escriptori_items_seleccionats ul li div { overflow:hidden; width:100%; text-align:right; }
+div.escriptori_items_seleccionats ul li span.procediment { display:block; width:17.5em; float:left; text-align:left; }
+

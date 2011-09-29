@@ -1,0 +1,121 @@
+@charset "utf-8";
+
+#menu {     
+    color:#fff; 
+    height: 53px;
+    background: url(../img/menu/fondo.gif) 0 0 repeat-x;
+}
+#menu_contingut {
+	position: relative;     
+    padding:.5em 0 0 0; 
+    margin:0 auto;
+	width: 77em;
+}
+#menu_contingut > ul { 
+    width:100%; 
+	padding-top: 6px;
+    list-style:none;
+}
+#menu_contingut ul li { 
+    float:left; 
+    margin-right:.7em;
+    position: relative; 
+}
+#menu_contingut ul li a ,
+#menu_contingut ul li span.text{ 
+    display:block;  
+    float:left; 
+    font-size: 13px; 
+    color:#fff; 
+    text-decoration:none; 
+    padding:.3em .7em; 
+    background-color: #C7C7C7;
+    font-weight: bold;
+	border-radius: 5px 5px 5px 5px;
+}
+#menu_contingut ul li.desplegable a,
+#menu_contingut ul li.desplegable span.text{
+    background-image: url(../img/menu/desplegable.png);
+    background-position: 92% 60%;   
+    background-repeat: no-repeat;
+    padding-right: 25px;
+}
+#menu_contingut ul li span.cueta{
+    display:block;
+    position:absolute;
+    width: 100%;
+    height: 6px;        
+    bottom: -6px;   
+    background: url(../img/menu/flecha_off.gif) 50% 0 no-repeat;
+}
+#menu_contingut ul li.seleccionat span.text,
+#menu_contingut ul li:hover a{ 
+    background-color:#FF910C;	
+}
+#menu_contingut ul li.seleccionat a { 
+    background-color: #FF910C;
+}
+#menu_contingut ul li:hover span.cueta,
+#menu_contingut ul li.seleccionat span.cueta {  
+    background-image: url(../img/menu/flecha.gif);
+}
+
+#menu_contingut #taulesMestre { 
+    display:none; 
+    overflow:hidden; 
+    position:absolute; 
+    top:0; 
+    left:0; 
+    z-index:10; 
+    width:15em; 
+    list-style:none; 
+    background-color: #FF910C;  
+    padding: 4px;   
+    
+    border-radius: 0 10px 10px 10px;
+}
+#menu_contingut #taulesMestre  ul{
+    padding-bottom: 10px;
+}
+#menu_contingut #taulesMestre  li{
+    list-style: none;
+    clear: both;
+}
+#menu_contingut #taulesMestre  > li:first-child{
+    border-radius: 10px 10px 0 0;
+}
+#menu_contingut #taulesMestre  > li:last-child{
+    border-radius: 0 0 10px 10px;
+}
+#menu_contingut #taulesMestre  li{
+    float:none;
+    margin-right: 0;
+    background-color: #FFD39E;      
+}
+#menu_contingut #taulesMestre  li a:hover{
+    background-color: #FFE5C5;
+}
+#menu_contingut #taulesMestre  li li{
+    padding: 0;
+}
+#menu_contingut #taulesMestre .titol{
+    display:block;
+    font: bold 12px Arial, Helvetica, Sans-serif; 
+    color: #000000;
+    padding-top: 10px;  
+}
+#menu_contingut #taulesMestre  li a{
+    float: none;
+    padding: 0;
+    background-color: transparent;
+    background: none;
+    font-size: 12px;
+    color: Black;
+    text-decoration:underline;
+    font-weight: normal;
+    padding: 5px 10px 5px 10px;
+    font: 12px Arial, Helvetica, Sans-serif; 
+}
+#menu_contingut #taulesMestre  li span{
+    padding: 5px 10px 5px 10px;
+}
