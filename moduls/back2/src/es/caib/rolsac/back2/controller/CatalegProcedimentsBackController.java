@@ -29,6 +29,7 @@ import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
@@ -51,7 +52,7 @@ public class CatalegProcedimentsBackController {
 	}
 
 	@RequestMapping(value = "/catalegProcediments.htm")
-	public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenuOrganigrama.jsp");
@@ -96,6 +97,7 @@ public class CatalegProcedimentsBackController {
 		return "index";
 	}
 
+	
 	@RequestMapping(value = "/llistat.htm", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
@@ -306,6 +308,7 @@ public class CatalegProcedimentsBackController {
 		return resultats;
 	}
 
+	
 	@RequestMapping(value = "/pagDetall.htm", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 		Map<String, Object> resultats = new HashMap<String, Object>();
@@ -360,9 +363,7 @@ public class CatalegProcedimentsBackController {
 
 			if (proc.getIniciacion() != null) {
 				Iniciacion iniciacion = proc.getIniciacion();
-				resultats.put("item_iniciacio_id", iniciacion.getId());
-				String nom = ((TraduccionIniciacion) iniciacion.getTraduccion(lang)).getNombre();
-				resultats.put("item_iniciacio_nom", nom);
+				resultats.put("item_iniciacio", iniciacion.getId());
 			}
 
 			if (proc.getOrganResolutori() != null) {
@@ -373,9 +374,7 @@ public class CatalegProcedimentsBackController {
 
 			if (proc.getFamilia() != null) {
 				Familia familia = proc.getFamilia();
-				resultats.put("item_familia_id", familia.getId());
-				String nom = ((TraduccionFamilia) familia.getTraduccion(lang)).getNombre();
-				resultats.put("item_familia_nom", nom);
+				resultats.put("item_familia", familia.getId());
 			}
 
 			resultats.put("item_tramite", proc.getTramite());
@@ -456,40 +455,69 @@ public class CatalegProcedimentsBackController {
 				error = "Error, falten camps.";
 				result = new IdNomTransient(-3l, error);
 			} else {
-				ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 				
-				ProcedimientoLocal procediment;
+				ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
+				ProcedimientoLocal procediment = new ProcedimientoLocal();
+				ProcedimientoLocal procedimentOld;			
+
+				
+				boolean edicion;
 				try {
 					Long id = Long.parseLong(request.getParameter("item_id"));
-					procediment = procedimentDelegate.obtenerProcedimiento(id);
+					procedimentOld = procedimentDelegate.obtenerProcedimiento(id);
+					edicion = true;
 				} catch (NumberFormatException nfe) {
-					procediment = new ProcedimientoLocal();
+					procedimentOld = null;
+					edicion = false;
+				}
+			
+				
+				if (edicion) {
+					procediment.setId(procedimentOld.getId());
+					procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
+					
+					// FIXME: Mientras no se guarden todos los datos mantenemos los valores originales que tiene el procedimiento.
+					procediment.setDocumentos(procedimentOld.getDocumentos());
+					procediment.setMaterias(procedimentOld.getMaterias());
+					procediment.setNormativas(procedimentOld.getNormativas());
+					procediment.setTramites(procedimentOld.getTramites());
 				}
 
-				procediment.setUnidadAdministrativa(ua);
 
 				// Idiomas
-				Traduccion traduccion;
 				TraduccionProcedimientoLocal tpl;
 				IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 				List<String> langs = idiomaDelegate.listarLenguajes();
 
-				// TODO: da error por violacion de una FK de los idiomas. Esto
-				// pasa porque Hibernate devuelve null en vez de un objeto con 
-				// sus atributos en blanco o nulos. Probar a crear un procedimiento 
-				// nuevo siempre y si es una edicion, ponerle el id del que hay en bb.dd.
 				for (String lang: langs) {
-					traduccion = procediment.getTraduccion(lang);
-					if (traduccion != null) {
-						tpl = (TraduccionProcedimientoLocal) traduccion;
-						setTraducciones(tpl, request, lang);
+					if (edicion) {
+						tpl = (TraduccionProcedimientoLocal) procedimentOld.getTraduccion(lang);
+						if (tpl == null) {
+							tpl = new TraduccionProcedimientoLocal();
+						}
 					} else {
 						tpl = new TraduccionProcedimientoLocal();
-						setTraducciones(tpl, request, lang);
-						procediment.setTraduccion(lang, tpl);
 					}
+
+					tpl.setNombre(request.getParameter("item_nom_" + lang));
+					tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
+					tpl.setResumen(request.getParameter("item_objecte_" + lang));
+					tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
+					tpl.setRequisitos(request.getParameter("item_requisits_" + lang));
+					tpl.setPlazos(request.getParameter("item_presentacio_" + lang));
+					tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
+					tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
+					tpl.setLugar(request.getParameter("item_lloc_" + lang));
+					tpl.setSilencio(request.getParameter("item_silenci_" + lang));
+					tpl.setObservaciones(request.getParameter("item_observacions_" + lang));
+					
+					procediment.setTraduccion(lang, tpl);
 				}
 				// Fin idiomas
+				
+				
+				procediment.setUnidadAdministrativa(ua);
+				
 				
 				try {
 					Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
@@ -500,17 +528,21 @@ public class CatalegProcedimentsBackController {
 					throw new NumberFormatException();
 				}
 
+				
 				Date data_publicacio = DateUtil.parseDate(request.getParameter("item_data_publicacio"));
 				if (data_publicacio != null) {
 					procediment.setFechaPublicacion(data_publicacio);
 				}
+				
 				
 				Date data_caducitat = DateUtil.parseDate(request.getParameter("item_data_caducitat"));
 				if (data_caducitat != null) {
 					procediment.setFechaCaducidad(data_caducitat);
 				}
 				
+				
 				procediment.setFechaActualizacion(new Date());
+				
 				
 				try {
 					Long iniciacionId = Long.parseLong(request.getParameter("item_iniciacio"));
@@ -523,6 +555,7 @@ public class CatalegProcedimentsBackController {
 					throw new NumberFormatException();
 				}
 				
+				
 				try {
 					Long familiaId = Long.parseLong(request.getParameter("item_familia"));
 					FamiliaDelegate fDelegate = DelegateUtil.getFamiliaDelegate();
@@ -534,6 +567,7 @@ public class CatalegProcedimentsBackController {
 					throw new NumberFormatException();
 				}
 
+				
 				procediment.setResponsable(request.getParameter("item_responsable"));
 				procediment.setTramite(request.getParameter("item_tramite"));
 				procediment.setUrl(request.getParameter("item_url"));
@@ -549,15 +583,31 @@ public class CatalegProcedimentsBackController {
 					throw new NumberFormatException();
 				}
 				
+				
+				try {
+					Long organId = Long.parseLong(request.getParameter("item_organ_id"));
+					UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+					UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
+					procediment.setOrganResolutori(organ);
+				} catch (NumberFormatException e) {
+					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+					error = "L'órgan és incorrecte.";
+					throw new NumberFormatException();
+				}
+				
+				
 				procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
 				procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");
 				
+				
 				procediment.setSignatura(request.getParameter("item_codi"));
 				procediment.setInfo(request.getParameter("item_notes"));
 
+				
 				procedimentDelegate.grabarProcedimiento(procediment, ua.getId());
 
+				
 //				String ok = messageSource.getMessage("procediment.guardat.correcte", null, request.getLocale());
 				String ok = "Procediment guardat correctament.";
 				result = new IdNomTransient(procediment.getId(), ok);
@@ -577,21 +627,6 @@ public class CatalegProcedimentsBackController {
 		}
 
 		return result;
-	}
-	
-	
-	private void setTraducciones(TraduccionProcedimientoLocal tpl, HttpServletRequest request, String lang) {
-		tpl.setNombre(request.getParameter("item_nom_" + lang));
-		tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
-		tpl.setResumen(request.getParameter("item_objecte_" + lang));
-		tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
-		tpl.setRequisitos(request.getParameter("item_requisits_" + lang));
-		tpl.setPlazos(request.getParameter("item_presentacio_" + lang));
-		tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
-		tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
-		tpl.setLugar(request.getParameter("item_lloc_" + lang));
-		tpl.setSilencio(request.getParameter("item_silenci_" + lang));
-		tpl.setObservaciones(request.getParameter("item_observacions_" + lang));
 	}
 	
 }

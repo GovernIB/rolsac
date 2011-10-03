@@ -1031,9 +1031,15 @@ function obrir(url, name, x, y) {
 
 //Seleccionar una UA
 
-function ArbreUA(){
-    obrir(popupUA + "?idUA=0&action=&ficha=true", "Arbre de UA", 538, 440);
- }
+function ArbreUA(id_input, id_hidden){
+    obrir(popupUA + "?idUA=0&idInput=" + id_input + "&idHidden=" + id_hidden, "Arbre de UA", 538, 440);
+}
+
+function EliminaArbreUA(id_input, id_hidden){
+	$("#" + id_input).val("");
+	$("#" + id_hidden).val("");
+}
+
 
 //Limpiar un input de un formulario excepto los campos hidden, readonly y disabled.
 //Se usa como callback de un $('selector').each().

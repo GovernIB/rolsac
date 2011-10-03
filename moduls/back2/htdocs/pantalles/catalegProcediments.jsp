@@ -979,10 +979,10 @@
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_organ">Òrgan competent per resoldre</label>
+                                    <label for="item_url">URL tr&agrave;mit extern</label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_organ" name="item_organ" type="text" class="nou" />
+                                    <input id="item_url" name="item_url" type="text" class="nou" />
                                 </div>
                             </div>
                             <div class="element t50p">
@@ -1020,10 +1020,11 @@
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_url">URL tr&agrave;mit extern</label>
+                                    <label for="item_organ">Òrgan competent per resoldre</label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_url" name="item_url" type="text" class="nou" />
+                                    <input id="item_organ" name="item_organ" type="text" class="nou" readonly="true" />
+                                    <input id="item_organ_id" name="item_organ_id" type="hidden" />
                                 </div>
                             </div>
                             <div class="element t50p">
@@ -1037,6 +1038,22 @@
                         </div>
                         <div class="fila">
                             <div class="element t50p">
+	                            <div id="cercador">
+	                                <div class="botonera" style="margin-top: 0px; float:left;">
+		                                <div class="boton btnGenerico" style="margin-left: 0px;">
+		                                    <a href="javascript:ArbreUA('item_organ', 'item_organ_id');" class="btn consulta">
+		                                    <span><span>Cambiar Órgan</span></span>
+		                                    </a>
+		                                </div>
+		                                <div class="boton btnGenerico">
+		                                    <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
+		                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                    </a>
+		                                </div>
+								    </div>		                            
+								</div>
+                            </div>
+                            <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_finestreta_unica">Finestreta Única de la Directiva de Serveis</label>
                                 </div>
@@ -1044,6 +1061,8 @@
                                     <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_fi_vida_administrativa">Fi de la vida administrativa</label>
@@ -1052,8 +1071,6 @@
                                     <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_taxa">Taxa</label>

@@ -893,16 +893,17 @@ var Detall = {
 		
 		$("#item_codi").val(dada_node.item_codi);
 		
-		if (dada_node.item_iniciacio_id != undefined) {
-			$("#item_iniciacio").val(dada_node.item_iniciacio_nom);
+		if (dada_node.item_iniciacio != undefined) {
+			$("#item_iniciacio").val(dada_node.item_iniciacio);
 		}
 		
 		if (dada_node.item_organ_id != undefined) {
+			$("#item_organ_id").val(dada_node.item_organ_id);
 			$("#item_organ").val(dada_node.item_organ_nom);
 		}
 		
-		if (dada_node.item_familia_id != undefined) {
-			$("#item_familia").val(dada_node.item_familia_nom);
+		if (dada_node.item_familia != undefined) {
+			$("#item_familia").val(dada_node.item_familia);
 		}
 		
 		if (dada_node.item_familia_id != undefined) {

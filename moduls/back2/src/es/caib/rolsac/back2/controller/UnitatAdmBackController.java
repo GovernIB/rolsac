@@ -389,10 +389,10 @@ public class UnitatAdmBackController {
 				List<String> langs = idiomaDelegate.listarLenguajes();
 				for (String lang: langs) {
 					tUA = new TraduccionUA();
-					tUA.setNombre("item_nom_"+  lang );
-					tUA.setPresentacion("item_presentacio_" + lang);
-					tUA.setAbreviatura("item_abreviatura_" + lang);
-					tUA.setUrl("item_url_" + lang);
+					tUA.setNombre(request.getParameter("item_nom_"+  lang ));
+					tUA.setPresentacion(request.getParameter("item_presentacio_" + lang));
+					tUA.setAbreviatura(request.getParameter("item_abreviatura_" + lang));
+					tUA.setUrl(request.getParameter("item_url_" + lang));
 					
 					unitatAdministrativa.setTraduccion(lang, tUA);
 				}
@@ -533,7 +533,7 @@ public class UnitatAdmBackController {
                 } 
 */
 				
-				//unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, null);
+				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, null);
 				
 				
                 String ok = messageSource.getMessage("personal.guardat.correcte", null, request.getLocale());

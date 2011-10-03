@@ -317,15 +317,15 @@ var Detall = {
 			//$("#item_responsable_sexe").val(dada_node.item_responsable_sexe);
 			
 			//TODO: se genera un error 1000 al asignar con val un archivo al input. Se comenta hasta poder solucionarlo
-			$("#item_responsable_foto_petita_nom").val(dada_node.item_responsable_foto_petita);			
-			$("#item_responsable_foto_gran_nom").val(dada_node.item_responsable_foto_gran);			
+			//$("#item_responsable_foto_petita").val(dada_node.item_responsable_foto_petita);			
+			//$("#item_responsable_foto_gran").val(dada_node.item_responsable_foto_gran);			
 			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);			
 			
 			//Logotipos
-			$("#item_logo_horizontal_nom").val(dada_node.item_logo_horizontal);
-			$("#item_logo_vertical_nom").val(dada_node.item_logo_vertical);
-			$("#item_logo_salutacio_horizontal_nom").val(dada_node.item_logo_salutacio_horizontal);
-			$("#item_logo_salutacio_vertical_nom").val(dada_node.item_logo_salutacio_vertical);		
+			//$("#item_logo_horizontal").val(dada_node.item_logo_horizontal);
+			//$("#item_logo_vertical").val(dada_node.item_logo_vertical);
+			//$("#item_logo_salutacio_horizontal").val(dada_node.item_logo_salutacio_horizontal);
+			//$("#item_logo_salutacio_vertical").val(dada_node.item_logo_salutacio_vertical);		
 			
 			
 			//Fitxes de la portada web
@@ -796,12 +796,6 @@ var Error = {
 		});
 	}
 };
-
-function EliminaArbreUA()
-{
-	$("#id_item_pare").val("");
-	$("#item_pare").val("");
-}
 
 function posarValorsInput(idInput, valor)
 {

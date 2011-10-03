@@ -42,6 +42,9 @@ public class PopupUABackController {
         if (request.getParameter("idUA") != null) {
             request.setAttribute("idUA",new Long(request.getParameter("idUA")));
 
+            model.put("id_input", request.getParameter("idInput"));
+            model.put("id_hidden", request.getParameter("idHidden"));
+            
             try {
 
                 List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);

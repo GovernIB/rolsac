@@ -351,12 +351,12 @@
 						<div id="cercador">
 							<div class="botonera" style="margin-top: 0px; float:left;">
 								<div class="boton btnGenerico" style="margin-left: 0px;">
-									<a href="javascript:ArbreUA();" class="btn consulta">
+									<a href="javascript:ArbreUA('item_pare', 'id_item_pare');" class="btn consulta">
 									<span><span><spring:message code='boto.canviarUAPare'/></span></span>
 									</a>
 								</div>
                             	<div class="boton btnGenerico">
-                            		<a href="javascript:EliminaArbreUA();" class="btn borrar">
+                            		<a href="javascript:EliminaArbreUA('item_pare', 'id_item_pare');" class="btn borrar">
                             		<span><span><spring:message code='boto.borrar'/></span></span>
                             		</a>
                             	</div>
@@ -403,19 +403,11 @@
 								<div class="control">
 									<input id="item_responsable_foto_petita" name="item_responsable_foto_petita" type="file" />
 								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_responsable_foto_petita_nom" name="item_responsable_foto_petita_nom" type="text" readonly="readonly" />
-								</div>
 							</div>
 							<div class="element t50p">
 								<div class="etiqueta"><label for="item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
 								<div class="control">
 									<input id="item_responsable_foto_gran" name="item_responsable_foto_gran" type="file" />
-								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_responsable_foto_gran_nom" name="item_responsable_foto_gran_nom" type="text" readonly="readonly" />
 								</div>
 							</div>
 						</div>
@@ -456,19 +448,11 @@
 								<div class="control">
 									<input id="item_logo_horizontal" name="item_logo_horizontal" type="file" />
 								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_logo_horizontal_nom" name="item_logo_horizontal_nom" type="text" readonly="readonly" />
-								</div>
 							</div>
 							<div class="element t50p">
 								<div class="etiqueta"><label for="item_logo_vertical">Logo vertical</label></div>
 								<div class="control">
 									<input id="item_logo_vertical" name="item_logo_vertical" type="file" />
-								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_logo_vertical_nom" name="item_logo_vertical_nom" type="text" />
 								</div>
 							</div>
 						</div>
@@ -480,19 +464,11 @@
 								<div class="control">
 									<input id="item_logo_salutacio_horizontal" name="item_logo_salutacio_horizontal" type="file" />
 								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_logo_salutacio_horizontal_nom" name="item_logo_salutacio_horizontal_nom" type="text" />
-								</div>
 							</div>
 							<div class="element t50p">
 								<div class="etiqueta"><label for="item_logo_salutacio_vertical">Logo salutacio vertical</label></div>
 								<div class="control">
 									<input id="item_logo_salutacio_vertical" name="item_logo_salutacio_vertical" type="file" />
-								</div>
-								<div class="etiqueta"></div>
-								<div class="control">
-									<input id="item_logo_salutacio_vertical_nom" name="item_logo_salutacio_vertical_nom" type="text" />
 								</div>
 							</div>
 						</div>
