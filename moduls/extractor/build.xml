@@ -30,9 +30,6 @@
             <include name="poi.jar"/>
             <include name="pdfbox.jar"/>
         	<include name="jericho-html-2.5.jar"/>
-        	<include name="Tidy.jar"/>
-        	<include name="taw.jar"/>
-        	<include name="wai.jar"/>
         	<include name="aclibico.jar"/>
         	<include name="img.jar"/>
         	<include name="lax.jar"/>
