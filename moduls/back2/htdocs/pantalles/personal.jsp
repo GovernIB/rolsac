@@ -418,6 +418,9 @@
 </div>
 <div id="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
     <form id="formGuardar" action="false">
+    
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
+    
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <div class="botonera dalt">
             <ul>
@@ -436,8 +439,7 @@
             </ul>
         </div>
         
-        <div class="grupoModulosFormulario">
-            <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
+        <div class="grupoModulosFormulario">            
             <!-- modul -->
         <div class="modul">                 
             <fieldset>                              
