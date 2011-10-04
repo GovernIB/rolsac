@@ -6,8 +6,12 @@ jQuery(document).ready(function(){
 	jQuery("#btnPublicar").bind("click",function(){Detall.publica();});
 });
 
-function DetallBase(){
+/**
+ * @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
+ */
+function DetallBase(soloFicha){
 	var that = this;
+	var soloFicha = soloFicha || false;
 
 	// Url de la previsualización (tiene que sobreescribirse al extender la clase).
 	this.urlPrevisualizar = null;
@@ -63,7 +67,9 @@ function DetallBase(){
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
-					Detall.recarregar();
+					if( !soloFicha ){
+						Detall.recarregar();											
+					}
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 				}				
 				
@@ -137,8 +143,8 @@ function DetallBase(){
 		this.actualizaEventos();
 	}
 	
-	this.recarregar = function() {
-		
+	this.recarregar = function() {		
+			
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {
 			
@@ -171,12 +177,10 @@ function DetallBase(){
 						});
 						
 					});					
-					
-				}
-				
-			});
-			
-		});		
+				}				
+			});			
+		});
+		
 	}
 	
 	this.previsualitzaTorna = function() {		
