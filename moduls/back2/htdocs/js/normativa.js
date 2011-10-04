@@ -56,6 +56,9 @@ var Llistat = {
 		this.extend = ListadoBase;
 		this.extend();
 		
+		$("#cerca_data").mask("99/99/9999");
+		$("#cerca_data_butlleti").mask("99/99/9999");		
+		
 		Llistat.carregar({});		
 	},
 	
@@ -92,7 +95,8 @@ var Llistat = {
 			ordre_c1 = (ordre_C == "titol") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "numero") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "tipus") ? " " + ordre_T : "";
-			ordre_c4 = (ordre_C == "data") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "tipologia") ? " " + ordre_T : "";
+			ordre_c5 = (ordre_C == "data") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -127,7 +131,8 @@ var Llistat = {
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
 			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\">" + txtNumero + "</div>";
 			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\">" + txtTipus + "</div>";
-			codi_cap4 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\">" + txtData + "</div>";						
+			codi_cap4 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\">" + txtTipologia + "</div>";
+			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\">" + txtData + "</div>";						
 			
 			
 			// codi taula
@@ -136,7 +141,7 @@ var Llistat = {
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4 + codi_cap5;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -155,11 +160,8 @@ var Llistat = {
 				codi_taula += "</div>";
 				
 				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.numero + "</div>";
-				/*
-				tipus_val = dada_node.tipus;
-				txt_tipus = (tipus_val == "L") ? txtLocal : (tipus_val == "E") ? txtExterna : txtBOIB;
-				*/
 				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";
+				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.tipologia + "</div>";
 				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
 				
 				codi_taula += "</div>";
@@ -230,10 +232,17 @@ var Llistat = {
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador
-			dataVars_cercador = "&titol=" + $("#cerca_titol").val();
-			dataVars_cercador = "&text=" + $("#cerca_text").val();
-			dataVars_cercador += "&data_butlleti=" + $("#cerca_data_butlleti").val();
-			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
+			dataVars_cercador = "";
+			dataVars_cercador += "&numero=" + $("#cerca_numero").val();
+			dataVars_cercador += "&tipus=" + $("#cerca_tipus_normativa").val();
+			dataVars_cercador += "&butlleti=" + $("#cerca_butlleti").val();
+			dataVars_cercador += "&registre=" + $("#cerca_registre").val();
+			dataVars_cercador += "&llei=" + $("#cerca_llei").val();
+			dataVars_cercador += "&data=" + $("#cerca_data").val();
+			//dataVars_cercador = "&titol=" + $("#cerca_titol").val();
+			dataVars_cercador += "&text=" + $("#cerca_text").val();
+			dataVars_cercador += "&data_butlleti=" + $("#cerca_data_butlleti").val();			
+			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
 			dataVars_cercador += "&cercaExternes=" + $("#cerca_externes").is(':checked');
 			
@@ -402,7 +411,9 @@ var Detall = {
 		// dates
 		//$("#item_data").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		$("#item_data_publicacio").mask("99/99/9999");
+		
+		$("#item_data_butlleti").mask("99/99/9999");
+		$("#item_data").mask("99/99/9999");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -429,7 +440,7 @@ var Detall = {
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 									
 		// modul tipologia
-		$("#item_tipologia").bind("change",Detall.tipologia);
+		//$("#item_tipologia").bind("change",Detall.tipologia);
 		
 		// altres moduls
 		modulAfectacions_pare_elm = $("#modulLateral div.modulAfectacions").parents("div.modul:first");
@@ -513,10 +524,27 @@ var Detall = {
 		
 	},
 	nou: function() {
+		
+		//Anular id
+		$("#item_id").val("");
+		
+		//Ocultar botones
+		$("#modulLateral li.btnEliminar").hide();
+
+		//Borrar valores de los campos
+		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select.nou").val("").end().find("h2:first").text(txtNouTitol);
+		
+		//Establecer UA por defecto
+		$("#item_ua_id").val(idUaActual);
+		$("#item_ua_nom").val(nomUaActual);
+		
+		//Ocultar paneles
+		$("#modul_procediments, #modul_afectacions").hide();
 				
 		//escriptori_detall_elm.find("a.elimina, a.previsualitza").find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
+
 		
 		pro_seleccionats_elm = escriptori_detall_elm.find("div.modulAfectacions div.seleccionats");
 		pro_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaAfectacions + ".");
@@ -527,14 +555,11 @@ var Detall = {
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);
 		}
-		
-		$("#item_estat").val("E");
-		
-		$("#item_data_publicacio").val(txtImmediat);
-		
+				
 		$("#modulLateral p.baix:first").removeClass("iPublicat");
 		
-		$("#item_tipologia").val($("#item_tipologia option:eq(0)").val());
+		//$("#item_tipologia").val($("#item_tipologia option:eq(0)").val());
+		
 		$("#gestioTraspas").hide();
 		modulAfectacions_pare_elm.show();
 		modulProcediments_pare_elm.show();
@@ -551,22 +576,27 @@ var Detall = {
 	
 	pintar: function(dades) {
 		
-		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
+		//escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
+		
+		$("#modulLateral li.btnEliminar").show();
+		$("#modulLateral li.btnEliminar").css("visibility", "visible");
 		
 		dada_node = dades;
 		
 		$("#modulLateral p.baix:first").addClass("iPublicat");
 							
 		$("#item_id").val(dada_node.id);
+		$("#item_tipologia").val(dada_node.tipologia);
+		$("#item_validacio").val(dada_node.validacio);
 		
-		$("#item_estat").val("R");
-		//$("#item_data").val(dada_node.data);
+		//$("#item_estat").val("R");
 		
 		$("#item_titol_ca").val(dada_node.idioma_ca_titol);
 		$("#item_enllas_ca").val(dada_node.idioma_ca_enllac);
 		$("#item_apartat_ca").val(dada_node.idioma_ca_apartat);
 		$("#item_pagina_inicial_ca").val(dada_node.idioma_ca_pagini);
 		$("#item_pagina_final_ca").val(dada_node.idioma_ca_pagfin);
+		$("#item_responsable_ca").val(dada_node.idioma_ca_responsable);
 		$("#item_des_curta_ca").val(dada_node.idioma_ca_observacions);
 		
 		$("#item_titol_es").val(dada_node.idioma_es_titol);
@@ -574,6 +604,7 @@ var Detall = {
 		$("#item_apartat_es").val(dada_node.idioma_es_apartat);
 		$("#item_pagina_inicial_es").val(dada_node.idioma_es_pagini);
 		$("#item_pagina_final_es").val(dada_node.idioma_es_pagfin);
+		$("#item_responsable_es").val(dada_node.idioma_es_responsable);
 		$("#item_des_curta_es").val(dada_node.idioma_es_observacions);		
 		
 		$("#item_titol_en").val(dada_node.idioma_en_titol);
@@ -581,6 +612,7 @@ var Detall = {
 		$("#item_apartat_en").val(dada_node.idioma_en_apartat);
 		$("#item_pagina_inicial_en").val(dada_node.idioma_en_pagini);
 		$("#item_pagina_final_en").val(dada_node.idioma_en_pagfin);
+		$("#item_responsable_en").val(dada_node.idioma_en_responsable);
 		$("#item_des_curta_en").val(dada_node.idioma_en_observacions);		
 		
 		$("#item_titol_de").val(dada_node.idioma_de_titol);
@@ -588,6 +620,7 @@ var Detall = {
 		$("#item_apartat_de").val(dada_node.idioma_de_apartat);
 		$("#item_pagina_inicial_de").val(dada_node.idioma_de_pagini);
 		$("#item_pagina_final_de").val(dada_node.idioma_de_pagfin);
+		$("#item_responsable_de").val(dada_node.idioma_de_responsable);
 		$("#item_des_curta_de").val(dada_node.idioma_de_observacions);
 		
 		$("#item_titol_fr").val(dada_node.idioma_fr_titol);
@@ -595,17 +628,22 @@ var Detall = {
 		$("#item_apartat_fr").val(dada_node.idioma_fr_apartat);
 		$("#item_pagina_inicial_fr").val(dada_node.idioma_fr_pagini);
 		$("#item_pagina_final_fr").val(dada_node.idioma_fr_pagfin);
+		$("#item_responsable_fr").val(dada_node.idioma_fr_responsable);
 		$("#item_des_curta_fr").val(dada_node.idioma_fr_observacions);		
 		
 		$("#item_numero").val(dada_node.numero);
+		$("#item_butlleti_id").val(dada_node.butlleti_id);
 		$("#item_butlleti").val(dada_node.butlleti);
 		$("#item_registre").val(dada_node.registre);
 		$("#item_llei").val(dada_node.llei);
 		
 		$("#item_data_butlleti").val(dada_node.data_butlleti);
-		$("#item_data_publicacio").val(dada_node.data);
+		$("#item_data").val(dada_node.data);
 		
-		$("#item_tipologia").val(dada_node.tipus);
+		$("#item_tipus").val(dada_node.tipus);
+		
+		$("#item_ua_id").val(dada_node.idUA);
+		$("#item_ua_nom").val(dada_node.nomUA);
 		
 		if (dada_node.tipus == "B") {
 			
@@ -666,10 +704,7 @@ var Detall = {
 			}
 		
 		}
-		
-		// mostrem
-		
-		$("#modulLateral li.btnEliminar").show();
+
 		
 		if ($("#carregantDetall").size() > 0) {
 			
@@ -698,6 +733,15 @@ var Detall = {
 		
 		}
 		
+		//Mostrar / ocultar campo de responsable en normativa local/externa
+		if ("E" == $("#item_tipologia").val()) {
+			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
+			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
+		} else {
+			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
+			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().hide();
+		}		
+		
 	},		
 	
 	elimina: function() {
@@ -710,7 +754,7 @@ var Detall = {
 		// ajax
 		$.ajax({
 			type: "POST",
-			url: pagDetall,
+			url: pagEliminar,
 			data: dataVars,
 			dataType: "json",
 			error: function() {
@@ -728,11 +772,11 @@ var Detall = {
 					Missatge.cancelar();
 					
 					if (data.id > -1) {
-						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});						
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});						
 					}										
 					
 					// array
-					Detall.array({id: dada_node.id, accio: "elimina"});
+					Detall.array({id: data.id, accio: "elimina"});
 					
 					// recarregar
 					Detall.recarregar();

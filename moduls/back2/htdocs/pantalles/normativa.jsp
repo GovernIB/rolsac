@@ -12,10 +12,14 @@
         var pagLlistat = '<c:url value="/normativa/llistat.htm" />';
         var pagDetall = '<c:url value="/normativa/pagDetall.htm" />';
         var pagGuardar = '<c:url value="/normativa/guardar.htm" />';
+        var pagEliminar = '<c:url value="/normativa/eliminar.htm" />';
         
         var pagBOIB = "json/boibsJSON.php";
         var pagNormativa = "json/normativesJSON.php";
         var pagProcediments = "json/procedimentsJSON.php";
+        
+		var idUaActual = '<c:out value="${idUA}" />';
+		var nomUaActual = '<c:out value="${nomUA}" />';        
         
         // eixir aplicacio
         var txtEixirAplicacio = "Per raons de seguretat, és preferible que abandone l'aplicació fent clic al botó Tanca l'aplicació";
@@ -54,6 +58,7 @@
 
         var txtNumero = "Número";
         var txtTipus = "Tipus";
+        var txtTipologia = "Tipologia";
         var txtData = "Data";
         var txtLocal = "Local";
         var txtExterna = "Externa";
@@ -196,365 +201,39 @@
         var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
         
-        // dades formularios
-        var FormulariDades = [
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_data",
-                "obligatori": "si",
-                "tipus": "data",
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.data.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.data.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_titol_ca",
-                "obligatori": "si",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 250,
-                        "mostrar": "si",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_m_ca",
-                "obligatori": "si",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.tipusUnitat_tractament_m_ca.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_m_ca.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_f_ca",
-                "obligatori": "si",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.tipusUnitat_carrec_f_ca.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_f_ca.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_f_ca",
-                "obligatori": "si",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "obligatori": "<spring:message code='normativa.formulari.tipusUnitat_tractament_f_ca.obligatori'/>",
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_f_ca.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tipus_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "si",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tipus_es.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_m_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_m_es.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_m_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_m_es.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_f_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_f_es.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_f_es",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_f_es.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tipus_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "si",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tipus_en.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_m_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_m_en.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_m_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_m_en.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_f_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_f_en.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_f_en",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_f_en.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tipus_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "si",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tipus_de.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_m_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_m_de.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_m_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_m_de.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_carrec_f_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_carrec_f_de.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_tractament_f_de",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_tractament_f_de.no_nomes_numeros'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "tipusUnitat_codi_estandar",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 50,
-                        "mostrar": "si",
-                        "abreviat": "no"
-                    },
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.tipusUnitat_codi_estandar.no_nomes_numeros'/>"
-                    }
-            }
-        ];
+		// dades formularios
+		var FormulariDades = [
+			{
+				"modo": "individual",
+				"etiqueta": "id",
+				"etiquetaValor": "item_titol_ca",
+				"obligatori": "si",
+				"tipus": "alfanumeric",
+				"caracters":
+					{
+						"maxim": 250,
+						"mostrar": "si",
+						"abreviat": "no"
+					},
+				"error":
+					{
+						"obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
+						"tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
+					}
+			},
+			{
+				"modo": "individual",
+				"etiqueta": "id",
+				"etiquetaValor": "item_numero",
+				"obligatori": "si",
+				"tipus": "numeric",
+				"error":
+					{
+						"obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>"
+					}
+			},			
+
+		];
     -->
     </script>
 
@@ -586,59 +265,127 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <h2>Cercador</h2>
-                    <div class="fila">
-                        <div class="element t29">
-                            <div class="etiqueta">
-                                <label for="cerca_titol"><spring:message code='camp.titol_normativa'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_titol" name="cerca_titol" type="text" size="50" maxlength="250" class="titol" />
-                            </div>
-                        </div>
-                        
-                        <div class="element t29">
-                            <div class="etiqueta">
-                                <label for="cerca_text"><spring:message code='camp.text'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_text" name="cerca_text" type="text" maxlength="250" class="text" />
-                            </div>
-                        </div>                      
-                        
-                        <div class="element t10">
-                            <div class="etiqueta">
-                                <label for="cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_data_butlleti" name="cerca_data_butlleti" type="text" class="data" />
-                            </div>
-                        </div>
-                        
-                        <div class="element t29">
-                            <div class="etiqueta">
-                                <label for="cerca_estat"><spring:message code='camp.estat'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_estat" name="cerca_estat">
-                                    <option value="L" selected="selected">Local</option>
-                                    <option value="E">Externa</option>
-                                    <option value="B">BOIB</option>
-                                </select>
-                            </div>
-                        </div>      
-                    </div>
                     
-                    <div class="fila">
-                        <div class="element t18">
-                            <input type="checkbox" id="cerca_totes_unitats" name="cerca_totes_unitats" checked="checked"/>
-                            <label for="cerca_totes_unitats" class="checkbox"><spring:message code='camp.cerca_totes_unitats'/></label>                     
-                        </div>
+					<div class="fila">
+						<div class="element t10">
+							<div class="etiqueta">
+								<label for="cerca_numero"><spring:message code='camp.numero'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_numero" name="cerca_numero" type="text" />
+							</div>							
+						</div>
+						
+						<div class="element t16">
+							<div class="etiqueta">
+								<label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
+							</div>
+							<div class="control">
+								<select id="cerca_validacio" name="cerca_validacio">
+									<option value="1" selected="selected">Pública</option>
+									<option value="2">Interna</option>
+									<option value="3">Reserva</option>
+								</select>
+							</div>
+						</div>							
+						
+						<div class="element t29">
+							<div class="etiqueta">
+								<label for="cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
+							</div>
+							<div class="control">
+								<select id="cerca_tipus_normativa" name="cerca_tipus_normativa">
+									<option value="">--Tots--</option>
+									<c:forEach items="${llistaTipusNormativa}" var="tipus">										
+										<option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+									</c:forEach>
+								</select>								
+							</div>							
+						</div>
+						<div class="element t16">
+							<div class="etiqueta">
+								<label for="cerca_butlleti"><spring:message code='camp.butlleti'/></label>
+							</div>
+							<div class="control">
+								<select id="cerca_butlleti" name="cerca_butlleti">
+									<option value="">--Tots--</option>
+									<c:forEach items="${llistaButlletins}" var="butlleti">										
+										<option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+									</c:forEach>
+								</select>								
+							</div>							
+						</div>												
+					</div>		
+					
+					<div class="fila">
+						<div class="element t10">
+							<div class="etiqueta">
+								<label for="cerca_registre"><spring:message code='camp.registre'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_registre" name="cerca_registre" type="text" />
+							</div>							
+						</div>	
+						
+						<div class="element t10">
+							<div class="etiqueta">
+								<label for="cerca_llei"><spring:message code='camp.llei'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_llei" name="cerca_llei" type="text" />
+							</div>							
+						</div>		
+						
+						<div class="element t10">
+							<div class="etiqueta">
+								<label for="cerca_data"><spring:message code='camp.data'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_data" name="cerca_data" type="text" class="data" />
+							</div>
+						</div>			
+						
+						<div class="element t10">
+							<div class="etiqueta">
+								<label for="cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_data_butlleti" name="cerca_data_butlleti" type="text" class="data" />
+							</div>
+						</div>
+					</div>			
+					
+					<div class="fila">
+						<!-- div class="element t29">
+							<div class="etiqueta">
+								<label for="cerca_titol"><spring:message code='camp.titol_normativa'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_titol" name="cerca_titol" type="text" size="50" maxlength="250" class="titol" />
+							</div>
+						</div -->
+						
+						<div class="element t30">
+							<div class="etiqueta">
+								<label for="cerca_text"><spring:message code='camp.text'/></label>
+							</div>
+							<div class="control">
+								<input id="cerca_text" name="cerca_text" type="text" maxlength="250" class="text" />
+							</div>
+						</div>						
+					</div>
+					
+					<div class="fila">
+						<div class="element t18">
+							<input type="checkbox" id="cerca_totes_unitats" name="cerca_totes_unitats"/>
+							<label for="cerca_totes_unitats" class="checkbox"><spring:message code='camp.cerca_totes_unitats'/></label>						
+						</div>
 
-                        <div class="element t18">                           
-                            <input type="checkbox" id="cerca_externes" name="cerca_externes" />
-                            <label for="cerca_externes" class="checkbox"><spring:message code='camp.cerca_externes'/></label>
-                        </div>                      
-                    </div>
+						<div class="element t18">							
+							<input type="checkbox" id="cerca_externes" name="cerca_externes" />
+							<label for="cerca_externes" class="checkbox"><spring:message code='camp.cerca_externes'/></label>
+						</div>						
+					</div>                    
                     
                     <div class="botonera">
                         <div class="boton btnGenerico">
@@ -734,18 +481,24 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t25p">
                                         <div class="etiqueta"><label for="item_pagina_inicial_ca">Pàgina inicial</label></div>
                                         <div class="control">
                                             <input id="item_pagina_inicial_ca" name="item_pagina_inicial_ca" type="text" class="nou" />
                                         </div>
                                     </div>
-                                    <div class="element t50p">
+                                    <div class="element t25p">
                                         <div class="etiqueta"><label for="item_pagina_final_ca">Pàgina final</label></div>
                                         <div class="control">
                                             <input id="item_pagina_final_ca" name="item_pagina_final_ca" type="text" class="nou" />
                                         </div>
                                     </div>
+									<div class="element t50p">
+										<div class="etiqueta"><label for="item_responsable_ca">Responsable</label></div>
+										<div class="control">
+											<input id="item_responsable_ca" name="item_responsable_ca" type="text" class="nou" />
+										</div>
+									</div>                                    
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">
@@ -789,20 +542,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="fila">
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_inicial_es">Pàgina inicial</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_inicial_es" name="item_pagina_inicial_es" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_final_es">Pàgina final</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_final_es" name="item_pagina_final_es" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                </div>
+								<div class="fila">
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_inicial_es">Pàgina inicial</label></div>
+										<div class="control">
+											<input id="item_pagina_inicial_es" name="item_pagina_inicial_es" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_final_es">Pàgina final</label></div>
+										<div class="control">
+											<input id="item_pagina_final_es" name="item_pagina_final_es" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t50p">
+										<div class="etiqueta"><label for="item_responsable_es">Responsable</label></div>
+										<div class="control">
+											<input id="item_responsable_es" name="item_responsable_es" type="text" class="nou" />
+										</div>
+									</div>									
+								</div>
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_arxiu_es">Arxiu</label></div>
@@ -845,20 +604,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="fila">
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_inicial_en">Pàgina inicial</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_inicial_en" name="item_pagina_inicial_en" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_final_en">Pàgina final</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_final_en" name="item_pagina_final_en" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                </div>
+								<div class="fila">
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_inicial_en">Pàgina inicial</label></div>
+										<div class="control">
+											<input id="item_pagina_inicial_en" name="item_pagina_inicial_en" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_final_en">Pàgina final</label></div>
+										<div class="control">
+											<input id="item_pagina_final_en" name="item_pagina_final_en" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t50p">
+										<div class="etiqueta"><label for="item_responsable_en">Responsable</label></div>
+										<div class="control">
+											<input id="item_responsable_en" name="item_responsable_en" type="text" class="nou" />
+										</div>
+									</div>									
+								</div>
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_arxiu_en">Arxiu</label></div>
@@ -901,20 +666,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="fila">
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_inicial_de">Pàgina inicial</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_inicial_de" name="item_pagina_inicial_de" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_final_de">Pàgina final</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_final_de" name="item_pagina_final_de" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                </div>
+								<div class="fila">
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_inicial_de">Pàgina inicial</label></div>
+										<div class="control">
+											<input id="item_pagina_inicial_de" name="item_pagina_inicial_de" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_final_de">Pàgina final</label></div>
+										<div class="control">
+											<input id="item_pagina_final_de" name="item_pagina_final_de" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t50p">
+										<div class="etiqueta"><label for="item_responsable_de">Responsable</label></div>
+										<div class="control">
+											<input id="item_responsable_de" name="item_responsable_de" type="text" class="nou" />
+										</div>
+									</div>									
+								</div>
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_arxiu_de">Arxiu</label></div>
@@ -957,21 +728,27 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="fila">
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_inicial_fr">Pàgina inicial</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_inicial_fr" name="item_pagina_inicial_fr" type="text" class="nou" />
-                                        </div>
+								<div class="fila">
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_inicial_fr">Pàgina inicial</label></div>
+										<div class="control">
+											<input id="item_pagina_inicial_fr" name="item_pagina_inicial_fr" type="text" class="nou" />
+										</div>
 
-                                    </div>
-                                    <div class="element t50p">
-                                        <div class="etiqueta"><label for="item_pagina_final_fr">Pàgina final</label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_final_fr" name="item_pagina_final_fr" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                </div>
+									</div>
+									<div class="element t25p">
+										<div class="etiqueta"><label for="item_pagina_final_fr">Pàgina final</label></div>
+										<div class="control">
+											<input id="item_pagina_final_fr" name="item_pagina_final_fr" type="text" class="nou" />
+										</div>
+									</div>
+									<div class="element t50p">
+										<div class="etiqueta"><label for="item_responsable_fr">Responsable</label></div>
+										<div class="control">
+											<input id="item_responsable_fr" name="item_responsable_fr" type="text" class="nou" />
+										</div>
+									</div>									
+								</div>
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_arxiu_fr">Arxiu</label></div>
@@ -1004,56 +781,100 @@
                 <legend>Gestió</legend>
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
-                    <div class="fila">
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_numero">Número</label></div>
-                            <div class="control">
-                                <input id="item_numero" name="item_numero" type="text"
-                                    class="nou" />
-                            </div>
-                        </div>
-                        <div class="element t50p">
-                            
-                            <div class="etiqueta"><label for="item_ua">Unitat Administrativa</label></div>
-                            <div class="control">
-                                <input id="item_ua_id" name="item_ua_id" value='<c:out value="${idUA}" />' type="hidden" />
-                                <input id="item_ua" name="item_ua" type="text"  value='<c:out value="${nomUA}" />' />
-                            </div>
-                        </div>
-                    </div>
+					<div class="fila">
+						<div class="element t25p">
+							<div class="etiqueta"><label for="item_numero">Número</label></div>
+							<div class="control">
+								<input id="item_numero" name="item_numero" type="text" class="nou" />
+							</div>
+						</div>
+						<div class="element t25p">
+							<div class="etiqueta"><label for="item_data">Data</label></div>
+							<div class="control">
+								<input id="item_data" name="item_data" type="text" class="data nou" />
+							</div>
+						</div>	
+						<div class="element t50p">
+							<div class="etiqueta"><label for="item_registre">Registre</label></div>
+							<div class="control">
+								<input id="item_registre" name="item_registre" type="text" class="nou" />
+							</div>
+						</div>
+					</div>
                     <!-- /fila -->
                     <!-- fila -->
-                    <div class="fila">
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_butlleti">Butlletí</label></div>
-                            <div class="control">
-                                <input id="item_butlleti" name="item_butlleti" type="text" class="nou" />
-                            </div>
-                        </div>
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_data_butlleti">Data del butlletí</label></div>
-                            <div class="control">
-                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>
+					<div class="fila">
+						<div class="element t25p">
+							<div class="etiqueta"><label for="item_butlleti_id">Butlletí</label></div>
+							<!-- div class="control">
+								<input id="item_butlleti_id" name="item_butlleti_id" type="hidden" />
+								<input id="item_butlleti" name="item_butlleti" type="text" class="nou" />
+							</div-->
+							<div class="control">
+								<select id="item_butlleti_id" name="item_butlleti_id" class="nou">
+									<option value="">- -No definit --</option>
+									<c:forEach items="${llistaButlletins}" var="butlleti">										
+										<option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+									</c:forEach>
+								</select>		
+							</div>						
+						</div>
+						<div class="element t25p">
+							<div class="etiqueta"><label for="item_data_butlleti">Data del butlletí</label></div>
+							<div class="control">
+								<input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
+							</div>
+						</div>
+						<div class="element t50p">
+							<div class="etiqueta"><label for="item_tipus">Tipus de normativa</label></div>
+							<div class="control">
+								<select id="item_tipus" name="item_tipus" class="nou">
+									<option value="">-- No definit --</option>
+									<c:forEach items="${llistaTipusNormativa}" var="tipus">										
+										<option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+									</c:forEach>
+								</select>
+								
+							</div>
+						</div>						
+					</div>
                     <!-- /fila -->
                     <!-- fila -->
-                    <div class="fila">
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_registre">Registre</label></div>
-                            <div class="control">
-                                <input id="item_registre" name="item_registre" type="text" class="nou" />
-                            </div>
-                        </div>
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_llei">Llei</label></div>
-                            <div class="control">
-                                <input id="item_llei" name="item_llei" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>
+					<div class="fila">
+						<div class="element t50p">							
+							<div class="etiqueta"><label for="item_ua_nom">Unitat Administrativa</label></div>
+							<div class="control">
+								<input id="item_ua_id" name="item_ua_id" type="hidden" />
+								<input id="item_ua_nom" name="item_ua_nom" type="text" />
+							</div>
+						</div>
+											
+						<div class="element t50p">
+							<div class="etiqueta"><label for="item_llei">Llei</label></div>
+							<div class="control">
+								<input id="item_llei" name="item_llei" type="text" class="nou" />
+							</div>
+						</div>					
+					</div>
                     <!-- /fila -->
+                    
+					<!-- Botonera -->
+					<div id="cercador">
+						<div class="botonera" style="margin-top: 0px; float:left;">
+							<div class="boton btnGenerico" style="margin-left: 0px;">
+								<a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta">
+								<span><span>Canviar UA</span></span>
+								</a>
+							</div>
+                           	<div class="boton btnGenerico">
+                           		<a href="javascript:EliminaArbreUA('item_ua_nom', 'item_ua_id');" class="btn borrar">
+                           		<span><span>Borrar</span></span>
+                           		</a>
+                           	</div>
+                      	</div>
+					</div>
+					<!-- /Botonera -->	  
+					                  
                 </div>
             </fieldset>
         </div>
@@ -1074,7 +895,7 @@
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila publicacion_2campos">
-                        <div class="element left">
+                        <!-- >div class="element left">
                             <div class="etiqueta">
                                 <label for="item_estat">Estat</label>
                             </div>
@@ -1084,15 +905,15 @@
                                     <option value="R">Real</option>
                                 </select>
                             </div>
-                        </div>
+                        </div-->
                         <div class="element right">
                             <div class="etiqueta">
-                                <label for="item_visibilitat">Visibilitat</label>
+                                <label for="item_validacio">Validació</label>
                             </div>
                             <div class="control">
-                                <select id="item_visibilitat" name="item_visibilitat">
-                                    <option value="P" selected="selected">Pública</option>
-                                    <option value="I">Interna</option>
+                                <select id="item_validacio" name="item_validacio">
+                                    <option value="1" selected="selected">Pública</option>
+                                    <option value="2">Interna</option>
                                 </select>
                             </div>
                         </div>
@@ -1100,7 +921,7 @@
                     <!-- /fila -->
                     <!-- fila -->
                     <div class="fila publicacion_2campos">
-                        <div class="element left">
+                        <!-- div class="element left">
                             <div class="etiqueta">
                                 <label for="item_data_publicacio">Data publicació</label>
                             </div>
@@ -1115,7 +936,7 @@
                             <div class="control">
                                 <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" />
                             </div>
-                        </div>
+                        </div-->
                     </div>
                     <div class="clear"></div>
                     <!-- /fila -->
@@ -1125,10 +946,12 @@
                           <li class="btnVolver impar">
                               <a id="btnVolver" href="javascript:;" class="btn torna"><span><span>Torna</span></span></a>
                           </li>
+
                           <li class="btnGuardar par">
                               <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
                           </li>                                                    
                           <li class="btnEliminar impar" style="display:none;">
+
                               <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
                           </li>
                           <li class="btnPrevisualizar par">
@@ -1145,14 +968,12 @@
         //}
         %>
         <!-- modul -->
-        <div class="modul">
+        <!-- div class="modul">
             <fieldset>
                 <a class="modul mostrat">Amaga</a>
                 <legend>Tipologia</legend>
-                <div class="modul_continguts mostrat">
-                    <!-- modulTraspas -->
-                    <div class="modulTraspas">
-                        <!-- fila -->
+                <div class="modul_continguts mostrat">                    
+                    <div class="modulTraspas">                        
                         <div class="fila">
                             <div class="element">
                                 <div class="etiqueta">
@@ -1167,15 +988,16 @@
                                     <a id="gestioTraspas" class="btn gestiona" href="javascript:;"><span><span>Gestiona traspàs</span></span></a>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /fila -->
-                    </div>
-                    <!-- /modulTraspas -->
+                        </div>                        
+                    </div>                    
                 </div>
             </fieldset>
-        </div>
+        </div-->
         <!-- /modul -->
         <!-- modul -->
+        
+        <input type="hidden" id="item_tipologia" name="item_tipologia" />
+        
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat">Amaga</a>

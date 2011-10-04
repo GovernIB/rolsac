@@ -208,7 +208,8 @@ function DetallBase(soloFicha){
 				}
 			}
 			
-			delete Items_arr[id_eliminat];
+			//delete Items_arr[id_eliminat];
+			Items_arr.splice(id_eliminat,1);
 			
 		}	
 	}

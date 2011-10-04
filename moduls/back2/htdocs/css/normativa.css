@@ -6,14 +6,17 @@
 
 /* llistats table */
 
-div.llistat div.thead div.titol { width:57em; padding-left:5em; }
+div.llistat div.thead div.titol { width:50em; padding-left:5em; }
 div.llistat div.thead div.numero { width:9em; }
-div.llistat div.thead div.tipus { width:13em; }
+div.llistat div.thead div.tipus { width:10em; }
+div.llistat div.thead div.tipologia { width:10em; }
 div.llistat div.thead div.data { width:9em; }
 
-div.llistat div.tbody div.titol { width:41em; padding-bottom:1em; padding-left:4em; padding-right: 1em; background:transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em 7px; }
-div.llistat div.tbody div.numero { width:6.5em; }
-div.llistat div.tbody div.tipus { width:9em; }
-div.llistat div.tbody div.data { width:7em; }
+div.llistat div.tbody div.titol { line-height: 1.4em; width:35em; padding-bottom:1em; padding-left:4em; padding-right: 1em; background:transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em .1em; }
+div.llistat div.tbody div.numero { width:5.4em; padding: 0 .5em; line-height: 1.4em}
+div.llistat div.tbody div.tipus { width:6.5em; padding: 0 .5em; line-height: 1.4em}
+div.llistat div.tbody div.tipologia { width:6.2em; padding: 0 .5em; line-height: 1.4em}
+div.llistat div.tbody div.data { width:7em; padding: 0 .5em; line-height: 1.4em}
 
 div.llistat div.tbody div.td span.titol { font-style:italic; }
+

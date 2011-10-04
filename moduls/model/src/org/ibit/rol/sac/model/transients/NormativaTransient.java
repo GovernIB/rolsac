@@ -1,8 +1,12 @@
 package org.ibit.rol.sac.model.transients;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.ibit.rol.sac.model.ValueObject;
 
-public class NormativaTransient implements ValueObject {
+public class NormativaTransient implements ValueObject, Comparable {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 	
@@ -11,17 +15,80 @@ public class NormativaTransient implements ValueObject {
     private String titulo;
     private String fecha;
     private String tipo;
+    private String tipologia;
+    private Date fechaDate; //para el compareTo
 	
-	public NormativaTransient(long id, long numero, String titulo, String fecha, String tipo) {
+    public NormativaTransient() {
+    	super();
+    }
+    
+	public NormativaTransient(long id, long numero, String titulo, Date fecha, String tipo, String tipologia) {
+		
 	    super();
+	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    
 	    this.id = id;
 	    this.numero = numero;
 	    this.titulo = titulo;
-	    this.fecha = fecha;
+	    this.fecha = fecha != null ? df.format(fecha) : "";
+	    this.fechaDate = fecha;
 	    this.tipo = tipo;
+	    this.tipologia = tipologia;
 	}
 
+	/**
+	 * Función de comparación para permitir la ordenación de listas de NormativaTransient.
+	 * 
+	 * @param o Objeto a comparar. Se espera NormativaTransient.
+	 * 
+	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parámetro.
+	 */
+	public int compareTo(Object o) {
+		NormativaTransient cmp = (NormativaTransient)o;
+		if (cmp == null)
+			cmp = new NormativaTransient();
+			
+		if (this.fechaDate == null) {
+			if (cmp.fechaDate != null)
+				return -1;
+			else
+				return 0;
+		}
+		else if (cmp.fechaDate == null)
+			return 1;
+		
+		else if (this.fechaDate.equals(cmp.fechaDate)) {
+			return 0;
+		}
+		else if (this.fechaDate.before(cmp.fechaDate)) {
+			return -1;
+		}
+		else if (this.fechaDate.after(cmp.fechaDate)) {
+			return 1;
+		} else
+			return 0;
+	}
 	
+		
+	
+	/**
+	 * Devuelve el valor de tipologia.
+	 *
+	 * @return Valor de tipologia.
+	 */
+	public String getTipologia() {
+		return tipologia;
+	}
+
+	/**
+	 * Guarda el valor de tipologia.
+	 *
+	 * @param tipologia Nuevo valor de tipologia.
+	 */
+	public void setTipologia(String tipologia) {
+		this.tipologia = tipologia;
+	}
+
 	/**
 	 * Devuelve el valor de id.
 	 *
@@ -29,6 +96,24 @@ public class NormativaTransient implements ValueObject {
 	 */
 	public long getId() {
 		return id;
+	}
+
+	/**
+	 * Devuelve el valor de fechaDate.
+	 *
+	 * @return Valor de fechaDate.
+	 */
+	public Date getFechaDate() {
+		return fechaDate;
+	}
+
+	/**
+	 * Guarda el valor de fechaDate.
+	 *
+	 * @param fechaDate Nuevo valor de fechaDate.
+	 */
+	public void setFechaDate(Date fechaDate) {
+		this.fechaDate = fechaDate;
 	}
 
 	/**
@@ -115,9 +200,6 @@ public class NormativaTransient implements ValueObject {
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
 	}
-	
-	
-	
-	
+
 	
 }

@@ -112,6 +112,9 @@ public class PopupUABackController {
         List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
         
         model.put("raizOptions", raices);
+        
+        model.put("id_input", request.getParameter("idInput"));
+        model.put("id_hidden", request.getParameter("idHidden"));        
 
         UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
 
@@ -215,6 +218,9 @@ public class PopupUABackController {
         }*/
 
         model.put("tieneHijos", tieneHijos);
+        
+        model.put("id_input", request.getParameter("idInput"));
+        model.put("id_hidden", request.getParameter("idHidden"));        
 
         return "pantalles/popArbreUA";
     }

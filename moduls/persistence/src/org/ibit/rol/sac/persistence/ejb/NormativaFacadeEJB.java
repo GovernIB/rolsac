@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -56,6 +57,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -77,7 +79,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	private static String idioma_per_defecte ="ca";
 	
     /**
-     * Obtiene refer�ncia al ejb de control de Acceso.
+     * Obtiene referéncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -91,7 +93,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Autoriza la creaci�n de una normativa
+     * Autoriza la creación de una normativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -101,7 +103,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     
         
     /**
-     * Autoriza la modificaci�n de una normativa
+     * Autoriza la modificación de una normativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -119,7 +121,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         try {
             if (normativa.getId() == null) {
                 if (normativa.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear una normativa p�blica");
+                    throw new SecurityException("No puede crear una normativa pï¿½blica");
                 }
             } else {
                 if (!getAccesoManager().tieneAccesoNormativa(normativa.getId())) {
@@ -161,7 +163,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         try {
             if (normativa.getId() == null) {
                 if (normativa.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear una normativa p�blica");
+                    throw new SecurityException("No puede crear una normativa pï¿½blica");
                 }
                 session.save(normativa);
                 addOperacion(session, normativa, Auditoria.INSERTAR);
@@ -229,7 +231,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Busca todas las Normativas que cumplen los criterios de b�squeda
+     * Busca todas las Normativas que cumplen los criterios de bï¿½squeda
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -276,6 +278,139 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+    /**
+     * Busca todas las Normativas que cumplen los criterios de búsqueda aplicando el orden indicado.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, String campoOrdenacion, String orden) {
+        Session session = getSession();
+        try {
+        	
+        	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+        	
+            List params = new ArrayList();
+            
+            String sQuery = "";
+            if (traduccion.get("idioma") != null) {
+            	sQuery = populateQuery(parametros, traduccion, params);
+            } else {
+            	String paramsQuery = populateQuery(parametros, new HashMap(), params);
+            	if (paramsQuery.length() > 0) {   
+            		sQuery += paramsQuery + " and ";
+            	}
+            	sQuery += "(" + populateQuery(traduccion, params) + ")"; // TODO: dejarlo asi o buscar textos traducidos en lucene?
+            }            
+
+            String orderBy = " order by " + campoOrdenacion + " " + orden;
+            
+            Query query;
+            if ("local".equals(tipo)) {
+            	//Si la búsqueda es por normativas locales filtramos por unidades administrativas
+            	Set<Long> uas = new HashSet<Long>();
+            	
+            	//Si se ha indicado mostrar normativas de las unidades administrativas del usuario
+                if (uaMeves) {
+                	
+                	Set<UnidadAdministrativa> listaUAsUsuario = getUsuario(session).getUnidadesAdministrativas();
+                	for (UnidadAdministrativa ua : listaUAsUsuario) {                		
+                		uas.add(ua.getId());
+                		List<Long> listaDescendientes = uaDelegate.cargarArbolUnidadId(ua.getId());
+                		uas.addAll(listaDescendientes);                		
+                	}
+                	                	
+                } else {
+                	uas.add(idUA);
+                }
+                
+                sQuery += " and normativa.unidadAdministrativa.id in (";
+                String sep = "";
+                for (Long ua : uas) {
+                	sQuery += sep + ua;
+                	sep = ", ";
+                }
+                sQuery += ")";
+            	
+                // Eliminado "left join fetch" por problemas en el cache de traducciones.
+                query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+                
+            } else { // "externa".equals(tipo))
+                // Eliminado "left join fetch" por problemas en el cache de traducciones.
+                query = session.createQuery("from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+            }
+            
+            for (int i = 0; i < params.size(); i++) {
+                Object o = params.get(i);
+                query.setParameter(i, o);
+            }
+            
+            List normativas = query.list();
+
+            List normativasAcceso = new ArrayList();
+            Usuario usuario = getUsuario(session);
+            for (int i = 0; i < normativas.size(); i++) {
+                if("local".equals(tipo)){
+                    NormativaLocal normativa =  (NormativaLocal)normativas.get(i);
+                    if(tieneAcceso(usuario, normativa)){
+                        normativasAcceso.add(normativa);
+                    }
+                } else{
+                    NormativaExterna normativa =  (NormativaExterna)normativas.get(i);
+                    if(tieneAcceso(usuario, normativa)){
+                        normativasAcceso.add(normativa);
+                    }
+                }
+            }
+
+            return normativasAcceso;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+            
+        } catch (DelegateException de) {
+        	throw new EJBException(de);
+        	
+        } finally {
+            close(session);
+        }
+    }    
+    
+    
+    /**
+     * Construye el query de búsqueda multiidioma en todos los campos
+     */
+    private String populateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            if (value != null) {
+            	if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
+    }    
+    
+    
 
     /**
      * Busca todas las Normativas con un texto determinado.
@@ -404,7 +539,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * A�ade una nueva afectacion a la normativa
+     * Aï¿½ade una nueva afectacion a la normativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -463,7 +598,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * A�ade un nuevo procedimiento a la normativa
+     * Aï¿½ade un nuevo procedimiento a la normativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -597,7 +732,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 
     /**
-     * Construye el query de b�squeda segun los par�metros
+     * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map trad, List params) {
         String aux = "";
@@ -664,10 +799,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	/**
 	 * Metodo que obtiene un bean con el filtro para la indexacion
 	 * 
-	 * Debemos incluir las materias a trav�s de los procedimientos relacionados
+	 * Debemos incluir las materias a través de los procedimientos relacionados
 	 * con esa normativa y la unidad administrativa de la que depende.
 	 * 
-	 * M�todo v�lido para Normativas locales y externas
+	 * Método válido para Normativas locales y externas
 	 * @throws DelegateException 
 	 * 
      * @ejb.interface-method
@@ -790,7 +925,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
 	
     /**
-     * A�ade la normativa al indice en todos los idiomas
+     * Añade la normativa al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -916,7 +1051,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			 
 			 DadesNormativaModel dadesNormativaModel = new DadesNormativaModel();			 
 			 
-			 //Datos de bolet�n
+			 //Datos de boletín
 			 dadesNormativaModel.setNomDiari(boletin.getNombre());			 
 			 dadesNormativaModel.setDataPublicacio(normativaLocal.getFechaBoletin());
 			 
@@ -925,7 +1060,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			 dadesNormativaModel.setNumDiari( normativaLocal.getNumero().toString() );
 			 dadesNormativaModel.setDataPublicacio(normativaLocal.getFechaBoletin());			 						 
 			 
-			 //Datos de traducci�n unidad administrativa
+			 //Datos de traducción unidad administrativa
 			 UnidadAdministrativa unidadAdministrativa = normativaLocal.getUnidadAdministrativa();
 			 
 			 TraduccionUA traduccionUADef = (TraduccionUA) unidadAdministrativa.getTraduccion(idioma_per_defecte);
@@ -943,7 +1078,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			 dadesNormativaModel.setOrganismePropietari( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() );
 			 dadesNormativaModel.setUoPropietaria( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() );
 			 			 
-			 //Datos de traducci�n normativa local
+			 //Datos de traducción normativa local
 			 if (traduccionNormativa != null) {				 
 				 dadesNormativaModel.setSumari( traduccionNormativa.getTitulo() != null ? traduccionNormativa.getTitulo() : traduccionNormativaDef.getTitulo() );
 				 dadesNormativaModel.setEnlla�( traduccionNormativa.getEnlace() != null ? traduccionNormativa.getEnlace() :  traduccionNormativaDef.getEnlace() );
@@ -982,7 +1117,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 				
 			TraduccionNormativa traduccionNormativa = (TraduccionNormativa) normativaLocal.getTraduccion(idioma);
 			
-			//Si no obtenemos el annexo con el idioma pasado por par�metro, probamos con el idioma por defecto			
+			//Si no obtenemos el annexo con el idioma pasado por parámetro, probamos con el idioma por defecto			
 			if (traduccionNormativa == null)
 				traduccionNormativa = (TraduccionNormativa) normativaLocal.getTraduccion(idioma_per_defecte);
 			
@@ -1008,8 +1143,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 
     /**
      * WEBCAIB.
-     * Obtiene las normativas por c�digo de procedimiento, con el idioma indicado.
-     * Si no existe en dicho idioma se buscar�n por el idioma por defecto.
+     * Obtiene las normativas por código de procedimiento, con el idioma indicado.
+     * Si no existe en dicho idioma se buscarán por el idioma por defecto.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1041,8 +1176,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 	 
     /**
      * WEBCAIB.
-     * Obtiene las normativas por c�digo de procedimiento, con el idioma indicado.
-     * Si no existe en dicho idioma se buscar�n por el idioma por defecto.
+     * Obtiene las normativas por código de procedimiento, con el idioma indicado.
+     * Si no existe en dicho idioma se buscarán por el idioma por defecto.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1064,7 +1199,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			 List<Normativa> listaTmpNormativas = query.list();			 
 			 List<Normativa> listaNormativas = new ArrayList();
 			 
-			 //Descartamos las normativas con id de UA distinto al pasado por par�mtro			 
+			 //Descartamos las normativas con id de UA distinto al pasado por parámtro			 
 			 for (Normativa normativa : listaTmpNormativas ) {				 
 				if ( normativa instanceof NormativaLocal &&
 					( (NormativaLocal) normativa).getUnidadAdministrativa() != null && 
@@ -1084,7 +1219,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	 	 
 	 /**
 	  * A partir de una lista de objetos Normativa, devuelve su correspondiente lista de 
-	  * objetos NormativaModel, teniendo en cuenta el idioma de traducci�n.
+	  * objetos NormativaModel, teniendo en cuenta el idioma de traducción.
 	  * 
 	  * @param listaNormativa
 	  * @param idioma
@@ -1098,7 +1233,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			NormativaModel normativaModel = new NormativaModel();
 			Boletin boletin = normativa.getBoletin();
 			
-			//Campos sin traducci�n
+			//Campos sin traducción
 			normativaModel.setCodi( normativa.getId().intValue() );
 			normativaModel.setData( normativa.getFecha() != null ? normativa.getFecha() : null );
 			normativaModel.setNumero( normativa.getNumero() != null ? normativa.getNumero().toString() : null );
@@ -1114,7 +1249,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			if (traduccion == null)
 				traduccion = traduccionDef;
 			
-			//Campos con traducci�n
+			//Campos con traducción
 			normativaModel.setSumari( traduccion.getTitulo() != null ? traduccion.getTitulo() : traduccionDef.getTitulo() );
 			
 			Archivo archivo = traduccion.getArchivo();

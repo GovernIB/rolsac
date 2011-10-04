@@ -24,7 +24,7 @@ import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
  */
 public class NormativaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public boolean autorizaCrearNormativa(Integer validacionNormativa) throws DelegateException {
@@ -82,6 +82,14 @@ public class NormativaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
+        try {
+            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, campoOrdenacion, orden);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }    
 
     public List buscarNormativas(String texto) throws DelegateException {
         try {

@@ -31,7 +31,8 @@
     text-indent: -1000px;
     width: 16px;
     height: 16px;
-    background-image: url(../img/botons/desplegar.png);
+    background-image: url("../img/botons/desplegar.png");
+
 }
 #escriptori_detall #modulLateral .modul fieldset legend{
     font: bold 11px Verdana, Helvetica, Sans-serif;
