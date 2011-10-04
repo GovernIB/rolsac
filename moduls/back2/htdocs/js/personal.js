@@ -24,19 +24,10 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
-	
-	// Asociamos los evento a los botones.
-	jQuery("#btnNuevaFicha").bind("click",function(){Llistat.nuevaFicha();});
-	jQuery("#tabListado").bind("click",function(){Llistat.tabListado();});	
-	jQuery("#tabBuscador").bind("click",function(){Llistat.tabBuscador();});	
-	jQuery("#btnBuscarForm").bind("click",function(){Llistat.busca();});
-	jQuery("#btnLimpiarForm").bind("click",function(){Llistat.limpia();});	
-	
-	jQuery("#btnVolver").bind("click",function(){Detall.torna();});
-	jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
-	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar()});
-		
+
 	// INICIEM	
+	Error = new CError();
+	
 	Llistat.iniciar();	
 	Detall.iniciar();	
 	//Docs.iniciar();
@@ -202,7 +193,7 @@ var Llistat = {
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
 			
 				// events
-				escriptori_contingut_elm.bind("click",Llistat.llansar);
+				//escriptori_contingut_elm.bind("click",Llistat.llansar);
 				
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
@@ -555,7 +546,9 @@ var Detall = {
 	},
 	nou: function() {
 		
-		escriptori_detall_elm.find("a.elimina").hide().end().find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		//escriptori_detall_elm.find("a.elimina").hide().end().find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
+		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
 		
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);

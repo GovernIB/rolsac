@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_procediments.css"/>" media="screen" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
@@ -91,6 +90,144 @@
     var txtCercantAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
+</script>
+<script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
+<script type="text/javascript">
+<!--
+    var txtMaxim = "<spring:message code='txt.maxim'/>";
+    var txtMax = "<spring:message code='txt.max'/>";
+    var txtCaracters = "<spring:message code='txt.caracters'/>";
+    var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
+    var txtAnyMal = "<spring:message code='txt.any_mal'/>";
+    var txtMesMal = "<spring:message code='txt.mes_mal'/>";
+    var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
+    var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+    var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";    
+    var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
+
+    // dades formularios
+    var FormulariDades = [
+        // Nombre (Catalan)
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_nom_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtNombreObligatorio,
+                    "tipus": txtNombreNoSoloNumeros
+                }
+        },
+        
+        // Estado
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_estat",
+            "obligatori": "si",
+            "tipus": "numeric",
+            "error":
+                {
+                    "obligatori": "El camp 'Estat' es obligatori"                   
+                }
+        },
+        
+        // Forma de iniciación
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_iniciacio",
+            "obligatori": "si",
+            "tipus": "numeric",         
+            "error":
+                {
+                    "obligatori": "El camp 'Forma d'iniciació' es obligatori"                   
+                }
+        },
+        
+        // Familia
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_familia",
+            "obligatori": "si",
+            "tipus": "numeric",         
+            "error":
+                {
+                    "obligatori": "El camp 'Familia' es obligatori"                 
+                }
+        },
+        
+        // Plazo máximo para resolución (Catalán)
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_resolucio_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "El camp 'Termini màxim per a la resolució' es obligatori",
+                    "tipus": "El camp 'Termini màxim per a la resolució' no pot estar compost només de números",
+                }
+        },
+        
+        // Plazo máximo para la notificación (Catalán)
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_notificacio_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "El camp 'Termini màxim per a la notificació' es obligatori",
+                    "tipus": "El camp 'Termini màxim per a la notificació' no pot estar compost només de números",
+                }
+        },
+        
+        // Silencio administrativo
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_silenci_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "El camp 'Silenci administratiu' es obligatori",
+                    "tipus": "El camp 'Silenci administratiu' no pot estar compost només de números",
+                }
+        }
+        
+    ];
+-->
 </script>
 
 <div id="escriptori_contingut">
@@ -1038,20 +1175,20 @@
                         </div>
                         <div class="fila">
                             <div class="element t50p">
-	                            <div id="cercador">
-	                                <div class="botonera" style="margin-top: 0px; float:left;">
-		                                <div class="boton btnGenerico" style="margin-left: 0px;">
-		                                    <a href="javascript:ArbreUA('item_organ', 'item_organ_id');" class="btn consulta">
-		                                    <span><span>Cambiar Órgan</span></span>
-		                                    </a>
-		                                </div>
-		                                <div class="boton btnGenerico">
-		                                    <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
-		                                    <span><span><spring:message code='boto.borrar'/></span></span>
-		                                    </a>
-		                                </div>
-								    </div>		                            
-								</div>
+                                <div id="cercador">
+                                    <div class="botonera" style="margin-top: 0px; float:left;">
+                                        <div class="boton btnGenerico" style="margin-left: 0px;">
+                                            <a href="javascript:ArbreUA('item_organ', 'item_organ_id');" class="btn consulta">
+                                            <span><span>Cambiar Órgan</span></span>
+                                            </a>
+                                        </div>
+                                        <div class="boton btnGenerico">
+                                            <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
+                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                            </a>
+                                        </div>
+                                    </div>                                  
+                                </div>
                             </div>
                             <div class="element t50p">
                                 <div class="etiqueta">
@@ -1143,23 +1280,22 @@
                                     <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" />
                                 </div>
                             </div>
-                        </div>
-                        <div class="clear"></div>
+                        </div>                        
                         <!-- /fila -->
                         <!-- botonera dalt -->
                         <div class="botonera dalt">
                           <ul>
-                              <li class="btnGuardar">
-                                  <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
-                              </li>
-                              <li class="btnPrevisualizar">
-                                  <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
-                              </li>
-                              <li class="btnVolver">
+                              <li class="btnVolver impar">
                                   <a id="btnVolver" href="javascript:;" class="btn torna"><span><span>Torna</span></span></a>
                               </li>
-                              <li class="btnEliminar" style="display:none;">
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
                                   <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
+                              </li>
+                              <li class="btnPrevisualizar par">
+                                  <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
                               </li>
                           </ul>
                         </div>

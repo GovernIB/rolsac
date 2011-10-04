@@ -1,7 +1,17 @@
+jQuery(document).ready(function(){
+	// Asociamos los evento a los botones.
+	jQuery("#btnNuevaFicha").bind("click",function(){Llistat.nuevaFicha();});
+	jQuery("#tabListado").bind("click",function(){Llistat.tabListado();});	
+	jQuery("#tabBuscador").bind("click",function(){Llistat.tabBuscador();});	
+	jQuery("#btnBuscarForm").bind("click",function(){Llistat.busca();});
+	jQuery("#btnLimpiarForm").bind("click",function(){Llistat.limpia();});	
+});
+
 /**
  * Clase de la que debe heredar el objeto Llistat.
  */
 function ListadoBase(){
+	var that = this;
 	this.cacheDatosListado = null;
 	
 	// Atributo que contiene el id del elemento que se está visualizando en la ficha.
@@ -52,8 +62,7 @@ function ListadoBase(){
 			resultats_elm.find("div.L").slideDown(300,function() {
 				jQuery(this).addClass("actiu");
 
-				resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-				escriptori_contingut_elm.bind("click",Llistat.llansar);
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");				
 			});
 		});
 	}
@@ -71,24 +80,19 @@ function ListadoBase(){
 			resultats_elm.find("div."+opcio_unitat).slideDown(300,function() {
 				jQuery(this).addClass("actiu");
 				
-				resultats_actiu_elm = resultats_elm.find("div.actiu:first");				
-				escriptori_contingut_elm.bind("click",Llistat.llansar);
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");								
 			});
 		});
 	}
 	
 	// Muestra el formulario para insertar una nueva ficha.
-	this.nuevaFicha = function(){
-		// desactivem taula
-		escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);		
+	this.nuevaFicha = function(){		
 		Detall.nou();
 	}
 	
 	// Realizar una búsqueda
 	this.busca = function(){		
-	
-		// desactivem taula
-		escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
+			
 		cercador_elm.find("input, select").attr("disabled", "disabled");
 		
 		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
@@ -100,7 +104,7 @@ function ListadoBase(){
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
+				//pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
 				Llistat.carregar({cercador: "si"});
 				
 			});
@@ -112,22 +116,10 @@ function ListadoBase(){
 	 * @param enlace_html Número de la página de destino.
 	 */
 	this.anar = function(enlace_html){
-		
+						
 		resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-		
-		if (isNaN(parseInt(enlace_html,10))) {
-			if (elm.hasClass("inici")) {
-				num = 1;
-			} else if (elm.hasClass("anteriors")) {
-				num = parseInt(pag_Pag,10);
-			} else if (elm.hasClass("final")) {
-				num = paginasNum;
-			} else {
-				num = parseInt(pag_Pag,10)+2;
-			}
-		} else {
-			num = parseInt(enlace_html,10);
-		}
+				
+		num = parseInt(enlace_html,10);
 		
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantAnteriors : txtCercantSeguents;
@@ -142,9 +134,11 @@ function ListadoBase(){
 				// llancem!
 				
 				if (resultats_actiu_elm.hasClass("C")) {
-					Llistat.carregar({pagina: num-1, cercador: "si"});
+					//Llistat.carregar({pagina: num-1, cercador: "si"});
+					that.carregar({pagina: num-1, cercador: "si"});
 				} else {
-					Llistat.carregar({pagina: num-1});
+					//Llistat.carregar({pagina: num-1});
+					that.carregar({pagina: num-1});
 				}
 				
 			});

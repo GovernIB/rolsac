@@ -47,7 +47,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="#"><spring:message code="submenu.fitxes_informatives" /></a></li>
+                    <li><a href="<c:url value="/fitxainf/fitxainf.htm"/>"><spring:message code="submenu.fitxes_informatives" /></a></li>
                 </c:otherwise>
             </c:choose>
             

@@ -424,13 +424,13 @@
                 <%-- dsanchez: Al deshabilitar el botón hay que añadir la clase "off" --%>
                 <!-- <li class="btnVolver off"> -->
                 
-                <li class="btnVolver">
+                <li class="btnVolver impar">
                     <a id="btnVolver" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
                 </li>
-                <li class="btnGuardar">
+                <li class="btnGuardar par">
                     <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
                 </li>
-                <li class="e btnEliminar">
+                <li class="e btnEliminar impar">
                     <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
                 </li>
             </ul>

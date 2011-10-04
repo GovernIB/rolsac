@@ -1122,17 +1122,17 @@
                     <!-- botonera dalt -->
                     <div class="botonera dalt">
                       <ul>
-                          <li class="btnGuardar">
-                              <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
-                          </li>
-                          <li class="btnPrevisualizar">
-                              <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
-                          </li>
-                          <li class="btnVolver">
+                          <li class="btnVolver impar">
                               <a id="btnVolver" href="javascript:;" class="btn torna"><span><span>Torna</span></span></a>
                           </li>
-                          <li class="btnEliminar" style="display:none;">
+                          <li class="btnGuardar par">
+                              <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
+                          </li>                                                    
+                          <li class="btnEliminar impar" style="display:none;">
                               <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
+                          </li>
+                          <li class="btnPrevisualizar par">
+                              <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
                           </li>
                       </ul>
                     </div>

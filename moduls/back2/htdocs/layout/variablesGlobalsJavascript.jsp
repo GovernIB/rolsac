@@ -89,5 +89,9 @@
     var txtFuncions = '<spring:message code="error.conexio.funcions"/>';
     var txtFuncionsFins = '<spring:message code="error.conexio.fins"/>';
     var txtErrorPermissos = '<spring:message code="error.permissos"/>';
-    var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';
+    var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';    
+        
+    // Errores de validación
+    var txtMaxim = "<spring:message code='txt.maxim'/>";
+    var txtCaracters = "<spring:message code='txt.caracters'/>";
 </script>

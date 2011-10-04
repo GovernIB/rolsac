@@ -358,6 +358,95 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
     /**
+     * Busca todas las fichas que cumplen los criterios de busqueda del nuevo back (sacback2). 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves) {        
+        Session session = getSession();
+        
+        try {           
+            if (!userIsOper()) {
+                parametros.put("validacion", Validacion.PUBLICA);
+            }
+
+            List params = new ArrayList();
+            String i18nQuery = "";
+            String fetVitalQuery = "";            
+            String materiaQuery = "";            
+            String mainQuery = "select distinct ficha from Ficha as ficha , ficha.traducciones as trad, ficha.fichasua as fsua ";
+            
+            if (traduccion.get("idioma") != null) {
+                i18nQuery = populateQuery(parametros, traduccion, params);
+            } else {
+                String paramsQuery = populateQuery(parametros, new HashMap(), params);
+                if (paramsQuery.length() != 0) {
+                    i18nQuery += paramsQuery + " and ";
+                }
+                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")"; // TODO: dejarlo asi o buscar textos traducidos en lucene?
+            }
+            
+            Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+            if (uaFilles) {
+                uas.add(ua);
+                ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+                Hibernate.initialize(ua.getHijos());
+                uas.addAll(ua.getHijos());
+            } else if (uaMeves) {
+                uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+            } else {
+                uas.add(ua);
+            }
+            String uaQuery = " and fsua.unidadAdministrativa.id in (";
+            for (Iterator<UnidadAdministrativa> it = uas.iterator(); it.hasNext();) {
+                uaQuery += it.next().getId();
+                if (it.hasNext()) {
+                    uaQuery += ", ";
+                } else {
+                    uaQuery += ")";
+                }
+            }
+            
+            if(idFetVital != null){
+              mainQuery += ",ficha.hechosVitales as hec ";  
+              fetVitalQuery = " and hec.id = ? ";
+              params.add(idFetVital);
+            } 
+            
+            if(idMateria != null){
+              mainQuery += ",ficha.materias as mat ";  
+              materiaQuery = " and mat.id = ? "; 
+              params.add(idMateria);
+            }
+                       
+            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery);
+            for (int i = 0; i < params.size(); i++) {
+                Object o = params.get(i);
+                query.setParameter(i, o);
+            }
+     
+            List<Ficha> fichas = query.list();
+            if (!userIsOper()) {
+                return fichas;
+            } else {
+                List<Ficha> fichasAcceso = new ArrayList<Ficha>();
+                Usuario usuario = getUsuario(session);
+                for (Ficha ficha: fichas){
+                    if(tieneAcceso(usuario, ficha)){
+                        fichasAcceso.add(ficha);
+                     }   
+                }
+                return fichasAcceso;
+            }
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    /**
      * Aï¿½ade una nueva materia a la ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -1069,7 +1158,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             indexBorraFicha(ficha.getId());
             indexInsertaFicha(ficha,null);
             if(borrar)
-                log.debug("Entro en borrar remoto ficha UA");
+                log.info("Entro en borrar remoto ficha UA");
             	Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1142,9 +1231,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         }
 
         // Tratamiento de traducciones
-        if (aux.length() > 0) aux = aux + " and ";
-        aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
-        traduccion.remove("idioma");
+        if (!traduccion.isEmpty()) {
+            if (aux.length() > 0) aux = aux + " and ";
+            aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
+            traduccion.remove("idioma");
+        }
         for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
             String key = (String) iter2.next();
             Object value = traduccion.get(key);
@@ -1900,7 +1991,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	resultado =  new ArrayList<FichaCrawler>();
             	
                 int max = 100;
-                log.debug("Buscando por: " + busqueda+" en el path: "+index);
+                log.info("Buscando por: " + busqueda+" en el path: "+index);
                 
                 IndexSearcher is   = new IndexSearcher(index);
                 QueryParser parser = new QueryParser("contents", getAnalizador(idioma));
@@ -1910,7 +2001,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 TopDocs topDocs = collector.topDocs();
                 ScoreDoc[] hits = topDocs.scoreDocs;
 
-                log.debug(" results: " + hits.length + " of total " + topDocs.totalHits);
+                log.info(" results: " + hits.length + " of total " + topDocs.totalHits);
 
                 for (int i = 0; i < hits.length; i++) {
                 	FichaCrawler fichaCrawler=new FichaCrawler();
@@ -1919,12 +2010,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     String tituloURL = is.doc(hits[i].doc).getField("title").stringValue();
                     String idFicha = is.doc(hits[i].doc).getField("idFicha").stringValue();
                     String modified = is.doc(hits[i].doc).getField("timestamp").stringValue();
-                    //log.debug("No " + (i+1) + " with relevance " + relevance + "% : "+ url+ " (" + modified + ')');
-                    //log.debug("IdFicha : "+idFicha);
-                    //log.debug("Titulo : "+tituloURL);
+                    //log.info("No " + (i+1) + " with relevance " + relevance + "% : "+ url+ " (" + modified + ')');
+                    //log.info("IdFicha : "+idFicha);
+                    //log.info("Titulo : "+tituloURL);
                     Ficha ficha = obtenerFicha(Long.valueOf(idFicha));
                     if(ficha.getFechaPublicacion()!=null &&dataInici!=null&&dataFi!=null){
-                    	log.debug("Buscada Crawler entre fechas: Fecha Publicación: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
+                    	log.info("Buscada Crawler entre fechas: Fecha Publicación: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
                     	if(ficha.getFechaPublicacion().before(dataFi)&&ficha.getFechaPublicacion().after(dataInici)){
                     		fichaCrawler.setTituloURL(tituloURL);
                             fichaCrawler.setURL(url);
@@ -1963,6 +2054,39 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		return analyzer;
 	}
 
+	 /**
+     * Construye el query de búsqueda multiidioma en todos los campos
+     */
+    private String i18nPopulateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            if (value != null) {
+                if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
+    }
+	
 
      /**
      * Obtiene una Ficha.

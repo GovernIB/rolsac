@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/* arbre */
+
+div.escriptori_ua_arbre { padding-top:1.5em; }
+
+div.ua_arbre ul.mollaPa { list-style:none; padding-left:.5em; margin-bottom:1em; background-color:#f7f7f7; }
+div.ua_arbre ul.mollaPa li { display:inline; padding-right:1.2em; padding-left:.8em; background:transparent url(../img/botons/mollaPa.gif) no-repeat right center; }
+
+div.ua_arbre div.nivells { height:3em; white-space:nowrap; border-right:1px solid #ccc; border-left:1px solid #ccc; }
+div.ua_arbre div.nivells_contingut { position:relative; left:0; width:10000em; }
+
+div.ua_arbre div.nivells ul.nivell { float:left; width:43em; list-style:none; border-top:1px solid #ccc; border-bottom:0; }
+div.ua_arbre div.nivells ul.nivell li div { overflow:hidden; width:100%; min-height:1.8em; padding:.5em 0; border-bottom:1px solid #ccc; }
+div.ua_arbre div.nivells ul.nivell li a { display:block; float:left; }
+div.ua_arbre div.nivells ul.nivell li a.selecciona { padding-left:2em; }
+div.ua_arbre div.nivells ul.nivell li a.fills { float:right; margin-right:2em; }
+
+div.ua_arbre div.nivells ul.nivell span.afegit { font-weight:bold; padding-left:1.8em; margin-left:7em; background:transparent url(../img/botons/afegit.gif) no-repeat left center; }
+
+div.ua_arbre div.nivells ul.nivell li div.carregant { display:none; width:40.8em; font-style:italic; padding:1em 0 1em 3em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }

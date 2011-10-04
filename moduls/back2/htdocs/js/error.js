@@ -1,5 +1,5 @@
-var Error = {
-	llansar: function() {
+function CError(){	
+	this.llansar = function() {
 		if (escriptori_detall_elm.css("display") != "none") {
 			escriptori_detall_elm.attr('aria-hidden', 'true').attr('aria-disabled', 'true').fadeOut(300);
 		}
@@ -15,8 +15,9 @@ var Error = {
 			// mostrem
 			escriptori_elm.attr('aria-hidden', 'false').attr('aria-disabled', 'false').html(codi).fadeIn(300);
 		});
-	},
-	conexion: function() {
+	}
+	
+	this.conexion = function() {
 		segundos--;
 		if (segundos == 0) {
 			Error.reiniciar();
@@ -25,8 +26,9 @@ var Error = {
 		} else {
 			$("#temps").html(segundos + " " + txtSegons);
 		}
-	},
-	reiniciar: function() {
+	}
+	
+	this.reiniciar = function() {
 		escriptori_elm.fadeOut(300, function() {
 			if (conex) { clearInterval(conex); }
 			// escriptori, carregant
@@ -37,4 +39,4 @@ var Error = {
 			});
 		});
 	}
-};
+}

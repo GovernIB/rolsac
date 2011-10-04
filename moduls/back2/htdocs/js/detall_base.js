@@ -1,14 +1,38 @@
+jQuery(document).ready(function(){
+	jQuery("#btnVolver").bind("click",function(){Detall.torna();});
+	jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
+	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
+	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
+	jQuery("#btnPublicar").bind("click",function(){Detall.publica();});
+});
+
 function DetallBase(){
+	var that = this;
+
+	// Url de la previsualización (tiene que sobreescribirse al extender la clase).
+	this.urlPrevisualizar = null;
+
+	this.actualizaEventos = function(){		
+						
+		// Asociamos los eventos a los botones de plegar y desplegar.
+		jQuery("#formGuardar a.mostrat, #formGuardar a.amagat").unbind("click").bind("click",function(){				
+			if( jQuery(this).hasClass("mostrat") ){		
+				jQuery(this).removeClass("mostrat").addClass("amagat").text(txtAmaga);			
+			}else{
+				jQuery(this).removeClass("amagat").addClass("mostrat").text(txtMostra);			
+			}					
+			jQuery(this).siblings("div.modul_continguts").slideToggle(300);
+		});
+	}
+	
 	this.guarda = function() {
-			
-		// TODO: hacer comprobaciones de otra forma mas simple
-		
+									
 		// Validamos el formulario
 		if( typeof FormulariComprovar != "undefined" ){
+					
 			FormulariComprovar.llansar();
 			
-			if (!formComprovacio) {
-				escriptori_detall_elm.bind("click", Detall.llansar);
+			if (!formComprovacio) {				
 				return false;
 			}
 		}
@@ -47,16 +71,19 @@ function DetallBase(){
 		});
 	}
 	
+	this.publica = function(){
+		jQuery("#item_data_publicacio").val(txtImmediat);
+		jQuery("#item_data_caducitat").val("");
+		this.guarda();
+	}
+	
 	/**
 	 * Vuelve de la ficha al listado.
 	 */
 	this.torna = function() {		
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
-			escriptori_contingut_elm.fadeIn(300, function() {
-				// activar
-				escriptori_contingut_elm.bind("click",Llistat.llansar);
-			});			
+			escriptori_contingut_elm.fadeIn(300);			
 		});		
 	}
 	
@@ -65,8 +92,7 @@ function DetallBase(){
 	 */
 	this.eliminar = function() {
 			
-		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() { 
-			//representacio_detall_elm.unbind("click", Detall.llansar); 
+		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() { 			
 			Detall.elimina();
 			}
 		});
@@ -74,12 +100,11 @@ function DetallBase(){
 	}
 	
 	this.carregar = function(itemID){
-						
-		//escriptori_detall_elm.find("a.elimina").show();
+		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();				
 		
-		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
-			suggeriment_elm.slideUp(300);
-		}
+		if (itemID == undefined){
+			itemID = $("#item_id").val();
+		}						
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			
@@ -103,11 +128,13 @@ function DetallBase(){
 						
 					},
 					success: function(data) {
-						Detall.pintar(data);					
+						Detall.pintar(data);												
 					}
 				});			
 			});			
 		});			
+		
+		this.actualizaEventos();
 	}
 	
 	this.recarregar = function() {
@@ -149,6 +176,12 @@ function DetallBase(){
 				
 			});
 			
+		});		
+	}
+	
+	this.previsualitzaTorna = function() {		
+		escriptori_previsualitza_elm.fadeOut(300, function() {		
+			escriptori_detall_elm.fadeIn(300);		
 		});		
 	}
 	
@@ -253,14 +286,27 @@ function DetallBase(){
 			}
 		}		
 	}
+	
+	this.previsualitza = function() {
+		var url = this.urlPrevisualizar;
 		
-	// Asociamos los eventos para plegar y desplegar los módulos
-	jQuery("#formGuardar a.mostrat").bind("click",function(){		
-		if( jQuery(this).hasClass("mostrat") ){		
-			jQuery(this).removeClass("mostrat").addClass("amagat").text(txtAmaga);			
-		}else{
-			jQuery(this).removeClass("amagat").addClass("mostrat").text(txtMostra);			
-		}		
-		jQuery(this).siblings("div.modul_continguts:first").slideToggle(300);
-	});
+		escriptori_detall_elm.fadeOut(300, function() {
+									
+			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+			//fitxa_ID = escriptori_detall_elm.find("#item_id").val();
+			
+			url += "?lang=" + fitxa_idiomaSeleccionat + "&codi=636513"; //+ fitxa_ID;
+									
+			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {			
+				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);			
+			});
+		
+		});		
+	}
+	
+	this.previsualitzaTorna = function() {		
+		escriptori_previsualitza_elm.fadeOut(300, function() {		
+			escriptori_detall_elm.fadeIn(300);
+		});
+	}
 }

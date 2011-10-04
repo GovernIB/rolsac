@@ -7,10 +7,7 @@
 }
 
 div.modulEdificis { padding-bottom:1em; }
-
-div.modulEdificis div.seleccionats ul { list-style:circle; margin-left:2em; }
 div.modulEdificis div.seleccionats ul li { padding-bottom:.4em; }
-div.modulEdificis div.seleccionats ul li:hover { background-color:#ffc; }
 div.modulEdificis div.seleccionats p.info { margin-top:0; }
 
 /* escriptori edificis */
@@ -91,17 +88,3 @@ div.escriptori_items_seleccionats .interior h3{
     font: bold 11px Verdana, Helvetica, Sans-serif;
     text-transform: uppercase;
 }
-div.escriptori_items_seleccionats .interior ul{
-    list-style: none;
-}
-div.escriptori_items_seleccionats .interior ul li{
-    border-radius: 5px 5px 5px 5px;
-    border: 1px solid #E3E3E3;
-    background-color: White;
-    padding: 5px 10px;
-    margin-bottom: 5px;
-}
-
-div.escriptori_items_seleccionats ul li div { overflow:hidden; width:100%; text-align:right; }
-div.escriptori_items_seleccionats ul li span.procediment { display:block; width:17.5em; float:left; text-align:left; }
-

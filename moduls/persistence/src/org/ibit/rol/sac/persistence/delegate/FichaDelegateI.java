@@ -10,6 +10,7 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 public interface FichaDelegateI {
 
@@ -25,6 +26,8 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract List buscarFichas(String texto) throws DelegateException;
+	
+	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves) throws DelegateException;
 
 	public abstract List listarFichas() throws DelegateException;
 

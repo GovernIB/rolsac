@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+div.llistat div.thead div.fitxa { 
+    width: 600px; 
+    padding-left: 50px; 
+}
+div.llistat div.tbody div.fitxa{ 
+    width: 600px;   
+    padding-left: 50px;
+    background: url(../img/taula_llistat/fitxa.gif) 21px 7px no-repeat;
+}
+div.llistat div.publicacio,
+div.llistat div.caducitat { 
+    width: 100px;
+    padding: 0 12px;
+}
