@@ -15,11 +15,12 @@
     <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
     <!-- script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script-->
     <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
-    <!--script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script-->
 
     <script type="text/javascript">
+    // accesos
     var pagLlistat = '<c:url value="/fitxainf/llistat.htm" />';
     var pagDetall = '<c:url value="/fitxainf/pagDetall.htm" />';
+    var pagGuardar = '<c:url value="/fitxainf/guardar.htm" />';
 
     // texts
     var txtEspere = "Espere un moment, si us plau.";
@@ -38,7 +39,7 @@
     var txtMostremAl = " a la ";
     var txtNoHiHa = "No hi ha";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
-    var txtCarregantLlistat = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
+    var txtCarregantItems = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
     var txtOrdenats = "ordenats";
     var txtAscendentment = "ascendentment";
     var txtDescendentment = "descendentment";
@@ -136,15 +137,123 @@
     
     // suggeriments
     var suggeriments = "";
-    var txtMaxim = "màxim";
-    var txtMax = "màx.";
-    var txtCaracters = "caracters";
-    var txtCampObligatori = "Camp obligatori";
-    var txtAnyMal = "El format de l'any del camp";
-    var txtMesMal = "El format del mes del camp";
-    var txtDiaMal = "El format de dia del camp";
-    var txtNoEsCorrecte = "no és correcte. Exemple: 01/01/2010";
 
+    </script>
+    
+    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
+    <script type="text/javascript">
+	//validacio
+	
+	var txtMaxim = "<spring:message code='txt.maxim'/>";
+    var txtMax = "<spring:message code='txt.max'/>";
+    var txtCaracters = "<spring:message code='txt.caracters'/>";
+    var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
+    var txtAnyMal = "<spring:message code='txt.any_mal'/>";
+    var txtMesMal = "<spring:message code='txt.mes_mal'/>";
+    var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
+    var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+    
+	// dades formularis
+	var FormulariDades = [
+		{
+			"modo": "individual",
+			"etiqueta": "id",
+			"etiquetaValor": "item_titol_ca",
+			"obligatori": "si",
+			"tipus": "alfanumeric",
+			"caracters":
+				{
+					"maxim": 250,
+					"mostrar": "si",
+					"abreviat": "no"
+				},
+			"error":
+				{
+					"obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
+					"tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"
+				}
+		},
+		{
+			"modo": "individual",
+			"etiqueta": "id",
+			"etiquetaValor": "item_titol_es",
+			"obligatori": "no",
+			"tipus": "alfanumeric",
+			"caracters":
+				{
+					"maxim": 250,
+					"mostrar": "si",
+					"abreviat": "no"
+				},
+			"error":
+				{
+					"tipus": "El camp 'Títol de la fitxa en l'idioma castellà' no pot estar compost només de números"
+				}
+		},
+		{
+			"modo": "individual",
+			"etiqueta": "id",
+			"etiquetaValor": "item_titol_en",
+			"obligatori": "no",
+			"tipus": "alfanumeric",
+			"caracters":
+				{
+					"maxim": 250,
+					"mostrar": "si",
+					"abreviat": "no"
+				},
+			"error":
+				{
+					"tipus": "El camp 'Títol de la fitxa en l'idioma anglés' no pot estar compost només de números"
+				}
+		},
+		{
+			"modo": "individual",
+			"etiqueta": "id",
+			"etiquetaValor": "item_titol_de",
+			"obligatori": "no",
+			"tipus": "alfanumeric",
+			"caracters":
+				{
+					"maxim": 250,
+					"mostrar": "si",
+					"abreviat": "no"
+				},
+			"error":
+				{
+					"tipus": "El camp 'Títol de la fitxa en l'idioma alemany' no pot estar compost només de números"
+				}
+		},
+		{
+			"modo": "individual",
+			"etiqueta": "id",
+			"etiquetaValor": "item_titol_fr",
+			"obligatori": "no",
+			"tipus": "alfanumeric",
+			"caracters":
+				{
+					"maxim": 250,
+					"mostrar": "si",
+					"abreviat": "no"
+				},
+			"error":
+				{
+					"tipus": "El camp 'Títol de la fitxa en l'idioma francés' no pot estar compost només de números"
+				}
+		},
+		{
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_estat",
+            "obligatori": "si",
+            "tipus": "numeric",
+            "error":
+                {
+                    "obligatori": "El camp 'Estat' es obligatori"                   
+                }
+        }	
+	];
+    
     </script>
     <div id="escriptori_contingut"> 
     <ul id="opcions">
@@ -154,9 +263,9 @@
         <li class="opcio C">
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
-        <li class="opcions nuevo">          
-            <a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span>Crea  una nova fitxa</span></span></a>
-        </li>
+        <c:if test="${idUA > 0}">
+	        <li id="btnNuevaFicha" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea  una nova fitxa</span></span></a></li>
+        </c:if>
     </ul>
     <div id="resultats">
         <div class="resultats L actiu">

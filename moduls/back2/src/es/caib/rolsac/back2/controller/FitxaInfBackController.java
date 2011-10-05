@@ -1,49 +1,28 @@
 package es.caib.rolsac.back2.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.EspacioTerritorial;
-import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HechoVital;
-import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.Personal;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionEspacioTerritorial;
-import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionIniciacion;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionTratamiento;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.FichaTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
+import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -68,48 +47,53 @@ public class FitxaInfBackController {
     @RequestMapping(value = "/fitxainf.htm", method = GET)
     public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
-        MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-        HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
-
-        List<Materia> llistaMateries = new ArrayList<Materia>();
-        List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();
-        List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
-        List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
-
-        try {
-            llistaMateries = materiaDelegate.listarMaterias();
-
-            for (Materia materia : llistaMateries) {
-                llistaMateriesTransient.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(request.getLocale().getLanguage())));
-            }
-
-            llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
-            
-            for (HechoVital fetVital : llistaFetsVitals) {
-                TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(request.getLocale().getLanguage());
-                llistaFetsVitalsTransient.add(new IdNomTransient(fetVital.getId(), 
-                                                                 thv == null ? null : thv.getNombre()));
-            }
-
-        } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
-                // model.put("error", "permisos");//TODO:mensajes de error
-            } else {
-                // model.put("error", "altres");
-                dEx.printStackTrace();
-            }
-        }
-
         model.put("menu", 0);
         model.put("submenu", "layout/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 3);
         model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
         model.put("escriptori", "pantalles/fitxaInf.jsp");
-        
-        model.put("llistaMateries", llistaMateriesTransient);
-        model.put("llistaFetsVitals", llistaFetsVitalsTransient);
-        
-        
+        if (session.getAttribute("unidadAdministrativa") != null) {
+            String lang = request.getLocale().getLanguage();
+            model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
+            model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
+
+            try {
+                
+                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                List<Materia> llistaMateries = new ArrayList<Materia>();
+                List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
+                
+                llistaMateries = materiaDelegate.listarMaterias();
+    
+                for (Materia materia : llistaMateries) {
+                    llistaMateriesTransient.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));
+                }
+    
+                model.put("llistaMateries", llistaMateriesTransient);
+                
+                HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();  
+                List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();                
+                List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
+                
+                llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
+                
+                for (HechoVital fetVital : llistaFetsVitals) {
+                    TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+                    llistaFetsVitalsTransient.add(new IdNomTransient(fetVital.getId(), 
+                                                                     thv == null ? null : thv.getNombre()));
+                }
+                
+                model.put("llistaFetsVitals", llistaFetsVitalsTransient);
+    
+            } catch (DelegateException dEx) {
+                if (dEx.getCause() instanceof SecurityException) {
+                    // model.put("error", "permisos");//TODO:mensajes de error
+                } else {
+                    // model.put("error", "altres");
+                    dEx.printStackTrace();
+                }
+            }            
+        }
         return "index";
     }
 
@@ -240,9 +224,7 @@ public class FitxaInfBackController {
         resultats.put("nodes", llistaFitxesTransient);
 
         return resultats;
-        
-        
-        
+    
     }
 
     @RequestMapping(value = "/pagDetall.htm", method = POST)
@@ -322,52 +304,108 @@ public class FitxaInfBackController {
     IdNomTransient guardarFicha(HttpSession session, HttpServletRequest request) {
 
         IdNomTransient result = null;
+        String error = null;
 
         try {
             // TODO pendent de quins camps son obligatoris
             UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-            String nom = request.getParameter("item_nom");
-            String username = request.getParameter("item_codi");
-            if (ua == null || nom == null || username == null || "".equals(nom) || "".equals(username)) {
-                String error = messageSource.getMessage("persona.error.falten.camps", null, request.getLocale());
+            if (ua == null) {//TODO:afegir els camps obligatoris
+                error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
                 result = new IdNomTransient(-3l, error);
             } else {
-                UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-                UnidadAdministrativa unitatAdministrativa = null;
-
+                FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+                Ficha fitxa = new Ficha();
+                Ficha fitxaOld = new Ficha();
+                boolean edicion;
+                
                 try {
                     Long id = Long.parseLong(request.getParameter("item_id"));
-                    unitatAdministrativa = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id);
+                    fitxaOld = fitxaDelegate.obtenerFicha(id);
+                    edicion = true;
                 } catch (NumberFormatException nfe) {
-                    unitatAdministrativa = new UnidadAdministrativa();
+                    fitxaOld = null;
+                    edicion = false;
                 }
 
-                //                 
-                // unitatAdministrativa.se
-                // unitatAdministrativa.setNombre(nom);
-                // unitatAdministrativa.setUsername(username);
-                // unitatAdministrativa.setUnidadAdministrativa(ua);
-                // unitatAdministrativa.setFunciones(request.getParameter("item_funcions"));
-                // unitatAdministrativa.setCargo(request.getParameter("item_carrec"));
-                // unitatAdministrativa.setEmail(request.getParameter("item_email"));
-                // unitatAdministrativa.setExtensionPublica(request.getParameter("item_epui"));
-                // unitatAdministrativa.setNumeroLargoPublico(request.getParameter("item_nlpui"));
-                // unitatAdministrativa.setExtensionPrivada(request.getParameter("item_epri"));
-                // unitatAdministrativa.setNumeroLargoPrivado(request.getParameter("item_nlpri"));
-                // unitatAdministrativa.setExtensionMovil(request.getParameter("item_em"));
-                // unitatAdministrativa.setNumeroLargoMovil(request.getParameter("item_nlm"));
-                //                
+                if (edicion){
+                    fitxa.setId(fitxaOld.getId());
+                    fitxa.setBaner(fitxaOld.getBaner());
+                    fitxa.setIcono(fitxaOld.getIcono());
+                    fitxa.setHechosVitales(fitxaOld.getHechosVitales());
+                    fitxa.setImagen(fitxaOld.getImagen());
+                    fitxa.setMaterias(fitxaOld.getMaterias());
+                    fitxa.setResponsable(fitxaOld.getResponsable());
+                    fitxa.setForo_tema(fitxaOld.getForo_tema());                    
+                    fitxa.setFichasua(fitxaOld.getFichasua());
+                    fitxa.setDocumentos(fitxaOld.getDocumentos());
+                    fitxa.setEnlaces(fitxaOld.getEnlaces());                    
+                }
+                
+                try {
+                    Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
+                    fitxa.setValidacion(validacion);
+                } catch (NumberFormatException e) {
+                    // String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+                    error = "L'estat és incorrecte.";
+                    throw new NumberFormatException();
+                }
+                                
+                Date data_publicacio = DateUtil.parseDate(request.getParameter("item_data_publicacio"));
+                if (data_publicacio != null) {
+                    fitxa.setFechaPublicacion(data_publicacio);
+                }
+                
+                Date data_caducitat = DateUtil.parseDate(request.getParameter("item_data_caducitat"));
+                if (data_caducitat != null) {
+                    fitxa.setFechaCaducidad(data_caducitat);
+                }
+                
+             // Idiomas
+                TraduccionFicha tfi;
+                IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+                List<String> langs = idiomaDelegate.listarLenguajes();
 
-                String ok = messageSource.getMessage("personal.guardat.correcte", null, request.getLocale());
-                result = new IdNomTransient(unitatAdministrativa.getId(), ok);
+                for (String lang: langs) {
+                    if (edicion) {
+                        tfi = (TraduccionFicha) fitxa.getTraduccion(lang);
+                        if (tfi == null) {
+                            tfi = new TraduccionFicha();
+                        }
+                    } else {
+                        tfi = new TraduccionFicha();
+                    }
+
+                    tfi.setTitulo(request.getParameter("item_titol_" + lang));
+                    tfi.setDescAbr(request.getParameter("item_des_curta_" + lang));
+                    tfi.setDescripcion(request.getParameter("item_des_llarga_" + lang));
+                    tfi.setUrl(request.getParameter("item_url_" + lang));
+                    
+                    fitxa.setTraduccion(lang, tfi);
+                }
+                // Fin idiomas
+                
+                fitxa.setFechaActualizacion(new Date());
+                
+                fitxa.setUrlForo(request.getParameter("item_forum"));
+                
+                fitxa.setUrlVideo(request.getParameter("item_youtube"));
+                
+                fitxa.setInfo(request.getParameter("item_notes"));
+                
+                //Asociacion de ficha con Unidad administrativa
+                
+                fitxaDelegate.grabarFicha(fitxa);
+                
+                String ok = "Fitxa guardada correctament.";
+                result = new IdNomTransient(fitxa.getId(), ok);
             }
 
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
-                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+                error = messageSource.getMessage("error.permisos", null, request.getLocale());
                 result = new IdNomTransient(-1l, error);
             } else {
-                String error = messageSource.getMessage("error.altres", null, request.getLocale());
+                error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomTransient(-2l, error);
                 dEx.printStackTrace();
             }
