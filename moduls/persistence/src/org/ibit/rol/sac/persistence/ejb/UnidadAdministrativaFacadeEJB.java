@@ -2817,21 +2817,27 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	public StringBuffer getUaMollaBack2(Long idua, String idioma, String url, String uaIdPlaceholder) {
 		StringBuffer mollapa = new StringBuffer(" ");
 		try {
-			UnidadAdministrativaDelegate uadel = org.ibit.rol.sac.persistence.delegate.DelegateUtil.getUADelegate();
-		    UnidadAdministrativa uniadm = uadel.obtenerUnidadAdministrativa(idua);
-			while (uniadm!=null) {
+		    UnidadAdministrativa uniadm = obtenerUnidadAdministrativa(idua);
+		    boolean tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
+
+		    while (uniadm!=null && tieneAcceso) {
 				StringBuffer ua_sbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
 				Cadenas.initAllTab(ua_sbuf); //primera letra en mayusculas
 				String ua_texto=Cadenas.initTab(ua_sbuf.toString()); // articulos a minusculas
+
 				if (idua.equals(uniadm.getId())) {
 					mollapa.insert(0, "<li class=\"seleccionat\">" + ua_texto + " </li>");
 				} else {
 					String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
 					mollapa.insert(0, "<li><a href=\"" + uaURL + "\">" + ua_texto + "</a>" + " </li>");
 				}
+
 				uniadm = uniadm.getPadre();
+				if (uniadm != null) {
+					tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
+				}
 			}
-		} catch (DelegateException e) {
+		} catch (EJBException e) {
 			mollapa = new StringBuffer("&nbsp;");			
 		} 
 		return mollapa;

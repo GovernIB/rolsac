@@ -35,7 +35,7 @@ public class UnidadAdministrativaController {
 		try {
 			if (session.getAttribute("unidadAdministrativa") != null) {
 				UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-				uaHijos = uaDelegate.listarHijosUA(ua.getId());	// TODO: Si un usuario pertenece a una UA, pertenece tambien a todos sus hijos?
+				uaHijos = uaDelegate.listarHijosUA(ua.getId());
 			} else {
 				uaHijos = uaDelegate.listarUnidadesAdministrativasRaiz();
 			}

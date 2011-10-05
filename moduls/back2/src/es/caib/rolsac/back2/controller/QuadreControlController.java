@@ -25,14 +25,7 @@ public class QuadreControlController {
     }
     
     @RequestMapping(value="/quadreControl.htm")        
-	public String login(HttpSession session, HttpServletRequest request, Map<String,Object> model) throws ServletException, IOException {
-        //Inicialización de variables de sesion y otros elementos iniciales de la aplicación
-            
-        // Unitat administrativa per defecte
-        session.setAttribute("codi_uniadm", "2");
-        session.setAttribute("nom_uniadm", "Presidència");
-       
-        //Pantalla inicial
+	public String quadreControl(HttpSession session, HttpServletRequest request, Map<String,Object> model) throws ServletException, IOException {
         model.put("menu", 0);
         model.put("submenu", "layout/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 0);
