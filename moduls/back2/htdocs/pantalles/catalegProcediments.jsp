@@ -1245,7 +1245,7 @@
                     <legend>Publicació</legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
-                        <div class="fila publicacion_2campos">
+                        <div class="fila">
                             <div class="element left">
                                 <div class="etiqueta">
                                     <label for="item_estat">Estat</label>
@@ -1263,7 +1263,7 @@
                         </div>
                         <!-- /fila -->
                         <!-- fila -->
-                        <div class="fila publicacion_2campos">
+                        <div class="fila">
                             <div class="element left">
                                 <div class="etiqueta">
                                     <label for="item_data_publicacio">Data publicació</label>
@@ -1398,19 +1398,12 @@
                     <a class="modul mostrat">Amaga</a>
                     <legend>Matèries relacionades</legend>
                     <div class="modul_continguts mostrat">
+                        
                         <!-- modulMateries -->
-                        <div class="modulMateries">
+                        <div class="modulMateries selectorChecks">
                             <div class="seleccionats">
-                                <p class="info">No hi ha matèries.</p>
-                                <!--
-                                                <p class="info">Hi ha <strong>3 matèries</strong>.</p>
-                                                
-                                                <ul>
-                                                    <li>Agricultura</li>
-                                                    <li>Canvi climàtic</li>
-                                                    <li>Caça</li>
-                                                </ul>
-                                                -->
+                                <p class="info">No hi ha matèries.</p>                                
+                                <div class="listaOrdenable"></div>
                                 <p class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span>Gestiona matèries</span></span></a>
                                 </p>

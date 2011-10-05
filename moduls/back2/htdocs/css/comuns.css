@@ -1087,7 +1087,7 @@ div.table div.tbody div.td a:hover{
     border: none;
     background-color: transparent;
     margin: 0;
-    padding: 0;
+    padding: 15px 0 0 0;
     float: none;
     width: auto;
     clear:both;
@@ -1457,7 +1457,3 @@ div.modulDocuments div.seleccionats ul {
 #ajuda div.botonera a:hover { color:#ff9; background-color:#000; }
 
 #ajuda iframe { width:15em; height:18em; }
-
-
-
-

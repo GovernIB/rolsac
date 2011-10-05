@@ -1,10 +1,6 @@
 // MODUL EDIFICIS
 
-$(document).ready(function() {
-	
-	ModulEdifici = new CModulEdifici();
-	EscriptoriEdifici = new CEscriptoriEdifici();
-	Llistat = EscriptoriEdifici;
+$(document).ready(function() {	
 	
 	// elements
 	modul_edificis_elm = jQuery("div.modulEdificis:first");
@@ -13,6 +9,10 @@ $(document).ready(function() {
 	escriptori_edificis_elm = jQuery("#escriptori_edificis");	
 	cercador_elm = jQuery("#cercador");
 	
+	ModulEdifici = new CModulEdifici();
+	EscriptoriEdifici = new CEscriptoriEdifici();
+	Llistat = EscriptoriEdifici;
+	
 	multipagina = new Multipagina();
 	
 	if (modul_edificis_elm.size() == 1) {
@@ -20,20 +20,17 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botón de volver al detalle
-	jQuery(".btnVolverDetalle").bind("click",function(){		
-		EscriptoriEdifici.torna();
-	});
-	
-	jQuery("#btnFinalizar").bind("click",function(){
-		EscriptoriEdifici.finalizar();
-	});
+	jQuery(".btnVolverDetalle").bind("click",function(){EscriptoriEdifici.torna();});	
+	jQuery("#btnFinalizar").bind("click",function(){EscriptoriEdifici.finalizar();});
 	
 });
 
 function CModulEdifici(){
-
+	this.extend = ListaOrdenable;
+	this.extend();		
+	
 	this.iniciar = function() {
-		
+			
 		edificis_llistat_elm = escriptori_edificis_elm.find("div.escriptori_items_llistat:first");
 		edificis_cercador_elm = escriptori_edificis_elm.find("div.escriptori_items_cercador:first");
 		edificis_seleccionats_elm = escriptori_edificis_elm.find("div.escriptori_items_seleccionats:first");
@@ -50,37 +47,26 @@ function CModulEdifici(){
 				
 		edificis_llistat_elm.add(edificis_seleccionats_elm);							
 		
-		// one al botó de gestionar
-		modul_edificis_elm.find("a.gestiona").one("click", ModulEdifici.gestiona);
+		// Configuramos la lista ordenable.
+		this.configurar({
+			nombre: "edifici",
+			nodoOrigen: modul_edificis_elm.find(".listaOrdenable"),
+			nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"),
+			atributos: ["id", "nombre", "orden"]
+			});
 		
-	}
+		// one al botó de gestionar
+		modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();} );
+		
+	}	
 			
-	this.gestiona = function() {		
+	this.gestiona = function() {
 						
 		lis_size = modul_edificis_elm.find("li").size();
 		
 		if (lis_size > 0) {
-			
-			codi_seleccionat = "<ul>";
-			
-			modul_edificis_elm.find("li").each(function() {
-				
-				li_elm = $(this);
-				
-				codi_seleccionat += "<li>";
-				codi_seleccionat += "<div class=\"edifici\">";
-				codi_seleccionat += "<input type=\"hidden\" value=\"" + li_elm.find("input").val() + "\" />";
-				codi_seleccionat += "<span class=\"edifici\">" + li_elm.text() + "</span>";
-				codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
-				codi_seleccionat += "</div>";
-				codi_seleccionat += "</li>";
-			
-			});
-			
-			codi_seleccionat += "</ul>";
-			
-			//edificis_seleccionats_elm.find("ul").remove().end().append(codi_seleccionat);
-			edificis_seleccionats_elm.find(".listaOrdenable").html(codi_seleccionat);
+		
+			this.copiaInicial();
 															
 			EscriptoriEdifici.contaSeleccionats();
 			
@@ -91,70 +77,23 @@ function CModulEdifici(){
 		}
 		
 		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {
-			
-			escriptori_edificis_elm.fadeIn(300, function() {
-				// activar
-				escriptori_edificis_elm.bind("click",EscriptoriEdifici.llansar);
-			});
-			
+		escriptori_detall_elm.fadeOut(300, function() {			
+			escriptori_edificis_elm.fadeIn(300);			
 		});
 	}
 };
 
-function CEscriptoriEdifici(){	
-	var that = this;
+function CEscriptoriEdifici(){		
 	this.extend = ListadoBase;
 	this.extend();
 	
-	// Agrega un edificio en la lista
-	this.agregaEdificio = function( itemID, titulo ){
+	var that = this;
 	
-		procediment_id = itemID;
-		procediment_titol = titulo;
-		
-		//procediment_id = elm.parent().find("input.id").val();
-		//procediment_titol = elm.html();
-		
-		lis_size = edificis_seleccionats_elm.find("li").size();
-		
-		procediment_esta = false;
-		
-		if (lis_size == 0) {
-			
-			//$("<ul>").appendTo(edificis_seleccionats_elm);
-			edificis_seleccionats_elm.find(".listaOrdenable").html("<ul></ul>");
-			
-		} else {
-			
-			edificis_seleccionats_elm.find("input").each(function() {
-				
-				if ($(this).val() == procediment_id) {
-					procediment_esta = true;
-				}
-			
-			});
-			
-		}
-				
-		if (!procediment_esta) {
-		
-			codi_seleccionat = "<li>";
-			codi_seleccionat += "<div class=\"edifici\">";
-			codi_seleccionat += "<input type=\"hidden\" value=\"" + procediment_id + "\" />";
-			codi_seleccionat += "<span class=\"edifici\">" + procediment_titol + "</span>";
-			codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
-			codi_seleccionat += "</div>";
-			codi_seleccionat += "</li>";
-			
-			//edificis_seleccionats_elm.find("ul").append(codi_seleccionat);
-			edificis_seleccionats_elm.find(".listaOrdenable ul").append(codi_seleccionat);
-			
-			EscriptoriEdifici.contaSeleccionats();
-		
-		}
-		
-		//escriptori_edificis_elm.bind("click",EscriptoriEdifici.llansar);
+	// Agrega un item en la lista
+	this.agregaItem = function( itemID, titulo ){	
+		if( ModulEdifici.agregaItem( {id: itemID, nombre: titulo} ) ){		
+			this.contaSeleccionats();		
+		}				
 	}
 	
 	this.eliminaItemLista = function( item ){
@@ -284,15 +223,12 @@ function CEscriptoriEdifici(){
 		edificis_dades_elm.fadeOut(300, function() {
 			// pintem
 			edificis_dades_elm.html(codi_final).fadeIn(300, function() {
-										
-				// events
-				escriptori_edificis_elm.bind("click",EscriptoriEdifici.llansar);
-												
+														
 				// Evento lanzado al hacer click en un elemento de la lista.
-				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){					
-					var itemID = jQuery(this).attr("id").split("_")[1];
+				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
+					var itemID = jQuery(this).attr("class").split("_")[1];
 					var titulo = jQuery(this).html();
-					that.agregaEdificio(itemID,titulo);
+					that.agregaItem(itemID,titulo);
 					});
 				
 				// cercador
@@ -353,205 +289,34 @@ function CEscriptoriEdifici(){
 		});	
 	}
 	
-	this.finalizar = function(){
-		//escriptori_edificis_elm.unbind("click",EscriptoriEdifici.llansar);
-				
-		nombre_llistat = 0;
+	this.finalizar = function(){		
+								
+		nombre_llistat = ModulEdifici.finalizar();
 		
-		codi_llistat = "<ul>";
+		codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
 		
-		edificis_seleccionats_elm.find("li").each(function(i) {
-							
-			li_elm = $(this);
-			input_elm = li_elm.find("input");
-			codi_llistat += "<li><input type=\"hidden\" value=\"" + li_elm.find("input").val() + "\" />" + li_elm.find("span.edifici").text() + "</li>";
-			nombre_llistat++;
-			
-		});
+		//modul_edificis_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
+		modul_edificis_elm.find("p.info").html(codi_info);		
 		
-		codi_llistat += "</ul>";
+		if (nombre_llistat > 1) {			
+			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).css({cursor:"move"});
+			modul_edificis_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
+		}
 		
 		codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
 		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
 		
 		//modul_edificis_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 		modul_edificis_elm.find("p.info").html(codi_info);
-		modul_edificis_elm.find(".listaOrdenable").html(codi_llistat);
+		//modul_edificis_elm.find(".listaOrdenable").html(codi_llistat);
 		
 		if (nombre_llistat > 1) {
-			modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css({cursor: "move"});
+			modul_edificis_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
 		}
 		
 		this.torna();
-	}
-			
-	this.llansar = function(e) {
-		
-		/*
-		elm = $(e.target);
-		
-		if (elm.is("A")) {
-			
-			escriptori_edificis_elm.unbind("click",EscriptoriEdifici.llansar);
-				
-			// llancem
-			pare_elm = elm.parent();
-			
-			if (pare_elm.is("LI") && pare_elm.hasClass("opcio")) {
-												
-				// opcions pestanya
-				EscriptoriEdifici.opcions(elm);
-				
-			} else
-			if (pare_elm.hasClass("th")) {
-				
-				// ordenacio
-				if (pare_elm.hasClass("ASC")) {
-					ordreTipus_edifici_elm.val("DESC");
-				} else if (pare_elm.hasClass("DESC")) {
-					ordreTipus_edifici_elm.val("ASC");
-				} else {
-					pare_class = pare_elm.attr("class");
-					c = pare_class.substr(pare_class.indexOf(" ")+1);
-					ordreCamp_edifici_elm.val(c);
-				}
-				
-				// animacio
-				edificis_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_ordre = "<p class=\"executant\">" + txtCarregantItems + "</p>";
-					edificis_dades_elm.html(codi_ordre).fadeIn(300, function() {
-						
-						EscriptoriEdifici.carregar({});
-						
-					});
-				});
-				
-			}			
-			else if (pare_elm.is("P") && pare_elm.attr("class") == "paginacio") {
-				
-				pag_Pag = pagPagina_edifici_elm.val();
-				enlace_html = elm.html();
-				EscriptoriEdifici.anar(enlace_html);
-				
-			} else if (elm.hasClass("nom")) {
-				
-				/*procediment_id = elm.parent().find("input.id").val();
-				procediment_titol = elm.html();
-				
-				lis_size = edificis_seleccionats_elm.find("li").size();
-				
-				procediment_esta = false;
-				
-				if (lis_size == 0) {
-					
-					$("<ul>").appendTo(edificis_seleccionats_elm);
-					
-				} else {
-					
-					edificis_seleccionats_elm.find("input").each(function() {
-						
-						if ($(this).val() == procediment_id) {
-							procediment_esta = true;
-						}
-					
-					});
-					
-				}
-				
-				if (!procediment_esta) {
-				
-					codi_seleccionat = "<li>";
-					codi_seleccionat += "<div class=\"procediment\">";
-					codi_seleccionat += "<input type=\"hidden\" value=\"" + procediment_id + "\" />";
-					codi_seleccionat += "<span class=\"procediment\">" + procediment_titol + "</span>";
-					codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
-					codi_seleccionat += "</div>";
-					codi_seleccionat += "</li>";
-					
-					edificis_seleccionats_elm.find("ul").append(codi_seleccionat);
-					
-					EscriptoriEdifici.contaSeleccionats();
-				
-				}
-				
-				escriptori_edificis_elm.bind("click",EscriptoriEdifici.llansar);
-				
-				
-			}
-			
-		} else if (elm.is("SPAN") && elm.parent().parent().is("A") && elm.parent().parent().hasClass("btn")) {
-			
-			
-			a_elm = elm.parents("a.btn:first");
-			
-			if (a_elm.hasClass("torna")) {
-				
-				escriptori_edificis_elm.unbind("click",EscriptoriEdifici.llansar);
-				
-				EscriptoriEdifici.torna();
-				
-			} else if (a_elm.hasClass("elimina")) {
-												
-				a_elm.parents("li:first").remove();
-				
-				EscriptoriEdifici.contaSeleccionats();
-				
-				
-			} 
-			else if (a_elm.hasClass("finalitza")) {
-				
-				escriptori_edificis_elm.unbind("click",EscriptoriEdifici.llansar);
-				
-				nombre_llistat = 0;
-				
-				codi_llistat = "<ul>";
-				
-				edificis_seleccionats_elm.find("li").each(function(i) {
-				
-					li_elm = $(this);
-					input_elm = li_elm.find("input");
-					codi_llistat += "<li><input type=\"hidden\" value=\"" + li_elm.find("input").val() + "\" />" + li_elm.find("span.procediment").text() + "</li>";
-					nombre_llistat++;
-					
-				});
-				
-				codi_llistat += "</ul>";
-				
-				codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
-				codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
-				
-				modul_edificis_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
-				
-				if (nombre_llistat > 1) {
-					modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
-				}
-				
-				EscriptoriEdifici.torna();
-				
-			} else 
-			if (a_elm.hasClass("consulta")) {
-				
-				// desactivem taula
-				escriptori_edificis_elm.unbind("click",EscriptoriEdifici.llansar);
-				
-				edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
-				
-				// animacio
-				edificis_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
-					edificis_dades_elm.html(codi_cercant).fadeIn(300, function() {
-					
-						// events taula
-						pagPagina_edifici_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
-						EscriptoriEdifici.carregar({});
-						
-					});
-				});
-				
-			}
-		}*/
 	}
 	
 	// Método sobreescrito
@@ -576,11 +341,10 @@ function CEscriptoriEdifici(){
 	this.torna = function() {
 		
 		// animacio
-		escriptori_edificis_elm.fadeOut(300, function() {
-			
+		escriptori_edificis_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_edificis_elm.find("a.gestiona").one("click", ModulEdifici.gestiona);
+				modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();});
 			});
 			
 		});
@@ -603,8 +367,8 @@ function CEscriptoriEdifici(){
 			
 		} else {
 			
-			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtEdificis.toLowerCase() + "</strong>.");
-			edificis_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtEdificis.toLowerCase() + "</strong>.");						
+			edificis_seleccionats_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
 			
 		}
 		

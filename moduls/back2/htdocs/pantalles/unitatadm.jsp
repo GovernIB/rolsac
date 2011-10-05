@@ -848,6 +848,7 @@
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>  
+    <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_edificis.js'/>"></script>

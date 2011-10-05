@@ -1,27 +1,7 @@
 @charset "utf-8";
 
 /* llistats table */
-/*
-div.llistat div.thead div.nom { width:41em; padding-left:5em; }
-div.llistat div.thead div.publicacio { width:9em; }
-div.llistat div.thead div.caducitat { width:9em; }
 
-div.llistat div.thead div.nom a { width:40em; }
-div.llistat div.thead div.publicacio a { width:8em; }
-div.llistat div.thead div.caducitat a { width:8em; }
-
-div.llistat div.tbody div.nom { width:40em; padding-bottom:1em; padding-left:5.5em; background:transparent url(../img/taula_llistat/procediment.gif) no-repeat 2em .8em; }
-div.llistat div.tbody div.nomCaducat { background:transparent url(../img/taula_llistat/procediment_caducat.gif) no-repeat 2em .8em; }
-div.llistat div.tbody div.publicacio { width:8em; }
-div.llistat div.tbody div.caducitat { width:8em; }
-
-div.llistat div.tbody div.nom a, div.llistat div.tbody div.nom span { font:normal 1.3em Georgia, "Times New Roman", Times, serif; }
-div.llistat div.tbody div.td span.nom { font-style:italic; }
-
-div.llistat div.tbody div.caducat { font-weight:bold; color:#c00; }
-
-#resultats p.paginacio { text-align:center; padding:.5em 1em; background-color:#ffecd9; }
-*/
 
 div.llistat div.nom { 
     width: 400px;   
@@ -38,82 +18,6 @@ div.llistat div.caducitat  {
     width: 200px;
     padding: 0 12px;
 }
-
-
-#escriptori_detall #modulLateral{
-    margin-top: 0;
-}
-#escriptori_detall #modulLateral div.modul{
-    background-color: #F3F3F3;
-    border: 1px solid #D3D3D3;  
-    overflow: hidden;
-    padding: 15px;
-    margin-bottom: 33px;
-    position:relative;
-    
-    border-radius: 15px 15px 15px 15px;
-}
-#escriptori_detall #modulLateral div.modul a.modul{
-    position:absolute;
-    right: 9px;
-    top: 9px;
-    display:block;
-    text-indent: -1000px;
-    width: 16px;
-    height: 16px;
-    background-image: url("../img/botons/desplegar.png");
-}
-#escriptori_detall #modulLateral .modul fieldset legend{
-    font: bold 11px Verdana, Helvetica, Sans-serif;
-    color: #333333;
-    text-transform: uppercase;
-    display: block;
-    padding-bottom: 15px;
-}
-#escriptori_detall #modulLateral .botonera{
-    border: none;
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
-    float: none;
-    width: auto;
-}
-#escriptori_detall #modulLateral .botonera ul{
-    padding: 0;
-    border: none;
-    border-radius: 0;
-}
-
-
-#escriptori_detall #modulLateral .modulMateries .llistat{
-    clear:both;
-    padding-top: 10px;
-    display: none;
-}
-#escriptori_detall #modulLateral .modulMateries .llistat ul{
-    list-style: none;
-}
-#escriptori_detall #modulLateral .modulMateries .llistat li{
-    float: left;
-    width: 49.9%;
-    font-size: 10px;
-}
-#escriptori_detall #modulLateral .modulMateries .llistat li input{
-    float:right;
-    margin-right: 5px;
-}
-#escriptori_detall #modulLateral .modulMateries .llistat li.impar,
-#escriptori_detall #modulLateral .modulMateries .llistat li:nth-child(2n+1){
-    clear:left; 
-}
-#escriptori_detall #modulLateral .modulMateries .botonera{
-    clear: both;
-    padding-top: 10px;
-}
-#escriptori_detall #modulLateral .modulMateries  .botonera .btnGenerico{
-    margin-right: 10px;
-}
-
 div.publicacion_2campos {
     clear: both;
 }

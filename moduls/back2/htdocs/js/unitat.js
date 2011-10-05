@@ -237,19 +237,21 @@ function CDetall(soloFicha){
 			edi_llistat_elm.find("input").removeAttr("checked");
 									
 			if (edificis_nodes_size == 0) {
+				
 				edi_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEdificis + ".");
+				
 			} else {
-				codi_edificis = "<ul>";
-				$(edificis_nodes).each(function() {
+			
+				var itemsLista = [];
+				var i=0;
+				jQuery(edificis_nodes).each(function(){
 					edifici_node = this;
-					codi_edificis += "<li><input type=\"hidden\" value=\"" + edifici_node.id + "\" />" + edifici_node.nom + "</li>";
-					edi_llistat_elm.find("input[value=" + edifici_node.id + "]").attr("checked","checked");
-				});
-				codi_edificis += "<ul>";
+					itemsLista.push( {id:edifici_node.id, nombre:edifici_node.nom, orden: i++} );
+				});				
+				ModulEdifici.agregaItems(itemsLista);
+				
 				txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
-				//edi_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.").after(codi_edificis);
-				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");
-				edi_seleccionats_elm.find(".listaOrdenable").html(codi_edificis);
+				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");				
 			}			
 			
 		} else {
