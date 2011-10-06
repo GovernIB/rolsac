@@ -380,15 +380,25 @@ function CDetall(){
 	//Se añaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		var llistaMateries = "";
+		var llistaMateries = "materies=";
+		var llistaFets = "fetsVitals=";
 		var dataVars = "";
+		
 		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
 			llistaMateries += $(this).val() + ",";										
 		});
 		if (llistaMateries.length > 0){
 			llistaMateries = llistaMateries.slice(0, llistaMateries.length-1);
-			dataVars = "materies=" + llistaMateries;
 		}
+		
+		$("div.modulFetsVitals div.seleccionats div.listaOrdenable input").each(function() {
+			llistaFets += $(this).val() + ",";										
+		});
+		if (llistaFets.length > 0){
+			llistaFets = llistaFets.slice(0, llistaFets.length-1);			 
+		}
+		
+		dataVars = llistaMateries + "&" + llistaFets
 		
 		this._baseGuarda(dataVars);
 	}
@@ -537,6 +547,29 @@ function CDetall(){
 			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;			
 			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
 			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+		}
+		
+		//Fets Vitals
+
+		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
+		fets_llistat_elm = escriptori_detall_elm.find("div.modulFetsVitals div.llistat");
+		fets_nodes = dada_node.fetsVitals;
+		fets_nodes_size = fets_nodes.length;
+		
+		fets_llistat_elm.find("input").removeAttr("checked");
+		if (fets_nodes_size == 0) {
+			fets_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaFets + ".");
+		} else {
+			codi_fets = "<ul>";
+			$(fets_nodes).each(function() {
+				fet_node = this;
+				codi_fets += "<li><input type=\"hidden\" value=\"" + fet_node.id + "\" />" + fet_node.nom + "</li>";
+				fets_llistat_elm.find("input[value=" + fet_node.id + "]").attr("checked","checked");
+			});
+			codi_fets += "<ul>";
+			txt_fets = (fets_nodes_size == 1) ? txtFet : txtFets;
+			fets_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + fets_nodes_size + " " + txt_fets + "</strong>.");
+			fets_seleccionats_elm.find(".listaOrdenable").html(codi_fets);			
 		}
 		
 		// mostrem

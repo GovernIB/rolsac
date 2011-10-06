@@ -1037,26 +1037,18 @@
                             </div>
                             <div class="llistat">
                                 <ul>
-                                    <li><label><span>Fet vital 1</span><input
-                                            type="checkbox" value="1" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Fet vital 2</span><input
-                                            type="checkbox" value="2" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Fet vital 3</span><input
-                                            type="checkbox" value="3" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Fet vital 4</span><input
-                                            type="checkbox" value="4" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Fet vital 5</span><input
-                                            type="checkbox" value="5" />
-                                    </label>
-                                    </li>
+									<c:forEach items="${llistaFetsVitals}" var="fetVital" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${fetVital.nom}" /></span><input type="checkbox" value="<c:out value='${fetVital.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
@@ -1069,7 +1061,6 @@
                             </div>
                         </div>
                         <!-- /modulFetsVitals -->
-                        
                     </div>
                 </fieldset>
             </div>

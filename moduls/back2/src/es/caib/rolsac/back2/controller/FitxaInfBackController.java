@@ -202,8 +202,7 @@ public class FitxaInfBackController {
         
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);
-            //llistaFitxes = fitxaDelegate.listarFichasUnidad(ua.getId());
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);           
 
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
@@ -234,11 +233,12 @@ public class FitxaInfBackController {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
         List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
-        List<IdNomTransient> llistaEdificisTransient = new ArrayList<IdNomTransient>();
+        List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
         
         FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         
         Long id = new Long(request.getParameter("id"));
+        String lang = request.getLocale().getLanguage();
         
         try {
         
@@ -291,13 +291,13 @@ public class FitxaInfBackController {
 
             resultats.put("item_notes", fitxa.getInfo());
             
-          //Materias asociadas
+            //Materias asociadas
             
             if (fitxa.getMaterias() != null) {             
             
                 for(Materia materia : fitxa.getMaterias()){                
                     llistaMateriesTransient.add(new IdNomTransient(  materia.getId(), 
-                                                                     materia.getNombreMateria(request.getLocale().getLanguage())
+                                                                     materia.getNombreMateria(lang)
                                                                            ));                
                    }
                 
@@ -306,6 +306,24 @@ public class FitxaInfBackController {
             } else {
                 resultats.put("materies", null);
             } 
+           
+            //Fets vitals
+            
+            if (fitxa.getHechosVitales() != null) {             
+                
+                for(HechoVital fetVital : fitxa.getHechosVitales()){
+                    TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+                    llistaFetsVitalsTransient.add(new IdNomTransient(  fetVital.getId(), 
+                                                                       thv == null ? "" : thv.getNombre()                                                                       
+                                                                           ));                
+                   }
+                
+                resultats.put("fetsVitals", llistaFetsVitalsTransient);
+            
+            } else {
+                resultats.put("fetsVitals", null);
+            }
+            
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -351,7 +369,6 @@ public class FitxaInfBackController {
                     fitxa.setId(fitxaOld.getId());
                     fitxa.setBaner(fitxaOld.getBaner());
                     fitxa.setIcono(fitxaOld.getIcono());
-                    fitxa.setHechosVitales(fitxaOld.getHechosVitales());
                     fitxa.setImagen(fitxaOld.getImagen());                    
                     fitxa.setResponsable(fitxaOld.getResponsable());
                     fitxa.setForo_tema(fitxaOld.getForo_tema());                    
@@ -440,7 +457,33 @@ public class FitxaInfBackController {
                     
                   fitxa.setMaterias(materiesNoves);                                                 
                 }
+                //Fets vitals
                 
+                if (request.getParameter("fetsVitals") != null && !"".equals(request.getParameter("fetsVitals"))){
+                    HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+                    Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
+                    String[] codisFetsNous = request.getParameter("fetsVitals").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i<codisFetsNous.length; i++){
+                            for (HechoVital fetVital: fitxaOld.getHechosVitales()){
+                                if(fetVital.getId().equals(Long.valueOf(codisFetsNous[i]))){
+                                    fetsVitalsNous.add(fetVital);
+                                    codisFetsNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiFetVital: codisFetsNous){
+                        if (codiFetVital != null){
+                            fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(Long.valueOf(codiFetVital)));
+                        }                        
+                    }
+                    
+                  fitxa.setHechosVitales(fetsVitalsNous);                                                 
+                }
                 
                 //Asociacion de ficha con Unidad administrativa                                
                 

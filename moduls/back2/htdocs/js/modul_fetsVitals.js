@@ -66,9 +66,11 @@ var ModulFetsVitals = {
 				codi_llistat += "</ul>";
 				
 				codi_materia_txt = (nombre_llistat == 1) ? txtFet : txtFets;
-				codi_info = (nombre_llistat == 0) ? txtNoHiHaFets + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
 				
-				fets_seleccionats_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
+				codi_info = (nombre_llistat == 0) ? txtNoHiHaFets + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";				
+				
+				fets_seleccionats_elm.find("p.info").html(codi_info);
+				fets_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);
 				
 				fets_seleccionats_elm.slideDown(300);
 				fets_llistat_elm.slideUp(300);
