@@ -29,7 +29,7 @@ function DetallBase(soloFicha){
 		});
 	}
 	
-	this.guarda = function( dataVars ) {
+	this.guarda = function(dataVars) {
 		
 		// Validamos el formulario
 		if( typeof FormulariComprovar != "undefined" ){
@@ -46,7 +46,7 @@ function DetallBase(soloFicha){
 
 		dataForm = $("#formGuardar").serialize();
 
-		if (dataVars.length > 0) {
+		if (typeof dataVars != 'undefined' && dataVars.length > 0) {
 			dataForm += "&" + dataVars;
 		}
 						
