@@ -296,7 +296,6 @@ var Llistat = {
 			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();
-			//dataVars_cercador += "&seccio=" + $("#cerca_seccio").val();
 			dataVars_cercador += "&url=" + $("#cerca_url").val();
 			dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
 			dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
@@ -377,28 +376,12 @@ function CDetall(){
 	this.extend();
 	var that = this;
 	
-	//Se añaden los campos que no se van a serializar directamente mediante .serialize()	
+	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		var llistaMateries = "materies=";
-		var llistaFets = "fetsVitals=";
 		var dataVars = "";
-		
-		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
-			llistaMateries += $(this).val() + ",";										
-		});
-		if (llistaMateries.length > 0){
-			llistaMateries = llistaMateries.slice(0, llistaMateries.length-1);
-		}
-		
-		$("div.modulFetsVitals div.seleccionats div.listaOrdenable input").each(function() {
-			llistaFets += $(this).val() + ",";										
-		});
-		if (llistaFets.length > 0){
-			llistaFets = llistaFets.slice(0, llistaFets.length-1);			 
-		}
-		
-		dataVars = llistaMateries + "&" + llistaFets
+
+		dataVars = ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
 		
 		this._baseGuarda(dataVars);
 	}
@@ -450,13 +433,11 @@ function CDetall(){
 		
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
 		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
-		
-		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-		mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		
-		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
-		fets_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaFets + ".");
-		
+
+		ModulMateries.nuevo();
+	
+		ModulFetsVitals.nuevo();
+
 		secc_ua_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
 		secc_ua_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
 		
@@ -525,52 +506,10 @@ function CDetall(){
 		$("#item_notes").val(dada_node.item_notes);
 		$("#item_youtube").val(dada_node.item_youtube);
 		$("#item_forum").val(dada_node.item_forum);				
+	
+		ModulMateries.inicializarMaterias(dada_node.materies);
 		
-		// materies
-		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
-		materies_nodes = dada_node.materies;
-		materes_nodes_size = materies_nodes.length;
-
-		mat_llistat_elm.find("input").removeAttr("checked");
-		
-		if (materes_nodes_size == 0) {
-			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		} else {
-			codi_materies = "<ul>";
-			$(materies_nodes).each(function() {
-				materia_node = this;
-				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
-				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
-			});
-			codi_materies += "<ul>";
-			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;			
-			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
-			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
-		}
-		
-		//Fets Vitals
-
-		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
-		fets_llistat_elm = escriptori_detall_elm.find("div.modulFetsVitals div.llistat");
-		fets_nodes = dada_node.fetsVitals;
-		fets_nodes_size = fets_nodes.length;
-		
-		fets_llistat_elm.find("input").removeAttr("checked");
-		if (fets_nodes_size == 0) {
-			fets_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaFets + ".");
-		} else {
-			codi_fets = "<ul>";
-			$(fets_nodes).each(function() {
-				fet_node = this;
-				codi_fets += "<li><input type=\"hidden\" value=\"" + fet_node.id + "\" />" + fet_node.nom + "</li>";
-				fets_llistat_elm.find("input[value=" + fet_node.id + "]").attr("checked","checked");
-			});
-			codi_fets += "<ul>";
-			txt_fets = (fets_nodes_size == 1) ? txtFet : txtFets;
-			fets_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + fets_nodes_size + " " + txt_fets + "</strong>.");
-			fets_seleccionats_elm.find(".listaOrdenable").html(codi_fets);			
-		}
+		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
 		
 		// mostrem
 

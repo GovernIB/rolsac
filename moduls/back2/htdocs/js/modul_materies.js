@@ -59,7 +59,6 @@ function CModulMateries(){
 		codi_materia_txt = (nombre_llistat == 1) ? txtMateria : txtMateries;
 		codi_info = (nombre_llistat == 0) ? txtNoHiHaMateries + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
 		
-		//materies_seleccionats_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 		materies_seleccionats_elm.find("p.info").html(codi_info);
 		materies_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		
 		
@@ -67,4 +66,53 @@ function CModulMateries(){
 		materies_llistat_elm.slideUp(300);
 		
 	}
-};
+	
+	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
+	this.inicializarMaterias = function(dades){
+		
+		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
+		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
+		materies_nodes = dades;
+		materes_nodes_size = materies_nodes.length;
+
+		mat_llistat_elm.find("input").removeAttr("checked");
+		
+		if (materes_nodes_size == 0) {
+			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
+		} else {
+			codi_materies = "<ul>";
+			$(materies_nodes).each(function() {
+				materia_node = this;
+				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
+				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
+			});
+			codi_materies += "<ul>";
+			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;			
+			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
+			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+		}
+	}
+	
+	//devuelve un string con el formato materies=n1,n2,...,nm donde n son codigos de materias
+	this.listaMaterias = function (){
+		
+		var listaMaterias = "materies=";
+		
+		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
+			listaMaterias += $(this).val() + ",";										
+		});
+		if (listaMaterias.length > 0){
+			listaMaterias = listaMaterias.slice(0, listaMaterias.length-1);
+		}
+		return listaMaterias;
+	}
+	
+	//Al acceder al formulario de creacion, limpia las listas de materias y desmarca los checkboxes	
+	this.nuevo = function() {
+		
+		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
+		mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
+		$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false);
+		
+	}	
+}
