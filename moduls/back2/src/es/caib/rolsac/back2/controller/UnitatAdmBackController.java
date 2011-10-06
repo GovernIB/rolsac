@@ -352,6 +352,7 @@ public class UnitatAdmBackController {
     public @ResponseBody IdNomTransient guardarUniAdm(HttpSession session, HttpServletRequest request) {
         
         IdNomTransient result = null;
+        String accio = "guardar";
         
         try {
             //TODO pendent de quins camps son obligatoris
@@ -371,6 +372,7 @@ public class UnitatAdmBackController {
                 try {
                     Long id = Long.parseLong(request.getParameter("item_id"));
                     unitatAdministrativaOld = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id); 
+                    accio = "actualitzar";
                 } catch (NumberFormatException nfe) {
 
                 }
@@ -380,8 +382,11 @@ public class UnitatAdmBackController {
                 	
                 	/*
                 	 * Setear Fitxers
+                	 * Seteamos con valores anteriores
                 	 */
-                	
+                	unitatAdministrativa.setUnidadesMaterias(unitatAdministrativaOld.getUnidadesMaterias());
+                	unitatAdministrativa.setEdificios(unitatAdministrativaOld.getEdificios());
+                	unitatAdministrativa.setFichasUA(unitatAdministrativaOld.getFichasUA());
                 }
             	// Idiomas
                 TraduccionUA tUA;
@@ -416,20 +421,18 @@ public class UnitatAdmBackController {
 					EspacioTerritorial espacioTerritorial = espacioTerritorialDelegate.obtenerEspacioTerritorial(espaiTerritorialId);
 					unitatAdministrativa.setEspacioTerrit(espacioTerritorial);
 				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					String error = "L'espai territorial és incorrecte.";
+				    String error = messageSource.getMessage("unitatadm.formulari.error.espaiTerritorial_incorrecte", null, request.getLocale());
 					result = new IdNomTransient(-3l, error);
 				}
                 
 				
 				try {
-					Long unitatAdmPareId = Long.parseLong(request.getParameter("item_espai_territorial"));
+					Long unitatAdmPareId = Long.parseLong(request.getParameter("item_pare_id"));
 					UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 					UnidadAdministrativa pare = unidadAdministrativaDelegate.obtenerUnidadAdministrativa(unitatAdmPareId);
 					unitatAdministrativa.setPadre(pare);
 				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					String error = "L'Unitat Administrativa Pare és incorrecte.";
+					String error = messageSource.getMessage("unitatadm.formulari.error.unitatAdministrativaPare_incorrecte", null, request.getLocale());
 					result = new IdNomTransient(-3l, error);
 				}
 				
@@ -457,8 +460,7 @@ public class UnitatAdmBackController {
 					Tratamiento tratamiento = tratamientoDelegate.obtenerTratamiento(tractamentId);
 					unitatAdministrativa.setTratamiento(tratamiento);
 				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					String error = "El tracatament és incorrecte.";
+					String error = messageSource.getMessage("unitatadm.formulari.error.tractament_incorrecte", null, request.getLocale());
 					result = new IdNomTransient(-3l, error);
 				}
 				
@@ -482,25 +484,21 @@ public class UnitatAdmBackController {
 				*/
 				
 				//Fichas de la portada web
-                
-				/*
-                resultats.put("item_nivell_1", uni.getNumfoto1());
-                resultats.put("item_nivell_2", uni.getNumfoto2());
-                resultats.put("item_nivell_3", uni.getNumfoto3());
-                resultats.put("item_nivell_4", uni.getNumfoto4());
-				*/
-               
-				/*
-                 
-                //Fichas de la portada web
-                
-                resultats.put("item_nivell_1", uni.getNumfoto1());
-                resultats.put("item_nivell_2", uni.getNumfoto2());
-                resultats.put("item_nivell_3", uni.getNumfoto3());
-                resultats.put("item_nivell_4", uni.getNumfoto4());
-    	          
-                //Materias asociadas
-               
+				if (request.getParameter("item_nivell_1")!=null && !"".equals(request.getParameter("item_nivell_1"))){
+					unitatAdministrativa.setNumfoto1(Integer.parseInt(request.getParameter("item_nivell_1")));
+				}
+				if (request.getParameter("item_nivell_2")!=null && !"".equals(request.getParameter("item_nivell_2"))){
+					unitatAdministrativa.setNumfoto2(Integer.parseInt(request.getParameter("item_nivell_2")));
+				}
+				if (request.getParameter("item_nivell_3")!=null && !"".equals(request.getParameter("item_nivell_3"))){
+					unitatAdministrativa.setNumfoto3(Integer.parseInt(request.getParameter("item_nivell_3")));
+				}
+				if (request.getParameter("item_nivell_4")!=null && !"".equals(request.getParameter("item_nivell_4"))){
+					unitatAdministrativa.setNumfoto4(Integer.parseInt(request.getParameter("item_nivell_4")));
+				}
+
+				//Materias asociadas
+               /*
                 if (uni.getUnidadesMaterias() != null) {             
                 
                     for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
@@ -533,10 +531,9 @@ public class UnitatAdmBackController {
                 } 
 */
 				
-				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, null);
+				crearUnitatAdministrativa(accio, unitatAdministrativaDelegate,	unitatAdministrativa);  
 				
-				
-                String ok = messageSource.getMessage("personal.guardat.correcte", null, request.getLocale());
+                String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
                 result = new IdNomTransient(unitatAdministrativa.getId(), ok);
             }
             
@@ -553,6 +550,30 @@ public class UnitatAdmBackController {
         
         return result;
     }
+
+	/**
+	 * @param accio
+	 * @param unitatAdministrativaDelegate
+	 * @param unitatAdministrativa
+	 * @throws DelegateException
+	 */
+	private void crearUnitatAdministrativa(String accio, UnidadAdministrativaDelegate unitatAdministrativaDelegate,
+			UnidadAdministrativa unitatAdministrativa) throws DelegateException {
+		if("guardar".equals(accio)) {
+			if (unitatAdministrativa.getPadre() != null ) {
+				unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
+			} else {
+				unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
+			}
+		} else if ("actualitzar".equals(accio)) {
+			// Actualitza Pare Unitat Administrativa si escau
+			if (unitatAdministrativa.getPadre() != null ) {
+				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
+			} else {
+				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, null);
+			}
+		}
+	}
 	
     /**
      * Método que comprueba si hay que mostrar los logos
