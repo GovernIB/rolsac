@@ -13,6 +13,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -21,12 +23,18 @@ import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.PersonalTransient;
+
+import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
+import es.caib.rolsac.back2.util.RolUtil;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 
 @Controller
 @RequestMapping("/personal/")
 public class PersonalBackController {
     
+	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	
     private MessageSource messageSource = null;
     
     @Autowired
@@ -34,47 +42,54 @@ public class PersonalBackController {
         this.messageSource = messageSource;
     }
     
+    
     @RequestMapping(value = "/personal.htm", method = GET)
     public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
         model.put("menu", 0);
         model.put("submenu", "layout/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 5);
-        model.put("escriptori", "pantalles/personal.jsp");
-        if (session.getAttribute("unidadAdministrativa")!=null){
-            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
+        
+        RolUtil rolUtil= new RolUtil(request);
+        if (rolUtil.userIsSuper()) {
+        	model.put("escriptori", "pantalles/personal.jsp");
+            if (session.getAttribute("unidadAdministrativa")!=null){
+                model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
+                model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
+            }
+        } else {
+        	model.put("error", "permisos");
         }        
 
         return "index";
     }
-    //TODO:mensajes de error
+
 	@RequestMapping(value = "/llistat.htm", method = POST)
 	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
 
-	       List<Personal> llistaPersonal = new ArrayList<Personal>();
-	       List<PersonalTransient> llistaPersonalTransient = new ArrayList<PersonalTransient>();
-	       Map<String,Object> resultats = new HashMap<String,Object>();
-		   Map<String, Object> paramMap = new HashMap<String, Object>();
-		   
-		   if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
-               return resultats;//Si no hay unidad administrativa se devuelve vacio
-           }
-		   
-		   paramMap.put("username", request.getParameter("username"));
-	       paramMap.put("nombre", request.getParameter("nom"));
-	       paramMap.put("funciones", request.getParameter("funcions"));
-	       paramMap.put("cargo", request.getParameter("carrec"));
-	       paramMap.put("email", request.getParameter("email"));
-	       paramMap.put("extensionPublica", request.getParameter("epui"));
-	       paramMap.put("numeroLargoPublico", request.getParameter("nlpui"));
-	       paramMap.put("extensionPrivada", request.getParameter("epri"));
-	       paramMap.put("numeroLargoPrivado", request.getParameter("nlpri"));
-	       paramMap.put("extensionMovil", request.getParameter("em"));
-	       paramMap.put("numeroLargoMovil", request.getParameter("nlm"));
-	       paramMap.put("unidadAdministrativa.id", new Long(request.getParameter("idUA")));		   		      		     		   
-           
-           try {                      		   
+       List<Personal> llistaPersonal = new ArrayList<Personal>();
+       List<PersonalTransient> llistaPersonalTransient = new ArrayList<PersonalTransient>();
+       Map<String,Object> resultats = new HashMap<String,Object>();
+	   Map<String, Object> paramMap = new HashMap<String, Object>();
+	   
+	   if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
+           return resultats;//Si no hay unidad administrativa se devuelve vacio
+       }
+	   
+	   paramMap.put("username", request.getParameter("username"));
+       paramMap.put("nombre", request.getParameter("nom"));
+       paramMap.put("funciones", request.getParameter("funcions"));
+       paramMap.put("cargo", request.getParameter("carrec"));
+       paramMap.put("email", request.getParameter("email"));
+       paramMap.put("extensionPublica", request.getParameter("epui"));
+       paramMap.put("numeroLargoPublico", request.getParameter("nlpui"));
+       paramMap.put("extensionPrivada", request.getParameter("epri"));
+       paramMap.put("numeroLargoPrivado", request.getParameter("nlpri"));
+       paramMap.put("extensionMovil", request.getParameter("em"));
+       paramMap.put("numeroLargoMovil", request.getParameter("nlm"));
+       paramMap.put("unidadAdministrativa.id", new Long(request.getParameter("idUA")));		   		      		     		   
+       
+       try {                      		   
 		   		   		
 			PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
 			llistaPersonal = personalDelegate.listarPersonalFiltro(paramMap);
@@ -91,10 +106,9 @@ public class PersonalBackController {
 
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
-				//model.put("error", "permisos");
+				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
-            	//model.put("error", "altres");
-            	dEx.printStackTrace();
+            	log.error("Error: " + dEx.getMessage());
             }
 		}
 
@@ -105,7 +119,7 @@ public class PersonalBackController {
 	}
 
 	@RequestMapping(value = "/pagDetall.htm", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    
 	    Map<String, Object> personaDetall = new HashMap<String, Object>();
 	    
@@ -133,10 +147,9 @@ public class PersonalBackController {
 	        
 	    } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
-                model.put("error", "permisos");
+            	log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
-                model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error("Error: " + dEx.getMessage());
             }
         }
 	    
@@ -161,9 +174,10 @@ public class PersonalBackController {
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 resultatStatus.setId(-1l);
+                log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
                 resultatStatus.setId(-2l);
-                dEx.printStackTrace();
+                log.error("Error: " + dEx.getMessage());
             }
         }
 	    
@@ -219,10 +233,11 @@ public class PersonalBackController {
 			if (dEx.getCause() instanceof SecurityException) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomTransient(-1l, error);
+				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomTransient(-2l, error);
-				dEx.printStackTrace();
+				log.error("Error: " + dEx.getMessage());
 			}
 		}
         

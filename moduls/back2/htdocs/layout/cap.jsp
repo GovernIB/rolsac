@@ -1,16 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%
-String[] roles = new String[]{"RSC_ADMIN","RSC_SYSTEM","RSC_SUPER","RSC_OPER"};
-java.util.List<String> rolenames = new java.util.ArrayList<String>(roles.length);
-if (request.getRemoteUser() != null) {            
-	 for (int i = 0; i < roles.length; i++) {
-        if (request.isUserInRole(roles[i])) {
-            rolenames.add(roles[i]);
-        }
-    }
-}
-%>
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
 <div id="cap">
     <div id="cap_contingut">
         <div class="logos">
@@ -21,7 +11,7 @@ if (request.getRemoteUser() != null) {
         </div>
         <div class="usuari">        
             <p>
-                <spring:message code="cap.usuari" />: <strong>[<%=request.getRemoteUser() %>]</strong> <a href="" class="btn personalitzar" title="<spring:message code='cap.personalitza_aplicacio'/>"><%=rolenames%></a>                
+                <spring:message code="cap.usuari" />: <strong>[<c:out value="${pageContext.request.remoteUser}"/>]</strong> <a href="#" class="btn personalitzar" title="<spring:message code='cap.personalitza_aplicacio'/>"><rol:printRol/></a>
             </p>
         </div>
         <div id="tancarAplicacio">

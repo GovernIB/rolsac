@@ -28,7 +28,7 @@
             <jsp:include page="layout/cap.jsp" flush="true"/>
             <c:choose>
                 <c:when test="${error=='permisos'}">
-                    <p><spring:message code="error.pemissos.accedir"/></p>
+                    <p><spring:message code="error.permisos.accedir"/></p>
                 </c:when>
                 <c:when test="${error=='altres'}">
                     <p><spring:message code="error.altres"/></p>

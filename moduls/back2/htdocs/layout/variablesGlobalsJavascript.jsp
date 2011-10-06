@@ -88,7 +88,7 @@
     var txtConectar = '<spring:message code="error.conexio.conectar_ara"/>';
     var txtFuncions = '<spring:message code="error.conexio.funcions"/>';
     var txtFuncionsFins = '<spring:message code="error.conexio.fins"/>';
-    var txtErrorPermissos = '<spring:message code="error.permissos"/>';
+    var txtErrorPermisos = '<spring:message code="error.permisos"/>';
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';    
         
     // Errores de validación

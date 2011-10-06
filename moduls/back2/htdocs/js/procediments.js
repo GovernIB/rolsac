@@ -736,7 +736,7 @@ function CDetall(){
 				if (data.id > 0) {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 				} else if (data.id == -1){
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermissos});
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 				} else if (data.id == -2){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}

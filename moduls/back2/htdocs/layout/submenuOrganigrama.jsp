@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
 <div id="submenu">
 	<div id="submenu_contingut">
 		<ul>
@@ -63,17 +64,20 @@
                 </c:otherwise>
             </c:choose>
             
-            <c:choose>
-                <c:when test="${submenu_seleccionado==5}">
-                    <li class="seleccionat">
-                        <span><spring:message code="submenu.personal" /></span>
-                        <span class="actual"></span>
-                    </li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="<c:url value="/personal/personal.htm"/>"><spring:message code="submenu.personal" /></a></li>
-                </c:otherwise>
-            </c:choose>
+            <c:set var="mostrarPersonal"><rol:userIsSuper/></c:set>
+            <c:if test="${mostrarPersonal}" >
+	            <c:choose>
+	                <c:when test="${submenu_seleccionado==5}">
+	                    <li class="seleccionat">
+	                        <span><spring:message code="submenu.personal" /></span>
+	                        <span class="actual"></span>
+	                    </li>
+	                </c:when>
+	                <c:otherwise>
+	                    <li><a href="<c:url value="/personal/personal.htm"/>"><spring:message code="submenu.personal" /></a></li>
+	                </c:otherwise>
+	            </c:choose>
+            </c:if>
 		</ul>			
 	</div>		
 </div>
