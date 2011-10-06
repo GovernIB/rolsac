@@ -25,14 +25,14 @@ public abstract class GrabadorBase {
 	}
 
 
-	protected void añadirMateriaSinEspecificar(Classificable materias) throws DelegateException {
+	protected void anadirMateriaSinEspecificar(Classificable materias) throws DelegateException {
 		Materia sinEspecificar = buscarMateriaSinEspecificar();
 		materias.addMateria(sinEspecificar);
 	}
 	
 	public <T extends Classificable> T guardar(TraDynaValidatorForm dForm, T t) throws DelegateException {
 		if(!t.tieneMaterias()) 
-			añadirMateriaSinEspecificar(t);
+			anadirMateriaSinEspecificar(t);
 		return grabar(dForm, t);
 	}
 	
