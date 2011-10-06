@@ -43,12 +43,12 @@ public class ProcedimientoControllerTest extends TestCase {
 	  MockMateriaDelegate materiaDelegate = new MockMateriaDelegate() { 
 		  public List listarMaterias() throws org.ibit.rol.sac.persistence.delegate.DelegateException {
 			  List<Materia> materias=new ArrayList<Materia>();
-			  materias=añadirMateria(materias,Materia.CE_SENSECLASSIFICAR);
-			  materias=añadirMateria(materias,"Salut");
+			  materias=anadirMateria(materias,Materia.CE_SENSECLASSIFICAR);
+			  materias=anadirMateria(materias,"Salut");
 			  return materias;
 		  }
 
-		  private List<Materia> añadirMateria(List<Materia> materias, String cemateria) {
+		  private List<Materia> anadirMateria(List<Materia> materias, String cemateria) {
 			  Materia materia;
 			  materia = new Materia();
 			  materia.setCodigoEstandar(cemateria);
