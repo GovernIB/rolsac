@@ -32,7 +32,7 @@ public class StrutsCustomValidator {
 		   if (!value.equals(value2))  
 			   return true;
 		    
-		   añadirError(va, field, errors, request);
+		   anadirError(va, field, errors, request);
 	       
 	        return false;
  
@@ -64,7 +64,7 @@ public class StrutsCustomValidator {
 	}
 	
 	
-	private static void añadirError(ValidatorAction va, Field field,
+	private static void anadirError(ValidatorAction va, Field field,
 			ActionErrors errors, HttpServletRequest request) {
 		errors.add(
 				obtenerNombreCampo(field),
