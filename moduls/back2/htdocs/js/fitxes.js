@@ -377,6 +377,22 @@ function CDetall(){
 	this.extend();
 	var that = this;
 	
+	//Se añaden los campos que no se van a serializar directamente mediante .serialize()	
+	this._baseGuarda = this.guarda;	
+	this.guarda = function() {
+		var llistaMateries = "";
+		var dataVars = "";
+		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
+			llistaMateries += $(this).val() + ",";										
+		});
+		if (llistaMateries.length > 0){
+			llistaMateries = llistaMateries.slice(0, llistaMateries.length-1);
+			dataVars = "materies=" + llistaMateries;
+		}
+		
+		this._baseGuarda(dataVars);
+	}
+
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/fitxa.do";
 	
 	this.iniciar = function() {
@@ -499,7 +515,29 @@ function CDetall(){
 		$("#item_notes").val(dada_node.item_notes);
 		$("#item_youtube").val(dada_node.item_youtube);
 		$("#item_forum").val(dada_node.item_forum);				
-				
+		
+		// materies
+		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
+		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
+		materies_nodes = dada_node.materies;
+		materes_nodes_size = materies_nodes.length;
+
+		mat_llistat_elm.find("input").removeAttr("checked");
+		
+		if (materes_nodes_size == 0) {
+			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
+		} else {
+			codi_materies = "<ul>";
+			$(materies_nodes).each(function() {
+				materia_node = this;
+				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
+				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
+			});
+			codi_materies += "<ul>";
+			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;			
+			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
+			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+		}
 		
 		// mostrem
 

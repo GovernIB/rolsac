@@ -29,8 +29,8 @@ function DetallBase(soloFicha){
 		});
 	}
 	
-	this.guarda = function() {
-									
+	this.guarda = function( dataVars ) {
+		
 		// Validamos el formulario
 		if( typeof FormulariComprovar != "undefined" ){
 					
@@ -43,14 +43,18 @@ function DetallBase(soloFicha){
 						
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});		
-		
-		dataVars = $("#formGuardar").serialize();
+
+		dataForm = $("#formGuardar").serialize();
+
+		if (dataVars.length > 0) {
+			dataForm += "&" + dataVars;
+		}
 						
 		// ajax
 		$.ajax({
 			type: "POST",
 			url: pagGuardar,
-			data: dataVars,
+			data: dataForm,
 			dataType: "json",
 			error: function() {
 				

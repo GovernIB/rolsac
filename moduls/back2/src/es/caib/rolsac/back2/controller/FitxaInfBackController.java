@@ -3,8 +3,10 @@ package es.caib.rolsac.back2.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -231,6 +233,8 @@ public class FitxaInfBackController {
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
+        List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
+        List<IdNomTransient> llistaEdificisTransient = new ArrayList<IdNomTransient>();
         
         FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         
@@ -287,6 +291,22 @@ public class FitxaInfBackController {
 
             resultats.put("item_notes", fitxa.getInfo());
             
+          //Materias asociadas
+            
+            if (fitxa.getMaterias() != null) {             
+            
+                for(Materia materia : fitxa.getMaterias()){                
+                    llistaMateriesTransient.add(new IdNomTransient(  materia.getId(), 
+                                                                     materia.getNombreMateria(request.getLocale().getLanguage())
+                                                                           ));                
+                   }
+                
+                resultats.put("materies", llistaMateriesTransient);
+            
+            } else {
+                resultats.put("materies", null);
+            } 
+            
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 // model.put("error", "permisos");
@@ -332,8 +352,7 @@ public class FitxaInfBackController {
                     fitxa.setBaner(fitxaOld.getBaner());
                     fitxa.setIcono(fitxaOld.getIcono());
                     fitxa.setHechosVitales(fitxaOld.getHechosVitales());
-                    fitxa.setImagen(fitxaOld.getImagen());
-                    fitxa.setMaterias(fitxaOld.getMaterias());
+                    fitxa.setImagen(fitxaOld.getImagen());                    
                     fitxa.setResponsable(fitxaOld.getResponsable());
                     fitxa.setForo_tema(fitxaOld.getForo_tema());                    
                     fitxa.setFichasua(fitxaOld.getFichasua());
@@ -392,7 +411,38 @@ public class FitxaInfBackController {
                 
                 fitxa.setInfo(request.getParameter("item_notes"));
                 
-                //Asociacion de ficha con Unidad administrativa
+                //Materies
+                                
+                //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
+                //probable que se repitan la mayoria de materias.
+                if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))){
+                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                    Set<Materia> materiesNoves = new HashSet<Materia>();
+                    String[] codisMateriaNous = request.getParameter("materies").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i<codisMateriaNous.length; i++){
+                            for (Materia materia: fitxaOld.getMaterias()){
+                                if(materia.getId().equals(Long.valueOf(codisMateriaNous[i]))){//materia ya existente
+                                    materiesNoves.add(materia);
+                                    codisMateriaNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiMateria: codisMateriaNous){
+                        if (codiMateria != null){
+                            materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
+                        }                        
+                    }
+                    
+                  fitxa.setMaterias(materiesNoves);                                                 
+                }
+                
+                
+                //Asociacion de ficha con Unidad administrativa                                
                 
                 fitxaDelegate.grabarFicha(fitxa);
                 
