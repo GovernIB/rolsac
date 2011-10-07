@@ -29,6 +29,7 @@ $(document).ready(function() {
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
+	Error = new CError();
 	
 	// es un detall?
 	window_href = window.location.href;
@@ -50,9 +51,8 @@ $(document).ready(function() {
 			
 		}
 	
-	}
+	}	
 	
-	Error = new CError();
 	Llistat.iniciar();
 	Cercador.iniciar();
 	Detall.iniciar();	
@@ -404,7 +404,6 @@ function CDetall(){
 				itemID_ultim = 0;
 			});
 		});
-		
 		this.actualizaEventos();
 	}		
 	
@@ -752,4 +751,3 @@ function CDetall(){
 		});
 	}
 };
-

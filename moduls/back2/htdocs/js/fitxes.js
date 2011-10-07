@@ -82,6 +82,7 @@ $(document).ready(function() {
 	});
 	
 	// INICIEM
+	Llistat = new CLlistat();
 	Detall = new CDetall();
 	
 	// es un detall?
@@ -112,7 +113,7 @@ $(document).ready(function() {
 	
 	//Fotos.iniciar();
 	Docs.iniciar();
-	Enllasos.iniciar();
+	//Enllasos.iniciar();
 	
 	$.suggeriments();
 	
@@ -134,20 +135,20 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
-var Llistat = {
-	iniciar: function() {
-		this.extend = ListadoBase;
-		this.extend();
+function CLlistat(){
+	this.extend = ListadoBase;
+	this.extend();
 		
+	this.iniciar = function() {		
 		$("#cerca_fechaCaducidad").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaPublicacion").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_fechaActualizacion").datepicker({ dateFormat: 'dd/mm/yy' });
 	
 		Llistat.carregar({});
 		
-	},
+	}
 	
-	finCargaListado: function(opcions,data){
+	this.finCargaListado = function(opcions,data){
 		// total
 		resultats_total = parseInt(data.total,10);
 		
@@ -274,9 +275,9 @@ var Llistat = {
 				
 			});
 		});	
-	},
+	}
 	
-	carregar: function(opcions) {
+	this.carregar = function(opcions) {
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
 		var modoListado = !modoBuscador;
@@ -454,8 +455,7 @@ function CDetall(){
 				itemID_ultim = 0;
 			});
 		});
-		
-		this.actualizaEventos();
+		this.actualizaEventos();		
 	}
 			
 	this.pintar = function(dades) {
@@ -562,144 +562,7 @@ function CDetall(){
 			success: function(data) {
 			}
 		});
-	}
-	
-	/*
-	this.guarda = function() {
-		
-		// form comprobar
-		FormulariComprovar.llansar();
-		
-		if (!formComprovacio) {
-			return false;
-		}
-		
-		// missatge
-		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-		
-		item_ID = $("#item_id").val();
-		
-		// json
-		json_str = "{";
-		
-		json_str += "\"id\": \"" + item_ID + "\",";
-		json_str += "\"codi\": \"" + $("#item_codi").val() + "\",";
-		
-		json_str += "\"idioma\": [";
-		
-		idioma_nodes = $("div.idiomes div.idioma");
-		idioma_nodes_size = idioma_nodes.size();
-		
-		$(idioma_nodes).each(function(i) {
-			
-			idioma_nodo = $(this);
-			
-			json_str += "{";
-				
-			idioma_class = idioma_nodo.attr("class");
-			idioma_codi = idioma_class.substr(idioma_class.indexOf(" ")+1,2);
-			
-			json_str += "\"" + idioma_codi + "\": [{";
-			
-			input_nodes = idioma_nodo.find("input");
-			input_nodes_size = input_nodes.size();
-			
-			$(input_nodes).each(function(j) {
-			
-				idioma_node = $(this);
-			
-				json_str += "\"" + idioma_node.attr("id") + "\": \"" + idioma_node.val() + "\"";
-				
-				if (j != input_nodes_size-1) {
-					json_str += ",";
-				}
-			
-			});
-			
-			json_str += "}]";
-			
-			json_str += "}";
-			
-			if (i != idioma_nodes_size-1) {
-				json_str += ",";
-			}
-		
-		});
-		
-		json_str += "]";
-		
-		json_str += "}";
-		
-		accio = (item_ID == "") ? "guardar" : "modificar";
-		
-		dataVars = "accio=" + accio + "&dades=" + json_str;
-				
-		// ajax
-		$.ajax({
-			type: "POST",
-			url: pagDetall,
-			data: dataVars,
-			dataType: "json",
-			error: function() {
-				
-				// missatge
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-				
-			},
-			success: function(data) {		
-			}
-		});
-		
-	}*/
-	
-	/*this.recarregar = function() {
-		
-		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {
-			
-			div_L_elm = resultats_elm.find("div.L:first");
-			carregant_codi = "<p class=\"executant\">" + txtCarregantLlistat + "</p>";
-			div_L_elm.find("div.dades").html(carregant_codi);
-			
-			escriptori_contingut_elm.fadeIn(300, function() {
-				
-				// cercador o llistat?
-				if (opcions_elm.find("li.actiu").hasClass("L")) {
-					
-					Llistat.carregar({});
-					
-				} else {
-					
-					L_elm = opcions_elm.find("li.L:first");
-					
-					// estils
-					opcions_elm.find("li.actiu:first").html("<a href=\"javascript:;\">" + opcions_elm.find("li.actiu").html() + "</a>").removeClass("actiu");
-					// opcio
-					L_elm.html(L_elm.find("a:first").html()).addClass("actiu");
-					
-					// resultats
-					resultats_elm.find("div.actiu:first").removeClass("actiu").slideUp(300,function() {
-																															 
-						$(this).find("div.dades").html("");
-						
-						div_L_elm.slideDown(300,function() {
-							
-							$(this).addClass("actiu");
-							Llistat.carregar({});
-							
-						});
-						
-					});
-					
-				}
-				
-			});
-			
-		});
-		
-	}*/
+	}	
 }
 
 // documents
@@ -806,6 +669,7 @@ var Docs = {
 	}
 };
 
+/*
 // enllasos
 var Enllasos = {
 	iniciar: function() {
@@ -905,7 +769,9 @@ var Enllasos = {
 		
 	}
 };
+*/
 
+/*
 // fotos
 var Fotos = {
 	iniciar: function() {
@@ -1010,21 +876,11 @@ var Fotos = {
 		
 	}
 };
-
-
-
-
-
-
-
-
+*/
 
 
 
 /*
-
-
-
 var Error = {
 	llansar: function() {
 		if (escriptori_detall_elm.css("display") != "none") {

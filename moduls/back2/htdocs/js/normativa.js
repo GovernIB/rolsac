@@ -26,7 +26,11 @@ $(document).ready(function() {
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");	
 	
-	Error = new CError();
+	Error = new CError();	
+	//Docs = new CDocs();
+	Llistat = new CLlistat();	
+	Detall = new CDetall();
+	
 	Llistat.iniciar();
 	Cercador.iniciar();
 	Detall.iniciar();
@@ -51,18 +55,18 @@ var paginacio_marge = 4;
 // llistat
 var itemID_ultim = 0;
 
-var Llistat = {	
-	iniciar: function() {
-		this.extend = ListadoBase;
-		this.extend();
-		
+function CLlistat(){	
+	this.extend = ListadoBase;		
+	this.extend();
+	
+	this.iniciar = function() {		
 		$("#cerca_data").mask("99/99/9999");
 		$("#cerca_data_butlleti").mask("99/99/9999");		
 		
 		Llistat.carregar({});		
-	},
+	}
 	
-	finCargaListado: function( opcions, data ){
+	this.finCargaListado = function( opcions, data ){
 		// total
 		resultats_total = parseInt(data.total,10);
 		
@@ -204,9 +208,9 @@ var Llistat = {
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
 			
 				// events
-				if (escriptori_contingut_elm.css("display") != "none") {
+				/*if (escriptori_contingut_elm.css("display") != "none") {
 					escriptori_contingut_elm.bind("click",Llistat.llansar);
-				}
+				}*/
 				
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
@@ -215,9 +219,9 @@ var Llistat = {
 				
 			});
 		});
-	},
+	}
 	
-	carregar: function(opcions) {
+	this.carregar = function(opcions) {
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)		
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
 		var modoListado = !modoBuscador;
@@ -309,11 +313,12 @@ var Llistat = {
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}
 	
-	},
+	}
 	
-	busca: function(){
+	this.busca = function(){
 		// desactivem taula
-		escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
+		//escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
+		
 		cercador_elm.find("input, select").attr("disabled", "disabled");
 		
 		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
@@ -330,84 +335,18 @@ var Llistat = {
 				
 			});
 		});
-	},
-
-	llansar: function(e) {		
-		/*
-		elm = $(e.target);
-				
-		if (elm.is("A")) {
-			// desactivem taula
-			escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
-									
-			// cercador
-			resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-			if (resultats_actiu_elm.hasClass("C")) {
-				
-				pagPagina_elm = pagPagina_cercador_elm;
-				ordreTipus_elm = ordreTipus_cercador_elm;
-				ordreCamp_elm = ordreCamp_cercador_elm;
-			
-			} else {
-				
-				pagPagina_elm = pagPagina_llistat_elm;
-				ordreTipus_elm = ordreTipus_llistat_elm;
-				ordreCamp_elm = ordreCamp_llistat_elm;
-				
-			}
-			
-			// llancem
-			pare_elm = elm.parent();
-			
-			if (pare_elm.is("LI") && pare_elm.hasClass("opcio")) {
-				
-				// opcions pestanya
-				//Llistat.opcions(elm);							
-				
-			} else if (pare_elm.hasClass("th")) {
-									
-				// ordenacio
-				if (pare_elm.hasClass("ASC")) {
-					ordreTipus_elm.val("DESC");
-				} else if (pare_elm.hasClass("DESC")) {
-					ordreTipus_elm.val("ASC");
-				} else {
-					pare_class = pare_elm.attr("class");
-					c = pare_class.substr(pare_class.indexOf(" ")+1);
-					ordreCamp_elm.val(c);
-				}
-												
-				resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
-												
-				// animacio
-				resultats_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_ordre = "<p class=\"executant\">" + txtCarregantLlistat + "</p>";
-					resultats_dades_elm.html(codi_ordre).fadeIn(300, function() {
-						
-						if (resultats_actiu_elm.hasClass("C")) {
-							Llistat.carregar({cercador: "si"});
-						} else {
-							Llistat.carregar({});
-						}
-						
-					});
-				});
-			}
-		}*/
 	}
-		
 };
 
 // items array
 var Items_arr = new Array();
 
 // detall
-var Detall = {
-	iniciar: function() {
-		this.extend = DetallBase;
-		this.extend();
-		
+function CDetall(){
+	this.extend = DetallBase;
+	this.extend();
+	
+	this.iniciar = function() {			
 		// dates
 		//$("#item_data").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
@@ -447,9 +386,9 @@ var Detall = {
 		modulProcediments_pare_elm = $("#modulLateral div.modulProcediments").parents("div.modul:first");
 		
 		//TODO máscaras campos			
-	},
+	}
 	
-	tipologia: function(e) {
+	this.tipologia = function(e) {
 		
 		if ($(this).val() == "B") {
 			$("#gestioTraspas").fadeIn(300);
@@ -461,69 +400,15 @@ var Detall = {
 			modulProcediments_pare_elm.fadeIn(300);
 		}
 		
-	},
+	}
 	
-	dataPublicacio: function(e) {		
+	this.dataPublicacio = function(e) {		
 		if ($(this).val() == "") {
 			$(this).val(txtImmediat);
 		}		
-	},
-
-	llansar: function(e) {
-		/*
-		elm = $(e.target);
-		
-		if (elm.is("A") && elm.hasClass("modul")) {
-			
-			escriptori_detall_elm.unbind("click", Detall.llansar);
-			
-			modul_continguts_elm = elm.parent().find("div.modul_continguts:first");
-			
-			if (elm.hasClass("amagat")) {
-				modul_continguts_elm.slideDown(300, function() {
-					elm.addClass("mostrat").removeClass("amagat").text(txtAmaga);
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
-			} else {
-				modul_continguts_elm.slideUp(300, function() {
-					$(this).removeClass("mostrat");
-					elm.addClass("amagat").removeClass("mostrat").text(txtMostra);
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
-			}
-		
-		} else if (elm.is("SPAN") && elm.parent().parent().is("A") && elm.parent().parent().hasClass("btn")) {
-			
-			a_elm = elm.parents("a:first");
-			
-			if (a_elm.hasClass("torna")) {
-				
-				escriptori_detall_elm.unbind("click", Detall.llansar);
-				
-				Detall.torna();
-				
-			} else if (a_elm.hasClass("guarda")) {
-				
-				escriptori_detall_elm.unbind("click", Detall.llansar);
-				
-				Detall.guarda();
-				
-			} else if (a_elm.hasClass("previsualitza")) {
-				
-				escriptori_detall_elm.unbind("click", Detall.llansar);
-				
-				Detall.previsualitza();
-				
-			} else if (a_elm.hasClass("elimina")) {
-					
-				// missatge
-				Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() { representacio_detall_elm.unbind("click", Detall.llansar); Detall.elimina(); }});
-				
-			}		
-		}*/
-		
-	},
-	nou: function() {
+	}
+	
+	this.nou = function() {
 		
 		//Anular id
 		$("#item_id").val("");
@@ -567,15 +452,14 @@ var Detall = {
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				escriptori_detall_elm.bind("click", Detall.llansar);
+				//escriptori_detall_elm.bind("click", Detall.llansar);
 				itemID_ultim = 0;
 			});
 		});
-		
 		this.actualizaEventos();
-	},
+	}
 	
-	pintar: function(dades) {
+	this.pintar = function(dades) {
 		
 		//escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -718,7 +602,7 @@ var Detall = {
 				
 				escriptori_detall_elm.fadeIn(300, function() {
 					// activar
-					escriptori_detall_elm.bind("click", Detall.llansar);
+					//escriptori_detall_elm.bind("click", Detall.llansar);
 				});
 											
 			});
@@ -728,7 +612,7 @@ var Detall = {
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300, function() {
 					// activar
-					escriptori_detall_elm.bind("click", Detall.llansar);
+					//escriptori_detall_elm.bind("click", Detall.llansar);
 				});
 			});
 		
@@ -743,9 +627,9 @@ var Detall = {
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().hide();
 		}		
 		
-	},		
+	}
 	
-	elimina: function() {
+	this.elimina = function() {
 		
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -783,9 +667,9 @@ var Detall = {
 					Detall.recarregar();
 			}
 		});			
-	},
+	}
 		
-	previsualitza: function() {
+	this.previsualitza = function() {
 		
 		escriptori_detall_elm.fadeOut(300, function() {
 			
@@ -802,13 +686,14 @@ var Detall = {
 		
 		});
 		
-	},
-	previsualitzaTorna: function() {
+	}
+	
+	this.previsualitzaTorna = function() {
 		
 		escriptori_previsualitza_elm.fadeOut(300, function() {
 		
 			escriptori_detall_elm.fadeIn(300, function() {
-				escriptori_detall_elm.bind("click", Detall.llansar);
+				//escriptori_detall_elm.bind("click", Detall.llansar);
 			});
 		
 		});
@@ -816,6 +701,7 @@ var Detall = {
 	}	
 };
 
+/*
 // documents
 var Docs = {
 	iniciar: function() {
@@ -1124,3 +1010,4 @@ var Fotos = {
 		
 	}
 };
+*/

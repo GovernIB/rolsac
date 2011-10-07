@@ -27,12 +27,11 @@ $(document).ready(function() {
 
 	// INICIEM	
 	Error = new CError();
+	Llistat = new CLlistat();
+	Detall = new CDetall();
 	
 	Llistat.iniciar();	
-	Detall.iniciar();	
-	//Docs.iniciar();
-	
-	//$.suggeriments();	
+	Detall.iniciar();				
 });
 
 // idioma
@@ -43,17 +42,16 @@ var numCercadorMinim = 0;
 
 // llistat
 var itemID_ultim = 0;
-var Llistat = {	
+function CLlistat(){	
+	this.extend = ListadoBase;
+	this.extend();
 
-	iniciar: function() {	
-		this.extend = ListadoBase;
-		this.extend();
-		
+	this.iniciar = function() {		
 		Llistat.carregar({});		
-	},
+	}
 	
 	// Método llamado al terminar de cargar el listado por ajax.
-	finCargaListado: function( opcions, data ){			
+	this.finCargaListado = function( opcions, data ){			
 		
 		// total
 		resultats_total = parseInt(data.total,10);
@@ -191,10 +189,7 @@ var Llistat = {
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
-			
-				// events
-				//escriptori_contingut_elm.bind("click",Llistat.llansar);
-				
+							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
 					cercador_elm.find("input, select").removeAttr("disabled");
@@ -202,8 +197,9 @@ var Llistat = {
 				
 			});
 		});
-	},
-	carregar: function(opcions) {	
+	}
+	
+	this.carregar = function(opcions) {	
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
 		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
 		var modoListado = !modoBuscador;
@@ -294,56 +290,9 @@ var Llistat = {
 		}else{			
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}
-	},
-									
-	llansar: function(e) {					
-		/*elm = $(e.target);
-				
-		if (elm.is("A")) {
-			// desactivem taula
-			escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
-			
-			// cercador
-			resultats_actiu_elm = resultats_elm.find("div.actiu:first");			
-									
-			// llancem
-			pare_elm = elm.parent();
-			
-			if (pare_elm.hasClass("th")) {
-									
-				// ordenacio
-				if (pare_elm.hasClass("ASC")) {
-					ordreTipus_elm.val("DESC");
-				} else if (pare_elm.hasClass("DESC")) {
-					ordreTipus_elm.val("ASC");
-				} else {
-					pare_class = pare_elm.attr("class");
-					c = pare_class.substr(pare_class.indexOf(" ")+1);
-					ordreCamp_elm.val(c);
-				}
-				
-				resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
-				
-				// animacio
-				resultats_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_ordre = "<p class=\"executant\">" + txtCarregantItems + "</p>";
-					resultats_dades_elm.html(codi_ordre).fadeIn(300, function() {
-						
-						if (resultats_actiu_elm.hasClass("C")) {
-							Llistat.carregar({cercador: "si"});
-						} else {
-							Llistat.carregar({});
-						}
-						
-					});
-				});
-							
-			} 
-		}*/
-	},
-			
-	anar: function(enlace_html) {
+	}
+													
+	this.anar = function(enlace_html) {
 
 		resultats_actiu_elm = resultats_elm.find("div.actiu:first");
 		
@@ -382,20 +331,19 @@ var Llistat = {
 			});
 		});
 		
-	},
+	}
 };
 
 // detall array
 var Items_arr = new Array();
 
-
 // detall
-var Detall = {
-	iniciar: function() {		
-		// Extendemos de la clase base;
-		this.extend = DetallBase;
-		this.extend();
-		
+function CDetall(){
+	// Extendemos de la clase base;
+	this.extend = DetallBase;
+	this.extend();
+	
+	this.iniciar = function() {			
 		// dates
 		$("#procediment_data_publicacio, #procediment_data_caducitat, #procediment_data_actualitzacio").mask("99/99/9999");
 		
@@ -424,127 +372,9 @@ var Detall = {
 		$("#item_epui, #item_epri, #item_em").mask("99999");
 		$("#item_nlpui, #item_nlpri, #item_nlm").mask("999999999");
 		
-	},
-	
-	/*
-	// dsanchez: En Personal no hay idiomas.	
-	idioma: function(e) {
-		elm = $(e.target);
+	}
 		
-		if (elm.is("A")) {
-			
-			ul_idiomes_elm.unbind("click",Detall.idioma);
-			
-			if (!elm.hasClass("desplegar")) {
-				
-				a_clicat_class = elm.attr("class");
-				
-				div_idiomes_elm.find("div.seleccionat").slideUp(300, function() {
-					
-					$(this).removeClass("seleccionat");
-					span_primer_elm = ul_idiomes_elm.find("span:first");
-					span_primer_elm_class = span_primer_elm.attr("class");
-					span_primer_elm_text = span_primer_elm.text();
-					span_primer_elm.parent().removeClass("seleccionat").html("<a href=\"javascript:;\" class=\"" + span_primer_elm_class + "\">" + span_primer_elm_text + "</a>");
-					
-					elm_text = elm.text();
-					elm.parent().addClass("seleccionat").html("<span class=\"" + a_clicat_class + "\">" + elm_text + "</span>");
-					
-					div_idiomes_elm.find("div." + a_clicat_class).slideDown(300, function() {
-						$(this).addClass("seleccionat");
-						ul_idiomes_elm.bind("click",Detall.idioma);
-					});
-				
-				});
-				
-			} else{
-				
-				if (!elm.hasClass("on")) {
-				
-					ul_idiomes_elm.find("li:not(.desplegar)").css("display","none");
-					div_idiomes_elm.find("div.idioma").each(function(i) {
-						text_idioma = ul_idiomes_elm.find("li:eq(" + i + ")").text();
-						div_idioma_elm = $(this);
-						if (i >= 1) {
-							div_idioma_elm.css("border-top",".2em solid #ffecd9");
-						}
-						div_idioma_elm.prepend("<h3>" + text_idioma + "</h3>").slideDown(300);
-					});
-					elm.addClass("on").text(txtPlega);
-				
-				} else {
-					
-					div_idiomes_elm.find("div.idioma").each(function(i) {
-						div_idioma_elm = $(this);
-						if (i >= 1) {
-							div_idioma_elm.css("border-top","");
-						}
-						div_idioma_elm.find("h3:first").remove().end().slideUp(300);
-					});
-					elm.removeClass("on").text(txtDesplega);
-					ul_idiomes_elm.find("li:not(.desplegar)").css("display","block");
-					
-				}
-				
-				ul_idiomes_elm.bind("click",Detall.idioma);
-			
-			}
-			
-		}
-		
-	},
-	*/
-	llansar: function(e) {	
-		
-		/*
-		elm = $(e.target);
-		
-		if (elm.is("A") && elm.hasClass("modul")) {
-			
-			escriptori_detall_elm.unbind("click", Detall.llansar);
-			
-			modul_continguts_elm = elm.parent().find("div.modul_continguts:first");
-			
-			if (elm.hasClass("amagat")) {
-				modul_continguts_elm.slideDown(300, function() {
-					elm.addClass("mostrat").removeClass("amagat").text(txtAmaga);
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
-			} else {
-				modul_continguts_elm.slideUp(300, function() {
-					$(this).removeClass("mostrat");
-					elm.addClass("amagat").removeClass("mostrat").text(txtMostra);
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
-			}
-			
-		} else if (elm.is("SPAN") && elm.parents("a:first").hasClass("btn")) {
-			
-			a_elm = elm.parents("a:first");
-			
-			if (a_elm.hasClass("torna")) {
-				
-				escriptori_detall_elm.unbind("click", Detall.llansar);
-				
-				Detall.torna();
-				
-			} else if (a_elm.hasClass("guarda")) {
-				
-				escriptori_detall_elm.unbind("click", Detall.llansar);
-				
-				Detall.guarda();
-				
-			} else if (a_elm.hasClass("elimina")) {
-					
-				// missatge
-				Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() { Detall.elimina(); }});
-				
-			}
-			
-		}*/
-		
-	},
-	nou: function() {
+	this.nou = function() {
 		
 		//escriptori_detall_elm.find("a.elimina").hide().end().find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
@@ -555,17 +385,14 @@ var Detall = {
 		}
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
-			escriptori_detall_elm.fadeIn(300, function() {
-				// activar
-				escriptori_detall_elm.bind("click", Detall.llansar);
+			escriptori_detall_elm.fadeIn(300, function() {				
 				itemID_ultim = 0;
 			});
 		});
-		
 		this.actualizaEventos();
-	},
+	}
 			
-	pintar: function(dades) {
+	this.pintar = function(dades) {
 		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -598,26 +425,21 @@ var Detall = {
 				// array
 				Detall.array({id: pro_node.id, accio: "guarda", dades: pro_node});
 				
-				escriptori_detall_elm.fadeIn(300, function() {
-					// activar
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
+				escriptori_detall_elm.fadeIn(300);
 											
 			});
 			
 		} else {
 			
 			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300, function() {
-					// activar
-					escriptori_detall_elm.bind("click", Detall.llansar);
-				});
+				escriptori_detall_elm.fadeIn(300);				
 			});
 		
 		}
 		
-	},	
-	elimina: function() {
+	}
+	
+	this.elimina = function() {
 		
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -659,103 +481,3 @@ var Detall = {
 	}
 	
 };
-
-/*
-// documents
-var Docs = {
-	iniciar: function() {				
-		docs_elm = $("div.documents");
-		docs_table_existix = false;
-		
-		docs_elm.bind("click",Docs.llansar);
-		
-		codi_table_docs = "<div class=\"table docs\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_docs += "<div class=\"thead\">";
-		codi_table_docs += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th doc\">" + txtDoc + "</div>";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "<div class=\"tbody\">";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		
-		return codi_table_docs;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("doc"))) {
-			
-			docs_elm.unbind("click",Docs.llansar);
-			
-			A_elm = elm.parents("a:first");
-			doc_elm = elm.parents("div.documents:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (doc_elm.find("div.table").size() == 0) {
-			
-					elm.parents("p:first").before(codi_table_docs);
-					
-					docs_table_elm = doc_elm.find("div.table:first");
-					docs_table_tbody_elm = docs_table_elm.find("div.tbody");
-					
-					docs_table_existix = true;
-					
-				}
-				
-				tr_num = docs_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_docs = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_docs += "<div role=\"gridcell\" class=\"td doc\">";
-				codi_docs += "<input name=\"doc_ca\" type=\"file\" />";
-				codi_docs += "</div>";
-				codi_docs += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_docs += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_docs += "</div>";
-				codi_docs += "</div>";
-				
-				docs_table_tbody_elm.append(codi_docs);
-				docs_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = docs_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						docs_table_elm.slideUp(300,function() {
-							$(this).remove();
-							docs_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").addClass("elimina");
-				}
-				
-			}
-			
-			docs_elm.bind("click",Docs.llansar);
-			
-		}
-		
-	}
-};*/
