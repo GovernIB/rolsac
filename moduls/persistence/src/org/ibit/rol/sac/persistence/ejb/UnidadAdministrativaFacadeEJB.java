@@ -2949,7 +2949,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				llocModel.setLatitud( edificio.getLatitud() );
 				llocModel.setLongitud( edificio.getLongitud() );
-				llocModel.setAdreça( edificio.getDireccion() );
+				llocModel.setAdreca( edificio.getDireccion() );
 				llocModel.setPoblacio( edificio.getPoblacion() );
 				llocModel.setCodiPostal( edificio.getCodigoPostal() );
 				

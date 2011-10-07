@@ -21,7 +21,7 @@ public class DadesNormativaModel implements java.io.Serializable {
    private Date dataPublicacio;
    private String organismePropietari; 
    private String uoPropietaria;
-   private String enllaç;
+   private String enllas;
    private String observacions;
    
    
@@ -59,8 +59,8 @@ public class DadesNormativaModel implements java.io.Serializable {
    public void setSumari (String sumari) { this.sumari = sumari; }
    public String getSumari () { return sumari; }
 
-   public void setEnllaç (String enllaç) { this.enllaç = enllaç; }
-   public String getEnllaç () { return enllaç; }
+   public void setEnllas (String enllas) { this.enllas = enllas; }
+   public String getEnllas () { return enllas; }
    
    public void setObservacions (String observacions) { this.observacions = observacions; }
    public String getObservacions() { return observacions; }
@@ -80,7 +80,7 @@ public class DadesNormativaModel implements java.io.Serializable {
 	   		  "\ndataPulicacio: " + tmpDataPublicacio +
 	   		  "\norganismePropietari: " + organismePropietari +
 	   		  "\nuoPropietaria: " + uoPropietaria +
-	   		  "\nenllaç: " + enllaç +
+	   		  "\nenllaç: " + enllas +
 	   		  "\nobservacions: " + observacions +
 	   		  "]";
 	   

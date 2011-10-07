@@ -1081,7 +1081,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 			 //Datos de traducciÃ³n normativa local
 			 if (traduccionNormativa != null) {				 
 				 dadesNormativaModel.setSumari( traduccionNormativa.getTitulo() != null ? traduccionNormativa.getTitulo() : traduccionNormativaDef.getTitulo() );
-				 dadesNormativaModel.setEnllaç( traduccionNormativa.getEnlace() != null ? traduccionNormativa.getEnlace() :  traduccionNormativaDef.getEnlace() );
+				 dadesNormativaModel.setEnllas( traduccionNormativa.getEnlace() != null ? traduccionNormativa.getEnlace() :  traduccionNormativaDef.getEnlace() );
 				 dadesNormativaModel.setObservacions( traduccionNormativa.getObservaciones() != null ? traduccionNormativa.getObservaciones() : traduccionNormativaDef.getObservaciones() );
 				 dadesNormativaModel.setNumeroPagina( traduccionNormativa.getPaginaInicial() != null ? traduccionNormativa.getPaginaInicial() : ( traduccionNormativaDef.getPaginaInicial() != null ? traduccionNormativaDef.getPaginaInicial() : 0 ) );
 			 }

@@ -6,7 +6,7 @@ public class LlocModel implements java.io.Serializable {
    private String codiUO = "";
    private String longitud = "";
    private String latitud = "";
-   private String adreça = "";
+   private String adreca = "";
    private String poblacio = "";
    private String codiPostal = "";
    private String comunitat = "";
@@ -34,8 +34,8 @@ public class LlocModel implements java.io.Serializable {
    public void setLatitud (String latitud)  {this.latitud = latitud; }
    public String getLatitud () { return latitud;}    
    
-   public void setAdreça (String adreça)  {this.adreça = adreça; }
-   public String getAdreça () { return adreça;}
+   public void setAdreca (String adreca)  {this.adreca = adreca; }
+   public String getAdreca () { return adreca;}
    
    public void setPoblacio (String poblacio)  {this.poblacio = poblacio; }
    public String getPoblacio () { return poblacio;}
@@ -85,7 +85,7 @@ public class LlocModel implements java.io.Serializable {
    public LlocModel () {}
 
    public String toString () {
-      return "[adreça : " + adreça +
+      return "[adreca : " + adreca +
              "\n poblacio : " + poblacio +
              "\n codi postal : " + codiPostal +
              "\n comunitat : " + comunitat +
