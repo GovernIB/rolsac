@@ -35,7 +35,7 @@ $(document).ready(function() {
 			
 	// INICIEM
 	Error = new CError();
-	Detall = new CDetall(true);
+	Detall = new CDetall(false);
 	
 	Detall.iniciar();
 	
@@ -48,6 +48,15 @@ var Items_arr = new Array();
 function CDetall(soloFicha){	
 	this.extend = DetallBase;
 	this.extend(soloFicha);
+	
+	
+	this._baseGuarda = this.guarda;
+	this.guarda = function() {
+		this._baseGuarda();
+		// redirecciona;
+		window.location.href = pagLlistat;
+	}
+	
 	
 	this.iniciar = function() {
 				
@@ -254,11 +263,13 @@ function CDetall(soloFicha){
 				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");				
 			}			
 			
-		} else {
-			
-			$("#escriptori_detall").html("<p class=\"noUnitat\">Es necessari triar primer una unitat administrativa</p>");			
-			
 		}
+		// Eliminam missatge per poder crear de noves
+ 		//else {
+			
+		//	$("#escriptori_detall").html("<p class=\"noUnitat\">" + noUnitat +"</p>");			
+			
+		//}
 			
 		// mostrem
 		if ($("#carregantDetall").size() > 0) {
@@ -288,14 +299,14 @@ function CDetall(soloFicha){
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 		
-		tipusUnitat_ID = $("#tipusUnitat_id").val();
+		tipusUnitat_ID = $("#item_id").val();
 		
 		dataVars = "accio=eliminar&id=" + tipusUnitat_ID;
 				
 		// ajax
 		$.ajax({
 			type: "POST",
-			url: pagUnitat,
+			url: pagEsborrar,
 			data: dataVars,
 			dataType: "json",
 			error: function() {

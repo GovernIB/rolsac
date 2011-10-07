@@ -368,7 +368,7 @@
                                 </div>
                                 <div class="control select">
                                     <select id="item_responsable_sexe" name="item_responsable_sexe">
-                                        <option value=""><spring:message code='unitatadm.formulari.responsable.sexe'/><spring:message code='txt.escolliu_opcio'/></option>
+                                        <option value=""><spring:message code='txt.escolliu_opcio'/></option>
                                         <option value="1"><spring:message code='txt.sexe.masculi'/></option>
                                         <option value="2"><spring:message code='txt.sexe.femeni'/></option>
                                     </select>
@@ -513,6 +513,9 @@
                               <li class="btnPrevisualizar par">
                                   <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
                               </li>
+                              <li class="e btnEliminar impar">
+								  <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+				              </li>
                           </ul>
                         </div>
                                                 
@@ -833,7 +836,9 @@
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
     
     <script type="text/javascript">
-
+    	var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
+    	var pagLlistat = '<c:url value="/unitatadm/unitatadm.htm" />';
+    	
         var pagDetall = '<c:url value="/unitatadm/pagDetall.htm" />';
         var pagEdificis = '<c:url value="/edificis/llistat.htm" />';
         var pagGuardar = '<c:url value="/unitatadm/guardar.htm" />';
@@ -945,6 +950,8 @@
         var txtMesMal = "<spring:message code='txt.mes_mal'/>";
         var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+
+        var txtItemEliminar="Capullo de merda";
         
     </script>
     

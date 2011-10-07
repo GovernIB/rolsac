@@ -40,6 +40,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import sun.misc.Perf.GetPerfAction;
+
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
@@ -352,7 +354,6 @@ public class UnitatAdmBackController {
     public @ResponseBody IdNomTransient guardarUniAdm(HttpSession session, HttpServletRequest request) {
         
         IdNomTransient result = null;
-        String accio = "guardar";
         
         try {
             //TODO pendent de quins camps son obligatoris
@@ -361,7 +362,8 @@ public class UnitatAdmBackController {
             String username = request.getParameter("item_codi");
             
             //if (ua == null || nom == null || username == null || "".equals(nom) || "".equals(username)) {
-            if (ua == null || nom == null || "".equals(nom)) {
+            //if (ua == null || nom == null || "".equals(nom)) {
+            if (nom == null || "".equals(nom)) {
                 String error = messageSource.getMessage("unitatadm.formulari.error.falten_camps", null, request.getLocale());
                 result = new IdNomTransient(-3l, error);
             } else {
@@ -372,7 +374,6 @@ public class UnitatAdmBackController {
                 try {
                     Long id = Long.parseLong(request.getParameter("item_id"));
                     unitatAdministrativaOld = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id); 
-                    accio = "actualitzar";
                 } catch (NumberFormatException nfe) {
 
                 }
@@ -531,7 +532,10 @@ public class UnitatAdmBackController {
                 } 
 */
 				
-				crearUnitatAdministrativa(accio, unitatAdministrativaDelegate,	unitatAdministrativa);  
+				crearUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);  
+				
+				// Sobre escrivim la unitat administrativa de la amollapa
+				session.setAttribute("unidadAdministrativa", unitatAdministrativa);
 				
                 String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
                 result = new IdNomTransient(unitatAdministrativa.getId(), ok);
@@ -552,27 +556,27 @@ public class UnitatAdmBackController {
     }
 
 	/**
-	 * @param accio
 	 * @param unitatAdministrativaDelegate
 	 * @param unitatAdministrativa
 	 * @throws DelegateException
 	 */
-	private void crearUnitatAdministrativa(String accio, UnidadAdministrativaDelegate unitatAdministrativaDelegate,
+	private void crearUnitatAdministrativa(UnidadAdministrativaDelegate unitatAdministrativaDelegate,
 			UnidadAdministrativa unitatAdministrativa) throws DelegateException {
-		if("guardar".equals(accio)) {
+		
+		
+		if (unitatAdministrativa.getId() != null) {
+			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,unitatAdministrativa.getPadre().getId());
+		} else {
+			Long id  ;
 			if (unitatAdministrativa.getPadre() != null ) {
-				unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
+				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
 			} else {
-				unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
+				id = unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
 			}
-		} else if ("actualitzar".equals(accio)) {
-			// Actualitza Pare Unitat Administrativa si escau
-			if (unitatAdministrativa.getPadre() != null ) {
-				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
-			} else {
-				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, null);
-			}
+			unitatAdministrativa.setId(id);
 		}
+		
+		
 	}
 	
     /**
@@ -586,172 +590,79 @@ public class UnitatAdmBackController {
         return !((value == null) || value.equals("N"));
     }
     
-    /*
-//    @RequestMapping(value = "/guardar.htm", method = POST)
-//    public @ResponseBody IdNomTransient guardar(HttpSession session, HttpServletRequest request) {
-//         
-//          //TODO: completar paso de normativa local a externa y viceversa.
-//         
-//    Normativa normativa = null;
-//    Normativa normativaOld = null;          
-//          IdNomTransient result = null;
-//          boolean normativaLocal;
-//     
-//      try {
-//          NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-//         
-//          //Obtener la UA de la normativa. Si no tiene UA asignada es una normativa externa.
-//          UnidadAdministrativa ua = null;
-//          if (request.getParameter("item_ua_id") != null && !"".equals(request.getParameter("item_ua_id"))) {
-//                Long idUA = new Long(request.getParameter("item_ua_id"));
-//                ua = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(idUA);
-//          }
-//
-//          //Determinar si la normativa a guardar tiene que ser local/externa
-//          if (ua == null) {
-//                normativaLocal = false;
-//                normativa = new NormativaExterna();
-//          } else {
-//                normativaLocal = true;
-//                normativa = new NormativaLocal();     
-//                //Asociar UA si es normativa local
-//                ((NormativaLocal)normativa).setUnidadAdministrativa(ua);                    
-//          }          
-//                     
-//          boolean edicion = request.getParameter("item_id") != null && !"".equals(request.getParameter("item_id"));
-//          Long idNorm = Long.parseLong(request.getParameter("item_id"));
-//          if (edicion) {
-//                normativaOld = normativaDelegate.obtenerNormativa(idNorm);
-//                normativa.setAfectadas(normativaOld.getAfectadas());
-//                normativa.setAfectantes(normativaOld.getAfectantes());
-//                normativa.setProcedimientos(normativaOld.getProcedimientos());
-//                normativa.setId(idNorm);
-//          }
-//
-//          //Campos por idioma
-//          List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-//          for (String idioma : idiomas) {
-//                TraduccionNormativa traNorm = normativaOld != null ? (TraduccionNormativa)normativaOld.getTraduccion(idioma) : null;
-//                                 
-//                if (traNorm != null) {
-//                      /*
-//                      //Paso de externa a local
-//                      if (TraduccionNormativaExterna.class.isInstance(traNorm) && normativaLocal) {                             
-//                           //TODO: borrar traducción externa?
-//                          
-//                           traNorm = null;
-//                      }
-//                      //Paso de local a externa
-//                      else
-//                      if (TraduccionNormativa.class.isInstance(traNorm) && !normativaLocal) {
-//                           //TODO: borrar traduccion local?
-//                          
-//                           traNorm = null;
-//                      }
-//                      //Se queda igual
-//                      else
-//                      */
-//                           normativa.setTraduccion(idioma, traNorm);
-//                }
-//                else
-//                if (traNorm == null) {
-//                      if (normativaLocal)
-//                           traNorm = new TraduccionNormativa();
-//                      else
-//                           traNorm = new TraduccionNormativaExterna();
-//
-//                      normativa.setTraduccion(idioma, traNorm);
-//                }
-//
-//                traNorm.setTitulo(request.getParameter("item_titol_" + idioma));
-//                traNorm.setEnlace(request.getParameter("item_enllas_" + idioma));
-//                traNorm.setApartado(request.getParameter("item_apartat_" + idioma));
-//                if (request.getParameter("item_pagina_inicial_" + idioma) != null && !"".equals(request.getParameter("item_pagina_inicial_" + idioma)))
-//                      traNorm.setPaginaInicial(Integer.parseInt(request.getParameter("item_pagina_inicial_" + idioma)));
-//
-//                if (request.getParameter("item_pagina_final_" + idioma) != null && !"".equals(request.getParameter("item_pagina_final_" + idioma)))
-//                      traNorm.setPaginaFinal(Integer.parseInt(request.getParameter("item_pagina_final_" + idioma)));                        
-//
-//                traNorm.setObservaciones(request.getParameter("item_des_curta_" + idioma));    
-//
-//                //Responsable sólo en normativa externa
-//                if (!normativaLocal) {                              
-//                      ((TraduccionNormativaExterna)traNorm).setResponsable(request.getParameter("item_responsable_" + idioma));
-//                }
-//
-//          }
-//
-//          //Los demás campos
-//          if (request.getParameter("item_numero") != null && !"".equals(request.getParameter("item_numero")))
-//                normativa.setNumero(Long.parseLong(request.getParameter("item_numero")));
-//
-//          normativa.setLey(request.getParameter("item_llei"));
-//
-//          if (request.getParameter("item_registre") != null && !"".equals(request.getParameter("item_registre")))
-//                normativa.setRegistro(Long.parseLong(request.getParameter("item_registre")));
-//
-//          if (request.getParameter("item_data_butlleti") != null && !"".equals(request.getParameter("item_data_butlleti"))) {
-//                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                normativa.setFechaBoletin(dateFormat.parse(request.getParameter("item_data_butlleti")));
-//          }
-//
-//          if (request.getParameter("item_data") != null && !"".equals(request.getParameter("item_data"))) {
-//                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//                normativa.setFecha(dateFormat.parse(request.getParameter("item_data")));
-//          }       
-//
-//          if (request.getParameter("item_tipus") != null && !"".equals(request.getParameter("item_tipus"))) {
-//                Tipo tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativa(new Long(request.getParameter("item_tipus")));
-//                normativa.setTipo(tipo);
-//          }
-//
-//          if (request.getParameter("item_validacio") != null && !"".equals(request.getParameter("item_validacio")))
-//                normativa.setValidacion(new Integer(request.getParameter("item_validacio")));
-//
-//
-//          //Boletín
-//          if (request.getParameter("item_butlleti_id") != null && !"".equals(request.getParameter("item_butlleti_id"))) {
-//                Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(Long.parseLong(request.getParameter("item_butlleti_id")));
-//                normativa.setBoletin(boletin);
-//          }
-//
-//          if (normativaLocal) {
-//                /*
-//                //Era externa y la pasamos a local, eliminamos el registro anterior
-//                if (edicion && NormativaExterna.class.isInstance(normativaOld))
-//                      normativaDelegate.borrarNormativa(normativaOld.getId());
-//                */
-//                normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
-//          } else {
-//                /*
-//                //Era externa y la pasamos a local, eliminamos el registro anterior
-//                if (edicion && NormativaLocal.class.isInstance(normativaOld))
-//                      normativaDelegate.borrarNormativa(normativaOld.getId());             
-//                */
-//                normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
-//          }
-//
-//          String ok = messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale());
-//          result = new IdNomTransient(normativa.getId(), ok);
-//         
-//         
-//      } catch (DelegateException dEx) {
-//                if (dEx.getCause() instanceof SecurityException) {
-//                      String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-//                      result = new IdNomTransient(-1l, error);
-//                } else {
-//                      String error = messageSource.getMessage("error.altres", null, request.getLocale());
-//                      result = new IdNomTransient(-2l, error);
-//                      dEx.printStackTrace();
-//                }                      
-//      } catch (ParseException e) {
-//                String error = messageSource.getMessage("error.altres", null, request.getLocale());
-//                result = new IdNomTransient(-2l, error);            
-//                e.printStackTrace();
-//          }
-//                                
-//         
-//          return result;
-//    }
-//*/
+	@RequestMapping(value = "/esborrar.htm", method = POST)
+    public @ResponseBody IdNomTransient esborrarUniAdm(HttpServletRequest request) {
+	    
+	    IdNomTransient resultatStatus = new IdNomTransient(); 
+	    
+	    try {
+            
+            Long idUA = new Long(request.getParameter("id"));
+            
+            UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
+            unidadAdministrativaDelegate.eliminarUaSinRelaciones(idUA);             
+            
+            resultatStatus.setId(1l);
+            resultatStatus.setNom("correcte");
+            
+        } catch (DelegateException dEx) {
+            if (dEx.getCause() instanceof SecurityException) {
+                resultatStatus.setId(-1l);
+            } else {
+                resultatStatus.setId(-2l);
+                dEx.printStackTrace();
+            }
+        }
+	    
+	    return resultatStatus;
+	}
+    
+	
+	/**
+     *  Descripción: Action que se ejecuta al eliminar una UA. En esta Accion se controla que la UA no tenga Microsites relacionados,
+     *  se comprueba que la UA no tenga elmentos relacionados, y finalmente si no tiene elementos se elimina la UA.
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return actionforward
+     */
+	/*
+	public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                                  HttpServletResponse response) throws SecurityException,Exception {
+
+        log.debug("Entramos en eliminar");
+        DynaValidatorForm dForm = (DynaValidatorForm) form;
+        UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
+
+        Long id = (Long) dForm.get("id");
+        
+        if (!hayMicrositesUA(id)) {
+        
+        	UnidadAdministrativa ua = unidadDelegate.consultarUnidadAdministrativa(id);
+        	
+        	//Validamos que se pueda eliminar la UA. Se podra elimnar si no tiene elementos relacionados. Ha excepción de usuarios y edificios.
+        	ActionErrors errores =  validarEliminacionUA(ua,unidadDelegate);
+        	if(!errores.isEmpty()){
+        		saveErrors(request, errores);
+        		request.setAttribute("idUA", id);
+        		log.error("No se puede elimar la UA. La UA tiene elementos relacionados ");
+        		return dispatchMethod(mapping, form, request, response, "seleccionar");
+        		//return mapping.findForward("success");
+	        }
+	
+        	unidadDelegate.eliminarUaSinRelaciones(id);
+
+        	dForm.reset(mapping, request);
+	        request.setAttribute("alert", "confirmacion.baja");
+	        log.debug("Eliminada Unidad Administrativa: " + id);
+
+        } else {
+	        request.setAttribute("alert", "microsites.ua.asociados");
+	        log.debug("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
+        	
+        }
+        return mapping.findForward("cancel");
+    }*/
+	
 }
