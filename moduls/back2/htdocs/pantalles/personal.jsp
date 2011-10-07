@@ -133,11 +133,14 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_ua",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
+                "etiquetaValor": "item_ua_id",
+                "obligatori": "si",
+                "tipus": "numeric",
                 "error":
-                    {}
+                    {
+		            	"obligatori": "<spring:message code='personal.formulari.ua.obligatori'/>",
+		                "tipus": "<spring:message code='personal.formulari.ua.nomes_numeros'/>"
+                    }
             },
             {
                 "modo": "individual",
@@ -460,38 +463,66 @@
                             <div class="control">                       
                                 <input id="item_codi" name="item_codi" type="text" class="nou t6" />
                             </div>                                      
-                        </div>                                  
-                        <div class="element t50p">                                      
-                            <input id="item_ua_id" name="item_ua_id" type="hidden" class="nou" value='<c:out value="${idUA}"/>'/>                                       
-                            <div class="etiqueta"><label for="item_ua"><spring:message code='camp.unitat_administrativa_competent'/></label></div>
-                            <div class="control">                           
-                                <input id="item_ua" name="item_ua" type="text" readonly="readonly" value='<c:out value="${nomUA}"/>' />
-                            </div>                                  
-                        </div>                                  
+                        </div>              
+                        <div class="element t50p">                                  
+                            <div class="etiqueta"><label for="item_carrec"><spring:message code='camp.carrec'/></label></div>
+                            <div class="control">
+                                <input id="item_carrec" name="item_carrec" type="text" class="nou" />                           
+                            </div>                                      
+                        </div>                        
                     </div>
                     <!-- /fila -->
-                    
+                   
                     <!-- fila -->
                     <div class="fila">                              
-                        <div class="element t75p">                                  
+                        <div class="element t99p">                                  
                             <div class="etiqueta"><label for="item_funcions"><spring:message code='camp.funcions'/></label></div>
                             <div class="control">
                                 <input id="item_funcions" name="item_funcions" type="text" class="nou" />                           
                             </div>                                      
                         </div>                                  
-                        <div class="element t25p">                                  
-                            <div class="etiqueta"><label for="item_carrec"><spring:message code='camp.carrec'/></label></div>
-                            <div class="control">
-                                <input id="item_carrec" name="item_carrec" type="text" class="nou" />                           
-                            </div>                                      
-                        </div>                                  
                     </div>
-                    <!-- /fila -->                          
+                    <!-- /fila -->    
+                    
+                    <!-- fila -->
+                    <div class="fila">
+                        <div class="element t50p">                                      
+                           <input id="item_ua_id" name="item_ua_id" type="hidden" class="nou" value='<c:out value="${idUA}"/>'/>                                       
+                           <div class="etiqueta"><label for="item_ua"><spring:message code='camp.unitat_administrativa_competent'/></label></div>
+                           <div class="control">                           
+                               <input id="item_ua" name="item_ua" type="text" readonly="readonly" value='<c:out value="${nomUA}"/>' />
+                           </div>                                  
+                       </div>        
+                       <div class="element t50p">                                      
+                       </div>                    
+                    </div>                    
+                    <!-- /fila -->
+                    
+                    <!-- fila -->
+                    <div class="fila">
+                       <div class="element t50p">
+                           <div id="cercador">
+                               <div class="botonera" style="margin-top: 0px; float:left;">
+                                   <div class="boton btnGenerico" style="margin-left: 0px;">
+                                       <a href="javascript:ArbreUA('item_ua', 'item_ua_id');" class="btn consulta">
+                                       <span><span><spring:message code='boto.canviarUA'/></span></span>
+                                       </a>
+                                   </div>
+                                   <div class="boton btnGenerico">
+                                       <a href="javascript:EliminaArbreUA('item_ua', 'item_ua_id');" class="btn borrar">
+                                       <span><span><spring:message code='boto.borrar'/></span></span>
+                                       </a>
+                                   </div>
+                               </div>
+                           </div>
+                        </div>
+                    </div>
+                    <!-- fila -->
                 </div>                          
             </fieldset>                 
         </div>
-                <!-- /modul -->                 
-                <!-- modul -->
+        <!-- /modul -->                 
+        <!-- modul -->
         <div class="modul">                 
             <fieldset>                              
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                         
@@ -518,8 +549,9 @@
                             </div>                                      
                         </div>                                  
                     </div>
-                            <!-- /fila -->                              
-                            <!-- fila -->
+                    <!-- /fila -->
+                                                  
+                    <!-- fila -->
                     <div class="fila">                              
                         <div class="element t25p">                                  
                             <div class="etiqueta"><label for="item_epri"><spring:message code='camp.extensio_privada_intranet'/></label></div>
@@ -551,20 +583,4 @@
             </fieldset>                 
         </div>
     </form>
-    <!-- /modul -->
-    <%--                    
-    <div class="botonera baix">
-        <ul>
-            <li>
-                <a href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
-            </li>
-            <li>
-                <a href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
-            </li>
-            <li class="e">
-                <a href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
-            </li>
-        </ul>
-    </div>
-    --%>                
 </div>

@@ -20,6 +20,7 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.PersonalTransient;
@@ -36,6 +37,7 @@ public class PersonalBackController {
 	private static Log log = LogFactory.getLog(PrintRolTag.class);
 	
     private MessageSource messageSource = null;
+    
     
     @Autowired
     public void setMessageSource(MessageSource messageSource){
@@ -64,6 +66,7 @@ public class PersonalBackController {
         return "index";
     }
 
+    
 	@RequestMapping(value = "/llistat.htm", method = POST)
 	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
 
@@ -118,6 +121,7 @@ public class PersonalBackController {
 		return resultats;
 	}
 
+	
 	@RequestMapping(value = "/pagDetall.htm", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    
@@ -156,6 +160,7 @@ public class PersonalBackController {
         return personaDetall;
 	}
 
+	
 	@RequestMapping(value = "/esborrarPersonal.htm", method = POST)
     public @ResponseBody IdNomTransient esborrarPersonal(HttpServletRequest request) {
 	    
@@ -185,14 +190,22 @@ public class PersonalBackController {
 	}
 	
 	
-	
 	@RequestMapping(value = "/guardar.htm", method = POST)
 	public @ResponseBody IdNomTransient guardarPersonal(HttpSession session, HttpServletRequest request) {
         
 		IdNomTransient result = null;
         
         try {
-        	UnidadAdministrativa ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+//        	UnidadAdministrativa ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+        	UnidadAdministrativa ua;
+        	try {
+        		Long uaId = Long.parseLong(request.getParameter("item_ua_id"));
+        		UnidadAdministrativaDelegate udelegate = DelegateUtil.getUADelegate();
+        		ua = udelegate.obtenerUnidadAdministrativa(uaId);
+        	} catch (NumberFormatException nfe) {
+        		ua = null;
+        	}
+        	
     	    String nom = request.getParameter("item_nom");
     	    String username = request.getParameter("item_codi");
     	    
