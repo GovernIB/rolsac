@@ -283,7 +283,7 @@ public class Sincronizador {
 	 * @throws ComunicacionException
 	 */
 	private void recogerProcedimientos(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
-		try {
+		/*try {
 			log.debug("Recogiendo Procedimientos relacionados");
 			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
 			
@@ -311,7 +311,7 @@ public class Sincronizador {
 			throw new CapaDeDatosException(e);
 		} catch (WSInvocatorException e) {
 			throw new ComunicacionException("Fallo en la invocacion del webservice recogerProcedimientosRelacionados",e);
-		}
+		}*/
 	}
 	
 	

@@ -248,14 +248,13 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 			for(Seccion seccion : secciones){
 				if(seccion.getCodigoEstandard()!=null && !"".equals(seccion.getCodigoEstandard().trim())){
 					log.debug("Recoginedo fichas de la seccion: "+ ((TraduccionSeccion)seccion.getTraduccion()).getNombre());
-					final Long[] idsFichaTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
-					if(idsFichaTrans!=null){
+					final FichaTransferible[] fichasTrans = sincInvoker.recogerFichasUASeccion(seccion.getCodigoEstandard(), ua.getIdExterno(), hechosCE, materiasCE);
+					if(fichasTrans!=null){
 						log.debug("Fichas recogidas");
                         boolean grabarFicha= false;
-						for(Long idFichaTrans : idsFichaTrans){
+						for(FichaTransferible fichaTrans : fichasTrans){
                             // Condicions afegides per controllar que no es donin d'alta fitxes sense matèries ni fets vitals.
                             // Controllam que si la llista ens ve amb elements nulls, se descarti la fitxa.
-                            FichaTransferible fichaTrans = sincInvoker.recogerFicha(idFichaTrans);
                             if ((fichaTrans.getCodigoEstandarMaterias() != null && fichaTrans.getCodigoEstandarMaterias().length > 0)
 				                || (fichaTrans.getCodigoEstandarHV() != null && fichaTrans.getCodigoEstandarHV().length > 0)) {
 
@@ -317,12 +316,10 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 		try {
 			log.debug("Recogiendo Procedimientos relacionados");
 			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
-			
 			if(procsTransferibles!=null){
 				log.debug("Procedimientos recogidos");
 				
 				for(ProcedimientoTransferible procTransferible : procsTransferibles){
-					
 					if (procTransferible.getId() != null) {
                         ProcedimientoRemoto procRemoto = procRemotoDelegate.obtenerProcedimientoRemoto(procTransferible.getId(),adminRemota.getId());
                         if(procRemoto==null){
