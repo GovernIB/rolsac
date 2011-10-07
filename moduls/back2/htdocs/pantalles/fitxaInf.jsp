@@ -142,9 +142,9 @@
     
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
     <script type="text/javascript">
-	//validacio
-	
-	var txtMaxim = "<spring:message code='txt.maxim'/>";
+    //validacio
+    
+    var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtMax = "<spring:message code='txt.max'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
     var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
@@ -153,95 +153,95 @@
     var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
     var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
     
-	// dades formularis
-	var FormulariDades = [
-		{
-			"modo": "individual",
-			"etiqueta": "id",
-			"etiquetaValor": "item_titol_ca",
-			"obligatori": "si",
-			"tipus": "alfanumeric",
-			"caracters":
-				{
-					"maxim": 250,
-					"mostrar": "si",
-					"abreviat": "no"
-				},
-			"error":
-				{
-					"obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
-					"tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"
-				}
-		},
-		{
-			"modo": "individual",
-			"etiqueta": "id",
-			"etiquetaValor": "item_titol_es",
-			"obligatori": "no",
-			"tipus": "alfanumeric",
-			"caracters":
-				{
-					"maxim": 250,
-					"mostrar": "si",
-					"abreviat": "no"
-				},
-			"error":
-				{
-					"tipus": "El camp 'Títol de la fitxa en l'idioma castellà' no pot estar compost només de números"
-				}
-		},
-		{
-			"modo": "individual",
-			"etiqueta": "id",
-			"etiquetaValor": "item_titol_en",
-			"obligatori": "no",
-			"tipus": "alfanumeric",
-			"caracters":
-				{
-					"maxim": 250,
-					"mostrar": "si",
-					"abreviat": "no"
-				},
-			"error":
-				{
-					"tipus": "El camp 'Títol de la fitxa en l'idioma anglés' no pot estar compost només de números"
-				}
-		},
-		{
-			"modo": "individual",
-			"etiqueta": "id",
-			"etiquetaValor": "item_titol_de",
-			"obligatori": "no",
-			"tipus": "alfanumeric",
-			"caracters":
-				{
-					"maxim": 250,
-					"mostrar": "si",
-					"abreviat": "no"
-				},
-			"error":
-				{
-					"tipus": "El camp 'Títol de la fitxa en l'idioma alemany' no pot estar compost només de números"
-				}
-		},
-		{
-			"modo": "individual",
-			"etiqueta": "id",
-			"etiquetaValor": "item_titol_fr",
-			"obligatori": "no",
-			"tipus": "alfanumeric",
-			"caracters":
-				{
-					"maxim": 250,
-					"mostrar": "si",
-					"abreviat": "no"
-				},
-			"error":
-				{
-					"tipus": "El camp 'Títol de la fitxa en l'idioma francés' no pot estar compost només de números"
-				}
-		},
-		{
+    // dades formularis
+    var FormulariDades = [
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
+                    "tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_es",
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "tipus": "El camp 'Títol de la fitxa en l'idioma castellà' no pot estar compost només de números"
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_en",
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "tipus": "El camp 'Títol de la fitxa en l'idioma anglés' no pot estar compost només de números"
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_de",
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "tipus": "El camp 'Títol de la fitxa en l'idioma alemany' no pot estar compost només de números"
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_titol_fr",
+            "obligatori": "no",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "tipus": "El camp 'Títol de la fitxa en l'idioma francés' no pot estar compost només de números"
+                }
+        },
+        {
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_estat",
@@ -251,8 +251,8 @@
                 {
                     "obligatori": "El camp 'Estat' es obligatori"                   
                 }
-        }	
-	];
+        }   
+    ];
     
     </script>
     <div id="escriptori_contingut"> 
@@ -264,7 +264,7 @@
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
         <c:if test="${idUA > 0}">
-	        <li id="btnNuevaFicha" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea  una nova fitxa</span></span></a></li>
+            <li id="btnNuevaFicha" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea  una nova fitxa</span></span></a></li>
         </c:if>
     </ul>
     <div id="resultats">
@@ -859,7 +859,7 @@
         <!-- /modulPrincipal -->
         
         <!-- modulLateral -->
-        <div id="modulLateral">
+        <div class="modulLateral">
             <? if ($_SESSION['rolsac_rol'] != "RSC_OPERADOR") { ?>
             <!-- modul -->
             <div class="modul publicacio">
@@ -938,7 +938,7 @@
                     <legend>Documents relacionats</legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulDocuments -->
-                        <div class="modulDocuments">
+                        <div class="modulDocuments multilang">
                             <ul class="idiomes">
                                 <li class="ca seleccionat">ca</li>
                                 <li class="es">es</li>
@@ -947,19 +947,19 @@
                                 <li class="fr">fr</li>
                             </ul>
                             <div class="seleccionats">
-                                <div class="ca seleccionat">
+                                <div class="ca seleccionat cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="es">
+                                <div class="es cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="en">
+                                <div class="en cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="de">
+                                <div class="de cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="fr">
+                                <div class="fr cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
                                 <p class="btnGenerico">
@@ -1061,6 +1061,7 @@
                             </div>
                         </div>
                         <!-- /modulFetsVitals -->
+                        
                     </div>
                 </fieldset>
             </div>

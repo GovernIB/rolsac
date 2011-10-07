@@ -76,7 +76,7 @@ function CDetall(soloFicha){
 			
 			a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 			
-			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
+			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");			
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click",Detall.idioma);
 		}
@@ -255,7 +255,21 @@ function CDetall(soloFicha){
 				var i=0;
 				jQuery(edificis_nodes).each(function(){
 					edifici_node = this;
-					itemsLista.push( {id:edifici_node.id, nombre:edifici_node.nom, orden: i++} );
+
+					// dsanchez: Creamos la lista de elementos iniciales.
+					itemsLista.push( {
+						id:edifici_node.id, 
+						nombre: edifici_node.nom,
+						// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
+						/*nombre:{
+							es: edifici_node.nom, 
+							en: edifici_node.nom, 
+							ca: edifici_node.nom, 
+							de: edifici_node.nom, 
+							fr: edifici_node.nom
+							},*/
+						orden: i++	// Si no hay orden, lo calculamos previamente.
+						} );
 				});				
 				ModulEdifici.agregaItems(itemsLista);
 				

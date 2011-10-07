@@ -498,7 +498,7 @@
         <!-- /modulPrincipal -->
         
         <!-- modulLateral -->
-        <div id="modulLateral">
+        <div class="modulLateral">
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
@@ -577,13 +577,13 @@
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.seccions'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
-                        <!-- modulEdificis -->
+                        <!-- modulSeccions -->
                         <div class="modulSeccions">                                     
                             <div class="seleccionats">                                          
                                 <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>                              
                             </div>                                  
                         </div>
-                        <!-- /modulEdificis -->                                 
+                        <!-- /modulSeccions -->                                 
                     </div>                              
                 </fieldset>                     
             </div>
@@ -595,20 +595,50 @@
                     <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulEdificis -->
-                        <div class="modulEdificis">                                 
-                            <div class="seleccionats">                                          
-                                <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
-                                <div class="listaOrdenable"></div>
-                                <!--
-                                <p class="info">Hi ha <strong>3 edificis</strong> relacionats.</p>                                          
-                                <div class="listaOrdenable">
-                                    <ul>
-                                        <li><input type="hidden" value="1" />Edifici 1</li>
-                                        <li><input type="hidden" value="2" />Edifici 2</li>
-                                        <li><input type="hidden" value="3" />Edifici 3</li>
-                                    </ul>
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <!--<div class="modulEdificis multilang">-->
+                        <div class="modulEdificis">
+                            
+                            <!--
+                            <ul class="idiomes">
+                                <li class="introIdiomas">Idioma:</li>
+                                <li class="ca seleccionat">ca</li>
+                                <li class="es">es</li>
+                                <li class="en">en</li>
+                                <li class="de">de</li>
+                                <li class="fr">fr</li>
+                            </ul>-->
+                            
+                            <div class="seleccionats">
+                                <%-- dsanchez: un solo idioma --%>
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
                                 </div>
-                                -->                             
+                                <%-- dsanchez: multiidioma --%>
+                                <!--
+                                <div class="seleccionat cajaIdioma ca">
+                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="es cajaIdioma">
+                                    <p class="info">No hay edificios.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="en cajaIdioma">
+                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                <div class="de cajaIdioma">
+                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                <div class="fr cajaIdioma">
+                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                -->
+                                
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.edificis.gestiona'/></span></span></a>
                                 </div>
@@ -741,20 +771,67 @@
         </div>        
         
         <!-- seleccionats -->
-        <div class="escriptori_items_seleccionats">
+        <!--<div class="escriptori_items_seleccionats">
             <div class="interior">
                 <h3><spring:message code='unitatadm.formulari.edificis.selecionats'/></h3>                      
                 <div class="dades">                     
-                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>                           
-                </div>
-                
-                <div class="listaOrdenable"></div>
-                
-                <!--  dsanchez: La lista debería crearse aquí, pero parece que se crea como hija directa de "escriptori_items_seleccionats" -->
-                
+                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                </div>               
+                <div class="listaOrdenable"></div>                                                
                 <p class="botonera btnGenerico">
                     <a id="btnFinalizar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                 </p>                  
+            </div>
+        </div>-->
+        
+        <div class="modulLateral escriptori_items_seleccionats">
+            <div class="modul">
+                
+                <!--<div class="interior multilang">-->
+                <div class="interior">
+                
+                    <!--<ul class="idiomes">
+                        <li class="introIdiomas">Idioma:</li>
+                        <li class="ca seleccionat">ca</li>
+                        <li class="es">es</li>
+                        <li class="en">en</li>
+                        <li class="de">de</li>
+                        <li class="fr">fr</li>
+                    </ul>-->
+                    
+                    <div class="seleccionats">
+                    
+                        <div class="seleccionat">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>
+                    
+                        <!--<div class="seleccionat cajaIdioma ca">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>
+                        <div class="es cajaIdioma">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>
+                        <div class="en cajaIdioma">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>                                
+                        <div class="de cajaIdioma">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>                                
+                        <div class="fr cajaIdioma">
+                            <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                            <div class="listaOrdenable"></div>                      
+                        </div>-->
+                        
+                        <p class="botonera btnGenerico">
+                            <a id="btnFinalizar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        </p>                                    
+                    </div>                                  
+                </div>
             </div>
         </div>
         <!-- seleccionats -->
@@ -951,7 +1028,7 @@
         var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
 
-        var txtItemEliminar="Capullo de merda";
+        var txtItemEliminar="Eliminar item";
         
     </script>
     
@@ -1132,7 +1209,5 @@
                     }
             }
         ];
-
     -->
-
     </script>

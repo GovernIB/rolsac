@@ -247,8 +247,22 @@ function DetallBase(soloFicha){
 				
 				});
 				
+				
+				// Comprobamos si existen modulos laterales muldiidioma
+				var modulos = jQuery(".modulLateral .modul .multilang");
+				
+				jQuery(modulos).find("li.seleccionat:first").removeClass("seleccionat");
+				jQuery(modulos).find("li." + a_clicat_class).addClass("seleccionat");
+				jQuery(modulos).find("div.seleccionats div.seleccionat").slideUp(300,function(){
+					jQuery(this).removeClass("seleccionat");
+					jQuery(this).hide();
+					jQuery(this).siblings("div." + a_clicat_class).slideDown(300,function(){
+						jQuery(this).addClass("seleccionat");
+					});
+				});
+				
 				// Comprovamos si existen documentos relacionados
-				if (typeof modul_documents_elm != "undefined") {
+				/*if (typeof modul_documents_elm != "undefined") {
 					modul_documents_idiomes_elm.find("li.seleccionat:first").removeClass("seleccionat");
 					modul_documents_idiomes_elm.find("li." + a_clicat_class).addClass("seleccionat");
 					
@@ -257,9 +271,8 @@ function DetallBase(soloFicha){
 						documents_seleccionats_elm.find("div." + a_clicat_class).slideDown(300, function() {
 							$(this).addClass("seleccionat");
 						});
-					});
-					
-				}
+					});					
+				}*/		
 				
 			} else{
 				

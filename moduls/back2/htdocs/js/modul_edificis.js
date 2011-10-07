@@ -52,7 +52,9 @@ function CModulEdifici(){
 			nombre: "edifici",
 			nodoOrigen: modul_edificis_elm.find(".listaOrdenable"),
 			nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden"]
+			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+			//multilang: true
+			multilang: false
 			});
 		
 		// one al botó de gestionar
@@ -89,17 +91,30 @@ function CEscriptoriEdifici(){
 	
 	var that = this;
 	
-	// Agrega un item en la lista
+	/**
+	 * Agrega un item a la lista.
+	 */
 	this.agregaItem = function( itemID, titulo ){	
-		if( ModulEdifici.agregaItem( {id: itemID, nombre: titulo} ) ){		
+					
+		// dsanchez: Componemos el item para enviar a la lista.
+		var item = {
+			id: itemID,
+			nombre: titulo
+			// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
+			/*nombre:{
+				es: titulo,
+				ca: titulo,
+				en: titulo,
+				de: titulo,
+				fr: titulo
+			}*/
+		};
+		
+		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
+		if( ModulEdifici.agregaItem( item ) ){		
 			this.contaSeleccionats();		
 		}				
-	}
-	
-	this.eliminaItemLista = function( item ){
-		item.remove();			
-		this.contaSeleccionats();
-	}
+	}	
 	
 	// Cambia de página.
 	this.cambiaPagina = function( pag ){
@@ -226,7 +241,8 @@ function CEscriptoriEdifici(){
 														
 				// Evento lanzado al hacer click en un elemento de la lista.
 				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
-					var itemID = jQuery(this).attr("class").split("_")[1];
+					var partesItem = jQuery(this).attr("class").split("_");
+					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
 					that.agregaItem(itemID,titulo);
 					});
@@ -301,19 +317,28 @@ function CEscriptoriEdifici(){
 		
 		if (nombre_llistat > 1) {			
 			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).css({cursor:"move"});
-			modul_edificis_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
+			modul_edificis_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				update: function(event,ui){
+					ModulEdifici.calculaOrden(ui,"origen");
+					EscriptoriEdifici.contaSeleccionats();
+				}
+			}).css({cursor:"move"});
 		}
 		
 		codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
 		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
 		
-		//modul_edificis_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 		modul_edificis_elm.find("p.info").html(codi_info);
-		//modul_edificis_elm.find(".listaOrdenable").html(codi_llistat);
 		
-		if (nombre_llistat > 1) {
-			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css({cursor: "move"});
-			modul_edificis_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
+		if (nombre_llistat > 1) {			
+			modul_edificis_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				update: function(event,ui){
+					ModulEdifici.calculaOrden(ui,"origen");
+					EscriptoriEdifici.contaSeleccionats();
+				}
+			}).css({cursor:"move"});
 		}
 		
 		this.torna();
@@ -330,10 +355,8 @@ function CEscriptoriEdifici(){
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
 			edificis_dades_elm.html(codi_anar).fadeIn(300, function() {
-				pagPagina_edifici_elm.val(num-1);
-								
-				that.carregar({pagina: num-1});
-				
+				pagPagina_edifici_elm.val(num-1);								
+				that.carregar({pagina: num-1});				
 			});
 		});
 	}
@@ -353,7 +376,7 @@ function CEscriptoriEdifici(){
 	
 	this.contaSeleccionats = function() {
 		
-		seleccionats_val = edificis_seleccionats_elm.find("li").size();
+		seleccionats_val = edificis_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = edificis_seleccionats_elm.find("p.info:first");
 		
 		if (seleccionats_val == 0) {
@@ -368,13 +391,20 @@ function CEscriptoriEdifici(){
 		} else {
 			
 			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtEdificis.toLowerCase() + "</strong>.");						
-			edificis_seleccionats_elm.find("ul").sortable({ axis: 'y', change: function(){ModulEdifici.calculaOrden()}}).css({cursor:"move"});
+			edificis_seleccionats_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				update: function(event,ui){
+					ModulEdifici.calculaOrden(ui,"origen");
+					EscriptoriEdifici.contaSeleccionats();
+				}
+			}).css({cursor:"move"});
 			
 		}
 		
 		edificis_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
 			var itemLista = jQuery(this).parents("li:first");
-			EscriptoriEdifici.eliminaItemLista(itemLista);
+			ModulEdifici.eliminaItem(itemLista);
+			EscriptoriEdifici.contaSeleccionats();
 		});
 	}
 };

@@ -1047,13 +1047,13 @@ div.table div.tbody div.td a:hover{
 
 /* Módulo lateral */
 
-#escriptori_detall #modulLateral{
+#escriptori_detall .modulLateral{
     margin-top: 0;
     float: right;
     width: 286px;    
 }
 
-#escriptori_detall #modulLateral div.modul{
+#escriptori_detall .modulLateral div.modul{
     background-color: #F3F3F3;
     border: 1px solid #D3D3D3;  
     overflow: hidden;
@@ -1064,7 +1064,7 @@ div.table div.tbody div.td a:hover{
     border-radius: 15px 15px 15px 15px;
 }
 
-#escriptori_detall #modulLateral div.modul a.modul{
+#escriptori_detall .modulLateral div.modul a.modul{
     position:absolute;
     right: 9px;
     top: 9px;
@@ -1075,7 +1075,7 @@ div.table div.tbody div.td a:hover{
     background-image: url(../img/botons/desplegar.png);
 }
 
-#escriptori_detall #modulLateral .modul fieldset legend{
+#escriptori_detall .modulLateral .modul fieldset legend{
     font: bold 11px Verdana, Helvetica, Sans-serif;
     color: #333333;
     text-transform: uppercase;
@@ -1083,7 +1083,7 @@ div.table div.tbody div.td a:hover{
     padding-bottom: 15px;
 }
 
-#escriptori_detall #modulLateral .botonera{
+#escriptori_detall .modulLateral .botonera{
     border: none;
     background-color: transparent;
     margin: 0;
@@ -1093,28 +1093,27 @@ div.table div.tbody div.td a:hover{
     clear:both;
 }
 
-#escriptori_detall #modulLateral .botonera ul{
+#escriptori_detall .modulLateral .botonera ul{
     padding: 0;
     border: none;
     border-radius: 0;    
 }
 
-#escriptori_detall #modulLateral .left {
-
+#escriptori_detall .modulLateral .left {
     clear: both;
     float:left;
     width: 49%;
     padding-bottom: 10px;
 }
 
-#escriptori_detall #modulLateral .right {
+#escriptori_detall .modulLateral .right {
     float:left;
     width: 49%;
     padding-bottom: 10px;
 }
 
-#escriptori_detall #modulLateral .left input,
-#escriptori_detall #modulLateral .right input {
+#escriptori_detall .modulLateral .left input,
+#escriptori_detall .modulLateral .right input {
     width: 80%;
 }
 
@@ -1315,32 +1314,32 @@ div.modul div.llistat div.tbody div.nou { display:none; }
 
 /* Módulo selector con checkboxes (materias, hechos vitales, ...) */
 
-#escriptori_detall #modulLateral .selectorChecks .llistat{
+#escriptori_detall .modulLateral .selectorChecks .llistat{
     clear:both;
     padding-top: 10px;
     display: none;
 }
-#escriptori_detall #modulLateral .selectorChecks .llistat ul{
+#escriptori_detall .modulLateral .selectorChecks .llistat ul{
     list-style: none;
 }
-#escriptori_detall #modulLateral .selectorChecks .llistat li{
+#escriptori_detall .modulLateral .selectorChecks .llistat li{
     float: left;
     width: 49.9%;
     font-size: 10px;
 }
-#escriptori_detall #modulLateral .selectorChecks .llistat li input{
+#escriptori_detall .modulLateral .selectorChecks .llistat li input{
     float:right;
     margin-right: 5px;
 }
-#escriptori_detall #modulLateral .selectorChecks .llistat li.impar,
-#escriptori_detall #modulLateral .selectorChecks .llistat li:nth-child(2n+1){
+#escriptori_detall .modulLateral .selectorChecks .llistat li.impar,
+#escriptori_detall .modulLateral .selectorChecks .llistat li:nth-child(2n+1){
     clear:left; 
 }
-#escriptori_detall #modulLateral .selectorChecks .botonera{
+#escriptori_detall .modulLateral .selectorChecks .botonera{
     clear: both;
     padding-top: 10px;
 }
-#escriptori_detall #modulLateral .selectorChecks  .botonera .btnGenerico{
+#escriptori_detall .modulLateral .selectorChecks  .botonera .btnGenerico{
     margin-right: 10px;
 }
 
@@ -1384,29 +1383,33 @@ div.previsualitzacio { padding:1em; border:1px solid #ccc; }
 div.previsualitzacio iframe { width:100%; height:40em; border:0; }
 
 
-/* modul lateral documents */
+/* modul lateral */
 
-div.modulDocuments ul.idiomes { 
+.modulLateral .multilang  ul.idiomes { 
     overflow:hidden; 
     list-style:none; 
     padding:.5em 0 0 0; 
     margin-bottom:1em;
     color: #0099CC;
 }
-div.modulDocuments ul.idiomes li { float:left; height:1.5em; padding:.3em 0.5em 0.3em 0.5em; margin:0; }
-div.modulDocuments ul.idiomes li.introIdiomas {padding-left: 0; color: #000;}
-div.modulDocuments ul.idiomes li.seleccionat { background-color:#fff; color: #000; font-weight: bold;}
-div.modulDocuments ul.idiomes li.seleccionat a { font-weight:bold; color:#000; text-decoration:none; }
+.modulLateral .multilang ul.idiomes li { 
+    float:left; 
+    height:1.5em; 
+    padding:.3em 0.5em 0.3em 0.5em; 
+    margin:0;
+    border-radius: 6px;
+}
+.modulLateral .multilang ul.idiomes li.introIdiomas {padding-left: 0; color: #000;}
+.modulLateral .multilang ul.idiomes li.seleccionat { background-color:#fff; color: #000; font-weight: bold;}
+.modulLateral .multilang ul.idiomes li.seleccionat a { font-weight:bold; color:#000; text-decoration:none; }
 
+.modulLateral .multilang div.seleccionats .cajaIdioma{ 
+    display:none;
+}
+.modulLateral .multilang div.seleccionats div.seleccionat { display:block; }
+.modulLateral .multilang ul li div span.doc { display:block; float:left; text-align:left; }
 
-div.modulDocuments div.seleccionats div { display:none; }
-div.modulDocuments div.seleccionats div.seleccionat { display:block; }
-
-div.modulDocuments div.seleccionats ul li div { display:block; text-align:right; }
-div.modulDocuments div.seleccionats ul li div span.doc { display:block; float:left; text-align:left; }
-
-
-div.modulDocuments div.seleccionats ul { 
+.modulLateral .multilang div.seleccionats ul { 
     list-style:none;
 }
 

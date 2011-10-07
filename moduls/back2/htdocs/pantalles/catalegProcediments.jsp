@@ -1236,7 +1236,7 @@
         </div>
         <!-- /modulPrincipal -->
         <!-- modulLateral -->
-        <div id="modulLateral">
+        <div class="modulLateral">
             <? if ($_SESSION['rolsac_rol'] != "RSC_OPERADOR") { ?>
             <!-- modul -->
             <div class="modul publicacio">
@@ -1312,7 +1312,7 @@
                     <legend>Documents relacionats</legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulDocuments -->
-                        <div class="modulDocuments">
+                        <div class="modulDocuments multilang">
                             <ul class="idiomes">
                                 <li class="introIdiomas">Idioma:</li>
                                 <li class="ca seleccionat">ca</li>
@@ -1322,7 +1322,7 @@
                                 <li class="fr">fr</li>
                             </ul>
                             <div class="seleccionats">
-                                <div class="ca seleccionat">
+                                <div class="ca seleccionat cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                     <!--ul>
                                         <li>
@@ -1350,16 +1350,16 @@
                                             </div></li>
                                     </ul-->
                                 </div>
-                                <div class="es">
+                                <div class="es cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="en">
+                                <div class="en cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="de">
+                                <div class="de cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
-                                <div class="fr">
+                                <div class="fr cajaIdioma">
                                     <p class="info">No hi ha documents.</p>
                                 </div>
                             </div>
