@@ -504,8 +504,15 @@
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_arxiu_ca">Arxiu</label></div>
-                                        <div class="control">
+                                        <div class="control archivo">   
                                             <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
+                                            <div class="archivoActual">
+                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
+                                                <span class="checkBorrar">
+                                                    <input id="id_item_arxiu_ca" type="checkbox" name="borrar_item_archiu_ca" />
+                                                    <label for="id_item_arxiu_ca">Eliminar archivo</label>                                              
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -568,6 +575,13 @@
                                         <div class="etiqueta"><label for="item_arxiu_es">Arxiu</label></div>
                                         <div class="control">
                                             <input id="item_arxiu_es" name="item_arxiu_es" type="file" class="nou" />
+                                            <div class="archivoActual">
+                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
+                                                <span class="checkBorrar">
+                                                    <input id="id_item_arxiu_es" type="checkbox" name="borrar_item_archiu_es" />
+                                                    <label for="id_item_arxiu_es">Eliminar archivo</label>                                              
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -630,6 +644,13 @@
                                         <div class="etiqueta"><label for="item_arxiu_en">Arxiu</label></div>
                                         <div class="control">
                                             <input id="item_arxiu_en" name="item_arxiu_en" type="file" class="nou" />
+                                            <div class="archivoActual">
+                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
+                                                <span class="checkBorrar">
+                                                    <input id="id_item_arxiu_en" type="checkbox" name="borrar_item_archiu_en" />
+                                                    <label for="id_item_arxiu_en">Eliminar archivo</label>                                              
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -692,6 +713,13 @@
                                         <div class="etiqueta"><label for="item_arxiu_de">Arxiu</label></div>
                                         <div class="control">
                                             <input id="item_arxiu_de" name="item_arxiu_de" type="file" class="nou" />
+                                            <div class="archivoActual">
+                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
+                                                <span class="checkBorrar">
+                                                    <input id="id_item_arxiu_de" type="checkbox" name="borrar_item_archiu_de" />
+                                                    <label for="id_item_arxiu_de">Eliminar archivo</label>                                              
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -755,6 +783,13 @@
                                         <div class="etiqueta"><label for="item_arxiu_fr">Arxiu</label></div>
                                         <div class="control">
                                             <input id="item_arxiu_fr" name="item_arxiu_fr" type="file" class="nou" />
+                                            <div class="archivoActual">
+                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
+                                                <span class="checkBorrar">
+                                                    <input id="id_item_arxiu_fr" type="checkbox" name="borrar_item_archiu_fr" />
+                                                    <label for="id_item_arxiu_fr">Eliminar archivo</label>                                              
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

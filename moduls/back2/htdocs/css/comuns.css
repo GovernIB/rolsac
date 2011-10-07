@@ -885,6 +885,20 @@ div.table div.tbody div.td a:hover{
     width: 99.9%;
     border: none;
 }
+#escriptori_detall .grupoModulosFormulario .archivo .archivoActual{
+    padding-top: 10px;
+}
+#escriptori_detall .grupoModulosFormulario .archivo .archivoActual a{
+    color: #0099CC;
+}
+#escriptori_detall .grupoModulosFormulario .archivo .checkBorrar{
+    padding-left: 20px;
+}
+#escriptori_detall .grupoModulosFormulario .archivo .checkBorrar input{
+    position: relative;
+    top: 3px;
+}
+
 #escriptori_detall .grupoModulosFormulario .element{
     float: left;    
 }

@@ -514,8 +514,8 @@
                                   <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
                               </li>
                               <li class="e btnEliminar impar">
-								  <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
-				              </li>
+                                  <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
                           </ul>
                         </div>
                                                 
@@ -908,14 +908,13 @@
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_edificis.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
     
     <script type="text/javascript">
-    	var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
-    	var pagLlistat = '<c:url value="/unitatadm/unitatadm.htm" />';
-    	
+        var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
+        var pagLlistat = '<c:url value="/unitatadm/unitatadm.htm" />';
+        
         var pagDetall = '<c:url value="/unitatadm/pagDetall.htm" />';
         var pagEdificis = '<c:url value="/edificis/llistat.htm" />';
         var pagGuardar = '<c:url value="/unitatadm/guardar.htm" />';
