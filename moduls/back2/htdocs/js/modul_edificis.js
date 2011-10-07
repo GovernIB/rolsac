@@ -340,6 +340,9 @@ function CEscriptoriEdifici(){
 				}
 			}).css({cursor:"move"});
 		}
+
+		// Marcamos el formulario como modificado para habilitar el botón de guardar.
+		Detall.modificado();
 		
 		this.torna();
 	}

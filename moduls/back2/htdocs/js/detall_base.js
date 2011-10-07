@@ -1,9 +1,39 @@
 jQuery(document).ready(function(){
-	jQuery("#btnVolver").bind("click",function(){Detall.torna();});
-	jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
+	jQuery("#btnVolver").bind("click",function(){Detall.torna();});	
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
-	jQuery("#btnPublicar").bind("click",function(){Detall.publica();});
+	//jQuery("#btnPublicar").bind("click",function(){Detall.publica();});
+	
+	// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
+	jQuery("#btnGuardar").parent().addClass("off");
+	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
+	
+	jQuery("#formGuardar input,#formGuardar select,#formGuardar textarea").bind("change",function(){Detall.modificado();});
+	
+	if( jQuery("textarea.rich").tinymce != undefined ){
+		$('textarea.rich').tinymce({
+			// Location of TinyMCE script
+			script_url : tinyMceUrl,
+
+			// General options
+			theme : "advanced",
+			plugins : "pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,advlist",
+			
+			// Theme options
+			theme_advanced_buttons1 : "bold,italic,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,bullist,numlist,|,link,unlink,|,undo,redo,|,cleanup,code",
+			theme_advanced_buttons2 : "",
+			theme_advanced_buttons3 : "",
+			theme_advanced_buttons4 : "",
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : true,
+			theme_advanced_resize_horizontal: false,
+			
+			onchange_callback: function(){Detall.modificado();}
+		});
+	}
+	
 });
 
 /**
@@ -81,6 +111,11 @@ function DetallBase(soloFicha){
 		});
 	}
 	
+	this.modificado = function(){
+		// Habilitamos el botón de guardar.
+		jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
+	}
+	
 	this.publica = function(){
 		jQuery("#item_data_publicacio").val(txtImmediat);
 		jQuery("#item_data_caducitat").val("");
@@ -110,6 +145,10 @@ function DetallBase(soloFicha){
 	}
 	
 	this.carregar = function(itemID){
+			
+		// Deshabilitamos inicialmente el botón de guardar.
+		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
+		
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();				
 		
 		if (itemID == undefined){
