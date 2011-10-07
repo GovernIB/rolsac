@@ -405,6 +405,7 @@ function CDetall(){
 			});
 		});
 		
+		this.actualizaEventos();
 	}		
 	
 	this.pintar = function(dades) {

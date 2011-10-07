@@ -562,6 +562,7 @@ var Detall = {
 			});
 		});
 		
+		this.actualizaEventos();
 	},
 			
 	pintar: function(dades) {
