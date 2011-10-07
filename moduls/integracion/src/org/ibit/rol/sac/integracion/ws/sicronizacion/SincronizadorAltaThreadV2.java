@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.integracion.ws.sicronizacion;
+ï»¿package org.ibit.rol.sac.integracion.ws.sicronizacion;
 
 import org.ibit.rol.sac.integracion.ws.invoker.WSInvocatorException;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -16,6 +16,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
  * 
  * @author arodrigo
  *
+ * Esta version incluye lo mismos que la version 1 pero en esta ademas se recogen los edificios relacionados
+ * con las diferentes unidades administrativas remotas.
  */
 public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 	
@@ -89,7 +91,7 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
 			
 			if(edificioTransferibles!=null){
-				log.debug("Edificios recogidos tamaño: "+edificioTransferibles.length);
+				log.debug("Edificios recogidos tamaï¿½o: "+edificioTransferibles.length);
 				
 				for(EdificioTransferible edificioTransferible : edificioTransferibles){
 					log.debug("getId: "+edificioTransferible.getId());

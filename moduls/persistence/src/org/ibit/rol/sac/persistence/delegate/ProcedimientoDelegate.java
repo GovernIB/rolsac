@@ -1,10 +1,11 @@
-package org.ibit.rol.sac.persistence.delegate;
+﻿package org.ibit.rol.sac.persistence.delegate;
 
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
 import org.ibit.rol.sac.model.webcaib.ActuacioModel;
+import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
+import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -172,6 +173,13 @@ public class ProcedimientoDelegate {
 			Long idUA, String[] codEstMat, String[] codEstHV)
 			throws DelegateException {
 		return impl.listarProcedimientosPublicosUAHVMateria(idUA, codEstMat,
+				codEstHV);
+	}
+
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(
+			Long idUA, String[] codEstMat, String[] codEstHV)
+			throws DelegateException {
+		return impl.listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat,
 				codEstHV);
 	}
 

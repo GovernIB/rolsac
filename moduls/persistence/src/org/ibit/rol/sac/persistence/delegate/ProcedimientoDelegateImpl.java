@@ -1,22 +1,24 @@
-package org.ibit.rol.sac.persistence.delegate;
-
-import java.rmi.RemoteException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.ejb.CreateException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
+﻿package org.ibit.rol.sac.persistence.delegate;
 
 import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
 import org.ibit.rol.sac.model.webcaib.ActuacioModel;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import java.rmi.RemoteException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Business delegate para manipular procedimientos.
@@ -70,7 +72,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-    
+
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscadorProcedimientos(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
 	 */
@@ -298,6 +300,20 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
         try {
             return getFacade().listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+
+    }
+
+    /* PORMAD */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosPublicosUAHVMateria(java.lang.Long, java.lang.String[], java.lang.String[])
+	 */
+    @SuppressWarnings("unchecked")
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
+        try {
+            return getFacade().listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

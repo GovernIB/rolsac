@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.integracion.ws.sicronizacion;
+ï»¿package org.ibit.rol.sac.integracion.ws.sicronizacion;
 
 
 import org.ibit.rol.sac.integracion.ws.invoker.WSInvocatorException;
@@ -12,6 +12,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
  * 
  * @author arodrigo
  *
+ * Esta versión implementa toda la funcionalidad necesaria para adaptarse a los requerimientos de la Ventanilla Unica
+ * de Directiva de Servicios
  */
 public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	
@@ -82,7 +84,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 * @throws CapaDeDatosException
 	 * @throws ComunicacionException
 	 */
-	private void recogerEdificios(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
+	protected void recogerEdificios(final UnidadAdministrativaRemota ua) throws CapaDeDatosException, ComunicacionException{
 		try {
 			log.debug("Recogiendo Edificios relacionados para la UA: "+ua);
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
@@ -139,7 +141,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
                         procRemoto.rellenear(procTransferible);
                         
                     	if(procTransferible.getIdOrganResolutori()!=null){
-                            procRemoto.setOrganResolutori(uaRemotaDelegate.obtenerUARemota(adminRemota.getIdRemoto(), procTransferible.getIdOrganResolutori()));	
+                            procRemoto.setOrganResolutori(uaRemotaDelegate.obtenerUARemota(adminRemota.getIdRemoto(),procTransferible.getIdOrganResolutori()));
                         }
                         procRemoto.setUnidadAdministrativa(ua);
                         procRemoto.setAdministracionRemota(adminRemota);
@@ -159,7 +161,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 
                         
                         procRemotoDelegate.grabarProcedimientoRemoto(procRemoto,procTransferible.getCodigoEstandarMaterias(),procTransferible.getCodigoEstandarHV());
-                        log.debug("Procedimiento guardado idExt "+ procTransferible.getId());    
+                        log.debug("Procedimiento guardado idExt "+ procTransferible.getId());
 
                         //recogemos documentos Informativos (uno a uno)
                         if(procTransferible.getIdsDocsInfor()!=null){
@@ -228,7 +230,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 * @throws CapaDeDatosException
 	 * @throws ComunicacionException
 	 */
-	private void recogerTramites(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
+	protected void recogerTramites(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
 		try {
 			log.debug("Recogiendo Tramites relacionados para el procedimiento: "+proc.getIdExterno());
 			final TramiteTransferible[] tramiteTransferibles = sincInvoker.recogerTramitesRelacionados(proc.getIdExterno());
@@ -267,7 +269,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	 * @throws CapaDeDatosException
 	 * @throws ComunicacionException
 	 */
-	private void recogerNormativas(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
+	protected void recogerNormativas(final ProcedimientoRemoto proc) throws CapaDeDatosException, ComunicacionException{
 		try {
 			log.debug("Recogiendo Normativas relacionados para el procedimiento: "+proc.getIdExterno());
 			final NormativaTransferible[] normativaTransferibles = sincInvoker.recogerNormativasRelacionadas(proc.getIdExterno());

@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.persistence.ejb;
+﻿package org.ibit.rol.sac.persistence.ejb;
 
 
 import java.sql.Connection;
@@ -1166,7 +1166,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         return result;
     }
 
-    /**
+  /**
      * Obtiene los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1218,6 +1218,69 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     					Hibernate.initialize(proc.getHechosVitalesProcedimientos());
                         Hibernate.initialize(proc.getDocumentos());
     					procsFinales.add(proc);
+    				}
+    			}
+    		}
+    		return procsFinales;
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+    }
+
+    /**
+     * Obtiene los ids de los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
+    	Session session = getSession();
+    	try {
+    		UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+    		Hibernate.initialize(unidadAdministrativa.getProcedimientos());
+
+    		Set<ProcedimientoLocal> procs = unidadAdministrativa.getProcedimientos();
+    		List<Long> procsFinales = new ArrayList<Long>();
+    		for(ProcedimientoLocal proc: procs){
+    			if(publico(proc)){
+    				//Variable que indica si el procedimiento tiene alguna relacion
+    				boolean relacionada = false;
+
+    				//comprobamos materias
+    				Query queryMat = session.createQuery("select mat.codigoEstandar from ProcedimientoLocal p, p.materias as mat where p.id =:id");
+    				queryMat.setParameter("id", proc.getId(), Hibernate.LONG);
+
+    				List<String> codigosMaterias = queryMat.list();
+
+    				//si el procedimiento esta relacionada con alguna materia la marcamos
+    				for(String codigoMat: codEstMat){
+    					if (relacionada = codigosMaterias.contains(codigoMat)){
+    						break;
+    					}
+    				}
+
+    				//Si no tiene niguna relacion con ninguna materia miramos si teiene ralacion con algun HV
+    				if(!relacionada){
+    					Query queryHechos = session.createQuery("select hpv.hechoVital.codigoEstandar from ProcedimientoLocal p, p.hechosVitalesProcedimientos as hpv where p.id =:id");
+    					queryHechos.setParameter("id", proc.getId(), Hibernate.LONG);
+
+    					List<String> codigosHechos = queryHechos.list();
+
+    					// si la ficha esta relacionada con el hechovital la marcamos
+    					for(String codigoHev: codEstHV){
+    						if (relacionada = codigosHechos.contains(codigoHev)){
+    							break;
+    						}
+    					}
+    				}
+
+    				if(relacionada){
+    				/*	Hibernate.initialize(proc.getMaterias());
+    					Hibernate.initialize(proc.getHechosVitalesProcedimientos());
+                        Hibernate.initialize(proc.getDocumentos());
+    				*/	procsFinales.add(proc.getId());
     				}
     			}
     		}
