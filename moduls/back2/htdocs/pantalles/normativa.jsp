@@ -6,6 +6,7 @@
 <link href='<c:url value="/css/modul_traspas.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 
     <script type="text/javascript">
     <!--
@@ -15,6 +16,8 @@
         var pagGuardar = '<c:url value="/normativa/guardar.htm" />';
         var pagEliminar = '<c:url value="/normativa/eliminar.htm" />';
         
+        var pagArrel = '<c:url value="/" />';
+        
         var pagBOIB = "json/boibsJSON.php";
         var pagNormativa = "json/normativesJSON.php";
         var pagProcediments = "json/procedimentsJSON.php";
@@ -22,6 +25,8 @@
         var idUaActual = '<c:out value="${idUA}" />';
         var nomUaActual = '<c:out value="${nomUA}" />';        
         
+		var txtSenseArxiu = '-- No hi ha arxiu assignat --';
+		
         // eixir aplicacio
         var txtEixirAplicacio = "Per raons de seguretat, és preferible que abandone l'aplicació fent clic al botó Tanca l'aplicació";
         // missatge
@@ -409,7 +414,7 @@
 <!-- /escriptori_contingut -->
 <!-- escriptori_detall -->
 <div id="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
-    <form id="formGuardar" action="false">
+    <form id="formGuardar" action="" method="POST">
     <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
     <p>Recordi que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>
         
@@ -502,19 +507,24 @@
                                     </div>                                    
                                 </div>
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_ca">Arxiu</label></div>
                                         <div class="control archivo">   
-                                            <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
-                                            <div class="archivoActual">
-                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
-                                                <span class="checkBorrar">
-                                                    <input id="id_item_arxiu_ca" type="checkbox" name="borrar_item_archiu_ca" />
-                                                    <label for="id_item_arxiu_ca">Eliminar archivo</label>                                              
-                                                </span>
-                                            </div>
+                                        	<div id="grup_arxiu_actual_ca" class="grup_arxiu_actual">
+                                        		<span>-- No hi ha arxiu asignat --</span>
+                                        		<a href="#" target="_blank"></a>
+                                        		<input type="checkbox" name="item_arxiu_ca_delete" id="item_arxiu_ca_delete" value="1"/>
+                                        		<label for="item_arxiu_ca_delete" class="eliminar">Eliminar</label>
+                                        	</div>
                                         </div>
-                                    </div>
+                                    </div>    
+                                    
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_arxiu_ca">Arxiu nou</label></div>
+                                        <div class="control">                                      		
+                                            <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
+                                        </div>
+                                    </div>                                                                                      
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">
@@ -571,19 +581,24 @@
                                     </div>                                  
                                 </div>
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_es">Arxiu</label></div>
                                         <div class="control">
-                                            <input id="item_arxiu_es" name="item_arxiu_es" type="file" class="nou" />
-                                            <div class="archivoActual">
-                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
-                                                <span class="checkBorrar">
-                                                    <input id="id_item_arxiu_es" type="checkbox" name="borrar_item_archiu_es" />
-                                                    <label for="id_item_arxiu_es">Eliminar archivo</label>                                              
-                                                </span>
-                                            </div>
+                                        	<div id="grup_arxiu_actual_es" class="grup_arxiu_actual">
+                                        		<span>-- No hi ha arxiu asignat --</span>
+                                        		<a href="#" target="_blank"></a>
+                                        		<input type="checkbox" name="item_arxiu_es_delete" id="item_arxiu_es_delete" value="1"/>
+                                        		<label for="item_arxiu_es_delete" class="eliminar">Eliminar</label>
+                                        	</div>
                                         </div>
-                                    </div>
+                                    </div>    
+                                    
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_arxiu_es">Arxiu nou</label></div>
+                                        <div class="control">                                      		
+                                            <input id="item_arxiu_es" name="item_arxiu_es" type="file" class="nou" />
+                                        </div>
+                                    </div>                                                                                      
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">
@@ -640,19 +655,24 @@
                                     </div>                                  
                                 </div>
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_en">Arxiu</label></div>
                                         <div class="control">
-                                            <input id="item_arxiu_en" name="item_arxiu_en" type="file" class="nou" />
-                                            <div class="archivoActual">
-                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
-                                                <span class="checkBorrar">
-                                                    <input id="id_item_arxiu_en" type="checkbox" name="borrar_item_archiu_en" />
-                                                    <label for="id_item_arxiu_en">Eliminar archivo</label>                                              
-                                                </span>
-                                            </div>
+                                        	<div id="grup_arxiu_actual_en" class="grup_arxiu_actual">
+                                        		<span>-- No hi ha arxiu asignat --</span>
+                                        		<a href="#" target="_blank"></a>
+                                        		<input type="checkbox" name="item_arxiu_en_delete" id="item_arxiu_en_delete" value="1"/>
+                                        		<label for="item_arxiu_en_delete" class="eliminar">Eliminar</label>
+                                        	</div>
                                         </div>
-                                    </div>
+                                    </div>    
+                                    
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_arxiu_en">Arxiu nou</label></div>
+                                        <div class="control">                                      		
+                                            <input id="item_arxiu_en" name="item_arxiu_en" type="file" class="nou" />
+                                        </div>
+                                    </div>                                                                                      
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">
@@ -709,19 +729,24 @@
                                     </div>                                  
                                 </div>
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_de">Arxiu</label></div>
                                         <div class="control">
-                                            <input id="item_arxiu_de" name="item_arxiu_de" type="file" class="nou" />
-                                            <div class="archivoActual">
-                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
-                                                <span class="checkBorrar">
-                                                    <input id="id_item_arxiu_de" type="checkbox" name="borrar_item_archiu_de" />
-                                                    <label for="id_item_arxiu_de">Eliminar archivo</label>                                              
-                                                </span>
-                                            </div>
+                                        	<div id="grup_arxiu_actual_de" class="grup_arxiu_actual">
+                                        		<span>-- No hi ha arxiu asignat --</span>
+                                        		<a href="#" target="_blank"></a>
+                                        		<input type="checkbox" name="item_arxiu_de_delete" id="item_arxiu_de_delete" value="1"/>
+                                        		<label for="item_arxiu_de_delete" class="eliminar">Eliminar</label>
+                                        	</div>
                                         </div>
-                                    </div>
+                                    </div>    
+                                    
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_arxiu_de">Arxiu nou</label></div>
+                                        <div class="control">                                      		
+                                            <input id="item_arxiu_de" name="item_arxiu_de" type="file" class="nou" />
+                                        </div>
+                                    </div>                                                                                      
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">
@@ -779,19 +804,24 @@
                                     </div>                                  
                                 </div>
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_fr">Arxiu</label></div>
                                         <div class="control">
-                                            <input id="item_arxiu_fr" name="item_arxiu_fr" type="file" class="nou" />
-                                            <div class="archivoActual">
-                                                Archivo actual: <a href="#">archivo_actual.pdf</a>
-                                                <span class="checkBorrar">
-                                                    <input id="id_item_arxiu_fr" type="checkbox" name="borrar_item_archiu_fr" />
-                                                    <label for="id_item_arxiu_fr">Eliminar archivo</label>                                              
-                                                </span>
-                                            </div>
+                                        	<div id="grup_arxiu_actual_fr" class="grup_arxiu_actual">
+                                        		<span>-- No hi ha arxiu asignat --</span>
+                                        		<a href="#" target="_blank"></a>
+                                        		<input type="checkbox" name="item_arxiu_fr_delete" id="item_arxiu_fr_delete" value="1"/>
+                                        		<label for="item_arxiu_fr_delete" class="eliminar">Eliminar</label>
+                                        	</div>
                                         </div>
-                                    </div>
+                                    </div>    
+                                    
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_arxiu_fr">Arxiu nou</label></div>
+                                        <div class="control">                                      		
+                                            <input id="item_arxiu_fr" name="item_arxiu_fr" type="file" class="nou" />
+                                        </div>
+                                    </div>                                                                                      
                                 </div>
                                 <div class="fila">
                                     <div class="element t99p">

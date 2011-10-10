@@ -55,6 +55,7 @@
         	<include name="lucene-caib.jar"/>
         	<include name="dom4j.jar"/>
 			<include name="org.springframework.**.jar"/>
+        	<include name="commons-fileupload-1.2.2.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />

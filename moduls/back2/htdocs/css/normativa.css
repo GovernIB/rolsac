@@ -20,3 +20,24 @@ div.llistat div.tbody div.data { width:7em; padding: 0 .5em; line-height: 1.4em}
 
 div.llistat div.tbody div.td span.titol { font-style:italic; }
 
+div.grup_arxiu_actual {
+    margin-bottom: 1em;
+}
+
+div.grup_arxiu_actual label {
+    display: inline;
+    margin-right: 0.25em;
+}
+
+div.grup_arxiu_actual span {
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+div.grup_arxiu_actual a {
+    margin-right: 2em;
+}
+
+div.grup_arxiu_nou label {
+    margin-right: 1em;
+}

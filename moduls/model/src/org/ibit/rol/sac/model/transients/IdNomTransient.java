@@ -35,4 +35,8 @@ public class IdNomTransient implements Serializable {
 		this.nom = nom;
 	}
 	
+	public String getJson() {
+		return "{\"id\" : \"" + id + "\", \"nom\" : \"" + nom + "\" }";
+	}
+	
 }

@@ -347,6 +347,9 @@ function CDetall(){
 	this.extend();
 	
 	this.iniciar = function() {			
+		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
+		this.guarda = this.guarda_upload;
+		
 		// dates
 		//$("#item_data").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
@@ -386,7 +389,44 @@ function CDetall(){
 		modulProcediments_pare_elm = $("#modulLateral div.modulProcediments").parents("div.modul:first");
 		
 		//TODO máscaras campos			
-	}
+	},
+	
+
+	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	this.guarda_upload = function(e) {
+		
+		// Validamos el formulario
+		if( typeof FormulariComprovar != "undefined" ){
+					
+			FormulariComprovar.llansar();
+			
+			if (!formComprovacio) {				
+				return false;
+			}
+		}
+
+		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		$("#formGuardar").ajaxSubmit({			
+			url: pagGuardar,
+			dataType: 'json',
+			beforeSubmit: function() {
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+			},
+			success: function(data) {				
+				Llistat.cacheDatosListado = null;
+				
+				if (data.id < 0) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+				} else {
+					Detall.recarregar();
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+				}					
+			}
+								
+		});
+		return false;		
+		
+	},
 	
 	this.tipologia = function(e) {
 		
@@ -476,6 +516,35 @@ function CDetall(){
 		
 		//$("#item_estat").val("R");
 		
+		for each (var idioma in ["ca", "es", "en", "fr", "de"]) {
+			
+			$("#item_titol_" + idioma).val(dada_node["idioma_" + idioma + "_titol"]);
+			$("#item_enllas_" + idioma).val(dada_node["idioma_" + idioma + "_enllac"]);
+			$("#item_apartat_" + idioma).val(dada_node["idioma_" + idioma + "_apartat"]);
+			$("#item_pagina_inicial_" + idioma).val(dada_node["idioma_" + idioma + "_pagini"]);
+			$("#item_pagina_final_" + idioma).val(dada_node["idioma_" + idioma + "_pagfin"]);
+			$("#item_responsable_" + idioma).val(dada_node["idioma_" + idioma + "_responsable"]);
+			$("#item_des_curta_" + idioma).val(dada_node["idioma_" + idioma + "_observacions"]);
+			
+			$("#item_arxiu_" + idioma).val("");
+			$("#grup_arxiu_actual_" + idioma + " input").removeAttr("checked");
+			if (dada_node["idioma_" + idioma + "_enllas_arxiu"]) {
+				$("#grup_arxiu_actual_" + idioma + " a").show();					
+				$("#grup_arxiu_actual_" + idioma + " a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_arxiu_actual_" + idioma + " a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_arxiu_actual_" + idioma + " span").hide();
+				$("#grup_arxiu_actual_" + idioma + " input").show();
+				$("#grup_arxiu_actual_" + idioma + " label.eliminar").show();
+							
+			} else {
+				$("#grup_arxiu_actual_" + idioma + " span").show();
+				$("#grup_arxiu_actual_" + idioma + " input").hide();
+				$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
+				$("#grup_arxiu_actual_" + idioma + " a").hide();			
+			}			
+			
+		}
+		/*
 		$("#item_titol_ca").val(dada_node.idioma_ca_titol);
 		$("#item_enllas_ca").val(dada_node.idioma_ca_enllac);
 		$("#item_apartat_ca").val(dada_node.idioma_ca_apartat);
@@ -483,6 +552,23 @@ function CDetall(){
 		$("#item_pagina_final_ca").val(dada_node.idioma_ca_pagfin);
 		$("#item_responsable_ca").val(dada_node.idioma_ca_responsable);
 		$("#item_des_curta_ca").val(dada_node.idioma_ca_observacions);
+		
+		$("#item_arxiu_ca").val("");
+		$("#grup_arxiu_actual_ca input").removeAttr("checked");
+		if (dada_node.idioma_ca_enllas_arxiu) {
+			$("#grup_arxiu_actual_ca a").show();					
+			$("#grup_arxiu_actual_ca a").attr("href", pagArrel + dada_node.idioma_ca_enllas_arxiu);
+			$("#grup_arxiu_actual_ca a").text(dada_node.idioma_ca_nom_arxiu);
+			$("#grup_arxiu_actual_ca span").hide();
+			$("#grup_arxiu_actual_ca input").show();
+			$("#grup_arxiu_actual_ca label.eliminar").show();
+						
+		} else {
+			$("#grup_arxiu_actual_ca span").show();
+			$("#grup_arxiu_actual_ca input").hide();
+			$("#grup_arxiu_actual_ca label.eliminar").hide();
+			$("#grup_arxiu_actual_ca a").hide();			
+		}
 		
 		$("#item_titol_es").val(dada_node.idioma_es_titol);
 		$("#item_enllas_es").val(dada_node.idioma_es_enllac);
@@ -515,6 +601,8 @@ function CDetall(){
 		$("#item_pagina_final_fr").val(dada_node.idioma_fr_pagfin);
 		$("#item_responsable_fr").val(dada_node.idioma_fr_responsable);
 		$("#item_des_curta_fr").val(dada_node.idioma_fr_observacions);		
+		*/
+		
 		
 		$("#item_numero").val(dada_node.numero);
 		$("#item_butlleti_id").val(dada_node.butlleti_id);
