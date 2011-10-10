@@ -56,6 +56,7 @@
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "Caducitat";
     
+    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
@@ -1402,212 +1403,35 @@
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
                             <div class="seleccionats">
-                                <p class="info">No hi ha matèries.</p>                                
+                                <p class="info">No hi ha matèries.</p>
                                 <div class="listaOrdenable"></div>
-                                <p class="btnGenerico">
+                                <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span>Gestiona matèries</span></span></a>
-                                </p>
+                                </div>
                             </div>
                             <div class="llistat">
                                 <ul>
-                                    <li><label><span>Agricultura</span><input
-                                            type="checkbox" value="1" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Canvi climàtic</span><input
-                                            type="checkbox" value="2" />
-                                    </label>
-                                    </li>
-                                    <!--
-                                    <li><label><span>Caça</span><input type="checkbox"
-                                            value="3" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Comerç</span><input
-                                            type="checkbox" value="4" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Consum</span><input
-                                            type="checkbox" value="5" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Contractació administrativa</span><input
-                                            type="checkbox" value="6" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Cooperació</span><input
-                                            type="checkbox" value="7" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Cultura</span><input
-                                            type="checkbox" value="8" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Dependència</span><input
-                                            type="checkbox" value="9" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Discapacitat</span><input
-                                            type="checkbox" value="10" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Dona</span><input type="checkbox"
-                                            value="11" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Economia</span><input
-                                            type="checkbox" value="12" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Educació</span><input
-                                            type="checkbox" value="13" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Emergències</span><input
-                                            type="checkbox" value="14" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Emigració</span><input
-                                            type="checkbox" value="15" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Empresa</span><input
-                                            type="checkbox" value="16" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Energia</span><input
-                                            type="checkbox" value="17" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Entitats</span><input
-                                            type="checkbox" value="18" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Esports</span><input
-                                            type="checkbox" value="19" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Europa / Internacional</span><input
-                                            type="checkbox" value="20" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Família</span><input
-                                            type="checkbox" value="21" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Formació ocupacional</span><input
-                                            type="checkbox" value="22" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Gent gran</span><input
-                                            type="checkbox" value="23" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Habitatge</span><input
-                                            type="checkbox" value="24" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Immigració</span><input
-                                            type="checkbox" value="25" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Indústria</span><input
-                                            type="checkbox" value="26" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Infraestructures</span><input
-                                            type="checkbox" value="27" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Infància i menors</span><input
-                                            type="checkbox" value="28" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Innovació i recerca</span><input
-                                            type="checkbox" value="29" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Institucions</span><input
-                                            type="checkbox" value="30" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Joventut</span><input
-                                            type="checkbox" value="31" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Llengua</span><input
-                                            type="checkbox" value="32" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Medi ambient</span><input
-                                            type="checkbox" value="33" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Oposicions i funció pública</span><input
-                                            type="checkbox" value="34" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Participació ciutadana</span><input
-                                            type="checkbox" value="35" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Personal docent</span><input
-                                            type="checkbox" value="36" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Pesca</span><input type="checkbox"
-                                            value="37" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Policia i interior</span><input
-                                            type="checkbox" value="38" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Qualitat</span><input
-                                            type="checkbox" value="39" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Ramaderia</span><input
-                                            type="checkbox" value="40" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Salut</span><input type="checkbox"
-                                            value="41" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Serveis socials</span><input
-                                            type="checkbox" value="42" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Tecnologia i comunicacions</span><input
-                                            type="checkbox" value="43" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Territori</span><input
-                                            type="checkbox" value="44" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Transports i mobilitat</span><input
-                                            type="checkbox" value="45" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Treball i ocupació</span><input
-                                            type="checkbox" value="46" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Tributs i recaptació</span><input
-                                            type="checkbox" value="47" />
-                                    </label>
-                                    </li>
-                                    <li><label><span>Turisme i hostaleria</span><input
-                                            type="checkbox" value="48" />
-                                    </label>
-                                    </li>
-                                     -->
+                                    <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${materia.nom}" /></span><input type="checkbox" value="<c:out value='${materia.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
                                 </ul>
-                                <p class="btnGenerico">
-                                    <a class="btn finalitza" href="javascript:;"><span><span>Finalitza</span></span></a>
-                                </p>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span>Finalitza</span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span>Cancel·la</span></span></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- /modulMateries -->

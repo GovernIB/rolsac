@@ -9,6 +9,7 @@ function CModulMateries(){
 	var modul_materies_elm = jQuery("div.modulMateries");
 	var materies_seleccionats_elm;
 	var materies_llistat_elm;
+	var materiaDefaultClass = "materiaDefault";
 					 	
 	if ( modul_materies_elm.size() == 1 ) {		
 
@@ -28,6 +29,16 @@ function CModulMateries(){
 	}
 	
 	this.cancela = function(){
+		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
+		mat_llistat_elm.find("input[type=checkbox]").each(function() {
+			$this = jQuery(this);
+			if ($this.hasClass(materiaDefaultClass)) {
+				$this.attr("checked", "checked");
+			} else {
+				$this.removeAttr("checked");
+			}
+		});
+		
 		materies_seleccionats_elm.slideDown(300);
 		materies_llistat_elm.slideUp(300);
 	}
@@ -50,6 +61,10 @@ function CModulMateries(){
 			if (input_elm.attr("checked")) {
 				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
 				nombre_llistat++;
+				
+				input_elm.addClass(materiaDefaultClass);
+			} else {
+				input_elm.removeClass(materiaDefaultClass);
 			}
 			
 		});
@@ -73,24 +88,26 @@ function CModulMateries(){
 		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
 		materies_nodes = dades;
-		materes_nodes_size = materies_nodes.length;
+		materies_nodes_size = materies_nodes.length;
 
 		mat_llistat_elm.find("input").removeAttr("checked");
 		
-		if (materes_nodes_size == 0) {
+		if (materies_nodes_size == 0) {
 			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
 		} else {
 			codi_materies = "<ul>";
 			$(materies_nodes).each(function() {
 				materia_node = this;
 				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
-				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
+				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked", "checked").addClass(materiaDefaultClass);
 			});
 			codi_materies += "<ul>";
-			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;			
-			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
+			txt_materies = (materies_nodes_size == 1) ? txtMateria : txtMateries;			
+			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materies_nodes_size + " " + txt_materies + "</strong>.");
 			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
 		}
+		
+		that.mostrarMateriasSeleccionadas();
 	}
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde n son codigos de materias
@@ -107,12 +124,21 @@ function CModulMateries(){
 		return listaMaterias;
 	}
 	
-	//Al acceder al formulario de creacion, limpia las listas de materias y desmarca los checkboxes	
+	/* Al acceder al formulario de creacion, limpia las listas de materias, desmarca los checkboxes,
+	 * marca las materias por defecto, econder el listado y mostrar los seleccionados.
+	 */
 	this.nuevo = function() {
 		
 		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 		mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false);
-		
-	}	
+		$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false).removeClass(materiaDefaultClass);
+
+		that.mostrarMateriasSeleccionadas();
+	}
+
+	// Econder el listado y mostrar los seleccionados.
+	this.mostrarMateriasSeleccionadas = function () {
+		escriptori_detall_elm.find("div.modulMateries div.llistat").hide();
+		escriptori_detall_elm.find("div.modulMateries div.seleccionats").show();
+	}
 }

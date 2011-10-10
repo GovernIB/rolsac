@@ -3,9 +3,11 @@ package es.caib.rolsac.back2.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -28,17 +30,17 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
+import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
 
-import com.sun.media.sound.DataPusher;
-
 import es.caib.rolsac.back2.util.DateUtil;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
+
 
 @Controller
 @RequestMapping("/catalegProcediments/")
@@ -64,6 +66,15 @@ public class CatalegProcedimentsBackController {
 			model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
 
 			try {
+                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                List<IdNomTransient> materiesTransientList = new ArrayList<IdNomTransient>();
+                List<Materia> llistaMateries = materiaDelegate.listarMaterias();
+                for (Materia materia : llistaMateries) {
+                	materiesTransientList.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));
+                }
+                model.put("llistaMateries", materiesTransientList);
+				
+                
 				FamiliaDelegate fd = DelegateUtil.getFamiliaDelegate();
 				List<IdNomTransient> familiasTransientList = new LinkedList<IdNomTransient>();
 				List<Familia> familias = fd.listarFamilias();
@@ -73,6 +84,7 @@ public class CatalegProcedimentsBackController {
 					familiasTransientList.add(new IdNomTransient(f.getId(), tf.getNombre()));
 				}
 				model.put("families", familiasTransientList);
+				
 				
 				IniciacionDelegate id = DelegateUtil.getIniciacionDelegate();
 				List<IdNomTransient> iniciacionTransientList = new LinkedList<IdNomTransient>();
@@ -84,11 +96,12 @@ public class CatalegProcedimentsBackController {
 				}
 				model.put("iniciacions", iniciacionTransientList);
 				
+
 			} catch (DelegateException dEx) {
 				if (dEx.getCause() instanceof SecurityException) {
-					// model.put("error", "permisos");
+					model.put("error", "permisos");
 				} else {
-					// model.put("error", "altres");
+					model.put("error", "altres");
 					dEx.printStackTrace();
 				}
 			}
@@ -358,7 +371,21 @@ public class CatalegProcedimentsBackController {
 				resultats.put("fr", new TraduccionProcedimientoLocal());
 			}
 			// Fin idiomas
+			
+			
+			// Materias asociadas
+            if (proc.getMaterias() != null) {             
+                List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
+                for(Materia materia : proc.getMaterias()){                
+                    llistaMateriesTransient.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));                
+                }
+                resultats.put("materies", llistaMateriesTransient);
+            } else {
+                resultats.put("materies", null);
+            } 
+            // Fin Materias asociadas
 
+            
 			resultats.put("item_codi", proc.getSignatura());
 
 			if (proc.getIniciacion() != null) {
@@ -403,7 +430,7 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_notes", proc.getInfo());
 
-			// TODO: documentos, tramites, materias, normativas.
+			// TODO: documentos, tramites, normativas.
 
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -416,6 +443,7 @@ public class CatalegProcedimentsBackController {
 
 		return resultats;
 	}
+	
 
 	@RequestMapping(value = "/esborrarProcediment.htm", method = POST)
 	public @ResponseBody
@@ -484,6 +512,38 @@ public class CatalegProcedimentsBackController {
 				}
 
 
+                // Materias
+                /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
+                 * En el primer caso es bastante probable que se repitan la mayoria de materias.
+                 */
+                if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))){
+                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                    Set<Materia> materiesNoves = new HashSet<Materia>();
+                    String[] codisMateriaNous = request.getParameter("materies").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i < codisMateriaNous.length; i++){
+                            for (Materia materia: procedimentOld.getMaterias()){
+                                if(materia.getId().equals(Long.valueOf(codisMateriaNous[i]))) {//materia ya existente
+                                    materiesNoves.add(materia);
+                                    codisMateriaNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiMateria: codisMateriaNous){
+                        if (codiMateria != null){
+                            materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
+                        }                        
+                    }
+                    
+                    procediment.setMaterias(materiesNoves);                                   
+                }
+                // Fin Materias
+                
+				
 				// Idiomas
 				TraduccionProcedimientoLocal tpl;
 				IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();

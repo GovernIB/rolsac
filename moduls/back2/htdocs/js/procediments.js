@@ -333,6 +333,12 @@ function CDetall(){
 	this.extend = DetallBase;
 	this.extend();
 	
+	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
+	this._baseGuarda = this.guarda;	
+	this.guarda = function() {
+		this._baseGuarda(ModulMateries.listaMaterias());
+	}
+	
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
 
 	this.iniciar = function() {	
@@ -374,6 +380,8 @@ function CDetall(){
 		
 	this.nou = function() {
 				
+		ModulMateries.nuevo();
+		
         //escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -680,6 +688,8 @@ function CDetall(){
 			}
 		}
 */		
+        
+		ModulMateries.inicializarMaterias(dada_node.materies);
 		
         // mostrem
         
