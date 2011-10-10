@@ -354,8 +354,8 @@ function CDetall(){
 		//$("#item_data").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		
-		$("#item_data_butlleti").mask("99/99/9999");
-		$("#item_data").mask("99/99/9999");
+		//$("#item_data_butlleti").mask("99/99/9999");
+		//$("#item_data").mask("99/99/9999");
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {

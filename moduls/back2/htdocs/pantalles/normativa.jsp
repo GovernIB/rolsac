@@ -226,7 +226,119 @@
                         "obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
                         "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                     }
+            },           
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_ca",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
+                    }
+            },    
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_es",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_es.tipus'/>"
+                    }
+            },  
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_en",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_en.tipus'/>"
+                    }
             },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_de",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_de.tipus'/>"
+                    }
+            },             
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_fr",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_fr.tipus'/>"
+                    }
+            },   
+            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_ca",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
+                    }
+            },    
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_es",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_es.tipus'/>"
+                    }
+            },  
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_en",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_en.tipus'/>"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_de",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_de.tipus'/>"
+                    }
+            },             
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_fr",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_fr.tipus'/>"
+                    }
+            },            
+            
             {
                 "modo": "individual",
                 "etiqueta": "id",
@@ -235,9 +347,34 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>"
+                        "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>",
+                        "tipus": "<spring:message code='normativa.formulari.numero.tipus'/>"
                     }
-            },          
+            },       
+            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_data",
+                "obligatori": "no",
+                "tipus": "data",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.data.tipus'/>"
+                    }
+            },    
+            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_data_butlleti",
+                "obligatori": "no",
+                "tipus": "data",
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.data_butlleti.tipus'/>"
+                    }
+            }           
 
         ];
     -->

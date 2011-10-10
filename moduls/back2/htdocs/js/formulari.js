@@ -83,7 +83,7 @@ var FormulariComprovar = {
 					return false;
 				}
 				
-				if (dada.tipus != "numeric" && dada_val != "" && !isNaN(dada_val)) {
+				if (dada.tipus == "numeric" && dada_val != "" && isNaN(dada_val)) {
 					FormulariComprovar.error({error: dada.error.tipus, camp: dada_elm});
 					return false;
 				}
