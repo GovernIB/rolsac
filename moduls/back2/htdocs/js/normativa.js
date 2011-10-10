@@ -463,6 +463,15 @@ function CDetall(){
 		$("#item_ua_id").val(idUaActual);
 		$("#item_ua_nom").val(nomUaActual);
 		
+		
+		//Resetear upload de archivos
+		for each (var idioma in ["ca", "es", "en", "fr", "de"]) {
+			$("#grup_arxiu_actual_" + idioma + " span").show();
+			$("#grup_arxiu_actual_" + idioma + " input").hide();
+			$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
+			$("#grup_arxiu_actual_" + idioma + " a").hide();	
+		}
+		
 		//Ocultar paneles
 		$("#modul_procediments, #modul_afectacions").hide();
 				
