@@ -512,6 +512,8 @@ function CDetall(){
 		
 		//escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
+		$("#modul_procediments, #modul_afectacions").show();
+		
 		$("#modulLateral li.btnEliminar").show();
 		$("#modulLateral li.btnEliminar").css("visibility", "visible");
 		
@@ -553,65 +555,7 @@ function CDetall(){
 			}			
 			
 		}
-		/*
-		$("#item_titol_ca").val(dada_node.idioma_ca_titol);
-		$("#item_enllas_ca").val(dada_node.idioma_ca_enllac);
-		$("#item_apartat_ca").val(dada_node.idioma_ca_apartat);
-		$("#item_pagina_inicial_ca").val(dada_node.idioma_ca_pagini);
-		$("#item_pagina_final_ca").val(dada_node.idioma_ca_pagfin);
-		$("#item_responsable_ca").val(dada_node.idioma_ca_responsable);
-		$("#item_des_curta_ca").val(dada_node.idioma_ca_observacions);
-		
-		$("#item_arxiu_ca").val("");
-		$("#grup_arxiu_actual_ca input").removeAttr("checked");
-		if (dada_node.idioma_ca_enllas_arxiu) {
-			$("#grup_arxiu_actual_ca a").show();					
-			$("#grup_arxiu_actual_ca a").attr("href", pagArrel + dada_node.idioma_ca_enllas_arxiu);
-			$("#grup_arxiu_actual_ca a").text(dada_node.idioma_ca_nom_arxiu);
-			$("#grup_arxiu_actual_ca span").hide();
-			$("#grup_arxiu_actual_ca input").show();
-			$("#grup_arxiu_actual_ca label.eliminar").show();
-						
-		} else {
-			$("#grup_arxiu_actual_ca span").show();
-			$("#grup_arxiu_actual_ca input").hide();
-			$("#grup_arxiu_actual_ca label.eliminar").hide();
-			$("#grup_arxiu_actual_ca a").hide();			
-		}
-		
-		$("#item_titol_es").val(dada_node.idioma_es_titol);
-		$("#item_enllas_es").val(dada_node.idioma_es_enllac);
-		$("#item_apartat_es").val(dada_node.idioma_es_apartat);
-		$("#item_pagina_inicial_es").val(dada_node.idioma_es_pagini);
-		$("#item_pagina_final_es").val(dada_node.idioma_es_pagfin);
-		$("#item_responsable_es").val(dada_node.idioma_es_responsable);
-		$("#item_des_curta_es").val(dada_node.idioma_es_observacions);		
-		
-		$("#item_titol_en").val(dada_node.idioma_en_titol);
-		$("#item_enllas_en").val(dada_node.idioma_en_enllac);
-		$("#item_apartat_en").val(dada_node.idioma_en_apartat);
-		$("#item_pagina_inicial_en").val(dada_node.idioma_en_pagini);
-		$("#item_pagina_final_en").val(dada_node.idioma_en_pagfin);
-		$("#item_responsable_en").val(dada_node.idioma_en_responsable);
-		$("#item_des_curta_en").val(dada_node.idioma_en_observacions);		
-		
-		$("#item_titol_de").val(dada_node.idioma_de_titol);
-		$("#item_enllas_de").val(dada_node.idioma_de_enllac);
-		$("#item_apartat_de").val(dada_node.idioma_de_apartat);
-		$("#item_pagina_inicial_de").val(dada_node.idioma_de_pagini);
-		$("#item_pagina_final_de").val(dada_node.idioma_de_pagfin);
-		$("#item_responsable_de").val(dada_node.idioma_de_responsable);
-		$("#item_des_curta_de").val(dada_node.idioma_de_observacions);
-		
-		$("#item_titol_fr").val(dada_node.idioma_fr_titol);
-		$("#item_enllas_fr").val(dada_node.idioma_fr_enllac);
-		$("#item_apartat_fr").val(dada_node.idioma_fr_apartat);
-		$("#item_pagina_inicial_fr").val(dada_node.idioma_fr_pagini);
-		$("#item_pagina_final_fr").val(dada_node.idioma_fr_pagfin);
-		$("#item_responsable_fr").val(dada_node.idioma_fr_responsable);
-		$("#item_des_curta_fr").val(dada_node.idioma_fr_observacions);		
-		*/
-		
+	
 		
 		$("#item_numero").val(dada_node.numero);
 		$("#item_butlleti_id").val(dada_node.butlleti_id);

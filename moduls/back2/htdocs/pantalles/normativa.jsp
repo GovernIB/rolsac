@@ -1201,7 +1201,7 @@
         
         <input type="hidden" id="item_tipologia" name="item_tipologia" />
         
-        <div class="modul">
+        <div class="modul" id="modul_procediments">
             <fieldset>
                 <a class="modul mostrat">Amaga</a>
                 <legend>Procediments relacionats</legend>
@@ -1210,9 +1210,9 @@
                     <div class="modulProcediments">
                         <div class="seleccionats">
                             <p class="info">No hi ha procediments.</p>
-                            <p class="btnGenerico">
+                            <!-- p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span>Gestiona procediments</span></span></a>
-                            </p>
+                            </p-->
                         </div>
                     </div>
                     <!-- /modulProcediments -->
@@ -1221,7 +1221,7 @@
         </div>
         <!-- /modul -->
         <!-- modul -->
-        <div class="modul">
+        <div class="modul" id="modul_afectacions">
             <fieldset>
                 <a class="modul amagat">Mostra</a>
                 <legend>Afectacions relacionades</legend>
