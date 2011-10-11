@@ -1,4 +1,4 @@
-﻿package org.ibit.rol.sac.persistence.delegate;
+package org.ibit.rol.sac.persistence.delegate;
 
 import java.util.Collection;
 import java.util.List;

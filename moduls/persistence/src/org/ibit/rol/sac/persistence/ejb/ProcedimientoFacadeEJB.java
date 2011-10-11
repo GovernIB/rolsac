@@ -1,4 +1,4 @@
-﻿package org.ibit.rol.sac.persistence.ejb;
+package org.ibit.rol.sac.persistence.ejb;
 
 
 import java.sql.Connection;
