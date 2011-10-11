@@ -136,8 +136,8 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 	
 	/**
 	 * Recoge toda la informacion de la {@link AdministracionRemota}. Comienza desde la
-	 * {@link UnidadAdministrativa} cuyo codigo estandar esta señalado en la {@link AdministracionRemota}
-	 * y a la profindidad señalada.
+	 * {@link UnidadAdministrativa} cuyo codigo estandar esta seÃ±alado en la {@link AdministracionRemota}
+	 * y a la profindidad seÃ±alada.
 	 * 
 	 * Todas las {@link Ficha} y {@link ProcedimientoLocal} relacionados con las {@link UnidadAdministrativa}
 	 * tambien son recogidos.
@@ -253,7 +253,7 @@ public class SincronizadorAltaThread extends SincronizadorThreadAbstract{
 						log.debug("Fichas recogidas");
                         boolean grabarFicha= false;
 						for(FichaTransferible fichaTrans : fichasTrans){
-                            // Condicions afegides per controllar que no es donin d'alta fitxes sense matèries ni fets vitals.
+                            // Condicions afegides per controllar que no es donin d'alta fitxes sense matÃ¨ries ni fets vitals.
                             // Controllam que si la llista ens ve amb elements nulls, se descarti la fitxa.
                             if ((fichaTrans.getCodigoEstandarMaterias() != null && fichaTrans.getCodigoEstandarMaterias().length > 0)
 				                || (fichaTrans.getCodigoEstandarHV() != null && fichaTrans.getCodigoEstandarHV().length > 0)) {
