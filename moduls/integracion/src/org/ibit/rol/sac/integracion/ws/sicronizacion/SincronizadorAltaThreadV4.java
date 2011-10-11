@@ -1,4 +1,4 @@
-﻿package org.ibit.rol.sac.integracion.ws.sicronizacion;
+package org.ibit.rol.sac.integracion.ws.sicronizacion;
 
 import org.ibit.rol.sac.model.*;
 import org.ibit.rol.sac.model.ws.FichaTransferible;

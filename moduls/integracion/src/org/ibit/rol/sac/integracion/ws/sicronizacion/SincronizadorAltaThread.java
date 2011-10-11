@@ -1,4 +1,4 @@
-﻿package org.ibit.rol.sac.integracion.ws.sicronizacion;
+package org.ibit.rol.sac.integracion.ws.sicronizacion;
 
 import java.util.ArrayList;
 import java.util.List;
