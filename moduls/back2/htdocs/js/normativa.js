@@ -38,6 +38,8 @@ $(document).ready(function() {
 	//$.suggeriments();
 });
 
+var idiomas = ["ca", "es", "en", "fr", "de"];
+
 // idioma
 var pag_idioma = $("html").attr("lang");
 
@@ -404,6 +406,22 @@ function CDetall(){
 				return false;
 			}
 		}
+		
+		/*
+		//Preparar los datos de afectaciones relacionadas
+		var listaAfectaciones = "{'listaAfectaciones' :";
+		var sep = "";
+		$("div.modulAfectacions").find("li").each(function() {
+			var li_elm = $(this);
+			var idNormaAfectada = li_elm.find("input.norma").val();
+			var idTipoAfectacion = li_elm.find("input.afectacio").val();
+					
+			listaAfectaciones += sep + "{ \"afectacioId\" : " + idTipoAfectacion + ", \"normaId\" : " + idNormaAfectada+ ", \"normaNom\" : \"\", \"afectacioNom\" : \"\" } ";
+			sep=",";
+		});
+		listaAfectaciones += "}";
+		$("#afectaciones").val(listaAfectaciones);
+		*/
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({			
@@ -463,13 +481,18 @@ function CDetall(){
 		$("#item_ua_id").val(idUaActual);
 		$("#item_ua_nom").val(nomUaActual);
 		
+		var names = ["Chris", "Kate", "Steve"];
+		for(var i in names)
+		{
+		    alert(names[i]);
+		}
 		
-		//Resetear upload de archivos
-		for each (var idioma in ["ca", "es", "en", "fr", "de"]) {
-			$("#grup_arxiu_actual_" + idioma + " span").show();
-			$("#grup_arxiu_actual_" + idioma + " input").hide();
-			$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
-			$("#grup_arxiu_actual_" + idioma + " a").hide();	
+		//Resetear upload de archivos			
+		for (var i in idiomas) {
+			$("#grup_arxiu_actual_" + idiomas[i] + " span").show();
+			$("#grup_arxiu_actual_" + idiomas[i] + " input").hide();
+			$("#grup_arxiu_actual_" + idiomas[i] + " label.eliminar").hide();
+			$("#grup_arxiu_actual_" + idiomas[i] + " a").hide();	
 		}
 		
 		//Ocultar paneles
@@ -526,8 +549,9 @@ function CDetall(){
 		$("#item_validacio").val(dada_node.validacio);
 		
 		//$("#item_estat").val("R");
-		
-		for each (var idioma in ["ca", "es", "en", "fr", "de"]) {
+				
+		for (var i in idiomas) {		
+			var idioma = idiomas[i];
 			
 			$("#item_titol_" + idioma).val(dada_node["idioma_" + idioma + "_titol"]);
 			$("#item_enllas_" + idioma).val(dada_node["idioma_" + idioma + "_enllac"]);
@@ -595,7 +619,7 @@ function CDetall(){
 				$(afecta_nodes).each(function() {
 					afectacio_node = this;
 					codi_afecta += "<li>";
-					//codi_afecta += "<input type=\"hidden\" value=\"" + afectacio_node.afectacioId + "\" class=\"afectacio\" />";
+					codi_afecta += "<input type=\"hidden\" value=\"" + afectacio_node.afectacioId + "\" class=\"afectacio\" />";
 					codi_afecta += "<input type=\"hidden\" value=\"" + afectacio_node.normaId + "\" class=\"norma\" />";
 					codi_afecta += afectacio_node.afectacioNom + ", " + txtAmbLaNorma + " <em>" + afectacio_node.normaNom + "</em>";
 					codi_afecta += "</li>";
