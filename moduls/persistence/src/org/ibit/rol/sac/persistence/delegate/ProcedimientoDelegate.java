@@ -1,4 +1,4 @@
-﻿package org.ibit.rol.sac.persistence.delegate;
+package org.ibit.rol.sac.persistence.delegate;
 
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
