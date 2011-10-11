@@ -409,7 +409,7 @@ function CDetall(){
 		
 		/*
 		//Preparar los datos de afectaciones relacionadas
-		var listaAfectaciones = "{'listaAfectaciones' :";
+		var listaAfectaciones = "{\"listaAfectaciones\" :";
 		var sep = "";
 		$("div.modulAfectacions").find("li").each(function() {
 			var li_elm = $(this);
@@ -481,11 +481,6 @@ function CDetall(){
 		$("#item_ua_id").val(idUaActual);
 		$("#item_ua_nom").val(nomUaActual);
 		
-		var names = ["Chris", "Kate", "Steve"];
-		for(var i in names)
-		{
-		    alert(names[i]);
-		}
 		
 		//Resetear upload de archivos			
 		for (var i in idiomas) {
