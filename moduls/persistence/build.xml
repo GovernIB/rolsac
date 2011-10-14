@@ -48,7 +48,8 @@
             <include name="lucene-ibit.jar"/>
 -->
    			<include name="lucene-core-2.2.0.jar"/>
-   			<include name="lucene-spellchecker-2.2.0.jar"/>			
+   			<include name="lucene-spellchecker-2.2.0.jar"/>	
+        	<include name="lucene-queries-2.2.0.jar"/>
    			<include name="jericho-html-2.5.jar"/>        	
             <include name="commons-logging.jar"/>
             <include name="commons-lang-2.4.jar"/>
@@ -208,7 +209,7 @@
             jarfile="${ejb.product}/sac-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="Fundaciï¿½ IBIT"/>
             </manifest>
             <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate-rolsac.cfg.xml"/>
             <fileset dir="${ejb.gen.etc}" includes="hibernate-rolsac.cfg.xml"/>
@@ -223,7 +224,7 @@
             jarfile="${ejb.product}/sac-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="Fundaciï¿½ IBIT"/>
             </manifest>
             <include name="**/delegate/**/*.class"/>
             <include name="**/intf/**/*.class"/>
@@ -239,7 +240,7 @@
             overview="${ejb.doc}/overview.html"
             windowtitle="API del componente ${modul}"
             doctitle="API del componente ${modul}"
-            bottom="Fundació Ibit">
+            bottom="Fundaciï¿½ Ibit">
             <sourcepath>
                 <pathelement path="${ejb.gen.src}"/>
                 <pathelement path="${ejb.src}"/>
@@ -250,7 +251,7 @@
         </javadoc>
     </target>
 
-    <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentación"/>
+    <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentaciï¿½n"/>
     <target name="main" depends="ejb.jar,ejb.client" description="Construye el componente"/>
 
 

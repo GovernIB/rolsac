@@ -17,6 +17,7 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BoostingQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
@@ -72,6 +73,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -117,7 +119,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     protected String indexType;
 
     /**
-     * Ubicació del directori de Lucene a emprar.
+     * Ubicaciï¿½ del directori de Lucene a emprar.
      * @ejb.env-entry value="${index.location}"
      */
     protected String indexLocation;
@@ -761,7 +763,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Busca documentos para un idioma concreto, con opción de sugerir
+     * Busca documentos para un idioma concreto, con opciï¿½n de sugerir
      * en caso de haber encontrado nada interesante.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -777,7 +779,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             IndexResultados res= null;
 
             //Buscamos la frase exacta que se ha introducido
-           	query = QuerySearchAdv(idi, null, null, cadena, null, "GEN", null, null, null, null, null, restringido);
+           	query = QuerySearchAdv(idi, null, null, cadena, null, "GEN", null, null, null, null, null, restringido, false);
         
             Hits hits = searcher.search(query);
             long endTime=0;
@@ -796,11 +798,11 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 						saltos = "1";
 					}
 		            //Buscamos alguna de las palabras que se ha introducido					
-					query = QuerySearchAdv(idi, cadena, null, null, null, "GEN", null, null, null, null, null, restringido);
+					query = QuerySearchAdv(idi, cadena, null, null, null, "GEN", null, null, null, null, null, restringido, false);
 					hits = searcher.search(query);
 					if ((hits.length() < MIN_HITS || hits.score(0) < MIN_SCORE)) {
 			            //Buscamos cualquiera de las palabras que se ha introducido						
-						query = QuerySearchAdv(idi, null, cadena, null, null, "GEN", null, null, null, null, null, restringido);
+						query = QuerySearchAdv(idi, null, cadena, null, null, "GEN", null, null, null, null, null, restringido, false);
 						hits = searcher.search(query);						
 					}
 						
@@ -1078,13 +1080,13 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Busca documentos para un idioma concreto, con opción de sugerir
+     * Busca documentos para un idioma concreto, con opciï¿½n de sugerir
      * en caso de haber encontrado nada interesante.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
         
-    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido) {
+    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido, boolean actual) {
     	long startTime = System.currentTimeMillis();
         try {
         	idi = idi.toLowerCase();
@@ -1094,7 +1096,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             Query query = null;
             IndexResultados res= null;
 
-           	query = QuerySearchAdv(idi, cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, restringido);
+           	query = QuerySearchAdv(idi, cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, restringido, actual);
         
             Hits hits = searcher.search(query);
             long endTime=0;
@@ -1133,7 +1135,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     
-    private Query QuerySearchAdv(String idi, String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, boolean restringido) {
+    private Query QuerySearchAdv(String idi, String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, boolean restringido, boolean actual) {
     	BooleanQuery querytotal = new BooleanQuery();
     	
         
@@ -1313,8 +1315,23 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             }            
             
             log.debug(querytotal.toString());
+            if(actual){
+            	// damos mayor puntuacion a los resultados de un periodo de meses
+            	String peridoActualidad =System.getProperty("es.caib.rolsac.lucene.peridoActualidad");
+            	if(peridoActualidad != null){
+            		int meses = Integer.valueOf(peridoActualidad);
+        			Calendar calendar = Calendar.getInstance();
+        			calendar.add(Calendar.MONTH, -meses);
+                	String anyo=new java.text.SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
+                	Term fechaAct_anyo= new Term (Catalogo.DESCRIPTOR_PUBLICACION, anyo);
+                    Term fechaUltima= new Term (Catalogo.DESCRIPTOR_PUBLICACION, "0000000" );
+                    RangeQuery actualidadAnyo = new RangeQuery(fechaUltima, fechaAct_anyo, true);
+                    Query balancedQuery = new BoostingQuery(querytotal, actualidadAnyo, 0.3f); 
+                   
+                    return balancedQuery;
+            	}
 
-    	
+            }
     	return querytotal;
     }
     
@@ -1498,7 +1515,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         } else if (HIBERNATE_INDEX_TYPE.equals(indexType)) {
             directory = new HibernateDirectory(sessionFactory);
         } else {
-            throw new EJBException("Tipo de índice no valido: " + indexType);
+            throw new EJBException("Tipo de ï¿½ndice no valido: " + indexType);
         }
         if (!IndexReader.indexExists(directory)) {
             new IndexWriter(directory, analyzer, true).close();
@@ -1514,7 +1531,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			writer.setMergeFactor(25);
 			writer.setMaxMergeDocs(625);
 			
-			//añade un documento
+			//aï¿½ade un documento
     		if (operacion.equals(OPER_ADDDOCUMENT)) {
                 Document document = getDocument(indexObject);
                 writer.addDocument(document);
@@ -1624,8 +1641,8 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     
-	/* Clase que sobreescribe un método de QueryParser para permitir hacer sugerencias 
-	 * cuando las búsquedas sean compuestas
+	/* Clase que sobreescribe un mï¿½todo de QueryParser para permitir hacer sugerencias 
+	 * cuando las bï¿½squedas sean compuestas
 	 * 
 	 */ 
 	
