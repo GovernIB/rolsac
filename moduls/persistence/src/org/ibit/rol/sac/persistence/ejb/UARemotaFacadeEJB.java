@@ -44,7 +44,7 @@ import java.util.Collections;
 public abstract class UARemotaFacadeEJB extends HibernateEJB {
 
 	/**
-	 * Obtiene referència al ejb de control de Acceso.
+	 * Obtiene referï¿½ncia al ejb de control de Acceso.
 	 * 
 	 * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
 	 */
@@ -151,7 +151,7 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
                 Query query = session.getNamedQuery("unidades.root.count");
                 uaRemota.setOrden(((Integer) query.list().get(0)).intValue());
             }else{
-                //Si no lo es la añado a su padre
+                //Si no lo es la aï¿½ado a su padre
                 uaPadre.addHijo(uaRemota);
             }
 
@@ -301,7 +301,7 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
             Hibernate.initialize(ua.getNormativas());
             return ua;
         } catch (HibernateException he) {
-            throw new EJBException("No s' ha trobat la unitat administrativa sol·licitada",he);
+            throw new EJBException("No s' ha trobat la unitat administrativa solï¿½licitada",he);
         } finally {
             close(session);
         }
@@ -667,7 +667,7 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	}
 
 	 /**
-		 * Añade la ua al indice en todos los idiomas
+		 * Aï¿½ade la ua al indice en todos los idiomas
 		 * 
 		 * @ejb.interface-method
 		 * @ejb.permission unchecked="true"
@@ -993,9 +993,10 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	        	
 	        	//Obtemos las fichas
 	            Query queryFic = session.createQuery(
-	                    "Select DISTINCT f from FichaRemota as f " +
+	                    "Select DISTINCT f from FichaRemota as f , fua in f.fichasua " +
 	                    "where f.validacion = :validacion " +
 	                    "and f.fechaActualizacion is not null " +
+	                    "and fua is not null " +
 	                    "and f.administracionRemota.id = :idRemota " +
 	                    (!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
 	                    "order by f.fechaActualizacion desc");
@@ -1020,7 +1021,7 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	            queryProc.setMaxResults(length);
 	            queryProc.setCacheable(true);
 	            List<ProcedimientoRemoto> listProc = queryProc.list();
-	            //Ordenación
+	            //Ordenaciï¿½n
 	            listOrdenada.addAll(listProc);
 	            Collections.sort(listOrdenada, new Comparator() {
 	                     public int compare(Object o1, Object o2) {
@@ -1068,8 +1069,9 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	        try {
 	        	
 	            Query queryFic = session.createQuery(
-	                    "select f from FichaRemota f, HistoricoFicha hf, Estadistica e " +
+	                    "select f from FichaRemota f, HistoricoFicha hf, Estadistica e , fua in f.fichasua " +
 	                    "where hf.ficha = f and e.historico = hf " +
+	                    "and fua is not null " +
 	                    "and f.validacion = :validacion " +
 	                    "and f.administracionRemota.id = :idRemota " +
 	                    (!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
