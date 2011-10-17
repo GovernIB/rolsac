@@ -3,6 +3,7 @@ package es.caib.rolsac.back2.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Boletin;
@@ -28,12 +31,15 @@ import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionNormativaExterna;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTipo;
+import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.transients.AfectacionTransient;
+import org.ibit.rol.sac.model.transients.AfectacionesTransient;
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.NormativaTransient;
 import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
@@ -46,17 +52,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import es.caib.rolsac.back2.util.UploadUtil;
 
 
 @Controller
 @RequestMapping("/normativa/")
 public class NormativaBackController {
-	
-	//TODO: obtener de fichero de propiedades externo
-	final static String idioma_per_defecte = "ca";
-	
+		
     private MessageSource messageSource = null;
     
     @Autowired
@@ -78,12 +80,14 @@ public class NormativaBackController {
 
         if (session.getAttribute("unidadAdministrativa")!=null){
             model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(idioma_per_defecte));            
+            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa());            
         } 		
         
         //Listas para el buscador
         try {
         	//Las pasamos a transient
+        	
+        	//Boletines
         	List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
         	List<IdNomTransient> listaBoletinesTransient = new ArrayList<IdNomTransient>();
         	for (Boletin boletin : listaBoletines) {        		       		
@@ -92,17 +96,31 @@ public class NormativaBackController {
         	}
         	model.put("llistaButlletins", listaBoletinesTransient);
         	
+        	//Tipos normativa
         	List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
         	List<IdNomTransient> listaTiposNormativaTransient = new ArrayList<IdNomTransient>();
         	for (Tipo tipo : listaTiposNormativa) {
         		TraduccionTipo traTipo = (TraduccionTipo)tipo.getTraduccion(idioma);
         		if (traTipo == null) {
-        			traTipo = (TraduccionTipo)tipo.getTraduccion(idioma_per_defecte);        			
+        			traTipo = (TraduccionTipo)tipo.getTraduccion();        			
         		}
         		IdNomTransient tipoTran = new IdNomTransient(tipo.getId(), traTipo.getNombre());
         		listaTiposNormativaTransient.add(tipoTran);
         	}        	
         	model.put("llistaTipusNormativa", listaTiposNormativaTransient);
+        	
+        	//Tipos afectacion
+        	List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
+        	List<IdNomTransient> listaTiposAfectacionTransient = new ArrayList<IdNomTransient>();
+        	for (TipoAfectacion tipoAfec : listaTiposAfectacion) {
+        		TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion(idioma);
+        		if (traTipAfec == null)
+        			traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion();
+        		
+        		IdNomTransient tipAfecTran = new IdNomTransient(tipoAfec.getId(), traTipAfec.getNombre());
+        		listaTiposAfectacionTransient.add(tipAfecTran);
+        	}
+        	model.put("llistaTipusAfectacio", listaTiposAfectacionTransient);
         	        	
         } catch (DelegateException e) {
             if (e.getCause() instanceof SecurityException) {
@@ -115,7 +133,6 @@ public class NormativaBackController {
 		
 		return "index";
 	}
-	
 	
 	
 	@RequestMapping(value = "/llistat.htm", method = POST)
@@ -140,12 +157,10 @@ public class NormativaBackController {
 		//Determinar si ha marcado el checkbox "Cerar a totes les meves unitats"
 		boolean meves = "true".equals(request.getParameter("totesUnitats"));
 		
-		
 		if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
 			return resultats;//Si no hay unidad administrativa se devuelve vacío
 		}	
 		Long idUA = new Long(request.getParameter("idUA"));
-		
 		
 		try {
 			//Obtener parámetros de búsqueda
@@ -193,7 +208,6 @@ public class NormativaBackController {
 				paramTrad.put("idioma", idioma);
 			}			
 			
-			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
@@ -204,33 +218,7 @@ public class NormativaBackController {
 				llistaNormatives.addAll(listaExternas);
 			}
 			
-			for (Normativa normativa : llistaNormatives) {
-				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
-				String titulo = "";
-				if (traNor != null) {
-					//Retirar posible enlace incrustado en titulo
-					titulo = obtenerTituloDeEnlaceHtml(traNor.getTitulo());
-				}					
-				
-				TraduccionTipo traTip = normativa.getTipo() != null ? (TraduccionTipo)normativa.getTipo().getTraduccion(idioma) : null;
-				String tipus = "";
-				
-				if (traTip != null)
-					tipus = traTip.getNombre();
-				
-				
-				boolean local = NormativaLocal.class.isInstance(normativa);
-				
-				llistaNormativesTransient.add(
-							new NormativaTransient(
-									normativa.getId() != null ? normativa.getId().longValue() : 0, 
-									normativa.getNumero() != null ? normativa.getNumero().longValue() : 0, 
-									titulo, 
-									normativa.getFecha(), 
-									tipus,
-									local ? "Local" : "Externa")
-						);
-			}
+			llistaNormativesTransient = pasarListaNormativasATransient(llistaNormatives, idioma);
 			
 			//Ordenar lista si se combinan locales y externas
 			if (buscaExternas) {				
@@ -253,9 +241,7 @@ public class NormativaBackController {
 		resultats.put("nodes", llistaNormativesTransient);
 
 		return resultats;
-		
-	}	
-	
+	}
 
 
 	@RequestMapping(value = "/pagDetall.htm", method = POST)
@@ -264,6 +250,8 @@ public class NormativaBackController {
 	    Map<String, Object> normativaDetall = new HashMap<String, Object>();
 	    List<Object> afectadas = new ArrayList<Object>();
 	    List<Object> procedimientos = new ArrayList<Object>();
+	    
+	    String idiomaUsuario = request.getLocale().getLanguage();
 	    
 	    try {
 	        
@@ -318,7 +306,6 @@ public class NormativaBackController {
     	        
         	}
 	        
-	        
 	        normativaDetall.put("numero", normativa.getNumero());	        
 	        normativaDetall.put("butlleti_id", normativa.getBoletin() != null ? normativa.getBoletin().getId() : null);
 	        normativaDetall.put("butlleti", normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : null);
@@ -329,18 +316,32 @@ public class NormativaBackController {
 	        normativaDetall.put("validacio", normativa.getValidacion());
 	        
 	        //Normativas afectadas
-	        Set<Afectacion> listaAfectadas = normativa.getAfectadas();
+	        Set<Afectacion> listaAfectadas = normativa.getAfectadas();	        
 	        for (Afectacion afec : listaAfectadas) {
-	        	Normativa normativaAfectada = afec.getNormativa();
-	        	TraduccionNormativa traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion("ca"); //TODO: cambiar por idioma por defecto del usuario
-	        	afectadas.add(new AfectacionTransient(normativaAfectada.getId(), traNormAfectada != null ? traNormAfectada.getTitulo() : ""));
+	        	Normativa normativaAfectada = afec.getNormativa();	        	        		        		       
+	        	AfectacionTransient afeTran = new AfectacionTransient();	        	
+	        	afeTran.setAfectacioId(afec.getTipoAfectacion().getId());
+	        	
+	        	TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
+	        	if (traTipAfec == null)
+	        		traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion();
+	        	
+	        	afeTran.setAfectacioNom(traTipAfec.getNombre());
+	        	afeTran.setNormaId(normativaAfectada.getId());
+	        	
+	        	TraduccionNormativa traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion(idiomaUsuario);
+	        	if (traNormAfectada == null)
+	        		traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion();
+	        	
+	        	afeTran.setNormaNom(traNormAfectada != null ? obtenerTituloDeEnlaceHtml(traNormAfectada.getTitulo()) : "");
+	        	afectadas.add(afeTran);
 	        }	        
 	        normativaDetall.put("afectacions", afectadas);
 	        
 	        //Procedimientos
 	        Set<ProcedimientoLocal> listaProcedimientos = normativa.getProcedimientos();
 	        for (ProcedimientoLocal proc : listaProcedimientos) {
-	        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion("ca"); //TODO: cambiar por idioma por defecto del usuario
+	        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario); 
 	        	procedimientos.add(new ProcedimientoLocalTransient(proc.getId(), traProc != null ? traProc.getNombre() : "", null, null));
 	        }
 	        normativaDetall.put("procediments", procedimientos);
@@ -361,7 +362,7 @@ public class NormativaBackController {
 	@RequestMapping(value = "/guardar.htm", method = POST)
 	public @ResponseBody String guardar(HttpSession session, HttpServletRequest request) {
 		
-		//TODO: completar paso de normativa local a externa y viceversa.
+		//TODO: no permitir paso de normativa externa a local y viceversa
 		
     	Normativa normativa = null;
     	Normativa normativaOld = null; 		
@@ -385,7 +386,6 @@ public class NormativaBackController {
     				ficherosForm.put(item.getFieldName(), item);    				
     			}
     		}
-        	
         	
         	NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
         	
@@ -411,13 +411,13 @@ public class NormativaBackController {
     		
         	if (edicion) {
 				Long idNorm = Long.parseLong(valoresForm.get("item_id"));
-        		normativaOld = normativaDelegate.obtenerNormativa(idNorm);
+        		normativaOld = normativaDelegate.obtenerNormativa(idNorm);        		
         		normativa.setAfectadas(normativaOld.getAfectadas());
-        		normativa.setAfectantes(normativaOld.getAfectantes());
+        		normativa.setAfectantes(normativaOld.getAfectantes());        		
         		normativa.setProcedimientos(normativaOld.getProcedimientos());
         		normativa.setId(idNorm);
         	} 
-
+        	
         	//Campos por idioma
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	for (String idioma : idiomas) {
@@ -489,7 +489,6 @@ public class NormativaBackController {
         	if (valoresForm.get("item_validacio") != null && !"".equals(valoresForm.get("item_validacio")))
         		normativa.setValidacion(new Integer(valoresForm.get("item_validacio")));
 
-
         	//Boletín
         	if (valoresForm.get("item_butlleti_id") != null && !"".equals(valoresForm.get("item_butlleti_id"))) {
         		Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(Long.parseLong(valoresForm.get("item_butlleti_id")));
@@ -501,6 +500,38 @@ public class NormativaBackController {
         	} else {
         		normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
         	}
+        	
+    		//Afectaciones
+    		ObjectMapper mapper = new ObjectMapper();    	
+    		String jsonAfectaciones = valoresForm.get("afectaciones");
+    		AfectacionesTransient afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesTransient.class);
+
+    		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
+    		if (edicion) {
+    			Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
+    			for (Afectacion afectacionOld : listaActualAfectaciones) {
+    				
+    				//Buscar la afectación en la lista nueva
+    				boolean estaEnLaListaNueva = false;
+    				for (AfectacionTransient afectacionNew : afectaciones.getListaAfectaciones()) {
+    					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
+    						estaEnLaListaNueva = true;
+    						afectaciones.getListaAfectaciones().remove(afectacionNew);
+    						break;
+    					}
+    				}
+    				//Si no está en la lista nueva es que hay que eliminarla		
+    				if (!estaEnLaListaNueva) {    				
+    					normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
+    				}
+    			}
+    		}
+    		
+    		//Establecer las afectaciones indicadas en la pantalla
+			for (AfectacionTransient afectacion : afectaciones.getListaAfectaciones()) {
+				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
+			}         	
+        	
 
         	String ok = messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale());
         	result = new IdNomTransient(normativa.getId(), ok);
@@ -528,6 +559,15 @@ public class NormativaBackController {
 		} catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);
+			e.printStackTrace();
+			
+		} catch (JsonParseException e) {
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomTransient(-2l, error);
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 						
@@ -558,7 +598,117 @@ public class NormativaBackController {
         return  new IdNomTransient(id, messageSource.getMessage("normativa.eliminat.correcte", null, request.getLocale()));		
 	}
 	
+	
+	@RequestMapping(value = "/cercarNormatives.htm", method = POST)
+	public @ResponseBody Map<String, Object> cercarNormatives(HttpServletRequest request, HttpSession session)  {
 
+		//Listar las normativas de la unidad administrativa
+		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
+		List<NormativaTransient>llistaNormativesTransient = new ArrayList<NormativaTransient>();
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();	
+		Map<String, String> paramTrad = new HashMap<String, String>();
+		
+		String idioma = request.getLocale().getLanguage();
+		
+		//TODO obtener la ordenación por parámetro
+		String campoOrdenacion = "normativa.fecha";
+		String orden = "desc";		
+		
+		
+		try {
+			//Obtener parámetros de búsqueda
+		
+			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				Date data = df.parse(request.getParameter("data"));
+				paramMap.put("fecha", data);
+			}			
+			
+			if (request.getParameter("data_butlleti") != null && !request.getParameter("data_butlleti").equals("")) {
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+				Date dataButlleti = df.parse(request.getParameter("data_butlleti"));
+				paramMap.put("fechaBoletin", dataButlleti);
+			}
+			
+			String titulo = request.getParameter("titol");
+			if (titulo != null && !"".equals(titulo)) {
+				titulo = titulo.toUpperCase();
+				paramTrad.put("titulo", titulo);
+			} else {
+				paramTrad.put("idioma", idioma);
+			}			
+			
+			
+			//Realizar la consulta y obtener resultados
+			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+			
+			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, campoOrdenacion, orden));
+			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", null, false, campoOrdenacion, orden));
+			
+			llistaNormativesTransient = pasarListaNormativasATransient(llistaNormatives, idioma);
+			
+			//Ordenar lista (por fecha descendente)		
+			Collections.sort(llistaNormativesTransient);
+			
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+					
+		} catch (DelegateException dEx) {
+			if (dEx.getCause() instanceof SecurityException) {
+				//model.put("error", "permisos");
+			} else {
+				//model.put("error", "altres");
+				dEx.printStackTrace();
+			}
+		}
+		
+		resultats.put("total", llistaNormativesTransient.size());
+		resultats.put("nodes", llistaNormativesTransient);
+
+		return resultats;
+		
+	}	
+	
+	/**
+	 * Obtiene una lista de NormativaTransient a partir de una lista de Normativa.
+	 * @param llistaNormatives Lista de Normativa.
+	 * @param idioma Idioma seleccionado por el usuario.
+	 */
+	private List<NormativaTransient> pasarListaNormativasATransient(List<Normativa> llistaNormatives,	 String idioma) {
+		
+		List<NormativaTransient> llistaNormativesTransient = new ArrayList<NormativaTransient>();
+		
+		for (Normativa normativa : llistaNormatives) {
+			
+			TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
+			if (traNor == null)
+				traNor = (TraduccionNormativa)normativa.getTraduccion();
+							
+			//Retirar posible enlace incrustado en titulo
+			String titulo = traNor != null ? obtenerTituloDeEnlaceHtml(traNor.getTitulo()) : "";	
+			
+			TraduccionTipo traTip = normativa.getTipo() != null ? (TraduccionTipo)normativa.getTipo().getTraduccion(idioma) : null;
+
+			String tipus  = traTip != null ? traTip.getNombre() : "";
+			
+			boolean local = NormativaLocal.class.isInstance(normativa);
+			
+			llistaNormativesTransient.add(
+						new NormativaTransient(
+								normativa.getId() != null ? normativa.getId().longValue() : 0, 
+								normativa.getNumero() != null ? normativa.getNumero().longValue() : 0, 
+								titulo, 
+								normativa.getFecha(), 
+								tipus,
+								local ? "Local" : "Externa")
+					);
+		}
+		
+		return llistaNormativesTransient;
+	}	
+	
 	
 	//TODO: mover a clase de utilidades.
 	/**
@@ -584,7 +734,6 @@ public class NormativaBackController {
 				return texto;
 		} else 
 			return texto;
-				
 	}
 	
 	
@@ -604,7 +753,5 @@ public class NormativaBackController {
 		archivo.setDatos(fileItem.get());
 		return archivo;
 	}
-	
-	
 
 }

@@ -185,7 +185,7 @@ function CLlistat(){
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "Llistat.cambiaPagina",
+				funcionPagina: "Llistat.cambiaPagina"
 			});					
 			
 			codi_navegacio = multipagina.getHtml();
@@ -244,14 +244,12 @@ function CLlistat(){
 			dataVars_cercador += "&butlleti=" + $("#cerca_butlleti").val();
 			dataVars_cercador += "&registre=" + $("#cerca_registre").val();
 			dataVars_cercador += "&llei=" + $("#cerca_llei").val();
-			dataVars_cercador += "&data=" + $("#cerca_data").val();
-			//dataVars_cercador = "&titol=" + $("#cerca_titol").val();
+			dataVars_cercador += "&data=" + $("#cerca_data").val();			
 			dataVars_cercador += "&text=" + $("#cerca_text").val();
 			dataVars_cercador += "&data_butlleti=" + $("#cerca_data_butlleti").val();			
 			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
-			dataVars_cercador += "&cercaExternes=" + $("#cerca_externes").is(':checked');
-			
+			dataVars_cercador += "&cercaExternes=" + $("#cerca_externes").is(':checked');			
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 		
 		} else {
@@ -407,9 +405,9 @@ function CDetall(){
 			}
 		}
 		
-		/*
+		
 		//Preparar los datos de afectaciones relacionadas
-		var listaAfectaciones = "{\"listaAfectaciones\" :";
+		var listaAfectaciones = "{\"listaAfectaciones\" : [";
 		var sep = "";
 		$("div.modulAfectacions").find("li").each(function() {
 			var li_elm = $(this);
@@ -419,9 +417,9 @@ function CDetall(){
 			listaAfectaciones += sep + "{ \"afectacioId\" : " + idTipoAfectacion + ", \"normaId\" : " + idNormaAfectada+ ", \"normaNom\" : \"\", \"afectacioNom\" : \"\" } ";
 			sep=",";
 		});
-		listaAfectaciones += "}";
+		listaAfectaciones += "]}";
 		$("#afectaciones").val(listaAfectaciones);
-		*/
+		
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({			
@@ -548,13 +546,13 @@ function CDetall(){
 		for (var i in idiomas) {		
 			var idioma = idiomas[i];
 			
-			$("#item_titol_" + idioma).val(dada_node["idioma_" + idioma + "_titol"]);
-			$("#item_enllas_" + idioma).val(dada_node["idioma_" + idioma + "_enllac"]);
-			$("#item_apartat_" + idioma).val(dada_node["idioma_" + idioma + "_apartat"]);
-			$("#item_pagina_inicial_" + idioma).val(dada_node["idioma_" + idioma + "_pagini"]);
-			$("#item_pagina_final_" + idioma).val(dada_node["idioma_" + idioma + "_pagfin"]);
-			$("#item_responsable_" + idioma).val(dada_node["idioma_" + idioma + "_responsable"]);
-			$("#item_des_curta_" + idioma).val(dada_node["idioma_" + idioma + "_observacions"]);
+			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
+			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
+			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
+			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
+			$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
+			$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
 			
 			$("#item_arxiu_" + idioma).val("");
 			$("#grup_arxiu_actual_" + idioma + " input").removeAttr("checked");
@@ -576,19 +574,19 @@ function CDetall(){
 		}
 	
 		
-		$("#item_numero").val(dada_node.numero);
-		$("#item_butlleti_id").val(dada_node.butlleti_id);
-		$("#item_butlleti").val(dada_node.butlleti);
-		$("#item_registre").val(dada_node.registre);
-		$("#item_llei").val(dada_node.llei);
+		$("#item_numero").val(nn(dada_node.numero));
+		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
+		$("#item_butlleti").val(nn(dada_node.butlleti));
+		$("#item_registre").val(nn(dada_node.registre));
+		$("#item_llei").val(nn(dada_node.llei));
 		
-		$("#item_data_butlleti").val(dada_node.data_butlleti);
-		$("#item_data").val(dada_node.data);
+		$("#item_data_butlleti").val(nn(dada_node.data_butlleti));
+		$("#item_data").val(nn(dada_node.data));
 		
-		$("#item_tipus").val(dada_node.tipus);
+		$("#item_tipus").val(nn(dada_node.tipus));
 		
-		$("#item_ua_id").val(dada_node.idUA);
-		$("#item_ua_nom").val(dada_node.nomUA);
+		$("#item_ua_id").val(nn(dada_node.idUA));
+		$("#item_ua_nom").val(nn(dada_node.nomUA));
 		
 		if (dada_node.tipus == "B") {
 			
@@ -622,9 +620,11 @@ function CDetall(){
 				codi_afecta += "</ul>";
 				txt_afectacions = (afecta_nodes_size == 1) ? txtAfectacio : txtAfectacions;
 				afecta_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + afecta_nodes_size + " " + txt_afectacions.toLowerCase() + "</strong>.").after(codi_afecta);
+				/*
 				if (afecta_nodes_size > 1) {
 					afecta_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
 				}
+				*/
 			}
 			
 			// procediments

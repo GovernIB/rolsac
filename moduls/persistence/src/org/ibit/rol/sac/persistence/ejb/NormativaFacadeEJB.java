@@ -322,16 +322,19 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 	}
                 	                	
                 } else {
-                	uas.add(idUA);
+                	if (idUA != null)
+                		uas.add(idUA);
                 }
                 
-                sQuery += " and normativa.unidadAdministrativa.id in (";
-                String sep = "";
-                for (Long ua : uas) {
-                	sQuery += sep + ua;
-                	sep = ", ";
+                if (idUA != null) {
+                	sQuery += " and normativa.unidadAdministrativa.id in (";
+                	String sep = "";
+                	for (Long ua : uas) {
+                		sQuery += sep + ua;
+                		sep = ", ";
+                	}
+                	sQuery += ")";
                 }
-                sQuery += ")";
             	
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
                 query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + orderBy);

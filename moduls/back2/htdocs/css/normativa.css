@@ -41,3 +41,33 @@ div.grup_arxiu_actual a {
 div.grup_arxiu_nou label {
     margin-right: 1em;
 }
+
+/* Buscador afectaciones */
+#escriptori_afectacions .escriptori_items_cercador input.checkbox {
+    width: auto;
+}
+
+
+#escriptori_afectacions div.llistat div.thead div.titol {
+    padding-left: 0em;
+    width: 38em;
+}
+
+#escriptori_afectacions div.llistat div.tbody div.titol {
+    padding-left: 0em;
+    width: 29.5em;
+    padding-right: 1em;
+    font-size: .9em;
+}
+
+#escriptori_afectacions div.llistat div.tbody div.numero {
+    padding-left: 0.5em;
+    width: 5em;
+    padding-right: 1em;
+}
+
+#escriptori_afectacions div.llistat div.tbody div.data {
+    padding-left: 0.5em;
+    width: 5em;
+    padding-right: 1em;
+}

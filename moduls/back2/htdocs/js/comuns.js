@@ -1068,3 +1068,11 @@ function marcarOpcionSelect(select, id){
 	     }   
 	}
 }
+
+//Not null. Si el valor es null devuelve cadena vacía, de lo contrario devuelve el valor
+function nn(valor) {
+	if (valor == "null" || valor == null)
+		return "";
+	else
+		return valor;
+}

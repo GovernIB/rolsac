@@ -7,6 +7,7 @@
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
 
     <script type="text/javascript">
     <!--
@@ -19,7 +20,7 @@
         var pagArrel = '<c:url value="/" />';
         
         var pagBOIB = "json/boibsJSON.php";
-        var pagNormativa = "json/normativesJSON.php";
+        var pagNormativa = '<c:url value="/normativa/cercarNormatives.htm" />';
         var pagProcediments = "json/procedimentsJSON.php";
         
         var idUaActual = '<c:out value="${idUA}" />';
@@ -137,32 +138,14 @@
         var txtRegistre = "Registre";
         var txtNoHiHaNormativaBOIB = txtNoHiHa + " normativa BOIB";
         
-        /*
-        <?
-        // afectacions
-        $query_afectacions = "SELECT * ";
-        $query_afectacions .= "FROM afectacio";
-        $afectacions = mysql_query($query_afectacions, $rolsac) or die(mysql_error());
-        $row_afectacions = mysql_fetch_assoc($afectacions);
-        $totalRows_afectacions = mysql_num_rows($afectacions);
-        $Afectacions_arr = "var Afectacions_arr = [";
-        $i = 0;
-        if ($totalRows_afectacions > 0) {
-            do {
-                if ($i > 0) { $Afectacions_arr .= ","; }
-                $Afectacions_arr .= "{";
-                $Afectacions_arr .= "\"id\": ".$row_afectacions['afectacio_id'].",";
-                $Afectacions_arr .= "\"nom\": \"".utf8_encode($row_afectacions['afectacio_nom'."_".$_SESSION['rolsac_idioma']])."\"";
-                $Afectacions_arr .= "}";
-                $i++;
-            } while ($row_afectacions = mysql_fetch_assoc($afectacions));
-        }
-        mysql_free_result($afectacions);
-        $Afectacions_arr .= "];";
-        echo $Afectacions_arr;
-        ?>
-        */
+        var txtNoHiHaNormativa = txtNoHiHa + " " + txtNormatives;
         
+        var Afectacions_arr = [];
+        <c:forEach items="${llistaTipusAfectacio}" var="tipus">
+        	Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
+    	</c:forEach>
+        
+                
         // modul procediments
         var txtProcediment = "Procediment";
         var txtProcediments = "Procediments";
@@ -498,16 +481,7 @@
                         </div>
                     </div>          
                     
-                    <div class="fila">
-                        <!-- div class="element t29">
-                            <div class="etiqueta">
-                                <label for="cerca_titol"><spring:message code='camp.titol_normativa'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_titol" name="cerca_titol" type="text" size="50" maxlength="250" class="titol" />
-                            </div>
-                        </div -->
-                        
+                    <div class="fila">                        
                         <div class="element t30">
                             <div class="etiqueta">
                                 <label for="cerca_text"><spring:message code='camp.text'/></label>
@@ -1222,6 +1196,7 @@
         <!-- /modul -->
         <!-- modul -->
         <div class="modul" id="modul_afectacions">
+        	<input type="hidden" id="afectaciones" name="afectaciones" value=""/>
             <fieldset>
                 <a class="modul amagat">Mostra</a>
                 <legend>Afectacions relacionades</legend>
@@ -1360,10 +1335,7 @@
     <h2>Gestió de l'afectació relacionada</h2>
     <div class="botonera dalt">
         <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span>Torna
-                            al detall</span>
-                </span>
-            </a></li>
+            <li><a href="javascript:;" class="btn torna"><span><span>Torna al detall</span></span></a></li>
         </ul>
     </div>
     <!-- llistat -->
@@ -1374,41 +1346,153 @@
             <div class="fila">
                 <div class="element t15">
                     <div class="etiqueta">
-                        <label for="cerca_normativa_titol">Títol de la normativa</label>
+                        <label for="afec_cerca_normativa_titol">Títol de la normativa</label>
                     </div>
                     <div class="control">
-                        <input id="cerca_normativa_titol" name="cerca_normativa_titol"
+                        <input id="afec_cerca_normativa_titol" name="afec_cerca_normativa_titol"
                             type="text" class="titol" />
                     </div>
                 </div>
-                <div class="element t7">
-                    <div class="etiqueta">
-                        <label for="cerca_normativa_codi">Codi</label>
-                    </div>
-                    <div class="control">
-                        <input id="cerca_normativa_codi" name="cerca_normativa_codi"
-                            type="text" class="codi" />
-                    </div>
-                </div>
-                <div class="element t18">
-                    <div class="etiqueta">
-                        <label for="cerca_normativa_no_relacionades">Cerca per
-                            normativa no relacionada</label>
-                    </div>
-                    <div class="control">
-                        <select id="cerca_normativa_no_relacionades"
-                            name="cerca_normativa_no_relacionades" class="t8">
-                            <option value="0" selected="selected">No</option>
-                            <option value="1">Sí</option>
-                        </select>
-                    </div>
-                </div>
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
+                     </div>
+                 </div>          
+                 
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
+                     </div>
+                 </div>
             </div>
             <div class="botonera">
                 <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span>
                 </span>
                 </a>
             </div>
+            
+            <!-- div class="fila">
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_numero"><spring:message code='camp.numero'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_numero" name="afec_cerca_numero" type="text" />
+                     </div>                          
+                 </div>
+                 
+                 <div class="element t16">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_validacio"><spring:message code='camp.validacio'/></label>
+                     </div>
+                     <div class="control">
+                         <select id="afec_cerca_validacio" name="afec_cerca_validacio">
+                             <option value="1" selected="selected">Pública</option>
+                             <option value="2">Interna</option>
+                             <option value="3">Reserva</option>
+                         </select>
+                     </div>
+                 </div>                          
+                 
+                 <div class="element t29">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
+                     </div>
+                     <div class="control">
+                         <select id="afec_cerca_tipus_normativa" name="afec_cerca_tipus_normativa">
+                             <option value="">--Tots--</option>
+                             <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                 <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                             </c:forEach>
+                         </select>                               
+                     </div>                          
+                 </div>
+                 <div class="element t16">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_butlleti"><spring:message code='camp.butlleti'/></label>
+                     </div>
+                     <div class="control">
+                         <select id="afec_cerca_butlleti" name="afec_cerca_butlleti">
+                             <option value="">--Tots--</option>
+                             <c:forEach items="${llistaButlletins}" var="butlleti">                                      
+                                 <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+                             </c:forEach>
+                         </select>                               
+                     </div>                          
+                 </div>                                              
+             </div>      
+             
+             <div class="fila">
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_registre"><spring:message code='camp.registre'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_registre" name="afec_cerca_registre" type="text" />
+                     </div>                          
+                 </div>  
+                 
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_llei"><spring:message code='camp.llei'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_llei" name="afec_cerca_llei" type="text" />
+                     </div>                          
+                 </div>      
+                 
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
+                     </div>
+                 </div>          
+                 
+                 <div class="element t10">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
+                     </div>
+                 </div>
+             </div>          
+             
+             <div class="fila">                        
+                 <div class="element t30">
+                     <div class="etiqueta">
+                         <label for="afec_cerca_text"><spring:message code='camp.text'/></label>
+                     </div>
+                     <div class="control">
+                         <input id="afec_cerca_text" name="afec_cerca_text" type="text" maxlength="250" class="text" />
+                     </div>
+                 </div>                      
+             </div>
+             
+             <div class="fila">
+                 <div class="element t18">
+                     <input type="checkbox" class="checkbox" id="afec_cerca_totes_unitats" name="afec_cerca_totes_unitats"/>
+                     <label for="afec_cerca_totes_unitats" class="checkbox"><spring:message code='camp.cerca_totes_unitats'/></label>                     
+                 </div>
+
+                 <div class="element t18">                           
+                     <input type="checkbox" class="checkbox" id="afec_cerca_externes" name="afec_cerca_externes" />
+                     <label for="afec_cerca_externes" class="checkbox"><spring:message code='camp.cerca_externes'/></label>
+                 </div>                      
+             </div>                    
+                    
+            <div class="botonera">
+                <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span></span></a>
+            </div-->           
+            
         </div>
         <!-- /cercador -->
         <div class="dades"></div>

@@ -8,12 +8,53 @@ public class AfectacionTransient implements ValueObject {
 	
 	private long normaId;
     private String normaNom;
+    private String afectacioNom;
+    private long afectacioId;
 	
-	public AfectacionTransient(long normaId, String normaNom) {
-	    super();
-	    this.normaId = normaId;
-	    this.normaNom = normaNom;
+    public AfectacionTransient() {
+    	super();
+    }
+    	
+	
+	/**
+	 * Devuelve el valor de afectacioId.
+	 *
+	 * @return Valor de afectacioId.
+	 */
+	public long getAfectacioId() {
+		return afectacioId;
 	}
+
+	/**
+	 * Guarda el valor de afectacioId.
+	 *
+	 * @param afectacioId Nuevo valor de afectacioId.
+	 */
+	public void setAfectacioId(long afectacioId) {
+		this.afectacioId = afectacioId;
+	}
+
+	/**
+	 * Devuelve el valor de afectacioNom.
+	 *
+	 * @return Valor de afectacioNom.
+	 */
+	public String getAfectacioNom() {
+		return afectacioNom;
+	}
+
+
+
+	/**
+	 * Guarda el valor de afectacioNom.
+	 *
+	 * @param afectacioNom Nuevo valor de afectacioNom.
+	 */
+	public void setAfectacioNom(String afectacioNom) {
+		this.afectacioNom = afectacioNom;
+	}
+
+
 
 	/**
 	 * Devuelve el valor de normaId.
