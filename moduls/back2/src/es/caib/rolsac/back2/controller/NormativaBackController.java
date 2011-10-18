@@ -56,6 +56,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
+import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
 
@@ -166,7 +167,7 @@ public class NormativaBackController {
 		if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
 			return resultats;//Si no hay unidad administrativa se devuelve vacío
 		}	
-		Long idUA = new Long(request.getParameter("idUA"));
+		Long idUA = ParseUtil.parseLong(request.getParameter("idUA"));
 		
 		try {
 			//Obtener parámetros de búsqueda
@@ -184,13 +185,13 @@ public class NormativaBackController {
 			}
 			
 			if (request.getParameter("numero") != null && !"".equals(request.getParameter("numero")) )
-				paramMap.put("numero", new Long(request.getParameter("numero")));
+				paramMap.put("numero", ParseUtil.parseLong(request.getParameter("numero")));
 			
 			if (request.getParameter("tipus") != null && !"".equals(request.getParameter("tipus")) )
-				paramMap.put("tipo", new Long(request.getParameter("tipus")));
+				paramMap.put("tipo", ParseUtil.parseLong(request.getParameter("tipus")));
 			
 			if (request.getParameter("butlleti") != null && !"".equals(request.getParameter("butlleti")) )
-				paramMap.put("boletin", new Long(request.getParameter("butlleti")));
+				paramMap.put("boletin", ParseUtil.parseLong(request.getParameter("butlleti")));
 
 			if (request.getParameter("registre") != null && !"".equals(request.getParameter("registre")) )
 				paramMap.put("registro", request.getParameter("registre"));
@@ -264,7 +265,7 @@ public class NormativaBackController {
 	    
 	    try {
 	        
-	        Long id = new Long(request.getParameter("id"));		
+	        Long id = ParseUtil.parseLong(request.getParameter("id"));		
 	        
 	        NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 	        Normativa normativa = normativaDelegate.obtenerNormativa(id);
@@ -400,7 +401,7 @@ public class NormativaBackController {
         	//Obtener la UA de la normativa. Si no tiene UA asignada es una normativa externa.
         	UnidadAdministrativa ua = null;
         	if ( valoresForm.get("item_ua_id") != null && !"".equals(valoresForm.get("item_ua_id")) ) {	
-        		Long idUA = new Long(valoresForm.get("item_ua_id"));
+        		Long idUA = ParseUtil.parseLong(valoresForm.get("item_ua_id"));
         		ua = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa(idUA);
         	}
 
@@ -418,7 +419,7 @@ public class NormativaBackController {
     		boolean edicion = valoresForm.get("item_id") != null && !"".equals(valoresForm.get("item_id"));
     		
         	if (edicion) {      		        		
-				Long idNorm = Long.parseLong(valoresForm.get("item_id"));
+				Long idNorm = ParseUtil.parseLong(valoresForm.get("item_id"));
         		normativaOld = normativaDelegate.obtenerNormativa(idNorm);
         		
         		//Comprobar permisos
@@ -435,7 +436,7 @@ public class NormativaBackController {
             	}
             	
             	//Comprobar si se ha cambiado la validacion siendo operador
-            	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(new Integer(valoresForm.get("item_validacio")))) {
+            	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
             		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
             	}
             		
@@ -446,7 +447,7 @@ public class NormativaBackController {
         		normativa.setId(idNorm);
         	} else {
         		//Comprobar permisos
-            	if (!normativaDelegate.autorizaCrearNormativa(Integer.parseInt(valoresForm.get("item_validacio")))) {
+            	if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
             		//throw new SecurityException("Aviso: No tiene privilegios para crear una normativa pública");            		
     				return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
             	}
@@ -473,10 +474,10 @@ public class NormativaBackController {
         		traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
         		traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
         		if (valoresForm.get("item_pagina_inicial_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_inicial_" + idioma)))
-        			traNorm.setPaginaInicial(Integer.parseInt(valoresForm.get("item_pagina_inicial_" + idioma)));
+        			traNorm.setPaginaInicial(ParseUtil.parseInt(valoresForm.get("item_pagina_inicial_" + idioma)));
 
         		if (valoresForm.get("item_pagina_final_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_final_" + idioma)))
-        			traNorm.setPaginaFinal(Integer.parseInt(valoresForm.get("item_pagina_final_" + idioma)));        			
+        			traNorm.setPaginaFinal(ParseUtil.parseInt(valoresForm.get("item_pagina_final_" + idioma)));        			
 
         		traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
 
@@ -498,12 +499,12 @@ public class NormativaBackController {
 
         	//Los demás campos
         	if (valoresForm.get("item_numero") != null && !"".equals(valoresForm.get("item_numero")))
-        		normativa.setNumero(Long.parseLong(valoresForm.get("item_numero")));
+        		normativa.setNumero(ParseUtil.parseLong(valoresForm.get("item_numero")));
 
         	normativa.setLey(valoresForm.get("item_llei"));
 
         	if (valoresForm.get("item_registre") != null && !"".equals(valoresForm.get("item_registre")))
-        		normativa.setRegistro(Long.parseLong(valoresForm.get("item_registre")));
+        		normativa.setRegistro(ParseUtil.parseLong(valoresForm.get("item_registre")));
 
         	if (valoresForm.get("item_data_butlleti") != null && !"".equals(valoresForm.get("item_data_butlleti"))) {
         		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -516,16 +517,16 @@ public class NormativaBackController {
         	}       
 
         	if (valoresForm.get("item_tipus") != null && !"".equals(valoresForm.get("item_tipus"))) {
-        		Tipo tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativa(new Long(valoresForm.get("item_tipus")));
+        		Tipo tipo = DelegateUtil.getTipoNormativaDelegate().obtenerTipoNormativa(ParseUtil.parseLong(valoresForm.get("item_tipus")));
         		normativa.setTipo(tipo);
         	}
 
         	if (valoresForm.get("item_validacio") != null && !"".equals(valoresForm.get("item_validacio")))
-        		normativa.setValidacion(new Integer(valoresForm.get("item_validacio")));
+        		normativa.setValidacion(ParseUtil.parseInt(valoresForm.get("item_validacio")));
 
         	//Boletín
         	if (valoresForm.get("item_butlleti_id") != null && !"".equals(valoresForm.get("item_butlleti_id"))) {
-        		Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(Long.parseLong(valoresForm.get("item_butlleti_id")));
+        		Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(ParseUtil.parseLong(valoresForm.get("item_butlleti_id")));
         		normativa.setBoletin(boletin);
         	}
 
@@ -613,7 +614,7 @@ public class NormativaBackController {
 
 	@RequestMapping(value = "/eliminar.htm", method = POST)
 	public @ResponseBody IdNomTransient eliminar(HttpSession session, HttpServletRequest request) {
-		Long id = new Long(request.getParameter("id"));
+		Long id = ParseUtil.parseLong(request.getParameter("id"));
 		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 		
 		try {

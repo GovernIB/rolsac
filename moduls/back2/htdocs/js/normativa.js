@@ -717,7 +717,7 @@ function CDetall(){
 	this.elimina = function() {
 		
 		// missatge
-		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+		//Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});				
 														
 		dataVars = "accio=eliminar&id=" + Llistat.itemID;
 				
@@ -727,6 +727,9 @@ function CDetall(){
 			url: pagEliminar,
 			data: dataVars,
 			dataType: "json",
+			beforeSubmit : function() {
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+			},			
 			error: function() {
 				
 				// missatge
@@ -735,21 +738,22 @@ function CDetall(){
 				Error.llansar();
 				
 			},
-			success: function(data) {				
+			success: function(data) {	
 			
-					Llistat.anulaCache();
-			
-					Missatge.cancelar();
-					
-					if (data.id > -1) {
-						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});						
-					}										
+				Llistat.anulaCache();				
+				
+				if (data.id > -1) {		
+					// recarregar
+					Detall.recarregar();				
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 					
 					// array
 					Detall.array({id: data.id, accio: "elimina"});
-					
-					// recarregar
-					Detall.recarregar();
+
+				} else {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+				}
+						
 			}
 		});			
 	}
