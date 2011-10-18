@@ -71,3 +71,7 @@ div.grup_arxiu_nou label {
     width: 5em;
     padding-right: 1em;
 }
+
+#botoneraCambioUA div {
+	margin-right: 1em;
+}

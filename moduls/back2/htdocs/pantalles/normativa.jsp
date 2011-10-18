@@ -994,7 +994,7 @@
                             <div class="etiqueta"><label for="item_ua_nom"><spring:message code='camp.unitat_administrativa'/></label></div>
                             <div class="control">
                                 <input id="item_ua_id" name="item_ua_id" type="hidden" />
-                                <input id="item_ua_nom" name="item_ua_nom" type="text" />
+                                <input id="item_ua_nom" name="item_ua_nom" type="text" readonly="readonly"/>
                             </div>
                         </div>
                                             
@@ -1008,14 +1008,14 @@
                     <!-- /fila -->
                     
                     <!-- Botonera -->
-                    <div id="cercador">
+                    <div id="botoneraCambioUA">
                         <div class="botonera" style="margin-top: 0px; float:left;">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
                                 <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta">
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
                             </div>
-                            <div class="boton btnGenerico">
+                            <div id="botonBorrarUA" class="boton btnGenerico">
                                 <a href="javascript:EliminaArbreUA('item_ua_nom', 'item_ua_id');" class="btn borrar">
                                 <span><span><spring:message code='boto.borrar'/></span></span>
                                 </a>

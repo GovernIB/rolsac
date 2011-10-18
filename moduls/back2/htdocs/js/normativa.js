@@ -471,6 +471,10 @@ function CDetall(){
 		
 		//Ocultar botones
 		$("#modulLateral li.btnEliminar").hide();
+		
+		//Mostrar botones cambio de UA / borrar UA.
+		$("#botoneraCambioUA").show();
+		$("#botonBorrarUA a").show();		
 
 		//Borrar valores de los campos
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -529,7 +533,7 @@ function CDetall(){
 		this.actualizaEventos();
 	}
 	
-	this.pintar = function(dades) {
+	this.pintar = function(dades) {	
 		
 		//escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -683,11 +687,16 @@ function CDetall(){
 		
 		}
 		
-		//Mostrar / ocultar campo de responsable en normativa local/externa
+		//Mostrar / ocultar campo de responsable y botonera cambio UA en normativa local/externa
 		if ("E" == $("#item_tipologia").val()) {
+						
+			$("#botoneraCambioUA").hide();			
+			
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
 		} else {
+			$("#botoneraCambioUA").show();
+			$("#botonBorrarUA a").hide();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().hide();
 		}		

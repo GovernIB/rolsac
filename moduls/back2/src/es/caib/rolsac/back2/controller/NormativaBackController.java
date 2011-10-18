@@ -427,6 +427,13 @@ public class NormativaBackController {
             		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
             	}
             	
+            	//Comprobar que si la normativa es local se ha indicado UA y que si es externa no se ha hecho
+            	if (NormativaLocal.class.isInstance(normativaOld) && ua == null) {
+            		return (new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()))).getJson();
+            	} else if (NormativaExterna.class.isInstance(normativaOld) && ua != null) {
+            		return (new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()))).getJson();
+            	}
+            	
             	//Comprobar si se ha cambiado la validacion siendo operador
             	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(new Integer(valoresForm.get("item_validacio")))) {
             		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
