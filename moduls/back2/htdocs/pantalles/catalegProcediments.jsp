@@ -504,8 +504,7 @@
                                                 <label for="item_nom_ca">Nom del procediment</label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_ca" name="item_nom_ca" type="text"
-                                                    class="nou" />
+                                                <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -630,7 +629,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_objecte_es" name="item_objecte_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -642,7 +641,7 @@
                                             <div class="control">
                                                 <textarea id="item_destinataris_es"
                                                     name="item_destinataris_es" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -653,7 +652,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_requisits_es" name="item_requisits_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -664,7 +663,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_presentacio_es" name="item_presentacio_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -676,7 +675,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_resolucio_es" name="item_resolucio_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -688,7 +687,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_notificacio_es" name="item_notificacio_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -699,7 +698,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_lloc_es" name="item_lloc_es" cols="50"
-                                                    rows="2" class="rich nou"></textarea>
+                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -710,7 +709,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_silenci_es" name="item_silenci_es"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -722,7 +721,7 @@
                                             <div class="control">
                                                 <textarea id="item_observacions_es"
                                                     name="item_observacions_es" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -748,7 +747,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_objecte_en" name="item_objecte_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -760,7 +759,7 @@
                                             <div class="control">
                                                 <textarea id="item_destinataris_en"
                                                     name="item_destinataris_en" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -771,7 +770,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_requisits_en" name="item_requisits_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -782,7 +781,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_presentacio_en" name="item_presentacio_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -794,7 +793,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_resolucio_en" name="item_resolucio_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -806,7 +805,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_notificacio_en" name="item_notificacio_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -817,7 +816,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_lloc_en" name="item_lloc_en" cols="50"
-                                                    rows="2" class="rich nou"></textarea>
+                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -828,7 +827,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_silenci_en" name="item_silenci_en"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -840,7 +839,7 @@
                                             <div class="control">
                                                 <textarea id="item_observacions_en"
                                                     name="item_observacions_en" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -866,7 +865,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_objecte_de" name="item_objecte_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -878,7 +877,7 @@
                                             <div class="control">
                                                 <textarea id="item_destinataris_de"
                                                     name="item_destinataris_de" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -889,7 +888,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_requisits_de" name="item_requisits_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -900,7 +899,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_presentacio_de" name="item_presentacio_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -912,7 +911,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_resolucio_de" name="item_resolucio_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -924,7 +923,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_notificacio_de" name="item_notificacio_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -935,7 +934,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_lloc_de" name="item_lloc_de" cols="50"
-                                                    rows="2" class="rich nou"></textarea>
+                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -946,7 +945,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_silenci_de" name="item_silenci_de"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -958,7 +957,7 @@
                                             <div class="control">
                                                 <textarea id="item_observacions_de"
                                                     name="item_observacions_de" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -984,7 +983,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_objecte_fr" name="item_objecte_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -996,7 +995,7 @@
                                             <div class="control">
                                                 <textarea id="item_destinataris_fr"
                                                     name="item_destinataris_fr" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1007,7 +1006,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_requisits_fr" name="item_requisits_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1018,7 +1017,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_presentacio_fr" name="item_presentacio_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1030,7 +1029,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_resolucio_fr" name="item_resolucio_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1042,7 +1041,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_notificacio_fr" name="item_notificacio_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1053,7 +1052,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_lloc_fr" name="item_lloc_fr" cols="50"
-                                                    rows="2" class="rich nou"></textarea>
+                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1064,7 +1063,7 @@
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_silenci_fr" name="item_silenci_fr"
-                                                    cols="50" rows="2" class="rich nou"></textarea>
+                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1076,7 +1075,7 @@
                                             <div class="control">
                                                 <textarea id="item_observacions_fr"
                                                     name="item_observacions_fr" cols="50" rows="2"
-                                                    class="rich nou"></textarea>
+                                                    class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
