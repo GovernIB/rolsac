@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
 <link href='<c:url value="/css/normativa.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_afectacions.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
@@ -338,6 +339,7 @@
     -->
     </script>
 
+<input type="hidden" id="rolusuario" value="<rol:printRol/>"/>
 
 <div id="escriptori_contingut">
     <ul id="opcions">
@@ -385,9 +387,18 @@
                             </div>
                             <div class="control">
                                 <select id="cerca_validacio" name="cerca_validacio">
-                                    <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
-                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                
+            						<c:set var="rolSuper"><rol:userIsSuper/></c:set>
+						            <c:choose>
+						            	<c:when test="${rolSuper}" >
+	                                    	<option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+	                                    	<option value="2"><spring:message code='txt.validacio.interna'/></option>
+	                                    	<option value="3"><spring:message code='txt.validacio.reserva'/></option>  						            							            		
+						            	</c:when>
+						            	<c:otherwise>
+ 						            		<option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+						            	</c:otherwise>
+						            </c:choose>
                                 </select>
                             </div>
                         </div>                          
@@ -1050,9 +1061,18 @@
                             </div>
                             <div class="control">
                                 <select id="item_validacio" name="item_validacio">
-                                    <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
-                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                
+            						<c:set var="rolSuper"><rol:userIsSuper/></c:set>
+						            <c:choose>
+						            	<c:when test="${rolSuper}" >
+	                                    	<option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+	                                    	<option value="2"><spring:message code='txt.validacio.interna'/></option>
+	                                    	<option value="3"><spring:message code='txt.validacio.reserva'/></option>  						            							            		
+						            	</c:when>
+						            	<c:otherwise>
+ 						            		<option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+						            	</c:otherwise>
+						            </c:choose>                                                               
                                 </select>
                             </div>
                         </div>
@@ -1085,7 +1105,8 @@
                           <li class="btnVolver impar">
                               <a id="btnVolver" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
                           </li>
-
+						
+						                           
                           <li class="btnGuardar par">
                               <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
                           </li>                                                    
@@ -1093,6 +1114,8 @@
 
                               <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
                           </li>
+                                                 
+                          
                           <li class="btnPrevisualizar par">
                               <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
                           </li>
@@ -1136,10 +1159,12 @@
                     <!-- modulAfectacions -->
                     <div class="modulAfectacions">
                         <div class="seleccionats">
-                            <p class="info"><spring:message code='txt.no_afectacions'/></p>
+                            <p class="info"><spring:message code='txt.no_afectacions'/></p>                           
+
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
+
                         </div>
                     </div>
                     <!-- /modulAfectacions -->

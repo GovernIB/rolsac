@@ -21,6 +21,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Afectacion;
@@ -52,6 +54,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import es.caib.rolsac.back2.util.UploadUtil;
 
 
@@ -59,6 +63,8 @@ import es.caib.rolsac.back2.util.UploadUtil;
 @RequestMapping("/normativa/")
 public class NormativaBackController {
 		
+	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	
     private MessageSource messageSource = null;
     
     @Autowired
@@ -192,8 +198,12 @@ public class NormativaBackController {
 			if (request.getParameter("llei") != null && !"".equals(request.getParameter("llei")) )
 				paramMap.put("ley", request.getParameter("llei"));			
 			
-			if (request.getParameter("validacio") != null && !"".equals(request.getParameter("validacio")) )
-				paramMap.put("validacion", request.getParameter("validacio"));
+            if (request.isUserInRole("sacoper")){
+            	paramMap.put("validacion", "");
+            } else {
+                paramMap.put("validacion", request.getParameter("validacio"));
+            }			
+			
 			
 			// Textes (en todos los campos todos los idiomas)
 			String text = request.getParameter("text");
@@ -230,11 +240,10 @@ public class NormativaBackController {
 					
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
-				//model.put("error", "permisos");
-			} else {
-				//model.put("error", "altres");
-				dEx.printStackTrace();
-			}
+				log.error("Permisos insuficients: " + dEx.getMessage());
+            } else {
+            	log.error("Error: " + dEx.getMessage());
+            }
 		}
 		
 		resultats.put("total", llistaNormativesTransient.size());
@@ -349,10 +358,9 @@ public class NormativaBackController {
 	        
 	    } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
-                model.put("error", "permisos");
+            	log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
-                model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error("Error: " + dEx.getMessage());
             }
         }
 	    
@@ -409,14 +417,33 @@ public class NormativaBackController {
     		    		
     		boolean edicion = valoresForm.get("item_id") != null && !"".equals(valoresForm.get("item_id"));
     		
-        	if (edicion) {
+        	if (edicion) {      		        		
 				Long idNorm = Long.parseLong(valoresForm.get("item_id"));
-        		normativaOld = normativaDelegate.obtenerNormativa(idNorm);        		
+        		normativaOld = normativaDelegate.obtenerNormativa(idNorm);
+        		
+        		//Comprobar permisos
+            	if (!normativaDelegate.autorizaModificarNormativa(normativaOld.getId())) {
+            		//throw new SecurityException("Aviso: No tiene privilegios para modificar la normativa");
+            		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+            	}
+            	
+            	//Comprobar si se ha cambiado la validacion siendo operador
+            	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(new Integer(valoresForm.get("item_validacio")))) {
+            		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+            	}
+            		
+        		
         		normativa.setAfectadas(normativaOld.getAfectadas());
         		normativa.setAfectantes(normativaOld.getAfectantes());        		
         		normativa.setProcedimientos(normativaOld.getProcedimientos());
         		normativa.setId(idNorm);
-        	} 
+        	} else {
+        		//Comprobar permisos
+            	if (!normativaDelegate.autorizaCrearNormativa(Integer.parseInt(valoresForm.get("item_validacio")))) {
+            		//throw new SecurityException("Aviso: No tiene privilegios para crear una normativa pública");            		
+    				return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+            	}
+        	}
         	
         	//Campos por idioma
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
@@ -580,9 +607,14 @@ public class NormativaBackController {
 	@RequestMapping(value = "/eliminar.htm", method = POST)
 	public @ResponseBody IdNomTransient eliminar(HttpSession session, HttpServletRequest request) {
 		Long id = new Long(request.getParameter("id"));
+		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 		
 		try {
-			DelegateUtil.getNormativaDelegate().borrarNormativa(id);
+			if (normativaDelegate.autorizaModificarNormativa(id)) {			
+				normativaDelegate.borrarNormativa(id);
+			} else {
+				return new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));				
+			}
 			
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -652,16 +684,15 @@ public class NormativaBackController {
 			Collections.sort(llistaNormativesTransient);
 			
 			
-		} catch (ParseException e) {
-			e.printStackTrace();
+		} catch (ParseException e) {			
+			log.error("Error: " + e.getMessage());
 					
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
-				//model.put("error", "permisos");
-			} else {
-				//model.put("error", "altres");
-				dEx.printStackTrace();
-			}
+				log.error("Permisos insuficients: " + dEx.getMessage());
+            } else {
+            	log.error("Error: " + dEx.getMessage());
+            }
 		}
 		
 		resultats.put("total", llistaNormativesTransient.size());

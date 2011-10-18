@@ -480,6 +480,11 @@ function CDetall(){
 		$("#item_ua_nom").val(nomUaActual);
 		
 		
+		//Establecer Validación por defecto si el usuario es operador
+		if ( $("#rolusuario").val() == "RSC_OPER" ) {
+			$("#item_validacio").val(2);
+		}
+		
 		//Resetear upload de archivos			
 		for (var i in idiomas) {
 			$("#grup_arxiu_actual_" + idiomas[i] + " span").show();
