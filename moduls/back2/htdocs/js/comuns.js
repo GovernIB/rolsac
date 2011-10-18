@@ -1038,6 +1038,8 @@ function ArbreUA(id_input, id_hidden){
 function EliminaArbreUA(id_input, id_hidden){
 	$("#" + id_input).val("");
 	$("#" + id_hidden).val("");
+	$("#" + id_input).change();
+	$("#" + id_hidden).change();
 }
 
 

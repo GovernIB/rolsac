@@ -142,6 +142,8 @@
         var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
         var txtNoHiHaProcedimentsSeleccionats = txtNoHiHa + " " + txtProcediments.toLowerCase() + " " + txtSeleccionats.toLowerCase();        
         
+        var txtNormativaLocal = "<spring:message code='txt.normativa_local'/>";
+        var txtNormativaExterna = "<spring:message code='txt.normativa_externa'/>";
         
         // suggeriments
         var suggeriments = [
@@ -516,6 +518,8 @@
     <form id="formGuardar" action="" method="POST">
     <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
     <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+           
+    <p id="tipoNormativa"></p>
             
     <!-- modulPrincipal -->
     <div id="modulPrincipal" class="grupoModulosFormulario">        

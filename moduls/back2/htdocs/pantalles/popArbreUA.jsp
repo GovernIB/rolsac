@@ -23,6 +23,8 @@
         function carregar(id, nombre){
         	window.opener.$("#" + "<c:out value='${id_hidden}'/>").val(id);
         	window.opener.$("#" + "<c:out value='${id_input}'/>").val(nombre);
+        	window.opener.$("#" + "<c:out value='${id_hidden}'/>").change();
+        	window.opener.$("#" + "<c:out value='${id_input}'/>").change();
             window.close();
         }
 

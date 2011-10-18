@@ -75,3 +75,9 @@ div.grup_arxiu_nou label {
 #botoneraCambioUA div {
 	margin-right: 1em;
 }
+
+p#tipoNormativa {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.25em;
+}

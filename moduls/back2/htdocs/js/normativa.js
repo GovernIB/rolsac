@@ -35,6 +35,14 @@ $(document).ready(function() {
 	Cercador.iniciar();
 	Detall.iniciar();
 	
+	$("#item_ua_id").change( function() {
+		if ($(this).val() != "") {
+			$("#tipoNormativa").text(txtNormativaLocal);
+		} else {
+			$("#tipoNormativa").text(txtNormativaExterna);
+		}
+	});
+	
 	//$.suggeriments();
 });
 
@@ -483,6 +491,8 @@ function CDetall(){
 		$("#item_ua_id").val(idUaActual);
 		$("#item_ua_nom").val(nomUaActual);
 		
+		//Poner tipo Normativa local por defecto
+		$("#tipoNormativa").text(txtNormativaLocal);
 		
 		//Establecer Validación por defecto si el usuario es operador
 		if ( $("#rolusuario").val() == "RSC_OPER" ) {
@@ -689,12 +699,12 @@ function CDetall(){
 		
 		//Mostrar / ocultar campo de responsable y botonera cambio UA en normativa local/externa
 		if ("E" == $("#item_tipologia").val()) {
-						
-			$("#botoneraCambioUA").hide();			
-			
+			$("#tipoNormativa").text(txtNormativaExterna);
+			$("#botoneraCambioUA").hide();						
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").show();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").parent().parent().show();
 		} else {
+			$("#tipoNormativa").text(txtNormativaLocal);
 			$("#botoneraCambioUA").show();
 			$("#botonBorrarUA a").hide();
 			$("#item_responsable_ca, #item_responsable_es, #item_responsable_en, #item_responsable_de, #item_responsable_fr").hide();
@@ -1084,4 +1094,11 @@ var Fotos = {
 		
 	}
 };
+*/
+/*
+//Función que envuelve a EliminarArbreUANormativa que informa del tipo de normativa al eliminar la UA
+function EliminaArbreUANormativa(campo_nombre, campo_id) {
+	$("#tipoNormativa").text(txtNormativaExterna);
+	EliminaArbreUA(campo_nombre, campo_id)
+}
 */
