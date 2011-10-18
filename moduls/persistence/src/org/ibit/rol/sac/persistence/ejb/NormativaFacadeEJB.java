@@ -301,7 +301,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             	if (paramsQuery.length() > 0) {   
             		sQuery += paramsQuery + " and ";
             	}
-            	sQuery += "(" + populateQuery(traduccion, params) + ")"; // TODO: dejarlo asi o buscar textos traducidos en lucene?
+            	sQuery += "(" + populateQuery(traduccion, params) + ")";
             }            
 
             String orderBy = " order by " + campoOrdenacion + " " + orden;
@@ -325,15 +325,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 	if (idUA != null)
                 		uas.add(idUA);
                 }
-                
-                if (idUA != null) {
-                	sQuery += " and normativa.unidadAdministrativa.id in (";
-                	String sep = "";
-                	for (Long ua : uas) {
-                		sQuery += sep + ua;
-                		sep = ", ";
-                	}
-                	sQuery += ")";
+
+                if (!uas.isEmpty()) {
+	                sQuery += " and normativa.unidadAdministrativa.id in (";
+	                String sep = "";
+	                for (Long ua : uas) {
+	                	sQuery += sep + ua;
+	                	sep = ", ";
+	                }
+	                sQuery += ")";
                 }
             	
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.

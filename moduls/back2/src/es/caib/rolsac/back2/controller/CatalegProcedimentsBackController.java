@@ -1,5 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,9 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
+import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -31,13 +35,16 @@ import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
+import org.ibit.rol.sac.model.transients.ProcedimientoNormativaTransient;
 
 import es.caib.rolsac.back2.util.DateUtil;
+import es.caib.rolsac.back2.util.HtmlUtils;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -296,7 +303,7 @@ public class CatalegProcedimentsBackController {
 		try {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 			// llistaProcedimientos = procedimientosDelegate.buscarProcedimientos(paramMap, tradMap);
-			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles,uaMeves);
+			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves);
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
@@ -384,6 +391,33 @@ public class CatalegProcedimentsBackController {
                 resultats.put("materies", null);
             } 
             // Fin Materias asociadas
+            
+            
+            // Normativas asociadas
+            if (proc.getNormativas() != null) {             
+            	Map<String, String> map;
+            	List<Map<String, String>> llistaNormatives = new ArrayList<Map<String, String>>();
+                TraduccionNormativa traNor;
+				String titulo;
+                
+				for(Normativa normativa: proc.getNormativas()) {
+                	traNor = (TraduccionNormativa) normativa.getTraduccion(lang);
+    				titulo = "";
+    				if (traNor != null) {
+    					//Retirar posible enlace incrustado en titulo
+    					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo());
+    				}
+    				map = new HashMap<String, String>(2);
+    				map.put("id", normativa.getId().toString());
+    				map.put("nombre", titulo);
+                    llistaNormatives.add(map);      
+                }
+
+				resultats.put("normatives", llistaNormatives);
+            } else {
+                resultats.put("normatives", null);
+            } 
+            // Fin normativas asociadas
 
             
 			resultats.put("item_codi", proc.getSignatura());
@@ -430,7 +464,7 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_notes", proc.getInfo());
 
-			// TODO: documentos, tramites, normativas.
+			// TODO: documentos, tramites.
 
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -542,6 +576,38 @@ public class CatalegProcedimentsBackController {
                     procediment.setMaterias(materiesNoves);                                   
                 }
                 // Fin Materias
+                
+                
+                // Normativas
+                /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
+                 * En el primer caso es bastante probable que se repitan la mayoria de normativas.
+                 */
+                if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))){
+                    NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+                    Set<Normativa> normativesNoves = new HashSet<Normativa>();
+                    String[] codisNormativesNoves= request.getParameter("normatives").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i < codisNormativesNoves.length; i++){
+                            for (Normativa normativa: procedimentOld.getNormativas()){
+                                if(normativa.getId().equals(Long.valueOf(codisNormativesNoves[i]))) { // normativa ya existente
+                                	normativesNoves.add(normativa);
+                                    codisNormativesNoves[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiNormativa: codisNormativesNoves){
+                        if (codiNormativa != null){
+                        	normativesNoves.add(normativaDelegate.obtenerNormativa(Long.valueOf(codiNormativa)));
+                        }                        
+                    }
+                    
+                    procediment.setNormativas(normativesNoves);                                   
+                }
+                // Fin normativas
                 
 				
 				// Idiomas
@@ -687,6 +753,87 @@ public class CatalegProcedimentsBackController {
 		}
 
 		return result;
+	}
+	
+	
+	@RequestMapping(value = "/cercarNormatives.htm", method = POST)
+	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
+		
+		//Listar las normativas de la unidad administrativa
+		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
+		List<ProcedimientoNormativaTransient>llistaNormativesTransient= new ArrayList<ProcedimientoNormativaTransient>();
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();	
+		Map<String, String> paramTrad = new HashMap<String, String>();
+		
+		// TODO obtener la ordenación por parámetro
+		String campoOrdenacion = "normativa.fecha";
+		String orden = "desc";		
+				
+		String idioma = request.getLocale().getLanguage();
+		
+		if (session.getAttribute("unidadAdministrativa") == null){
+			return resultats;//Si no hay unidad administrativa se devuelve vacío
+		}
+		UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");		
+		
+		
+		try {
+			//Obtener parámetros de búsqueda
+		
+			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
+				Date fecha = DateUtil.parseDate(request.getParameter("data"));
+				paramMap.put("fecha", fecha);
+			}			
+
+			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
+				Date fechaBoletin = DateUtil.parseDate(request.getParameter("dataBulleti"));
+				paramMap.put("fechaBoletin", fechaBoletin);
+			}
+			
+			// Titol (en todos los idiomas)
+			String text = request.getParameter("titol");
+			if (text != null && !"".equals(text)) {
+				text = text.toUpperCase();
+				paramTrad.put("titulo", text);
+			} else {
+				paramTrad.put("idioma", idioma);
+			}			
+			
+			
+			//Realizar la consulta y obtener resultados
+			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", ua.getId(), false, campoOrdenacion, orden);
+			
+			for (Normativa normativa : llistaNormatives) {
+				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
+				String titulo = "";
+				if (traNor != null) {
+					//Retirar posible enlace incrustado en titulo
+					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo());
+				}					
+
+				llistaNormativesTransient.add(new ProcedimientoNormativaTransient(
+						normativa.getId(),
+						titulo,
+						DateUtil.formatDate(normativa.getFecha()),
+						DateUtil.formatDate(normativa.getFechaBoletin())
+				));
+			}
+
+		} catch (DelegateException dEx) {
+			if (dEx.getCause() instanceof SecurityException) {
+				//model.put("error", "permisos");
+			} else {
+				//model.put("error", "altres");
+				dEx.printStackTrace();
+			}
+		}
+		
+		resultats.put("total", llistaNormativesTransient.size());
+		resultats.put("nodes", llistaNormativesTransient);
+
+		return resultats;
 	}
 	
 }

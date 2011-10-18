@@ -112,15 +112,16 @@ function CModulMateries(){
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde n son codigos de materias
 	this.listaMaterias = function (){
-		
 		var listaMaterias = "materies=";
 		
 		$("div.modulMateries div.seleccionats div.listaOrdenable input").each(function() {
 			listaMaterias += $(this).val() + ",";										
 		});
-		if (listaMaterias.length > 0){
-			listaMaterias = listaMaterias.slice(0, listaMaterias.length-1);
+
+		if (listaMaterias[listaMaterias.length-1] == ","){
+			listaMaterias = listaMaterias.slice(0, -1);
 		}
+		
 		return listaMaterias;
 	}
 	

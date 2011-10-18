@@ -1001,8 +1001,6 @@
         var txtCodiPostal = "Codi Postal";
         var txtPoblacio = "Població";
         var txtNoHiHaEdificis = txtNoHiHa + " " + txtEdificis.toLowerCase();
-        var txtSeleccionat = "Seleccionat";
-        var txtSeleccionats = "Seleccionats";
         var txtNoHiHaEdificisSeleccionats = "No hi ha " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
         // error conexio

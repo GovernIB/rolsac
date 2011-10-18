@@ -13,6 +13,7 @@
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
@@ -23,6 +24,7 @@
     var pagDetall = '<c:url value="/catalegProcediments/pagDetall.htm" />';
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.htm" />';
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.htm" />';
+    var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.htm" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -73,9 +75,11 @@
     var txtNormativa = "Normativa";
     var txtNormatives = "Normatives";
     var txtNoHiHaNormativa = txtNoHiHa + " " + txtNormativa.toLowerCase();
+    var txtNoHiHaNormatives = txtNoHiHa + " " + txtNormatives.toLowerCase();
     var txtSeleccionada = "Seleccionada";
     var txtSeleccionades = "Seleccionades";
     var txtNoHiHaNormativaSeleccionada = txtNoHiHa + " " + txtNormativa.toLowerCase() + " " + txtSeleccionada.toLowerCase();
+    var txtNoHiHaNormativesSeleccionades = txtNoHiHa + " " + txtNormatives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
     var txtNumero = "Número";
     
     var txtImmediat = ""; //"Immediat"; // Comentado por si la funcionalidad fuese necesaria en el futuro (en el procediments.js se usa esta variable).
@@ -1440,26 +1444,29 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul">
-                <fieldset>
-                    <a class="modul mostrat">Amaga</a>
-                    <legend>Normativa relacionada</legend>
-                    <div class="modul_continguts mostrat">
-                        <!-- modulNormativa -->
-                        <div class="modulNormativa">
+            <div class="modul">                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend>Normativa relacionada</legend> <!--spring:message code='unitatadm.formulari.edificis'/-->                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulNormatives -->
+                        <div class="modulNormatives">
                             <div class="seleccionats">
-                                <p class="info">No hi ha normativa.</p>
-                                <p class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona normativa</span></span></a>
-                                </p>
-                            </div>
+                                <%-- dsanchez: un solo idioma --%>
+                                <div class="seleccionat">
+                                    <p class="info">No hi ha normatives relacionades</p> <!-- spring:message code='unitatadm.formulari.edificis.noInfo'/-->
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona normatives</span></span></a> <!--spring:message code='unitatadm.formulari.edificis.gestiona'/-->
+                                </div>
+                            </div>                                  
                         </div>
-                        <!-- /modulNormativa -->
-                    </div>
-                </fieldset>
+                        <!-- /modulNormatives -->                                 
+                    </div>                              
+                </fieldset>                     
             </div>
-            <!-- /modul -->
-            <!-- modul -->
+            <!-- /modul -->  
         </div>
         <!-- /modulLateral -->
     </div>
@@ -1477,100 +1484,68 @@
         </div>
     </div>
     <!-- /escriptori_previsualitza -->
-    <!-- escriptori_normativa -->
-    <div id="escriptori_normativa">
-        <h2>Gestió de la normativa relacionada</h2>
-        <div class="botonera dalt">
-            <ul>
-                <li><a href="javascript:;" class="btn torna"><span><span>Torna
-                                al detall</span>
-                    </span>
-                </a></li>
-                <li><a href="javascript:;" class="btn finalitza important"><span><span>Finalitza</span>
-                    </span>
-                </a></li>
-            </ul>
-        </div>
-        <!-- llistat -->
-        <div class="escriptori_items_llistat">
-            <!-- cercador -->
-            <div class="escriptori_items_cercador">
-                <h3>Cercador</h3>
-                <div class="fila">
-                    <div class="element t15">
-                        <div class="etiqueta">
-                            <label for="cerca_normativa_titol">Títol de la normativa</label>
-                        </div>
-                        <div class="control">
-                            <input id="cerca_normativa_titol" name="cerca_normativa_titol"
-                                type="text" class="titol" />
-                        </div>
-                    </div>
-                    <div class="element t7">
-                        <div class="etiqueta">
-                            <label for="cerca_normativa_codi">Codi</label>
-                        </div>
-                        <div class="control">
-                            <input id="cerca_normativa_codi" name="cerca_normativa_codi"
-                                type="text" class="codi" />
-                        </div>
-                    </div>
-                    <div class="element t18">
-                        <div class="etiqueta">
-                            <label for="cerca_normativa_no_relacionades">Cerca per
-                                normativa no relacionada</label>
-                        </div>
-                        <div class="control">
-                            <select id="cerca_normativa_no_relacionades"
-                                name="cerca_normativa_no_relacionades" class="t8">
-                                <option value="0" selected="selected">No</option>
-                                <option value="1">Sí</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="botonera">
-                    <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span>
-                    </span>
-                    </a>
-                </div>
-            </div>
-            <!-- /cercador -->
-            <div class="dades"></div>
-            <input type="hidden" value="0" class="pagPagina" /> <input
-                type="hidden" value="DESC" class="ordreTipus" /> <input
-                type="hidden" value="data" class="ordreCamp" />
-        </div>
-        <!-- /llistat -->
-        <!-- seleccionats -->
-        <div class="escriptori_items_seleccionats">
-            <h3>Normativa seleccionada</h3>
-            <div class="dades">
-                <p class="info">No hi ha cap normativa.</p>
-                <!--
-                                <p class="info">Seleccionades <strong>5 normatives</strong>.</p>
-                                
-                                <ul>
-                                    <li>
-                                        <div class="norma">
-                                            <input type="hidden" value="1" />
-                                            <span class="norma">(1) Títol exemple de la Normativa</span>
-                                            <a href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="norma">
-                                            <input type="hidden" value="2" />
-                                            <span class="norma">(2) Títol exemple de la Normativa</span>
-                                            <a href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                                -->
-            </div>
     
+    <!-- escriptori_normatives -->
+    <div id="escriptori_normatives">
+       <ul id="opcions_normativa" class="opcions">
+            <li class="opcio C actiu">Gestiona</li><!--spring:message code='unitatadm.formulari.edificis.gestio'/-->                                 
+        </ul>
+        
+        <div id="resultats_normativa" class="escriptori_items_llistat">            
+            <div class="resultats C actiu" style="display: block;">
+                <div id="cercador_normativa" class="escriptori_items_cercador"> 
+                    <div id="cercador_normativa_contingut">
+                        <div class="fila">                                  
+                            <div class="element t26">                               
+                                <div class="etiqueta"><label for="cerca_normativa_titol">Títol</label></div> <!--spring:message code='unitatadm.formulari.edificis.adreca'/-->
+                                <div class="control">
+                                    <input id="cerca_normativa_titol" name="cerca_normativa_titol" type="text" class="titol" />
+                                </div>                                  
+                            </div>                              
+                            <div class="element t12">                                
+                                <div class="etiqueta"><label for="cerca_normativa_data">Data</label></div> <!--spring:message code='unitatadm.formulari.edificis.cp'/-->
+                                <div class="control">
+                                    <input id="cerca_normativa_data" name="cerca_normativa_data" type="text" class="data" />
+                                </div>                                  
+                            </div>                              
+                            <div class="element t12">                               
+                                <div class="etiqueta"><label for="cerca_normativa_data_bulleti">Data bulletí</label></div> <!--spring:message code='unitatadm.formulari.edificis.poblacio'/-->
+                                <div class="control">
+                                    <input id="cerca_normativa_data_bulleti" name="cerca_normativa_data_bulleti" type="text" class="data_bulleti" />
+                                </div>                                  
+                            </div>                              
+                        </div>
+                        
+                        <div class="botonera">
+                            <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                            <div class="boton btnGenerico"><a id="btnBuscarForm_normativa" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                            <div class="boton btnGenerico"><a id="btnVolverDetalle_normativa" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+                        </div>
+                        
+                    </div>
+                </div>   
+                <div class="dades"></div>                       
+                <input type="hidden" value="0" class="pagPagina" />
+                <input type="hidden" value="DESC" class="ordreTipus" />
+                <input type="hidden" value="titol" class="ordreCamp" />             
+            </div>
+        </div>        
+        
+        <div class="modulLateral escriptori_items_seleccionats">
+            <div class="modul">
+                <div class="interior">
+                    <div class="seleccionats">
+                        <div class="seleccionat">
+                            <p class="info">No hi ha normatives</p> <!--spring:message code='unitatadm.formulari.edificis.noInfo'/-->
+                            <div class="listaOrdenable"></div>
+                        </div>
+                        <p class="botonera btnGenerico">
+                            <a id="btnFinalizar_normativa" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        </p>                                    
+                    </div>                                  
+                </div>
+            </div>
         </div>
         <!-- seleccionats -->
     </div>
-    <!-- /escriptori_normativa -->
-</form>
+    <!-- /escriptori_normatives -->

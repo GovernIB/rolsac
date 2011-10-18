@@ -47,6 +47,16 @@
     var txtCaducada = '<spring:message code="planificacio.caducada"/>';
     var txtPublicada = '<spring:message code="planificacio.publicada"/>';
 
+    var txtTitol = '<spring:message code="camp.titol_normativa"/>';
+    var txtData = '<spring:message code="camp.data"/>';
+    var txtDataBulleti = '<spring:message code="camp.data_butlleti"/>';
+    
+    var txtElimina = '<spring:message code="txt.elimina"/>';
+    var txtSeleccionat = '<spring:message code="txt.seleccionat"/>';
+    var txtSeleccionats = '<spring:message code="txt.seleccionats"/>';
+    var txtSeleccionada = '<spring:message code="txt.seleccionada"/>';
+    var txtSeleccionades = '<spring:message code="txt.seleccionades"/>';
+
     // grafica
     var mesosNom = new Array ("",
         '<spring:message code="data.mes.gener"/>',

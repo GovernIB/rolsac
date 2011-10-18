@@ -666,7 +666,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             	} else {
             		i18nQuery += paramsQuery + " and ";
             	}
-            	i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")"; // TODO: dejarlo asi o buscar textos traducidos en lucene?
+            	i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
             }
             
             Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
@@ -678,16 +678,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             } else if (uaMeves) {
             	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
             } else {
-            	uas.add(ua);
+            	if (ua != null) {
+            		uas.add(ua);
+        		}
             }
-            String uaQuery = " and procedimiento.unidadAdministrativa.id in (";
-            for (Iterator<UnidadAdministrativa> it = uas.iterator(); it.hasNext();) {
-            	uaQuery += it.next().getId();
-            	if (it.hasNext()) {
-            		uaQuery += ", ";
-            	} else {
-            		uaQuery += ")";
-            	}
+            
+            String uaQuery;
+            if (!uas.isEmpty()) {
+	            uaQuery = " and procedimiento.unidadAdministrativa.id in (";
+	            for (Iterator<UnidadAdministrativa> it = uas.iterator(); it.hasNext();) {
+	            	uaQuery += it.next().getId();
+	            	if (it.hasNext()) {
+	            		uaQuery += ", ";
+	            	} else {
+	            		uaQuery += ")";
+	            	}
+	            }
+            } else {
+            	uaQuery = " ";
             }
             
             Query query = session.createQuery("select distinct procedimiento from ProcedimientoLocal as procedimiento " +

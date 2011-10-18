@@ -1,4 +1,4 @@
-// TIPUS UNITATS ADMINISTRATIVES
+// CATALEG PROCEDIMENTS
 
 $(document).ready(function() {
 	
@@ -336,8 +336,14 @@ function CDetall(){
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		this._baseGuarda(ModulMateries.listaMaterias());
+		urlParams = ModulNormativa.listaNormativas();
+		urlParams += "&" + ModulMateries.listaMaterias();
+		
+		console.log(urlParams);
+		
+		this._baseGuarda(urlParams);
 	}
+	
 	
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
 
@@ -379,10 +385,13 @@ function CDetall(){
 	}
 		
 	this.nou = function() {
-				
+
 		ModulMateries.nuevo();
 		
-        //escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		ModulNormativa.nuevo();
+        EscriptoriNormativa.nuevo();
+		
+        
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
@@ -391,17 +400,12 @@ function CDetall(){
 		
 		tra_seleccionats_elm = escriptori_detall_elm.find("div.modulTramits div.seleccionats");
 		tra_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtTramitNouProcediment + ".").end().find("p.gestiona").hide();
-		
-		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-		mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		
-		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormativa div.seleccionats");
-		norma_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaNormativa + ".");
-		
+
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);
 		}
 		
+        
 		$("#item_data_publicacio").val(txtImmediat);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
@@ -645,27 +649,6 @@ function CDetall(){
 			}
 		}
 		
-		// materies
-		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
-		materies_nodes = dada_node.materies;
-		materes_nodes_size = materies_nodes.length;
-		
-		mat_llistat_elm.find("input").removeAttr("checked");
-		
-		if (materes_nodes_size == 0) {
-			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		} else {
-			codi_materies = "<ul>";
-			$(materies_nodes).each(function() {
-				materia_node = this;
-				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
-				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
-			});
-			codi_materies += "<ul>";
-			txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;
-			mat_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.").after(codi_materies);
-		}
 		
 		// normatives
 		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormativa div.seleccionats");
@@ -691,8 +674,10 @@ function CDetall(){
         
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		
+		ModulNormativa.inicializarNormativas(dada_node.normatives);
+		
+		
         // mostrem
-        
         $("#modulLateral li.btnEliminar").show();
         
 		if ($("#carregantDetall").size() > 0) {

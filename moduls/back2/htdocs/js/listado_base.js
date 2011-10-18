@@ -1,21 +1,55 @@
-jQuery(document).ready(function(){
-	// Asociamos los evento a los botones.
-	jQuery("#btnNuevaFicha").bind("click",function(){Llistat.nuevaFicha();});
-	jQuery("#tabListado").bind("click",function(){Llistat.tabListado();});	
-	jQuery("#tabBuscador").bind("click",function(){Llistat.tabBuscador();});	
-	jQuery("#btnBuscarForm").bind("click",function(){Llistat.busca();});
-	jQuery("#btnLimpiarForm").bind("click",function(){Llistat.limpia();});	
-});
-
 /**
- * Clase de la que debe heredar el objeto Llistat.
+ * Clase de la que debe heredar el objeto Llistat. 
+ * Todos los parametros son opcionales.
+ * Si no se pasan, se les asigna un valor por defecto para mantener la compatibilidad con la implementacion anterior.
+ * 
+ * @param idOpciones = Id del de la lista de pestanas (listado, buscador, crear nuevo).
+ * @param idResultados = Id del div de resultados.
+ * @param idBuscador = Id fel div del buscador.
+ * @param idBuscadorContenido = Id del div con el contenido del buscador.
+ * @param idTabListado = Id del enlace de la pestana del listado. 
+ * @param idTabBuscador = Id del enlace de la pestana del buscador.
+ * @param idBtnNuevo = Id del <li> de la pestaña de crear "algo" nuevo.
+ * @param idBtnBuscadorForm = Id del boton de busqueda.
+ * @param idBtnLimpiarForm = Id del boton de limpiar formulario.
  */
-function ListadoBase(){
+function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, idTabListado, idTabBuscador, idBtnNuevo, idBtnBuscadorForm, idBtnLimpiarForm){
+
+	// Valores por defecto por compatibilidad con implementacion anterior.
+	if (typeof idOpciones == "undefined" || idOpciones == "") idOpciones = "#opcions";
+	if (typeof idResultados == "undefined" || idResultados == "") idResultados = "#resultats";
+	if (typeof idBuscador == "undefined" || idBuscador == "") idBuscador = "#cercador";
+	if (typeof idBuscadorContenido == "undefined" || idBuscadorContenido == "") idBuscadorContenido = "#cercador_contingut";
+	if (typeof idTabListado == "undefined" || idTabListado == "") idTabListado = "#tabListado";
+	if (typeof idTabBuscador == "undefined" || idTabBuscador == "") idTabBuscador = "#tabBuscador";
+	if (typeof idBtnNuevo == "undefined" || idBtnNuevo == "") idBtnNuevo = "#btnNuevaFicha";
+	if (typeof idBtnBuscadorForm == "undefined" || idBtnBuscadorForm == "") idBtnBuscadorForm = "#btnBuscarForm";
+	if (typeof idBtnLimpiarForm == "undefined" || idBtnLimpiarForm == "") idBtnLimpiarForm = "#btnLimpiarForm";
+
+	
+	// Anadir los "#" por comodidad.
+	var ID_MARK = "#";
+	if (idOpciones[0] != ID_MARK) idOpciones = ID_MARK + idOpciones;
+	if (idResultados[0] != ID_MARK) idResultados = ID_MARK + idResultados;
+	if (idBuscador[0] != ID_MARK) idBuscador = ID_MARK + idBuscador;
+	if (idBuscadorContenido[0] != ID_MARK) idBuscadorContenido = ID_MARK + idBuscadorContenido;
+	if (idTabListado[0] != ID_MARK) idTabListado = ID_MARK + idTabListado;
+	if (idTabBuscador[0] != ID_MARK) idTabBuscador = ID_MARK + idTabBuscador;
+	if (idBtnNuevo[0] != ID_MARK) idBtnNuevo = ID_MARK + idBtnNuevo;
+	if (idBtnBuscadorForm[0] != ID_MARK) idBtnBuscadorForm = ID_MARK + 	idBtnBuscadorForm;
+	if (idBtnLimpiarForm[0] != ID_MARK) idBtnLimpiarForm = ID_MARK + idBtnLimpiarForm;
+	
+	
 	var that = this;
 	this.cacheDatosListado = null;
 	
 	// Atributo que contiene el id del elemento que se está visualizando en la ficha.
 	this.itemID;
+	
+	
+	var resultats_elm = jQuery(idResultados);
+	var cercador_elm = jQuery(idBuscador);
+	
 	
 	/**
 	 * Marca la cache como nula para forzar a que se vuelve a actualizar.
@@ -46,13 +80,13 @@ function ListadoBase(){
 	
 	// Limpia el formulario de búsqueda.
 	this.limpia = function(){
-		jQuery('#cercador_contingut :input').each(limpiarCampo);
+        jQuery(idBuscadorContenido + ' :input').each(limpiarCampo);
 	}
 	
 	// Cambia a la pestaña de listado.
 	this.tabListado = function() {		
-		jQuery("#opcions .actiu").removeClass("actiu");
-		jQuery("#tabListado").parent().addClass("actiu");
+		jQuery(idOpciones + " .actiu").removeClass("actiu");
+		jQuery(idTabListado).parent().addClass("actiu");
 		
 		opcio_unitat = "L";
 				
@@ -69,8 +103,8 @@ function ListadoBase(){
 	
 	// Cambia a la pestaña del buscador.
 	this.tabBuscador = function(){
-		jQuery("#opcions .actiu").removeClass("actiu");
-		jQuery("#tabBuscador").parent().addClass("actiu");
+		jQuery(idOpciones + " .actiu").removeClass("actiu");
+		jQuery(idTabBuscador).parent().addClass("actiu");
 		
 		opcio_unitat = "C";
 		
@@ -95,7 +129,7 @@ function ListadoBase(){
 			
 		cercador_elm.find("input, select").attr("disabled", "disabled");
 		
-		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
+		resultats_dades_elm = resultats_elm.find("div.actiu:first").find("div.dades:first");
 		
 		// animacio
 		resultats_dades_elm.fadeOut(300, function() {
@@ -105,7 +139,7 @@ function ListadoBase(){
 			
 				// events taula
 				//pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
-				Llistat.carregar({cercador: "si"});
+				that.carregar({cercador: "si"});
 				
 			});
 		});	
@@ -144,4 +178,11 @@ function ListadoBase(){
 			});
 		});	
 	}
+
+    // Bindings
+	jQuery(idTabListado).bind("click",function(){that.tabListado();});
+	jQuery(idBtnNuevo).bind("click",function(){that.nuevaFicha();});
+	jQuery(idTabBuscador).bind("click",function(){that.tabBuscador();});	
+	jQuery(idBtnBuscadorForm).bind("click",function(){that.busca();});
+	jQuery(idBtnLimpiarForm).bind("click",function(){that.limpia();});
 }
