@@ -24,7 +24,7 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
-	escriptori_previsualitza_elm = $("#escriptori_previsualitza");	
+	//escriptori_previsualitza_elm = $("#escriptori_previsualitza");	
 	
 	Error = new CError();	
 	//Docs = new CDocs();
@@ -511,7 +511,8 @@ function CDetall(){
 		$("#modul_procediments, #modul_afectacions").hide();
 				
 		//escriptori_detall_elm.find("a.elimina, a.previsualitza").find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
-		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
+		//escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
+		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
 
 		
@@ -752,7 +753,7 @@ function CDetall(){
 			}
 		});			
 	}
-		
+	/*
 	this.previsualitza = function() {
 		
 		escriptori_detall_elm.fadeOut(300, function() {
@@ -782,7 +783,8 @@ function CDetall(){
 		
 		});
 		
-	}	
+	}
+	*/	
 };
 
 /*
@@ -1094,11 +1096,4 @@ var Fotos = {
 		
 	}
 };
-*/
-/*
-//Función que envuelve a EliminarArbreUANormativa que informa del tipo de normativa al eliminar la UA
-function EliminaArbreUANormativa(campo_nombre, campo_id) {
-	$("#tipoNormativa").text(txtNormativaExterna);
-	EliminaArbreUA(campo_nombre, campo_id)
-}
 */

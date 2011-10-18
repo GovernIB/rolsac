@@ -1120,9 +1120,9 @@
                           </li>
                                                  
                           
-                          <li class="btnPrevisualizar par">
+                          <!-- li class="btnPrevisualizar par">
                               <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
-                          </li>
+                          </li-->
                       </ul>
                     </div>
                     <!-- /botonera dalt -->
@@ -1184,7 +1184,7 @@
 </div>
 <!-- /escriptori_detall -->
 <!-- escriptori_previsualitza -->
-<div id="escriptori_previsualitza">
+<!-- div id="escriptori_previsualitza">
     <h2><spring:message code='txt.previsualitzant_normativa'/></h2>
     <p>
         <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span><spring:message code='boto.torna'/></span>
@@ -1194,7 +1194,7 @@
     <div class="previsualitzacio">
         <iframe frameborder="0" scrolling="auto"></iframe>
     </div>
-</div>
+</div-->
 <!-- /escriptori_previsualitza -->
 <!-- escriptori_traspas -->
 <!-- div id="escriptori_traspas">
