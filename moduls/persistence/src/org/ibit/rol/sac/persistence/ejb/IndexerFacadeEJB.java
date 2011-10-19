@@ -17,7 +17,6 @@ import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.BoostingQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
@@ -779,7 +778,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             IndexResultados res= null;
 
             //Buscamos la frase exacta que se ha introducido
-           	query = QuerySearchAdv(idi, null, null, cadena, null, "GEN", null, null, null, null, null, restringido, false);
+           	query = QuerySearchAdv(idi, null, null, cadena, null, "GEN", null, null, null, null, null, restringido);
         
             Hits hits = searcher.search(query);
             long endTime=0;
@@ -798,11 +797,11 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 						saltos = "1";
 					}
 		            //Buscamos alguna de las palabras que se ha introducido					
-					query = QuerySearchAdv(idi, cadena, null, null, null, "GEN", null, null, null, null, null, restringido, false);
+					query = QuerySearchAdv(idi, cadena, null, null, null, "GEN", null, null, null, null, null, restringido);
 					hits = searcher.search(query);
 					if ((hits.length() < MIN_HITS || hits.score(0) < MIN_SCORE)) {
 			            //Buscamos cualquiera de las palabras que se ha introducido						
-						query = QuerySearchAdv(idi, null, cadena, null, null, "GEN", null, null, null, null, null, restringido, false);
+						query = QuerySearchAdv(idi, null, cadena, null, null, "GEN", null, null, null, null, null, restringido);
 						hits = searcher.search(query);						
 					}
 						
@@ -1086,7 +1085,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
         
-    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido, boolean actual) {
+    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido) {
     	long startTime = System.currentTimeMillis();
         try {
         	idi = idi.toLowerCase();
@@ -1096,7 +1095,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             Query query = null;
             IndexResultados res= null;
 
-           	query = QuerySearchAdv(idi, cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, restringido, actual);
+           	query = QuerySearchAdv(idi, cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, restringido);
         
             Hits hits = searcher.search(query);
             long endTime=0;
@@ -1135,7 +1134,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     
-    private Query QuerySearchAdv(String idi, String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, boolean restringido, boolean actual) {
+    private Query QuerySearchAdv(String idi, String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, boolean restringido) {
     	BooleanQuery querytotal = new BooleanQuery();
     	
         
@@ -1315,23 +1314,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             }            
             
             log.debug(querytotal.toString());
-            if(actual){
-            	// damos mayor puntuacion a los resultados de un periodo de meses
-            	String peridoActualidad =System.getProperty("es.caib.rolsac.lucene.peridoActualidad");
-            	if(peridoActualidad != null){
-            		int meses = Integer.valueOf(peridoActualidad);
-        			Calendar calendar = Calendar.getInstance();
-        			calendar.add(Calendar.MONTH, -meses);
-                	String anyo=new java.text.SimpleDateFormat("yyyyMMdd").format(calendar.getTime());
-                	Term fechaAct_anyo= new Term (Catalogo.DESCRIPTOR_PUBLICACION, anyo);
-                    Term fechaUltima= new Term (Catalogo.DESCRIPTOR_PUBLICACION, "0000000" );
-                    RangeQuery actualidadAnyo = new RangeQuery(fechaUltima, fechaAct_anyo, true);
-                    Query balancedQuery = new BoostingQuery(querytotal, actualidadAnyo, 0.3f); 
-                   
-                    return balancedQuery;
-            	}
-
-            }
     	return querytotal;
     }
     

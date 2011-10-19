@@ -142,9 +142,9 @@ public class IndexerDelegate implements StatelessDelegate {
         }
     }    
 
-    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido, boolean actual) throws DelegateException {
+    public IndexResultados buscaravanzado(String cerca_totes, String cerca_alguna, String cerca_frase, String cerca_cap, String tipus, String uo, String mat, Date fini, Date ffin, String ajudes, String idi, boolean sugerir, boolean restringido) throws DelegateException {
         try {
-            return local.buscaravanzado(cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, idi, sugerir, restringido, actual);
+            return local.buscaravanzado(cerca_totes, cerca_alguna, cerca_frase, cerca_cap, tipus, uo, mat, fini, ffin, ajudes, idi, sugerir, restringido);
         } catch (EJBException e) {
             throw new DelegateException(e);
         }
