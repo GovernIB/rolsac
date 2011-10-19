@@ -2,6 +2,8 @@
 
 $(document).ready(function() {
 	
+	jQuery("#btnInsertar").bind("click",function(){Detall.modificado();});
+	
 	// elements
 	opcions_elm = $("#opcions");
 	escriptori_elm = $("#escriptori");
@@ -380,18 +382,22 @@ function CDetall(){
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		var dataVars = "";
+		var dataVars = EscriptoriSeccionsUA.llistaSeccUa() + "&";
+		//TODO:incloure aquest error dins la verificacio de procediment.js
 
-		dataVars = ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
-		
-		this._baseGuarda(dataVars);
+		if (dataVars == "seccUA=&") {
+			Missatge.llansar({tipus: "alerta", modo: "informacion", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});
+		} else {		
+			dataVars += ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
+
+			this._baseGuarda(dataVars);
+		}
 	}
 
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/fitxa.do";
 	
 	this.iniciar = function() {
-		// dates
-		//$("#item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		// dates		
 		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		$("#item_data_publicacio").bind("blur",this.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		
@@ -439,8 +445,12 @@ function CDetall(){
 	
 		ModulFetsVitals.nuevo();
 
+		//TODO: moure a modul_seccion_ua.js
 		secc_ua_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
 		secc_ua_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
+		//$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false);
+		//
+		
 		
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);
@@ -468,9 +478,10 @@ function CDetall(){
 		$("#item_id").val(dada_node.item_id);
 		
 		$("#item_estat").val(dada_node.item_estat);
+
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
-		$("#item_data_caducitat").val(dada_node.item_data_caducitat);		
-		
+		$("#item_data_caducitat").val(dada_node.item_data_caducitat);
+		/*
 		if (dada_node.caducat == "S") {
 			escriptori_detall_elm.find("h2:first").append(", <span class=\"caducat\">" + txtCaducat.toLowerCase() + "</span>");
 			$("#modulLateral p.baix:first").removeClass("iPublicat").addClass("iCaducat");
@@ -478,7 +489,7 @@ function CDetall(){
 			escriptori_detall_elm.find("h2:first span.caducat").remove();
 			$("#modulLateral p.baix:first").removeClass("iCaducat").addClass("iPublicat");
 		}
-		
+		*/
 		$("#item_titol_ca").val(printStringFromNull(dada_node.ca.titulo));
 		$("#item_des_curta_ca").val(printStringFromNull(dada_node.ca.descAbr));
 		$("#item_des_llarga_ca").val(printStringFromNull(dada_node.ca.descripcion));
@@ -511,6 +522,34 @@ function CDetall(){
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		
 		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
+		
+		//TODO:moure a modul_seccions_ua
+		seccUA_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
+		seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
+
+		seccUA_nodes = dades.seccUA;
+		seccUA_nodes_size = seccUA_nodes.length;
+
+		//mat_llistat_elm.find("input").removeAttr("checked");
+		
+		if (seccUA_nodes_size == 0) {
+			seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
+		} else {
+			codi_seccUA = "<ul>";
+			$(seccUA_nodes).each(function() {
+				seccUA_node = this;
+				codi_seccUA += "<li>";
+				codi_seccUA +="<input class=\"idSeccUa\" type=\"hidden\" value=\"" + seccUA_node.id + "\" /> ";
+				codi_seccUA +="<input class=\"ua\" type=\"hidden\" value=\"" + seccUA_node.idUA + "\" /> ";
+				codi_seccUA +="<input class=\"seccio\" type=\"hidden\" value=\"" + seccUA_node.idSec + "\" /> ";
+				codi_seccUA += txtLaSeccio+" <em class=\"seccio\">"+seccUA_node.nombreSec+"</em>, "+txtAmbLaUnitat+" <em class=\"ua\">" + seccUA_node.nombreUA +"</em>" + "</li>";				
+			});
+			codi_seccUA += "</ul>";
+			txt_seccUA = (seccUA_nodes_size == 1) ? txtSeccioUA : txtSeccionsUA;			
+			seccUA_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + seccUA_nodes_size + " " + txt_seccUA + "</strong>.");
+			seccUA_seleccionats_elm.find(".listaOrdenable").html(codi_seccUA);
+						
+		}	
 		
 		// mostrem
 

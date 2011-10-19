@@ -16,8 +16,6 @@ var Seccions_Arbre = {
 		
 		escriptori_seccions_arbre_elm = $("div.escriptori_seccions_arbre:first");
 		escriptori_seccions_arbre_elm.html(ua_arbre_codi);
-		//secc_nivell_ample = escriptori_seccions_arbre_elm.width();
-		//secc_nivell_ample_em = Math.round(parseFloat($(secc_nivell_ample).toEm()));
 		
 		Seccions_Arbre.carregar({ nivell: 0 });
 		
@@ -28,15 +26,12 @@ var Seccions_Arbre = {
 		if (elm.is("A")) {
 			
 			if (elm.hasClass("selecciona")) {
-				
+
 				secc_arbre_elm.unbind("click", Seccions_Arbre.llansar);
 				
-				secc_pare_div_elm = elm.parents("div:first");
+				$("div.seccions_arbre a.selecciona").removeClass("triat");
 				
-				secc_ID = secc_pare_div_elm.find("input.id").val();
-				secc_NOM = secc_pare_div_elm.find("a.selecciona").text();
-				
-				EscriptoriSeccionsUA.afegir({ tipus: "seccio", id: secc_ID, nom: secc_NOM });
+				elm.addClass("triat");
 				
 				secc_arbre_elm.bind("click", Seccions_Arbre.llansar);
 				
@@ -80,50 +75,47 @@ var Seccions_Arbre = {
 					height: $(secc_nivell_alt).toEm()
 				}, 300);
 				
-			}
-			
-		} else if (elm.is("SPAN") && elm.parents("a.btn:first").hasClass("fills")) {
-			
-			secc_arbre_elm.unbind("click", Seccions_Arbre.llansar);
-			
-			secc_nivell_pare_DIV = elm.parents("div:first");
-			secc_nivell_pare_UL = secc_nivell_pare_DIV.parents("ul.nivell:first");
-			secc_nivell_pare_UL_class = secc_nivell_pare_UL.attr("class");
-			secc_nivell_val = parseInt(secc_nivell_pare_UL_class.substr(secc_nivell_pare_UL_class.indexOf(" ")+2),10);
-			secc_nivell_seguent_val = secc_nivell_val+1;
-			secc_nivell_ID = secc_nivell_pare_DIV.find("input:first").val();
-			secc_nivell_NOM = secc_nivell_pare_DIV.find("a.selecciona:first").text();
-			
-			secc_arbre_arr_esta = false;
-			codi_secc_arbre = "<ul class=\"nivell n" + secc_nivell_seguent_val + "\">";
-			$(secc_arbre_arr).each(function(i) {
-				arbre_arr_node = this;
-				if (arbre_arr_node.pare == secc_nivell_ID) {
-					secc_arbre_arr_esta = true;
-					codi_secc_arbre += "<li>";
-					codi_secc_arbre += "<div>";
-					codi_secc_arbre += "<input type=\"hidden\" value=\"" + arbre_arr_node.id + "\" class=\"id\"/>";
-					codi_secc_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + arbre_arr_node.nom + "</a>";
-					if (arbre_arr_node.fills == "S") {
-						codi_secc_arbre += "<a class=\"btn fills\" href=\"javascript:;\"><span><span>" + txtNodesFills + "</span></span></a>";
+			} else if (elm.hasClass("fills")){
+				
+				secc_arbre_elm.unbind("click", Seccions_Arbre.llansar);
+				
+				secc_nivell_pare_DIV = elm.parents("div:first");
+				secc_nivell_pare_UL = secc_nivell_pare_DIV.parents("ul.nivell:first");
+				secc_nivell_pare_UL_class = secc_nivell_pare_UL.attr("class");
+				secc_nivell_val = parseInt(secc_nivell_pare_UL_class.substr(secc_nivell_pare_UL_class.indexOf(" ")+2),10);
+				secc_nivell_seguent_val = secc_nivell_val+1;
+				secc_nivell_ID = secc_nivell_pare_DIV.find("input:first").val();
+				secc_nivell_NOM = secc_nivell_pare_DIV.find("a.selecciona:first").text();
+				
+				secc_arbre_arr_esta = false;
+				codi_secc_arbre = "<ul class=\"nivell n" + secc_nivell_seguent_val + "\">";
+				$(secc_arbre_arr).each(function(i) {
+					arbre_arr_node = this;
+					if (arbre_arr_node.pare == secc_nivell_ID) {
+						secc_arbre_arr_esta = true;
+						codi_secc_arbre += "<li>";
+						codi_secc_arbre += "<div>";
+						codi_secc_arbre += "<input type=\"hidden\" value=\"" + arbre_arr_node.id + "\" class=\"id\"/>";
+						codi_secc_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + arbre_arr_node.nom + "</a>";
+						if (arbre_arr_node.fills == true) {							
+							codi_secc_arbre += "<a class=\"btn fills\" href=\"javascript:;\"></a>";
+						}
+						codi_secc_arbre += "</div>";
+						codi_secc_arbre += "</li>";
 					}
-					codi_secc_arbre += "</div>";
-					codi_secc_arbre += "</li>";
+				});
+				codi_secc_arbre += "</ul>";
+
+				if (secc_arbre_arr_esta) {
+					Seccions_Arbre.pintar({ codi: codi_secc_arbre });
+				} else {
+					
+					Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantNodes });
+					
+					Seccions_Arbre.carregar({ nivell: (secc_nivell_val+1), pare: secc_nivell_ID });
 				}
-			});
-			codi_secc_arbre += "</ul>";
-			
-			if (secc_arbre_arr_esta) {
-				Seccions_Arbre.pintar({ codi: codi_secc_arbre });
-			} else {
-				
-				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantNodes });
-				
-				Seccions_Arbre.carregar({ nivell: (secc_nivell_val+1), pare: secc_nivell_ID });
 			}
-			
 		}
-		
 	},
 	carregar: function(opcions) {
 		
@@ -153,25 +145,7 @@ var Seccions_Arbre = {
 				
 			},
 			success: function(data) {
-				// estat json
-				json_estat = data.json.estat;
-				json_mode = (json_estat == "CORRECTE") ? "correcte" : (json_estat == "WARNING") ? "atencio" : (json_estat == "ERROR") ? "error" : "fatal";
-				if (json_estat == "FATAL") {
-					
-					Missatge.llansar({tipus: "alerta", modo: json_mode, fundit: "si", titol: data.json.missatge, funcio: function() { document.location = pagTancarAplicacio; }});
-					$("#contenidor").html("");
-					return false;
-				
-				} else if (json_estat == "ERROR") {
-					
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + data.json.missatge + "</p>"});
-					// error
-					Error.llansar();
-				
-				} else {
-					
-					data_seccio = data.json.data.seccions;
+					data_seccio = data.llistaSeccions;
 					
 					codi_secc_arbre = "<ul class=\"nivell n" + opcions.nivell + "\">";
 					$(data_seccio).each(function(i) {
@@ -182,8 +156,8 @@ var Seccions_Arbre = {
 						codi_secc_arbre += "<div>";
 						codi_secc_arbre += "<input type=\"hidden\" value=\"" + data_seccio_node.id + "\" class=\"id\"/>";
 						codi_secc_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + data_seccio_node.nom + "</a>";
-						if (data_seccio_node.filles == "S") {
-							codi_secc_arbre += "<a class=\"btn fills\" href=\"javascript:;\"><span><span>" + txtNodesFills + "</span></span></a>";
+						if (data_seccio_node.filles == true) {
+							codi_secc_arbre += "<a class=\"btn fills\" href=\"javascript:;\"></a>";
 						}
 						codi_secc_arbre += "</div>";
 						codi_secc_arbre += "</li>";
@@ -202,7 +176,6 @@ var Seccions_Arbre = {
 					Seccions_Arbre.pintar({ codi: codi_secc_arbre, nivell: opcions.nivell });
 					
 				}
-			}
 		});
 		
 	},

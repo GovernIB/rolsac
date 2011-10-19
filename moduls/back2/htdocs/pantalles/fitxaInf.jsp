@@ -10,10 +10,11 @@
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>    
+    <script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
-    <!-- script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script-->
     <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
 
     <script type="text/javascript">
@@ -21,6 +22,8 @@
     var pagLlistat = '<c:url value="/fitxainf/llistat.htm" />';
     var pagDetall = '<c:url value="/fitxainf/pagDetall.htm" />';
     var pagGuardar = '<c:url value="/fitxainf/guardar.htm" />';
+    var pagSeccions = '<c:url value="/fitxainf/seccions.htm" />';
+    var pagUnitats = '<c:url value="/fitxainf/unitats.htm" />';
 
     // texts
     var txtEspere = "Espere un moment, si us plau.";
@@ -143,7 +146,7 @@
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
     <script type="text/javascript">
     //validacio
-    
+    var txtSeccUa = "Es necessari definir una relació Fitxa -Secció -  UA";
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtMax = "<spring:message code='txt.max'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
@@ -323,8 +326,6 @@
                                         <option value='<c:out value="${materia.id}" />'><c:out value="${materia.nom}" /></option>
                                     </c:forEach>
                                 </select>               
-                                <%--input id="cerca_materia" name="cerca_materia" type="text"
-                                    class="materia" /--%>
                             </div>
                         </div>
                     </div> 
@@ -339,20 +340,9 @@
                                     <c:forEach items="${llistaFetsVitals}" var="fetVital">
                                         <option value='<c:out value="${fetVital.id}" />'><c:out value="${fetVital.nom}" /></option>
                                     </c:forEach>
-                                </select>   
-                                <%--input id="cerca_fetVital" name="cerca_fetVital" type="text"
-                                    class="fetVital" /--%>
+                                </select>
                             </div>
                         </div>
-                        <!-- div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_seccio">Secció</label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_seccio" name="cerca_seccio" type="text"
-                                    class="fetVital" />
-                            </div>
-                        </div-->
                         <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_url">URL Fórum</label>
@@ -438,8 +428,7 @@
     <form id="formGuardar" action="false">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <h2>Detall de la fitxa</h2>
-        <p>Recorde que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>
-            
+        <p>Recorde que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>            
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario">
             <!-- modul -->
@@ -856,8 +845,7 @@
             </div>
             <!-- /modul -->
         </div>
-        <!-- /modulPrincipal -->
-        
+        <!-- /modulPrincipal -->        
         <!-- modulLateral -->
         <div class="modulLateral">
             <? if ($_SESSION['rolsac_rol'] != "RSC_OPERADOR") { ?>
@@ -890,8 +878,8 @@
                                     <label for="item_data_publicacio">Data publicació</label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_publicacio" name="item_data_publicacio"
-                                        type="text" value="Immediat" class="nou" />
+                                    <input id="item_data_publicacio" name="item_data_publicacio"                                        
+                                        type="text" <%-- value="Immediat" --%> class="nou" />
                                 </div>
                             </div>
                             <div class="element right">
@@ -905,8 +893,7 @@
                             </div>
                         </div>
                         <!-- /fila -->
-                        <!-- botonera baix -->                      
-                                                                            
+                        <!-- botonera baix -->                                                                                                  
                         <div class="botonera dalt">
                           <ul>
                               <li class="btnVolver impar">
@@ -922,9 +909,7 @@
                                   <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
                               </li>                              
                           </ul>
-                        </div>
-                        
-                        
+                        </div>                                                
                         <!-- /botonera baix -->
                     </div>
                 </fieldset>
@@ -977,8 +962,7 @@
                 <fieldset>
                     <a class="modul mostrat">Amaga</a>
                     <legend>Matèries relacionades</legend>
-                    <div class="modul_continguts mostrat">
-                    
+                    <div class="modul_continguts mostrat">                    
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
                             <div class="seleccionats">
@@ -1013,8 +997,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /modulMateries -->
-                        
+                        <!-- /modulMateries -->                        
                     </div>
                 </fieldset>
             </div>
@@ -1024,8 +1007,7 @@
                 <fieldset>
                     <a class="modul mostrat">Amaga</a>
                     <legend>Fets vitals relacionats</legend>
-                    <div class="modul_continguts mostrat">
-                    
+                    <div class="modul_continguts mostrat">                    
                         <!-- modulFetsVitals -->
                         <div class="modulFetsVitals selectorChecks">
                             <div class="seleccionats">
@@ -1060,8 +1042,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /modulFetsVitals -->
-                        
+                        <!-- /modulFetsVitals -->                        
                     </div>
                 </fieldset>
             </div>
@@ -1078,14 +1059,7 @@
                         <div class="modulSeccionsUA">
                             <div class="seleccionats">
                                 <p class="info">No hi ha seccions amb Unitat Administrativa.</p>
-                                <div class="listaOrdenable">
-                                    <ul>
-                                        <li><input type="hidden" value="1" class="seccio" /> <input
-                                            type="hidden" value="4" class="ua" /> La secció <em
-                                            class="seccio">Correcció d'errors</em>, amb la UA <em
-                                            class="ua">Títol de la norma</em></li>
-                                    </ul>
-                                </div>
+                                <div class="listaOrdenable"></div>
                                 <div class="botonera">
                                     <div class="btnGenerico">
                                         <a class="btn gestiona" href="javascript:;"><span><span>Gestiona seccions</span></span></a>
@@ -1100,8 +1074,7 @@
             </div>
             <!-- /modul -->     
         </div>
-        <!-- /modulLateral -->
-    
+        <!-- /modulLateral -->    
     </form>
 </div>
 <!-- /escriptori_detall -->
@@ -1120,69 +1093,56 @@
 <!-- /escriptori_previsualitza -->
 <!-- escriptori_seccions_ua -->
 <div id="escriptori_seccions_ua">
-    <h2>Gestió de la relació entre les Seccions i les Unitats
-        Administratives</h2>
-    <div class="botonera dalt">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span>Torna
-                            al detall</span>
-                </span>
-            </a></li>
-        </ul>
-    </div>
+	<ul id="opcions">
+		<li class="opcio actiu">Gestió de la relació entre les Seccions i les Unitats
+        Administratives</li>
+	</ul>
     <!-- llistat -->
-    <div class="escriptori_items_llistat">
-        <!-- selector_seccions -->
+    <div id="resultats" class="escriptori_items_llistat">
         <div class="escriptori_selector_seccions">
-            <h3>Selector de seccions</h3>
+            <h3>Seccions</h3>
             <div class="escriptori_seccions_arbre"></div>
         </div>
-        <!-- /selector_seccions -->
-        <!-- selector_uas -->
-        <!--
-                        <div class="escriptori_selector_uas">
-                            <h3>Selector d'Unitats Administratives</h3>
-                            <div class="escriptori_ua_arbre"></div>
-                        </div>
-                        -->
-        <!-- /selector_uas -->
+        <div class="escriptori_selector_uas">
+            <h3>Unitats Administratives</h3>
+            <div class="escriptori_ua_arbre"></div>
+        </div>
+        <div id="cercador">
+        	<div class="botonera">
+				<div class="boton btnGenerico btnVolverDetalle">
+					<a class="btn torna" href="javascript:;">
+						<span><span>Torna al detall</span></span>
+					</a>
+				</div>
+			</div>
+		</div>
     </div>
     <!-- /llistat -->
     <!-- seleccionats -->
-    <div class="escriptori_items_seleccionats">
-        <h3>Seccions i Unitats seleccionades</h3>
-        <p class="botonera">
-            <a href="javascript:;" class="btn finalitza important"><span><span>Finalitza</span>
-            </span>
-            </a>
-        </p>
-        <div class="dades">
-            <p class="info">No hi ha cap secció/UA.</p>
-            <!--
-                            <p class="info">Seleccionades <strong>5 seccions/UA</strong>.</p>
-                            <ul>
-                                <li>
-                                    <div class="se_ua">
-                                        <input type="hidden" value="1" class="seccio" />
-                                        <input type="hidden" value="1" class="ua" />
-                                        <span class="se_ua">
-                                            <span class="seccio">(1) Títol de la secció</span>, amb la unitat <span class="ua">(1) Títol de la unitat administrativa</span>
-                                        </span>
-                                        <a href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
-                                    </div>
-                                </li>
-                            </ul>
-                            -->
-        </div>
-    </div>
-    <!-- seleccionats -->
-    <div class="botonera baix">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span>Torna
-                            al detall</span>
-                </span>
-            </a></li>
-        </ul>
-    </div>
+    
+    <div class="modulLateral escriptori_items_seleccionats">
+		<div class="modul">
+			<div class="interior">
+				<div class="seleccionats">
+					<div class="seleccionat">
+						<p class="info">No hi ha cap secció/UA.</p>
+						<div class="listaOrdenable"></div>
+					</div>
+					<div class="botonera">
+						<p class="botonera btnGenerico">
+							<a id="btnInsertar" class="btn inserta important" href="javascript:;">
+								<span><span>Inserta</span></span>
+							</a>							
+						</p>
+						<p class="botonera btnGenerico">
+							<a id="btnFinalizar" class="btn finalitza important" href="javascript:;">
+								<span><span>Finalitza</span></span>
+							</a>
+						</p>
+					</div>					
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- /escriptori_seccions_ua -->

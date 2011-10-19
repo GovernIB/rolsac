@@ -16,10 +16,10 @@ public class FichaTransient implements ValueObject {
 	private static final long serialVersionUID = 1L;
 	private Long id;
 	private String titulo;
-	private Date fechaPublicacion;
-	private Date fechaCaducidad;
+	private String fechaPublicacion;
+	private String fechaCaducidad;
 
-   public FichaTransient(long id, String titulo, Date fechaPublicacion, Date fechaCaducidad){
+   public FichaTransient(long id, String titulo, String fechaPublicacion, String fechaCaducidad){
         super();
         this.id = id;
         this.titulo = titulo;
@@ -43,19 +43,19 @@ public class FichaTransient implements ValueObject {
         this.titulo = titulo;
     }    
     
-    public Date getFechaPublicacion() {
+    public String getFechaPublicacion() {
         return fechaPublicacion;
     }
 
-    public void setFechaPublicacion(Date fechaPublicacion) {
+    public void setFechaPublicacion(String fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
     
-    public Date getFechaCaducidad() {
+    public String getFechaCaducidad() {
         return fechaCaducidad;
     }
 
-    public void setFechaCaducidad(Date fechaCaducidad) {
+    public void setFechaCaducidad(String fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
     

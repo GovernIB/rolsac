@@ -1,4 +1,4 @@
-// MODUL NORMATIVA
+// MODUL SECCIONS UA
 
 $(document).ready(function() {
 	
@@ -18,7 +18,7 @@ $(document).ready(function() {
 var ModulSeccionsUA = {
 	iniciar: function() {
 		
-		seccions_ua_llistat_elm = escriptori_seccions_ua_elm.find("div.escriptori_items_llistat:first");
+		seccions_ua_llistat_elm = escriptori_seccions_ua_elm.find("div.escriptori_items_llistat");
 		seccions_ua_seleccionats_elm = escriptori_seccions_ua_elm.find("div.escriptori_items_seleccionats:first");
 		
 		seccions_ua_dades_elm = seccions_ua_llistat_elm.find("div.dades:first");
@@ -30,12 +30,7 @@ var ModulSeccionsUA = {
 			} else {
 				botonera_elm.before("<div class=\"rabillo\">&nbsp;</div>").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 			}
-		});
-		
-		seccions_ua_llistat_elm.add(seccions_ua_seleccionats_elm).css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
-		
-		// botonera seleccionats
-		seccions_ua_seleccionats_elm.find("p.botonera").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
+		});				
 		
 		// one al botó de gestionar
 		modul_seccions_ua_elm.find("a.gestiona").one("click", ModulSeccionsUA.gestiona);
@@ -47,38 +42,37 @@ var ModulSeccionsUA = {
 		
 		if (lis_size > 0) {
 			
-			ua_seleccionada_elm = mollaPa_contingut_elm.find("li.seleccionat input").val();
+			ua_seleccionada_elm = mollaPa_contingut_elm.find("li.seleccionat input").val();			
 			
 			codi_seleccionat = "<ul>";
 			
 			modul_seccions_ua_elm.find("li").each(function() {
 				
 				li_elm = $(this);
-				
-				ua_val = li_elm.find("input.ua:first").val();
-				
+
 				codi_seleccionat += "<li>";
 				codi_seleccionat += "<div class=\"se_ua\">";
+				codi_seleccionat += "<input type=\"hidden\" value=\"" + li_elm.find("input.idSeccUa:first").val() + "\" class=\"idSeccUa\" /> ";//Para que tenga 3 elementos al serializarlo
 				codi_seleccionat += "<input type=\"hidden\" value=\"" + li_elm.find("input.seccio:first").val() + "\" class=\"seccio\" />";
-				codi_seleccionat += "<input type=\"hidden\" value=\"" + ua_val + "\" class=\"ua\" />";
+				codi_seleccionat += "<input type=\"hidden\" value=\"" + li_elm.find("input.ua:first").val() + "\" class=\"ua\" />";
 				codi_seleccionat += "<span class=\"se_ua\">";
 				codi_seleccionat += "<span class=\"seccio\">" + li_elm.find("em.seccio:first").text() + "</span>, " + txtAmbLaUnitat + " <span class=\"ua\">" + li_elm.find("em.ua:first").text() + "</span>";
-				codi_seleccionat += "</span>";
-				codi_seleccionat += (ua_val == ua_seleccionada_elm) ? "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>" : "&nbsp;";
+				codi_seleccionat += "</span>";				
+				codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"></a>";
 				codi_seleccionat += "</div>";
 				codi_seleccionat += "</li>";
 			
 			});
 			
 			codi_seleccionat += "</ul>";
-			
-			seccions_ua_seleccionats_elm.find("ul").remove().end().append(codi_seleccionat);
+						
+			seccions_ua_seleccionats_elm.find("div.listaOrdenable").html(codi_seleccionat);
 			
 			EscriptoriSeccionsUA.contaSeleccionats();
 			
 		} else {
 			
-			seccions_ua_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaSeccioUA + ".");
+			seccions_ua_seleccionats_elm.find("div.listaOrdenable").empty().end().find("p.info:first").text(txtNoHiHaSeccioUA + ".");
 			
 		}
 		
@@ -98,14 +92,14 @@ var ModulSeccionsUA = {
 				secc_arbre_nivells_elm.css({ height: $(secc_nivell_seguent_alt).toEm() });
 				
 				// modul ua
-				/*
+				
 				ua_nivell_ample = escriptori_ua_arbre_elm.width();
-				ua_nivell_ample_em = Math.round(parseFloat($(ua_nivell_ample).toEm())) + 1;
+				ua_nivell_ample_em = Math.round(parseFloat($(ua_nivell_ample).toEm()));
 				ua_nivell_UL = ua_arbre_elm.find("ul:last");
 				ua_nivell_UL_LIs = parseInt(ua_nivell_UL.find("li").size(),10);
 				ua_nivell_seguent_alt = ua_nivell_UL.innerHeight() + ua_nivell_UL_LIs;
 				ua_arbre_nivells_elm.css({ height: $(ua_nivell_seguent_alt).toEm() });
-				*/
+				
 				// activar
 				escriptori_seccions_ua_elm.bind("click",EscriptoriSeccionsUA.llansar);
 			});
@@ -119,11 +113,13 @@ var EscriptoriSeccionsUA = {
 	llansar: function(e) {
 		
 		elm = $(e.target);
-		
+
 		if (elm.is("SPAN") && elm.parent().parent().is("A") && elm.parent().parent().hasClass("btn")) {
 			
 			a_elm = elm.parents("a.btn:first");
-			
+			secc_pare_div_elm = $("div.seccions_arbre a.triat").parents("div:first");
+			ua_pare_div_elm = $("div.ua_arbre a.triat").parents("div:first");
+
 			if (a_elm.hasClass("torna")) {
 				
 				escriptori_seccions_ua_elm.unbind("click",EscriptoriSeccionsUA.llansar);
@@ -135,7 +131,16 @@ var EscriptoriSeccionsUA = {
 				a_elm.parents("li:first").remove();
 				
 				EscriptoriSeccionsUA.contaSeleccionats();
+
+			} else if (a_elm.hasClass("inserta")) {	
+											
+				secc_ID = secc_pare_div_elm.find("input.id").val();
+				secc_NOM = secc_pare_div_elm.find("a.selecciona").text();
 				
+				ua_ID = ua_pare_div_elm.find("input.id").val();
+				ua_NOM = ua_pare_div_elm.find("a.selecciona").text();
+				
+				EscriptoriSeccionsUA.afegir({idSecc: secc_ID, nomSecc: secc_NOM, idUA: ua_ID, nomUA: ua_NOM });				
 				
 			} else if (a_elm.hasClass("finalitza")) {
 				
@@ -146,10 +151,10 @@ var EscriptoriSeccionsUA = {
 				codi_llistat = "<ul>";
 				
 				seccions_ua_seleccionats_elm.find("li").each(function(i) {
-				
 					li_elm = $(this);
 					input_elm = li_elm.find("input");
 					codi_llistat += "<li>";
+					codi_llistat += "<input type=\"hidden\" value=\"" + li_elm.find("input.idSeccUa").val() + "\" class=\"idSeccUa\" />";
 					codi_llistat += "<input type=\"hidden\" value=\"" + li_elm.find("input.seccio").val() + "\" class=\"seccio\" />";
 					codi_llistat += "<input type=\"hidden\" value=\"" + li_elm.find("input.ua").val() + "\" class=\"ua\" />";
 					codi_llistat += txtLaSeccio + " <em class=\"seccio\">" + li_elm.find("span.seccio").text() + "</em>, " + txtAmbLaUnitat + " <em class=\"ua\">" + li_elm.find("span.ua").text() + "</em>";
@@ -166,13 +171,21 @@ var EscriptoriSeccionsUA = {
 				modul_seccions_ua_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 				
 				if (nombre_llistat > 1) {
-					modul_seccions_ua_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+					modul_seccions_ua_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
 				}
+				
+				Detall.modificado();
 				
 				EscriptoriSeccionsUA.torna();
 				
 			}
 			
+		}
+		if (elm.hasClass("btn elimina")){
+			
+			elm.parents("li:first").remove();
+			
+			EscriptoriSeccionsUA.contaSeleccionats();			
 		}
 		
 	},
@@ -206,59 +219,56 @@ var EscriptoriSeccionsUA = {
 		} else {
 			
 			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtSeccionsUA.toLowerCase() + "</strong>.");
-			seccions_ua_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+			seccions_ua_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
 			
 		}
-		
 	},
 	afegir: function(dades) {
 		
-		seccio_id = dades.id;
-		seccio_titol = dades.nom;
+		seccio_id = dades.idSecc;
+		seccio_titol = dades.nomSecc;
 		
-		lis_size = seccions_ua_seleccionats_elm.find("li").size();
-		
-		seccio_esta = false;
-		
-		if (lis_size == 0) {
-			
-			$("<ul>").appendTo(seccions_ua_seleccionats_elm);
-			
-		} else {
-			
-			seccions_ua_seleccionats_elm.find("input").each(function() {
-				
-				if ($(this).val() == seccio_id) {
-					seccio_esta = true;
-				}
-			
-			});
-			
-		}
-		
-		if (!seccio_esta) {
-			
-			li_mollaPa_seleccionat_elm = mollaPa_contingut_elm.find("li.seleccionat");
-			
-			ua_text = li_mollaPa_seleccionat_elm.text();
-			ua_text = ua_text.substr(ua_text.indexOf(">")+2);
-			
+		ua_id = dades.idUA;
+		ua_titol = dades.nomUA;
+
+		if ($("#escriptori_seccions_ua li input.seccio[type=hidden][value="+seccio_id+"]+input.ua[type=hidden][value="+ua_id+"]").size() == 0) {
 			codi_seleccionat = "<li>";
 			codi_seleccionat += "<div class=\"se_ua\">";
+			codi_seleccionat += "<input type=\"hidden\" value=\"-1\" class=\"idSeccUa\" />";
 			codi_seleccionat += "<input type=\"hidden\" value=\"" + seccio_id + "\" class=\"seccio\" />";
-			codi_seleccionat += "<input type=\"hidden\" value=\"" + li_mollaPa_seleccionat_elm.find("input").val() + "\" class=\"ua\" />";
+			codi_seleccionat += "<input type=\"hidden\" value=\"" + ua_id + "\" class=\"ua\" />";
 			codi_seleccionat += "<span class=\"se_ua\">";
-			codi_seleccionat += "<span class=\"seccio\">" + seccio_titol + "</span>, " + txtAmbLaUnitat + " <span class=\"ua\">" + ua_text + "</span>";
-			codi_seleccionat += "</span>";
-			codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
+			codi_seleccionat += "<span class=\"seccio\">" + seccio_titol + "</span>, " + txtAmbLaUnitat + " <span class=\"ua\">" + ua_titol + "</span>";
+			codi_seleccionat += "</span>";			
+			codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"></a>";
 			codi_seleccionat += "</div>";
 			codi_seleccionat += "</li>";
+
+			seccions_ua_seleccionats_elm_ul = seccions_ua_seleccionats_elm.find("div.listaOrdenable ul");
 			
-			seccions_ua_seleccionats_elm.find("ul").append(codi_seleccionat);
+			if (seccions_ua_seleccionats_elm_ul.size() > 0){				
+				seccions_ua_seleccionats_elm_ul.append(codi_seleccionat);				
+			} else {
+				seccions_ua_seleccionats_elm.find("div.listaOrdenable").append("<ul>"+codi_seleccionat+"</ul>");
+			}					
 			
 			EscriptoriSeccionsUA.contaSeleccionats();
-		
 		}
+	},
+	llistaSeccUa: function(){
+		//Retorna una llista de parelles idSecc, idUA.
+		
+		var listaSeccUa = "seccUA=";
+		
+		$("div.modulSeccionsUA div.seleccionats ul li").each(function() {			
+			listaSeccUa += $(this).find("input.idSeccUa[type=hidden]").val() + "#" + $(this).find("input.seccio[type=hidden]").val() + "#" + $(this).find("input.ua[type=hidden]").val() + ",";										
+		});
+
+		if (listaSeccUa[listaSeccUa.length-1] == ","){
+			listaSeccUa = listaSeccUa.slice(0, -1);
+		}		
+		
+		return listaSeccUa;
 		
 	}
 };

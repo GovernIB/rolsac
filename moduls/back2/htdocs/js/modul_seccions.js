@@ -459,7 +459,7 @@ var EscriptoriSeccio = {
 				modul_seccions_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 				
 				if (nombre_llistat > 1) {
-					modul_seccions_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+					modul_seccions_elm.find("ul").sortable({ axis: 'y', cursor: 'url(img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(img/cursor/grab.cur), move");
 				}
 				
 				EscriptoriSeccio.torna();
@@ -549,7 +549,7 @@ var EscriptoriSeccio = {
 		} else {
 			
 			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtProcediments.toLowerCase() + "</strong>.");
-			seccions_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+			seccions_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(img/cursor/grab.cur), move");
 			
 		}
 		

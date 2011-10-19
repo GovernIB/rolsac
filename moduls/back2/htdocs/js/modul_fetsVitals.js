@@ -101,9 +101,11 @@ function CModulFetsVitals(){
 		$("div.modulFetsVitals div.seleccionats div.listaOrdenable input").each(function() {
 			llistaFets += $(this).val() + ",";										
 		});
-		if (llistaFets.length > 0){
-			llistaFets = llistaFets.slice(0, llistaFets.length-1);			 
+
+		if (llistaFets[llistaFets.length-1] == ","){
+			llistaFets = llistaFets.slice(0, -1);
 		}
+		
 		return llistaFets;
 	}
 	
