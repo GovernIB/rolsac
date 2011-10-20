@@ -68,6 +68,61 @@ public class SincronizacionServicio {
 		}
     }
 
+    
+
+    @SuppressWarnings("unchecked")
+	public Long[] recogerIdsFichasUASeccion(final String codEstSecc, final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
+    	log.debug("recogerIdsFichasUASeccion");
+        try{
+            final FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+
+            final List<Ficha> fichas = fichaDelegate.listarFichasSeccionUA(idUA, codEstSecc, codEstHV, codEstMat);
+            Long[] fichasTransArray = null;
+            if(fichas!=null && !fichas.isEmpty()){
+                List<Long> fichasTrans = new ArrayList<Long>();
+                for(final Ficha ficha: fichas){
+                    fichasTrans.add(ficha.getId());
+                }
+                fichasTransArray = fichasTrans.toArray(new Long[0]);
+            }
+            log.debug("recogerIdsFichasUASeccion fin");
+            return fichasTransArray;
+        } catch (Exception e) {
+			log.error("error", e);
+			throw e;
+		}
+    }
+
+
+    public FichaTransferible recogerFicha(final Long idFicha) throws Exception {
+        try{
+            log.debug("recogerFicha");
+            final FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
+            final Ficha ficha = fichaDelegate.obtenerFicha(idFicha);
+
+
+            FichaTransferible fichaTransferible = null;
+            if(ficha!=null){
+                //transformar a transferible
+                fichaTransferible = FichaTransferible.generar(ficha);
+                //obtenemos responsable
+                if(fichaTransferible.getResponsable() == null || fichaTransferible.getResponsable().trim().length()<= 0){
+                    String responsables = obtenerResponsableHistorico(ficha.getId(),"ficha");
+                    if (responsables!=null && responsables.length()>0)fichaTransferible.setResponsable(responsables);
+                }
+
+            }
+            log.debug("recogerFicha fin");
+            return fichaTransferible;
+
+
+        }catch(Exception e){
+           log.error("error", e);
+           throw e;
+        }
+
+
+    }
 
     public UnidadAdministrativaTransferible recogerUnidadAdministrativa(final Long idUA) throws Exception{
     	log.debug("recogerUnidadAdministrativa");
@@ -119,6 +174,64 @@ public class SincronizacionServicio {
 			throw e;
 		}
     }
+
+     @SuppressWarnings("unchecked")
+	public Long[] recogerIdsProcedimientosRelacionados(final Long idUA, final String[] codEstHV, final String[] codEstMat) throws Exception {
+    	log.debug("recogerIdsProcedimientosRelacionados");
+    	try {
+            final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+            final List<Long> procs = procedimientoDelegate.listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
+            Long[] procsTransArray = null;
+
+            if(procs!=null && !procs.isEmpty()){
+
+                final List<Long> procsTrans = new ArrayList<Long>();
+                /*for(final ProcedimientoLocal proc: procs){
+                   final ProcedimientoTransferible procTrans = ProcedimientoTransferible.generar(proc);
+                    *//** Obtengo el responsable del histórico**//*
+                    if(procTrans.getResponsable() == null || procTrans.getResponsable().trim().length()<= 0){
+    					String responsables = obtenerResponsableHistorico(proc.getId(),"procedimiento");
+    					if (responsables!=null && responsables.length()>0)procTrans.setResponsable(responsables);
+    				}
+                    procsTrans.add(proc.getId());
+                }*/
+
+                procsTransArray = procs.toArray(new Long[0]);
+            }
+            log.debug("recogerIdsProcedimientosRelacionados fin");
+            return  procsTransArray;
+        } catch (Exception e) {
+			log.error("error", e);
+			throw e;
+		}
+    }
+
+    public ProcedimientoTransferible recogerProcedimiento(final Long idProc) throws Exception {
+           try{
+               log.debug("recogerProcedimiento");
+               final ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
+               final ProcedimientoLocal procedimiento = procedimientoDelegate.obtenerProcedimiento(idProc);
+
+
+              ProcedimientoTransferible procedimientoTransferible = null;
+               if(procedimiento !=null){
+                   //transformar a transferible
+                   procedimientoTransferible = ProcedimientoTransferible.generar(procedimiento);
+                   //obtenemos responsable
+                   if(procedimientoTransferible.getResponsable() == null || procedimientoTransferible.getResponsable().trim().length()<= 0){
+                       String responsables = obtenerResponsableHistorico(procedimiento.getId(),"procedimiento");
+                       if (responsables!=null && responsables.length()>0)procedimientoTransferible.setResponsable(responsables);
+                   }
+
+               }
+               log.debug("recogerProcedimiento fin");
+               return procedimientoTransferible;
+           }catch(Exception e){
+              log.error("error", e);
+              throw e;
+           }
+       }
+
     
     @SuppressWarnings("unchecked")
 	public EdificioTransferible[] recogerEdificiosRelacionados(final Long idUA) throws Exception {

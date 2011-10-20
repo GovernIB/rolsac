@@ -16,6 +16,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
  * 
  * @author arodrigo
  *
+ * Esta version incluye lo mismos que la version 1 pero en esta ademas se recogen los edificios relacionados
+ * con las diferentes unidades administrativas remotas.
  */
 public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 	

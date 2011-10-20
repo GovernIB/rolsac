@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
@@ -285,6 +286,20 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
 	public List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
         try {
             return getFacade().listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+
+    }
+
+    /* PORMAD */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosPublicosUAHVMateria(java.lang.Long, java.lang.String[], java.lang.String[])
+	 */
+    @SuppressWarnings("unchecked")
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) throws DelegateException {
+        try {
+            return getFacade().listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

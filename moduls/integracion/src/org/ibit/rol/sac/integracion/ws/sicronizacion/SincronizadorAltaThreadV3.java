@@ -12,6 +12,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
  * 
  * @author arodrigo
  *
+ * Esta versión implementa toda la funcionalidad necesaria para adaptarse a los requerimientos de la Ventanilla Unica
+ * de Directiva de Servicios
  */
 public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	
