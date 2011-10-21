@@ -51,6 +51,9 @@ import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -369,9 +372,17 @@ public class NormativaBackController {
 	}
 	
 	@RequestMapping(value = "/guardar.htm", method = POST)
-	public @ResponseBody String guardar(HttpSession session, HttpServletRequest request) {
+	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		
-		//TODO: no permitir paso de normativa externa a local y viceversa
+		/**
+		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
+		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicación. 
+		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
+		 */
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 		
     	Normativa normativa = null;
     	Normativa normativaOld = null; 		
@@ -384,7 +395,7 @@ public class NormativaBackController {
         try {
         	
     		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando todos los parámetros en el map valoresForm y los que son de tipo fichero en ficherosForm.
+    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
@@ -422,38 +433,40 @@ public class NormativaBackController {
 				Long idNorm = ParseUtil.parseLong(valoresForm.get("item_id"));
         		normativaOld = normativaDelegate.obtenerNormativa(idNorm);
         		
-        		//Comprobar permisos
+        		//Comprobar permisos para modificar normativa
             	if (!normativaDelegate.autorizaModificarNormativa(normativaOld.getId())) {
-            		//throw new SecurityException("Aviso: No tiene privilegios para modificar la normativa");
-            		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
             	
             	//Comprobar que si la normativa es local se ha indicado UA y que si es externa no se ha hecho
             	if (NormativaLocal.class.isInstance(normativaOld) && ua == null) {
-            		return (new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()))).getJson();
+    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
+    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	} else if (NormativaExterna.class.isInstance(normativaOld) && ua != null) {
-            		return (new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()))).getJson();
+    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
+    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
             	
-            	//Comprobar si se ha cambiado la validacion siendo operador
+            	//Comprobar que no se haya cambiado la validacion siendo operador
             	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
-            		return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);            	
             	}
-            		
         		
         		normativa.setAfectadas(normativaOld.getAfectadas());
         		normativa.setAfectantes(normativaOld.getAfectantes());        		
         		normativa.setProcedimientos(normativaOld.getProcedimientos());
         		normativa.setId(idNorm);
         	} else {
-        		//Comprobar permisos
+        		//Comprobar permisos de creación
             	if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
-            		//throw new SecurityException("Aviso: No tiene privilegios para crear una normativa pública");            		
-    				return (new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()))).getJson();
+    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
         	}
         	
-        	//Campos por idioma
+        	//Obtener campos por idioma
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	for (String idioma : idiomas) {
         		TraduccionNormativa traNorm = normativaOld != null ? (TraduccionNormativa)normativaOld.getTraduccion(idioma) : null;
@@ -489,7 +502,7 @@ public class NormativaBackController {
         		//Archivo
         		FileItem fileItem = ficherosForm.get("item_arxiu_" + idioma);
         		if ( fileItem.getSize() > 0 ) {
-        			traNorm.setArchivo(obtenerArchivo(traNorm.getArchivo(), fileItem));
+        			traNorm.setArchivo(UploadUtil.obtenerArchivo(traNorm.getArchivo(), fileItem));
         		} else
         		//borrar fichero si se solicita
         		if (valoresForm.get("item_arxiu_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_arxiu_" + idioma + "_delete"))){
@@ -497,7 +510,7 @@ public class NormativaBackController {
         		}
         	}
 
-        	//Los demás campos
+        	//Obtener los demás campos
         	if (valoresForm.get("item_numero") != null && !"".equals(valoresForm.get("item_numero")))
         		normativa.setNumero(ParseUtil.parseLong(valoresForm.get("item_numero")));
 
@@ -524,19 +537,20 @@ public class NormativaBackController {
         	if (valoresForm.get("item_validacio") != null && !"".equals(valoresForm.get("item_validacio")))
         		normativa.setValidacion(ParseUtil.parseInt(valoresForm.get("item_validacio")));
 
-        	//Boletín
         	if (valoresForm.get("item_butlleti_id") != null && !"".equals(valoresForm.get("item_butlleti_id"))) {
         		Boletin boletin = DelegateUtil.getBoletinDelegate().obtenerBoletin(ParseUtil.parseLong(valoresForm.get("item_butlleti_id")));
         		normativa.setBoletin(boletin);
         	}
 
+        	//Guardar
         	if (normativaLocal) {
         		normativaDelegate.grabarNormativaLocal((NormativaLocal)normativa, ua.getId());
         	} else {
         		normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
         	}
         	
-    		//Afectaciones
+        	
+    		//Gestionar afectaciones
     		ObjectMapper mapper = new ObjectMapper();    	
     		String jsonAfectaciones = valoresForm.get("afectaciones");
     		AfectacionesTransient afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesTransient.class);
@@ -546,7 +560,7 @@ public class NormativaBackController {
     			Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
     			for (Afectacion afectacionOld : listaActualAfectaciones) {
     				
-    				//Buscar la afectación en la lista nueva
+    				//Buscar la afectación afectacionOld en la lista nueva recibida en el post
     				boolean estaEnLaListaNueva = false;
     				for (AfectacionTransient afectacionNew : afectaciones.getListaAfectaciones()) {
     					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
@@ -562,15 +576,13 @@ public class NormativaBackController {
     			}
     		}
     		
-    		//Establecer las afectaciones indicadas en la pantalla
+    		//Añadir afectaciones
 			for (AfectacionTransient afectacion : afectaciones.getListaAfectaciones()) {
 				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
 			}         	
         	
-
-        	String ok = messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale());
-        	result = new IdNomTransient(normativa.getId(), ok);
-        	
+			//Finalizado correctamente
+        	result = new IdNomTransient(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
         	
         } catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -602,13 +614,12 @@ public class NormativaBackController {
 			e.printStackTrace();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomTransient(-2l, error);			
 			e.printStackTrace();
 		}
-						
-		//Si en el caso de multipart no lo hacemos manualmente da problemas en el navegador, 
-		//pues la respuesta intenta guardarla como una nueva página html.
-		return result.getJson();
+		
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 	}
 
 
@@ -776,21 +787,6 @@ public class NormativaBackController {
 	}
 	
 	
-	/**
-	 * Convierte el objeto FileItem al objeto Archivo.
-	 * @param archivo Objeto Archivo.
-	 * @param fileItem Objeto FileItem.
-	 * @return Objeto Archivo.
-	 */
-	private Archivo obtenerArchivo(Archivo archivo, FileItem fileItem) {
-		if (archivo == null)
-			archivo = new Archivo();
-		
-		archivo.setMime(fileItem.getContentType());
-		archivo.setPeso(fileItem.getSize());
-		archivo.setNombre(fileItem.getName());        			
-		archivo.setDatos(fileItem.get());
-		return archivo;
-	}
+
 
 }

@@ -2,8 +2,10 @@ package es.caib.rolsac.back2.util;
 
 import java.io.File;
 
+import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.ibit.rol.sac.model.Archivo;
 
 public class UploadUtil {
 
@@ -25,6 +27,33 @@ public class UploadUtil {
 		upload.setSizeMax(MAX_FILE_SIZE);
 		
 		return upload;
+	}	
+	
+	/**
+	 * Convierte el objeto FileItem al objeto Archivo.
+	 * @param archivo Objeto Archivo.
+	 * @param fileItem Objeto FileItem.
+	 * @return Objeto Archivo.
+	 */
+	public static Archivo obtenerArchivo(Archivo archivo, FileItem fileItem) {
+		if (archivo == null)
+			archivo = new Archivo();
+		
+		
+		String nombre = fileItem.getName();
+		
+		//Retiramos posible ruta incluida en el nombre
+		int sep = nombre.lastIndexOf('\\');
+		if (sep < 0)
+			sep = nombre.lastIndexOf('/');
+				
+		nombre = nombre.substring(sep + 1);
+		
+		archivo.setMime(fileItem.getContentType());
+		archivo.setPeso(fileItem.getSize());
+		archivo.setNombre(nombre);        			
+		archivo.setDatos(fileItem.get());
+		return archivo;
 	}	
 
 }

@@ -12,7 +12,7 @@
     <link href="<c:url value='/css/menu.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/submenu.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/jquery-ui.css'/>" rel="stylesheet" type="text/css"/> 
-    <script type="text/javascript" src="<c:url value='/js/jquery-1.4.2.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>

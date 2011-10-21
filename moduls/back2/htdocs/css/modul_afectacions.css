@@ -20,8 +20,8 @@ div.modulAfectacions div.seleccionats p.info { margin-top:0; }
 #escriptori_afectacions div.botonera ul li.e { float:right !important; padding-right:2em; }
 
 #escriptori_afectacions div.dalt { margin-top:2em; }
-#escriptori_afectacions div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../imgs/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
-#escriptori_afectacions div.rabillo { clear:both; height:1em; /*background:transparent url(../imgs/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
+#escriptori_afectacions div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
+#escriptori_afectacions div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
 
 /* escriptori llistat */
 
@@ -39,9 +39,9 @@ div.escriptori_items_cercador div.t18 { width:18em; }
 div.escriptori_items_cercador div.t18 input, #cercador div.t18 select { width:17em; }
 div.escriptori_items_cercador div.botonera { text-align:center; background-color:#ccd7e2 !important; }
 
-#escriptori_afectacions div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../imgs/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+#escriptori_afectacions div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
 
-div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../imgs/executant.gif) no-repeat 1em 50%; }
+div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }
 div.escriptori_items_llistat div.dades p.info { margin-top:1.5em; }
 
 div.normativa div.thead div.titol { width:26em; padding-left:5em; }
@@ -52,11 +52,11 @@ div.normativa div.thead div.titol a { width:25em; }
 div.normativa div.thead div.numero a { width:8em; }
 div.normativa div.thead div.data a { width:8em; }
 
-div.normativa div.tbody div.titol { width:25em; padding-bottom:1em; padding-left:5.5em; background:transparent url(../imgs/taula_llistat/fitxa.gif) no-repeat 2em .8em; }
+div.normativa div.tbody div.titol { width:25em; padding-bottom:1em; background:transparent url(../img/taula_llistat/fitxa.gif) no-repeat 0 0; }
 div.normativa div.tbody div.numero { width:8em; }
 div.normativa div.tbody div.data { width:8em; }
 
-div.normativa div.tbody div.titol a, div.llistat div.tbody div.titol span { font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
+div.normativa div.tbody div.titol a, div.llistat div.tbody div.titol span { padding-left: 1.5em; font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
 div.normativa div.tbody div.td span.titol { font-style:italic; }
 
 div.escriptori_items_llistat p.paginacio { text-align:center; padding:.5em 1em; background-color:#ffecd9; }

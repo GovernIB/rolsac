@@ -26,18 +26,17 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	if (typeof idBtnBuscadorForm == "undefined" || idBtnBuscadorForm == "") idBtnBuscadorForm = "#btnBuscarForm";
 	if (typeof idBtnLimpiarForm == "undefined" || idBtnLimpiarForm == "") idBtnLimpiarForm = "#btnLimpiarForm";
 
-	
 	// Anadir los "#" por comodidad.
 	var ID_MARK = "#";
-	if (idOpciones[0] != ID_MARK) idOpciones = ID_MARK + idOpciones;
-	if (idResultados[0] != ID_MARK) idResultados = ID_MARK + idResultados;
-	if (idBuscador[0] != ID_MARK) idBuscador = ID_MARK + idBuscador;
-	if (idBuscadorContenido[0] != ID_MARK) idBuscadorContenido = ID_MARK + idBuscadorContenido;
-	if (idTabListado[0] != ID_MARK) idTabListado = ID_MARK + idTabListado;
-	if (idTabBuscador[0] != ID_MARK) idTabBuscador = ID_MARK + idTabBuscador;
-	if (idBtnNuevo[0] != ID_MARK) idBtnNuevo = ID_MARK + idBtnNuevo;
-	if (idBtnBuscadorForm[0] != ID_MARK) idBtnBuscadorForm = ID_MARK + 	idBtnBuscadorForm;
-	if (idBtnLimpiarForm[0] != ID_MARK) idBtnLimpiarForm = ID_MARK + idBtnLimpiarForm;
+	if (idOpciones.substring(0,1) != ID_MARK) idOpciones = ID_MARK + idOpciones;
+	if (idResultados.substring(0,1) != ID_MARK) idResultados = ID_MARK + idResultados;
+	if (idBuscador.substring(0,1) != ID_MARK) idBuscador = ID_MARK + idBuscador;
+	if (idBuscadorContenido.substring(0,1) != ID_MARK) idBuscadorContenido = ID_MARK + idBuscadorContenido;
+	if (idTabListado.substring(0,1) != ID_MARK) idTabListado = ID_MARK + idTabListado;
+	if (idTabBuscador.substring(0,1) != ID_MARK) idTabBuscador = ID_MARK + idTabBuscador;
+	if (idBtnNuevo.substring(0,1) != ID_MARK) idBtnNuevo = ID_MARK + idBtnNuevo;
+	if (idBtnBuscadorForm.substring(0,1) != ID_MARK) idBtnBuscadorForm = ID_MARK + 	idBtnBuscadorForm;
+	if (idBtnLimpiarForm.substring(0,1) != ID_MARK) idBtnLimpiarForm = ID_MARK + idBtnLimpiarForm;
 	
 	
 	var that = this;
@@ -46,10 +45,8 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	// Atributo que contiene el id del elemento que se está visualizando en la ficha.
 	this.itemID;
 	
-	
 	var resultats_elm = jQuery(idResultados);
 	var cercador_elm = jQuery(idBuscador);
-	
 	
 	/**
 	 * Marca la cache como nula para forzar a que se vuelve a actualizar.

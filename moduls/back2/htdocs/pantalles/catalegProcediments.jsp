@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
-<script type="text/javascript" src="<c:url value='/js/jquery-1.4.2.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>

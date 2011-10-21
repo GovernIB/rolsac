@@ -358,13 +358,6 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
-		// dates
-		//$("#item_data").mask("99/99/9999").datepicker({ altField: '#actualDate' });
-		//$("#item_data_publicacio").bind("blur",Detall.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		
-		//$("#item_data_butlleti").mask("99/99/9999");
-		//$("#item_data").mask("99/99/9999");
-		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
@@ -388,15 +381,10 @@ function CDetall(){
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
-									
-		// modul tipologia
-		//$("#item_tipologia").bind("change",Detall.tipologia);
 		
 		// altres moduls
 		modulAfectacions_pare_elm = $("#modulLateral div.modulAfectacions").parents("div.modul:first");
 		modulProcediments_pare_elm = $("#modulLateral div.modulProcediments").parents("div.modul:first");
-		
-		//TODO máscaras campos			
 	},
 	
 
@@ -414,7 +402,8 @@ function CDetall(){
 		}
 		
 		
-		//Preparar los datos de afectaciones relacionadas
+		//Preparar los datos de afectaciones relacionadas.
+		//Crear un JSON con la lista de afectaciones.
 		var listaAfectaciones = "{\"listaAfectaciones\" : [";
 		var sep = "";
 		$("div.modulAfectacions").find("li").each(function() {
@@ -436,7 +425,8 @@ function CDetall(){
 			beforeSubmit: function() {
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 			},
-			success: function(data) {				
+			success: function(data) {
+							
 				Llistat.cacheDatosListado = null;
 				
 				if (data.id < 0) {
@@ -546,8 +536,6 @@ function CDetall(){
 	
 	this.pintar = function(dades) {	
 		
-		//escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
-		
 		$("#modul_procediments, #modul_afectacions").show();
 		
 		$("#modulLateral li.btnEliminar").show();
@@ -561,7 +549,6 @@ function CDetall(){
 		$("#item_tipologia").val(dada_node.tipologia);
 		$("#item_validacio").val(dada_node.validacio);
 		
-		//$("#item_estat").val("R");
 				
 		for (var i in idiomas) {		
 			var idioma = idiomas[i];
@@ -592,7 +579,6 @@ function CDetall(){
 			}			
 			
 		}
-	
 		
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
