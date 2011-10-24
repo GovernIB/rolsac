@@ -1,18 +1,11 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.*;
 import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.expression.Expression;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocCollector;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.ibit.lucene.analysis.AlemanAnalyzer;
 import org.ibit.lucene.analysis.CastellanoAnalyzer;
 import org.ibit.lucene.analysis.CatalanAnalyzer;
@@ -25,13 +18,12 @@ import org.ibit.rol.sac.model.ws.FichaUATransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -56,13 +48,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	protected Hashtable contenidos_web; // contiene url y su contenido para agilizar el proceso de indexacion de fichas
 	
     /**
-     * Obtiene referéncia al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
 
     /**
-     * Ubicació del directori de Lucene a emprar.
+     * Ubicaciï¿½ del directori de Lucene a emprar.
      * @ejb.env-entry value="${index.crawler.location}"
      */
     protected String indexCrawlerLocation;
@@ -76,7 +68,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Autoriza la creación de una ficha
+     * Autoriza la creaciï¿½n de una ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -86,7 +78,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     
         
     /**
-     * Autoriza la modificación ficha
+     * Autoriza la modificaciï¿½n ficha
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -105,7 +97,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         	Date FechaActualizacionBD = new Date();
             if (ficha.getId() == null) {
                 if (ficha.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear una ficha pública");
+                    throw new SecurityException("No puede crear una ficha pï¿½blica");
                 }
             } else {
                 if (!getAccesoManager().tieneAccesoFicha(ficha.getId())) {
@@ -114,7 +106,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	Ficha fichaBD = obtenerFicha(ficha.getId());
             	FechaActualizacionBD = fichaBD.getFechaActualizacion();            	
             }
-            /* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/
+            /* Se alimenta la fecha de actualizaciï¿½n de forma automï¿½tica si no se ha introducido dato*/
             if (ficha.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD,ficha.getFechaActualizacion())) {
             	ficha.setFechaActualizacion(new Date());
             }        	            
@@ -877,7 +869,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     /**
      * Crea o actualiza una FichaUA
-     * Esta ficha será la que tenga el orden 0 
+     * Esta ficha serï¿½ la que tenga el orden 0 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -905,7 +897,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
             Seccion seccion = (Seccion) session.load(Seccion.class, seccion_id);
             if (!getAccesoManager().tieneAccesoSeccion(seccion_id)) {
-                throw new SecurityException("No tiene acceso a la sección");
+                throw new SecurityException("No tiene acceso a la secciï¿½n");
             }
             
             // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
@@ -936,7 +928,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-                throw new SecurityException("No tiene acceso a la relación");
+                throw new SecurityException("No tiene acceso a la relaciï¿½n");
             }
             FichaUA ficha1 = (FichaUA) session.load(FichaUA.class, id);
             UnidadAdministrativa unidad = ficha1.getUnidadAdministrativa();
@@ -979,7 +971,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza los ordenes de las fichas de una sección de una Unidad administrativa
+     * Actualiza los ordenes de las fichas de una secciï¿½n de una Unidad administrativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -1001,7 +993,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             		valor_orden= Integer.parseInt(parametros[0]);
             		
             		if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-            			throw new SecurityException("No tiene acceso a la relación");
+            			throw new SecurityException("No tiene acceso a la relaciï¿½n");
             		}
             		FichaUA ficha = (FichaUA) session.load(FichaUA.class, id);
 
@@ -1047,7 +1039,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-                throw new SecurityException("No tiene acceso a la relación");
+                throw new SecurityException("No tiene acceso a la relaciï¿½n");
             }
             FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, id);
             final  Long idFicha = fichaUA.getFicha().getId();
@@ -1326,7 +1318,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 						if (fichaua.getSeccion().getTraduccion(idioma)!=null)
 			        		txtexto+=((TraduccionSeccion)fichaua.getSeccion().getTraduccion(idioma)).getNombre()+" ";
 			        	if (primer) {
-			        		//como titulo del servicio principal ponemos únicamente la primera seccion que pillamos
+			        		//como titulo del servicio principal ponemos ï¿½nicamente la primera seccion que pillamos
 			        		String txUA = "";
 			        		String txSeccion = "";
 			        		String txMaintitle = "";
@@ -1407,7 +1399,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Añade la ficha al indice en todos los idiomas
+     * Aï¿½ade la ficha al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1450,7 +1442,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            		
 	            		if (trad.getUrl().startsWith("http") || trad.getUrl().startsWith("/") ) {
 	            			//El servidor no tiene acceso a internet para realizar esta tarea
-	            			//Toni comenta que esto no es necesario ya que con la información de la ficha es suficiente
+	            			//Toni comenta que esto no es necesario ya que con la informaciï¿½n de la ficha es suficiente
 	            			//indexBorraWEB_EXTERNA (ficha, idi);
 	            			//indexInsertaWEB_EXTERNA (ficha, filter, idi);
 	            		}
@@ -1484,7 +1476,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            	
 	            }
 
-	            //No:Se añaden todos los documentos en todos los idiomas. 
+	            //No:Se aï¿½aden todos los documentos en todos los idiomas. 
 	            //Ahora en el idioma actual.
 	            if (ficha.getDocumentos()!=null) {
 		            Iterator iterdocs = ficha.getDocumentos().iterator();
@@ -1497,8 +1489,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		            	}
 				
 		            	
-		            	// Se crea la indexación del documento individual y se añade la información 
-		            	// para la indexación de la ficha.
+		            	// Se crea la indexaciï¿½n del documento individual y se aï¿½ade la informaciï¿½n 
+		            	// para la indexaciï¿½n de la ficha.
 							IndexObject ioDoc = new IndexObject();
 			            	String textDoc = null;								
 			            	//ioDoc.addArchivo((Archivo)documento.getArchivo());
@@ -1546,8 +1538,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		            }
 	            }
 
-            	// Se crea la indexación del foro como documento individual y se añade la información 
-            	// para la indexación de la ficha.
+            	// Se crea la indexaciï¿½n del foro como documento individual y se aï¿½ade la informaciï¿½n 
+            	// para la indexaciï¿½n de la ficha.
             	if (ficha.getUrlForo()!=null && ficha.getUrlForo().length() > 0) {
 					io.setConforo("S");
             	} else 
@@ -1592,8 +1584,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 
     /**
-     * Añade la URL externa para un idioma, obteniendola de la ficha
-     * El id de la URL será el id de la ficha
+     * Aï¿½ade la URL externa para un idioma, obteniendola de la ficha
+     * El id de la URL serï¿½ el id de la ficha
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1716,8 +1708,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 	    	
 	    } catch (MalformedURLException e) {
-	      System.out.println("La URL no es válida: "+ laurl+ " "+e);
-	      contenidos_web.put(laurl, new String("La URL no es válida"));
+	      System.out.println("La URL no es vï¿½lida: "+ laurl+ " "+e);
+	      contenidos_web.put(laurl, new String("La URL no es vï¿½lida"));
 	    } catch (IOException e) {
 	      System.out.println("No puedo conectar con "+ laurl+ " "+e);
 	      contenidos_web.put(laurl, new String("No puedo conectar"));
@@ -1903,10 +1895,17 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 log.debug("Buscando por: " + busqueda+" en el path: "+index);
                 
                 IndexSearcher is   = new IndexSearcher(index);
-                QueryParser parser = new QueryParser("contents", getAnalizador(idioma));
-                org.apache.lucene.search.Query query = parser.parse(busqueda);
+                BooleanQuery booleanQuery = new BooleanQuery();
+                
+                QueryParser parser1 = new QueryParser("contents", getAnalizador(idioma));
+                org.apache.lucene.search.Query query1 = parser1.parse(busqueda);
+                QueryParser parser2 = new QueryParser("title", getAnalizador(idioma));
+                org.apache.lucene.search.Query query2 = parser2.parse(busqueda);
+                booleanQuery.add(query1, BooleanClause.Occur.SHOULD);
+                booleanQuery.add(query2, BooleanClause.Occur.SHOULD);
+                
                 TopDocCollector collector = new TopDocCollector(max);
-                is.search(query, collector);
+                is.search(booleanQuery, collector);
                 TopDocs topDocs = collector.topDocs();
                 ScoreDoc[] hits = topDocs.scoreDocs;
 
@@ -1919,12 +1918,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     String tituloURL = is.doc(hits[i].doc).getField("title").stringValue();
                     String idFicha = is.doc(hits[i].doc).getField("idFicha").stringValue();
                     String modified = is.doc(hits[i].doc).getField("timestamp").stringValue();
-                    //log.debug("No " + (i+1) + " with relevance " + relevance + "% : "+ url+ " (" + modified + ')');
-                    //log.debug("IdFicha : "+idFicha);
-                    //log.debug("Titulo : "+tituloURL);
+                    
                     Ficha ficha = obtenerFicha(Long.valueOf(idFicha));
                     if(ficha.getFechaPublicacion()!=null &&dataInici!=null&&dataFi!=null){
-                    	log.debug("Buscada Crawler entre fechas: Fecha Publicación: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
+                    	log.debug("Buscada Crawler entre fechas: Fecha Publicaciï¿½n: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
                     	if(ficha.getFechaPublicacion().before(dataFi)&&ficha.getFechaPublicacion().after(dataInici)){
                     		fichaCrawler.setTituloURL(tituloURL);
                             fichaCrawler.setURL(url);
