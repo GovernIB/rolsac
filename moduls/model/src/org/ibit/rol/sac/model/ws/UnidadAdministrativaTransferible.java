@@ -39,6 +39,7 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     private String telefono;
     private String fax;
     private String email;
+    private int nivel;
     
     private Integer sexoResponsable;
     private ArchivoTransferible fotop;
@@ -248,6 +249,13 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     	this.edificiosTransferibles = edificiosTransferibles;
     }
     
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
     
     //Funciones Extra
     
