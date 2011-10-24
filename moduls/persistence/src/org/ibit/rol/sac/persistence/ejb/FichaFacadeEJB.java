@@ -1,22 +1,11 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.*;
 import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.FetchMode;
 import net.sf.hibernate.expression.Expression;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocCollector;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.ibit.lucene.analysis.AlemanAnalyzer;
 import org.ibit.lucene.analysis.CastellanoAnalyzer;
 import org.ibit.lucene.analysis.CatalanAnalyzer;
@@ -29,13 +18,12 @@ import org.ibit.rol.sac.model.ws.FichaUATransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -1162,7 +1150,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             indexBorraFicha(ficha.getId());
             indexInsertaFicha(ficha,null);
             if(borrar)
-                log.info("Entro en borrar remoto ficha UA");
+                log.debug("Entro en borrar remoto ficha UA");
             	Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1995,7 +1983,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	resultado =  new ArrayList<FichaCrawler>();
             	
                 int max = 100;
-                log.info("Buscando por: " + busqueda+" en el path: "+index);
+                log.debug("Buscando por: " + busqueda+" en el path: "+index);
                 
                 IndexSearcher is   = new IndexSearcher(index);
                 BooleanQuery booleanQuery = new BooleanQuery();
@@ -2012,7 +2000,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 TopDocs topDocs = collector.topDocs();
                 ScoreDoc[] hits = topDocs.scoreDocs;
 
-                log.info(" results: " + hits.length + " of total " + topDocs.totalHits);
+                log.debug(" results: " + hits.length + " of total " + topDocs.totalHits);
 
                 for (int i = 0; i < hits.length; i++) {
                 	FichaCrawler fichaCrawler=new FichaCrawler();
@@ -2024,7 +2012,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     
                     Ficha ficha = obtenerFicha(Long.valueOf(idFicha));
                     if(ficha.getFechaPublicacion()!=null &&dataInici!=null&&dataFi!=null){
-                    	log.info("Buscada Crawler entre fechas: Fecha Publicacion: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
+                    	log.debug("Buscada Crawler entre fechas: Fecha Publicacion: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
                     	if(ficha.getFechaPublicacion().before(dataFi)&&ficha.getFechaPublicacion().after(dataInici)){
                     		fichaCrawler.setTituloURL(tituloURL);
                             fichaCrawler.setURL(url);
