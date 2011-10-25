@@ -7,6 +7,8 @@ public class ActuacionTransferible {
 	}
 
 	protected String establecerIdEnUrl(String id, String url) {
+		if(null==url) return null;
+
 		return url.replaceAll("%id%", id);
 	}
 	
