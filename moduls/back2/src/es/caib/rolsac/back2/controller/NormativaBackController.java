@@ -26,7 +26,6 @@ import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.ibit.rol.sac.model.Afectacion;
-import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Boletin;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
@@ -750,7 +749,8 @@ public class NormativaBackController {
 								normativa.getId() != null ? normativa.getId().longValue() : 0, 
 								normativa.getNumero() != null ? normativa.getNumero().longValue() : 0, 
 								titulo, 
-								normativa.getFecha(), 
+								normativa.getFecha(),
+								normativa.getFechaBoletin(),
 								tipus,
 								local ? "Local" : "Externa")
 					);

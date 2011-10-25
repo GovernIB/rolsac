@@ -26,8 +26,7 @@ $(document).ready(function() {
 	escriptori_detall_elm = $("#escriptori_detall");
 	//escriptori_previsualitza_elm = $("#escriptori_previsualitza");	
 	
-	Error = new CError();	
-	//Docs = new CDocs();
+	Error = new CError();
 	Llistat = new CLlistat();	
 	Detall = new CDetall();
 	
@@ -42,7 +41,7 @@ $(document).ready(function() {
 			$("#tipoNormativa").text(txtNormativaExterna);
 		}
 	});
-	
+
 	//$.suggeriments();
 });
 
@@ -69,9 +68,9 @@ function CLlistat(){
 	this.extend = ListadoBase;		
 	this.extend();
 	
-	this.iniciar = function() {		
-		$("#cerca_data").mask("99/99/9999");
-		$("#cerca_data_butlleti").mask("99/99/9999");		
+	this.iniciar = function() {
+		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
+		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
 		
 		Llistat.carregar({});		
 	}
@@ -116,7 +115,7 @@ function CLlistat(){
 			
 			if (resultats_total > 1) {
 			
-				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
+				txt_ordenats = (ordre_T == "ASC") ? txtOrdenades + " <em>" + txtAscendentment + "</em>" : txtOrdenades + " <em>" + txtDescendentment + "</em>";
 				
 				if (ordre_C == "titol") {
 					txt_per = txtLlistaItem;
@@ -132,7 +131,7 @@ function CLlistat(){
 			
 			}
 			
-			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
 			//De momento no habrá ordenación
 			/*
@@ -161,7 +160,6 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			//$(data.json.data.nodes).each(function(i) {
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
@@ -216,12 +214,7 @@ function CLlistat(){
 			
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
-			
-				// events
-				/*if (escriptori_contingut_elm.css("display") != "none") {
-					escriptori_contingut_elm.bind("click",Llistat.llansar);
-				}*/
-				
+							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
 					cercador_elm.find("input, select").removeAttr("disabled");
@@ -267,7 +260,6 @@ function CLlistat(){
 			ordreCamp_elm = ordreCamp_llistat_elm;
 			
 			// cercador			
-			
 			dataVars_cercador = "&idUA=" + $("#cerca_ua_id").val();
 			
 		}
@@ -282,7 +274,6 @@ function CLlistat(){
 		}
 			
 		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
@@ -324,9 +315,7 @@ function CLlistat(){
 	}
 	
 	this.busca = function(){
-		// desactivem taula
-		//escriptori_contingut_elm.attr('aria-disabled', 'true').unbind("click",Llistat.llansar);
-		
+
 		cercador_elm.find("input, select").attr("disabled", "disabled");
 		
 		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
@@ -400,10 +389,11 @@ function CDetall(){
 				return false;
 			}
 		}
-		
+	
 		
 		//Preparar los datos de afectaciones relacionadas.
 		//Crear un JSON con la lista de afectaciones.
+		/*
 		var listaAfectaciones = "{\"listaAfectaciones\" : [";
 		var sep = "";
 		$("div.modulAfectacions").find("li").each(function() {
@@ -415,7 +405,11 @@ function CDetall(){
 			sep=",";
 		});
 		listaAfectaciones += "]}";
+		
 		$("#afectaciones").val(listaAfectaciones);
+		*/
+		
+		$("#afectaciones").val( ModulAfectacions.jsonAfectacions() );
 		
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
@@ -500,8 +494,6 @@ function CDetall(){
 		//Ocultar paneles
 		$("#modul_procediments, #modul_afectacions").hide();
 				
-		//escriptori_detall_elm.find("a.elimina, a.previsualitza").find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
-		//escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);		
 
@@ -518,16 +510,13 @@ function CDetall(){
 				
 		$("#modulLateral p.baix:first").removeClass("iPublicat");
 		
-		//$("#item_tipologia").val($("#item_tipologia option:eq(0)").val());
-		
+
 		$("#gestioTraspas").hide();
 		modulAfectacions_pare_elm.show();
 		modulProcediments_pare_elm.show();
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
-				// activar
-				//escriptori_detall_elm.bind("click", Detall.llansar);
 				itemID_ultim = 0;
 			});
 		});
@@ -576,8 +565,7 @@ function CDetall(){
 				$("#grup_arxiu_actual_" + idioma + " input").hide();
 				$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
 				$("#grup_arxiu_actual_" + idioma + " a").hide();			
-			}			
-			
+			}						
 		}
 		
 		$("#item_numero").val(nn(dada_node.numero));
@@ -606,40 +594,19 @@ function CDetall(){
 			modulAfectacions_pare_elm.show();
 			modulProcediments_pare_elm.show();
 			
-			// afectacions
-			afecta_seleccionats_elm = escriptori_detall_elm.find("div.modulAfectacions div.seleccionats");
-			afecta_nodes = dada_node.afectacions;
-			afecta_nodes_size = afecta_nodes.length;
 			
-			if (afecta_nodes_size == 0) {
-				afecta_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaAfectacions + ".");
-			} else {
-				codi_afecta = "<ul>";
-				$(afecta_nodes).each(function() {
-					afectacio_node = this;
-					codi_afecta += "<li>";
-					codi_afecta += "<input type=\"hidden\" value=\"" + afectacio_node.afectacioId + "\" class=\"afectacio\" />";
-					codi_afecta += "<input type=\"hidden\" value=\"" + afectacio_node.normaId + "\" class=\"norma\" />";
-					codi_afecta += afectacio_node.afectacioNom + ", " + txtAmbLaNorma + " <em>" + afectacio_node.normaNom + "</em>";
-					codi_afecta += "</li>";
-				});
-				codi_afecta += "</ul>";
-				txt_afectacions = (afecta_nodes_size == 1) ? txtAfectacio : txtAfectacions;
-				afecta_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + afecta_nodes_size + " " + txt_afectacions.toLowerCase() + "</strong>.").after(codi_afecta);
-				/*
-				if (afecta_nodes_size > 1) {
-					afecta_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
-				}
-				*/
-			}
+			// afectacions
+			ModulAfectacions.inicializarAfectacions(dada_node.afectacions);
+			
 			
 			// procediments
-			pro_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.seleccionats");
+			pro_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.listaOrdenable");
 			pro_nodes = dada_node.procediments;
 			pro_nodes_size = pro_nodes.length;
 			
-			if (pro_nodes_size == 0) {
-				pro_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaProcediments + ".");
+			if (pro_nodes_size == 0) {				
+				escriptori_detall_elm.find("div.modulProcediments p.info").text(txtNoHiHaProcediments + ".");
+				pro_seleccionats_elm.html("");				
 			} else {
 				codi_pro = "<ul>";
 				$(pro_nodes).each(function() {
@@ -648,7 +615,9 @@ function CDetall(){
 				});
 				codi_pro += "</ul>";
 				txt_procediments = (pro_nodes_size == 1) ? txtProcediment : txtProcediments;
-				pro_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + pro_nodes_size + " " + txt_procediments + "</strong>.").after(codi_pro);
+				//pro_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + pro_nodes_size + " " + txt_procediments + "</strong>.").after(codi_pro);
+				escriptori_detall_elm.find("div.modulProcediments p.info").html(txtHiHa + " <strong>" + pro_nodes_size + " " + txt_procediments + "</strong>.");
+				pro_seleccionats_elm.html(codi_pro);
 				if (pro_nodes_size > 1) {
 					//pro_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
 				}
@@ -666,20 +635,14 @@ function CDetall(){
 				// array
 				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
 				
-				escriptori_detall_elm.fadeIn(300, function() {
-					// activar
-					//escriptori_detall_elm.bind("click", Detall.llansar);
-				});
+				escriptori_detall_elm.fadeIn(300);
 											
 			});
 			
 		} else {
 			
 			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300, function() {
-					// activar
-					//escriptori_detall_elm.bind("click", Detall.llansar);
-				});
+				escriptori_detall_elm.fadeIn(300);
 			});
 		
 		}
@@ -701,10 +664,7 @@ function CDetall(){
 	}
 	
 	this.elimina = function() {
-		
-		// missatge
-		//Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});				
-														
+												
 		dataVars = "accio=eliminar&id=" + Llistat.itemID;
 				
 		// ajax
@@ -743,347 +703,6 @@ function CDetall(){
 			}
 		});			
 	}
-	/*
-	this.previsualitza = function() {
-		
-		escriptori_detall_elm.fadeOut(300, function() {
-			
-			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
-			fitxa_ID = escriptori_detall_elm.find("#item_id").val();
-			
-			previsualitza_url = "http://www.caib.es/govern/sac/fitxa.do?lang=" + fitxa_idiomaSeleccionat + "&codi=636513"; //+ fitxa_ID;
-			
-			escriptori_previsualitza_elm.find("iframe").attr("src", previsualitza_url).end().fadeIn(300, function() {
-			
-				$(this).find("a.dePrevisualitzar").one("click", Detall.previsualitzaTorna);
-			
-			});
-		
-		});
-		
-	}
-	
-	this.previsualitzaTorna = function() {
-		
-		escriptori_previsualitza_elm.fadeOut(300, function() {
-		
-			escriptori_detall_elm.fadeIn(300, function() {
-				//escriptori_detall_elm.bind("click", Detall.llansar);
-			});
-		
-		});
-		
-	}
-	*/	
 };
 
-/*
-// documents
-var Docs = {
-	iniciar: function() {
-		
-		docs_elm = $("div.documentsRelacionats");
-		docs_table_existix = false;
-		
-		docs_elm.bind("click",Docs.llansar);
-		
-		codi_table_docs = "<div class=\"table llistat docs\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_docs += "<div class=\"thead\">";
-		codi_table_docs += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th nom\">" + txtNom + "</div>";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th arxiu\">" + txtArxiu + "</div>";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "<div class=\"tbody\">";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		
-		return codi_table_docs;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("doc"))) {
-			
-			docs_elm.unbind("click",Docs.llansar);
-			
-			A_elm = elm.parents("a:first");
-			doc_elm = elm.parents("div.documentsRelacionats:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (doc_elm.find("div.table").size() == 0) {
-			
-					elm.parents("p:first").before(codi_table_docs);
-					
-					docs_table_elm = doc_elm.find("div.table:first");
-					docs_table_tbody_elm = docs_table_elm.find("div.tbody");
-					
-					docs_table_existix = true;
-					
-				}
-				
-				tr_num = docs_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_docs = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_docs += "<div role=\"gridcell\" class=\"td nom\">";
-				codi_docs += "<input name=\"doc\" type=\"text\" />";
-				codi_docs += "</div>";
-				codi_docs += "<div role=\"gridcell\" class=\"td arxiu\">";
-				codi_docs += "<input name=\"doc\" type=\"file\" />";
-				codi_docs += "</div>";
-				codi_docs += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_docs += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_docs += "</div>";
-				codi_docs += "</div>";
-				
-				docs_table_tbody_elm.append(codi_docs);
-				docs_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = docs_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						docs_table_elm.slideUp(300,function() {
-							$(this).remove();
-							docs_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").addClass("elimina");
-				}
-				
-			}
-			
-			docs_elm.bind("click",Docs.llansar);
-			
-		}
-		
-	}
-};
 
-// enllasos
-var Enllasos = {
-	iniciar: function() {
-		
-		en_elm = $("div.enllasosRelacionats");
-		en_table_existix = false;
-		
-		en_elm.bind("click",Enllasos.llansar);
-		
-		codi_table_en = "<div class=\"table llistat enllasos\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_en += "<div class=\"thead\">";
-		codi_table_en += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_en += "<div role=\"columnheader\" class=\"th nom\">" + txtAdresa + "</div>";
-		codi_table_en += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_en += "</div>";
-		codi_table_en += "</div>";
-		codi_table_en += "<div class=\"tbody\">";
-		codi_table_en += "</div>";
-		codi_table_en += "</div>";
-		
-		return codi_table_en;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("doc"))) {
-			
-			en_elm.unbind("click",Enllasos.llansar);
-			
-			A_elm = elm.parents("a:first");
-			en_elm = elm.parents("div.enllasosRelacionats:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (en_elm.find("div.table").size() == 0) {
-			
-					elm.parents("p:first").before(codi_table_en);
-					
-					en_table_elm = en_elm.find("div.table:first");
-					en_table_tbody_elm = en_table_elm.find("div.tbody");
-					
-					en_table_existix = true;
-					
-				}
-				
-				tr_num = en_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_en = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_en += "<div role=\"gridcell\" class=\"td nom\">";
-				codi_en += "<input name=\"enllas\" type=\"text\" />";
-				codi_en += "</div>";
-				codi_en += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_en += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_en += "</div>";
-				codi_en += "</div>";
-				
-				en_table_tbody_elm.append(codi_en);
-				en_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = en_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						en_table_elm.slideUp(300,function() {
-							$(this).remove();
-							en_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").addClass("elimina");
-				}
-				
-			}
-			
-			en_elm.bind("click",Enllasos.llansar);
-			
-		}
-		
-	}
-};
-
-// fotos
-var Fotos = {
-	iniciar: function() {
-		
-		fotos_elm = $("#fotos");
-		fotos_table_existix = false;
-		
-		fotos_elm.bind("click",Fotos.llansar);
-		
-		codi_table_fotos = "<div class=\"table fotos\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_fotos += "<div class=\"thead\">";
-		codi_table_fotos += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th img\">" + txtImatge + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th petita\">" + txtFotoPetita + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th gran ASC\">" + txtFotoGran + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "<div class=\"tbody\">";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "</div>";
-		
-		return codi_table_fotos;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("foto"))) {
-			
-			fotos_elm.unbind("click",Fotos.llansar);
-			
-			A_elm = elm.parents("a:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (!fotos_table_existix) {
-			
-					elm.parents("p:first").before(codi_table_fotos);
-					
-					fotos_table_elm = $("#fotos div.table");
-					fotos_table_tbody_elm = fotos_table_elm.find("div.tbody");
-					
-					fotos_table_existix = true;
-					
-				}
-				
-				tr_num = fotos_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_foto = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_foto += "<div role=\"gridcell\" class=\"td img\">&nbsp;</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td petita\">";
-				codi_foto += "<input name=\"foto_petita\" type=\"file\" />";
-				codi_foto += "</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td gran\">";
-				codi_foto += "<input name=\"foto_gran\" type=\"file\" />";
-				codi_foto += "</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_foto += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_foto += "</div>";
-				codi_foto += "</div>";
-				
-				fotos_table_tbody_elm.append(codi_foto);
-				fotos_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = fotos_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						fotos_table_elm.slideUp(300,function() {
-							$(this).remove();
-							fotos_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.foto").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.foto").addClass("elimina");
-				}
-				
-			}
-			
-			fotos_elm.bind("click",Fotos.llansar);
-			
-		}
-		
-	}
-};
-*/

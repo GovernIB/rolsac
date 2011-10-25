@@ -873,18 +873,20 @@ div.table div.tbody div.td a:hover{
     background-color: #ECF6FC;
     width: 733px;
 }
-#escriptori_detall .grupoModulosFormulario .control.select{
+
+#escriptori_detall .grupoModulosFormulario .select{
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     height: 21px;   
     padding: 2px 0;
 }
-#escriptori_detall .grupoModulosFormulario .control.select select{
+#escriptori_detall .grupoModulosFormulario .select select{
     background-color: transparent;
     width: 99.9%;
     border: none;
 }
+
 #escriptori_detall .grupoModulosFormulario .archivo .archivoActual{
     padding-top: 10px;
 }
@@ -1457,6 +1459,11 @@ div.previsualitzacio iframe { width:100%; height:40em; border:0; }
     display: none;
 }
 
+
+div.modulLateral div.seleccionat ul {
+    list-style: none !important;
+    margin-left: 0 !important;
+}
 
 /* PER VERIFICAR */
 

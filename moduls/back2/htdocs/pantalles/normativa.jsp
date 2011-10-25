@@ -6,8 +6,11 @@
 <link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_traspas.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
 
     <script type="text/javascript">
@@ -35,17 +38,21 @@
         var txtSi = "<spring:message code='txt.si'/>";
         var txtNo = "<spring:message code='txt.no'/>";
         var txtTrobats = "<spring:message code='txt.trobats'/>";
+        var txtTrobades = "<spring:message code='txt.trobades'/>";
         var txtLlistaItem = "<spring:message code='txt.normativa'/>";
         var txtLlistaItems = "<spring:message code='txt.normatives'/>";
         var txtData = "<spring:message code='txt.data'/>";
+        var txtDataButlleti = "<spring:message code='camp.data_butlleti'/>";
         var txtPublicacio = "<spring:message code='boto.publicacio'/>";
         var txtCaducitat = "<spring:message code='txt.caducitat'/>";
         var txtMostrem = "<spring:message code='txt.mostrem'/>";
+        var txtDeLa = "<spring:message code='txt.de_la'/>";
         var txtMostremAl = " <spring:message code='txt.a_la'/> ";
         var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
         var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
         var txtCarregantLlistat = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;        
         var txtOrdenats = "<spring:message code='txt.ordenats'/>";
+        var txtOrdenades = "<spring:message code='txt.ordenades'/>";
         var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
         var txtDescendentment = "<spring:message code='txt.descendentment'/>";
         var txtPer = "<spring:message code='txt.per'/>";
@@ -126,7 +133,7 @@
         var txtRegistre = "<spring:message code='txt.registre'/>";
         var txtNoHiHaNormativaBOIB = txtNoHiHa + " " + "<spring:message code='txt.normativa_boib'/>";
         
-        var txtNoHiHaNormativa = txtNoHiHa + " " + txtNormatives;
+        var txtNoHiHaNormatives = txtNoHiHa + " " + txtNormatives;
         
         var Afectacions_arr = [];
         <c:forEach items="${llistaTipusAfectacio}" var="tipus">
@@ -374,7 +381,7 @@
                     <input id="cerca_ua_id" name="cerca_ua_id" type="hidden" value='<c:out value="${idUA}" />'/>
                     
                     <div class="fila">
-                        <div class="element t10">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_numero"><spring:message code='camp.numero'/></label>
                             </div>
@@ -383,7 +390,7 @@
                             </div>                          
                         </div>
                         
-                        <div class="element t16">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
                             </div>
@@ -405,7 +412,7 @@
                             </div>
                         </div>                          
                         
-                        <div class="element t29">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
                             </div>
@@ -418,7 +425,7 @@
                                 </select>                               
                             </div>                          
                         </div>
-                        <div class="element t16">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_butlleti"><spring:message code='camp.butlleti'/></label>
                             </div>
@@ -434,7 +441,7 @@
                     </div>      
                     
                     <div class="fila">
-                        <div class="element t10">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_registre"><spring:message code='camp.registre'/></label>
                             </div>
@@ -443,7 +450,7 @@
                             </div>                          
                         </div>  
                         
-                        <div class="element t10">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_llei"><spring:message code='camp.llei'/></label>
                             </div>
@@ -452,7 +459,7 @@
                             </div>                          
                         </div>      
                         
-                        <div class="element t10">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_data"><spring:message code='camp.data'/></label>
                             </div>
@@ -461,7 +468,7 @@
                             </div>
                         </div>          
                         
-                        <div class="element t10">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
                             </div>
@@ -472,7 +479,7 @@
                     </div>          
                     
                     <div class="fila">                        
-                        <div class="element t30">
+                        <div class="element t21">
                             <div class="etiqueta">
                                 <label for="cerca_text"><spring:message code='camp.text'/></label>
                             </div>
@@ -959,18 +966,16 @@
                     <div class="fila">
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_butlleti_id"><spring:message code='camp.butlleti'/></label></div>
-                            <!-- div class="control">
-                                <input id="item_butlleti_id" name="item_butlleti_id" type="hidden" />
-                                <input id="item_butlleti" name="item_butlleti" type="text" class="nou" />
-                            </div-->
                             <div class="control">
-                                <select id="item_butlleti_id" name="item_butlleti_id" class="nou">
-                                    <option value=""><spring:message code='txt.no_definit'/></option>
-                                    <c:forEach items="${llistaButlletins}" var="butlleti">                                      
-                                        <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
-                                    </c:forEach>
-                                </select>       
-                            </div>                      
+	                            <div class="select">
+	                                <select id="item_butlleti_id" name="item_butlleti_id" class="nou">
+	                                    <option value=""><spring:message code='txt.no_definit'/></option>
+	                                    <c:forEach items="${llistaButlletins}" var="butlleti">                                      
+	                                        <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+	                                    </c:forEach>
+	                                </select>       
+	                            </div>               
+                            </div>       
                         </div>
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data_butlleti'/></label></div>
@@ -980,7 +985,7 @@
                         </div>
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_tipus"><spring:message code='camp.tipus_normativa'/></label></div>
-                            <div class="control">
+                            <div class="control select">
                                 <select id="item_tipus" name="item_tipus" class="nou">
                                     <option value=""><spring:message code='txt.no_definit'/></option>
                                     <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
@@ -1145,7 +1150,10 @@
                     <!-- modulProcediments -->
                     <div class="modulProcediments">
                         <div class="seleccionats">
-                            <p class="info"><spring:message code='txt.no_procediments'/></p>
+                        	<div class="seleccionat">
+                            	<p class="info"><spring:message code='txt.no_procediments'/></p>
+                            	<div class="listaOrdenable"></div> 
+                            </div>
                         </div>
                     </div>
                     <!-- /modulProcediments -->
@@ -1159,12 +1167,14 @@
             <fieldset>
                 <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                 <legend><spring:message code='txt.afectacions_relacionades'/></legend>
-                <div class="modul_continguts">
+                <div class="modul_continguts mostrat">
                     <!-- modulAfectacions -->
                     <div class="modulAfectacions">
                         <div class="seleccionats">
-                            <p class="info"><spring:message code='txt.no_afectacions'/></p>                           
-
+                        	<div class="seleccionat">
+                            	<p class="info"><spring:message code='txt.no_afectacions'/></p>
+                            	<div class="listaOrdenable"></div>                              	                       
+							</div>
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
@@ -1280,193 +1290,76 @@
 
 <!-- escriptori_afectacions -->
 <div id="escriptori_afectacions">
-    <h2><spring:message code='txt.gestio_afectacio_relacionada'/></h2>
-    <div class="botonera dalt">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna_detall'/></span></span></a></li>
-        </ul>
-    </div>
-    <!-- llistat -->
-    <div class="escriptori_items_llistat">
-        <!-- cercador -->
-        <div class="escriptori_items_cercador">
-            <h3><spring:message code='tab.cercador'/></h3>
-            <div class="fila">
-                <div class="element t15">
-                    <div class="etiqueta">
-                        <label for="afec_cerca_normativa_titol"><spring:message code='camp.titol_normativa'/></label>
-                    </div>
-                    <div class="control">
-                        <input id="afec_cerca_normativa_titol" name="afec_cerca_normativa_titol"
-                            type="text" class="titol" />
-                    </div>
-                </div>
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
-                     </div>
-                 </div>          
-                 
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
-                     </div>
-                 </div>
-            </div>
-            <div class="botonera">
-                <a href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cerca_exclamacio'/></span>
-                </span>
-                </a>
-            </div>
-            
-            <!-- div class="fila">
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_numero"><spring:message code='camp.numero'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_numero" name="afec_cerca_numero" type="text" />
-                     </div>                          
-                 </div>
-                 
-                 <div class="element t16">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_validacio"><spring:message code='camp.validacio'/></label>
-                     </div>
-                     <div class="control">
-                         <select id="afec_cerca_validacio" name="afec_cerca_validacio">
-                             <option value="1" selected="selected">Pública</option>
-                             <option value="2">Interna</option>
-                             <option value="3">Reserva</option>
-                         </select>
-                     </div>
-                 </div>                          
-                 
-                 <div class="element t29">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
-                     </div>
-                     <div class="control">
-                         <select id="afec_cerca_tipus_normativa" name="afec_cerca_tipus_normativa">
-                             <option value="">--Tots--</option>
-                             <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
-                                 <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
-                             </c:forEach>
-                         </select>                               
-                     </div>                          
-                 </div>
-                 <div class="element t16">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_butlleti"><spring:message code='camp.butlleti'/></label>
-                     </div>
-                     <div class="control">
-                         <select id="afec_cerca_butlleti" name="afec_cerca_butlleti">
-                             <option value="">--Tots--</option>
-                             <c:forEach items="${llistaButlletins}" var="butlleti">                                      
-                                 <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
-                             </c:forEach>
-                         </select>                               
-                     </div>                          
-                 </div>                                              
-             </div>      
-             
-             <div class="fila">
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_registre"><spring:message code='camp.registre'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_registre" name="afec_cerca_registre" type="text" />
-                     </div>                          
-                 </div>  
-                 
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_llei"><spring:message code='camp.llei'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_llei" name="afec_cerca_llei" type="text" />
-                     </div>                          
-                 </div>      
-                 
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
-                     </div>
-                 </div>          
-                 
-                 <div class="element t10">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
-                     </div>
-                 </div>
-             </div>          
-             
-             <div class="fila">                        
-                 <div class="element t30">
-                     <div class="etiqueta">
-                         <label for="afec_cerca_text"><spring:message code='camp.text'/></label>
-                     </div>
-                     <div class="control">
-                         <input id="afec_cerca_text" name="afec_cerca_text" type="text" maxlength="250" class="text" />
-                     </div>
-                 </div>                      
-             </div>
-             
-             <div class="fila">
-                 <div class="element t18">
-                     <input type="checkbox" class="checkbox" id="afec_cerca_totes_unitats" name="afec_cerca_totes_unitats"/>
-                     <label for="afec_cerca_totes_unitats" class="checkbox"><spring:message code='camp.cerca_totes_unitats'/></label>                     
-                 </div>
+    
+    <ul id="opcions_afectacions" class="opcions">
+    	<li class="opcio C actiu">Gestiona</li>                               
+    </ul>    
+    
+    <div id="resultats_afectacions" class="escriptori_items_llistat">            
+        <div class="resultats C actiu" style="display: block;">
+            <div id="cercador_afectacions" class="escriptori_items_cercador"> 
+                <div id="cercador_afectacions_contingut">
+                    <div class="fila"> 
+		                <div class="element t26">
+		                    <div class="etiqueta">
+		                        <label for="afec_cerca_normativa_titol"><spring:message code='camp.titol_normativa'/></label>
+		                    </div>
+		                    <div class="control">
+		                        <input id="afec_cerca_normativa_titol" name="afec_cerca_normativa_titol" type="text" class="titol" />
+		                    </div>
+		                </div>
+		                 <div class="element t12">
+		                     <div class="etiqueta">
+		                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
+		                     </div>
+		                     <div class="control">
+		                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
+		                     </div>
+		                 </div>          
+		                 
+		                 <div class="element t12">
+		                     <div class="etiqueta">
+		                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+		                     </div>
+		                     <div class="control">
+		                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
+		                     </div>
+		                 </div>
+           			</div>
+           
+		            <div class="botonera">
+		                <div class="boton btnGenerico"><a id="btnLimpiarForm_afectacions" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+		                <div class="boton btnGenerico"><a id="btnBuscarForm_afectacions" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+		                <div class="boton btnGenerico"><a id="btnVolverDetalle_afectacions" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+		            </div>  
 
-                 <div class="element t18">                           
-                     <input type="checkbox" class="checkbox" id="afec_cerca_externes" name="afec_cerca_externes" />
-                     <label for="afec_cerca_externes" class="checkbox"><spring:message code='camp.cerca_externes'/></label>
-                 </div>                      
-             </div>                    
-                    
-            <div class="botonera">
-                <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span></span></a>
-            </div-->           
-            
-        </div>
-        <!-- /cercador -->
-        <div class="dades"></div>
-        <input type="hidden" value="0" class="pagPagina" /> <input
-            type="hidden" value="DESC" class="ordreTipus" /> <input
-            type="hidden" value="data" class="ordreCamp" />
-    </div>
-    <!-- /llistat -->
-    <!-- seleccionats -->
-    <div class="escriptori_items_seleccionats">
-        <h3><spring:message code='txt.afectacions_norma_seleccionada'/></h3>
-        <p class="botonera">
-            <a href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span>
-            </span>
-            </a>
-        </p>
-        <div class="dades">
-            <p class="info"><spring:message code='txt.no_afectacions'/></p>
-        </div>
+	           	</div>
+                                          
+        	</div>
+	        <!-- /cercador -->
+	        <div class="dades"></div>
+	        <input type="hidden" value="0" class="pagPagina" /> 
+	        <input type="hidden" value="DESC" class="ordreTipus" /> 
+	        <input type="hidden" value="data" class="ordreCamp" />
+	    </div>
+	</div>
+
+    <div class="modulLateral escriptori_items_seleccionats">
+        <div class="modul">
+        	<div class="interior">
+        		<div class="seleccionats">
+	        		<div class="seleccionat">
+	        			<p class="info"><spring:message code='txt.no_afectacions'/></p>     
+	        			<div class="listaOrdenable"></div>   			
+	        		</div>
+                    <p class="botonera btnGenerico">
+                        <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                    </p> 	        		        		
+        		</div>
+        	</div>
+        </div>        
     </div>
     <!-- seleccionats -->
-    <div class="botonera baix">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna_detall'/></span></span></a></li>
-        </ul>
-    </div>
 </div>
 <!-- /escriptori_afectacions -->
 <!-- escriptori_procediments -->

@@ -50,7 +50,7 @@ function ListaOrdenable(){
 	/**
 	 * Obtiene el html de un item de la lista.
 	 */
-	var getHtmlItem = function( item, btnEliminar, idioma ){
+	this.getHtmlItem = function( item, btnEliminar, idioma ){
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
@@ -89,7 +89,7 @@ function ListaOrdenable(){
 						
 					case "orden":
 						html += "<input class=\"" + params.nombre + "_" + atributo + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
-						break;
+						break;															
 						
 					default:
 						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
@@ -194,13 +194,13 @@ function ListaOrdenable(){
 		
 				jQuery( params.nodoDestino ).each(function(){
 					idioma = getIdiomaActivo( jQuery(this) );
-					html = getHtmlItem( item, true, idioma );					
+					html = this.getHtmlItem( item, true, idioma );					
 					jQuery(this).find("ul").append(html);					
 				});		
 				
 			}else{			
 							
-				html = getHtmlItem( item, true );				
+				html = this.getHtmlItem( item, true );				
 				jQuery( params.nodoDestino ).find("ul").append(html);			
 				
 			}
@@ -226,7 +226,7 @@ function ListaOrdenable(){
 				
 				html = "<ul>";
 				for( i in lista ){				
-					html += getHtmlItem( lista[i], false, idioma );
+					html += this.getHtmlItem( lista[i], false, idioma );
 				}
 				html += "</ul>";
 				
@@ -237,7 +237,7 @@ function ListaOrdenable(){
 		
 			html = "<ul>";		
 			for( i in lista ){						
-				html += getHtmlItem( lista[i], false );
+				html += this.getHtmlItem( lista[i], false );
 			}			
 			html += "</ul>";
 			
@@ -254,6 +254,8 @@ function ListaOrdenable(){
 		var html;
 		var idioma;
 		var clases;
+		
+		var _this = this;
 		
 		if( params.multilang ){			
 		
@@ -283,7 +285,7 @@ function ListaOrdenable(){
 						}
 					}
 								
-					html += getHtmlItem( item, true, idioma );
+					html += _this.getHtmlItem( item, true, idioma );
 				});			
 				
 				html += "</ul>";
@@ -310,7 +312,7 @@ function ListaOrdenable(){
 					item[atributo] = li_elm.find( "input."+params.nombre+"_"+atributo ).val();
 				}
 							
-				html += getHtmlItem( item, true );
+				html += _this.getHtmlItem( item, true );
 			});
 			
 			html += "</ul>";
@@ -328,6 +330,8 @@ function ListaOrdenable(){
 		var idioma;
 		var i;
 		var html;
+		
+		var _this = this;
 		
 		if( params.multilang ){
 		
@@ -358,7 +362,7 @@ function ListaOrdenable(){
 						}
 					}			
 					
-					html += getHtmlItem( item, false, idioma );
+					html += _this.getHtmlItem( item, false, idioma );
 					
 					numItems++;
 				});
@@ -390,7 +394,7 @@ function ListaOrdenable(){
 					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
 				}			
 				
-				html += getHtmlItem( item, false );
+				html += _this.getHtmlItem( item, false );
 				
 				numItems++;
 			});

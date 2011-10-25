@@ -24,7 +24,7 @@ div.modulProcediments div.seleccionats p.info { margin-top:0; }
 #escriptori_procediments div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
 
 /* escriptori llistat */
-
+/*
 div.escriptori_items_llistat { overflow:hidden; float:left; width:45em; padding:1em 1em 2em 1em; margin-right:1em; margin-bottom:1em; border:1px solid #f2f2f2; }
 
 div.escriptori_items_cercador { overflow:hidden; padding:1em; margin:0 auto; background-color:#e9eef3; }
@@ -49,7 +49,7 @@ div.escriptori_items_cercador div.botonera { text-align:center; background-color
 
 div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }
 div.escriptori_items_llistat div.dades p.info { margin-top:1.5em; }
-
+*/
 div.procediments div.thead div.nom { width:26em; padding-left:5em; }
 div.procediments div.thead div.publicacio { width:9em; }
 div.procediments div.thead div.caducitat { width:9em; }
@@ -66,10 +66,12 @@ div.procediments div.tbody div.caducitat { width:8em; }
 div.procediments div.tbody div.nom a, div.llistat div.tbody div.nom span { font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
 div.procediments div.tbody div.td span.nom { font-style:italic; }
 
+/*
 div.escriptori_items_llistat p.paginacio { text-align:center; padding:.5em 1em; background-color:#ffecd9; }
+*/
 
 /* escriptori seleccionarts*/
-
+/*
 div.escriptori_items_seleccionats { overflow:hidden; float:left; width:26em; padding:1em 1em 2em 1em; margin-bottom:1em; border:1px solid #f2f2f2; }
 
 div.escriptori_items_seleccionats p.botonera { padding:0.5em 1em; margin-bottom:1em; background-color:#ccd7e2; }
@@ -78,4 +80,4 @@ div.escriptori_items_seleccionats ul { list-style:circle; margin-left:1.5em; mar
 div.escriptori_items_seleccionats ul li { padding:.2em 0; }
 div.escriptori_items_seleccionats ul li div { overflow:hidden; width:100%; text-align:right; }
 div.escriptori_items_seleccionats ul li span.procediment { display:block; width:17.5em; float:left; text-align:left; }
-
+*/
