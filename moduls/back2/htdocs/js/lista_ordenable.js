@@ -172,6 +172,8 @@ function ListaOrdenable(){
 		var itemYaExiste = false;
 		var html;		
 		var idioma;
+		
+		var _this = this;
 						
 		if ( tamLista == 0) {
 						
@@ -194,13 +196,13 @@ function ListaOrdenable(){
 		
 				jQuery( params.nodoDestino ).each(function(){
 					idioma = getIdiomaActivo( jQuery(this) );
-					html = this.getHtmlItem( item, true, idioma );					
+					html = _this.getHtmlItem( item, true, idioma );					
 					jQuery(this).find("ul").append(html);					
 				});		
 				
 			}else{			
 							
-				html = this.getHtmlItem( item, true );				
+				html = _this.getHtmlItem( item, true );				
 				jQuery( params.nodoDestino ).find("ul").append(html);			
 				
 			}
@@ -219,6 +221,8 @@ function ListaOrdenable(){
 	this.agregaItems = function( lista ){
 		var item, idioma;		
 		
+		var _this = this;
+		
 		if( params.multilang ){
 		
 			jQuery(params.nodoOrigen).each( function(){
@@ -226,7 +230,7 @@ function ListaOrdenable(){
 				
 				html = "<ul>";
 				for( i in lista ){				
-					html += this.getHtmlItem( lista[i], false, idioma );
+					html += _this.getHtmlItem( lista[i], false, idioma );
 				}
 				html += "</ul>";
 				
@@ -237,7 +241,7 @@ function ListaOrdenable(){
 		
 			html = "<ul>";		
 			for( i in lista ){						
-				html += this.getHtmlItem( lista[i], false );
+				html += _this.getHtmlItem( lista[i], false );
 			}			
 			html += "</ul>";
 			
