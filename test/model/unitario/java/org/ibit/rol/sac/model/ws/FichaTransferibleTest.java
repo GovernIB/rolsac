@@ -1,4 +1,4 @@
-package test.unitario.model.testsuite.ws;
+package org.ibit.rol.sac.model.ws;
 
 
 import java.util.HashSet;
@@ -19,23 +19,39 @@ public class FichaTransferibleTest extends junit.framework.TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		fichaTransf=new FichaTransferible();
-		System.setProperty(FichaTransferible.URL_FICHA, "https://proves.caib.es/govern/sac/visor_proc.do?codi=%id%&lang=" );
 	}
 	
-	public void testRellenar() {
-		
+	/**
+	 * se comprueba que urlremota esta completa cuando si existe la propietat url_ficha
+	 */
+	public void testUrlRemotaSeCompletaCuandoPropiedadExiste() {
 		long id=123L;
 		Ficha procLocal = crearMockFicha(id);
-
+		System.setProperty(FichaTransferible.URL_FICHA, "https://proves.caib.es/govern/sac/visor_proc.do?codi=%id%&lang=" );
 				
 		fichaTransf.rellenar(procLocal);
 		
 		String expectedUrl="https://proves.caib.es/govern/sac/visor_proc.do?codi="+id+"&lang=";
 		assertEquals(expectedUrl, fichaTransf.getUrlRemota());
-		
 	}
 	
 
+	/**
+	 * se comprueba que urlremota es null cuando no existe la propietat url_ficha
+	 */
+
+	public void testUrlRemotaIsNullCuandoPropiedadNoExiste() {
+		long id=123L;
+		Ficha procLocal = crearMockFicha(id);
+		System.clearProperty(FichaTransferible.URL_FICHA);
+				
+		fichaTransf.rellenar(procLocal);
+		
+		assertNull(fichaTransf.getUrlRemota());
+	}
+
+	
+	
 	private Ficha crearMockFicha(long id) {
 		Ficha mock = new Ficha(id);
 		return mock;
