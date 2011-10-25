@@ -28,17 +28,12 @@ var Items_arr = new Array();
 function CDetall(soloFicha){	
 	this.extend = DetallBase;
 	this.extend(soloFicha);
-	
-	
-	this._baseGuarda = this.guarda;
-	this.guarda = function() {
-		this._baseGuarda();
-		// redirecciona;
-		window.location.href = pagLlistat;
-	}
-	
+		
 	
 	this.iniciar = function() {
+		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
+		this.guarda = this.guarda_upload;
+		
 				
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -68,6 +63,48 @@ function CDetall(soloFicha){
 		Detall.carregar();
 		
 	}
+	
+	
+	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	this.guarda_upload = function(e) {
+		
+		// Validamos el formulario
+		if( typeof FormulariComprovar != "undefined" ){
+					
+			FormulariComprovar.llansar();
+			
+			if (!formComprovacio) {				
+				return false;
+			}
+		}
+		
+		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		$("#formGuardar").ajaxSubmit({			
+			url: pagGuardar,
+			dataType: 'json',
+			beforeSubmit: function() {
+				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+			},
+			success: function(data) {
+							
+				Llistat.cacheDatosListado = null;
+				
+				if (data.id < 0) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+				} else {
+					Detall.recarregar();
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+				}					
+			}
+								
+		});
+		window.location.href = pagLlistat;
+		return false;	
+		
+		
+		
+	}
+	
 	
 	// Método sobreescrito
 	this.busca = function(){
@@ -171,20 +208,116 @@ function CDetall(soloFicha){
 			marcarOpcionSelect("item_responsable_sexe",dada_node.item_responsable_sexe);
 			//$("#item_responsable_sexe").val(dada_node.item_responsable_sexe);
 			
-			//TODO: se genera un error 1000 al asignar con val un archivo al input. Se comenta hasta poder solucionarlo
-			//$("#item_responsable_foto_petita_nom").val(dada_node.item_responsable_foto_petita);			
-			//$("#item_responsable_foto_gran_nom").val(dada_node.item_responsable_foto_gran);			
+			//FotoPetita
+			$("#item_responsable_foto_petita").val("");
+			$("#grup_item_responsable_foto_petita input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_responsable_foto_petita a").show();					
+				$("#grup_item_responsable_foto_petita a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_responsable_foto_petita a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_responsable_foto_petita span").hide();
+				$("#grup_item_responsable_foto_petita input").show();
+				$("#grup_item_responsable_foto_petita label.eliminar").show();
+							
+			} else {
+				$("#grup_item_responsable_foto_petita span").show();
+				$("#grup_item_responsable_foto_petita input").hide();
+				$("#grup_item_responsable_foto_petita label.eliminar").hide();
+				$("#grup_item_responsable_foto_petita a").hide();			
+			}	
+			
+			//FotoGran
+			$("#item_responsable_foto_gran").val("");
+			$("#grup_item_responsable_foto_gran input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_responsable_foto_gran a").show();					
+				$("#grup_item_responsable_foto_gran a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_responsable_foto_gran a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_responsable_foto_gran span").hide();
+				$("#grup_item_responsable_foto_gran input").show();
+				$("#grup_item_responsable_foto_gran label.eliminar").show();
+							
+			} else {
+				$("#grup_item_responsable_foto_gran span").show();
+				$("#grup_item_responsable_foto_gran input").hide();
+				$("#grup_item_responsable_foto_gran label.eliminar").hide();
+				$("#grup_item_responsable_foto_gran a").hide();			
+			}
+			
 			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);			
 			
 			//Logotipos
-			//$("#item_logo_horizontal").val(dada_node.item_logo_horizontal);
-			//$("#item_logo_vertical").val(dada_node.item_logo_vertical);
-			//$("#item_logo_salutacio_horizontal").val(dada_node.item_logo_salutacio_horizontal);
-			//$("#item_logo_salutacio_vertical").val(dada_node.item_logo_salutacio_vertical);		
+			//LogoHoritzontal
+			$("#item_logo_horizontal").val("");
+			$("#grup_item_logo_horizontal input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_logo_horizontal a").show();					
+				$("#grup_item_logo_horizontal a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_logo_horizontal a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_logo_horizontal span").hide();
+				$("#grup_item_logo_horizontal input").show();
+				$("#grup_item_logo_horizontal label.eliminar").show();
+							
+			} else {
+				$("#grup_item_logo_horizontal span").show();
+				$("#grup_item_logo_horizontal input").hide();
+				$("#grup_item_logo_horizontal label.eliminar").hide();
+				$("#grup_item_logo_horizontal a").hide();			
+			}
+			//LogoVertical
+			$("#item_logo_vertical").val("");
+			$("#grup_item_logo_vertical input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_logo_vertical a").show();					
+				$("#grup_item_logo_vertical a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_logo_vertical a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_logo_vertical span").hide();
+				$("#grup_item_logo_vertical input").show();
+				$("#grup_item_logo_vertical label.eliminar").show();
+							
+			} else {
+				$("#grup_item_logo_vertical span").show();
+				$("#grup_item_logo_vertical input").hide();
+				$("#grup_item_logo_vertical label.eliminar").hide();
+				$("#grup_item_logo_vertical a").hide();			
+			}
+			//LogoSalutacioHoritzontal
+			$("#item_logo_salutacio_horizontal").val("");
+			$("#grup_item_logo_salutacio_horizontal input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_logo_salutacio_horizontal a").show();					
+				$("#grup_item_logo_salutacio_horizontal a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_logo_salutacio_horizontal a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_logo_salutacio_horizontal span").hide();
+				$("#grup_item_logo_salutacio_horizontal input").show();
+				$("#grup_item_logo_salutacio_horizontal label.eliminar").show();
+							
+			} else {
+				$("#grup_item_logo_salutacio_horizontal span").show();
+				$("#grup_item_logo_salutacio_horizontal input").hide();
+				$("#grup_item_logo_salutacio_horizontal label.eliminar").hide();
+				$("#grup_item_logo_salutacio_horizontal a").hide();			
+			}
+			//LogoSalutacioVertical
+			$("#item_logo_salutacio_vertical").val("");
+			$("#grup_item_logo_salutacio_vertical input").removeAttr("checked");
+			if (dada_node["enllas_arxiu"]) {
+				$("#grup_item_logo_salutacio_vertical a").show();					
+				$("#grup_item_logo_salutacio_vertical a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
+				$("#grup_item_logo_salutacio_vertical a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				$("#grup_item_logo_salutacio_vertical span").hide();
+				$("#grup_item_logo_salutacio_vertical input").show();
+				$("#grup_item_logo_salutacio_vertical label.eliminar").show();
+							
+			} else {
+				$("#grup_item_logo_salutacio_vertical span").show();
+				$("#grup_item_logo_salutacio_vertical input").hide();
+				$("#grup_item_logo_salutacio_vertical label.eliminar").hide();
+				$("#grup_item_logo_salutacio_vertical a").hide();			
+			}
 			
 			
 			//Fitxes de la portada web
-
 			$("#item_nivell_1").val(dada_node.item_nivell_1);
 			$("#item_nivell_2").val(dada_node.item_nivell_2);
 			$("#item_nivell_3").val(dada_node.item_nivell_3);
@@ -318,6 +451,13 @@ function CDetall(soloFicha){
 				if (data.id > -1) {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 				}
+//				else {
+//					// tratar error;
+//					data.id;
+//					data.errores[]
+//
+//					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtTitulo, text: erroresHTML});
+//				}
 				
 				// array
 				Detall.array({id: dada_node.id, accio: "elimina"});

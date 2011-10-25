@@ -11,7 +11,7 @@
     </div>          
     <!-- escriptori_detall -->
     <div id="escriptori_detall">
-        <form id="formGuardar" action="false">
+        <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value='<c:out value="${idUA}" />' />       
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
         <!-- modulPrincipal -->     
@@ -378,6 +378,51 @@
                         <!-- /fila -->
                         <!-- fila -->
                         <div class="fila">
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
+	                            <div class="control archivo">   
+	                            	<div id="grup_item_responsable_foto_petita" class="file">
+	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                            		<a href="#" target="_blank"></a>
+	                            		<input type="checkbox" name="item_responsable_foto_petita_delete" id="item_responsable_foto_petita_delete" value="1"/>
+	                            		<label for="item_responsable_foto_petita_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                            	</div>
+	                            </div>
+	                        </div>    
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
+	                            <div class="control">                                      		
+	                                <input id="item_responsable_foto_petita" name="item_responsable_foto_petita" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                        <!-- fila -->
+                        <div class="fila">
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
+	                            <div class="control archivo">   
+	                            	<div id="grup_item_responsable_foto_gran" class="file">
+	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                            		<a href="#" target="_blank"></a>
+	                            		<input type="checkbox" name="item_responsable_foto_gran_delete" id="item_responsable_foto_gran_delete" value="1"/>
+	                            		<label for="item_responsable_foto_gran_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                            	</div>
+	                            </div>
+	                        </div>    
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
+	                            <div class="control">                                      		
+	                                <input id="item_responsable_foto_gran" name="item_responsable_foto_gran" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                        <%--
+                        <!-- fila -->
+                        <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
                                 <div class="control">
@@ -392,6 +437,7 @@
                             </div>
                         </div>
                         <!-- /fila -->
+                        --%>
                         <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
@@ -421,7 +467,100 @@
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                     <legend><spring:message code='unitatadm.formulari.logotipus'/></legend>
                     <div class="modul_continguts" style="display:block;">
+                    	<!-- fila -->
+                    	<div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
+                                <div class="control archivo">   
+                                	<div id="grup_item_logo_horizontal" class="file">
+                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                		<a href="#" target="_blank"></a>
+                                		<input type="checkbox" name="item_logo_horizontal_delete" id="item_logo_horizontal_delete" value="1"/>
+                                		<label for="item_logo_horizontal_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                	</div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
+                                <div class="control">
+                                    <input id="item_logo_horizontal" name="item_logo_horizontal" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                     	</div>
+                     	<!-- /fila -->
+                     	<!-- fila -->
+                     	<div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical'/></label></div>
+                                <div class="control archivo">   
+                                	<div id="grup_item_logo_vertical" class="file">
+                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                		<a href="#" target="_blank"></a>
+                                		<input type="checkbox" name="item_logo_vertical_delete" id="item_logo_vertical_delete" value="1"/>
+                                		<label for="item_logo_vertical_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                	</div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical'/></label></div>
+                                <div class="control">
+                                    <input id="item_logo_vertical" name="item_logo_vertical" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                     	</div>
+                        <!-- /fila -->
                         <!-- fila -->
+                     	<div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
+                                <div class="control archivo">   
+                                	<div id="grup_item_logo_salutacio_horizontal" class="file">
+                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                		<a href="#" target="_blank"></a>
+                                		<input type="checkbox" name="item_logo_salutacio_horizontal_delete" id="item_logo_salutacio_horizontal_delete" value="1"/>
+                                		<label for="item_logo_salutacio_horizontal_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                	</div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
+                                <div class="control">
+                                    <input id="item_logo_salutacio_horizontal" name="item_logo_salutacio_horizontal" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                     	</div>
+                        <!-- /fila -->
+                        <!-- fila -->
+                     	<div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_salutacio_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical.salutacio'/></label></div>
+                                <div class="control archivo">   
+                                	<div id="grup_item_logo_salutacio_vertical" class="file">
+                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                		<a href="#" target="_blank"></a>
+                                		<input type="checkbox" name="item_logo_salutacio_vertical_delete" id="item_logo_salutacio_vertical_delete" value="1"/>
+                                		<label for="item_logo_salutacio_vertical_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                	</div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_logo_salutacio_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical.salutacio'/></label></div>
+                                <div class="control">
+                                    <input id="item_logo_salutacio_vertical" name="item_logo_salutacio_vertical" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                     	</div>
+                        <!-- /fila -->             	
+                        <!-- fila -->
+                        <%-- 
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
@@ -437,6 +576,7 @@
                                 <div class="etiqueta"></div>
                             </div>
                         </div>
+                        
                         <!-- /fila -->
                         <!-- fila -->
                         <div class="fila">
@@ -454,6 +594,7 @@
                             </div>
                         </div>
                         <!-- /fila -->
+                        --%>
                     </div>
                 </fieldset>
             </div>
@@ -910,6 +1051,7 @@
     <script type="text/javascript" src="<c:url value='/js/modul_edificis.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
     
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";

@@ -70,3 +70,8 @@
 #ajuda div.botonera a:hover { color:#ff9; background-color:#000; }
 
 #ajuda iframe { width:15em; height:18em; }
+
+div.file span {
+    font-weight: bold;
+    margin-left: 1em;
+}

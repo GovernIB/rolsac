@@ -1,24 +1,24 @@
 package es.caib.rolsac.back2.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.ibit.rol.sac.model.Archivo;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
-import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.Personal;
-import org.ibit.rol.sac.model.TraduccionEspacioTerritorial;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -27,27 +27,29 @@ import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
-import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import sun.misc.Perf.GetPerfAction;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
+import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.back2.util.UploadUtil;
 
 @Controller
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController {
-    
+
+	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	
     private MessageSource messageSource = null;
     
     @Autowired
@@ -213,15 +215,20 @@ public class UnitatAdmBackController {
             
             resultats.put("item_responsable", uni.getResponsable());
             resultats.put("item_responsable_sexe", uni.getSexoResponsable());
+            
             if (uni.getFotop() != null){
+            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.htm?id=" +uni.getFotop().getId());
                 resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
             } else {
-                resultats.put("item_responsable_foto_petita", null);
+            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
+                resultats.put("item_responsable_foto_petita", "");
             }
             if (uni.getFotog() != null){
+                resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.htm?id=" +uni.getFotog().getId());
                 resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
             } else {
-                resultats.put("item_responsable_foto_gran", null);
+                resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
+                resultats.put("item_responsable_foto_gran", "");
             }           
 
             if (uni.getTratamiento() != null) {
@@ -351,40 +358,75 @@ public class UnitatAdmBackController {
     }
 	
 	@RequestMapping(value = "/guardar.htm", method = POST)
-    public @ResponseBody IdNomTransient guardarUniAdm(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
         
+		
+		/**
+		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
+		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicación. 
+		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
+		 */
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		UnidadAdministrativa ua = null;
+		UnidadAdministrativa unitatAdministrativaOld = null;
         IdNomTransient result = null;
         
+        Map<String, String> valoresForm = new HashMap<String, String>();
+		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
+        
         try {
-            //TODO pendent de quins camps son obligatoris
-            UnidadAdministrativa ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
-            String nom = request.getParameter("item_nom_ca");
-            String username = request.getParameter("item_codi");
+        	
+        	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+        	
+        	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
+
+    		for (FileItem item : items) {
+    			if (item.isFormField()) {
+    				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
+    			} else {
+    				ficherosForm.put(item.getFieldName(), item);    				
+    			}
+    		}
+        	
             
-            //if (ua == null || nom == null || username == null || "".equals(nom) || "".equals(username)) {
-            //if (ua == null || nom == null || "".equals(nom)) {
-            if (nom == null || "".equals(nom)) {
+    		//ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+    		//String username = request.getParameter("item_codi");
+            
+            //Campos obligatorios
+            String nom = valoresForm.get("item_nom_ca");
+            String validacio = valoresForm.get("item_validacio");
+            String sexeResponsable = valoresForm.get("item_responsable_sexe");
+            String tractament = valoresForm.get("item_tractament");
+                        
+            
+            if (nom == null || "".equals(nom) || validacio == null || "".equals(validacio) || sexeResponsable == null || "".equals(sexeResponsable) || tractament == null || "".equals(tractament)) {
                 String error = messageSource.getMessage("unitatadm.formulari.error.falten_camps", null, request.getLocale());
                 result = new IdNomTransient(-3l, error);
             } else {
                 UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
                 UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
-                UnidadAdministrativa unitatAdministrativaOld = null;
+                unitatAdministrativaOld = null;
 
-                try {
-                    Long id = Long.parseLong(request.getParameter("item_id"));
-                    unitatAdministrativaOld = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id); 
-                } catch (NumberFormatException nfe) {
+                boolean edicion;
+				try {
+					Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
+					unitatAdministrativaOld = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id);
+					edicion = true;
+				} catch (NumberFormatException nfe) {
+					unitatAdministrativaOld = null;
+					edicion = false;
+				}
+                
 
-                }
-
-                if (unitatAdministrativaOld != null) {
+                if (edicion) {
                 	unitatAdministrativa.setId(unitatAdministrativaOld.getId());
                 	
-                	/*
-                	 * Setear Fitxers
-                	 * Seteamos con valores anteriores
-                	 */
+                	// FIXME: Mientras no se guarden todos los datos mantenemos los valores originales que tiene la unidadAdministrativa.
                 	unitatAdministrativa.setUnidadesMaterias(unitatAdministrativaOld.getUnidadesMaterias());
                 	unitatAdministrativa.setEdificios(unitatAdministrativaOld.getEdificios());
                 	unitatAdministrativa.setFichasUA(unitatAdministrativaOld.getFichasUA());
@@ -395,10 +437,10 @@ public class UnitatAdmBackController {
 				List<String> langs = idiomaDelegate.listarLenguajes();
 				for (String lang: langs) {
 					tUA = new TraduccionUA();
-					tUA.setNombre(request.getParameter("item_nom_"+  lang ));
-					tUA.setPresentacion(request.getParameter("item_presentacio_" + lang));
-					tUA.setAbreviatura(request.getParameter("item_abreviatura_" + lang));
-					tUA.setUrl(request.getParameter("item_url_" + lang));
+					tUA.setNombre(valoresForm.get("item_nom_"+  lang ));
+					tUA.setPresentacion(valoresForm.get("item_presentacio_" + lang));
+					tUA.setAbreviatura(valoresForm.get("item_abreviatura_" + lang));
+					tUA.setUrl(valoresForm.get("item_url_" + lang));
 					
 					unitatAdministrativa.setTraduccion(lang, tUA);
 				}
@@ -407,17 +449,17 @@ public class UnitatAdmBackController {
                 
                 
                 //Condifuracion/gestion
-                unitatAdministrativa.setClaveHita(request.getParameter("item_clau_hita"));
-                unitatAdministrativa.setCodigoEstandar(request.getParameter("item_codi_estandar"));
-                unitatAdministrativa.setDominio(request.getParameter("item_domini"));
-                unitatAdministrativa.setValidacion(Integer.parseInt(request.getParameter("item_validacio")));
-                unitatAdministrativa.setTelefono(request.getParameter("item_telefon"));
-                unitatAdministrativa.setFax(request.getParameter("item_fax"));
-                unitatAdministrativa.setEmail(request.getParameter("item_email"));
+                unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
+                unitatAdministrativa.setCodigoEstandar(valoresForm.get("item_codi_estandar"));
+                unitatAdministrativa.setDominio(valoresForm.get("item_domini"));
+                unitatAdministrativa.setValidacion(Integer.parseInt(valoresForm.get("item_validacio")));
+                unitatAdministrativa.setTelefono(valoresForm.get("item_telefon"));
+                unitatAdministrativa.setFax(valoresForm.get("item_fax"));
+                unitatAdministrativa.setEmail(valoresForm.get("item_email"));
                 
                 
                 try {
-					Long espaiTerritorialId = Long.parseLong(request.getParameter("item_espai_territorial"));
+					Long espaiTerritorialId = Long.parseLong(valoresForm.get("item_espai_territorial"));
 					EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 					EspacioTerritorial espacioTerritorial = espacioTerritorialDelegate.obtenerEspacioTerritorial(espaiTerritorialId);
 					unitatAdministrativa.setEspacioTerrit(espacioTerritorial);
@@ -428,7 +470,7 @@ public class UnitatAdmBackController {
                 
 				
 				try {
-					Long unitatAdmPareId = Long.parseLong(request.getParameter("item_pare_id"));
+					Long unitatAdmPareId = Long.parseLong(valoresForm.get("item_pare_id"));
 					UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 					UnidadAdministrativa pare = unidadAdministrativaDelegate.obtenerUnidadAdministrativa(unitatAdmPareId);
 					unitatAdministrativa.setPadre(pare);
@@ -440,23 +482,30 @@ public class UnitatAdmBackController {
 				
 				
 				//Responsable
-				unitatAdministrativa.setResponsable(request.getParameter("item_responsable"));
-				unitatAdministrativa.setSexoResponsable(Integer.parseInt(request.getParameter("item_responsable_sexe")));
-				/*
-				if (uni.getFotop() != null){
-                    resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
-                } else {
-                    resultats.put("item_responsable_foto_petita", null);
-                }
-                if (uni.getFotog() != null){
-                    resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
-                } else {
-                    resultats.put("item_responsable_foto_gran", null);
-                }  
-                
-                */
+				unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
+				unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
+				
+				//FotoPetita
+        		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
+        		if ( fileFotoPetita.getSize() > 0 ) {
+        			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))){
+        			unitatAdministrativa.setFotop(null);
+        		}
+        		//FotoGran
+        		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
+        		if ( fileFotoGran.getSize() > 0 ) {
+        			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))){
+        			unitatAdministrativa.setFotog(null);
+        		}
+				
                 try {
-					Long tractamentId = Long.parseLong(request.getParameter("item_tractament"));
+					Long tractamentId = ParseUtil.parseLong(valoresForm.get("item_tractament"));
 					TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 					Tratamiento tratamiento = tratamientoDelegate.obtenerTratamiento(tractamentId);
 					unitatAdministrativa.setTratamiento(tratamiento);
@@ -467,35 +516,56 @@ public class UnitatAdmBackController {
 				
 				
 				//Logotipos
-                /*
-                if(mostrarLogosUA()){    //Codigo de del sacback original       
-                    if (uni.getLogoh() != null) {
-                        resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
-                    }
-                    if (uni.getLogov() != null) {
-                        resultats.put("item_logo_vertical", uni.getLogov().getNombre());
-                    }
-                    if (uni.getLogos() != null) {
-                        resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
-                    }
-                    if (uni.getLogot() != null) {
-                        resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
-                    }
-                }
-				*/
-				
+				//LogoHoritzontal
+        		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
+        		if ( fileLogoHoritzontal.getSize() > 0 ) {
+        			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))){
+        			unitatAdministrativa.setLogoh(null);
+        		}
+        		//LogoVertical
+        		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
+        		if ( fileLogoVertical.getSize() > 0 ) {
+        			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))){
+        			unitatAdministrativa.setLogov(null);
+        		}
+        		//LogoSalutacioHoritzontal
+        		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
+        		if ( fileLogoSalutacioHoritzontal.getSize() > 0 ) {
+        			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))){
+        			unitatAdministrativa.setLogos(null);
+        		}
+        		//LogoSalutacioVertical
+        		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
+        		if ( fileLogoSalutacioVertical.getSize() > 0 ) {
+        			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
+        		} else
+        		//borrar fichero si se solicita
+        		if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))){
+        			unitatAdministrativa.setLogot(null);
+        		}
+        		
+        		
 				//Fichas de la portada web
-				if (request.getParameter("item_nivell_1")!=null && !"".equals(request.getParameter("item_nivell_1"))){
-					unitatAdministrativa.setNumfoto1(Integer.parseInt(request.getParameter("item_nivell_1")));
+				if (valoresForm.get("item_nivell_1")!=null && !"".equals(valoresForm.get("item_nivell_1"))){
+					unitatAdministrativa.setNumfoto1(ParseUtil.parseInt(valoresForm.get("item_nivell_1")));
 				}
-				if (request.getParameter("item_nivell_2")!=null && !"".equals(request.getParameter("item_nivell_2"))){
-					unitatAdministrativa.setNumfoto2(Integer.parseInt(request.getParameter("item_nivell_2")));
+				if (valoresForm.get("item_nivell_2")!=null && !"".equals(valoresForm.get("item_nivell_2"))){
+					unitatAdministrativa.setNumfoto2(ParseUtil.parseInt(valoresForm.get("item_nivell_2")));
 				}
-				if (request.getParameter("item_nivell_3")!=null && !"".equals(request.getParameter("item_nivell_3"))){
-					unitatAdministrativa.setNumfoto3(Integer.parseInt(request.getParameter("item_nivell_3")));
+				if (valoresForm.get("item_nivell_3")!=null && !"".equals(valoresForm.get("item_nivell_3"))){
+					unitatAdministrativa.setNumfoto3(ParseUtil.parseInt(valoresForm.get("item_nivell_3")));
 				}
-				if (request.getParameter("item_nivell_4")!=null && !"".equals(request.getParameter("item_nivell_4"))){
-					unitatAdministrativa.setNumfoto4(Integer.parseInt(request.getParameter("item_nivell_4")));
+				if (valoresForm.get("item_nivell_4")!=null && !"".equals(valoresForm.get("item_nivell_4"))){
+					unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm.get("item_nivell_4")));
 				}
 
 				//Materias asociadas
@@ -550,9 +620,17 @@ public class UnitatAdmBackController {
                 result = new IdNomTransient(-2l, error);
                 dEx.printStackTrace();
             }
+        } catch (UnsupportedEncodingException e) {
+			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomTransient(-2l, error);
+			e.printStackTrace();
+        } catch (FileUploadException e) {
+			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
+			result = new IdNomTransient(-3l, error);
+			e.printStackTrace();
         }
         
-        return result;
+        return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
     }
 
 	/**
@@ -565,7 +643,11 @@ public class UnitatAdmBackController {
 		
 		
 		if (unitatAdministrativa.getId() != null) {
-			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,unitatAdministrativa.getPadre().getId());
+			if (unitatAdministrativa.getPadre() != null ) { 
+				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,unitatAdministrativa.getPadre().getId());
+			} else {
+				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,null);
+			}
 		} else {
 			Long id  ;
 			if (unitatAdministrativa.getPadre() != null ) {
@@ -595,74 +677,177 @@ public class UnitatAdmBackController {
 	    
 	    IdNomTransient resultatStatus = new IdNomTransient(); 
 	    
-	    try {
-            
-            Long idUA = new Long(request.getParameter("id"));
-            
-            UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
-            unidadAdministrativaDelegate.eliminarUaSinRelaciones(idUA);             
-            
-            resultatStatus.setId(1l);
-            resultatStatus.setNom("correcte");
-            
-        } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
-                resultatStatus.setId(-1l);
-            } else {
-                resultatStatus.setId(-2l);
-                dEx.printStackTrace();
-            }
-        }
+//	    try {
+//            
+//	    	UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
+//	    	
+//            Long id = new Long(request.getParameter("id"));
+//                       
+//            if (!hayMicrositesUA(id)) {
+//            
+//            	UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
+//            	
+//            	// Validamos que se pueda eliminar la UA. Se podra elimnar si no tiene elementos relacionados. Ha excepción de usuarios y edificios.
+//            	ActionErrors errores =  validarEliminacionUA(unitatAdministrativa,unidadAdministrativaDelegate);
+//            	if(!errores.isEmpty()){
+//            	//	saveErrors(request, errores);
+//            		request.setAttribute("idUA", id);
+//            		return dispatchMethod(mapping, form, request, response, "seleccionar");
+//            		//return mapping.findForward("success");
+//    	        }
+//    	
+//            	unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);  
+//
+//            	resultatStatus.setId(1l);
+//                resultatStatus.setNom("correcte");
+//            	
+//            	dForm.reset(mapping, request);
+//    	        request.setAttribute("alert", "confirmacion.baja");
+//    	        log.debug("Eliminada Unidad Administrativa: " + id);
+//
+//            } else {
+//    	        request.setAttribute("alert", "microsites.ua.asociados");
+//    	        log.debug("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
+//            	
+//            }
+//            
+//            
+//            if (!hayMicrositesUA(id)) {
+//            
+//            unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);             
+//            
+//            resultatStatus.setId(1l);
+//            resultatStatus.setNom("correcte");
+//            } else {
+//            	resultatStatus.setId(-1l);
+//                resultatStatus.setNom("No s'ha eliminat l'Unitat Orgànica perquè té microsites associats");
+//            }
+//            
+//        } catch (DelegateException dEx) {
+//            if (dEx.getCause() instanceof SecurityException) {
+//                resultatStatus.setId(-1l);
+//            } else {
+//                resultatStatus.setId(-2l);
+//                dEx.printStackTrace();
+//            }
+//        }
 	    
 	    return resultatStatus;
 	}
     
 	
-	/**
-     *  Descripción: Action que se ejecuta al eliminar una UA. En esta Accion se controla que la UA no tenga Microsites relacionados,
-     *  se comprueba que la UA no tenga elmentos relacionados, y finalmente si no tiene elementos se elimina la UA.
-     * @param mapping
-     * @param form
-     * @param request
-     * @param response
-     * @return actionforward
-     */
-	/*
-	public ActionForward eliminar(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-                                  HttpServletResponse response) throws SecurityException,Exception {
-
-        log.debug("Entramos en eliminar");
-        DynaValidatorForm dForm = (DynaValidatorForm) form;
-        UnidadAdministrativaDelegate unidadDelegate = DelegateUtil.getUADelegate();
-
-        Long id = (Long) dForm.get("id");
-        
-        if (!hayMicrositesUA(id)) {
-        
-        	UnidadAdministrativa ua = unidadDelegate.consultarUnidadAdministrativa(id);
-        	
-        	//Validamos que se pueda eliminar la UA. Se podra elimnar si no tiene elementos relacionados. Ha excepción de usuarios y edificios.
-        	ActionErrors errores =  validarEliminacionUA(ua,unidadDelegate);
-        	if(!errores.isEmpty()){
-        		saveErrors(request, errores);
-        		request.setAttribute("idUA", id);
-        		log.error("No se puede elimar la UA. La UA tiene elementos relacionados ");
-        		return dispatchMethod(mapping, form, request, response, "seleccionar");
-        		//return mapping.findForward("success");
-	        }
-	
-        	unidadDelegate.eliminarUaSinRelaciones(id);
-
-        	dForm.reset(mapping, request);
-	        request.setAttribute("alert", "confirmacion.baja");
-	        log.debug("Eliminada Unidad Administrativa: " + id);
-
-        } else {
-	        request.setAttribute("alert", "microsites.ua.asociados");
-	        log.debug("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
-        	
-        }
-        return mapping.findForward("cancel");
-    }*/
-	
+//	/**
+//     * Método que comprueba si hay microsites para una Unidad Orgánica
+//     * @param idua identificador de la unidad organica
+//     * @return boolean
+//     */
+//    private boolean hayMicrositesUA(Long idua){
+//    	boolean retorno=false;
+//    	
+//    	try {
+//	    	String value = System.getProperty("es.caib.rolsac.microsites");
+//	    	
+//	    	if ((value == null) || value.equals("N")) {
+//	    		retorno=false;
+//	    	} else {
+//	            retorno = tieneMicrosites(idua);
+//	    	}    	
+//		} catch (Exception e) {
+//			retorno=true; //para evitar inconsistencias
+//		}
+//    	
+//    	
+//    	return retorno;
+//    }
+//    
+//    private boolean tieneMicrosites(Long idua) throws Exception {
+//		boolean retorno = false;
+//		MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
+//		List micros = micro.listarMicrosites();
+//		           
+//		Iterator iter = micros.iterator();
+//		while (iter.hasNext()) 
+//		{
+//			Microsite mic = (Microsite) iter.next();
+//			if (mic.getUnidadAdministrativa()==idua.intValue()) {
+//	        			retorno=true;
+//				break;
+//			}
+//		}
+//		return retorno;
+//	}
+//	
+//    /**
+//     * Descripción: Método que valida si la UA puede ser eliminada.
+//     * 
+//     * @author Indra
+//     * @param  ua  Unidad administrativa
+//     * @param  unidadDelegate  Delegado de la Unidad administrativa
+//     * @return Devuelve un objeto actionerrors, si el objeto contiene errores la UnidadAdministrativa no podra ser borrada
+//     */
+//    private ActionErrors validarEliminacionUA(UnidadAdministrativa ua, UnidadAdministrativaDelegate unidadDelegate) {
+//    	
+//    	ActionErrors errores = new ActionErrors();
+//    	String ids ="";
+//    	boolean boolProcedIsEmpty =ua.getProcedimientos().isEmpty();
+//    	
+//    	// Comprobar si el usuari puede eliminar UA
+//    	try{
+//    		if (!ua.isRaiz()) { 
+//    			if (!unidadDelegate.autorizarEliminarUA(ua.getPadre().getId()))
+//    				errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisosAntecesorUA"));
+//    		} else {
+//    			if (!unidadDelegate.autorizarEliminarUA(ua.getId()))
+//    				errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisosUA"));
+//    		}
+//    		
+//    	}catch(Exception e){
+//    		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisos"));
+//    		return errores;  
+//    	}
+//
+//    	//Compronbar si la UA tiene elementos relacionados
+//        if(!ua.getHijos().isEmpty()){
+//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneHijos"));
+//        }else if(!ua.getFichasUA().isEmpty()){
+//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneFichas"));
+//        }else if(!ua.getPersonal().isEmpty()){
+//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tienePersonal"));
+//        }else if(!ua.getUnidadesMaterias().isEmpty()){
+//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneUnidadesMaterias"));
+//        }else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ){
+//       	
+//        	List <Long> idsList=new ArrayList<Long>();
+//
+//        	if(!boolProcedIsEmpty)
+//        		idsList = ua.getIdsProcedimientos();
+//        	else
+//        		idsList = ua.getIdsNormativas();
+//        	    	
+//        	Iterator<Long> iter = idsList.iterator();
+//        	int count = 0;
+//        	while(iter.hasNext()){
+//        		Long id = iter.next();
+//        		if (ids.equals("")){
+//          			ids = id.toString();
+//          			count++;
+//        		}else{
+//          			if ((count % 10) == 0)
+//          				ids = ids + ",<BR> " + id.toString();
+//          			else
+//          				ids = ids + ", " + id.toString();
+//          			
+//          			count++;
+//          		}
+//        	}
+//        	
+//        	if(!boolProcedIsEmpty)
+//        		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneProcedimientos",ids));
+//        	else
+//        		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneNormativas",ids));
+//        	
+//        }
+//
+//        return errores;
+//    }
 }
