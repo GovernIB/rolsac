@@ -6,8 +6,8 @@ import org.ibit.rol.sac.integracion.ws.UnidadAdminCENoEncontradaException;
 import org.ibit.rol.sac.model.AdministracionRemota;
 
 /**
- * Singleton que controla el proceso de Alta o Baja de una Administración Remota.
- * TODO: Aquesta implementació té el problema de doble-checked locking.
+ * Singleton que controla el proceso de Alta o Baja de una AdministraciÃ³n Remota.
+ * TODO: Aquesta implementaciÃ³ tÃ© el problema de doble-checked locking.
  * @author arodrigo
  *
  */
@@ -31,7 +31,7 @@ public class SincronizadorSingleton {
 	 */
 	public synchronized void alta(AdministracionRemota adminRemota) throws CapaDeDatosException, ComunicacionException, SincronizacionTrabajadoException, UnidadAdminCENoEncontradaException{
 		if(sinc==null){
-            log.debug("Inicio proceso de alta con la versión del sincronizador: "+adminRemota.getVersion());
+            log.debug("Inicio proceso de alta con la versiÃ³n del sincronizador: "+adminRemota.getVersion());
 
             if(adminRemota.getVersion()==null || adminRemota.getVersion()==1){
                 sinc = new SincronizadorAltaThread(adminRemota);
@@ -52,7 +52,7 @@ public class SincronizadorSingleton {
 	}
 	
 	/**
-	 * Inicia el proceso de baja de una Administración Remota 
+	 * Inicia el proceso de baja de una AdministraciÃ³n Remota 
 	 * 
 	 * @param adminRemota
 	 * @throws CapaDeDatosException
@@ -106,7 +106,7 @@ public class SincronizadorSingleton {
 	}
 	
 	/**
-	 * Devuelve la Administración Remota sobre la que se esta realizando el proceso.
+	 * Devuelve la AdministraciÃ³n Remota sobre la que se esta realizando el proceso.
 	 * @return {@link AdministracionRemota}
 	 */
 	public static AdministracionRemota getAdminRemota() {
@@ -144,7 +144,7 @@ public class SincronizadorSingleton {
 	}
 	
 	/**
-	 * Detiene un hilo de ejecución a la espera de que el estado del proceso varie
+	 * Detiene un hilo de ejecuciÃ³n a la espera de que el estado del proceso varie
 	 * @param timeout
 	 * @throws InterruptedException
 	 */

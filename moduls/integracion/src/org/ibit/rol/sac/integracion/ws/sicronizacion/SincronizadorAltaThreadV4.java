@@ -16,7 +16,7 @@ import java.util.List;
  * User: mgonzalez
  * Date: 19-sep-2011
  * Time: 9:36:53
- * Esta versión coincide con la V3 donde lo que se ha cambiado es la manera de obtener las fichas
+ * Esta versiÃ³n coincide con la V3 donde lo que se ha cambiado es la manera de obtener las fichas
  * y los procedimientos para evitar problemas de memoria con el mule. Ahora se van cogiendo de uno en uno.
  */
 public class SincronizadorAltaThreadV4 extends SincronizadorAltaThreadV3{
@@ -101,7 +101,7 @@ public class SincronizadorAltaThreadV4 extends SincronizadorAltaThreadV3{
 						log.debug("Fichas recogidas");
                         boolean grabarFicha= false;
 						for(Long idFichaTrans : idsFichaTrans){
-                            // Condicions afegides per controllar que no es donin d'alta fitxes sense matèries ni fets vitals.
+                            // Condicions afegides per controllar que no es donin d'alta fitxes sense matÃ¨ries ni fets vitals.
                             // Controllam que si la llista ens ve amb elements nulls, se descarti la fitxa.
                             FichaTransferible fichaTrans = sincInvoker.recogerFicha(idFichaTrans);
                             if ((fichaTrans.getCodigoEstandarMaterias() != null && fichaTrans.getCodigoEstandarMaterias().length > 0)
@@ -168,7 +168,7 @@ public class SincronizadorAltaThreadV4 extends SincronizadorAltaThreadV3{
 			log.debug("Recogiendo Procedimientos relacionados");
 			final Long[] idsProcsTransferibles = sincInvoker.recogerIdsProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
 			if(idsProcsTransferibles!=null){
-				log.debug("Procedimientos recogidos tamaño: "+idsProcsTransferibles.length);
+				log.debug("Procedimientos recogidos tamaÃ±o: "+idsProcsTransferibles.length);
 
 				for(Long idProcTransferible : idsProcsTransferibles){
                     if(null != idProcTransferible){

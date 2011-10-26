@@ -130,8 +130,8 @@ public class Sincronizador {
 	
 	/**
 	 * Recoge toda la informacion de la {@link AdministracionRemota}. Comienza desde la
-	 * {@link UnidadAdministrativa} cuyo codigo estandar esta señalado en la {@link AdministracionRemota}
-	 * y a la profindidad señalada.
+	 * {@link UnidadAdministrativa} cuyo codigo estandar esta seÃ±alado en la {@link AdministracionRemota}
+	 * y a la profindidad seÃ±alada.
 	 * 
 	 * Todas las {@link Ficha} y {@link ProcedimientoLocal} relacionados con las {@link UnidadAdministrativa}
 	 * tambien son recogidos.
