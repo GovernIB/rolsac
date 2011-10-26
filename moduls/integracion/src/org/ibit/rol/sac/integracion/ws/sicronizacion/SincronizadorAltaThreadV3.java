@@ -12,7 +12,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
  * 
  * @author arodrigo
  *
- * Esta versión implementa toda la funcionalidad necesaria para adaptarse a los requerimientos de la Ventanilla Unica
+ * Esta versiÃ³n implementa toda la funcionalidad necesaria para adaptarse a los requerimientos de la Ventanilla Unica
  * de Directiva de Servicios
  */
 public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
@@ -90,7 +90,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
 			
 			if(edificioTransferibles!=null){
-				log.debug("Edificios recogidos tamaño: "+edificioTransferibles.length);
+				log.debug("Edificios recogidos tamaÃ±o: "+edificioTransferibles.length);
 				
 				for(EdificioTransferible edificioTransferible : edificioTransferibles){
 					log.debug("getId: "+edificioTransferible.getId());
@@ -131,7 +131,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 			log.debug("Recogiendo Procedimientos relacionados");
 			final ProcedimientoTransferible[] procsTransferibles = sincInvoker.recogerProcedimientosRelacionados(ua.getIdExterno(), hechosCE, materiasCE);
 			if(procsTransferibles!=null){
-				log.debug("Procedimientos recogidos tamaño: "+procsTransferibles.length);
+				log.debug("Procedimientos recogidos tamaÃ±o: "+procsTransferibles.length);
 				for(ProcedimientoTransferible procTransferible : procsTransferibles){
 					if (procTransferible.getId() != null) {
                         ProcedimientoRemoto procRemoto = procRemotoDelegate.obtenerProcedimientoRemoto(procTransferible.getId(),adminRemota.getId());
@@ -205,7 +205,7 @@ public class SincronizadorAltaThreadV3 extends SincronizadorAltaThread{
 	
 	
 	private UnidadAdministrativa recogerOrdanResolutori (Long  idOrganResolutori,Long idAdminRemota,ProcedimientoRemoto procRemoto){
-		//obtenemos el Órgano Resolutori y lo añadimos
+		//obtenemos el Ã“rgano Resolutori y lo aÃ±adimos
 		UnidadAdministrativaRemota organResolutori=null;
 		if(idOrganResolutori!=null){
 			try {
