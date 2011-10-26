@@ -15,11 +15,11 @@
         var poprelacion;
 
         function popSeccion(){
-            poprelacion = obrir("<html:rewrite page='/sistema/seccion/arbol.do'/>?idSeccion=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
+            poprelacion = obrirScroll("<html:rewrite page='/sistema/seccion/arbol.do'/>?idSeccion=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
         }
 
         function popUA(){
-            poprealcion = obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
+            poprealcion = obrirScroll("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
         }
 
         function actualizaSeccion(id, nombre){

@@ -42,7 +42,7 @@
     }
 
     function abrirUA() {
-        poprealcion = obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&", "<bean:message key='boton.seleccionar' />", 538, 440);
+        poprealcion = obrirScroll("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&", "<bean:message key='boton.seleccionar' />", 538, 440);
     }
 
     function actualizaUA(id, nombre) {
@@ -50,7 +50,7 @@
         eval("document.forms[0].nombreUA.value=nombre");
     }
 
-    // Función para abrir la lista de opciones para busqueda o relacion
+    // Funciï¿½n para abrir la lista de opciones para busqueda o relacion
     function listaOpciones(opcion, dato){
         if (opcion == "busqueda"){
             obrir("<html:rewrite page='/contenido/normativa/popup.do?accion=busqueda&opcion='/>" + dato, "<bean:message key='boton.seleccionar' />", 538, 140);
@@ -60,7 +60,7 @@
         }
     }
 
-    // Función para abrir el popup de afectaciones
+    // Funciï¿½n para abrir el popup de afectaciones
     function listaAfectaciones(){
         obrir("<html:rewrite page='/contenido/normativa/popafectacion.do'/>", "<bean:message key='boton.seleccionar' />", 538, 180);
     }
@@ -313,7 +313,7 @@
 </center>
 </logic:notPresent>
 
-<!-- XAPUÇA -->
+<!-- XAPUï¿½A -->
 
 <% pageContext.removeAttribute(Globals.XHTML_KEY);%>
 <html:javascript
