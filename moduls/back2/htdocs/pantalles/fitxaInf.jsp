@@ -4,6 +4,7 @@
     <link href='<c:url value="/css/modul_seccions_ua.css"/>' rel="stylesheet" type="text/css" media="screen" />
     <link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
     <link href='<c:url value="/css/modul_seccions_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
+    <link href='<c:url value="/css/modul_enllassos.css"/>' rel="stylesheet" type="text/css" media="screen" />
     
     <script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
@@ -16,6 +17,8 @@
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
 
     <script type="text/javascript">
     // accesos
@@ -126,6 +129,11 @@
     var txtNodesFills = "Nodes fills";
     var txtCarregantArrel = "Carregant node arrel de l'arbre. " + txtEspere;
     var txtCarregantNodes = txtCarregant + " nodes fills. " + txtEspere;
+	// enllassos
+	var txtEnllas = "Enllaç";
+    var txtEnllassos = "Enllassos";
+    var txtNoHiHaEnllassos = "No hi ha cap " + txtEnllas.toLowerCase();
+    var txtNoHiHaEnllassosSeleccionats = "No hi ha " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
     
     // error conexio
     var txtCalcularTotal = "Calcular el total";
@@ -253,6 +261,17 @@
             "error":
                 {
                     "obligatori": "El camp 'Estat' es obligatori"                   
+                }
+        },
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "enllas_titol_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": "El camp 'Titol' es obligatori"                   
                 }
         }   
     ];
@@ -496,20 +515,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- enllasos -->
-                                    <h3>Enllaços relacionats</h3>
-                                    <div class="enllasosRelacionats">
-                                        <p class="info">No hi ha enllaços.</p>
-                                        <div class="fila">
-                                            <p>
-                                                <a href="javascript:;" class="btn afegeix"><span><span>Afegeix
-                                                            enllaç</span>
-                                                </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- /enllasos -->
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
@@ -556,20 +561,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- enllasos -->
-                                    <h3>Enlaces relacionados</h3>
-                                    <div class="enllasosRelacionats">
-                                        <p class="info">No hay enlaces.</p>
-                                        <div class="fila">
-                                            <p>
-                                                <a href="javascript:;" class="btn afegeix"><span><span>Añade
-                                                            enlace</span>
-                                                </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- /enllasos -->
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
@@ -616,20 +607,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- enllasos -->
-                                    <h3>Enllaços relacionats</h3>
-                                    <div class="enllasosRelacionats">
-                                        <p class="info">No hi ha enllaços.</p>
-                                        <div class="fila">
-                                            <p>
-                                                <a href="javascript:;" class="btn afegeix"><span><span>Afegeix
-                                                            enllaç</span>
-                                                </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- /enllasos -->
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
@@ -676,20 +653,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- enllasos -->
-                                    <h3>Enllaços relacionats</h3>
-                                    <div class="enllasosRelacionats">
-                                        <p class="info">No hi ha enllaços.</p>
-                                        <div class="fila">
-                                            <p>
-                                                <a href="javascript:;" class="btn afegeix"><span><span>Afegeix
-                                                            enllaç</span>
-                                                </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- /enllasos -->
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
@@ -736,20 +699,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- enllasos -->
-                                    <h3>Enllaços relacionats</h3>
-                                    <div class="enllasosRelacionats">
-                                        <p class="info">No hi ha enllaços.</p>
-                                        <div class="fila">
-                                            <p>
-                                                <a href="javascript:;" class="btn afegeix"><span><span>Afegeix
-                                                            enllaç</span>
-                                                </span>
-                                                </a>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- /enllasos -->
                                 </div>
                                 <!-- /fr -->
                             </div>
@@ -1050,7 +999,7 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul mostrat">Amaga</a>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend>
                         Relació: Secció - <abbr title="Unitat Administrativa">UA</abbr>
                     </legend>
@@ -1071,6 +1020,56 @@
                         <!-- /modulSeccionsUA -->
                     </div>
                 </fieldset>
+            </div>
+            <!-- /modul -->
+            <!-- modul -->
+            <div class="modul">                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend>Enllaços relacionats</legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulEnllaços -->
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <div class="modulEnllassos multilang">
+                            <ul class="idiomes">
+                            	<li class="introIdiomas">Idioma:</li>
+                                <li class="ca">ca</li>
+                                <li class="es">es</li>
+                                <li class="en">en</li>
+                                <li class="de">de</li>
+                                <li class="fr">fr</li>
+                            </ul>                            
+                            <div class="seleccionats">
+                                <%-- dsanchez: multiidioma --%>
+                                <div class="seleccionat cajaIdioma ca">
+                                    <p class="info">No hi ha enllaços</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="es cajaIdioma">
+                                    <p class="info">No hi ha enllaços</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="en cajaIdioma">
+                                    <p class="info">No hi ha enllaços</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                <div class="de cajaIdioma">
+                                    <p class="info">No hi ha enllaços</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                <div class="fr cajaIdioma">
+                                    <p class="info">No hi ha enllaços</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona enllaços</span></span></a>
+                                </div>
+                            </div>                                  
+                        </div>
+                        <!-- /modulEdificis -->                                 
+                    </div>                              
+                </fieldset>                     
             </div>
             <!-- /modul -->     
         </div>
@@ -1146,3 +1145,221 @@
 	</div>
 </div>
 <!-- /escriptori_seccions_ua -->
+<!-- escriptori_enllassos -->
+<div id="escriptori_enllassos">
+   <ul id="opcions">
+        <li class="opcio actiu">Administració de enllaços</li>                                 
+    </ul>    
+    <form id="formEnllassos" class="grupoModulosFormulario">
+    	<input id="id_enllas_actual" type="hidden"/>
+	    <div class="modul">
+	        <fieldset>
+		        <!-- fila -->
+		        <div class="fila">
+		            <p class="introIdiomas">Idioma:</p>
+		            <ul class="idiomes">
+		                <li class="idioma"><a href="javascript:;" class="ca">Català</a></li>
+		                <li class="idioma"><a href="javascript:;" class="es">Español</a></li>
+		                <li class="idioma"><a href="javascript:;" class="en">English</a></li>
+		                <li class="idioma"><a href="javascript:;" class="de">Deutsch</a></li>
+		                <li class="idioma"><a href="javascript:;" class="fr">Français</a></li>                                
+		            </ul>
+		            <div class="idiomes">
+		                <!-- ca -->
+		                <div class="idioma ca">
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_titol_ca">Títol</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_titol_ca" name="item_titol_ca" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_url_ca">Adreça web</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_url_ca" name="item_url_ca" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <!-- /ca -->
+		                <!-- es -->
+		                <div class="idioma es">
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_titol_es">Título</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_titol_es" name="item_titol_es" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>                                    
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_url_es">Dirección web</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_url_es" name="item_url_es" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <!-- /es -->
+		                <!-- en -->
+		                <div class="idioma en">
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_titol_en">Headline</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_titol_en" name="item_titol_en" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>                                    
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_url_en">Web adress</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_url_en" name="item_url_en" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <!-- /en -->
+		                <!-- de -->
+		                <div class="idioma de">
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_titol_de">Títol</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_titol_de" name="item_titol_de" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>                                    
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_url_de">Adreça web externa</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_url_de" name="item_url_de" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <!-- /de -->
+		                <!-- fr -->
+		                <div class="idioma fr">
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_titol_fr">Títol</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_titol_fr" name="item_titol_fr" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>                                    
+		                    <div class="fila">
+		                        <div class="element t99p">
+		                            <div class="etiqueta">
+		                                <label for="enllas_url_fr">Adreça web</label>
+		                            </div>
+		                            <div class="control">
+		                                <input id="enllas_url_fr" name="item_url_fr" type="text"
+		                                    class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div>
+		                <!-- /fr -->
+		            </div>
+		        </div>
+		        <div id="cercador">
+			        <div class="botonera">
+						<div class="boton btnGenerico">
+							<a id="btnLimpiarCampos" class="btn borrar" href="javascript:;">
+								<span><span>Borrar</span></span>
+							</a>
+						</div>
+						<div class="boton btnGenerico">
+							<a id="btnInsertarEnllas" class="btn inserta important" href="javascript:;">
+								<span><span>Inserta</span></span>
+							</a>							
+						</div>
+						<div id="btnVolverDetalle" class="boton btnGenerico">
+							<a class="btn torna" href="javascript:;">
+								<span><span>Torna al detall</span></span>
+							</a>
+						</div>
+					</div>
+				</div>
+		        <!-- /fila -->
+			</fieldset>
+		</div>
+	</form>
+    <div class="modulLateral escriptori_items_seleccionats">
+        <div class="modul">
+            <div class="interior multilang">            	
+                <ul class="idiomes">
+                	<li class="introIdiomas">Idioma:</li>
+                    <li class="ca">ca</li>
+                    <li class="es">es</li>
+                    <li class="en">en</li>
+                    <li class="de">de</li>
+                    <li class="fr">fr</li>
+                </ul>
+                <div class="seleccionats">
+                    <div class="seleccionat cajaIdioma ca">
+                        <p class="info">No hi ha enllaços</p>
+                        <div class="listaOrdenable"></div>
+                    </div>
+                    <div class="es cajaIdioma">
+                        <p class="info">No hi ha enllaços</p>
+                        <div class="listaOrdenable"></div>
+                    </div>
+                    <div class="en cajaIdioma">
+                        <p class="info">No hi ha enllaços</p>
+                        <div class="listaOrdenable"></div>
+                    </div>                                
+                    <div class="de cajaIdioma">
+                        <p class="info">No hi ha enllaços</p>
+                        <div class="listaOrdenable"></div>
+                    </div>                                
+                    <div class="fr cajaIdioma">
+                        <p class="info">No hi ha enllaços</p>
+                        <div class="listaOrdenable"></div>                      
+                    </div>                    
+                    <p class="botonera btnGenerico">
+                        <a id="btnFinalitzar" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                    </p>                                    
+                </div>                                  
+            </div>
+        </div>
+    </div>
+    <!-- seleccionats -->
+</div>                           
+
+<!-- /escriptori_enllassos -->

@@ -258,94 +258,101 @@ function DetallBase(soloFicha){
 	}
 	
 	this.idioma = function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A")) {
-			
-			ul_idiomes_elm.unbind("click");
-			
-			if (!elm.hasClass("desplegar")) {				
-												
-				a_clicat_class = elm.attr("class");
-				
-				div_idiomes_elm.find("div.seleccionat").slideUp(300, function() {
-					
-					$(this).removeClass("seleccionat");
-					span_primer_elm = ul_idiomes_elm.find("span:first");
-					span_primer_elm_class = span_primer_elm.attr("class");
-					span_primer_elm_text = span_primer_elm.text();
-					span_primer_elm.parent().removeClass("seleccionat").html("<a href=\"javascript:;\" class=\"" + span_primer_elm_class + "\">" + span_primer_elm_text + "</a>");
-					
-					elm_text = elm.text();
-					elm.parent().addClass("seleccionat").html("<span class=\"" + a_clicat_class + "\">" + elm_text + "</span>");
-					
-					div_idiomes_elm.find("div." + a_clicat_class).slideDown(300, function() {
-						$(this).addClass("seleccionat");
-						ul_idiomes_elm.bind("click",Detall.idioma);
-					});
-				
-				});
-				
-				
-				// Comprobamos si existen modulos laterales muldiidioma
-				var modulos = jQuery(".modulLateral .modul .multilang");
-				
-				jQuery(modulos).find("li.seleccionat:first").removeClass("seleccionat");
-				jQuery(modulos).find("li." + a_clicat_class).addClass("seleccionat");
-				jQuery(modulos).find("div.seleccionats div.seleccionat").slideUp(300,function(){
-					jQuery(this).removeClass("seleccionat");
-					jQuery(this).hide();
-					jQuery(this).siblings("div." + a_clicat_class).slideDown(300,function(){
-						jQuery(this).addClass("seleccionat");
-					});
-				});
-				
-				// Comprovamos si existen documentos relacionados
-				/*if (typeof modul_documents_elm != "undefined") {
-					modul_documents_idiomes_elm.find("li.seleccionat:first").removeClass("seleccionat");
-					modul_documents_idiomes_elm.find("li." + a_clicat_class).addClass("seleccionat");
-					
-					documents_seleccionats_elm.find("div.seleccionat").slideUp(300, function() {
-						$(this).removeClass("seleccionat");
-						documents_seleccionats_elm.find("div." + a_clicat_class).slideDown(300, function() {
-							$(this).addClass("seleccionat");
-						});
-					});					
-				}*/		
-				
-			} else{
-				
-				if (!elm.hasClass("on")) {
-				
-					ul_idiomes_elm.find("li:not(.desplegar)").css("display","none");
-					div_idiomes_elm.find("div.idioma").each(function(i) {
-						text_idioma = ul_idiomes_elm.find("li:eq(" + i + ")").text();
-						div_idioma_elm = $(this);
-						if (i >= 1) {
-							div_idioma_elm.css("border-top",".2em solid #ffecd9");
-						}
-						div_idioma_elm.prepend("<h3>" + text_idioma + "</h3>").slideDown(300);
-					});
-					elm.addClass("on").text(txtPlega);
-				
-				} else {
-					
-					div_idiomes_elm.find("div.idioma").each(function(i) {
-						div_idioma_elm = $(this);
-						if (i >= 1) {
-							div_idioma_elm.css("border-top","");
-						}
-						div_idioma_elm.find("h3:first").remove().end().slideUp(300);
-					});
-					elm.removeClass("on").text(txtDesplega);
-					ul_idiomes_elm.find("li:not(.desplegar)").css("display","block");
-					
-				}
-				
-				ul_idiomes_elm.bind("click",Detall.idioma);
-			
-			}
-		}		
+	    elm = $(e.target);
+	    
+	    if (elm.is("A")) {
+	        var ul_idiomes_elm = elm.parent().parent();
+	        ul_idiomes_elm.unbind("click");
+	        
+	        var div_idiomes_elm = ul_idiomes_elm.next();
+	        
+	        if (!elm.hasClass("desplegar")) {				
+	                                            
+	            a_clicat_class = elm.attr("class");
+	            
+	            div_idiomes_elm.find("div.seleccionat").slideUp(300, function() {
+	                
+	                $(this).removeClass("seleccionat");
+	                span_primer_elm = ul_idiomes_elm.find("span:first");
+	                span_primer_elm_class = span_primer_elm.attr("class");
+	                span_primer_elm_text = span_primer_elm.text();
+	                span_primer_elm.parent().removeClass("seleccionat").html("<a href=\"javascript:;\" class=\"" + span_primer_elm_class + "\">" + span_primer_elm_text + "</a>");
+
+	                elm_text = elm.text();
+	                elm.parent().addClass("seleccionat").html("<span class=\"" + a_clicat_class + "\">" + elm_text + "</span>");
+	                
+	                div_idiomes_elm.find("div." + a_clicat_class).slideDown(300, function() {
+	                    $(this).addClass("seleccionat");
+	                    if (typeof e.data != 'undefined' && typeof e.data.actualizarIdiomasModulosLaterales != 'undefined' && typeof e.data.idPare != 'undefined'){
+	                    	ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': e.data.actualizarIdiomasModulosLaterales, 'idPare':e.data.idPare},that.idioma);
+	                    } else {
+	                    	ul_idiomes_elm.bind("click", that.idioma);
+	                    }	                    	                    
+	                });
+	            
+	            });
+	            
+	            
+	            // Cambiamos los modulos laterales muldiidioma (por defecto se cambian).
+	            var cambiarModulosLaterales;
+	            if (typeof e.data != 'undefined' && typeof e.data.actualizarIdiomasModulosLaterales != 'undefined') {
+	                cambiarModulosLaterales = Boolean (e.data.actualizarIdiomasModulosLaterales);
+	            } else {
+	                cambiarModulosLaterales = true;
+	            }
+
+	            if (cambiarModulosLaterales) {	            		            	
+	            	
+	            	if (typeof e.data != 'undefined' && typeof e.data.idPare != 'undefined'){
+	            		var modulos = jQuery(e.data.idPare + " .modulLateral .modul .multilang");
+	            	} else {
+	            		var modulos = jQuery(".modulLateral .modul .multilang");
+	            	}	            		                
+	            	
+	                jQuery(modulos).find("li.seleccionat:first").removeClass("seleccionat");
+	                jQuery(modulos).find("li." + a_clicat_class).addClass("seleccionat");
+	                jQuery(modulos).find("div.seleccionats div.seleccionat").slideUp(300,function(){
+	                    jQuery(this).removeClass("seleccionat");
+	                    jQuery(this).hide();
+	                    jQuery(this).siblings("div." + a_clicat_class).slideDown(300,function(){
+	                        jQuery(this).addClass("seleccionat");
+	                    });
+	                });
+	            }
+
+	        } else{
+	            
+	            if (!elm.hasClass("on")) {
+	            
+	                ul_idiomes_elm.find("li:not(.desplegar)").css("display","none");
+	                div_idiomes_elm.find("div.idioma").each(function(i) {
+	                    text_idioma = ul_idiomes_elm.find("li:eq(" + i + ")").text();
+	                    div_idioma_elm = $(this);
+	                    if (i >= 1) {
+	                        div_idioma_elm.css("border-top",".2em solid #ffecd9");
+	                    }
+	                    div_idioma_elm.prepend("<h3>" + text_idioma + "</h3>").slideDown(300);
+	                });
+	                elm.addClass("on").text(txtPlega);
+	            
+	            } else {
+	                
+	                div_idiomes_elm.find("div.idioma").each(function(i) {
+	                    div_idioma_elm = $(this);
+	                    if (i >= 1) {
+	                        div_idioma_elm.css("border-top","");
+	                    }
+	                    div_idioma_elm.find("h3:first").remove().end().slideUp(300);
+	                });
+	                elm.removeClass("on").text(txtDesplega);
+	                ul_idiomes_elm.find("li:not(.desplegar)").css("display","block");
+	                
+	            }
+	            
+	            ul_idiomes_elm.bind("click", that.idioma);
+	        
+	        }
+	    }		
 	}
 	
 	this.previsualitza = function() {

@@ -52,7 +52,6 @@ $(document).ready(function() {
 				theme_advanced_buttons4 : "",
 				theme_advanced_toolbar_location : "top",
 				theme_advanced_toolbar_align : "left",
-				//theme_advanced_statusbar_location : "bottom",
 				theme_advanced_resizing : true,
 				theme_advanced_resize_horizontal: false
 			});
@@ -405,21 +404,21 @@ function CDetall(){
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			
 			// Esconder todos menos el primero
-			$('div.idioma:gt(0)').hide();
+			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 		
-			ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
+			var ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
 						
-			a_primer_elm = ul_idiomes_elm.find("a:first");
+			var a_primer_elm = ul_idiomes_elm.find("a:first");
 			a_primer_elm.parent().addClass("seleccionat");
 			
-			a_primer_elm_class = a_primer_elm.attr("class");
-			a_primer_elm_text = a_primer_elm.text();
+			var a_primer_elm_class = a_primer_elm.attr("class");
+			var a_primer_elm_text = a_primer_elm.text();
 			
 			a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 			
-			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
+			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
-			ul_idiomes_elm.bind("click",this.idioma);
+			ul_idiomes_elm.find("li.idioma").bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_detall'},that.idioma);			
 		}
 		
 		// moduls
@@ -448,9 +447,8 @@ function CDetall(){
 		//TODO: moure a modul_seccion_ua.js
 		secc_ua_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
 		secc_ua_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
-		//$("div.modulMateries div.llistat input[type=checkbox]").attr('checked', false);
-		//
-		
+	
+		ModulEnllas.nuevo();
 		
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);
@@ -531,7 +529,7 @@ function CDetall(){
 		seccUA_nodes_size = seccUA_nodes.length;
 
 		//mat_llistat_elm.find("input").removeAttr("checked");
-		
+
 		if (seccUA_nodes_size == 0) {
 			seccUA_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
 		} else {
@@ -550,6 +548,8 @@ function CDetall(){
 			seccUA_seleccionats_elm.find(".listaOrdenable").html(codi_seccUA);
 						
 		}	
+		
+		ModulEnllas.cargarEnlaces();
 		
 		// mostrem
 

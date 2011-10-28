@@ -2,6 +2,7 @@ package es.caib.rolsac.back2.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15,15 +16,18 @@ import javax.servlet.http.HttpSession;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 
+import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionEnlace;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.transients.EnlaceTransient;
 import org.ibit.rol.sac.model.transients.FichaUATransient;
 import org.ibit.rol.sac.model.transients.IdNomTransient;
 import org.ibit.rol.sac.model.transients.FichaTransient;
@@ -31,6 +35,7 @@ import org.ibit.rol.sac.model.transients.SeccionTransient;
 import org.ibit.rol.sac.model.transients.UnidadTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
@@ -247,6 +252,7 @@ public class FitxaInfBackController {
         List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
         List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
         List<FichaUATransient> llistaFichaUATransient = new ArrayList<FichaUATransient>();
+        List<EnlaceTransient> llistaEnllassosTransient = new ArrayList<EnlaceTransient>();
         
         FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         
@@ -359,7 +365,21 @@ public class FitxaInfBackController {
             } else {
                 resultats.put("seccUA", null);
             }
-                        
+           
+            //Enllaços
+            
+          
+            if (fitxa.getEnlaces() != null){
+                for (Enlace enllas : fitxa.getEnlaces()){
+                    llistaEnllassosTransient.add(new EnlaceTransient(enllas.getId(),
+                                                                    enllas.getOrden(),
+                                                                    enllas.getTraduccionMap()));
+                    
+                }
+                resultats.put("enllassos", llistaEnllassosTransient);
+            } else {
+                resultats.put("enllassos", null);
+            }
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -572,13 +592,79 @@ public class FitxaInfBackController {
                                         existe=1;
                                 }
                                 if (existe==0)
-                                    System.out.println("prova");
                                     fitxaDelegate.crearFichaUA(idUA, new Long(Parametros.PORTADAS_ACTUALIDAD), idFitxa);
                             }
                         }                                                
                     }
-                }                                                                                            
-               
+                }                                                                                                           
+                
+                //Tractament d'enllaçós                
+                
+                Enumeration<String> nomsParametres = request.getParameterNames();
+                
+                List<Enlace> enllassosNous = new ArrayList<Enlace>();
+                
+                while(nomsParametres.hasMoreElements()) {
+                    
+                    String nomParameter = (String)nomsParametres.nextElement();                    
+                    String[] elements = nomParameter.split("_");
+                    
+                    if (elements[0].equals("enllas") && elements[1].equals("id")){
+                        //En aquest cas, elements[2] es igual al id del enllas                                                 
+                                            
+                        Enlace enllas = new Enlace();                                           
+                        
+                        if (elements[2].charAt(0) == 't'){//Element nou, amb id temporal
+                            enllas.setId(null);                            
+                        } else {
+                            enllas.setId(ParseUtil.parseLong(request.getParameter(nomParameter)));
+                        }
+                        
+                        enllas.setOrden(ParseUtil.parseLong(request.getParameter("enllas_orden_" + elements[2])));                        
+                        
+                        for (String lang: langs){
+                         
+                            TraduccionEnlace traduccio = new TraduccionEnlace();
+                            
+                            traduccio.setTitulo(request.getParameter("enllas_nombre_" + lang + "_" + elements[2]));
+                            traduccio.setEnlace(request.getParameter("enllas_url_" + lang + "_" + elements[2]));
+                            
+                            enllas.setTraduccion(lang, traduccio);
+                            
+                        }
+                        
+                        enllas.setFicha(fitxa);
+                        
+                        enllassosNous.add(enllas);
+                        
+                    }                                                            
+                }
+                    
+                EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
+                
+                for (Enlace enllas: enllassosNous){
+                    enllasDelegate.grabarEnlace(enllas, null, idFitxa);
+                }                
+                
+                //Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no                
+                if (edicion){
+                    
+                    List<Enlace> enllassosEliminar = fitxaOld.getEnlaces();                                    
+                    
+                    for(Enlace enllas: enllassosNous){
+                        for (Iterator<Enlace> it = enllassosEliminar.iterator(); it.hasNext(); ){
+                            if (it.next().getId().equals(enllas.getId())){
+                                it.remove();
+                            }
+                        }
+                    }                    
+                    
+                    for (Enlace enllas: enllassosEliminar){
+                        enllasDelegate.borrarEnlace(enllas.getId());
+                    }
+                    
+                }                                                                                
+                
                 String ok = "Fitxa guardada correctament.";
                 result = new IdNomTransient(fitxa.getId(), ok);
             }

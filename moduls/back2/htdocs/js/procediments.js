@@ -338,9 +338,7 @@ function CDetall(){
 	this.guarda = function() {
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
-		
-		console.log(urlParams);
-		
+			
 		this._baseGuarda(urlParams);
 	}
 	
