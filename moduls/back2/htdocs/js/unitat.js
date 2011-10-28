@@ -98,10 +98,8 @@ function CDetall(soloFicha){
 			}
 								
 		});
-		window.location.href = pagLlistat;
+
 		return false;	
-		
-		
 		
 	}
 	
@@ -142,6 +140,9 @@ function CDetall(soloFicha){
 			url: pagDetall,
 			data: dataVars,
 			dataType: "json",
+			beforeSend : function () {
+				$("#carregantDetall").fadeIn(300);
+			},
 			error: function() {
 				
 				// missatge
@@ -150,12 +151,21 @@ function CDetall(soloFicha){
 				Error.llansar();
 				
 			},
-			success: function(data) {				
+			success: function(data) {
 				Detall.pintar(data);								
 			}
 		});
 		
 		this.actualizaEventos();		
+	}
+	
+	this.recarregar = function() {
+		
+		// animacio
+		escriptori_detall_elm.fadeOut(300, function() {
+			Detall.carregar();
+		});		
+		
 	}
 	
 	this.pintar = function(dades) {
@@ -399,11 +409,11 @@ function CDetall(soloFicha){
 		//}
 			
 		// mostrem
-		if ($("#carregantDetall").size() > 0) {
+		//if ($("#carregantDetall").size() > 0) {
 			
 			$("#carregantDetall").fadeOut(300, function() {
 				
-				$(this).remove();
+				//$(this).remove();
 				
 				// array
 				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
@@ -411,7 +421,7 @@ function CDetall(soloFicha){
 				escriptori_detall_elm.fadeIn(300);
 											
 			});
-			
+		/*
 		} else {
 			
 			escriptori_contingut_elm.fadeOut(300, function() {
@@ -419,6 +429,7 @@ function CDetall(soloFicha){
 			});			
 			
 		}
+		*/
 	}
 	
 	this.elimina = function() {

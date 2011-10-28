@@ -6,6 +6,9 @@
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />    
     
+    <div id="escriptori_contingut">
+    </div>
+    
     <div id="carregantDetall">
         <p class="executant"><spring:message code='unitatadm.carregant_unitatadm'/></p>
     </div>          

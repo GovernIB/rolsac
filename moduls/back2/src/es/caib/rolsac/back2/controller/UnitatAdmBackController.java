@@ -16,6 +16,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Materia;
@@ -48,6 +49,7 @@ import es.caib.rolsac.back2.util.UploadUtil;
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController {
 
+	
 	private static Log log = LogFactory.getLog(PrintRolTag.class);
 	
     private MessageSource messageSource = null;
@@ -58,8 +60,8 @@ public class UnitatAdmBackController {
     }
     
 	@RequestMapping(value = "/unitatadm.htm", method = GET)
-	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-	    
+	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
+		
 	    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 	    TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 	    EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
@@ -359,8 +361,6 @@ public class UnitatAdmBackController {
 	
 	@RequestMapping(value = "/guardar.htm", method = POST)
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
-        
-		
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
@@ -370,19 +370,15 @@ public class UnitatAdmBackController {
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-		
-		UnidadAdministrativa ua = null;
-		UnidadAdministrativa unitatAdministrativaOld = null;
+
         IdNomTransient result = null;
         
         Map<String, String> valoresForm = new HashMap<String, String>();
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
         
         try {
-        	
         	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
     		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
-        	
         	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
     		for (FileItem item : items) {
@@ -392,184 +388,166 @@ public class UnitatAdmBackController {
     				ficherosForm.put(item.getFieldName(), item);    				
     			}
     		}
-        	
-            
-    		//ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
-    		//String username = request.getParameter("item_codi");
             
             //Campos obligatorios
             String nom = valoresForm.get("item_nom_ca");
             String validacio = valoresForm.get("item_validacio");
             String sexeResponsable = valoresForm.get("item_responsable_sexe");
             String tractament = valoresForm.get("item_tractament");
-                        
             
             if (nom == null || "".equals(nom) || validacio == null || "".equals(validacio) || sexeResponsable == null || "".equals(sexeResponsable) || tractament == null || "".equals(tractament)) {
                 String error = messageSource.getMessage("unitatadm.formulari.error.falten_camps", null, request.getLocale());
                 result = new IdNomTransient(-3l, error);
+                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
+            } 
+            
+            UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+            
+            UnidadAdministrativa unitatAdministrativa;
+            
+			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
+			if (id != null) { 
+				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativa(id);
+			} else {									
+				unitatAdministrativa = new UnidadAdministrativa();
+			}
+
+			// Idiomas
+            //TraduccionUA tUA;
+			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			List<String> langs = idiomaDelegate.listarLenguajes();
+			Map traduccions = new HashMap(langs.size());
+			for (String lang: langs) {
+				TraduccionUA tUA = new TraduccionUA();
+				tUA.setNombre(valoresForm.get("item_nom_"+  lang ));
+				tUA.setPresentacion(valoresForm.get("item_presentacio_" + lang));
+				tUA.setAbreviatura(valoresForm.get("item_abreviatura_" + lang));
+				tUA.setUrl(valoresForm.get("item_url_" + lang));				
+				traduccions.put(lang, tUA);
+			}
+			unitatAdministrativa.setTraduccionMap(traduccions);
+			
+			// Fin idiomas
+
+			
+            //Condifuracion/gestion
+            unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
+            unitatAdministrativa.setCodigoEstandar(valoresForm.get("item_codi_estandar"));
+            unitatAdministrativa.setDominio(valoresForm.get("item_domini"));
+            unitatAdministrativa.setValidacion(Integer.parseInt(valoresForm.get("item_validacio")));
+            unitatAdministrativa.setTelefono(valoresForm.get("item_telefon"));
+            unitatAdministrativa.setFax(valoresForm.get("item_fax"));
+            unitatAdministrativa.setEmail(valoresForm.get("item_email"));
+            
+            Long espaiTerritorialId = ParseUtil.parseLong(valoresForm.get("item_espai_territorial"));
+            if (espaiTerritorialId != null) {
+				EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
+				EspacioTerritorial espacioTerritorial = espacioTerritorialDelegate.obtenerEspacioTerritorial(espaiTerritorialId);
+				unitatAdministrativa.setEspacioTerrit(espacioTerritorial);                	
             } else {
-                UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-                UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
-                unitatAdministrativaOld = null;
+            	unitatAdministrativa.setEspacioTerrit(null);
+            }
+            
+            Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
+            if (unitatAdmPareId != null) {
+				UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
+				UnidadAdministrativa pare = unidadAdministrativaDelegate.obtenerUnidadAdministrativa(unitatAdmPareId);
+				unitatAdministrativa.setPadre(pare);                	
+            } else {
+            	unitatAdministrativa.setPadre(null); 
+            }
+			
+			//Responsable
+			unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
+			unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
+			
+			//FotoPetita
+    		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
+    		if ( fileFotoPetita.getSize() > 0 ) {
+    			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))){
+    			unitatAdministrativa.setFotop(null);
+    		}
+    		//FotoGran
+    		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
+    		if ( fileFotoGran.getSize() > 0 ) {
+    			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))){
+    			unitatAdministrativa.setFotog(null);
+    		}
+			
 
-                boolean edicion;
-				try {
-					Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
-					unitatAdministrativaOld = unitatAdministrativaDelegate.obtenerUnidadAdministrativa(id);
-					edicion = true;
-				} catch (NumberFormatException nfe) {
-					unitatAdministrativaOld = null;
-					edicion = false;
-				}
-                
+			Long tractamentId = ParseUtil.parseLong(valoresForm.get("item_tractament"));
+			if (tractamentId != null) {
+				TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
+				Tratamiento tratamiento = tratamientoDelegate.obtenerTratamiento(tractamentId);
+				unitatAdministrativa.setTratamiento(tratamiento);
+			} else {
+				String error = messageSource.getMessage("unitatadm.formulari.error.tractament_incorrecte", null, request.getLocale());
+				result = new IdNomTransient(-3l, error);	
+				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+			}
+		
+			
+			//Logotipos
+			//LogoHoritzontal
+    		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
+    		if ( fileLogoHoritzontal.getSize() > 0 ) {
+    			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))){
+    			unitatAdministrativa.setLogoh(null);
+    		}
+    		//LogoVertical
+    		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
+    		if ( fileLogoVertical.getSize() > 0 ) {
+    			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))){
+    			unitatAdministrativa.setLogov(null);
+    		}
+    		//LogoSalutacioHoritzontal
+    		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
+    		if ( fileLogoSalutacioHoritzontal.getSize() > 0 ) {
+    			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))){
+    			unitatAdministrativa.setLogos(null);
+    		}
+    		//LogoSalutacioVertical
+    		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
+    		if ( fileLogoSalutacioVertical.getSize() > 0 ) {
+    			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
+    		} else
+    		//borrar fichero si se solicita
+    		if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))){
+    			unitatAdministrativa.setLogot(null);
+    		}
+    		
+    		
+			//Fichas de la portada web
+			if (valoresForm.get("item_nivell_1")!=null && !"".equals(valoresForm.get("item_nivell_1"))){
+				unitatAdministrativa.setNumfoto1(ParseUtil.parseInt(valoresForm.get("item_nivell_1")));
+			}
+			if (valoresForm.get("item_nivell_2")!=null && !"".equals(valoresForm.get("item_nivell_2"))){
+				unitatAdministrativa.setNumfoto2(ParseUtil.parseInt(valoresForm.get("item_nivell_2")));
+			}
+			if (valoresForm.get("item_nivell_3")!=null && !"".equals(valoresForm.get("item_nivell_3"))){
+				unitatAdministrativa.setNumfoto3(ParseUtil.parseInt(valoresForm.get("item_nivell_3")));
+			}
+			if (valoresForm.get("item_nivell_4")!=null && !"".equals(valoresForm.get("item_nivell_4"))){
+				unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm.get("item_nivell_4")));
+			}
 
-                if (edicion) {
-                	unitatAdministrativa.setId(unitatAdministrativaOld.getId());
-                	
-                	// FIXME: Mientras no se guarden todos los datos mantenemos los valores originales que tiene la unidadAdministrativa.
-                	unitatAdministrativa.setUnidadesMaterias(unitatAdministrativaOld.getUnidadesMaterias());
-                	unitatAdministrativa.setEdificios(unitatAdministrativaOld.getEdificios());
-                	unitatAdministrativa.setFichasUA(unitatAdministrativaOld.getFichasUA());
-                }
-            	// Idiomas
-                TraduccionUA tUA;
-				IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-				List<String> langs = idiomaDelegate.listarLenguajes();
-				for (String lang: langs) {
-					tUA = new TraduccionUA();
-					tUA.setNombre(valoresForm.get("item_nom_"+  lang ));
-					tUA.setPresentacion(valoresForm.get("item_presentacio_" + lang));
-					tUA.setAbreviatura(valoresForm.get("item_abreviatura_" + lang));
-					tUA.setUrl(valoresForm.get("item_url_" + lang));
-					
-					unitatAdministrativa.setTraduccion(lang, tUA);
-				}
-				// Fin idiomas
-                
-                
-                
-                //Condifuracion/gestion
-                unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
-                unitatAdministrativa.setCodigoEstandar(valoresForm.get("item_codi_estandar"));
-                unitatAdministrativa.setDominio(valoresForm.get("item_domini"));
-                unitatAdministrativa.setValidacion(Integer.parseInt(valoresForm.get("item_validacio")));
-                unitatAdministrativa.setTelefono(valoresForm.get("item_telefon"));
-                unitatAdministrativa.setFax(valoresForm.get("item_fax"));
-                unitatAdministrativa.setEmail(valoresForm.get("item_email"));
-                
-                
-                try {
-					Long espaiTerritorialId = Long.parseLong(valoresForm.get("item_espai_territorial"));
-					EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
-					EspacioTerritorial espacioTerritorial = espacioTerritorialDelegate.obtenerEspacioTerritorial(espaiTerritorialId);
-					unitatAdministrativa.setEspacioTerrit(espacioTerritorial);
-				} catch (NumberFormatException e) {
-				    String error = messageSource.getMessage("unitatadm.formulari.error.espaiTerritorial_incorrecte", null, request.getLocale());
-					result = new IdNomTransient(-3l, error);
-				}
-                
-				
-				try {
-					Long unitatAdmPareId = Long.parseLong(valoresForm.get("item_pare_id"));
-					UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
-					UnidadAdministrativa pare = unidadAdministrativaDelegate.obtenerUnidadAdministrativa(unitatAdmPareId);
-					unitatAdministrativa.setPadre(pare);
-				} catch (NumberFormatException e) {
-					String error = messageSource.getMessage("unitatadm.formulari.error.unitatAdministrativaPare_incorrecte", null, request.getLocale());
-					result = new IdNomTransient(-3l, error);
-				}
-				
-				
-				
-				//Responsable
-				unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
-				unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
-				
-				//FotoPetita
-        		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
-        		if ( fileFotoPetita.getSize() > 0 ) {
-        			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_responsable_foto_petita_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_petita_delete"))){
-        			unitatAdministrativa.setFotop(null);
-        		}
-        		//FotoGran
-        		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
-        		if ( fileFotoGran.getSize() > 0 ) {
-        			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))){
-        			unitatAdministrativa.setFotog(null);
-        		}
-				
-                try {
-					Long tractamentId = ParseUtil.parseLong(valoresForm.get("item_tractament"));
-					TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
-					Tratamiento tratamiento = tratamientoDelegate.obtenerTratamiento(tractamentId);
-					unitatAdministrativa.setTratamiento(tratamiento);
-				} catch (NumberFormatException e) {
-					String error = messageSource.getMessage("unitatadm.formulari.error.tractament_incorrecte", null, request.getLocale());
-					result = new IdNomTransient(-3l, error);
-				}
-				
-				
-				//Logotipos
-				//LogoHoritzontal
-        		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
-        		if ( fileLogoHoritzontal.getSize() > 0 ) {
-        			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_logo_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_horizontal_delete"))){
-        			unitatAdministrativa.setLogoh(null);
-        		}
-        		//LogoVertical
-        		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
-        		if ( fileLogoVertical.getSize() > 0 ) {
-        			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_logo_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_vertical_delete"))){
-        			unitatAdministrativa.setLogov(null);
-        		}
-        		//LogoSalutacioHoritzontal
-        		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
-        		if ( fileLogoSalutacioHoritzontal.getSize() > 0 ) {
-        			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_logo_salutacio_horizontal_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_horizontal_delete"))){
-        			unitatAdministrativa.setLogos(null);
-        		}
-        		//LogoSalutacioVertical
-        		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
-        		if ( fileLogoSalutacioVertical.getSize() > 0 ) {
-        			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
-        		} else
-        		//borrar fichero si se solicita
-        		if (valoresForm.get("item_logo_salutacio_vertical_delete") != null && !"".equals(valoresForm.get("item_logo_salutacio_vertical_delete"))){
-        			unitatAdministrativa.setLogot(null);
-        		}
-        		
-        		
-				//Fichas de la portada web
-				if (valoresForm.get("item_nivell_1")!=null && !"".equals(valoresForm.get("item_nivell_1"))){
-					unitatAdministrativa.setNumfoto1(ParseUtil.parseInt(valoresForm.get("item_nivell_1")));
-				}
-				if (valoresForm.get("item_nivell_2")!=null && !"".equals(valoresForm.get("item_nivell_2"))){
-					unitatAdministrativa.setNumfoto2(ParseUtil.parseInt(valoresForm.get("item_nivell_2")));
-				}
-				if (valoresForm.get("item_nivell_3")!=null && !"".equals(valoresForm.get("item_nivell_3"))){
-					unitatAdministrativa.setNumfoto3(ParseUtil.parseInt(valoresForm.get("item_nivell_3")));
-				}
-				if (valoresForm.get("item_nivell_4")!=null && !"".equals(valoresForm.get("item_nivell_4"))){
-					unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm.get("item_nivell_4")));
-				}
-
-				//Materias asociadas
-               /*
+			//Materias asociadas
+           /*
                 if (uni.getUnidadesMaterias() != null) {             
                 
                     for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
@@ -601,15 +579,15 @@ public class UnitatAdmBackController {
                     resultats.put("edificis", null);
                 } 
 */
-				
-				crearUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);  
-				
-				// Sobre escrivim la unitat administrativa de la amollapa
-				session.setAttribute("unidadAdministrativa", unitatAdministrativa);
-				
-                String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
-                result = new IdNomTransient(unitatAdministrativa.getId(), ok);
-            }
+			
+			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);  
+			
+			// Sobre escrivim la unitat administrativa de la amollapa
+			session.setAttribute("unidadAdministrativa", unitatAdministrativa);
+			
+            String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
+            result = new IdNomTransient(unitatAdministrativa.getId(), ok);
+            
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -638,9 +616,9 @@ public class UnitatAdmBackController {
 	 * @param unitatAdministrativa
 	 * @throws DelegateException
 	 */
-	private void crearUnitatAdministrativa(UnidadAdministrativaDelegate unitatAdministrativaDelegate,
-			UnidadAdministrativa unitatAdministrativa) throws DelegateException {
-		
+	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativaDelegate unitatAdministrativaDelegate, UnidadAdministrativa unitatAdministrativa) 
+		throws DelegateException 
+	{
 		
 		if (unitatAdministrativa.getId() != null) {
 			if (unitatAdministrativa.getPadre() != null ) { 
@@ -657,8 +635,6 @@ public class UnitatAdmBackController {
 			}
 			unitatAdministrativa.setId(id);
 		}
-		
-		
 	}
 	
     /**
