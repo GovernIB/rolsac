@@ -6,6 +6,7 @@
     <link href='<c:url value="/css/modul_seccions_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
     <link href='<c:url value="/css/modul_enllassos.css"/>' rel="stylesheet" type="text/css" media="screen" />
     
+    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
@@ -151,7 +152,7 @@
 
     </script>
     
-    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
+    
     <script type="text/javascript">
     //validacio
     var txtSeccUa = "Es necessari definir una relació Fitxa -Secció -  UA";
@@ -262,20 +263,29 @@
                 {
                     "obligatori": "El camp 'Estat' es obligatori"                   
                 }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "enllas_titol_ca",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "error":
-                {
-                    "obligatori": "El camp 'Titol' es obligatori"                   
-                }
-        }   
+        } 
     ];
-    
+
+    var FormulariEnllassos = [
+		{
+		    "modo": "individual",
+		    "etiqueta": "id",
+		    "etiquetaValor": "enllas_titol_ca",
+		    "obligatori": "si",
+		    "tipus": "alfanumeric",
+		    "caracters":
+            {
+                "maxim": 250,
+                "mostrar": "si",
+                "abreviat": "no"
+            },
+		    "error":
+		        {
+            		"obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
+		            "tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"                   
+		        }
+		}   
+	];
     </script>
     <div id="escriptori_contingut"> 
     <ul id="opcions">

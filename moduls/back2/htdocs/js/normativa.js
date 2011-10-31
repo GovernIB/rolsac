@@ -343,6 +343,8 @@ function CDetall(){
 	this.extend = DetallBase;
 	this.extend();
 	
+	var that = this;
+	
 	this.iniciar = function() {			
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
@@ -381,15 +383,9 @@ function CDetall(){
 	this.guarda_upload = function(e) {
 		
 		// Validamos el formulario
-		if( typeof FormulariComprovar != "undefined" ){
-					
-			FormulariComprovar.llansar();
-			
-			if (!formComprovacio) {				
-				return false;
-			}
+		if(!that.formulariValid()){
+			return false;
 		}
-	
 		
 		//Preparar los datos de afectaciones relacionadas.
 		//Crear un JSON con la lista de afectaciones.

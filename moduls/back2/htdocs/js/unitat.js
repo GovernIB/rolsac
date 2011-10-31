@@ -28,7 +28,8 @@ var Items_arr = new Array();
 function CDetall(soloFicha){	
 	this.extend = DetallBase;
 	this.extend(soloFicha);
-		
+	
+	var that = this;
 	
 	this.iniciar = function() {
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
@@ -69,13 +70,9 @@ function CDetall(soloFicha){
 	this.guarda_upload = function(e) {
 		
 		// Validamos el formulario
-		if( typeof FormulariComprovar != "undefined" ){
-					
-			FormulariComprovar.llansar();
-			
-			if (!formComprovacio) {				
-				return false;
-			}
+
+		if(!that.formulariValid()){
+			return false;
 		}
 		
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form

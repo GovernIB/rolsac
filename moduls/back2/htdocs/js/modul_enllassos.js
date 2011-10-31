@@ -18,6 +18,7 @@ $(document).ready(function() {
 	
 	if (modul_enllassos_elm.size() == 1) {
 		ModulEnllas.iniciar();
+		EscriptoriEnllas.iniciar();
 	}
 	
 	// Evento para el botón de volver al detalle
@@ -168,18 +169,27 @@ function CEscriptoriEnllas(){
 	this.extend();
 	
 	var that = this;
+	
+	var formulariComprovarEnllassos;
+	
+	this.iniciar = function () {
 		
-	this.guardar = function (){
+		formulariComprovarEnllassos = new FormulariComprovar(FormulariEnllassos);
 		
-		if( typeof FormulariComprovar != "undefined" ){
-			
-			FormulariComprovar.llansar();
-			
-			if (!formComprovacio) {				
-				return false;
-			}
-		}		
+		formulariComprovarEnllassos.iniciar();
 		
+	}
+		
+	this.guardar = function (){			
+		
+		//Validam el formulari d'enllassos
+		
+		formulariComprovarEnllassos.llansar();
+		
+		if (!formulariComprovarEnllassos.formComprovacio) {				
+			return false;
+		} 
+				
 		//Si el camp id_enllas_actual del jsp principal te valor, aleshores s'esta editant un enllas
 		
 		var idEnllas = $("#id_enllas_actual").val();
@@ -208,7 +218,12 @@ function CEscriptoriEnllas(){
 			
 		} else {
 		
-			var max_ordre = enllassos_seleccionats_elm.find(".listaOrdenable li:last input.enllas_orden").val();
+			var max_ordre = parseInt(enllassos_seleccionats_elm.find(".listaOrdenable li:last input.enllas_orden").val());
+			
+			//En cas de llista buïda
+			
+			max_ordre = (isNaN(max_ordre)) ? 0 : max_ordre + 1 ; 		
+			
 			//Els elements nous reben un id provisional. 						
 			
 			var idiomes = escriptori_enllassos_elm.find("div.idiomes");
@@ -230,7 +245,7 @@ function CEscriptoriEnllas(){
 							de: idiomes.find("#enllas_url_de").val(),
 							fr: idiomes.find("#enllas_url_fr").val()	
 							},
-						orden: parseInt(max_ordre)+1
+						orden: max_ordre
 			};		
 		
 			if (ModulEnllas.agregaItem(item)){
@@ -252,7 +267,6 @@ function CEscriptoriEnllas(){
 		modul_enllassos_elm.find("p.info").html(codi_info);		
 		
 		if (nombre_llistat > 1) {			
-			//modul_enllassos_elm.find("ul").sortable({ axis: 'y', cursor: 'url(img/cursor/grabbing.cur), move' }).css({cursor:"move"});
 			modul_enllassos_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
 				update: function(event,ui){

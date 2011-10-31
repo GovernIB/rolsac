@@ -375,7 +375,7 @@ var Items_arr = new Array();
 // detall
 function CDetall(){	
 	this.extend = DetallBase;
-	this.extend();
+	this.extend(false, FormulariDades);
 	var that = this;
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
@@ -707,108 +707,6 @@ var Docs = {
 		
 	}
 };
-
-/*
-// enllasos
-var Enllasos = {
-	iniciar: function() {
-		
-		en_elm = $("div.enllasosRelacionats");
-		en_table_existix = false;
-		
-		en_elm.bind("click",Enllasos.llansar);
-		
-		codi_table_en = "<div class=\"table llistat enllasos\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_en += "<div class=\"thead\">";
-		codi_table_en += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_en += "<div role=\"columnheader\" class=\"th nom\">" + txtAdresa + "</div>";
-		codi_table_en += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_en += "</div>";
-		codi_table_en += "</div>";
-		codi_table_en += "<div class=\"tbody\">";
-		codi_table_en += "</div>";
-		codi_table_en += "</div>";
-		
-		return codi_table_en;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("doc"))) {
-			
-			en_elm.unbind("click",Enllasos.llansar);
-			
-			A_elm = elm.parents("a:first");
-			en_elm = elm.parents("div.enllasosRelacionats:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (en_elm.find("div.table").size() == 0) {
-			
-					elm.parents("p:first").before(codi_table_en);
-					
-					en_table_elm = en_elm.find("div.table:first");
-					en_table_tbody_elm = en_table_elm.find("div.tbody");
-					
-					en_table_existix = true;
-					
-				}
-				
-				tr_num = en_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_en = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_en += "<div role=\"gridcell\" class=\"td nom\">";
-				codi_en += "<input name=\"enllas\" type=\"text\" />";
-				codi_en += "</div>";
-				codi_en += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_en += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_en += "</div>";
-				codi_en += "</div>";
-				
-				en_table_tbody_elm.append(codi_en);
-				en_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = en_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						en_table_elm.slideUp(300,function() {
-							$(this).remove();
-							en_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").addClass("elimina");
-				}
-				
-			}
-			
-			en_elm.bind("click",Enllasos.llansar);
-			
-		}
-		
-	}
-};
-*/
 
 /*
 // fotos

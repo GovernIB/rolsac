@@ -37,14 +37,23 @@ jQuery(document).ready(function(){
 });
 
 /**
- * @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
- */
-function DetallBase(soloFicha){
-	var that = this;
-	var soloFicha = soloFicha || false;
+* @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
+* @param array reglasFormulario: Lista de reglas a validar para guardar el formulario, por defecto FormulariDades.
+*/
+function DetallBase(soloFicha, reglasFormulario){
+       var that = this;
+       var soloFicha = soloFicha || false;
 
-	// Url de la previsualización (tiene que sobreescribirse al extender la clase).
-	this.urlPrevisualizar = null;
+       // Url de la previsualización (tiene que sobreescribirse al extender la clase).
+       this.urlPrevisualizar = null;
+
+
+       // Preparar reglas de validacion del formulario.
+       if (typeof reglasFormulario == 'undefined' && typeof FormulariDades != 'undefined') {
+               reglasFormulario = FormulariDades;
+       }
+       var formulariComprovar = new FormulariComprovar(reglasFormulario);
+       formulariComprovar.iniciar();
 
 	this.actualizaEventos = function(){		
 						
@@ -58,19 +67,20 @@ function DetallBase(soloFicha){
 			jQuery(this).siblings("div.modul_continguts").slideToggle(300);
 		});
 	}
-	
-	this.guarda = function(dataVars) {
 		
-		// Validamos el formulario
-		if( typeof FormulariComprovar != "undefined" ){
-					
-			FormulariComprovar.llansar();
-			
-			if (!formComprovacio) {				
-				return false;
-			}
+	this.formulariValid = function () {
+        formulariComprovar.llansar();
+        return formulariComprovar.formComprovacio;
+	}
+
+
+	this.guarda = function(dataVars) {
+	
+	    // Validamos el formulario
+		if (!that.formulariValid()) {
+		    return false;
 		}
-						
+					
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});		
 

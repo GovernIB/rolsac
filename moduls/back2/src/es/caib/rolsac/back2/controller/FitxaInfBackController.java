@@ -398,12 +398,24 @@ public class FitxaInfBackController {
 
         IdNomTransient result = null;
         String error = null;
+        Integer validacion = null;
 
         try {            
-            
-            // TODO pendent de quins camps son obligatoris
+
+            // Validacio previa
             UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-            if (ua == null) {//TODO:afegir els camps obligatoris
+            String titolCatala = request.getParameter("item_titol_ca");
+
+            //Validacio del estat 
+            
+            try {
+                validacion = Integer.parseInt(request.getParameter("item_estat"));                
+            } catch (NumberFormatException e) {
+                error = "L'estat és incorrecte.";
+                throw new NumberFormatException();
+            }            
+            
+            if (ua == null || titolCatala == null || "".equals(titolCatala)) {//Camps obligatoris
                 error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
                 result = new IdNomTransient(-3l, error);
             } else {
@@ -411,6 +423,8 @@ public class FitxaInfBackController {
                 Ficha fitxa = new Ficha();
                 Ficha fitxaOld = new Ficha();
                 boolean edicion;
+                
+                fitxa.setValidacion(validacion);                                               
                 
                 try {
                     Long id = Long.parseLong(request.getParameter("item_id"));
@@ -433,15 +447,6 @@ public class FitxaInfBackController {
                     fitxa.setEnlaces(fitxaOld.getEnlaces());                    
                 }
                 
-                try {
-                    Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
-                    fitxa.setValidacion(validacion);
-                } catch (NumberFormatException e) {
-                    // String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                    error = "L'estat és incorrecte.";
-                    throw new NumberFormatException();
-                }
-                                
                 Date data_publicacio = DateUtil.parseDate(request.getParameter("item_data_publicacio"));
                 if (data_publicacio != null) {
                     fitxa.setFechaPublicacion(data_publicacio);

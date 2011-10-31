@@ -1,44 +1,38 @@
 // formulario - comprobaciones
-
-$(document).ready(function() {
-	
-	// INICIAMOS
-	FormulariComprovar.iniciar();
-	
-});
-
-
 /*
-
 DATOS DEL FORMULARIO
 
-"modo": individual, llistat // si √©s grup hi ha que ficar l'etiqueta, dada, obligatori, tipus i error de cadascun, adem√©s del nombre m√≠nim i m√†xim del llistat
+"modo": individual, llistat // si Ès grup hi ha que ficar l'etiqueta, dada, obligatori, tipus i error de cadascun, ademÈs del nombre mÌnim i m‡xim del llistat
 "etiqueta": id o name
 "etiquetaValor": id_input
-"minim": int, // opcional, si √©s un llistat normalment generat per name
-"maxim": int, // opcional, si √©s un llistat normalment generat per name
-"conjunt": int // quan el llistat va per id segurament ser√† un conjunt d'elements limitat
+"minim": int, // opcional, si Ès un llistat normalment generat per name
+"maxim": int, // opcional, si Ès un llistat normalment generat per name
+"conjunt": int // quan el llistat va per id segurament ser‡ un conjunt d'elements limitat
 "obligatori": "si"
 "tipus": numeric, alfanumeric, textual, email, cp, telefon
 "caractersMax": int // opcional, sol anar a un textarea
 "error":
-		"minim": text // text si supera a la baixa el m√≠nim
-		"maxim": text // text si supera a l'alta el m√†xim
+		"minim": text // text si supera a la baixa el mÌnim
+		"maxim": text // text si supera a l'alta el m‡xim
 		"obligatori": "text,text", // si hi ha diversos elements (ex: per name) estaran separats per comes (,)
 		"tipus": "text,text", // si hi ha diversos elements (ex: por name) estaran separats per comes (,)
-		"suggerencia": text // text afegit a modo de consell, nom√©s una l√≠nia
-	
+		"suggerencia": text // text afegit a modo de consell, nomÈs una lÌnia
 */
-var formComprovacio = true;
 
-var FormulariComprovar = {
-	iniciar: function() {
-		
-		$(FormulariDades).each(function() {
+function FormulariComprovar(reglesValidacio) {
+    var that = this;
+
+    var reglesValidacio = reglesValidacio;
+    var camp;
+    
+	this.formComprovacio = true;
+    
+    this.iniciar = function() {
+		$(reglesValidacio).each(function() {
 		
 			dada = this;
 			
-			// text m√†xim
+			// text m‡xim
 			if (typeof dada.caracters != "undefined") {
 				$("#" + dada.etiquetaValor).tamanyoMaximo(parseInt(dada.caracters.maxim,10), {mostrar: dada.caracters.mostrar, abreviat: dada.caracters.abreviat});
 			}
@@ -49,27 +43,28 @@ var FormulariComprovar = {
 				$("#" + dada.etiquetaValor).parents("div.element:first").find("label").append(codi_obligatori);
 			}
 			
-			// m√°scara data
+			// m·scara data
 			if (dada.tipus == "data") {
 				$("#" + dada.etiquetaValor).mask("99/99/9999").validar("data");
 			}
 			
-			// m√°scara cp
+			// m·scara cp
 			if (dada.tipus == "cp") {
 				$("#" + dada.etiquetaValor).mask("99999");
 			}
 			
-			// m√°scara tel√®fon
+			// m·scara telËfon
 			if (dada.tipus == "telefon") {
 				$("#" + dada.etiquetaValor).mask("999999999");
 			}
 			
 		});
 		
-	},
-	llansar: function() {
+	}
+    
+	this.llansar = function() {
 		
-		$(FormulariDades).each(function() {
+		$(reglesValidacio).each(function() {
 		
 			dada = this;
 			
@@ -79,21 +74,21 @@ var FormulariComprovar = {
 				dada_val = dada_elm.val();
 				
 				if(dada.obligatori == "si" && dada_val == "") {
-					FormulariComprovar.error({error: dada.error.obligatori, camp: dada_elm});
+					that.error({error: dada.error.obligatori, camp: dada_elm});
 					return false;
 				}
 				
 				if (dada.tipus == "numeric" && dada_val != "" && isNaN(dada_val)) {
-					FormulariComprovar.error({error: dada.error.tipus, camp: dada_elm});
+					that.error({error: dada.error.tipus, camp: dada_elm});
 					return false;
 				}
 				
 				if (dada.tipus == "email" && dada_val != "") {
 					
-					dada_val_email = FormulariComprovar.email(dada_val);
+					dada_val_email = that.email(dada_val);
 					
 					if (dada_val_email == "error") {
-						FormulariComprovar.error({error: dada.error.tipus, camp: dada_elm});
+						that.error({error: dada.error.tipus, camp: dada_elm});
 						return false;
 					}
 					
@@ -108,7 +103,7 @@ var FormulariComprovar = {
 					et_num = $("form input[name=" + et_valor[0] + "]").size();
 					
 					if (et_num < dada.minim) {
-						FormulariComprovar.error({error: dada.error.minim});
+						that.error({error: dada.error.minim});
 						return false;
 					}
 				
@@ -132,16 +127,16 @@ var FormulariComprovar = {
 								
 								if ($.trim(obligatori_valor[i]) == "si" && et_valor_name_val.val() == "") {
 									if (dada.error.suggerencia) {
-										FormulariComprovar.error({error: $.trim(obligatori_error_valor[i]), camp: et_valor_name_val, suggerencia: dada.error.suggerencia});
+										that.error({error: $.trim(obligatori_error_valor[i]), camp: et_valor_name_val, suggerencia: dada.error.suggerencia});
 									} else {
-										FormulariComprovar.error({error: $.trim(obligatori_error_valor[i]), camp: et_valor_name_val});
+										that.error({error: $.trim(obligatori_error_valor[i]), camp: et_valor_name_val});
 									}
 									err = true;
 									return err;
 								}
 								
 								if ($.trim(tipus_valor[i]) != "numeric" && et_valor_name_val.val() != "" && !isNaN(et_valor_name_val.val())) {
-									FormulariComprovar.error({error: $.trim(tipus_error_valor[i]), camp: et_valor_name_val});
+									that.error({error: $.trim(tipus_error_valor[i]), camp: et_valor_name_val});
 									err = true;
 									return err;
 								}
@@ -180,16 +175,16 @@ var FormulariComprovar = {
 							
 							if ($.trim(obligatori_valor[j]) == "si" && valor_val == "" && $("#" + $.trim(dependiente_valor[j])+(i+1)).val() != "") {
 								if (dada.error.suggerencia) {
-									FormulariComprovar.error({error: $.trim(obligatori_error_valor[j]), camp: valor_elm, suggerencia: dada.error.suggerencia});
+									that.error({error: $.trim(obligatori_error_valor[j]), camp: valor_elm, suggerencia: dada.error.suggerencia});
 								} else {
-									FormulariComprovar.error({error: $.trim(obligatori_error_valor[j]), camp: valor_elm});
+									that.error({error: $.trim(obligatori_error_valor[j]), camp: valor_elm});
 								}
 								err = true;
 								return err;
 							}
 							
 							if ($.trim(tipus_valor[j]) != "numeric" && valor_val != "" && !isNaN(valor_val)) {
-								FormulariComprovar.error({error: $.trim(tipus_error_valor[j]), camp: valor_elm});
+								that.error({error: $.trim(tipus_error_valor[j]), camp: valor_elm});
 								err = true;
 								return err;
 							}
@@ -212,36 +207,41 @@ var FormulariComprovar = {
 		
 		});
 		
-	},
-	email: function(valor) {
-		
+	}
+    
+    
+	this.email = function(valor) {
 		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(valor)){
 			return "ok";
 		} else {
 			return "error";
 		}
-		
-	},
-	error: function(opcions) {
+	}
+    
+    
+	this.error = function(opcions) {
 		// missatge
 		if (opcions.camp) {
 			camp = opcions.camp;
 		}
 		if (opcions.suggerencia) {
-			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: opcions.error, text: "<p>" + opcions.suggerencia + "</p>", funcio: FormulariComprovar.tancar});
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: opcions.error, text: "<p>" + opcions.suggerencia + "</p>", funcio: that.tancar});
 		} else {
-			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: opcions.error, funcio: FormulariComprovar.tancar});
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: opcions.error, funcio: that.tancar});
 		}
-		formComprovacio = false;
-	},
-	tancar: function() {
+		that.formComprovacio = false;
+	}
+    
+    
+	this.tancar = function() {
 		Missatge.cancelar();
-		formComprovacio = true;
+		that.formComprovacio = true;
 		camp.focus();
 	}
 };
 
-// textarea, tamany m√†xim
+
+// textarea, tamany m‡xim
 jQuery.fn.tamanyoMaximo = function(max, opcions) {
 	this.each(function() {
 		div_padre = $(this).parents("div.element:first");
@@ -271,6 +271,7 @@ jQuery.fn.tamanyoMaximo = function(max, opcions) {
 		}
 	});
 };
+
 
 var validar_alerta = false;
 
