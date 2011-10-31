@@ -28,6 +28,7 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 		String idioma;
 		try {
 			idioma = id.lenguajePorDefecto();
+			if (idioma == null) idioma = "ca";
 		} catch (DelegateException e) {
 			idioma = "ca";
 			e.printStackTrace();
@@ -35,3 +36,4 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 		return new Locale(idioma);
     }
 }
+
