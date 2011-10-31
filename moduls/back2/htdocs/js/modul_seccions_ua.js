@@ -167,13 +167,10 @@ var EscriptoriSeccionsUA = {
 				
 				codi_seccions_txt = (nombre_llistat == 1) ? txtSeccioUA : txtSeccionsUA;
 				codi_info = (nombre_llistat == 0) ? txtNoHiHaSeccioUA + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_seccions_txt.toLowerCase() + "</strong>.";
-				
-				modul_seccions_ua_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
-				
-				if (nombre_llistat > 1) {
-					modul_seccions_ua_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
-				}
-				
+								
+				modul_seccions_ua_elm.find("p.info").html(codi_info);
+				modul_seccions_ua_elm.find("div.listaOrdenable").html(codi_llistat);
+
 				Detall.modificado();
 				
 				EscriptoriSeccionsUA.torna();
