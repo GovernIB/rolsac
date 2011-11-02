@@ -772,6 +772,31 @@ public class FitxaInfBackController {
         return resultats;
     }
     
+    @RequestMapping(value = "/esborrarFitxa.htm", method = POST)
+    public @ResponseBody IdNomTransient esborrarFitxa(HttpServletRequest request) {
+        IdNomTransient resultatStatus = new IdNomTransient();
+
+        try {
+            Long id = new Long(request.getParameter("id"));
+            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+            fitxaDelegate.borrarFicha(id);
+
+            resultatStatus.setId(1l);
+            resultatStatus.setNom("correcte");
+        } catch (DelegateException dEx) {
+            if (dEx.getCause() instanceof SecurityException) {
+                resultatStatus.setId(-1l);
+            } else {
+                resultatStatus.setId(-2l);
+                dEx.printStackTrace();
+            }
+        }
+
+        return resultatStatus;
+    }
+    
+    
+    
     /**
      * Método que comprueba si hay que mostrar los logos
      * 

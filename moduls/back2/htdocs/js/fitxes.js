@@ -576,22 +576,23 @@ function CDetall(){
 	}
 	
 	this.elimina = function() {
-		
+
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+				
+		item_ID = $("#item_id").val();
 		
-		item_ID = $("#tipusUnitat_id").val();
-		
-		dataVars = "accio=eliminar&id=" + item_ID;
+		dataVars = "&id=" + item_ID;
 				
 		// ajax
 		$.ajax({
 			type: "POST",
-			url: pagDetall,
+			url: pagEsborrar,
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				
+				Missatge.cancelar();
+			
 				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				// error
@@ -599,9 +600,27 @@ function CDetall(){
 				
 			},
 			success: function(data) {
-			}
-		});
-	}	
+
+				Llistat.anulaCache();
+			
+				Missatge.cancelar();//No s'ha de veure el missatge de confirmacio d'esborrat
+								
+				if (data.id > -1) {
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});					
+				} else if (data.id == -1){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+				} else if (data.id == -2){
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+				}
+								
+				// array
+				Detall.array({id: dada_node.id, accio: "elimina"});
+				// recarregar
+				Detall.recarregar();
+				
+			}			
+		});		
+	}
 }
 
 // documents

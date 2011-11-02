@@ -28,6 +28,7 @@
     var pagGuardar = '<c:url value="/fitxainf/guardar.htm" />';
     var pagSeccions = '<c:url value="/fitxainf/seccions.htm" />';
     var pagUnitats = '<c:url value="/fitxainf/unitats.htm" />';
+    var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.htm" />';
 
     // texts
     var txtEspere = "Espere un moment, si us plau.";
@@ -51,7 +52,7 @@
     var txtAscendentment = "ascendentment";
     var txtDescendentment = "descendentment";
     var txtPer = "per";
-
+    var txtEsborrarCorrecte = "La Fitxa s'ha esborrat correctament";
     // taula
     var pag_Res = 5;
     var txtNom = "Nom";
