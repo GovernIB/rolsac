@@ -63,7 +63,7 @@ public class FitxaInfBackController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(value = "/fitxainf.htm", method = GET)
+    @RequestMapping(value = "/fitxainf.do", method = GET)
     public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
         model.put("menu", 0);
@@ -116,7 +116,7 @@ public class FitxaInfBackController {
         return "index";
     }
 
-    @RequestMapping(value = "/llistat.htm", method = POST)
+    @RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
         
         List<Ficha> llistaFitxes = new ArrayList<Ficha>();
@@ -245,7 +245,7 @@ public class FitxaInfBackController {
     
     }
 
-    @RequestMapping(value = "/pagDetall.htm", method = POST)
+    @RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
@@ -393,7 +393,7 @@ public class FitxaInfBackController {
         return resultats;
     }
 
-    @RequestMapping(value = "/guardar.htm", method = POST)
+    @RequestMapping(value = "/guardar.do", method = POST)
     public @ResponseBody IdNomTransient guardarFicha(HttpSession session, HttpServletRequest request) {
 
         IdNomTransient result = null;
@@ -688,7 +688,7 @@ public class FitxaInfBackController {
         return result;
     }
     
-    @RequestMapping(value = "/seccions.htm", method = POST)
+    @RequestMapping(value = "/seccions.do", method = POST)
     public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request) {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
@@ -730,7 +730,7 @@ public class FitxaInfBackController {
         return resultats;
     }   
     
-    @RequestMapping(value = "/unitats.htm", method = POST)
+    @RequestMapping(value = "/unitats.do", method = POST)
     public @ResponseBody Map<String, Object> arbreUnitats(HttpServletRequest request) {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
@@ -772,7 +772,7 @@ public class FitxaInfBackController {
         return resultats;
     }
     
-    @RequestMapping(value = "/esborrarFitxa.htm", method = POST)
+    @RequestMapping(value = "/esborrarFitxa.do", method = POST)
     public @ResponseBody IdNomTransient esborrarFitxa(HttpServletRequest request) {
         IdNomTransient resultatStatus = new IdNomTransient();
 

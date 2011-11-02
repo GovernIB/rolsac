@@ -24,7 +24,7 @@ public class AdministracioController {
         this.messageSource = messageSource;
     }
     
-    @RequestMapping(value = "/llistat.htm", method = GET)
+    @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 3);
         model.put("submenu", "layout/submenuAdministracio.jsp");

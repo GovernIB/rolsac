@@ -59,7 +59,7 @@ public class UnitatAdmBackController {
         this.messageSource = messageSource;
     }
     
-	@RequestMapping(value = "/unitatadm.htm", method = GET)
+	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
 		
 	    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
@@ -125,7 +125,7 @@ public class UnitatAdmBackController {
 		return "index";
 	}
 	
-	@RequestMapping(value = "/pagDetall.htm", method = POST)
+	@RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
         
 	    Map<String,Object> resultats = new HashMap<String,Object>();	    
@@ -219,14 +219,14 @@ public class UnitatAdmBackController {
             resultats.put("item_responsable_sexe", uni.getSexoResponsable());
             
             if (uni.getFotop() != null){
-            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.htm?id=" +uni.getFotop().getId());
+            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" +uni.getFotop().getId());
                 resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
             } else {
             	resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
                 resultats.put("item_responsable_foto_petita", "");
             }
             if (uni.getFotog() != null){
-                resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.htm?id=" +uni.getFotog().getId());
+                resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" +uni.getFotog().getId());
                 resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
             } else {
                 resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
@@ -359,7 +359,7 @@ public class UnitatAdmBackController {
 	    return resultats;
     }
 	
-	@RequestMapping(value = "/guardar.htm", method = POST)
+	@RequestMapping(value = "/guardar.do", method = POST)
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
@@ -648,7 +648,7 @@ public class UnitatAdmBackController {
         return !((value == null) || value.equals("N"));
     }
     
-	@RequestMapping(value = "/esborrar.htm", method = POST)
+	@RequestMapping(value = "/esborrar.do", method = POST)
     public @ResponseBody IdNomTransient esborrarUniAdm(HttpServletRequest request) {
 	    
 	    IdNomTransient resultatStatus = new IdNomTransient(); 

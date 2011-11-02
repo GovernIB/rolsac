@@ -23,12 +23,12 @@
 
     <script type="text/javascript">
     // accesos
-    var pagLlistat = '<c:url value="/fitxainf/llistat.htm" />';
-    var pagDetall = '<c:url value="/fitxainf/pagDetall.htm" />';
-    var pagGuardar = '<c:url value="/fitxainf/guardar.htm" />';
-    var pagSeccions = '<c:url value="/fitxainf/seccions.htm" />';
-    var pagUnitats = '<c:url value="/fitxainf/unitats.htm" />';
-    var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.htm" />';
+    var pagLlistat = '<c:url value="/fitxainf/llistat.do" />';
+    var pagDetall = '<c:url value="/fitxainf/pagDetall.do" />';
+    var pagGuardar = '<c:url value="/fitxainf/guardar.do" />';
+    var pagSeccions = '<c:url value="/fitxainf/seccions.do" />';
+    var pagUnitats = '<c:url value="/fitxainf/unitats.do" />';
+    var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.do" />';
 
     // texts
     var txtEspere = "Espere un moment, si us plau.";

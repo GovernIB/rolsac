@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class LogoutBackController {
  
-    @RequestMapping(value="/logout.htm")        
+    @RequestMapping(value="/logout.do")        
 	public String logout(HttpSession session) throws ServletException, IOException {
  
         if (session != null) {

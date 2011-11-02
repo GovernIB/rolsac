@@ -16,7 +16,7 @@
                 </c:when>
                 <c:otherwise>
                     <li>
-                        <a href="<c:url value="/quadreControl/quadreControl.htm"/>"><spring:message code="menu.organigrama" /></a>
+                        <a href="<c:url value="/quadreControl/quadreControl.do"/>"><spring:message code="menu.organigrama" /></a>
                         <span class="cueta"></span>
                     </li>
                 </c:otherwise>
@@ -37,19 +37,19 @@
 					<span class="titol"><spring:message code="menu.sistema_generals" /></span>
 					<ul>
 						<li>
-							<a href="<c:url value="/materies/llistat.htm"/>"><spring:message code="menu.materies" /></a>
+							<a href="<c:url value="/materies/llistat.do"/>"><spring:message code="menu.materies" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/fetsVitals/llistat.htm"/>"><spring:message code="menu.fets_vitals" /></a>
+							<a href="<c:url value="/fetsVitals/llistat.do"/>"><spring:message code="menu.fets_vitals" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/publicObjectiu/llistat.htm"/>"><spring:message code="menu.public_objectiu" /></a>
+							<a href="<c:url value="/publicObjectiu/llistat.do"/>"><spring:message code="menu.public_objectiu" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/espaisTerritorials/llistat.htm"/>"><spring:message code="menu.espais_territorials" /></a>
+							<a href="<c:url value="/espaisTerritorials/llistat.do"/>"><spring:message code="menu.espais_territorials" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/perfils/llistat.htm"/>"><spring:message code="menu.perfils" /></a>
+							<a href="<c:url value="/perfils/llistat.do"/>"><spring:message code="menu.perfils" /></a>
 						</li>
 					</ul>
 				</li>
@@ -57,10 +57,10 @@
 					<span class="titol"><spring:message code="menu.procediments" /></span>
 					<ul>
 						<li>
-							<a href="<c:url value="/familia/llistat.htm"/>"><spring:message code="menu.familia" /></a>
+							<a href="<c:url value="/familia/llistat.do"/>"><spring:message code="menu.familia" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/tipusIniciacio/llistat.htm"/>"><spring:message code="menu.tipus_iniciacio" /></a>
+							<a href="<c:url value="/tipusIniciacio/llistat.do"/>"><spring:message code="menu.tipus_iniciacio" /></a>
 						</li>
 					</ul>
 				</li>
@@ -68,10 +68,10 @@
 					<span class="titol"><spring:message code="menu.unitat_organica" /></span>
 					<ul>
 						<li>
-							<a href="<c:url value="/tipusUnitat/llistat.htm"/>"><spring:message code="menu.tipus_unitat" /></a>
+							<a href="<c:url value="/tipusUnitat/llistat.do"/>"><spring:message code="menu.tipus_unitat" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/tipusResponsable/llistat.htm"/>"><spring:message code="menu.tipus_responsable" /></a>
+							<a href="<c:url value="/tipusResponsable/llistat.do"/>"><spring:message code="menu.tipus_responsable" /></a>
 						</li>
 					</ul>
 				</li>
@@ -79,7 +79,7 @@
 					<span class="titol"><spring:message code="menu.fitxes_informatives" /></span>
 					<ul>
 						<li>
-							<a href="<c:url value="/seccions/llistat.htm"/>"><spring:message code="menu.seccions" /></a>
+							<a href="<c:url value="/seccions/llistat.do"/>"><spring:message code="menu.seccions" /></a>
 						</li>
 					</ul>
 				</li>
@@ -87,10 +87,10 @@
 					<span class="titol"><spring:message code="menu.normativa" /></span>
 					<ul>
 						<li>
-							<a href="<c:url value="/tipusAfectacio/llistat.htm"/>"><spring:message code="menu.tipus_afectacio" /></a>
+							<a href="<c:url value="/tipusAfectacio/llistat.do"/>"><spring:message code="menu.tipus_afectacio" /></a>
 						</li>
 						<li>
-							<a href="<c:url value="/butlletinsOficials/llistat.htm"/>"><spring:message code="menu.butlletins_oficials" /></a>
+							<a href="<c:url value="/butlletinsOficials/llistat.do"/>"><spring:message code="menu.butlletins_oficials" /></a>
 						</li>
 					</ul>
 				</li>
@@ -105,7 +105,7 @@
                 </c:when>
                 <c:otherwise>
                     <li>
-                        <a href="<c:url value="/usuaris/llistat.htm"/>"><spring:message code="menu.usuaris" /></a>
+                        <a href="<c:url value="/usuaris/llistat.do"/>"><spring:message code="menu.usuaris" /></a>
                         <span class="cueta"></span>
                     </li>
                 </c:otherwise>
@@ -120,7 +120,7 @@
                 </c:when>
                 <c:otherwise>
                     <li>
-                        <a href="<c:url value="/administracio/llistat.htm"/>"><spring:message code="menu.administracio" /></a>
+                        <a href="<c:url value="/administracio/llistat.do"/>"><spring:message code="menu.administracio" /></a>
                         <span class="cueta"></span>
                     </li>
                 </c:otherwise>

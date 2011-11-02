@@ -60,7 +60,7 @@ public class CatalegProcedimentsBackController {
 		this.messageSource = messageSource;
 	}
 
-	@RequestMapping(value = "/catalegProcediments.htm")
+	@RequestMapping(value = "/catalegProcediments.do")
 	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		model.put("menu", 0);
@@ -118,7 +118,7 @@ public class CatalegProcedimentsBackController {
 	}
 
 	
-	@RequestMapping(value = "/llistat.htm", method = POST)
+	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
 		List<ProcedimientoLocal> llistaProcedimientos = new ArrayList<ProcedimientoLocal>();
@@ -329,7 +329,7 @@ public class CatalegProcedimentsBackController {
 	}
 
 	
-	@RequestMapping(value = "/pagDetall.htm", method = POST)
+	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		String lang = request.getLocale().getLanguage();
@@ -479,7 +479,7 @@ public class CatalegProcedimentsBackController {
 	}
 	
 
-	@RequestMapping(value = "/esborrarProcediment.htm", method = POST)
+	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
 	public @ResponseBody
 	IdNomTransient esborrarProcediment(HttpServletRequest request) {
 		IdNomTransient resultatStatus = new IdNomTransient();
@@ -504,7 +504,7 @@ public class CatalegProcedimentsBackController {
 	}
 
 	
-	@RequestMapping(value = "/guardar.htm", method = POST)
+	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomTransient guardarProcediment(HttpSession session, HttpServletRequest request) {
 
 		IdNomTransient result = null;
@@ -756,7 +756,7 @@ public class CatalegProcedimentsBackController {
 	}
 	
 	
-	@RequestMapping(value = "/cercarNormatives.htm", method = POST)
+	@RequestMapping(value = "/cercarNormatives.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 		
 		//Listar las normativas de la unidad administrativa

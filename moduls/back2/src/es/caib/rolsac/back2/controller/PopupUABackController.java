@@ -34,7 +34,7 @@ public class PopupUABackController {
         this.messageSource = messageSource;
     }
 
-    @RequestMapping(value = "/popArbreUA.htm", method = GET)
+    @RequestMapping(value = "/popArbreUA.do", method = GET)
     public String popupUA(Map<String, Object> model, HttpSession session, HttpServletRequest request) {               
 
         List tieneHijos = new ArrayList();
@@ -101,7 +101,7 @@ public class PopupUABackController {
         return raices;
     }
     
-    @RequestMapping(value = "/popArbreUAExpandir.htm")
+    @RequestMapping(value = "/popArbreUAExpandir.do")
     public String expandir(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         //log.info("Entramos en expandir");
@@ -165,7 +165,7 @@ public class PopupUABackController {
         return "pantalles/popArbreUA";
     }
 
-    @RequestMapping(value = "/popArbreUAContreure.htm")
+    @RequestMapping(value = "/popArbreUAContreure.do")
     public String contraer(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         //log.info("Entramos en contraer");

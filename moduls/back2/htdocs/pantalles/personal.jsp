@@ -4,10 +4,10 @@
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/personal.js'/>"></script>
 <script type="text/javascript">
-    var pagLlistatPersonal = '<c:url value="/personal/llistat.htm" />';
-    var pagDetall = '<c:url value="/personal/pagDetall.htm" />';
-    var pagGuardar = '<c:url value="/personal/guardar.htm" />';
-    var pagEsborrar = '<c:url value="/personal/esborrarPersonal.htm" />';
+    var pagLlistatPersonal = '<c:url value="/personal/llistat.do" />';
+    var pagDetall = '<c:url value="/personal/pagDetall.do" />';
+    var pagGuardar = '<c:url value="/personal/guardar.do" />';
+    var pagEsborrar = '<c:url value="/personal/esborrarPersonal.do" />';
     
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -325,7 +325,7 @@
         <div class="resultats C">
             <div id="cercador"> <%-- style="display:none/block" --%>
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2><%--action="<c:url value="/personal/processaCerca.htm"/>" --%>                 
+                    <h2>Cercador</h2><%--action="<c:url value="/personal/processaCerca.do"/>" --%>                 
                         <div class="fila">
                             <div class="element t21">
                                 <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>

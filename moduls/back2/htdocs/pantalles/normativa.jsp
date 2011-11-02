@@ -16,15 +16,15 @@
     <script type="text/javascript">
     <!--
         // pagines  
-        var pagLlistat = '<c:url value="/normativa/llistat.htm" />';
-        var pagDetall = '<c:url value="/normativa/pagDetall.htm" />';
-        var pagGuardar = '<c:url value="/normativa/guardar.htm" />';
-        var pagEliminar = '<c:url value="/normativa/eliminar.htm" />';
+        var pagLlistat = '<c:url value="/normativa/llistat.do" />';
+        var pagDetall = '<c:url value="/normativa/pagDetall.do" />';
+        var pagGuardar = '<c:url value="/normativa/guardar.do" />';
+        var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
         
         var pagArrel = '<c:url value="/" />';
         
         var pagBOIB = "json/boibsJSON.php";
-        var pagNormativa = '<c:url value="/normativa/cercarNormatives.htm" />';
+        var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
         var pagProcediments = "json/procedimentsJSON.php";
         
         var idUaActual = '<c:out value="${idUA}" />';

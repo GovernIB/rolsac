@@ -5,13 +5,13 @@
     // TODO: cambiar las urls de php por las buenas.
    
     // pagines comuns
-    var pagTancarAplicacio = '<c:url value="/logout.htm"/>';
+    var pagTancarAplicacio = '<c:url value="/logout.do"/>';
     var tinyMceUrl = '<c:url value="/js/tiny_mce/tiny_mce.js" />';  
-    var popupUA = '<c:url value="/pantalles/popArbreUA.htm"/>';
+    var popupUA = '<c:url value="/pantalles/popArbreUA.do"/>';
     var pagCap = "json/cap.php"; // no se usa de momento.
     //var pagLlistat = '';
     // pagines
-    var pagProcediments = '<c:url value="/catalegProcediments/catalegProcediments.htm"/>';
+    var pagProcediments = '<c:url value="/catalegProcediments/catalegProcediments.do"/>';
     var pagNormativa = "normativa.php";
     var pagFitxes = "fitxes.php"
     var pagInici = "json/iniciJSON.php";
@@ -34,8 +34,8 @@
     var txtMostrarCap = txtMostrar + ' ' + '<spring:message code="cap.capsalera"/>';
     // molla pa
     var txtCarregantMollaFills = '<spring:message code="mollapa.unitats.carregant"/>';
-    var pagMollaPa = '<c:url value="/unidadAdministrativa/listarHijos.htm"/>';
-    var cambioMollaPa = '<c:url value="/unidadAdministrativa/cambiarUA.htm"/>';
+    var pagMollaPa = '<c:url value="/unidadAdministrativa/listarHijos.do"/>';
+    var cambioMollaPa = '<c:url value="/unidadAdministrativa/cambiarUA.do"/>';
     // planificacio
     var txtAvui = '<spring:message code="planificacio.avui"/>';
     var txtDema = '<spring:message code="planificacio.dema"/>';

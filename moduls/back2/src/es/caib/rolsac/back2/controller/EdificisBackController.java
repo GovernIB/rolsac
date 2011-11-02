@@ -23,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/edificis/")
 public class EdificisBackController {
     	
-	@RequestMapping(value = "/llistat.htm", method = POST)
+	@RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody Map<String, Object> llistatEdificis(HttpServletRequest request) {
 	    	    	    
 	    Map<String,Object> resultats = new HashMap<String,Object>();

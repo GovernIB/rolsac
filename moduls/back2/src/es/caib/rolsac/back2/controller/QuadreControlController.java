@@ -24,7 +24,7 @@ public class QuadreControlController {
         this.messageSource = messageSource;
     }
     
-    @RequestMapping(value="/quadreControl.htm")        
+    @RequestMapping(value="/quadreControl.do")        
 	public String quadreControl(HttpSession session, HttpServletRequest request, Map<String,Object> model) throws ServletException, IOException {
         model.put("menu", 0);
         model.put("submenu", "layout/submenuOrganigrama.jsp");

@@ -37,7 +37,7 @@ public class UATags extends TagSupport {
 				UnidadAdministrativa ua = (UnidadAdministrativa) reqUA;
 				HttpServletRequest httpRequest=(HttpServletRequest)pageContext.getRequest();
 				
-				StringBuilder url = new StringBuilder("../unidadAdministrativa/cambiarUA.htm?ua=");
+				StringBuilder url = new StringBuilder("../unidadAdministrativa/cambiarUA.do?ua=");
 				String UA_ID_PLACEHOLDER = "__UAID__";
 				url.append(UA_ID_PLACEHOLDER);
 				url.append("&redirectTo=");

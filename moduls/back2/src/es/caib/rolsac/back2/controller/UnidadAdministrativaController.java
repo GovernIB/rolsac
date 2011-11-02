@@ -25,7 +25,7 @@ import org.ibit.rol.sac.model.transients.IdNomTransient;
 @RequestMapping("/unidadAdministrativa/")
 public class UnidadAdministrativaController {
 
-	@RequestMapping(value = "/listarHijos.htm")
+	@RequestMapping(value = "/listarHijos.do")
 	public @ResponseBody List<IdNomTransient> llistatHijos(HttpSession session, HttpServletRequest request) {
 		
 		List<IdNomTransient> uaHijosJSON = new ArrayList<IdNomTransient>();
@@ -60,7 +60,7 @@ public class UnidadAdministrativaController {
 	}
 
 
-	@RequestMapping(value = "/cambiarUA.htm")
+	@RequestMapping(value = "/cambiarUA.do")
 	public String cambiarUA(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 		try {
 			Long uaId = Long.parseLong(request.getParameter("ua"));
@@ -80,7 +80,7 @@ public class UnidadAdministrativaController {
 		
 		String redirectTo = request.getParameter("redirectTo");
 		if (redirectTo == null || "".equals(redirectTo)) {
-			redirectTo = "/quadreControl/quadreControl.htm";
+			redirectTo = "/quadreControl/quadreControl.do";
 		}
 		return "redirect:" + redirectTo;
 	}

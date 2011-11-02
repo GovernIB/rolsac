@@ -176,18 +176,18 @@
         }
 
         function unopen(nr){
-        	window.location = "<c:url value='popArbreUAContreure.htm' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
+        	window.location = "<c:url value='popArbreUAContreure.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
             //document.forms[0].idSelect.value = ex[nr].codi;
-            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAContreure.htm" />';
+            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAContreure.do" />';
             //document.forms[0].submit()
         }
 
         
 
         function open(nr){
-            window.location = "<c:url value='popArbreUAExpandir.htm' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
+            window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
             //document.forms[0].idSelect.value = ex[nr].codi;
-            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAExpandir.htm" />';
+            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAExpandir.do" />';
             //document.forms[0].submit()
         }
      -->   
@@ -210,7 +210,7 @@
 							        print_explorador();
 							-->     
 					        </script>
-					        <form action='<c:url value="/pantalles/popArbreUA.htm"/>' id="padreForm" method="post" >
+					        <form action='<c:url value="/pantalles/popArbreUA.do"/>' id="padreForm" method="post" >
 					            <input type="hidden" name="action" value='Expandir' />
 					            <input type="hidden" name="idUA" value='<c:out value="${idUA}" />' />
 					            <input type="hidden" name="idSelect" value="" />

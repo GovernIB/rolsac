@@ -1058,12 +1058,12 @@
     
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
-        var pagLlistat = '<c:url value="/unitatadm/unitatadm.htm" />';
+        var pagLlistat = '<c:url value="/unitatadm/unitatadm.do" />';
         
-        var pagDetall = '<c:url value="/unitatadm/pagDetall.htm" />';
-        var pagEdificis = '<c:url value="/edificis/llistat.htm" />';
-        var pagGuardar = '<c:url value="/unitatadm/guardar.htm" />';
-        var pagEsborrar = '<c:url value="/unitatadm/esborrar.htm" />';
+        var pagDetall = '<c:url value="/unitatadm/pagDetall.do" />';
+        var pagEdificis = '<c:url value="/edificis/llistat.do" />';
+        var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
+        var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
     
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";

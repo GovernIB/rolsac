@@ -21,7 +21,7 @@ public class ArchivoNormativaController extends ArchivoController {
         this.messageSource = messageSource;
     }
     
-    @RequestMapping(value = "/archivo.htm", method = GET)
+    @RequestMapping(value = "/archivo.do", method = GET)
     public void llistatMateries(HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.devolverArchivo(request, response);   
     }

@@ -76,7 +76,7 @@ public class NormativaBackController {
     }	
     	
 
-	@RequestMapping(value = "/normativa.htm", method = GET)
+	@RequestMapping(value = "/normativa.do", method = GET)
 	public String llistatNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
 		String idioma = request.getLocale().getLanguage();
@@ -144,7 +144,7 @@ public class NormativaBackController {
 	}
 	
 	
-	@RequestMapping(value = "/llistat.htm", method = POST)
+	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 
 		//Listar las normativas de la unidad administrativa
@@ -256,7 +256,7 @@ public class NormativaBackController {
 	}
 
 
-	@RequestMapping(value = "/pagDetall.htm", method = POST)
+	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
 			
 	    Map<String, Object> normativaDetall = new HashMap<String, Object>();
@@ -309,7 +309,7 @@ public class NormativaBackController {
     	        
     	        //archivo
     	        if (traNorm != null && traNorm.getArchivo() != null) {
-    	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "normativa/archivo.htm?id=" + normativa.getId() + "&lang=" + idioma);
+    	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "normativa/archivo.do?id=" + normativa.getId() + "&lang=" + idioma);
     	        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", traNorm.getArchivo().getNombre());
     	        } else {
     	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "");
@@ -370,7 +370,7 @@ public class NormativaBackController {
         return normativaDetall;
 	}
 	
-	@RequestMapping(value = "/guardar.htm", method = POST)
+	@RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		
 		/**
@@ -622,7 +622,7 @@ public class NormativaBackController {
 	}
 
 
-	@RequestMapping(value = "/eliminar.htm", method = POST)
+	@RequestMapping(value = "/eliminar.do", method = POST)
 	public @ResponseBody IdNomTransient eliminar(HttpSession session, HttpServletRequest request) {
 		Long id = ParseUtil.parseLong(request.getParameter("id"));
 		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
@@ -649,7 +649,7 @@ public class NormativaBackController {
 	}
 	
 	
-	@RequestMapping(value = "/cercarNormatives.htm", method = POST)
+	@RequestMapping(value = "/cercarNormatives.do", method = POST)
 	public @ResponseBody Map<String, Object> cercarNormatives(HttpServletRequest request, HttpSession session)  {
 
 		//Listar las normativas de la unidad administrativa

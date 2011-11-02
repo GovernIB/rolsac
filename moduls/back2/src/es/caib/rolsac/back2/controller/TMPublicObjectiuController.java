@@ -24,7 +24,7 @@ public class TMPublicObjectiuController {
         this.messageSource = messageSource;
     }
     
-    @RequestMapping(value = "/llistat.htm", method = GET)
+    @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatFetsVitals(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenuTMPublicObjectiu.jsp");

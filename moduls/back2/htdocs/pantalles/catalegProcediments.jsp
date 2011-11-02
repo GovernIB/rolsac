@@ -20,11 +20,11 @@
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 
 <script type="text/javascript">
-    var pagLlistat = '<c:url value="/catalegProcediments/llistat.htm" />';
-    var pagDetall = '<c:url value="/catalegProcediments/pagDetall.htm" />';
-    var pagGuardar = '<c:url value="/catalegProcediments/guardar.htm" />';
-    var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.htm" />';
-    var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.htm" />';
+    var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
+    var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
+    var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';
+    var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
+    var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";

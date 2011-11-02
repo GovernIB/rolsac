@@ -12,7 +12,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="<c:url value="/quadreControl/quadreControl.htm"/>"><spring:message code="submenu.quadre_control" /></a></li>
+                    <li><a href="<c:url value="/quadreControl/quadreControl.do"/>"><spring:message code="submenu.quadre_control" /></a></li>
                 </c:otherwise>
             </c:choose>
 			
@@ -24,7 +24,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="<c:url value="/catalegProcediments/catalegProcediments.htm"/>"><spring:message code="submenu.cataleg_procediments" /></a></li>
+                    <li><a href="<c:url value="/catalegProcediments/catalegProcediments.do"/>"><spring:message code="submenu.cataleg_procediments" /></a></li>
                 </c:otherwise>
             </c:choose>
             
@@ -36,7 +36,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="<c:url value="/unitatadm/unitatadm.htm"/>"><spring:message code="submenu.unitatAdm" /></a></li>
+                    <li><a href="<c:url value="/unitatadm/unitatadm.do"/>"><spring:message code="submenu.unitatAdm" /></a></li>
                 </c:otherwise>
             </c:choose>
 
@@ -48,7 +48,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="<c:url value="/fitxainf/fitxainf.htm"/>"><spring:message code="submenu.fitxes_informatives" /></a></li>
+                    <li><a href="<c:url value="/fitxainf/fitxainf.do"/>"><spring:message code="submenu.fitxes_informatives" /></a></li>
                 </c:otherwise>
             </c:choose>
             
@@ -60,7 +60,7 @@
                     </li>
                 </c:when>
                 <c:otherwise>
-                    <li><a href="<c:url value="/normativa/normativa.htm"/>"><spring:message code="submenu.normativa" /></a></li>
+                    <li><a href="<c:url value="/normativa/normativa.do"/>"><spring:message code="submenu.normativa" /></a></li>
                 </c:otherwise>
             </c:choose>
             
@@ -74,7 +74,7 @@
 	                    </li>
 	                </c:when>
 	                <c:otherwise>
-	                    <li><a href="<c:url value="/personal/personal.htm"/>"><spring:message code="submenu.personal" /></a></li>
+	                    <li><a href="<c:url value="/personal/personal.do"/>"><spring:message code="submenu.personal" /></a></li>
 	                </c:otherwise>
 	            </c:choose>
             </c:if>

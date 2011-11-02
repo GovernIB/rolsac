@@ -45,7 +45,7 @@ public class PersonalBackController {
     }
     
     
-    @RequestMapping(value = "/personal.htm", method = GET)
+    @RequestMapping(value = "/personal.do", method = GET)
     public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
         model.put("menu", 0);
@@ -67,7 +67,7 @@ public class PersonalBackController {
     }
 
     
-	@RequestMapping(value = "/llistat.htm", method = POST)
+	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
 
        List<Personal> llistaPersonal = new ArrayList<Personal>();
@@ -122,7 +122,7 @@ public class PersonalBackController {
 	}
 
 	
-	@RequestMapping(value = "/pagDetall.htm", method = POST)
+	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    
 	    Map<String, Object> personaDetall = new HashMap<String, Object>();
@@ -161,7 +161,7 @@ public class PersonalBackController {
 	}
 
 	
-	@RequestMapping(value = "/esborrarPersonal.htm", method = POST)
+	@RequestMapping(value = "/esborrarPersonal.do", method = POST)
     public @ResponseBody IdNomTransient esborrarPersonal(HttpServletRequest request) {
 	    
 	    IdNomTransient resultatStatus = new IdNomTransient(); 
@@ -190,7 +190,7 @@ public class PersonalBackController {
 	}
 	
 	
-	@RequestMapping(value = "/guardar.htm", method = POST)
+	@RequestMapping(value = "/guardar.do", method = POST)
 	public @ResponseBody IdNomTransient guardarPersonal(HttpSession session, HttpServletRequest request) {
         
 		IdNomTransient result = null;
