@@ -785,8 +785,4 @@ public class NormativaBackController {
 		} else 
 			return texto;
 	}
-	
-	
-
-
 }

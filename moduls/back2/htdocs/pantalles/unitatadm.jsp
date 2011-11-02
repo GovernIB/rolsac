@@ -1064,7 +1064,8 @@
         var pagEdificis = '<c:url value="/edificis/llistat.do" />';
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
-    
+        var pagArrel = '<c:url value="/" />';    
+        
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
         var txtCarregant = "<spring:message code='txt.carregant'/>";

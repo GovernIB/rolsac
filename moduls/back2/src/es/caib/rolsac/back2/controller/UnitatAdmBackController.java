@@ -14,9 +14,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.impl.Log4JLogger;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Materia;
@@ -41,7 +38,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
@@ -49,9 +45,6 @@ import es.caib.rolsac.back2.util.UploadUtil;
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController {
 
-	
-	private static Log log = LogFactory.getLog(PrintRolTag.class);
-	
     private MessageSource messageSource = null;
     
     @Autowired
@@ -129,15 +122,8 @@ public class UnitatAdmBackController {
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
         
 	    Map<String,Object> resultats = new HashMap<String,Object>();	    
-	    Map<String,Object> idiomes = new HashMap<String,Object>();
 	    List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
 	    List<IdNomTransient> llistaEdificisTransient = new ArrayList<IdNomTransient>();
-	    
-	    Map<String,String> ca = new HashMap<String,String>();
-	    Map<String,String> es = new HashMap<String,String>();
-	    Map<String,String> en = new HashMap<String,String>();
-	    Map<String,String> de = new HashMap<String,String>();
-	    Map<String,String> fr = new HashMap<String,String>();
 	    
 	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();	    	    	    	    
 
@@ -188,7 +174,7 @@ public class UnitatAdmBackController {
                 resultats.put("fr",new TraduccionUA());  
             }
             
-            //Condifuracion/gestion
+            //Configuración/gestion
             
             resultats.put("item_clau_hita", uni.getClaveHita());
             resultats.put("item_codi_estandar", uni.getCodigoEstandar());
@@ -219,14 +205,15 @@ public class UnitatAdmBackController {
             resultats.put("item_responsable_sexe", uni.getSexoResponsable());
             
             if (uni.getFotop() != null){
-            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" +uni.getFotop().getId());
+
+            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=1");
                 resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
             } else {
             	resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
                 resultats.put("item_responsable_foto_petita", "");
             }
-            if (uni.getFotog() != null){
-                resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" +uni.getFotog().getId());
+            if (uni.getFotog() != null) {
+            	resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipuus=2");
                 resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
             } else {
                 resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
@@ -238,24 +225,58 @@ public class UnitatAdmBackController {
                 resultats.put("item_tractament", uni.getTratamiento().getId());
             }
             
-            //Logotipos
-            
-            if(mostrarLogosUA()){    //Codigo de del sacback original       
-                if (uni.getLogoh() != null) {
-                    resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
-                }
-                if (uni.getLogov() != null) {
-                    resultats.put("item_logo_vertical", uni.getLogov().getNombre());
-                }
-                if (uni.getLogos() != null) {
-                    resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
-                }
-                if (uni.getLogot() != null) {
-                    resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
-                }
+            //Logotipo horizontal            
+            if (uni.getLogoh() != null) {
+            	resultats.put("item_logo_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=3");
+            	resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
+            } else {
+            	resultats.put("item_logo_horizontal_enllas_arxiu", "");
+            	resultats.put("item_log_horizontal", "");
             }
-            //Fichas de la portada web
             
+            //Logotipo vertical
+            if (uni.getLogov() != null) {
+            	resultats.put("item_logo_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=4");
+            	resultats.put("item_logo_vertical", uni.getLogov().getNombre());
+            } else {
+            	resultats.put("item_log_vertical_enllas_arxiu", "");
+            	resultats.put("item_log_vertical", "");
+            }
+            
+            //Logo saludo horizontal
+            if (uni.getLogos() != null) {
+            	resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=5");            	
+            	resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
+            } else {
+            	resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "");
+            	resultats.put("item_logo_salutacio_horizontal", "");
+            }
+            
+            //Logo saludo vertical
+            if (uni.getLogot() != null) {
+            	resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=6");
+            	resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
+            } else {
+            	resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "");
+            	resultats.put("item_logo_salutacio_vertical", "");
+            }
+                        
+//            if(mostrarLogosUA()){    //Codigo de del sacback original       
+//                if (uni.getLogoh() != null) {
+//                    resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
+//                }
+//                if (uni.getLogov() != null) {
+//                    resultats.put("item_logo_vertical", uni.getLogov().getNombre());
+//                }
+//                if (uni.getLogos() != null) {
+//                    resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
+//                }
+//                if (uni.getLogot() != null) {
+//                    resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
+//                }
+//            }                        
+            
+            //Fichas de la portada web            
             resultats.put("item_nivell_1", uni.getNumfoto1());
             resultats.put("item_nivell_2", uni.getNumfoto2());
             resultats.put("item_nivell_3", uni.getNumfoto3());
@@ -637,16 +658,16 @@ public class UnitatAdmBackController {
 		}
 	}
 	
-    /**
-     * Método que comprueba si hay que mostrar los logos
-     *
-     * @return boolean
-     */
-    private boolean mostrarLogosUA(){
-       
-        String value = System.getProperty("es.caib.rolsac.logos");
-        return !((value == null) || value.equals("N"));
-    }
+//    /**
+//     * Método que comprueba si hay que mostrar los logos
+//     *
+//     * @return boolean
+//     */
+//    private boolean mostrarLogosUA(){
+//       
+//        String value = System.getProperty("es.caib.rolsac.logos");
+//        return !((value == null) || value.equals("N"));
+//    }
     
 	@RequestMapping(value = "/esborrar.do", method = POST)
     public @ResponseBody IdNomTransient esborrarUniAdm(HttpServletRequest request) {

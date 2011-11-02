@@ -36,4 +36,3 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 		return new Locale(idioma);
     }
 }
-

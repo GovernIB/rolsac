@@ -28,7 +28,7 @@ var Items_arr = new Array();
 function CDetall(soloFicha){	
 	this.extend = DetallBase;
 	this.extend(soloFicha);
-	
+
 	var that = this;
 	
 	this.iniciar = function() {
@@ -218,10 +218,14 @@ function CDetall(soloFicha){
 			//FotoPetita
 			$("#item_responsable_foto_petita").val("");
 			$("#grup_item_responsable_foto_petita input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
+			
+			//if (dada_node["enllas_arxiu"]) {
+			if (dada_node["item_responsable_foto_petita_enllas_arxiu"]) {
 				$("#grup_item_responsable_foto_petita a").show();					
-				$("#grup_item_responsable_foto_petita a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_responsable_foto_petita a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				
+				$("#grup_item_responsable_foto_petita a").attr("href", pagArrel + dada_node["item_responsable_foto_petita_enllas_arxiu"]);				
+				$("#grup_item_responsable_foto_petita a").text(dada_node["item_responsable_foto_petita"]);
+				
 				$("#grup_item_responsable_foto_petita span").hide();
 				$("#grup_item_responsable_foto_petita input").show();
 				$("#grup_item_responsable_foto_petita label.eliminar").show();
@@ -236,10 +240,13 @@ function CDetall(soloFicha){
 			//FotoGran
 			$("#item_responsable_foto_gran").val("");
 			$("#grup_item_responsable_foto_gran input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
+			
+			if (dada_node["item_responsable_foto_gran_enllas_arxiu"]) {
 				$("#grup_item_responsable_foto_gran a").show();					
-				$("#grup_item_responsable_foto_gran a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_responsable_foto_gran a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				
+				$("#grup_item_responsable_foto_gran a").attr("href", pagArrel + dada_node["item_responsable_foto_gran_enllas_arxiu"]);
+				$("#grup_item_responsable_foto_gran a").text(dada_node["item_responsable_foto_gran"]);
+				
 				$("#grup_item_responsable_foto_gran span").hide();
 				$("#grup_item_responsable_foto_gran input").show();
 				$("#grup_item_responsable_foto_gran label.eliminar").show();
@@ -257,10 +264,13 @@ function CDetall(soloFicha){
 			//LogoHoritzontal
 			$("#item_logo_horizontal").val("");
 			$("#grup_item_logo_horizontal input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
+			if (dada_node["item_logo_horizontal_enllas_arxiu"]) {
+				
 				$("#grup_item_logo_horizontal a").show();					
-				$("#grup_item_logo_horizontal a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_logo_horizontal a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				
+				$("#grup_item_logo_horizontal a").attr("href", pagArrel + dada_node["item_logo_horizontal_enllas_arxiu"]);
+				$("#grup_item_logo_horizontal a").text(dada_node["item_logo_horizontal"]);
+				
 				$("#grup_item_logo_horizontal span").hide();
 				$("#grup_item_logo_horizontal input").show();
 				$("#grup_item_logo_horizontal label.eliminar").show();
@@ -271,13 +281,17 @@ function CDetall(soloFicha){
 				$("#grup_item_logo_horizontal label.eliminar").hide();
 				$("#grup_item_logo_horizontal a").hide();			
 			}
+			
 			//LogoVertical
 			$("#item_logo_vertical").val("");
 			$("#grup_item_logo_vertical input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
-				$("#grup_item_logo_vertical a").show();					
-				$("#grup_item_logo_vertical a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_logo_vertical a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+			if (dada_node["item_logo_vertical_enllas_arxiu"]) {
+				
+				$("#grup_item_logo_vertical a").show();
+				
+				$("#grup_item_logo_vertical a").attr("href", pagArrel + dada_node["item_logo_vertical_enllas_arxiu"]);
+				$("#grup_item_logo_vertical a").text(dada_node["item_logo_vertical"]);
+				
 				$("#grup_item_logo_vertical span").hide();
 				$("#grup_item_logo_vertical input").show();
 				$("#grup_item_logo_vertical label.eliminar").show();
@@ -288,13 +302,18 @@ function CDetall(soloFicha){
 				$("#grup_item_logo_vertical label.eliminar").hide();
 				$("#grup_item_logo_vertical a").hide();			
 			}
+			
 			//LogoSalutacioHoritzontal
 			$("#item_logo_salutacio_horizontal").val("");
 			$("#grup_item_logo_salutacio_horizontal input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
+			
+			if (dada_node["item_logo_salutacio_horizontal_enllas_arxiu"]) {
+				
 				$("#grup_item_logo_salutacio_horizontal a").show();					
-				$("#grup_item_logo_salutacio_horizontal a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_logo_salutacio_horizontal a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				
+				$("#grup_item_logo_salutacio_horizontal a").attr("href", pagArrel + dada_node["item_logo_salutacio_horizontal_enllas_arxiu"]);
+				$("#grup_item_logo_salutacio_horizontal a").text(dada_node["item_logo_salutacio_horizontal"]);
+				
 				$("#grup_item_logo_salutacio_horizontal span").hide();
 				$("#grup_item_logo_salutacio_horizontal input").show();
 				$("#grup_item_logo_salutacio_horizontal label.eliminar").show();
@@ -305,13 +324,17 @@ function CDetall(soloFicha){
 				$("#grup_item_logo_salutacio_horizontal label.eliminar").hide();
 				$("#grup_item_logo_salutacio_horizontal a").hide();			
 			}
+			
 			//LogoSalutacioVertical
 			$("#item_logo_salutacio_vertical").val("");
 			$("#grup_item_logo_salutacio_vertical input").removeAttr("checked");
-			if (dada_node["enllas_arxiu"]) {
+			
+			if (dada_node["item_logo_salutacio_vertical_enllas_arxiu"]) {
 				$("#grup_item_logo_salutacio_vertical a").show();					
-				$("#grup_item_logo_salutacio_vertical a").attr("href", pagArrel + dada_node["idioma_" + idioma + "_enllas_arxiu"]);
-				$("#grup_item_logo_salutacio_vertical a").text(dada_node["idioma_" + idioma + "_nom_arxiu"]);
+				
+				$("#grup_item_logo_salutacio_vertical a").attr("href", pagArrel + dada_node["item_logo_salutacio_vertical_enllas_arxiu"]);
+				$("#grup_item_logo_salutacio_vertical a").text(dada_node["item_logo_salutacio_vertical"]);
+				
 				$("#grup_item_logo_salutacio_vertical span").hide();
 				$("#grup_item_logo_salutacio_vertical input").show();
 				$("#grup_item_logo_salutacio_vertical label.eliminar").show();
@@ -329,7 +352,6 @@ function CDetall(soloFicha){
 			$("#item_nivell_2").val(dada_node.item_nivell_2);
 			$("#item_nivell_3").val(dada_node.item_nivell_3);
 			$("#item_nivell_4").val(dada_node.item_nivell_4);		
-			
 			
 			// materies
 			mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
