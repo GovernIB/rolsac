@@ -17,6 +17,7 @@ import javax.naming.NamingException;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -533,6 +534,27 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         } 
     }
     
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosActivos(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.Date)
+	 */
+    public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+        try {
+            return getFacade().buscarProcedimientosActivos(unidadAdministrativa, fechaCaducidad);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosCaducados(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.Date)
+	 */
+    public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+        try {
+            return getFacade().buscarProcedimientosCaducados(unidadAdministrativa, fechaCaducidad);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

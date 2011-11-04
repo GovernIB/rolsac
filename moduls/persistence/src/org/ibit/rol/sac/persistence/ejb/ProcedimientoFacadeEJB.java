@@ -29,6 +29,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
@@ -38,6 +39,7 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Estadistica;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -3197,4 +3199,74 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         return value;
     }	
     
+    /**
+     * Buscamos el numero de procedimientos activos des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Procedimientos activos
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+		Integer resultado = 0;
+		Session session = getSession();
+	
+		try {
+			
+        	Query query = null;
+        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.unidadAdministrativa.id= :id and prc.fechaCaducidad > :fecha");
+        		query.setLong("id", unidadAdministrativa.getId());
+	        	query.setDate("fecha", fechaCaducidad);
+        	} else {
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.fechaCaducidad > :fecha");
+	        	query.setDate("fecha", fechaCaducidad);
+        	}
+        	
+        	resultado = (Integer) query.uniqueResult();
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	
+		
+		return resultado;
+	}
+    
+	 /**
+     * Buscamos el numero de procedimientos activos des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Procedimientos caducados
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+		
+		Integer resultado = 0;		
+		Session session = getSession();
+		try {
+        	Query query = null;
+        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+	        	query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.unidadAdministrativa.id= :id and prc.fechaCaducidad < :fecha");
+	        	query.setLong("id", unidadAdministrativa.getId());
+	        	query.setDate("fecha", fechaCaducidad);
+        	} else {
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.fechaCaducidad < :fecha");
+	        	query.setDate("fecha", fechaCaducidad);
+        	}
+        	resultado = (Integer) query.uniqueResult();
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+			
+		return resultado;
+	}
 }

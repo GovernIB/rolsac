@@ -1277,4 +1277,39 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 		
 		return listaNormativaModel;		
 	 } 	 
+	 
+	 	/**
+	     * Buscamos el numero de normvativas activas
+	     * 
+	     * @param unidadAdministrativa
+	     * @return numero de normativas activas 
+	     * @ejb.interface-method
+	     * @ejb.permission unchecked="true"
+	     */
+		public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa){
+			Integer resultado = 0;
+			Session session = getSession();
+		
+			try {
+				
+	        	Query query = null;
+	        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.unidadAdministrativa.id= :id ");
+	        		query.setLong("id", unidadAdministrativa.getId());
+	        	} else {
+	        		query = session.createQuery("select count(*) from ProcedimientoLocal");
+	        	}
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+	    		
+	        } catch (HibernateException he) {
+	            throw new EJBException(he);
+	        } finally {
+	            close(session);
+	        }
+		
+			
+			return resultado;
+		}
+	    
 }

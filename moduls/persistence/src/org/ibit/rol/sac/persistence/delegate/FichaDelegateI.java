@@ -149,5 +149,9 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract Ficha obtenerFichaPMA(Long id) throws DelegateException;
+	
+	public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException;
+	   
+	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException;
 
 }

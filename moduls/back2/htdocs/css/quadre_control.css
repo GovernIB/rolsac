@@ -1,0 +1,91 @@
+@charset "utf-8";
+div.modul {
+    border: 1px solid #F2F2F2;
+    float: left;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    padding: 1em;
+    width: 53em;
+    background-color: White;
+}
+div.m50 {
+    width: 34.5em;
+}
+p#quadreControl {
+    color: #333333;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+div.modul h2 {
+    margin-bottom: 1em;
+    margin-top: 0;
+}
+#darreresModificacions ul {
+    list-style: none outside none;
+}
+#darreresModificacions ul li {
+    margin-bottom: 1em;
+    padding-left: 2em;
+}
+#darreresModificacions ul li.procediment {
+    background: url("../img/taula_llistat/procediment.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li.fitxa {
+    background: url("../img/taula_llistat/fitxa.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li.normativa {
+    background: url("../img/taula_llistat/normativa.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li.procediment_caducat {
+    background: url("../img/taula_llistat/procediment_caducat.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li.fitxa_caducat {
+    background: url("../img/taula_llistat/fitxa_caducada.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li.normativa_caducat {
+    background: url("../img/taula_llistat/normativa_caducada.gif") no-repeat scroll 0 0.4em transparent;
+}
+#darreresModificacions ul li span {
+    font-size: 0.9em;
+}
+#darreresModificacions ul li span.tipus {
+    font-variant: small-caps;
+}
+#darreresModificacions ul li a {
+    display: block;
+    font: 1.2em Georgia,"Times New Roman",Times,serif;
+}
+div.modul table {
+    border: 0 none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    width: 100%;
+}
+div.modul table thead th {
+    background-color: #FFECD9;
+    font-size: 0.9em;
+    padding: 0.3em 0.3em 0.8em;
+    text-align: right;
+    text-transform: uppercase;
+    width: 7em;
+}
+div.modul table thead th.tipus {
+    text-align: left;
+}
+div.modul table tbody th {
+    font: 1em Georgia,"Times New Roman",Times,serif;
+    padding: 0.5em 0.3em;
+    text-align: left;
+}
+div.modul table tbody td {
+    padding: 0.3em;
+    text-align: right;
+}
+div.modul table tbody td.total {
+    font-weight: bold;
+}
+div.modul table tbody th a {
+    display: block;
+    font: 1.2em Georgia,"Times New Roman",Times,serif;
+}

@@ -234,6 +234,13 @@ public class FichaDelegate implements FichaDelegateI {
            return impl.obtenerFichaPMA(id);
 	}
 	
+    
+    public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+		return impl.buscarFichasActivas(unidadAdministrativa,fechaCaducidad);
+	}
+	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad )throws DelegateException {
+		return impl.buscarFichasCaducadas(unidadAdministrativa,fechaCaducidad);
+	}
 
 
 }

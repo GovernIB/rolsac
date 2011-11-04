@@ -8,6 +8,7 @@ import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
 import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -262,6 +263,14 @@ public class ProcedimientoDelegate {
     
     public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) throws DelegateException {
     	return impl.actuacionsByFamiliaMat(codiFamilia, codiMateria, idioma);
+    }
+    
+    public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+    	return impl.buscarProcedimientosActivos(unidadAdministrativa, fechaCaducidad);
+    }
+    
+    public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+    	return impl.buscarProcedimientosCaducados(unidadAdministrativa, fechaCaducidad);
     }
     
 }

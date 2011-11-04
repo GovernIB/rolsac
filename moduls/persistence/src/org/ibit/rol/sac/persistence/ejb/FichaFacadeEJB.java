@@ -2129,5 +2129,76 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         return ficha;
 
     }
+    
+    /**
+     * Buscamos el numero de fichas activas des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Fichas activas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+		Integer resultado = 0;
+		Session session = getSession();
+	
+		try {
+			
+        	Query query = null;
+        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ficUA.unidadAdministrativa.id= :id and fic.fechaCaducidad > :fecha");
+        		query.setLong("id", unidadAdministrativa.getId());
+	        	query.setDate("fecha", fechaCaducidad);
+        	} else {
+        		query = session.createQuery("select count(*) from Ficha as fic where fic.fechaCaducidad > :fecha");
+	        	query.setDate("fecha", fechaCaducidad);
+        	}
+        	
+        	resultado = (Integer) query.uniqueResult();
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	
+		
+		return resultado;
+	}
+    
+	 /**
+     * Buscamos el numero de fichas caducadas des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Fichas caducadas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+		
+		Integer resultado = 0;		
+		Session session = getSession();
+		try {
+        	Query query = null;
+        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ficUA.unidadAdministrativa.id= :id and fic.fechaCaducidad < :fecha");
+        		query.setLong("id", unidadAdministrativa.getId());
+	        	query.setDate("fecha", fechaCaducidad);
+        	} else {
+        		query = session.createQuery("select count(*) from Ficha as fic where fic.fechaCaducidad < :fecha");
+	        	query.setDate("fecha", fechaCaducidad);
+        	}
+        	resultado = (Integer) query.uniqueResult();
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+			
+		return resultado;
+	}
 
 }

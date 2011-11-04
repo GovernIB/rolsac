@@ -14,6 +14,7 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.webcaib.DadesNormativaModel;
 import org.ibit.rol.sac.persistence.intf.NormativaFacade;
 import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
@@ -243,7 +244,14 @@ public class NormativaDelegate implements StatelessDelegate {
    			throw new DelegateException(e);
    		}
    	}
-
+   	
+   	public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa) throws DelegateException {
+   		try {
+   			return getFacade().buscarProcedimientosActivos(unidadAdministrativa);
+   		} catch (RemoteException e) {
+   			throw new DelegateException(e);
+   		}
+   	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
