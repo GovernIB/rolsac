@@ -1,16 +1,15 @@
 package es.caib.rolsac.back2.controller;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -22,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import es.caib.rolsac.back2.util.DateUtil;
 
 
 @Controller
@@ -87,19 +84,28 @@ public class QuadreControlController {
 			e.printStackTrace();
 		}
 		
+		// Darreres Modificacions
 		try {
 			EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
-			// TODO Dia d'avui - una setmana
-			//fechaActual.getTime - fechaActual.add(Calendar.DATE, -7);
-			List<Historico> llistaCanvis = eDelegate.listarUltimasModificaciones(DateUtil.parseDate("01/01/2010"), DateUtil.parseDate("20/02/2010"), NUMERO_REGISTROS, unitatAdministrativa);
+			
+			GregorianCalendar dataActualFi = dataActual;
+			dataActualFi.add(Calendar.DATE, -7);
+			
+			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActual.getTime(), dataActualFi.getTime(), NUMERO_REGISTROS, unitatAdministrativa);
 			
 			model.put("darreresModificacions", llistaCanvis);
 			
 			
-		} catch (DelegateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DelegateException dEx) {
+			 if (dEx.getCause() instanceof SecurityException) {
+	                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+	            } else {
+	                String error = messageSource.getMessage("error.altres", null, request.getLocale());
+	                dEx.printStackTrace();
+	            }
 		}
+		
+		// Estadístiques
 		
 		return "index";
 	}

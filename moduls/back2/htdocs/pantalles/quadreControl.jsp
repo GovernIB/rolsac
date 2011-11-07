@@ -18,33 +18,34 @@
 				<ul>
 					<c:forEach items="${darreresModificacions}" var="modificacio">
 						<c:choose>
-							<c:when test="${modificacio.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
+							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
 								<c:choose>
-									<c:when test="${modificacio.ficha.fechaActualizacion < dataActual}">
+									<c:when test="${modificacio.value.ficha.fechaActualizacion < dataActual}">
 										<li class="fitxa_caducat">
 									</c:when>
 									<c:otherwise>
 										<li class="fitxa">
 									</c:otherwise>
 								</c:choose>
-								<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. <span class="data"><c:out value="${modificacio.ficha.fechaActualizacion}" /> h.</span><a href="<c:out value="${modificacio.id }" />">(<c:out value="${modificacio.id }" />) <c:out value="${modificacio.nombre }" /></a></li>
+								<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 							</c:when>
-							<c:when test="${modificacio.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
+							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
 								<c:choose>
-									<c:when test="${modificacio.procedimiento.fechaActualizacion < dataActual}">
+									<c:when test="${modificacio.value.procedimiento.fechaActualizacion < dataActual}">
 										<li class="procediment_caducat">
 									</c:when>
 									<c:otherwise>
 										<li class="procediment">
 									</c:otherwise>
 								</c:choose>
-								<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. <span class="data"><c:out value="${modificacio.procedimiento.fechaActualizacion}" /> h.</span><a href="<c:out value="${modificacio.id }" />">(<c:out value="${modificacio.id }" />) <c:out value="${modificacio.nombre }" /></a></li>
+								<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 							</c:when>
-							<c:when test="${modificacio.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
-								<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. <span class="data"><c:out value="${modificacio.normativa.fecha}" /> h.</span><a href="<c:out value="${modificacio.id }" />">(<c:out value="${modificacio.id }" />) <c:out value="${modificacio.nombre }" /></a></li>
+							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
+								<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 							</c:when>
 						</c:choose>
 					</c:forEach>
+
 					<!-- 
 					<li class="procediment"><span class="tipus">Procediment</span>. <span class="data">25/05/2010 - 10:30 h.</span><a href="http://maq-rolsac.at4.net/procediments.php?/5">(5) Procediment exemple</a></li>
 					<li class="fitxa"><span class="tipus">Fitxa informativa</span>. <span class="data">24/05/2010 - 15:22 h.</span><a href="http://maq-rolsac.at4.net/fitxes.php?/4">(4) Títol de la fitxa exemple</a></li>

@@ -1,15 +1,19 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.intf.EstadisticaFacade;
-import org.ibit.rol.sac.persistence.intf.EstadisticaFacadeHome;
-import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
+import java.rmi.RemoteException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.List;
+
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.intf.EstadisticaFacade;
+import org.ibit.rol.sac.persistence.intf.EstadisticaFacadeHome;
+import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
 
 /**
  * Business delegate para manipular Estadisticas.
@@ -138,6 +142,15 @@ public class EstadisticaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, UnidadAdministrativa unidadAministrativa) throws DelegateException {
+        try {
+            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, unidadAministrativa);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

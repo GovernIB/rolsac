@@ -1,21 +1,45 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
-import net.sf.hibernate.type.Type;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.persistence.util.PeriodoUtil;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.Log;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.*;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
+import net.sf.hibernate.type.Type;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Estadistica;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoFicha;
+import org.ibit.rol.sac.model.HistoricoNormativa;
+import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.Periodo;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.util.PeriodoUtil;
 
 /**
  * SessionBean para manejar y consultar Estadisticas.
@@ -512,6 +536,129 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
 		}
 		
 		return hficha;
+	}
+    
+    /**
+     * Lista las ultimas modificaciones para Procedimientos, Normativas y Fichas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, UnidadAdministrativa unidadAdministrativa) {
+        Session session = getSession();
+        try {
+        	
+        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
+        		
+        		// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
+        		Query queryProcedimiento = null;
+            	Query queryNormativa = null;
+            	Query queryFicha = null;
+        		
+        		queryProcedimiento = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
+            			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+            			" and plo.unidadAdministrativa.id = :id "+
+            			" order by a.fecha desc");
+        		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryProcedimiento.setLong("id", unidadAdministrativa.getId());
+        		queryProcedimiento.setMaxResults(numeroRegistros);
+        		
+        		queryNormativa = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, NormativaLocal as nlo " +
+        			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
+        			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+        			" and nlo.unidadAdministrativa.id = :id " +
+        			" order by a.fecha desc");
+        		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryNormativa.setLong("id", unidadAdministrativa.getId());
+        		queryNormativa.setMaxResults(numeroRegistros);
+        		
+        		queryFicha = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
+            			"where h.id=a.historico.id and h.class = HistoricoFicha " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+            			" and fua.unidadAdministrativa.id = :id and fua.ficha.id = fic.id " +
+            			" order by a.fecha desc");
+        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryFicha.setLong("id", unidadAdministrativa.getId());
+        		queryFicha.setMaxResults(numeroRegistros);
+        		
+        		
+        		Map<Timestamp, Object> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros);
+        		
+        		return historicoOrdenado;
+        		
+        	} else {
+        		Query query = null;
+        		query = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a " +
+            			"where h.id=a.historico.id and h.class in (HistoricoProcedimiento, HistoricoNormativa, HistoricoFicha ) " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR + 
+            			" order by a.fecha desc");
+        		query.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+            	query.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+            	query.setMaxResults(numeroRegistros);
+            	//query.setCacheable(true);
+            	
+            	List<Object[]> lQuery = query.list();
+            	Map<Timestamp, Object> historico = new HashMap<Timestamp, Object>();
+        		
+        		for (Object[] obj : lQuery) {
+        			historico.put((Timestamp)obj[0], obj[1]);
+        		}
+        		
+        		 return historico;
+        	}
+           
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+
+	/**
+	 * @param queryProcedimiento
+	 * @param queryNormativa
+	 * @param queryFicha
+	 * @return
+	 * @throws HibernateException
+	 */
+	private Map<Timestamp, Object> ordenarLista(Query queryProcedimiento, Query queryNormativa, Query queryFicha, Integer numeroRegistros) throws HibernateException {
+		//Tratamiento de la query
+		List<Object[]> lQueryProcedimiento = queryProcedimiento.list();
+		List<Object[]> lQueryNormativa = queryNormativa.list();
+		List<Object[]> lQueryFicha = queryFicha.list();
+		
+		Map<Date, Object> historico = new HashMap<Date, Object>();
+		
+		for (Object[] obj : lQueryProcedimiento) {
+			historico.put((Timestamp)obj[0], obj[1]);
+		}
+		
+		for (Object[] obj : lQueryNormativa) {
+			historico.put((Timestamp)obj[0], obj[1]);
+		}
+		
+		for (Object[] obj : lQueryFicha) {
+			historico.put((Timestamp)obj[0], obj[1]);
+		}
+		
+		Object[] key = historico.keySet().toArray();
+		Arrays.sort(key);
+		
+		Map<Timestamp, Object> historicoOrdenado = new HashMap<Timestamp, Object>();
+		
+		int numReg = numeroRegistros;
+		if (key.length < numeroRegistros) {
+			numReg = key.length;
+		}
+		
+		for (int i = 1; i <= numReg; i++) {
+			historicoOrdenado.put((Timestamp)key[key.length-i], historico.get(key[key.length-i]));  			
+		}	
+		
+		return historicoOrdenado;
 	}
 
     
