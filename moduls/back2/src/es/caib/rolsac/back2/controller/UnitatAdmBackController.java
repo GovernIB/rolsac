@@ -6,8 +6,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -29,6 +31,7 @@ import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -56,6 +59,7 @@ public class UnitatAdmBackController {
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
 		
 	    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+	    
 	    TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 	    EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 	    
@@ -67,7 +71,7 @@ public class UnitatAdmBackController {
 	    List<IdNomTransient> llistaEspaiTerritorialTransient = new ArrayList<IdNomTransient>();
 	    
 	    try {                                
-            llistaMateries = materiaDelegate.listarMaterias();
+            llistaMateries = materiaDelegate.listarMaterias();	    	            
             
             for(Materia materia : llistaMateries){                
                 llistaMateriesTransient.add(new IdNomTransient(  materia.getId(), 
@@ -90,7 +94,6 @@ public class UnitatAdmBackController {
                                                                    espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())
                                                                        ));                
                }                       
-            
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -500,7 +503,6 @@ public class UnitatAdmBackController {
     		if (valoresForm.get("item_responsable_foto_gran_delete") != null && !"".equals(valoresForm.get("item_responsable_foto_gran_delete"))){
     			unitatAdministrativa.setFotog(null);
     		}
-			
 
 			Long tractamentId = ParseUtil.parseLong(valoresForm.get("item_tractament"));
 			if (tractamentId != null) {
@@ -513,7 +515,6 @@ public class UnitatAdmBackController {
 				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 			}
 		
-			
 			//Logotipos
 			//LogoHoritzontal
     		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
@@ -552,7 +553,6 @@ public class UnitatAdmBackController {
     			unitatAdministrativa.setLogot(null);
     		}
     		
-    		
 			//Fichas de la portada web
 			if (valoresForm.get("item_nivell_1")!=null && !"".equals(valoresForm.get("item_nivell_1"))){
 				unitatAdministrativa.setNumfoto1(ParseUtil.parseInt(valoresForm.get("item_nivell_1")));
@@ -566,44 +566,49 @@ public class UnitatAdmBackController {
 			if (valoresForm.get("item_nivell_4")!=null && !"".equals(valoresForm.get("item_nivell_4"))){
 				unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm.get("item_nivell_4")));
 			}
-
-			//Materias asociadas
-           /*
-                if (uni.getUnidadesMaterias() != null) {             
-                
-                    for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
-                        llistaMateriesTransient.add(new IdNomTransient(  unidadMateria.getMateria().getId(), 
-                                                                         unidadMateria.getMateria().getNombreMateria(request.getLocale().getLanguage())
-                                                                               ));                
-                       }
-                    
-                    resultats.put("materies", llistaMateriesTransient);
-                
-                } else {
-                    resultats.put("materies", null);
-                }            
-                
-                
-                //Edificios
-                
-                if (uni.getEdificios() != null) {             
-                
-                    for(Object edifici : uni.getEdificios()){                
-                        llistaEdificisTransient.add(new IdNomTransient(  ((Edificio)edifici).getId(), 
-                                                                         ((Edificio)edifici).getDireccion())
-                                                                               );                
-                       }
-                    
-                    resultats.put("edificis", llistaEdificisTransient);
-                
-                } else {
-                    resultats.put("edificis", null);
-                } 
-*/
 			
-			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);  
+			//Materias asociadas						
+            if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))) {
+            	
+            	UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
+            	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+				
+            	Set<UnidadMateria> unidadesMateriasNuevas = new HashSet<UnidadMateria>();
+            	
+				String[] codisMateriesNoves = valoresForm.get("materies").split(",");				
+				
+				//Si es edición sólo tendremos en cuenta las nuevas materias
+				if (id != null) {
+										
+					borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
+					
+	                for (int i = 0; i < codisMateriesNoves.length; i++) {
+	                		   
+	                    for ( UnidadMateria unidadMateria: unitatAdministrativa.getUnidadesMaterias() ) {
+	                    	
+	                        if ( unidadMateria.getMateria().getId().equals(Long.valueOf(codisMateriesNoves[i]) ) ) { //materia ya existente
+	                            unidadesMateriasNuevas.add(unidadMateria);
+	                            codisMateriesNoves[i] = null;
+	                            break;
+	                        }
+	                        	                        
+	                    }                            
+	                }                         					
+				}
+								
+                for (String codiMateria: codisMateriesNoves) {
+                	
+                    if (codiMateria != null) {                    	
+                    	UnidadMateria nuevaUnidadMateria = new UnidadMateria();
+                    	Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
+                    	unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());                     	                        
+                    }
+                }                
+            }
+            
+			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
 			
-			// Sobre escrivim la unitat administrativa de la amollapa
+			// Sobre escrivim la unitat administrativa de la mollapa
 			session.setAttribute("unidadAdministrativa", unitatAdministrativa);
 			
             String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
@@ -656,6 +661,7 @@ public class UnitatAdmBackController {
 			}
 			unitatAdministrativa.setId(id);
 		}
+				
 	}
 	
 //    /**
@@ -847,4 +853,34 @@ public class UnitatAdmBackController {
 //
 //        return errores;
 //    }
+	/**
+	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecerán
+	 * a ella, según los códigos de Materia pasados por parámetro. 
+	 */
+	private void borrarUnidadesMateriaObsoletas(UnidadAdministrativa unidadAdministrativa, String[] codigosMateriasNuevas) throws DelegateException {
+		
+		UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
+		Set<UnidadMateria> listaUnidadMateria = unidadAdministrativa.getUnidadesMaterias();			
+		List<Long> listaIdUnidadMateriaObsoleta = new ArrayList();
+		
+		for ( UnidadMateria unidadMateria : listaUnidadMateria ) {
+			
+			Materia materia = unidadMateria.getMateria();
+			int totalMateriasNuevas = codigosMateriasNuevas.length;
+			
+			int i = 0;
+			while ( i < totalMateriasNuevas && ( !materia.getId().equals(new Long(codigosMateriasNuevas[i])) ) ) 
+				i++;
+			
+			//Si la materia no está entre los codigos nuevos, significa que ha sido eliminada
+			//y, por tanto, la borraremos
+			if ( i == totalMateriasNuevas  ) 
+				listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
+			
+		}
+		
+		for ( Long id : listaIdUnidadMateriaObsoleta ) 
+			unidadMateriaDelegate.borrarUnidadMateria( id );
+		
+	}
 }

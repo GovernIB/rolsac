@@ -5,7 +5,7 @@
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />    
-    
+    	    
     <div id="escriptori_contingut">
     </div>
     

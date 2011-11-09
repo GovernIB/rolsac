@@ -26,15 +26,37 @@ var Items_arr = new Array();
 
 // detall
 function CDetall(soloFicha){	
+		
 	this.extend = DetallBase;
 	this.extend(soloFicha);
 
 	var that = this;
+	var materias = "";
 	
 	this.iniciar = function() {
-		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
-		this.guarda = this.guarda_upload;
 		
+		//Sobreescribimos la función del botón finalizar para añadir a los parámetros enviados
+		//las materias seleccionadas por el usuario
+		ModulMateries.extend = CModulMateries;
+		ModulMateries._finaliza = ModulMateries.finaliza;		
+		ModulMateries.finaliza = function() {
+						
+			ModulMateries._finaliza();
+			
+			// Añadir las materias a la información a enviar una vez actualizada la selección		
+			d = ModulMateries.listaMaterias();
+			
+			if ( $("#materies").val() == undefined ) {
+				htmlMaterias = "<input type='hidden' id='materies' name='materies' value='" + d.replace("materies=", "") + "'/>";
+				$("#formGuardar").append(htmlMaterias);
+			} else {
+				$("#materies").attr("value", d.replace("materies=", "") );
+			}
+			
+		}
+		
+		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
+		this.guarda = this.guarda_upload;
 				
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -65,18 +87,16 @@ function CDetall(soloFicha){
 		
 	}
 	
-	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
-		
+				
 		// Validamos el formulario
-
 		if(!that.formulariValid()){
 			return false;
 		}
-		
+				
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
-		$("#formGuardar").ajaxSubmit({			
+		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
 			beforeSubmit: function() {
@@ -99,7 +119,6 @@ function CDetall(soloFicha){
 		return false;	
 		
 	}
-	
 	
 	// Método sobreescrito
 	this.busca = function(){
@@ -167,7 +186,9 @@ function CDetall(soloFicha){
 	
 	this.pintar = function(dades) {
 						
-		dada_node = dades;		
+		dada_node = dades;
+		
+		
 		if (dada_node.id != -1){							
 								
 			$("#item_id").val(dada_node.id);
@@ -353,33 +374,10 @@ function CDetall(soloFicha){
 			$("#item_nivell_3").val(dada_node.item_nivell_3);
 			$("#item_nivell_4").val(dada_node.item_nivell_4);		
 			
-			// materies
-			mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-			mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
-			materies_nodes = dada_node.materies;
-			materes_nodes_size = materies_nodes.length;
-			
-			mat_llistat_elm.find("input").removeAttr("checked");
-			
-			if (materes_nodes_size == 0) {
-				mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-			} else {
-				codi_materies = "<ul>";
-				$(materies_nodes).each(function() {
-					materia_node = this;
-					codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
-					mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked","checked");
-				});
-				codi_materies += "<ul>";
-				txt_materies = (materes_nodes_size == 1) ? txtMateria : txtMateries;
-				//mat_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.").after(codi_materies);
-				mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materes_nodes_size + " " + txt_materies + "</strong>.");
-				mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
-			}
+			//Materias
+			ModulMateries.inicializarMaterias(dada_node.materies);
 
-			
-			//Edificis
-			
+			//Edificis			
 			edi_seleccionats_elm = escriptori_detall_elm.find("div.modulEdificis div.seleccionats");
 			edi_llistat_elm = escriptori_detall_elm.find("div.modulEdificis div.llistat");
 			edificis_nodes = dada_node.edificis;

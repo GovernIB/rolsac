@@ -54,11 +54,11 @@ function CModulMateries(){
 		codi_llistat = "<ul>";
 		
 		materies_llistat_elm.find("li").each(function(i) {
-		
+					
 			li_elm = $(this);
 			input_elm = li_elm.find("input");
-			
-			if (input_elm.attr("checked")) {
+					
+			if (input_elm.attr("checked") == "checked") {
 				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
 				nombre_llistat++;
 				
@@ -91,6 +91,17 @@ function CModulMateries(){
 		materies_nodes_size = materies_nodes.length;
 
 		mat_llistat_elm.find("input").removeAttr("checked");
+		
+		//Añadimos o eliminamos el atributo "checked" en función de si está o no marcado.
+		mat_llistat_elm.find("input").each(
+			function() {
+				$( this ).bind( "click", function() {
+					if ( !this.checked )
+						$(this).removeAttr("checked");
+					else
+						$(this).attr("checked", "checked");
+			});									
+		});
 		
 		if (materies_nodes_size == 0) {
 			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");

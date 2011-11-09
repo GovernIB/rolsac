@@ -74,7 +74,6 @@ function DetallBase(soloFicha, reglasFormulario){
 		return formulariComprovar.formComprovacio;
 	}
 
-
 	this.guarda = function(dataVars) {
 
 		// Validamos el formulario

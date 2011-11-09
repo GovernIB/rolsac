@@ -342,7 +342,6 @@ function CDetall(){
 		this._baseGuarda(urlParams);
 	}
 	
-	
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
 
 	this.iniciar = function() {	
