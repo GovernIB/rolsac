@@ -434,10 +434,8 @@ function CDetall(){
 			$("#item_objecte_" + idioma).val(printStringFromNull(dada_node[idioma]["resumen"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_requisits_" + idioma).val(printStringFromNull(dada_node[idioma]["requisitos"]));
-			$("#item_presentacio_" + idioma).val(printStringFromNull(dada_node[idioma]["plazos"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
-			$("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
 			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
 		}

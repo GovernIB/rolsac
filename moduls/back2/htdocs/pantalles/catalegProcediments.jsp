@@ -547,17 +547,6 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_presentacio_ca">Presentació</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_ca" name="item_presentacio_ca"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
                                                 <label for="item_resolucio_ca">Termini màxim per a la resolució</label>
                                             </div>
                                             <div class="control">
@@ -574,17 +563,6 @@
                                             <div class="control">
                                                 <textarea id="item_notificacio_ca" name="item_notificacio_ca"
                                                     cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_lloc_ca">Lloc</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_lloc_ca" name="item_lloc_ca" cols="50"
-                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -662,17 +640,6 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_presentacio_es">Presentación</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_es" name="item_presentacio_es"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
                                                 <label for="item_resolucio_es">Plazo máximo para la
                                                     resolución</label>
                                             </div>
@@ -691,17 +658,6 @@
                                             <div class="control">
                                                 <textarea id="item_notificacio_es" name="item_notificacio_es"
                                                     cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_lloc_es">Lugar</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_lloc_es" name="item_lloc_es" cols="50"
-                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -780,17 +736,6 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_presentacio_en">Presentació</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_en" name="item_presentacio_en"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
                                                 <label for="item_resolucio_en">Termini màxim per a la
                                                     resolució</label>
                                             </div>
@@ -809,17 +754,6 @@
                                             <div class="control">
                                                 <textarea id="item_notificacio_en" name="item_notificacio_en"
                                                     cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_lloc_en">Lloc</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_lloc_en" name="item_lloc_en" cols="50"
-                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -898,17 +832,6 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_presentacio_de">Presentació</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_de" name="item_presentacio_de"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
                                                 <label for="item_resolucio_de">Termini màxim per a la
                                                     resolució</label>
                                             </div>
@@ -927,17 +850,6 @@
                                             <div class="control">
                                                 <textarea id="item_notificacio_de" name="item_notificacio_de"
                                                     cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_lloc_de">Lloc</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_lloc_de" name="item_lloc_de" cols="50"
-                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -1016,17 +928,6 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_presentacio_fr">Presentació</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_fr" name="item_presentacio_fr"
-                                                    cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
                                                 <label for="item_resolucio_fr">Termini màxim per a la
                                                     resolució</label>
                                             </div>
@@ -1045,17 +946,6 @@
                                             <div class="control">
                                                 <textarea id="item_notificacio_fr" name="item_notificacio_fr"
                                                     cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_lloc_fr">Lloc</label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_lloc_fr" name="item_lloc_fr" cols="50"
-                                                    rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>

@@ -723,10 +723,8 @@ public class CatalegProcedimentsBackController {
 					tpl.setResumen(request.getParameter("item_objecte_" + lang));
 					tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
 					tpl.setRequisitos(request.getParameter("item_requisits_" + lang));
-					tpl.setPlazos(request.getParameter("item_presentacio_" + lang));
 					tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
 					tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
-					tpl.setLugar(request.getParameter("item_lloc_" + lang));
 					tpl.setSilencio(request.getParameter("item_silenci_" + lang));
 					tpl.setObservaciones(request.getParameter("item_observacions_" + lang));
 					
@@ -807,15 +805,17 @@ public class CatalegProcedimentsBackController {
 				}
 				
 				
-				try {
-					Long organId = Long.parseLong(request.getParameter("item_organ_id"));
-					UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-					UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
-					procediment.setOrganResolutori(organ);
-				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					error = "L'órgan és incorrecte.";
-					throw new NumberFormatException();
+				if (!"".equals(request.getParameter("item_organ_id"))) {
+					try {
+						Long organId = Long.parseLong(request.getParameter("item_organ_id"));
+						UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+						UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
+						procediment.setOrganResolutori(organ);
+					} catch (NumberFormatException e) {
+						// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+						error = "L'órgan és incorrecte.";
+						throw new NumberFormatException();
+					}
 				}
 				
 				
