@@ -30,8 +30,8 @@
         var idUaActual = '<c:out value="${idUA}" />';
         var nomUaActual = '<c:out value="${nomUA}" />';        
         
-		var txtSenseArxiu = "<spring:message code='txt.sense_arxiu'/>";
-		
+        var txtSenseArxiu = "<spring:message code='txt.sense_arxiu'/>";
+        
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
         var txtCarregant = "<spring:message code='txt.carregant'/>";
@@ -70,12 +70,12 @@
         var txtCercant = "<spring:message code='txt.cercant'/>";
         var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
         // paginacio
-	    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
-	    var txtSeguents = "<spring:message code='txt.seguents'/>";
-	    var txtAnteriors = "<spring:message code='txt.anteriors'/>";
-	    var txtInici = "<spring:message code='txt.inici'/>";
-	    var txtFinal = "<spring:message code='txt.final'/>";
-	    var txtPagines = "<spring:message code='txt.pagines'/>";
+        var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
+        var txtSeguents = "<spring:message code='txt.seguents'/>";
+        var txtAnteriors = "<spring:message code='txt.anteriors'/>";
+        var txtInici = "<spring:message code='txt.inici'/>";
+        var txtFinal = "<spring:message code='txt.final'/>";
+        var txtPagines = "<spring:message code='txt.pagines'/>";
         var txtCercantElements = txtCercant + " " + txtLlistaItems;
         var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
@@ -94,18 +94,18 @@
         var txtCaducat = "<spring:message code='txt.caducat'/>";
         var txtImmediat = "<spring:message code='txt.inmediat'/>";
         // idioma
-	    var txtDesplega = "<spring:message code='txt.desplega'/>";
-	    var txtPlega = "<spring:message code='txt.plega'/>";
-	    //fotos
-	    var txtImatge = "<spring:message code='txt.imatge'/>";
-	    var txtFoto = "<spring:message code='txt.foto'/>";
-	    var txtFotos = "<spring:message code='txt.fotos'/>";
-	    var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
-	    var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
-	    var txtLleva = "<spring:message code='txt.lleva'/>";
-	    var txtInclou = "<spring:message code='txt.inclou'/>";
-	    var txtElimina = "<spring:message code='txt.elimina'/>";
-	    var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
+        var txtDesplega = "<spring:message code='txt.desplega'/>";
+        var txtPlega = "<spring:message code='txt.plega'/>";
+        //fotos
+        var txtImatge = "<spring:message code='txt.imatge'/>";
+        var txtFoto = "<spring:message code='txt.foto'/>";
+        var txtFotos = "<spring:message code='txt.fotos'/>";
+        var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
+        var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
+        var txtLleva = "<spring:message code='txt.lleva'/>";
+        var txtInclou = "<spring:message code='txt.inclou'/>";
+        var txtElimina = "<spring:message code='txt.elimina'/>";
+        var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
         // docs
         var txtNom = "<spring:message code='txt.nom'/>";
         var txtArxiu = "<spring:message code='txt.arxiu'/>";
@@ -137,8 +137,8 @@
         
         var Afectacions_arr = [];
         <c:forEach items="${llistaTipusAfectacio}" var="tipus">
-        	Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
-    	</c:forEach>
+            Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
+        </c:forEach>
         
                 
         // modul procediments
@@ -397,17 +397,17 @@
                             <div class="control">
                                 <select id="cerca_validacio" name="cerca_validacio">
                                 
-            						<c:set var="rolSuper"><rol:userIsSuper/></c:set>
-						            <c:choose>
-						            	<c:when test="${rolSuper}" >
-	                                    	<option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
-	                                    	<option value="2"><spring:message code='txt.validacio.interna'/></option>
-	                                    	<option value="3"><spring:message code='txt.validacio.reserva'/></option>  						            							            		
-						            	</c:when>
-						            	<c:otherwise>
- 						            		<option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
-						            	</c:otherwise>
-						            </c:choose>
+                                    <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                    <c:choose>
+                                        <c:when test="${rolSuper}" >
+                                            <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                            <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                            <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </select>
                             </div>
                         </div>                          
@@ -521,7 +521,7 @@
 </div>
 <!-- /escriptori_contingut -->
 <!-- escriptori_detall -->
-<div id="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
+<div id="escriptori_detall" class="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
     <form id="formGuardar" action="" method="POST">
     <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
     <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
@@ -529,7 +529,7 @@
     <p id="tipoNormativa"></p>
             
     <!-- modulPrincipal -->
-    <div id="modulPrincipal" class="grupoModulosFormulario">        
+    <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">        
         <!-- modul -->
         <div class="modul">
             <fieldset>
@@ -604,18 +604,18 @@
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_ca"><spring:message code='camp.arxiu'/></label></div>
                                         <div class="control archivo">   
-                                        	<div id="grup_arxiu_actual_ca" class="grup_arxiu_actual">
-                                        		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        		<a href="#" target="_blank"></a>
-                                        		<input type="checkbox" name="item_arxiu_ca_delete" id="item_arxiu_ca_delete" value="1"/>
-                                        		<label for="item_arxiu_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                        	</div>
+                                            <div id="grup_arxiu_actual_ca" class="grup_arxiu_actual">
+                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                <a href="#" target="_blank"></a>
+                                                <input type="checkbox" name="item_arxiu_ca_delete" id="item_arxiu_ca_delete" value="1"/>
+                                                <label for="item_arxiu_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                            </div>
                                         </div>
                                     </div>    
                                     
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_ca"><spring:message code='camp.arxiu_nou'/></label></div>
-                                        <div class="control">                                      		
+                                        <div class="control">                                           
                                             <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
@@ -678,18 +678,18 @@
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_es"><spring:message code='camp.arxiu'/></label></div>
                                         <div class="control">
-                                        	<div id="grup_arxiu_actual_es" class="grup_arxiu_actual">
-                                        		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        		<a href="#" target="_blank"></a>
-                                        		<input type="checkbox" name="item_arxiu_es_delete" id="item_arxiu_es_delete" value="1"/>
-                                        		<label for="item_arxiu_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                        	</div>
+                                            <div id="grup_arxiu_actual_es" class="grup_arxiu_actual">
+                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                <a href="#" target="_blank"></a>
+                                                <input type="checkbox" name="item_arxiu_es_delete" id="item_arxiu_es_delete" value="1"/>
+                                                <label for="item_arxiu_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                            </div>
                                         </div>
                                     </div>    
                                     
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_es"><spring:message code='camp.arxiu_nou'/></label></div>
-                                        <div class="control">                                      		
+                                        <div class="control">                                           
                                             <input id="item_arxiu_es" name="item_arxiu_es" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
@@ -752,18 +752,18 @@
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_en"><spring:message code='camp.arxiu'/></label></div>
                                         <div class="control">
-                                        	<div id="grup_arxiu_actual_en" class="grup_arxiu_actual">
-                                        		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        		<a href="#" target="_blank"></a>
-                                        		<input type="checkbox" name="item_arxiu_en_delete" id="item_arxiu_en_delete" value="1"/>
-                                        		<label for="item_arxiu_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                        	</div>
+                                            <div id="grup_arxiu_actual_en" class="grup_arxiu_actual">
+                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                <a href="#" target="_blank"></a>
+                                                <input type="checkbox" name="item_arxiu_en_delete" id="item_arxiu_en_delete" value="1"/>
+                                                <label for="item_arxiu_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                            </div>
                                         </div>
                                     </div>    
                                     
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_en"><spring:message code='camp.arxiu_nou'/></label></div>
-                                        <div class="control">                                      		
+                                        <div class="control">                                           
                                             <input id="item_arxiu_en" name="item_arxiu_en" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
@@ -826,18 +826,18 @@
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_de"><spring:message code='camp.arxiu'/></label></div>
                                         <div class="control">
-                                        	<div id="grup_arxiu_actual_de" class="grup_arxiu_actual">
-                                        		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        		<a href="#" target="_blank"></a>
-                                        		<input type="checkbox" name="item_arxiu_de_delete" id="item_arxiu_de_delete" value="1"/>
-                                        		<label for="item_arxiu_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                        	</div>
+                                            <div id="grup_arxiu_actual_de" class="grup_arxiu_actual">
+                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                <a href="#" target="_blank"></a>
+                                                <input type="checkbox" name="item_arxiu_de_delete" id="item_arxiu_de_delete" value="1"/>
+                                                <label for="item_arxiu_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                            </div>
                                         </div>
                                     </div>    
                                     
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_de"><spring:message code='camp.arxiu_nou'/></label></div>
-                                        <div class="control">                                      		
+                                        <div class="control">                                           
                                             <input id="item_arxiu_de" name="item_arxiu_de" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
@@ -901,18 +901,18 @@
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_fr"><spring:message code='camp.arxiu'/></label></div>
                                         <div class="control">
-                                        	<div id="grup_arxiu_actual_fr" class="grup_arxiu_actual">
-                                        		<span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        		<a href="#" target="_blank"></a>
-                                        		<input type="checkbox" name="item_arxiu_fr_delete" id="item_arxiu_fr_delete" value="1"/>
-                                        		<label for="item_arxiu_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                        	</div>
+                                            <div id="grup_arxiu_actual_fr" class="grup_arxiu_actual">
+                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                <a href="#" target="_blank"></a>
+                                                <input type="checkbox" name="item_arxiu_fr_delete" id="item_arxiu_fr_delete" value="1"/>
+                                                <label for="item_arxiu_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                            </div>
                                         </div>
                                     </div>    
                                     
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_fr"><spring:message code='camp.arxiu_nou'/></label></div>
-                                        <div class="control">                                      		
+                                        <div class="control">                                           
                                             <input id="item_arxiu_fr" name="item_arxiu_fr" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
@@ -966,15 +966,13 @@
                     <div class="fila">
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_butlleti_id"><spring:message code='camp.butlleti'/></label></div>
-                            <div class="control">
-	                            <div class="select">
-	                                <select id="item_butlleti_id" name="item_butlleti_id" class="nou">
-	                                    <option value=""><spring:message code='txt.no_definit'/></option>
-	                                    <c:forEach items="${llistaButlletins}" var="butlleti">                                      
-	                                        <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
-	                                    </c:forEach>
-	                                </select>       
-	                            </div>               
+                            <div class="control select">
+                                <select id="item_butlleti_id" name="item_butlleti_id" class="nou">
+                                    <option value=""><spring:message code='txt.no_definit'/></option>
+                                    <c:forEach items="${llistaButlletins}" var="butlleti">                                      
+                                        <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+                                    </c:forEach>
+                                </select>       
                             </div>       
                         </div>
                         <div class="element t25p">
@@ -1071,17 +1069,17 @@
                             <div class="control">
                                 <select id="item_validacio" name="item_validacio">
                                 
-            						<c:set var="rolSuper"><rol:userIsSuper/></c:set>
-						            <c:choose>
-						            	<c:when test="${rolSuper}" >
-	                                    	<option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
-	                                    	<option value="2"><spring:message code='txt.validacio.interna'/></option>
-	                                    	<option value="3"><spring:message code='txt.validacio.reserva'/></option>  						            							            		
-						            	</c:when>
-						            	<c:otherwise>
- 						            		<option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
-						            	</c:otherwise>
-						            </c:choose>                                                               
+                                    <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                    <c:choose>
+                                        <c:when test="${rolSuper}" >
+                                            <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                            <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                            <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                        </c:otherwise>
+                                    </c:choose>                                                               
                                 </select>
                             </div>
                         </div>
@@ -1114,8 +1112,8 @@
                           <li class="btnVolver impar">
                               <a id="btnVolver" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
                           </li>
-						
-						                           
+                        
+                                                   
                           <li class="btnGuardar par">
                               <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
                           </li>                                                    
@@ -1150,9 +1148,9 @@
                     <!-- modulProcediments -->
                     <div class="modulProcediments">
                         <div class="seleccionats">
-                        	<div class="seleccionat">
-                            	<p class="info"><spring:message code='txt.no_procediments'/></p>
-                            	<div class="listaOrdenable"></div> 
+                            <div class="seleccionat">
+                                <p class="info"><spring:message code='txt.no_procediments'/></p>
+                                <div class="listaOrdenable"></div> 
                             </div>
                         </div>
                     </div>
@@ -1163,7 +1161,7 @@
         <!-- /modul -->
         <!-- modul -->
         <div class="modul" id="modul_afectacions">
-        	<input type="hidden" id="afectaciones" name="afectaciones" value=""/>
+            <input type="hidden" id="afectaciones" name="afectaciones" value=""/>
             <fieldset>
                 <a class="modul amagat"><spring:message code='txt.mostra'/></a>
                 <legend><spring:message code='txt.afectacions_relacionades'/></legend>
@@ -1171,10 +1169,10 @@
                     <!-- modulAfectacions -->
                     <div class="modulAfectacions">
                         <div class="seleccionats">
-                        	<div class="seleccionat">
-                            	<p class="info"><spring:message code='txt.no_afectacions'/></p>
-                            	<div class="listaOrdenable"></div>                              	                       
-							</div>
+                            <div class="seleccionat">
+                                <p class="info"><spring:message code='txt.no_afectacions'/></p>
+                                <div class="listaOrdenable"></div>                                                         
+                            </div>
                             <p class="btnGenerico">
                                 <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_afectacions'/></span></span></a>
                             </p>
@@ -1292,7 +1290,7 @@
 <div id="escriptori_afectacions">
     
     <ul id="opcions_afectacions" class="opcions">
-    	<li class="opcio C actiu">Gestiona</li>                               
+        <li class="opcio C actiu">Gestiona</li>                               
     </ul>    
     
     <div id="resultats_afectacions" class="escriptori_items_llistat">            
@@ -1300,63 +1298,63 @@
             <div id="cercador_afectacions" class="escriptori_items_cercador"> 
                 <div id="cercador_afectacions_contingut">
                     <div class="fila"> 
-		                <div class="element t26">
-		                    <div class="etiqueta">
-		                        <label for="afec_cerca_normativa_titol"><spring:message code='camp.titol_normativa'/></label>
-		                    </div>
-		                    <div class="control">
-		                        <input id="afec_cerca_normativa_titol" name="afec_cerca_normativa_titol" type="text" class="titol" />
-		                    </div>
-		                </div>
-		                 <div class="element t12">
-		                     <div class="etiqueta">
-		                         <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
-		                     </div>
-		                     <div class="control">
-		                         <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
-		                     </div>
-		                 </div>          
-		                 
-		                 <div class="element t12">
-		                     <div class="etiqueta">
-		                         <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
-		                     </div>
-		                     <div class="control">
-		                         <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
-		                     </div>
-		                 </div>
-           			</div>
+                        <div class="element t26">
+                            <div class="etiqueta">
+                                <label for="afec_cerca_normativa_titol"><spring:message code='camp.titol_normativa'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="afec_cerca_normativa_titol" name="afec_cerca_normativa_titol" type="text" class="titol" />
+                            </div>
+                        </div>
+                         <div class="element t12">
+                             <div class="etiqueta">
+                                 <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
+                             </div>
+                             <div class="control">
+                                 <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
+                             </div>
+                         </div>          
+                         
+                         <div class="element t12">
+                             <div class="etiqueta">
+                                 <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+                             </div>
+                             <div class="control">
+                                 <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
+                             </div>
+                         </div>
+                    </div>
            
-		            <div class="botonera">
-		                <div class="boton btnGenerico"><a id="btnLimpiarForm_afectacions" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
-		                <div class="boton btnGenerico"><a id="btnBuscarForm_afectacions" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
-		                <div class="boton btnGenerico"><a id="btnVolverDetalle_afectacions" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
-		            </div>  
+                    <div class="botonera">
+                        <div class="boton btnGenerico"><a id="btnLimpiarForm_afectacions" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnBuscarForm_afectacions" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnVolverDetalle_afectacions" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+                    </div>  
 
-	           	</div>
+                </div>
                                           
-        	</div>
-	        <!-- /cercador -->
-	        <div class="dades"></div>
-	        <input type="hidden" value="0" class="pagPagina" /> 
-	        <input type="hidden" value="DESC" class="ordreTipus" /> 
-	        <input type="hidden" value="data" class="ordreCamp" />
-	    </div>
-	</div>
+            </div>
+            <!-- /cercador -->
+            <div class="dades"></div>
+            <input type="hidden" value="0" class="pagPagina" /> 
+            <input type="hidden" value="DESC" class="ordreTipus" /> 
+            <input type="hidden" value="data" class="ordreCamp" />
+        </div>
+    </div>
 
     <div class="modulLateral escriptori_items_seleccionats">
         <div class="modul">
-        	<div class="interior">
-        		<div class="seleccionats">
-	        		<div class="seleccionat">
-	        			<p class="info"><spring:message code='txt.no_afectacions'/></p>     
-	        			<div class="listaOrdenable"></div>   			
-	        		</div>
+            <div class="interior">
+                <div class="seleccionats">
+                    <div class="seleccionat">
+                        <p class="info"><spring:message code='txt.no_afectacions'/></p>     
+                        <div class="listaOrdenable"></div>              
+                    </div>
                     <p class="botonera btnGenerico">
                         <a id="btnFinalizar_afectacions" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                    </p> 	        		        		
-        		</div>
-        	</div>
+                    </p>                                    
+                </div>
+            </div>
         </div>        
     </div>
     <!-- seleccionats -->

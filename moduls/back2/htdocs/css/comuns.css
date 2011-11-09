@@ -104,37 +104,6 @@ a.btn:hover span, a.btn:focus span, a.btn:active span { color:#000; cursor:point
     color: Black;
 }
 
-/*
-dsanchez: Para estos botones usar mejor la clase btnGenerico.
-
-a.personalitzar span span { padding-left:1.8em; background:transparent url(../img/botons/personalitzar.gif) no-repeat left center; }
-a.ajuda span span { padding-left:1.8em; background:transparent url(../img/botons/ajuda.gif) no-repeat left center; }
-a.consulta span span { padding-left:1.8em; background:transparent url(../img/botons/consulta.gif) no-repeat left center; }
-a.nou span span { padding-left:1.8em; background:transparent url(../img/botons/nou.gif) no-repeat left center; }
-a.torna span span { padding-left:1.8em; background:transparent url(../img/botons/torna.gif) no-repeat left center; }
-a.associar span span { padding-left:1.8em; background:transparent url(../img/botons/associar.gif) no-repeat left center; }
-a.elimina span span { padding-left:1.8em; background:transparent url(../img/botons/eliminar.gif) no-repeat left center; }
-a.esborra span span { padding-left:1.8em; background:transparent url(../img/botons/eliminar.gif) no-repeat left center; }
-
-a.esborrar span span { padding-left:1.8em; background:transparent url(../img/botons/esborrar.gif) no-repeat left center; }
-a.lleva span span { padding-left:1.8em; background:transparent url(../img/botons/esborrar.gif) no-repeat left center; }
-a.guarda span span { padding-left:1.8em; background:transparent url(../img/botons/guarda.gif) no-repeat left center; }
-a.certificat span span { padding-left:1.8em; background:transparent url(../img/botons/certificat.gif) no-repeat left center; }
-a.inclou span span { padding-left:1.8em; background:transparent url(../img/botons/inclou.gif) no-repeat left center; }
-a.tancar span span, a.mostrat span span { padding-left:1.8em; background:transparent url(../img/botons/tancar.gif) no-repeat left center !important; }
-a.acceptar span span { padding-left:1.8em; background:transparent url(../img/botons/acceptar.gif) no-repeat left center; }
-a.gps span span { padding-left:1.8em; background:transparent url(../img/botons/gps.gif) no-repeat left center; }
-a.previsualitza span span { padding-left:1.8em; background:transparent url(../img/botons/previsualitza.gif) no-repeat left center; }
-a.obri span span { padding-left:1.8em; background:transparent url(../img/botons/obri.gif) no-repeat left center; }
-a.afegeix span span { padding-left:1.8em; background:transparent url(../img/botons/associar.gif) no-repeat left center; }
-a.edita span span { padding-left:1.8em; background:transparent url(../img/botons/edita.gif) no-repeat left center; }
-a.fills span span { padding-right:1.8em; background:transparent url(../img/botons/fills.gif) no-repeat right center; }
-a.traduix span span { padding-left:1.8em; background:transparent url(../img/botons/traduix.gif) no-repeat left center; }
-
-a.gestiona span span { padding-left:1.8em; background:transparent url(../img/botons/gestiona.gif) no-repeat left center; }
-a.finalitza span span { padding-left:1.8em; background:transparent url(../img/botons/finalitza.gif) no-repeat left center; }
-*/
-
 span.sep { margin:0 1.5em; }
 
 /* ids */
@@ -246,45 +215,6 @@ span.sep { margin:0 1.5em; }
     background-color: #F8F8F8;
 }
 
-
-/* menu*/
-
-/*
-#menu { width:100%; color:#fff; background-color:#ff921e; }
-#menu_contingut { overflow:hidden; width:57em; padding:.5em 0 0 1em; margin:0 auto; }
-
-#menu_contingut ul { overflow:hidden; width:100%; list-style:none; }
-#menu_contingut ul li { float:left; margin-right:.7em; }
-
-#menu_contingut ul li a { display:block; float:left; font-size:1.2em; color:#fff; text-decoration:none; padding:.3em .7em; background-color:#e57700; }
-#menu_contingut ul li a:hover { background-color:#000; }
-#menu_contingut ul li.seleccionat span.text { display:block; float:left; font-size:1.2em; font-weight:bold; color:#000; padding:.3em .7em; background-color:#fff; }
-#menu_contingut ul li.seleccionat span.cueta { display:block; clear:both; float:left; position:relative; top:-1px; width:2em; height:.5em; background:transparent url(../img/cap/seleccionat.gif) no-repeat right top; }
-*/
-
-/*
-#submenu { width:100%; color:#000; background-color:#ffe2c4; }
-#submenu_contingut { overflow:hidden; width:58em; padding:.5em 0 .5em 0; margin:0 auto; }
-
-#submenu_contingut ul { overflow:hidden; width:100%; list-style:none; }
-#submenu_contingut ul li { display:inline; padding:0 .8em 0 1em; border-left:1px solid #000; }
-
-#submenu_contingut ul li a { color:#000; }
-#submenu_contingut ul li.seleccionat span { font-weight:bold; text-transform:uppercase; padding:0 1em; background-color:#fff; }
-*/
-
-/* taulesMestre */
-/*
-#menu_contingut #taulesMestre { display:none; overflow:hidden; position:absolute; top:0; left:0; z-index:10; width:15em; list-style:none; background-color:#fff; border:1px solid #e57700; border-bottom:0; }
-
-#menu_contingut #taulesMestre li { float:none; font-size:.9em; margin-right:0; }
-#menu_contingut #taulesMestre li li { border-bottom:1px solid #ccc; }
-#menu_contingut #taulesMestre li li:last-child { border-bottom:0; }
-
-#menu_contingut #taulesMestre li a { display:block; float:none; color:#000; text-decoration:none; padding:.2em .7em; background-color:#fff; }
-#menu_contingut #taulesMestre li a:hover, #menu_contingut #taulesMestre li a:focus { background-color:#ffc !important; }
-#menu_contingut #taulesMestre li span.titol { display:block; font-size:1em; font-weight:bold; color:#fff; padding:.2em .7em; background-color:#e57700; }
-*/
 
 /* mollaPa */
 #mollaPa{
@@ -714,31 +644,6 @@ div.table div.tbody div.td a:hover{
     height: 20px;
 }
 
-/*#cercador div.t6 { width:6em; }
-#cercador div.t6 input { width:5em; }
-#cercador div.t8 { width:8em; }
-#cercador div.t8 input, #cercador div.t8 select { width:7em; }
-#cercador div.t10 { width:10em; }
-#cercador div.t10 input, #cercador div.t10 select { width:9em; }
-#cercador div.t11 { width:11em; }
-#cercador div.t11 input, #cercador div.t11 select { width:10em; }
-#cercador div.t13 { width:13em; }
-#cercador div.t13 input, #cercador div.t11 select { width:12em; }
-#cercador div.t15 { width:15em; }
-#cercador div.t15 input { width:14em; }
-#cercador div.t18 { width:18em; }
-#cercador div.t18 input { width:17em; }
-#cercador div.t21 { width:21em; }
-#cercador div.t21 input { width:20em; }
-#cercador div.t22 { width:22em; }
-#cercador div.t22 input { width:21em; }
-#cercador div.t29 { width:29em; }
-#cercador div.t29 input { width:28em; }
-#cercador div.t31 { width:31em; }
-#cercador div.t31 input { width:30em; }
-#cercador div.t33 { width:33em; }
-#cercador div.t33 input { width:32em; }*/
-
 #cercador div input.on { background-color:#ddfeff !important; border:1px solid #7f9db9 !important; }
 /*#cercador div input.t8, #cercador div select.t8 { width:6em !important; }*/
 #cercador div input.t17 { width:12.5em !important; }
@@ -811,19 +716,19 @@ div.table div.tbody div.td a:hover{
 
 #carregantDetall { font-size:1.3em; font-style:italic; padding:1em 0 1em 1.6em; background:#fff url(../img/executant.gif) no-repeat left center; }
 
-#escriptori_detall { 
+.escriptori_detall { 
     display:none; 
     font: 13px Arial, Helvetica, Sans-serif;
     color: Black;
 }
-#escriptori_detall h2{
+.escriptori_detall h2{
     display: none;
 }
-#escriptori_detall .grupoModulosFormulario{
+.escriptori_detall .grupoModulosFormulario{
     float: left;
     width: 779px;       
 }
-#escriptori_detall .grupoModulosFormulario div.modul{
+.escriptori_detall .grupoModulosFormulario div.modul{
     border-radius: 15px 15px 15px 15px;
     border: 1px solid #D4D4D4;
     background-color: White;
@@ -831,7 +736,7 @@ div.table div.tbody div.td a:hover{
     position:relative;    
     padding: 25px 21px 25px 21px;
 }
-#escriptori_detall .grupoModulosFormulario div.modul a.modul{
+.escriptori_detall .grupoModulosFormulario div.modul a.modul{
     position:absolute;
     right: 9px;
     top: 9px;
@@ -841,25 +746,25 @@ div.table div.tbody div.td a:hover{
     height: 16px;
     background-image: url(../img/botons/desplegar.png);
 }
-#escriptori_detall .grupoModulosFormulario legend{
+.escriptori_detall .grupoModulosFormulario legend{
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
     color: #333333;
     text-transform: uppercase;
     margin-bottom: 15px;
 }
-#escriptori_detall .grupoModulosFormulario .etiqueta{
+.escriptori_detall .grupoModulosFormulario .etiqueta{
     height: 21px;   
     overflow: hidden;
 }
-#escriptori_detall .grupoModulosFormulario .obligatori{ 
+.escriptori_detall .grupoModulosFormulario .obligatori{ 
     color: #CC0000;
 }
-#escriptori_detall .grupoModulosFormulario .fila{
+.escriptori_detall .grupoModulosFormulario .fila{
     clear:both;
     margin-bottom: 20px;
     overflow: hidden;
 }
-#escriptori_detall .grupoModulosFormulario input[type=text]{    
+.escriptori_detall .grupoModulosFormulario input[type=text]{    
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     color: Black;
@@ -869,73 +774,71 @@ div.table div.tbody div.td a:hover{
     
     border-radius: 5px 5px 5px 5px;
 }
-#escriptori_detall .grupoModulosFormulario textarea{    
+.escriptori_detall .grupoModulosFormulario textarea{    
     background-color: #ECF6FC;
     width: 733px;
 }
-
-#escriptori_detall .grupoModulosFormulario .select{
+.escriptori_detall .grupoModulosFormulario .control.select{
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     height: 21px;   
     padding: 2px 0;
 }
-#escriptori_detall .grupoModulosFormulario .select select{
+.escriptori_detall .grupoModulosFormulario .control.select select{
     background-color: transparent;
     width: 99.9%;
     border: none;
 }
-
-#escriptori_detall .grupoModulosFormulario .archivo .archivoActual{
+.escriptori_detall .grupoModulosFormulario .archivo .archivoActual{
     padding-top: 10px;
 }
-#escriptori_detall .grupoModulosFormulario .archivo .archivoActual a{
+.escriptori_detall .grupoModulosFormulario .archivo .archivoActual a{
     color: #0099CC;
 }
-#escriptori_detall .grupoModulosFormulario .archivo .checkBorrar{
+.escriptori_detall .grupoModulosFormulario .archivo .checkBorrar{
     padding-left: 20px;
 }
-#escriptori_detall .grupoModulosFormulario .archivo .checkBorrar input{
+.escriptori_detall .grupoModulosFormulario .archivo .checkBorrar input{
     position: relative;
     top: 3px;
 }
 
-#escriptori_detall .grupoModulosFormulario .element{
+.escriptori_detall .grupoModulosFormulario .element{
     float: left;    
 }
-#escriptori_detall .grupoModulosFormulario .element .control{   
-    padding-right: 25px;
+.escriptori_detall .grupoModulosFormulario .element .control{   
+    margin-right: 25px;
 }
-#escriptori_detall .grupoModulosFormulario .element:last-child .control{
-    padding-right: 0;
+.escriptori_detall .grupoModulosFormulario .element:last-child .control{
+    margin-right: 0;
 }
-#escriptori_detall .grupoModulosFormulario .t20p{
+.escriptori_detall .grupoModulosFormulario .t20p{
     width: 19.9%;
 }
-#escriptori_detall .grupoModulosFormulario .t25p{
+.escriptori_detall .grupoModulosFormulario .t25p{
     width: 24.9%;
 }
-#escriptori_detall .grupoModulosFormulario .t30p{
+.escriptori_detall .grupoModulosFormulario .t30p{
     width: 29.9%;
 }
-#escriptori_detall .grupoModulosFormulario .t50p{
+.escriptori_detall .grupoModulosFormulario .t50p{
     width: 49.9%;
 }
-#escriptori_detall .grupoModulosFormulario .t75p{
+.escriptori_detall .grupoModulosFormulario .t75p{
     width: 74.9%;
 }
-#escriptori_detall .grupoModulosFormulario .t99p{
+.escriptori_detall .grupoModulosFormulario .t99p{
     width: 99.9%;
 }
 
 /* Botones */
 
-#escriptori_detall .botonera{
+.escriptori_detall .botonera{
     float: right;
     width: 286px;    
 }
-#escriptori_detall .botonera ul{
+.escriptori_detall .botonera ul{
     background-color: #F3F3F3;
     border: 1px solid #D3D3D3;  
     overflow: hidden;
@@ -943,33 +846,33 @@ div.table div.tbody div.td a:hover{
     
     border-radius: 15px 15px 15px 15px;
 }
-#escriptori_detall .botonera ul li,
-#escriptori_detall .botonera ul li a,
-#escriptori_detall .botonera ul li span{
+.escriptori_detall .botonera ul li,
+.escriptori_detall .botonera ul li a,
+.escriptori_detall .botonera ul li span{
     height: 38px;
     font: 16px/38px Impact, Arial, Helvetica, Sans-serif;
     color: White;
     display:block;
     text-align: center; 
 }
-#escriptori_detall .botonera ul li{
+.escriptori_detall .botonera ul li{
     list-style: none;
     float: left;
     background: url(../img/botons/opcion1/cen.gif) 0 0 repeat-x;
     min-width: 105px;
     margin-bottom: 10px;
 }
-#escriptori_detall .botonera ul li a{   
+.escriptori_detall .botonera ul li a{   
     background: url(../img/botons/opcion1/izq.gif) 0 0 no-repeat;
     text-decoration: none;
 }
-#escriptori_detall .botonera ul li a:hover{ 
+.escriptori_detall .botonera ul li a:hover{ 
     text-decoration: underline;
 }
-#escriptori_detall .botonera ul li a > span{
+.escriptori_detall .botonera ul li a > span{
     background: url(../img/botons/opcion1/der.gif) 100% 0 no-repeat; 
 }
-#escriptori_detall .botonera ul li a > span span{
+.escriptori_detall .botonera ul li a > span span{
     padding: 0 15px 0 32px;
     text-transform: uppercase;
 }
@@ -977,99 +880,99 @@ div.table div.tbody div.td a:hover{
 
 /* Boton eliminar */
 
-#escriptori_detall .botonera ul li.btnEliminar{
+.escriptori_detall .botonera ul li.btnEliminar{
     clear: left;
 }
-#escriptori_detall .botonera ul li.btnEliminar{
+.escriptori_detall .botonera ul li.btnEliminar{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
-#escriptori_detall .botonera ul li.btnEliminar a{   
+.escriptori_detall .botonera ul li.btnEliminar a{   
     background-image: url(../img/botons/opcion2/izq.gif);    
 }
-#escriptori_detall .botonera ul li.btnEliminar a > span{
+.escriptori_detall .botonera ul li.btnEliminar a > span{
     background-image: url(../img/botons/opcion2/der.gif);    
 }
-#escriptori_detall .botonera ul li.btnEliminar a span span{
+.escriptori_detall .botonera ul li.btnEliminar a span span{
     background: url(../img/botons/iconos/borrar.png) 10px 50% no-repeat; 
 }
 
 
 /* Boton previsualizar */
 
-/*#escriptori_detall .botonera ul li.btnPrevisualizar{
+/*.escriptori_detall .botonera ul li.btnPrevisualizar{
     float: right;
 }*/
-#escriptori_detall .botonera ul li.btnPrevisualizar{
+.escriptori_detall .botonera ul li.btnPrevisualizar{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
-#escriptori_detall .botonera ul li.btnPrevisualizar a{  
+.escriptori_detall .botonera ul li.btnPrevisualizar a{  
     background-image: url(../img/botons/opcion2/izq.gif);    
 }
-#escriptori_detall .botonera ul li.btnPrevisualizar a > span{
+.escriptori_detall .botonera ul li.btnPrevisualizar a > span{
     background-image: url(../img/botons/opcion2/der.gif);    
 }
-#escriptori_detall .botonera ul li.btnPrevisualizar a span span{
+.escriptori_detall .botonera ul li.btnPrevisualizar a span span{
     background: url(../img/botons/iconos/previsualizar.png) 13px 50% no-repeat;  
 }
 
 
 /* Boton volver */
 
-#escriptori_detall .botonera ul li.btnVolver a span span{
+.escriptori_detall .botonera ul li.btnVolver a span span{
     background: url(../img/botons/iconos/volver.png) 13px 50% no-repeat; 
 }
 
 
 /* Boton guardar */
 
-/*#escriptori_detall .botonera ul li.btnGuardar{
+/*.escriptori_detall .botonera ul li.btnGuardar{
     clear: left;
 }*/
-#escriptori_detall .botonera ul li.btnGuardar a span span{
+.escriptori_detall .botonera ul li.btnGuardar a span span{
     background: url(../img/botons/iconos/guardar.png) 13px 50% no-repeat;    
 }
 
 
 /* Boton publicar */
 
-#escriptori_detall .botonera ul li.btnPublicar span span{
+.escriptori_detall .botonera ul li.btnPublicar span span{
     background: url(../img/botons/iconos/publicar.png) 5px 50% no-repeat;    
 }
 
 
 /* Boton deshabilitado */
 
-#escriptori_detall .botonera ul li.off{ 
+.escriptori_detall .botonera ul li.off{ 
     background-image: url(../img/botons/opcion_off/cen.gif); 
 }
-#escriptori_detall .botonera ul li.off a{   
+.escriptori_detall .botonera ul li.off a{   
     background-image: url(../img/botons/opcion_off/izq.gif);     
     cursor: default;
 }
-#escriptori_detall .botonera ul li.off a:hover{ 
+.escriptori_detall .botonera ul li.off a:hover{ 
     text-decoration: none;
 }
-#escriptori_detall .botonera ul li.off a > span{
+.escriptori_detall .botonera ul li.off a > span{
     background-image: url(../img/botons/opcion_off/der.gif); 
 }
 
-#escriptori_detall .botonera ul li.par{
+.escriptori_detall .botonera ul li.par{
     clear: left;
 }
-#escriptori_detall .botonera ul li.impar{
+.escriptori_detall .botonera ul li.impar{
     float:right;
 }
 
 
 /* Módulo lateral */
 
-#escriptori_detall .modulLateral{
+.escriptori_detall .modulLateral{
     margin-top: 0;
     float: right;
     width: 286px;    
 }
 
-#escriptori_detall .modulLateral div.modul{
+.escriptori_detall .modulLateral div.modul{
     background-color: #F3F3F3;
     border: 1px solid #D3D3D3;  
     overflow: hidden;
@@ -1080,7 +983,7 @@ div.table div.tbody div.td a:hover{
     border-radius: 15px 15px 15px 15px;
 }
 
-#escriptori_detall .modulLateral div.modul a.modul{
+.escriptori_detall .modulLateral div.modul a.modul{
     position:absolute;
     right: 9px;
     top: 9px;
@@ -1091,7 +994,7 @@ div.table div.tbody div.td a:hover{
     background-image: url(../img/botons/desplegar.png);
 }
 
-#escriptori_detall .modulLateral .modul fieldset legend{
+.escriptori_detall .modulLateral .modul fieldset legend{
     font: bold 11px Verdana, Helvetica, Sans-serif;
     color: #333333;
     text-transform: uppercase;
@@ -1099,7 +1002,7 @@ div.table div.tbody div.td a:hover{
     padding-bottom: 15px;
 }
 
-#escriptori_detall .modulLateral .botonera{
+.escriptori_detall .modulLateral .botonera{
     border: none;
     background-color: transparent;
     margin: 0;
@@ -1109,164 +1012,54 @@ div.table div.tbody div.td a:hover{
     clear:both;
 }
 
-#escriptori_detall .modulLateral .botonera ul{
+.escriptori_detall .modulLateral .botonera ul{
     padding: 0;
     border: none;
     border-radius: 0;    
 }
 
-#escriptori_detall .modulLateral .left {
+.escriptori_detall .modulLateral .left {
     clear: both;
     float:left;
     width: 49%;
     padding-bottom: 10px;
 }
 
-#escriptori_detall .modulLateral .right {
+.escriptori_detall .modulLateral .right {
     float:left;
     width: 49%;
     padding-bottom: 10px;
 }
 
-#escriptori_detall .modulLateral .left input,
-#escriptori_detall .modulLateral .right input {
+.escriptori_detall .modulLateral .left input,
+.escriptori_detall .modulLateral .right input,
+escriptori_detall .modulLateral .left select {
     width: 80%;
 }
 
-/*
-#escriptori_detall { display:none; margin:0 0 4em 0; }
-
-#escriptori_detall h2 { font-size:1.4em; margin-top:0; margin-bottom:.5em; }
-#escriptori_detall h2 span.A { color:#060; }
-#escriptori_detall h2 span.R, #escriptori_detall h2 span.C { color:#c00; }
-
-#escriptori_detall h2 span.caducat { color:#c00; }
-
-#modulPrincipal { float:left; width:50.5em; }
-#escriptori_detall #modulPrincipal div.modul { width:49em; }
-
-#escriptori_detall div.modul { overflow:hidden; position:relative; width:56.5em; padding:1em 0 0 1em; margin-bottom:1em; border:1px solid #f2f2f2; }
-#escriptori_detall div.modul h2 { float:left; margin-top:0; }
-#escriptori_detall div.modul a.modul { position:absolute; top:1em; right:1em; padding-left:1.3em; }
-#escriptori_detall div.modul a.amagat { background:transparent url(../img/botons/mostra.gif) no-repeat left center; }
-#escriptori_detall div.modul a.mostrat { background:transparent url(../img/botons/amaga.gif) no-repeat left center; }
-#escriptori_detall div.modul_continguts { display:none; clear:both; width:100%; }
-#escriptori_detall div.mostrat { display:block !important; }
-
-#escriptori_detall div.modul h2 span.caducat { font-size:.8em; text-transform:uppercase; color:#c00; margin-left:3em; padding-left:2em; background:transparent url(../img/taula_llistat/procediment_caducat.gif) no-repeat left center; }
-
-#escriptori_detall div.m50p { float:left; clear:none; width:34.7em; }
-#escriptori_detall div.m66p { float:left; clear:none; width:46.2em; }
-#escriptori_detall div.m33p { float:left; clear:none; width:23.1em; }
-
-#escriptori_detall div.modul fieldset { border:0; }
-#escriptori_detall div.modul legend { font-size:1.2em; font-weight:bold; padding-bottom:1em; }
-
-#escriptori_detall h3 { margin-top:0; margin-bottom:1em; }
-
-#escriptori_detall div.fila { overflow:hidden; width:100%; padding:0; margin-bottom:1.5em; }
-#escriptori_detall div.ambColumna { margin-bottom:0; }
-
-#escriptori_detall div.senseMarge { margin-bottom:0 !important; }
-
-#escriptori_detall div.columna { overflow:hidden; float:left; padding:0; margin-right:1.9em; }
-#escriptori_detall div.t50 { width:26em; }
-#escriptori_detall div.c_t50 { width:34.5em; }
-#escriptori_detall div.columna div.element { width:100%; }
-
-#escriptori_detall p.columna { font-weight:1.1em; font-weight:bold; text-transform:uppercase; padding:.5em 0; margin:0 0 1em; }
-
-#escriptori_detall div.element { overflow:hidden; float:left; padding:0; margin: 0 1em; }
-#escriptori_detall div.t20p { width:9em; }
-#escriptori_detall div.t20p input, #escriptori_detall div.t20p p.input { width:8em; }
-#escriptori_detall div.t25p { width:12em; }
-#escriptori_detall div.t25p input, #escriptori_detall div.t25p p.input { width:11em; }
-#escriptori_detall div.t33p { width:17em; }
-#escriptori_detall div.t33p input, #escriptori_detall div.t33p p.input { width:16em; }
-#escriptori_detall div.t50p { width:26em; }
-#escriptori_detall div.t50p input, #escriptori_detall div.t50p p.input { width:25em; }
-#escriptori_detall div.t66p { width:35.5em; }
-#escriptori_detall div.t66p input, #escriptori_detall div.t66p p.input { width:34.5em; }
-#escriptori_detall div.t99p { width:55em; }
-#escriptori_detall div.t99p input, #escriptori_detall div.t99p textarea, #escriptori_detall div.t99p p.input { width:54em; }
-
-#escriptori_detall div.t7 { width:7.5em; }
-#escriptori_detall div.t7 input, #escriptori_detall div.t7 p.input { width:6.5em; }
-#escriptori_detall div.t9 { width:9em; }
-#escriptori_detall div.t9 input, #escriptori_detall div.t9 p.input { width:8em; }
-#escriptori_detall div.t10 { width:10em; }
-#escriptori_detall div.t10 input, #escriptori_detall div.t10 p.input { width:9em; }
-#escriptori_detall div.t15 { width:15em; }
-#escriptori_detall div.t15 input, #escriptori_detall div.t15 p.input { width:14em; }
-#escriptori_detall div.t20 { width:20em; }
-#escriptori_detall div.t20 input, #escriptori_detall div.t20 p.input { width:19em; }
-#escriptori_detall div.t32 { width:32em; }
-#escriptori_detall div.t32 input, #escriptori_detall div.t32 p.input, #escriptori_detall div.t32 select { width:31em; }
-#escriptori_detall div.t34 { width:34em; }
-#escriptori_detall div.t34 input, #escriptori_detall div.t34 p.input, #escriptori_detall div.t34 textarea { width:33em; }
-#escriptori_detall div.t53 { width:53em; }
-#escriptori_detall div.t53 textarea, #escriptori_detall div.t53 p.input { width:52em; }
-#escriptori_detall div.t65 { width:70em; }
-#escriptori_detall div.t65 textarea, #escriptori_detall div.t65 p.input { width:69em; }
-
-#escriptori_detall input.t100, #escriptori_detall textarea.t100 { width:95%; }
-#escriptori_detall input.t4, #escriptori_detall select.t4 { width:4em !important; }
-#escriptori_detall p.t4 { width:3em !important; }
-#escriptori_detall input.t6, #escriptori_detall select.t6 { width:6em !important; }
-#escriptori_detall p.t6 { width:5em !important; }
-#escriptori_detall input.t10, #escriptori_detall select.t10 { width:10em !important; }
-#escriptori_detall input.t44 { width:44em !important; }
-
-#escriptori_detall div.etiqueta { font-family:Georgia, "Times New Roman", Times, serif; padding-bottom:.2em; }
-#escriptori_detall div.etiqueta:after { content:":"; }
-
-#escriptori_detall div.control { font-family:Georgia, "Times New Roman", Times, serif; padding:0 0 .2em 0; }
-#escriptori_detall div.control p { line-height:1.4em; }
-
-#escriptori_detall div.control p.input { float:left; font:normal 1em 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; line-height:normal; padding:.1em .2em; margin:0; background-color:#f7f7f7; border:1px solid #7f7f7f; }
-
-#escriptori_detall div.text { font-size:1.3em; }
-
-#escriptori_detall div.titol { font-size:1.4em; padding-top:.3em; padding-bottom:.3em; padding-left:.3em; }
-
-#escriptori_detall div.documentos ul { list-style:none; margin:.3em 0 0 .2em; }
-#escriptori_detall div.documentos ul li { padding:.3em 0 .5em 1.8em; background:#fff url(../../administracion-0.0.1/img/comunicaciones/documento.gif) no-repeat 0 .4em; }
-#escriptori_detall div.documentos ul li p { margin:0 0 .3em 0; }
-#escriptori_detall div.documentos ul li p.firmador { font:normal .9em 'TrebuchetMS', 'Trebuchet MS', Arial, Helvetica, sans-serif; color:#060; }
-
-#escriptori_detall div.botonera { clear:both; padding:.5em 0; background-color:#f0f0ee; }
-#escriptori_detall div.botonera ul { overflow:hidden; width:100%; height:1.8em; list-style:none; padding:.2em 0; }
-#escriptori_detall div.botonera ul li { float:left; height:1.8em; padding:.1em 0 .1em 2em; }
-#escriptori_detall div.botonera ul li.e { float:right !important; padding-right:2em; }
-
-#escriptori_detall div.botonera button { overflow:visible; font-size:1.1em; font-weight:bold; padding:.2em 1em; margin:0 1em; cursor:pointer; }
-#escriptori_detall div.botonera button img { vertical-align:middle; margin-right:.5em; }
-
-#escriptori_detall div.dalt { margin-top:2em; }
-*/
 
 #btnBorrar { color:#c00; }
 
-#escriptori_detall div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
+.escriptori_detall div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
 
-#escriptori_detall div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
+.escriptori_detall div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
 
 
 /* botonera publicacio */
 
-#escriptori_detall div.publicacio { background-color:#f0f0ee; }
-#escriptori_detall div.publicacio fieldset legend { padding-bottom:0; }
+.escriptori_detall div.publicacio { background-color:#f0f0ee; }
+.escriptori_detall div.publicacio fieldset legend { padding-bottom:0; }
 
-#escriptori_detall div.publicacio p.dalt { padding:.5em 1em; margin-right:1em; margin-bottom:1em; background-color:#ccd7e2; }
-#escriptori_detall div.publicacio p.baix { text-align:right; padding:.5em 1em; margin-right:1em; background-color:#ffc977; }
+.escriptori_detall div.publicacio p.dalt { padding:.5em 1em; margin-right:1em; margin-bottom:1em; background-color:#ccd7e2; }
+.escriptori_detall div.publicacio p.baix { text-align:right; padding:.5em 1em; margin-right:1em; background-color:#ffc977; }
 
-#escriptori_detall div.publicacio p.iEsborrany { background-color:#ffc977; }
-#escriptori_detall div.publicacio p.iCaducat { background-color:#e99191; }
-#escriptori_detall div.publicacio p.iPublicat { background-color:#a0eca0; }
+.escriptori_detall div.publicacio p.iEsborrany { background-color:#ffc977; }
+.escriptori_detall div.publicacio p.iCaducat { background-color:#e99191; }
+.escriptori_detall div.publicacio p.iPublicat { background-color:#a0eca0; }
 
 /*No hi ha unitat seleccionada*/
 
-#escriptori_detall p.noUnitat {
+.escriptori_detall p.noUnitat {
     background: url("../img/missatge/alerta.gif") no-repeat scroll 0 50% #FFFFFF;
     font-size: 1.3em;
     padding: 1em 0 1em 2em !important;
@@ -1275,45 +1068,29 @@ div.table div.tbody div.td a:hover{
 
 /* idiomes modulPrincipal */
 
-#modulPrincipal .introIdiomas{
+.modulPrincipal .introIdiomas{
     float: left;
     margin: 0;
     padding-top: 5px;
     line-height: 15px;
 }
-#modulPrincipal ul.idiomes{
+.modulPrincipal ul.idiomes{
     list-style: none;
     height: 50px;
 }
-#modulPrincipal ul.idiomes li.idioma{
+.modulPrincipal ul.idiomes li.idioma{
     float: left;
     font-size: 13px;
     padding: 5px 12px 0 12px;
 }
-#modulPrincipal ul.idiomes li.seleccionat{
+.modulPrincipal ul.idiomes li.seleccionat{
     font-weight: bold;
     color: black;
 }
-#modulPrincipal ul.idiomes li.idioma a{ 
+.modulPrincipal ul.idiomes li.idioma a{ 
     color: #0099CC;
     text-decoration: underline;
 }
-
-/*
-#modulPrincipal ul.idiomes { overflow:hidden; width:54.5em; list-style:none; padding:1em 0 0 1em; margin-bottom:1.5em; background-color:#ffecd9; }
-#modulPrincipal ul.idiomes li { float:left; height:2em; padding:.3em 1em 0 1em; margin:0; }
-#modulPrincipal ul.idiomes li.seleccionat { background-color:#fff; }
-#modulPrincipal ul.idiomes li.seleccionat a { font-weight:bold; color:#000; text-decoration:none; }
-
-#modulPrincipal ul.idiomes li.desplegar { float:right; }
-#modulPrincipal ul.idiomes li.desplegar a { color:#c00; padding-left:1.3em; background:transparent url(../img/botons/desplegar_off.gif) no-repeat left center; }
-#modulPrincipal ul.idiomes li.desplegar a.on { background:transparent url(../img/botons/desplegar_on.gif) no-repeat left center; }
-
-#modulPrincipal div.idiomes { padding-bottom:0; border-bottom:.2em solid #ffecd9; }
-#modulPrincipal div.idiomes div.idioma { display:none; }
-#modulPrincipal div.idiomes div.seleccionat { display:block !important; }
-#modulPrincipal div.idiomes div.idioma h3 { margin-top:1em !important; }
-*/
 
 /* docs */
 
@@ -1330,57 +1107,34 @@ div.modul div.llistat div.tbody div.nou { display:none; }
 
 /* Módulo selector con checkboxes (materias, hechos vitales, ...) */
 
-#escriptori_detall .modulLateral .selectorChecks .llistat{
+.escriptori_detall .modulLateral .selectorChecks .llistat{
     clear:both;
     padding-top: 10px;
     display: none;
 }
-#escriptori_detall .modulLateral .selectorChecks .llistat ul{
+.escriptori_detall .modulLateral .selectorChecks .llistat ul{
     list-style: none;
 }
-#escriptori_detall .modulLateral .selectorChecks .llistat li{
+.escriptori_detall .modulLateral .selectorChecks .llistat li{
     float: left;
     width: 49.9%;
     font-size: 10px;
 }
-#escriptori_detall .modulLateral .selectorChecks .llistat li input{
+.escriptori_detall .modulLateral .selectorChecks .llistat li input{
     float:right;
     margin-right: 5px;
 }
-#escriptori_detall .modulLateral .selectorChecks .llistat li.impar,
-#escriptori_detall .modulLateral .selectorChecks .llistat li:nth-child(2n+1){
+.escriptori_detall .modulLateral .selectorChecks .llistat li.impar,
+.escriptori_detall .modulLateral .selectorChecks .llistat li:nth-child(2n+1){
     clear:left; 
 }
-#escriptori_detall .modulLateral .selectorChecks .botonera{
+.escriptori_detall .modulLateral .selectorChecks .botonera{
     clear: both;
     padding-top: 10px;
 }
-#escriptori_detall .modulLateral .selectorChecks  .botonera .btnGenerico{
+.escriptori_detall .modulLateral .selectorChecks  .botonera .btnGenerico{
     margin-right: 10px;
 }
-
-
-/* modul fets vitals */
-
-/*
-div.modulFetsVitals { padding-bottom:1em; }
-
-div.modulFetsVitals div.seleccionats ul { list-style:circle; margin-left:2em; }
-div.modulFetsVitals div.seleccionats ul li { padding-bottom:.4em; }
-div.modulFetsVitals div.seleccionats p.info { margin-top:0; }
-
-div.modulFetsVitals div.llistat { display:none; }
-div.modulFetsVitals div.llistat ul { overflow:hidden; list-style:none; padding-right:1em; }
-div.modulFetsVitals div.llistat  ul li { overflow:hidden; float:left; width:50%; }
-div.modulFetsVitals div.llistat  ul li label { display:block; overflow:hidden; width:100%; }
-div.modulFetsVitals div.llistat  ul li label:hover { background-color:#ffc; cursor:pointer; }
-div.modulFetsVitals div.llistat  ul li span { display:block; float:right; width:9em; }
-div.modulFetsVitals div.llistat  ul li input { margin-right:.5em; }
-div.modulFetsVitals div.llistat  p { clear:both; }
-
-div.modulFetsVitals div.llistat div.botonera { width:23em; text-align:center; padding:1em; background-color:#ccd7e2; }
-div.modulFetsVitals div.llistat div.rabilloLateral { height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
-*/
 
 /* modul tramits */
 
@@ -1457,6 +1211,31 @@ div.previsualitzacio iframe { width:100%; height:40em; border:0; }
 }
 .listaOrdenable ul li a.elimina span{
     display: none;
+}
+
+
+/* arxius */
+
+div.grup_arxiu_actual {
+    margin-bottom: 1em;
+}
+
+div.grup_arxiu_actual label {
+    display: inline;
+    margin-right: 0.25em;
+}
+
+div.grup_arxiu_actual span {
+    margin-left: 1em;
+    font-weight: bold;
+}
+
+div.grup_arxiu_actual a {
+    margin-right: 2em;
+}
+
+div.grup_arxiu_nou label {
+    margin-right: 1em;
 }
 
 

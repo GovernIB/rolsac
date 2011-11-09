@@ -148,7 +148,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
                 }                                                        
             }
             if (procedimiento_id != null) {
-                if (procedimiento_id != null) procedimiento = procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
+                if (procedimiento_id != null) procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimiento_id);
         		ProcedimientoDelegate pldel = null!=procDel? procDel : DelegateUtil.getProcedimientoDelegate();
                 try {            	
                 	pldel.indexBorraProcedimiento(procedimiento);

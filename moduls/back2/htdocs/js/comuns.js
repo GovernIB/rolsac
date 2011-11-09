@@ -1,6 +1,8 @@
 // CERRAR Y MENSAJES
 
 $(document).ready(function(){
+
+	idiomas = ["ca", "es", "en", "fr", "de"];
 	
 	// elements
 	contenidor_elm = $("#contenidor");

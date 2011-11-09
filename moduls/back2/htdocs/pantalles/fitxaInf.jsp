@@ -454,13 +454,13 @@
 </div>
 <!-- /escriptori_contingut -->
 <!-- escriptori_detall -->
-<div id="escriptori_detall">
+<div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="false">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <h2>Detall de la fitxa</h2>
         <p>Recorde que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>            
         <!-- modulPrincipal -->
-        <div id="modulPrincipal" class="grupoModulosFormulario">
+        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
             <div class="modul">
                 <fieldset>

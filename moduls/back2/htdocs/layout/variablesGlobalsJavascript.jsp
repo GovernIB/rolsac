@@ -5,6 +5,7 @@
     // TODO: cambiar las urls de php por las buenas.
    
     // pagines comuns
+    var pagArrel = '<c:url value="/" />';
     var pagTancarAplicacio = '<c:url value="/logout.do"/>';
     var tinyMceUrl = '<c:url value="/js/tiny_mce/tiny_mce.js" />';  
     var popupUA = '<c:url value="/pantalles/popArbreUA.do"/>';

@@ -56,9 +56,8 @@ $(document).ready(function() {
 	Llistat.iniciar();
 	Cercador.iniciar();
 	Detall.iniciar();	
-	//Docs.iniciar();
-	
 });
+
 
 // idioma
 var pag_idioma = $("html").attr("lang");
@@ -333,12 +332,13 @@ function CDetall(){
 	this.extend = DetallBase;
 	this.extend();
 	
+    var that = this;
+    
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
-			
 		this._baseGuarda(urlParams);
 	}
 	
@@ -346,7 +346,6 @@ function CDetall(){
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
 
 	this.iniciar = function() {	
-	
 		// dates
 		//$("#item_data_publicacio, #item_data_caducitat").mask("99/99/9999").datepicker({ altField: '#actualDate' });
 		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
@@ -355,21 +354,21 @@ function CDetall(){
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
-			$('div.idioma:gt(0)').hide();
+			escriptori_detall_elm.find('div.idioma').slice(1).hide();
 			
-			ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
+			var ul_idiomes_elm = escriptori_detall_elm.find("ul.idiomes:first");
 									
-			a_primer_elm = ul_idiomes_elm.find("a:first");
+			var a_primer_elm = ul_idiomes_elm.find("a:first");
 			a_primer_elm.parent().addClass("seleccionat");
 			
-			a_primer_elm_class = a_primer_elm.attr("class");
-			a_primer_elm_text = a_primer_elm.text();
+			var a_primer_elm_class = a_primer_elm.attr("class");
+			var a_primer_elm_text = a_primer_elm.text();
 			
 			a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 			
-			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
+			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
-			ul_idiomes_elm.bind("click",Detall.idioma);
+			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
 		// moduls
@@ -383,12 +382,13 @@ function CDetall(){
 	}
 		
 	this.nou = function() {
-
-		ModulMateries.nuevo();
+        //Ocultar paneles
+		jQuery("#modul_documents").hide();
 		
+		ModulMateries.nuevo();
 		ModulNormativa.nuevo();
         EscriptoriNormativa.nuevo();
-		
+
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -418,7 +418,9 @@ function CDetall(){
 	}		
 	
 	this.pintar = function(dades) {
-		
+		// Mostrar paneles
+		jQuery("#modul_documents, #modul_tramits").show();
+        
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
@@ -426,64 +428,25 @@ function CDetall(){
 		$("#item_id").val(dada_node.item_id);
 		
 		// Bloque de pestanyas de idiomas
-		$("#item_nom_ca").val(printStringFromNull(dada_node.ca.nombre));
-		$("#item_objecte_ca").val(printStringFromNull(dada_node.ca.resumen));
-		$("#item_destinataris_ca").val(printStringFromNull(dada_node.ca.destinatarios));
-		$("#item_requisits_ca").val(printStringFromNull(dada_node.ca.requisitos));
-		$("#item_presentacio_ca").val(printStringFromNull(dada_node.ca.plazos));
-		$("#item_resolucio_ca").val(printStringFromNull(dada_node.ca.resolucion));
-		$("#item_notificacio_ca").val(printStringFromNull(dada_node.ca.notificacion));
-		$("#item_lloc_ca").val(printStringFromNull(dada_node.ca.lugar));
-		$("#item_silenci_ca").val(printStringFromNull(dada_node.ca.silencio));
-		$("#item_observacions_ca").val(printStringFromNull(dada_node.ca.observaciones));
-		
-		$("#item_nom_es").val(printStringFromNull(dada_node.es.nombre));
-		$("#item_objecte_es").val(printStringFromNull(dada_node.es.resumen));
-		$("#item_destinataris_es").val(printStringFromNull(dada_node.es.destinatarios));
-		$("#item_requisits_es").val(printStringFromNull(dada_node.es.requisitos));
-		$("#item_presentacio_es").val(printStringFromNull(dada_node.es.plazos));
-		$("#item_resolucio_es").val(printStringFromNull(dada_node.es.resolucion));
-		$("#item_notificacio_es").val(printStringFromNull(dada_node.es.notificacion));
-		$("#item_lloc_es").val(printStringFromNull(dada_node.es.lugar));
-		$("#item_silenci_es").val(printStringFromNull(dada_node.es.silencio));
-		$("#item_observacions_es").val(printStringFromNull(dada_node.es.observaciones));
-		
-		$("#item_nom_en").val(printStringFromNull(dada_node.en.nombre));
-		$("#item_objecte_en").val(printStringFromNull(dada_node.en.resumen));
-		$("#item_destinataris_en").val(printStringFromNull(dada_node.en.destinatarios));
-		$("#item_requisits_en").val(printStringFromNull(dada_node.en.requisitos));
-		$("#item_presentacio_en").val(printStringFromNull(dada_node.en.plazos));
-		$("#item_resolucio_en").val(printStringFromNull(dada_node.en.resolucion));
-		$("#item_notificacio_en").val(printStringFromNull(dada_node.en.notificacion));
-		$("#item_lloc_en").val(printStringFromNull(dada_node.en.lugar));
-		$("#item_silenci_en").val(printStringFromNull(dada_node.en.silencio));
-		$("#item_observacions_en").val(printStringFromNull(dada_node.en.observaciones));
-		
-		$("#item_nom_de").val(printStringFromNull(dada_node.de.nombre));
-		$("#item_objecte_de").val(printStringFromNull(dada_node.de.resumen));
-		$("#item_destinataris_de").val(printStringFromNull(dada_node.de.destinatarios));
-		$("#item_requisits_de").val(printStringFromNull(dada_node.de.requisitos));
-		$("#item_presentacio_de").val(printStringFromNull(dada_node.de.plazos));
-		$("#item_resolucio_de").val(printStringFromNull(dada_node.de.resolucion));
-		$("#item_notificacio_de").val(printStringFromNull(dada_node.de.notificacion));
-		$("#item_lloc_de").val(printStringFromNull(dada_node.de.lugar));
-		$("#item_silenci_de").val(printStringFromNull(dada_node.de.silencio));
-		$("#item_observacions_de").val(printStringFromNull(dada_node.de.observaciones));
-		
-		$("#item_nom_fr").val(printStringFromNull(dada_node.fr.nombre));
-		$("#item_objecte_fr").val(printStringFromNull(dada_node.fr.resumen));
-		$("#item_destinataris_fr").val(printStringFromNull(dada_node.fr.destinatarios));
-		$("#item_requisits_fr").val(printStringFromNull(dada_node.fr.requisitos));
-		$("#item_presentacio_fr").val(printStringFromNull(dada_node.fr.plazos));
-		$("#item_resolucio_fr").val(printStringFromNull(dada_node.fr.resolucion));
-		$("#item_notificacio_fr").val(printStringFromNull(dada_node.fr.notificacion));
-		$("#item_lloc_fr").val(printStringFromNull(dada_node.fr.lugar));
-		$("#item_silenci_fr").val(printStringFromNull(dada_node.fr.silencio));
-		$("#item_observacions_fr").val(printStringFromNull(dada_node.fr.observaciones));
+		for (var i in idiomas) {
+			var idioma = idiomas[i];
+			$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
+			$("#item_objecte_" + idioma).val(printStringFromNull(dada_node[idioma]["resumen"]));
+			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
+			$("#item_requisits_" + idioma).val(printStringFromNull(dada_node[idioma]["requisitos"]));
+			$("#item_presentacio_" + idioma).val(printStringFromNull(dada_node[idioma]["plazos"]));
+			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
+			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
+			$("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
+			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
+			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
+		}
 		// Fin bloque de pestanyas de idiomas
 		
 		
 		marcarOpcionSelect("item_estat", dada_node.item_estat);
+		
+		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
 		
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
 
@@ -529,146 +492,9 @@ function CDetall(){
 		}
 		
 		$("#item_notes").val(dada_node.item_notes);
-/*		
-		// documents
-		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
-		doc_nodes = dada_node.documents;
-		doc_nodes_size = doc_nodes.length;
-		
-		if (doc_nodes_size == 0) {
-			doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
-		} else {
-			
-			num_ca = 0;
-			num_es = 0;
-			num_en = 0;
-			num_de = 0;
-			num_fr = 0;
-			
-			codi_doc_ca = "<ul>";
-			codi_doc_es = "<ul>";
-			codi_doc_en = "<ul>";
-			codi_doc_de = "<ul>";
-			codi_doc_fr = "<ul>";
-			
-			$(doc_nodes).each(function() {
-				doc_node = this;
-				
-				codi_doc = "<li>";
-				codi_doc += "<div>";
-				codi_doc += "<span class=\"doc\"><input type=\"hidden\" value=\"" + doc_node.id + "\" /><a href=\"#\">" + doc_node.nom + "</a></span>";
-				codi_doc += "<a class=\"btn lleva\" href=\"javascript:;\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_doc += "</div>";
-				codi_doc += "</li>";
-				
-				if (doc_node.idioma == "ca") {
-					codi_doc_ca += codi_doc;
-					num_ca++;
-				} else if (doc_node.idioma == "es") {
-					codi_doc_es += codi_doc;
-					num_es++;
-				} else if (doc_node.idioma == "en") {
-					codi_doc_en += codi_doc;
-					num_en++;
-				} else if (doc_node.idioma == "de") {
-					codi_doc_de += codi_doc;
-					num_de++;
-				} else if (doc_node.idioma == "fr") {
-					codi_doc_fr += codi_doc;
-					num_fr++;
-				}
-				
-			});
-			
-			codi_doc_ca += "</ul>";
-			codi_doc_es += "</ul>";
-			codi_doc_en += "</ul>";
-			codi_doc_de += "</ul>";
-			codi_doc_fr += "</ul>";
-			
-			if (num_ca == 0) {
-				doc_seleccionats_elm.find("div.ca ul").remove().end().find("div.ca p.info").text(txtNoHiHaDocuments + ".");
-			} else {
-				txt_documents = (num_ca == 1) ? txtDocument : txtDocuments;
-				doc_seleccionats_elm.find("div.ca ul").remove().end().find("div.ca p.info").html(txtHiHa + " <strong>" + num_ca + " " + txt_documents.toLowerCase() + "</strong>.").after(codi_doc_ca);
-			}
-			
-			if (num_es == 0) {
-				doc_seleccionats_elm.find("div.es ul").remove().end().find("div.es p.info").text(txtNoHiHaDocuments + ".");
-			} else {
-				txt_documents = (num_es == 1) ? txtDocument : txtDocuments;
-				doc_seleccionats_elm.find("div.es ul").remove().end().find("div.es p.info").html(txtHiHa + " <strong>" + num_es + " " + txt_documents.toLowerCase() + "</strong>.").after(codi_doc_es);
-			}
-			
-			if (num_en == 0) {
-				doc_seleccionats_elm.find("div.en ul").remove().end().find("div.en p.info").text(txtNoHiHaDocuments + ".");
-			} else {
-				txt_documents = (num_en == 1) ? txtDocument : txtDocuments;
-				doc_seleccionats_elm.find("div.en ul").remove().end().find("div.en p.info").html(txtHiHa + " <strong>" + num_en + " " + txt_documents.toLowerCase() + "</strong>.").after(codi_doc_en);
-			}
-			
-			if (num_de == 0) {
-				doc_seleccionats_elm.find("div.de ul").remove().end().find("div.de p.info").text(txtNoHiHaDocuments + ".");
-			} else {
-				txt_documents = (num_de == 1) ? txtDocument : txtDocuments;
-				doc_seleccionats_elm.find("div.de ul").remove().end().find("div.de p.info").html(txtHiHa + " <strong>" + num_de + " " + txt_documents.toLowerCase() + "</strong>.").after(codi_doc_de);
-			}
-			
-			if (num_fr == 0) {
-				doc_seleccionats_elm.find("div.fr ul").remove().end().find("div.fr p.info").text(txtNoHiHaDocuments + ".");
-			} else {
-				txt_documents = (num_de == 1) ? txtDocument : txtDocuments;
-				doc_seleccionats_elm.find("div.fr ul").remove().end().find("div.fr p.info").html(txtHiHa + " <strong>" + num_fr + " " + txt_documents.toLowerCase() + "</strong>.").after(codi_doc_fr);
-			}
-			
-			if (doc_nodes_size > 1) {
-				doc_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
-			}
-		}
-		
-		// tramits
-		tra_seleccionats_elm = escriptori_detall_elm.find("div.modulTramits div.seleccionats");
-		tra_nodes = dada_node.tramits;
-		tra_nodes_size = tra_nodes.length;
-		
-		if (tra_nodes_size == 0) {
-			tra_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaTramits + ".").end().find("p.gestiona").show();
-		} else {
-			codi_tramits = "<ul>";
-			$(tra_nodes).each(function() {
-				tramit_node = this;
-				codi_tramits += "<li><input type=\"hidden\" value=\"" + tramit_node.id + "\" />" + tramit_node.nom + "</li>";
-			});
-			codi_tramits += "<ul>";
-			txt_tramits = (tra_nodes_size == 1) ? txtTramit : txtTramits;
-			tra_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + tra_nodes_size + " " + txt_tramits.toLowerCase() + "</strong>.").after(codi_tramits).end().find("p.gestiona").show();
-			if (tra_nodes_size > 1) {
-				tra_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
-			}
-		}
 		
 		
-		// normatives
-		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormativa div.seleccionats");
-		normatives_nodes = dada_node.normatives;
-		normatives_nodes_size = normatives_nodes.length;
-		
-		if (normatives_nodes_size == 0) {
-			norma_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		} else {
-			codi_normatives = "<ul>";
-			$(normatives_nodes).each(function() {
-				normativa_node = this;
-				codi_normatives += "<li><input type=\"hidden\" value=\"" + normativa_node.id + "\" />" + normativa_node.nom + "</li>";
-			});
-			codi_normatives += "<ul>";
-			txt_materies = (normatives_nodes_size == 1) ? txtNormativa : txtNormatives;
-			norma_seleccionats_elm.find("ul").remove().end().find("p.info").html(txtHiHa + " <strong>" + normatives_nodes_size + " " + txt_materies.toLowerCase() + "</strong>.").after(codi_normatives);
-			if (normatives_nodes_size > 1) {
-				norma_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
-			}
-		}
-*/		
+		ModulDocuments.inicializarDocuments(dada_node.documents);
         
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		

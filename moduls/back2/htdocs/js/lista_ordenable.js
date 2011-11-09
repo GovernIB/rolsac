@@ -7,7 +7,7 @@ function ListaOrdenable(){
 	/**
 	 * Obtiene el idioma activo (solo en modo multi-idioma)
 	 */
-	var getIdiomaActivo = function( $lista ){	
+	this.getIdiomaActivo = function( $lista ){	
 		// Obtenemos el idioma activo.
 		var clases = $lista.parents(".cajaIdioma").attr("class");
 		clases = clases.split(" ");
@@ -68,7 +68,7 @@ function ListaOrdenable(){
 				if( item[atributo] != undefined ){
 				
 					if( params.multilang && ( typeof item[atributo] == "object" ) ){						
-						valor = item[atributo][idioma];					
+						valor = item[atributo][idioma];
 					}else{										
 						valor = item[atributo];												
 					}
@@ -84,18 +84,14 @@ function ListaOrdenable(){
 						
 					case "nombre":
 						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
-						if (valor == undefined  || valor == "") {
-							html += "<span class=\"" + params.nombre + "\">&nbsp;</span>";
-						} else {
-							html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
-						}
-												
-						break;
-					
+						if (jQuery.trim(valor) == "") valor = "&nbsp;";
+						html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
+						break;			
+
 					case "url":
 						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
 						break;
-						
+
 					case "orden":
 						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
 						break;															
@@ -177,12 +173,11 @@ function ListaOrdenable(){
 	 * @return boolean Devuelve true si el item no se encontraba ya en la lista.
 	 */
 	this.agregaItem = function( item ){
+		var _this = this;
 		var tamLista = jQuery(params.nodoDestino).filter(":first").find("li").size();		
 		var itemYaExiste = false;
 		var html;		
 		var idioma;
-		
-		var _this = this;
 						
 		if ( tamLista == 0) {
 						
@@ -204,7 +199,7 @@ function ListaOrdenable(){
 			if( params.multilang ){
 		
 				jQuery( params.nodoDestino ).each(function(){
-					idioma = getIdiomaActivo( jQuery(this) );
+					idioma = _this.getIdiomaActivo( jQuery(this) );
 					html = _this.getHtmlItem( item, true, idioma );					
 					jQuery(this).find("ul").append(html);					
 				});		
@@ -227,19 +222,26 @@ function ListaOrdenable(){
 	/**
 	 * Carga un array de items en la lista.
 	 */
-	this.agregaItems = function( lista ){
+	this.agregaItems = function( lista, btnElimiar ){
+        var _this = this;
+        
 		var item, idioma;		
 		
-		var _this = this;
+		var eliminar;
+		if (typeof btnElimiar != "undefined") {
+			eliminar = Boolean(btnElimiar);
+		} else {
+			eliminar = false;
+		}
 		
 		if( params.multilang ){
 		
 			jQuery(params.nodoOrigen).each( function(){
-				idioma = getIdiomaActivo( jQuery(this) );
+				idioma = _this.getIdiomaActivo( jQuery(this) );
 				
 				html = "<ul>";
-				for( i in lista ){				
-					html += _this.getHtmlItem( lista[i], false, idioma );
+				for( i in lista ){
+					html += _this.getHtmlItem( lista[i], eliminar, idioma );
 				}
 				html += "</ul>";
 				
@@ -250,7 +252,7 @@ function ListaOrdenable(){
 		
 			html = "<ul>";		
 			for( i in lista ){						
-				html += _this.getHtmlItem( lista[i], false );
+				html += _this.getHtmlItem( lista[i], eliminar );
 			}			
 			html += "</ul>";
 			
@@ -274,7 +276,7 @@ function ListaOrdenable(){
 		
 			jQuery(params.nodoOrigen).each(function(){
 								
-				idioma = getIdiomaActivo( jQuery(this) );								
+				idioma = _this.getIdiomaActivo( jQuery(this) );								
 				
 				html = "<ul>";
 				
@@ -354,7 +356,7 @@ function ListaOrdenable(){
 			
 				html = "<ul>";
 		
-				idioma = getIdiomaActivo( jQuery(this) );
+				idioma = _this.getIdiomaActivo( jQuery(this) );
 				
 				jQuery(this).find("li").each(function(){
 					var li_elm = jQuery(this);

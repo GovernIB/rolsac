@@ -197,8 +197,8 @@
 <body>
 	<div id="escriptori">
 	<!-- escriptori_detall -->
-	<div id="escriptori_detall" style="display: block;">
-		<div id="modulPrincipal" class="grupoModulosFormulario">					
+	<div id="escriptori_detall" class="escriptori_detall" style="display: block;">
+		<div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">					
 			<!-- modul -->
 			<div class="modul" style="-moz-border-radius: 1em 1em 0pt 0pt; margin-left: 10px; width: 472px; margin-top: 10px; height: 380px; overflow: auto;" >		
 				<fieldset>

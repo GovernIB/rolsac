@@ -13,12 +13,12 @@
         <p class="executant"><spring:message code='unitatadm.carregant_unitatadm'/></p>
     </div>          
     <!-- escriptori_detall -->
-    <div id="escriptori_detall">
+    <div id="escriptori_detall" class="escriptori_detall">
         <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value='<c:out value="${idUA}" />' />       
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
         <!-- modulPrincipal -->     
-        <div id="modulPrincipal" class="grupoModulosFormulario">            
+        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">            
             <!-- modul -->
             <div class="modul">     
                 <fieldset>

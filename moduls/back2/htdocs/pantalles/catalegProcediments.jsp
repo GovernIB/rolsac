@@ -1,10 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/cataleg_procediments.css"/>" media="screen" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_documents.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_normativa.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
 <script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
@@ -15,7 +18,6 @@
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 
@@ -25,6 +27,8 @@
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
     var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
+    var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
+    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -66,6 +70,8 @@
     var txtDocument = "document";
     var txtDocuments = "documents";
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
+    var txtSeleccionats = "Seleccionats";
+    var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
     
     var txtMateria = "matèria";
@@ -121,7 +127,7 @@
             "tipus": "alfanumeric",
             "caracters":
                 {
-                    "maxim": 250,
+                    "maxim": 230,
                     "mostrar": "si",
                     "abreviat": "no"
                 },
@@ -170,7 +176,7 @@
                     "obligatori": "El camp 'Familia' es obligatori"                 
                 }
         },
-        
+
         // Plazo máximo para resolución (Catalán)
         {
             "modo": "individual",
@@ -178,12 +184,11 @@
             "etiquetaValor": "item_resolucio_ca",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "caracters":
+            /*"caracters":
                 {
-                    "maxim": 250,
                     "mostrar": "si",
                     "abreviat": "no"
-                },
+                },*/
             "error":
                 {
                     "obligatori": "El camp 'Termini màxim per a la resolució' es obligatori",
@@ -198,12 +203,11 @@
             "etiquetaValor": "item_notificacio_ca",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "caracters":
+            /*"caracters":
                 {
-                    "maxim": 250,
                     "mostrar": "si",
                     "abreviat": "no"
-                },
+                },*/
             "error":
                 {
                     "obligatori": "El camp 'Termini màxim per a la notificació' es obligatori",
@@ -218,12 +222,11 @@
             "etiquetaValor": "item_silenci_ca",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "caracters":
+            /*"caracters":
                 {
-                    "maxim": 250,
                     "mostrar": "si",
                     "abreviat": "no"
-                },
+                },*/
             "error":
                 {
                     "obligatori": "El camp 'Silenci administratiu' es obligatori",
@@ -293,9 +296,9 @@
                             <div class="control">
                                 <select id="cerca_estat" name="cerca_estat" class="t8">
                                     <option value="" selected="selected">Tria una opci&oacute;</option>
-                                    <option value="1">P&uacute;blica</option>
-                                    <option value="2">Interna</option>
-                                    <option value="3">Reserva</option>
+	                                <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                 </select>
                             </div>
                         </div>
@@ -464,13 +467,13 @@
 
 <form id="formGuardar" action="false">
     <!-- escriptori_detall -->
-    <div id="escriptori_detall">
+    <div id="escriptori_detall" class="escriptori_detall">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <h2>Detall del procediment</h2>
         <p>Recorde que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>
         
         <!-- modulPrincipal -->
-        <div id="modulPrincipal" class="grupoModulosFormulario">                    
+        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
             <div class="modul">
                 <fieldset>
@@ -1235,13 +1238,11 @@
                     </div>
                 </fieldset>
             </div>
-            </form>
             <!-- /modul -->
         </div>
         <!-- /modulPrincipal -->
         <!-- modulLateral -->
         <div class="modulLateral">
-            <? if ($_SESSION['rolsac_rol'] != "RSC_OPERADOR") { ?>
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
@@ -1256,14 +1257,29 @@
                                 </div>
                                 <div class="control">
                                     <select id="item_estat" name="item_estat">
-                                        <option value="" selected="selected">Tria una opci&oacute;</option>
-                                        <option value="1">P&uacute;blica</option>
-                                        <option value="2">Interna</option>
-                                        <option value="3">Reserva</option>
+                                        <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                        <c:choose>
+                                           <c:when test="${rolSuper}" >
+                                               <option value="" selected="selected">Tria una opci&oacute;</option>
+                                               <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                               <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                               <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                           </c:when>
+                                           <c:otherwise>
+                                               <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                           </c:otherwise>
+                                       </c:choose>
                                     </select>
                                 </div>
                             </div>
-                            <div class="element right"></div>
+                            <div class="element right">
+                                <div class="etiqueta">
+                                    <label for="item_data_actualitzacio">Data actualització</label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_data_actualitzacio" name="item_data_actualitzacio" type="text" class="nou" readonly="readonly" />
+                                </div>
+                            </div>
                         </div>
                         <!-- /fila -->
                         <!-- fila -->
@@ -1308,15 +1324,15 @@
                 </fieldset>
             </div>
             <!-- /modul -->
-            <? } ?>
             <!-- modul -->
-            <div class="modul">
+            <div class="modul" id="modul_documents">
                 <fieldset>
                     <a class="modul mostrat">Amaga</a>
-                    <legend>Documents relacionats</legend>
-                    <div class="modul_continguts mostrat">
+                    <legend>Documents relacionats</legend><!-- spring:message code='unitatadm.formulari.edificis'/-->                               
+                    <div class="modul_continguts mostrat">                                  
                         <!-- modulDocuments -->
-                        <div class="modulDocuments multilang">
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <div class="modulDocuments multilang">                            
                             <ul class="idiomes">
                                 <li class="introIdiomas">Idioma:</li>
                                 <li class="ca seleccionat">ca</li>
@@ -1325,64 +1341,46 @@
                                 <li class="de">de</li>
                                 <li class="fr">fr</li>
                             </ul>
+                            
                             <div class="seleccionats">
-                                <div class="ca seleccionat cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
-                                    <!--ul>
-                                        <li>
-                                            <div>
-                                                <span class="doc"><a href="#">Nom del document</a>
-                                                </span> <a class="btn lleva" href="javascript:;"><span><span>Lleva</span>
-                                                </span>
-                                                </a>
-                                            </div></li>
-                                        <li>
-                                            <div>
-                                                <span class="doc"><input type="file" size="5"
-                                                    name="doc_ca">
-                                                </span> <a class="btn esborra" href="javascript:;"><span><span>Esborra</span>
-                                                </span>
-                                                </a>
-                                            </div></li>
-                                        <li>
-                                            <div>
-                                                <span class="doc"><input type="file" size="5"
-                                                    name="doc_ca">
-                                                </span> <a class="btn esborra" href="javascript:;"><span><span>Esborra</span>
-                                                </span>
-                                                </a>
-                                            </div></li>
-                                    </ul-->
+                                <%-- dsanchez: multiidioma --%>
+                                <div class="seleccionat cajaIdioma ca">
+                                    <p class="info">No hi ha documents relacionats.</p> <!--spring:message code='unitatadm.formulari.edificis.noInfo'/-->
+                                    <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="es cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info">No hi ha documents relacionats.</p>
+                                    <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="en cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
-                                </div>
+                                    <p class="info">No hi ha documents relacionats.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
                                 <div class="de cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
-                                </div>
+                                    <p class="info">No hi ha documents relacionats.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
                                 <div class="fr cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info">No hi ha documents relacionats.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>                                
+                                
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span>Afegeix document</span></span></a> <!-- spring:message code='unitatadm.formulari.edificis.gestiona'/-->
                                 </div>
-                            </div>
-                            <p class="btnGenerico">
-                                <a href="javascript:;" class="btn traduix"><span><span>Afegeix document</span></span></a>
-                            </p>
+                            </div>                                  
                         </div>
-                        <!-- /modulDocuments -->
-                    </div>
+                        <!-- /modulDocuments -->                                 
+                    </div>    
                 </fieldset>
             </div>
             <!-- /modul -->
-            <!-- modul -->
-            <div class="modul">
+            <!-- modul >
+            <div class="modul" id="modul_tramits">
                 <fieldset>
                     <a class="modul mostrat">Amaga</a>
                     <legend>Tràmits</legend>
                     <div class="modul_continguts mostrat">
-                        <!-- modulTramits -->
                         <div class="modulTramits">
                             <div class="seleccionats">
                                 <p class="info">No hi ha tràmits.</p>
@@ -1391,7 +1389,6 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- /modulTramits -->
                     </div>
                 </fieldset>
             </div>
@@ -1470,81 +1467,394 @@
         <!-- /modulLateral -->
     </div>
     <!-- /escriptori_detall -->
-    <!-- escriptori_previsualitza -->
-    <div id="escriptori_previsualitza">
-        <h2>Previsualitzant la fitxa</h2>
-        <p>
-            <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span>Torna</span>
-            </span>
-            </a>
-        </p>
-        <div class="previsualitzacio">
-            <iframe frameborder="0" scrolling="auto"></iframe>
-        </div>
+</form>
+
+<!-- escriptori_previsualitza -->
+<div id="escriptori_previsualitza">
+    <h2>Previsualitzant la fitxa</h2>
+    <p>
+        <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span>Torna</span>
+        </span>
+        </a>
+    </p>
+    <div class="previsualitzacio">
+        <iframe frameborder="0" scrolling="auto"></iframe>
     </div>
-    <!-- /escriptori_previsualitza -->
-    
-    <!-- escriptori_normatives -->
-    <div id="escriptori_normatives">
-       <ul id="opcions_normativa" class="opcions">
-            <li class="opcio C actiu">Gestiona</li><!--spring:message code='unitatadm.formulari.edificis.gestio'/-->                                 
-        </ul>
-        
-        <div id="resultats_normativa" class="escriptori_items_llistat">            
-            <div class="resultats C actiu" style="display: block;">
-                <div id="cercador_normativa" class="escriptori_items_cercador"> 
-                    <div id="cercador_normativa_contingut">
-                        <div class="fila">                                  
-                            <div class="element t26">                               
-                                <div class="etiqueta"><label for="cerca_normativa_titol">Títol</label></div> <!--spring:message code='unitatadm.formulari.edificis.adreca'/-->
-                                <div class="control">
-                                    <input id="cerca_normativa_titol" name="cerca_normativa_titol" type="text" class="titol" />
-                                </div>                                  
-                            </div>                              
-                            <div class="element t12">                                
-                                <div class="etiqueta"><label for="cerca_normativa_data">Data</label></div> <!--spring:message code='unitatadm.formulari.edificis.cp'/-->
-                                <div class="control">
-                                    <input id="cerca_normativa_data" name="cerca_normativa_data" type="text" class="data" />
-                                </div>                                  
-                            </div>                              
-                            <div class="element t12">                               
-                                <div class="etiqueta"><label for="cerca_normativa_data_bulleti">Data bulletí</label></div> <!--spring:message code='unitatadm.formulari.edificis.poblacio'/-->
-                                <div class="control">
-                                    <input id="cerca_normativa_data_bulleti" name="cerca_normativa_data_bulleti" type="text" class="data_bulleti" />
-                                </div>                                  
-                            </div>                              
-                        </div>
-                        
-                        <div class="botonera">
-                            <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
-                            <div class="boton btnGenerico"><a id="btnBuscarForm_normativa" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
-                            <div class="boton btnGenerico"><a id="btnVolverDetalle_normativa" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
-                        </div>
-                        
-                    </div>
-                </div>   
-                <div class="dades"></div>                       
-                <input type="hidden" value="0" class="pagPagina" />
-                <input type="hidden" value="DESC" class="ordreTipus" />
-                <input type="hidden" value="titol" class="ordreCamp" />             
-            </div>
-        </div>        
-        
-        <div class="modulLateral escriptori_items_seleccionats">
+</div>
+<!-- /escriptori_previsualitza -->
+
+
+<!-- escriptori_documents -->
+<div id="escriptori_documents" class="escriptori_detall">
+    <script type="text/javascript">
+        var txtTituloObligatorio = "<spring:message code='personal.formulari_document.titol.obligatori'/>";    
+        var txtTituloNoSoloNumeros = "<spring:message code='personal.formulari_document.titol.no_nomes_numeros'/>";
+
+        // dades formularis
+        var FormulariDadesDoc = [
+            { // Titol (Catala)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_titol_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 230,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+                "error":{
+                    "obligatori": txtTituloObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            }
+        ];
+    </script>
+    <form id="formGuardarDoc" action="" method="POST">
+        <input type="hidden" name="docId" id="docId" />
+        <input type="hidden" name="procId" id="procId" />
+        <p>Recordi que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>        
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    
+        <div id="modulDocuments" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
             <div class="modul">
-                <div class="interior">
-                    <div class="seleccionats">
-                        <div class="seleccionat">
-                            <p class="info">No hi ha normatives</p> <!--spring:message code='unitatadm.formulari.edificis.noInfo'/-->
-                            <div class="listaOrdenable"></div>
+                <fieldset>
+                    <a class="modul mostrat">Amaga</a>
+                    <legend>Document</legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas">Idioma:</p>
+                            <ul class="idiomes">
+                                <li class="idioma"><a href="javascript:;" class="ca">Català</a></li>
+                                <li class="idioma"><a href="javascript:;" class="es">Español</a></li>
+                                <li class="idioma"><a href="javascript:;" class="en">English</a></li>
+                                <li class="idioma"><a href="javascript:;" class="de">Deutsch</a></li>
+                                <li class="idioma"><a href="javascript:;" class="fr">Français</a></li>
+                            </ul>
+                            <div class="idiomes">
+                                <!-- ca -->
+                                <div class="idioma ca">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_titol_ca">Títol</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_titol_ca" name="item_titol_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_descripcio_ca">Descripcio</label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="item_descripcio_ca" name="item_descripcio_ca" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_ca"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_arxiu_doc_ca_delete" id="item_arxiu_doc_ca_delete" value="1"/>
+                                                    <label for="item_arxiu_doc_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_arxiu_doc_ca" name="item_arxiu_doc_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /ca -->
+                                <!-- es -->
+                                <div class="idioma es">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_titol_es">Títol</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_titol_es" name="item_titol_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_descripcio_es">Descripcio</label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="item_descripcio_es" name="item_descripcio_es" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_es"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_es" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_arxiu_doc_es_delete" id="item_arxiu_doc_es_delete" value="1"/>
+                                                    <label for="item_arxiu_doc_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_arxiu_doc_es" name="item_arxiu_doc_es" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /es -->
+                                <!-- en -->
+                                <div class="idioma en">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_titol_en">Títol</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_titol_en" name="item_titol_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_descripcio_en">Descripcio</label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="item_descripcio_en" name="item_descripcio_en" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_en"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_en" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_arxiu_doc_en_delete" id="item_arxiu_doc_en_delete" value="1"/>
+                                                    <label for="item_arxiu_doc_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_arxiu_doc_en" name="item_arxiu_doc_en" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /en -->
+                                <!-- de -->
+                                <div class="idioma de">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_titol_de">Títol</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_titol_de" name="item_titol_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_descripcio_de">Descripcio</label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="item_descripcio_de" name="item_descripcio_de" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_de"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_de" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_arxiu_doc_de_delete" id="item_arxiu_doc_de_delete" value="1"/>
+                                                    <label for="item_arxiu_doc_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_arxiu_doc_de" name="item_arxiu_doc_de" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /de -->
+                                <!-- fr -->
+                                <div class="idioma fr">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_titol_fr">Títol</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_titol_fr" name="item_titol_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_descripcio_fr">Descripcio</label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="item_descripcio_fr" name="item_descripcio_fr" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_fr"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_fr" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_arxiu_doc_fr_delete" id="item_arxiu_doc_fr_delete" value="1"/>
+                                                    <label for="item_arxiu_doc_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_arxiu_doc_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_arxiu_doc_fr" name="item_arxiu_doc_fr" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /fr -->
+                            </div>
                         </div>
-                        <p class="botonera btnGenerico">
-                            <a id="btnFinalizar_normativa" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                        </p>                                    
-                    </div>                                  
-                </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
             </div>
         </div>
-        <!-- seleccionats -->
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat">Amaga</a>
+                    <legend>Accions</legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_documents" href="javascript:;" class="btn torna"><span><span>Torna</span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_documents" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_documents" href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
+</div>
+<!-- escriptori_documents -->
+
+
+<!-- escriptori_normatives -->
+<div id="escriptori_normatives">
+   <ul id="opcions_normativa" class="opcions">
+        <li class="opcio C actiu">Gestiona</li><!--spring:message code='unitatadm.formulari.edificis.gestio'/-->                                 
+    </ul>
+    
+    <div id="resultats_normativa" class="escriptori_items_llistat">            
+        <div class="resultats C actiu" style="display: block;">
+            <div id="cercador_normativa" class="escriptori_items_cercador"> 
+                <div id="cercador_normativa_contingut">
+                    <div class="fila">                                  
+                        <div class="element t26">                               
+                            <div class="etiqueta"><label for="cerca_normativa_titol">Títol</label></div> <!--spring:message code='unitatadm.formulari.edificis.adreca'/-->
+                            <div class="control">
+                                <input id="cerca_normativa_titol" name="cerca_normativa_titol" type="text" class="titol" />
+                            </div>                                  
+                        </div>                              
+                        <div class="element t12">                                
+                            <div class="etiqueta"><label for="cerca_normativa_data">Data</label></div> <!--spring:message code='unitatadm.formulari.edificis.cp'/-->
+                            <div class="control">
+                                <input id="cerca_normativa_data" name="cerca_normativa_data" type="text" class="data" />
+                            </div>                                  
+                        </div>                              
+                        <div class="element t12">                               
+                            <div class="etiqueta"><label for="cerca_normativa_data_bulleti">Data bulletí</label></div> <!--spring:message code='unitatadm.formulari.edificis.poblacio'/-->
+                            <div class="control">
+                                <input id="cerca_normativa_data_bulleti" name="cerca_normativa_data_bulleti" type="text" class="data_bulleti" />
+                            </div>                                  
+                        </div>                              
+                    </div>
+                    
+                    <div class="botonera">
+                        <div class="boton btnGenerico"><a id="btnLimpiarForm_normativa" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnBuscarForm_normativa" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnVolverDetalle_normativa" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+                    </div>
+                    
+                </div>
+            </div>   
+            <div class="dades"></div>                       
+            <input type="hidden" value="0" class="pagPagina" />
+            <input type="hidden" value="DESC" class="ordreTipus" />
+            <input type="hidden" value="titol" class="ordreCamp" />             
+        </div>
+    </div>        
+    
+    <div class="modulLateral escriptori_items_seleccionats">
+        <div class="modul">
+            <div class="interior">
+                <div class="seleccionats">
+                    <div class="seleccionat">
+                        <p class="info">No hi ha normatives</p> <!--spring:message code='unitatadm.formulari.edificis.noInfo'/-->
+                        <div class="listaOrdenable"></div>
+                    </div>
+                    <p class="botonera btnGenerico">
+                        <a id="btnFinalizar_normativa" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                    </p>                                    
+                </div>                                  
+            </div>
+        </div>
     </div>
-    <!-- /escriptori_normatives -->
+    <!-- seleccionats -->
+</div>
+<!-- /escriptori_normatives -->

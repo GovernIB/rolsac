@@ -45,7 +45,6 @@ $(document).ready(function() {
 	//$.suggeriments();
 });
 
-var idiomas = ["ca", "es", "en", "fr", "de"];
 
 // idioma
 var pag_idioma = $("html").attr("lang");
@@ -382,10 +381,10 @@ function CDetall(){
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
-		// Validamos el formulario
-		if(!that.formulariValid()){
-			return false;
-		}
+	    // Validamos el formulario
+        if (!that.formulariValid()) {
+            return false;
+        }
 		
 		//Preparar los datos de afectaciones relacionadas.
 		//Crear un JSON con la lista de afectaciones.

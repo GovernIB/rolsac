@@ -1,10 +1,11 @@
 package es.caib.rolsac.back2.controller;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,12 +19,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
@@ -31,6 +35,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
@@ -45,6 +50,7 @@ import org.ibit.rol.sac.model.transients.ProcedimientoNormativaTransient;
 
 import es.caib.rolsac.back2.util.DateUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.ParseUtil;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -52,6 +58,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Controller
 @RequestMapping("/catalegProcediments/")
 public class CatalegProcedimentsBackController {
+	
+	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
 	private MessageSource messageSource = null;
 
@@ -271,13 +279,6 @@ public class CatalegProcedimentsBackController {
 			}
 		}
 
-		
-//		String nombre = request.getParameter("nom");
-//		if (nombre != null && !"".equals(nombre)) {
-//			tradMap.put("nombre", nombre.toUpperCase());
-//		}
-
-		
 		// Textes (en todos los campos todos los idiomas)
 		String textes = request.getParameter("textes");
 		if (textes != null && !"".equals(textes)) {
@@ -343,6 +344,8 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_estat", proc.getValidacion());
 
+			resultats.put("item_data_actualitzacio", DateUtil.formatDate(proc.getFechaActualizacion()));
+			
 			resultats.put("item_data_publicacio", DateUtil.formatDate(proc.getFechaPublicacion()));
 
 			resultats.put("item_data_caducitat", DateUtil.formatDate(proc.getFechaCaducidad()));
@@ -380,6 +383,48 @@ public class CatalegProcedimentsBackController {
 			// Fin idiomas
 			
 			
+			// Documentos relacionados
+			if (proc.getDocumentos() != null) {
+				Map<String, Object> mapDoc;
+				List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
+			
+				for(Documento doc: proc.getDocumentos()) {
+					if (doc != null) {
+						// Montar map solo con los campos 'titulo' de las traducciones del documento.
+						Map<String, String> titulos = new HashMap<String, String>();
+						IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+						List<String> idiomas = idiomaDelegate.listarLenguajes();
+						String nombre;
+						TraduccionDocumento traDoc;
+						
+						for (String idioma: idiomas) {
+							traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
+							if (traDoc != null && traDoc.getTitulo() != null) {
+								nombre = traDoc.getTitulo();
+							} else {
+								nombre = "";
+							}
+							titulos.put(idioma, nombre);
+						}
+		
+						mapDoc = new HashMap<String, Object>(3);
+						mapDoc.put("id", doc.getId());
+						mapDoc.put("orden", doc.getOrden());
+						mapDoc.put("nombre", titulos);
+						
+		                llistaDocuments.add(mapDoc);
+					} else {
+						log.error("El procedimient " + proc.getId() + " te un document null.");
+					}
+	            }
+				
+				resultats.put("documents", llistaDocuments);
+			} else {
+	            resultats.put("documents", null);
+	        } 
+            // Fin documentos relacionados
+            
+            
 			// Materias asociadas
             if (proc.getMaterias() != null) {             
                 List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
@@ -464,7 +509,7 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_notes", proc.getInfo());
 
-			// TODO: documentos, tramites.
+			// TODO: tramites.
 
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -535,13 +580,9 @@ public class CatalegProcedimentsBackController {
 			
 				
 				if (edicion) {
+					// Mantenemos los valores originales que tiene el procedimiento.
 					procediment.setId(procedimentOld.getId());
 					procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
-					
-					// FIXME: Mientras no se guarden todos los datos mantenemos los valores originales que tiene el procedimiento.
-					procediment.setDocumentos(procedimentOld.getDocumentos());
-					procediment.setMaterias(procedimentOld.getMaterias());
-					procediment.setNormativas(procedimentOld.getNormativas());
 					procediment.setTramites(procedimentOld.getTramites());
 				}
 
@@ -609,6 +650,58 @@ public class CatalegProcedimentsBackController {
                 }
                 // Fin normativas
                 
+                
+                // Documents
+                Enumeration<String> nomsParametres = request.getParameterNames();
+                Documento document;
+                DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
+                List<Documento> documents = new ArrayList<Documento>();
+                Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+
+                // obtenim  els documents i els seus ordres
+                while(nomsParametres.hasMoreElements()) {
+                	String nomParameter = (String)nomsParametres.nextElement();                    
+                    String[] elements = nomParameter.split("_");
+                    
+                    if ("documents".equals(elements[0]) && "id".equals(elements[1])) {
+                        // En aquest cas, elements[2] es igual al id del document
+                    	Long id = ParseUtil.parseLong(request.getParameter(nomParameter));
+                    	if (id != null) {
+	                    	document = docDelegate.obtenerDocumento(id);
+	                    	documents.add(document);
+	                    	
+	                    	// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+	                    	String[] orden = {request.getParameter("documents_orden_" + elements[2])};
+	                    	actulitzadorMap.put("orden_doc" + id, orden);
+                    	} else {
+                    		log.warn("S'ha rebut un id de document no númeric: " + id);
+                    	}
+                    }
+                }
+                
+                // actualitzam ordres
+                docDelegate.actualizarOrdenDocs(actulitzadorMap);
+                
+                // assignar els documents al procedimient i eliminar els que ja no estiguin seleccionats.
+                procediment.setDocumentos(documents);
+                if (edicion){
+                    List<Documento> docsOld = procedimentOld.getDocumentos();                                    
+                    
+                    for(Documento doc: documents){
+                        for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
+                        	Documento currentDoc = it.next();
+                            if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
+                                it.remove();
+                            }
+                        }
+                    }                    
+                    
+                    for (Documento doc: docsOld){
+                    	if (doc != null) docDelegate.borrarDocumento(doc.getId());
+                    }
+                } 
+                // Fi documents
+                
 				
 				// Idiomas
 				TraduccionProcedimientoLocal tpl;
@@ -647,6 +740,10 @@ public class CatalegProcedimentsBackController {
 				
 				try {
 					Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
+					// Comprobar que no se haya cambiado la validacion/estado siendo operador
+	            	if (request.isUserInRole("sacoper") && procedimentOld != null && !procedimentOld.getValidacion().equals(validacion)) {
+	            		throw new DelegateException(new SecurityException());
+	            	}
 					procediment.setValidacion(validacion);
 				} catch (NumberFormatException e) {
   				    // String error = messageSource.getMessage("error.permisos", null, request.getLocale());
@@ -667,7 +764,7 @@ public class CatalegProcedimentsBackController {
 				}
 				
 				
-				procediment.setFechaActualizacion(new Date());
+//				procediment.setFechaActualizacion(new Date()); // lo hace el facade automaticamente.
 				
 				
 				try {
@@ -740,7 +837,7 @@ public class CatalegProcedimentsBackController {
 			}
 
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomTransient(-1l, error);
 			} else {
@@ -835,5 +932,6 @@ public class CatalegProcedimentsBackController {
 
 		return resultats;
 	}
+
 	
 }

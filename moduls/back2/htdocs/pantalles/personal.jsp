@@ -420,7 +420,7 @@
         </div>      
     </div>
 </div>
-<div id="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
+<div id="escriptori_detall" class="escriptori_detall"> <%--La linia de style ja ve al CSS  - display: block/none; --%>
     <form id="formGuardar" action="false">
     
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
