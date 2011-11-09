@@ -349,18 +349,15 @@ function DetallBase(soloFicha, reglasFormulario){
 
 	this.previsualitza = function() {
 		var url = this.urlPrevisualizar;
-
 		escriptori_detall_elm.fadeOut(300, function() {
+			var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+			var id = escriptori_detall_elm.find("#item_id").val();
 
-			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
-			//fitxa_ID = escriptori_detall_elm.find("#item_id").val();
-
-			url += "?lang=" + fitxa_idiomaSeleccionat + "&codi=636513"; //+ fitxa_ID;
+			url += "?lang=" + idiomaSeleccionat + "&codi=" + id;
 
 			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {
 				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);
 			});
-
 		});
 	}
 

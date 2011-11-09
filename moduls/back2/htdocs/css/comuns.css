@@ -1147,9 +1147,12 @@ div.modulTramits div.seleccionats p.info { margin-top:0; }
 /* previsualitzacio */
 
 #escriptori_previsualitza { display:none; margin:0 0 4em 0; }
-#escriptori_previsualitza h2 { font-size:1.4em; margin-top:0; margin-bottom:.5em; }
-
-div.previsualitzacio { padding:1em; border:1px solid #ccc; }
+#escriptori_previsualitza h2 { font-size:1.4em; margin-top:0; margin-bottom:.5em; color: #666666;}
+#escriptori_previsualitza a.torna > span > span {
+    background: url("../img/botons/iconos/volver.gif") no-repeat scroll 15px 50% transparent;
+	padding-left: 40px;
+}
+div.previsualitzacio { margin-top: 4em; padding:1em; border:1px solid #ccc; }
 div.previsualitzacio iframe { width:100%; height:40em; border:0; }
 
 
