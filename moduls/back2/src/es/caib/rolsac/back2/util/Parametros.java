@@ -55,4 +55,9 @@ public class Parametros {
 	public static String MATERIA_AJUDES_SUBVENCIONS="34363";
 	
 	public static String UO_PORTAVOZ="270677";
+	
+	public static Integer NUMERO_REGISTROS = 5;
+	
+	public static Integer WIDTH_ESTADISTICA_QUADRE_CONTROL = 1014;
+	public static Integer HEIGHT_ESTADISTICA_QUADRE_CONTROL = 170;
 }

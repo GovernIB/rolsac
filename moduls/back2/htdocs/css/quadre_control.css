@@ -11,6 +11,9 @@ div.modul {
 div.m50 {
     width: 34.5em;
 }
+div.m100 {
+    width: 72em;
+}
 p#quadreControl {
     color: #333333;
     font-size: 1.25em;
@@ -53,7 +56,7 @@ div.modul h2 {
 }
 #darreresModificacions ul li a {
     display: block;
-    font: 1.2em Georgia,"Times New Roman",Times,serif;
+    font: 1em Georgia,"Times New Roman",Times,serif;
 }
 div.modul table {
     border: 0 none;
@@ -87,5 +90,5 @@ div.modul table tbody td.total {
 }
 div.modul table tbody th a {
     display: block;
-    font: 1.2em Georgia,"Times New Roman",Times,serif;
+    font: 1em Georgia,"Times New Roman",Times,serif;
 }
