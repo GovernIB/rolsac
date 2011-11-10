@@ -67,9 +67,12 @@ public class UnidadAdministrativaController {
 			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 			UnidadAdministrativa ua = uaDelegate.obtenerUnidadAdministrativa(uaId);
 			session.setAttribute("unidadAdministrativa", ua);
+			session.setAttribute("forzarUA", Boolean.TRUE); // Forzar a UAServletFilter a elegir una UA si no hay.
 		} catch (NumberFormatException nfe) {
 			session.removeAttribute("unidadAdministrativa");
+			session.setAttribute("forzarUA", Boolean.FALSE); // No forzar a UAServletFilter a elegir una UA.
 		} catch (DelegateException dEx) {
+			session.setAttribute("forzarUA", Boolean.FALSE);
 			if (dEx.getCause() instanceof SecurityException) {
 				model.put("error", "permisos");
 			} else {

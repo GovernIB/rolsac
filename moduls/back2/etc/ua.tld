@@ -17,10 +17,4 @@
             <rtexprvalue>false</rtexprvalue>
         </attribute-->
     </tag>
-    <tag>
-        <name>seleccionarUA</name>
-        <tag-class>es.caib.rolsac.back2.customJSTLTags.SeleccionarUATag</tag-class>
-        <body-content>empty</body-content>
-        <info>Seleccionar una unidad administrativa del usuario logueado.</info>
-    </tag>
 </taglib>
