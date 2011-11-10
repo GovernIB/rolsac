@@ -744,8 +744,7 @@ public class CatalegProcedimentsBackController {
 	            	}
 					procediment.setValidacion(validacion);
 				} catch (NumberFormatException e) {
-  				    // String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					error = "L'estat és incorrecte.";
+  				    error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
 				}
 
@@ -771,8 +770,7 @@ public class CatalegProcedimentsBackController {
 					Iniciacion iniciacion = iDelegate.obtenerIniciacion(iniciacionId);
 					procediment.setIniciacion(iniciacion);
 				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					error = "La forma d'iniciació és incorrecte.";
+					error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
 					throw new NumberFormatException();
 				}
 				
@@ -783,8 +781,7 @@ public class CatalegProcedimentsBackController {
 					Familia familia = fDelegate.obtenerFamilia(familiaId);
 					procediment.setFamilia(familia);
 				} catch (NumberFormatException e) {
-					// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					error = "La familia és incorrecte.";
+					error = messageSource.getMessage("proc.error.familia.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
 				}
 
@@ -799,8 +796,7 @@ public class CatalegProcedimentsBackController {
 						procediment.setVersion(version);
 					}
 				} catch (NumberFormatException e) {
-  				    // String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-					error = "La versión del trámit és incorrecte.";
+  				    error = messageSource.getMessage("proc.error.versio.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
 				}
 				
@@ -812,8 +808,7 @@ public class CatalegProcedimentsBackController {
 						UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
 						procediment.setOrganResolutori(organ);
 					} catch (NumberFormatException e) {
-						// String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-						error = "L'órgan és incorrecte.";
+						error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
 						throw new NumberFormatException();
 					}
 				}
@@ -831,8 +826,7 @@ public class CatalegProcedimentsBackController {
 				procedimentDelegate.grabarProcedimiento(procediment, ua.getId());
 
 				
-//				String ok = messageSource.getMessage("procediment.guardat.correcte", null, request.getLocale());
-				String ok = "Procediment guardat correctament.";
+				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 				result = new IdNomTransient(procediment.getId(), ok);
 			}
 

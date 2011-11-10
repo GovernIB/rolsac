@@ -134,8 +134,6 @@ function CModulDocuments(){
 
 	var that = this;
 	
-	//this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
-
 	this.iniciar = function() {			
         // botons        
         jQuery("#btnVolver_documents").bind("click", that.torna);

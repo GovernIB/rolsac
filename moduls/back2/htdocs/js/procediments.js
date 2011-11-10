@@ -395,15 +395,15 @@ function CDetall(){
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
 		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
 		
-		tra_seleccionats_elm = escriptori_detall_elm.find("div.modulTramits div.seleccionats");
-		tra_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtTramitNouProcediment + ".").end().find("p.gestiona").hide();
+//		tra_seleccionats_elm = escriptori_detall_elm.find("div.modulTramits div.seleccionats");
+//		tra_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtTramitNouProcediment + ".").end().find("p.gestiona").hide();
 
 		if (suggeriment_elm.size() != 0 && suggeriment_elm.css("display") != "none") {
 			suggeriment_elm.slideUp(300);
 		}
 		
         
-		$("#item_data_publicacio").val(txtImmediat);
+//		$("#item_data_publicacio").val(txtImmediat);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 		escriptori_contingut_elm.fadeOut(300, function() {
