@@ -28,6 +28,16 @@
 	<td>prova ficha</td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>dom=document.getElementById('traducciones[0].descAbr_ifr').contentWindow.document.body</td>
+	<td>prueba abreviada</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>dom=document.getElementById('traducciones[0].descripcion_ifr').contentWindow.document.body</td>
+	<td>prueba detallada</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
 	<td>action</td>
 	<td></td>
@@ -78,7 +88,6 @@
 	<td>Se ha realizado la baja correctamente</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

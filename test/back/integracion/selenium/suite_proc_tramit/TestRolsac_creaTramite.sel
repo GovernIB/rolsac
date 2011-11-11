@@ -17,11 +17,6 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForPageToLoad</td>
-	<td></td>
-	<td></td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
 	<td>link=Seleccionar por código</td>
 	<td></td>
@@ -33,8 +28,8 @@
 </tr>
 <tr>
 	<td>waitForPopUp</td>
-	<td>Seleccionar</td>
-	<td>30000</td>
+	<td></td>
+	<td></td>
 </tr>
 <tr>
 	<td>selectWindow</td>
@@ -68,10 +63,9 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>Alta Trámite </td>
+	<td>Alta Trámite</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>
