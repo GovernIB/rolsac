@@ -385,7 +385,7 @@ function CDetall(){
 		//TODO:incloure aquest error dins la verificacio de procediment.js
 
 		if (dataVars == "seccUA=&") {
-			Missatge.llansar({tipus: "alerta", modo: "informacion", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});
 		} else {		
 			dataVars += ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
 

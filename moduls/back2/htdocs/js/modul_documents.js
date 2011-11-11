@@ -130,7 +130,11 @@ function CEscriptoriProcediments(){
 // Creacion/edicion de docs
 function CModulDocuments(){
 	this.extend = DetallBase;
-	this.extend(true, FormulariDadesDoc);
+	if (typeof FormulariDadesDoc != 'undefined') {
+		this.extend(true, FormulariDadesDoc);
+	} else {
+		this.extend(true, null);
+	}
 
 	var that = this;
 	
