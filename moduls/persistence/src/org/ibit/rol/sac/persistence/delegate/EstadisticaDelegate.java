@@ -143,9 +143,17 @@ public class EstadisticaDelegate implements StatelessDelegate {
         }
     }
     
-    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, UnidadAdministrativa unidadAministrativa) throws DelegateException {
+    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, UnidadAdministrativa unidadAdministrativa) throws DelegateException {
         try {
-            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, unidadAministrativa);
+            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, unidadAdministrativa);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List<Integer> resumenOperativa(Date fechaInicio, Date fechaFin, Integer tipoOperacion, Long idUnidadAdministrativa) throws DelegateException {
+        try {
+            return getFacade().resumenOperativa(fechaInicio, fechaFin, tipoOperacion, idUnidadAdministrativa);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

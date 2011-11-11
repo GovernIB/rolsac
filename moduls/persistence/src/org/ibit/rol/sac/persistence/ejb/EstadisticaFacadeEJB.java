@@ -617,6 +617,95 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         }
     }
 
+    
+    /**
+     * Lista las ultimas modificaciones para Procedimientos, Normativas y Fichas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List<Integer> resumenOperativa(Date fechaInicio, Date fechaFin, Integer tipoOperacion, Long idUnidadAdministrativa) {
+        Session session = getSession();
+        try {
+        	List<Integer> valores = new ArrayList<Integer>();
+        	
+        	Query queryProcedimiento = null;
+        	Query queryNormativa = null;
+        	Query queryFicha = null;
+        	
+        	if (idUnidadAdministrativa != null ) {
+        		
+        		queryProcedimiento = session.createQuery("select count(h) from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
+            			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " +
+            			" and plo.unidadAdministrativa.id = :id "+
+            			" order by a.fecha desc");
+        		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryProcedimiento.setInteger("tipoOperacion", tipoOperacion);
+        		queryProcedimiento.setLong("id", idUnidadAdministrativa);
+        		
+        		queryNormativa = session.createQuery("select count(h) from Historico as h, Auditoria as a, NormativaLocal as nlo " +
+        			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
+        			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " +
+        			" and nlo.unidadAdministrativa.id = :id " +
+        			" order by a.fecha desc");
+        		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryNormativa.setInteger("tipoOperacion", tipoOperacion);
+        		queryNormativa.setLong("id", idUnidadAdministrativa);
+        		
+        		queryFicha = session.createQuery("select count(h) from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
+            			"where h.id=a.historico.id and h.class = HistoricoFicha " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion" +
+            			" and fua.unidadAdministrativa.id = :id and fua.ficha.id = fic.id " +
+            			" order by a.fecha desc");
+        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryFicha.setInteger("tipoOperacion", tipoOperacion);
+        		queryFicha.setLong("id", idUnidadAdministrativa);
+        		
+        	} else {
+        		queryProcedimiento = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
+            			"where h.id=a.historico.id and h.class in (HistoricoProcedimiento) " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " + 
+            			" order by a.fecha desc");
+        		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryProcedimiento.setInteger("tipoOperacion", tipoOperacion);
+            	
+        		queryNormativa = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
+            			"where h.id=a.historico.id and h.class in (HistoricoNormativa) " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " + 
+            			" order by a.fecha desc");
+        		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryNormativa.setInteger("tipoOperacion", tipoOperacion);
+            	
+        		queryFicha = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
+            			"where h.id=a.historico.id and h.class in (HistoricoFicha) " +
+            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " + 
+            			" order by a.fecha desc");
+        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+            	queryFicha.setInteger("tipoOperacion", tipoOperacion);
+
+        	}
+
+        	valores.add((Integer)queryProcedimiento.uniqueResult());
+        	valores.add((Integer)queryNormativa.uniqueResult());
+        	valores.add((Integer)queryFicha.uniqueResult());
+
+        	return valores;
+           
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
+    
 	/**
 	 * @param queryProcedimiento
 	 * @param queryNormativa

@@ -7,6 +7,7 @@ div.modul {
     padding: 1em;
     width: 53em;
     background-color: White;
+    -moz-border-radius: 1em 1em 1em 1em;
 }
 div.m50 {
     width: 34.5em;
@@ -91,4 +92,12 @@ div.modul table tbody td.total {
 div.modul table tbody th a {
     display: block;
     font: 1em Georgia,"Times New Roman",Times,serif;
+}
+
+#opcions {
+	padding-top: 0em;
+}
+
+#opcions li {
+    padding: 0 20px 0 20px;
 }

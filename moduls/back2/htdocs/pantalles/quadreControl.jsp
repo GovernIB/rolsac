@@ -13,44 +13,52 @@
 		<!-- inici dades -->
 		<div style="display: block;" id="iniciDades"> 
 			<!-- darreres modificacions -->
-			<div style="-moz-border-radius: 1em 1em 1em 1em;" id="darreresModificacions" class="modul m50">
+			<div id="darreresModificacions" class="modul m50">
 				<h2><spring:message code='quadreControl.darreres_modificacions'/></h2>
-				<ul>
-					<c:forEach items="${darreresModificacions}" var="modificacio">
-						<c:choose>
-							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
+				<c:choose>
+					<c:when test="${not empty darreresModificacions}">
+						<ul>
+							<c:forEach items="${darreresModificacions}" var="modificacio">
 								<c:choose>
-									<c:when test="${modificacio.value.ficha.fechaActualizacion < dataActual}">
-										<li class="fitxa_caducat">
+									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
+										<c:choose>
+											<c:when test="${modificacio.value.ficha.fechaActualizacion < dataActual}">
+												<li class="fitxa_caducat">
+											</c:when>
+											<c:otherwise>
+												<li class="fitxa">
+											</c:otherwise>
+										</c:choose>
+										<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
-									<c:otherwise>
-										<li class="fitxa">
-									</c:otherwise>
-								</c:choose>
-								<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
-							</c:when>
-							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
-								<c:choose>
-									<c:when test="${modificacio.value.procedimiento.fechaActualizacion < dataActual}">
-										<li class="procediment_caducat">
+									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
+										<c:choose>
+											<c:when test="${modificacio.value.procedimiento.fechaActualizacion < dataActual}">
+												<li class="procediment_caducat">
+											</c:when>
+											<c:otherwise>
+												<li class="procediment">
+											</c:otherwise>
+										</c:choose>
+										<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
-									<c:otherwise>
-										<li class="procediment">
-									</c:otherwise>
+									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
+										<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+									</c:when>
 								</c:choose>
-								<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
-							</c:when>
-							<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
-								<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
-							</c:when>
-						</c:choose>
-					</c:forEach>
-				</ul>
+							</c:forEach>
+						</ul>
+					</c:when>
+					<c:otherwise>
+						<spring:message code='quadreControl.no_darreres_modificacions'/>
+					</c:otherwise>
+				</c:choose>
+				
 			</div>
 			<!-- /darreres modificacions -->
 				
 			<!-- continguts -->
-			<div style="-moz-border-radius: 1em 1em 1em 1em;" id="nombreContinguts" class="modul m50">	
+			<div id="nombreContinguts" class="modul m50">	
 				<h2><spring:message code='quadreControl.nombre_continguts'/></h2>
 				<table>
 					<thead>
@@ -87,11 +95,11 @@
 			<!-- /continguts -->
 	 		
 	 		<!-- grafica estadistiques UA -->
-	 		<div style="-moz-border-radius: 1em 1em 1em 1em;" id="graficaPlanificacio" class="modul m100">
+	 		<div id="graficaEstadistiques" class="modul m100">
 	 			<h2><spring:message code='quadreControl.grafica.estadistica_ua'/><c:out value="${nomUA }" /></h2>
 	 			<c:choose>
 	 				<c:when test="${idUA > 0}">
-	 					<img alt="" src="<c:url value="/quadreControl/estadisticaUA.do?id=${idUA }"/>" border="0" />
+	 					<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=1&id=${idUA }"/>" border="0" />
 	 				</c:when>
 	 				<c:otherwise>
 	 					<spring:message code='quadreControl.grafica.escull_ua'/>
@@ -100,13 +108,33 @@
 	 		</div>
 	 		<!-- /grafica estadistiques UA -->	
 
-<%--
 			<!-- grafica resum -->
-	 		<div style="-moz-border-radius: 1em 1em 1em 1em;" id="graficaPlanificacio" class="modul m100">
+	 		<div id="graficaResum" class="modul m100">
 	 			<h2><spring:message code='quadreControl.grafica.resum'/></h2>
 	 			<c:choose>
 	 				<c:when test="${idUA > 0}">
-	 					<img alt="" src="<c:url value="/quadreControl/estadisticaUA.do?id=${idUA }"/>" border="0" />
+	 					<ul id="opcions">
+					        <li class="opcio actiu" id="liAlta">
+					            <a href="javascript:void(0)" id="tabAlta">Altes</a>
+					        </li>
+					        <li class="opcio" id="liBaixa">
+					            <a href="javascript:;" id="tabBaixa">Baixes</a>
+					        </li>
+				            <li class="opcio" id="liModificacio">
+				            	<a href="javascript:;" id="tabModificacio">Modificacions</a>	
+				            </li>
+					    </ul>
+					    <div id="resultats">
+					        <div class="resultats actiu" id="divAlta" style="display: block;">
+				            	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=2&id=${idUA }"/>" border="0" />			 				
+					        </div>
+					        <div class="resultats " style="display: none;" id="divBaixa">
+					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=3&id=${idUA }"/>" border="0" />
+					        </div>
+					        <div class="resultats " style="display: none;" id="divModificacio">
+					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=4&id=${idUA }"/>" border="0" />
+					        </div>
+					    </div>	
 	 				</c:when>
 	 				<c:otherwise>
 	 					<spring:message code='quadreControl.grafica.escull_ua'/>
@@ -114,7 +142,7 @@
 	 			</c:choose>
 	 		</div>
 	 		<!-- /grafica resum-->
- --%>
+
 		</div>
 		<!-- /inici dades -->
 				
@@ -126,6 +154,7 @@
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/quadre_control.js'/>"></script>
     
     <script type="text/javascript">
            

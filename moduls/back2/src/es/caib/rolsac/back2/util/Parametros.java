@@ -58,6 +58,13 @@ public class Parametros {
 	
 	public static Integer NUMERO_REGISTROS = 5;
 	
-	public static Integer WIDTH_ESTADISTICA_QUADRE_CONTROL = 1014;
+	public static Integer WIDTH_ESTADISTICA_QUADRE_CONTROL = 1010;
 	public static Integer HEIGHT_ESTADISTICA_QUADRE_CONTROL = 170;
+	
+	public static Integer GRAFICA_ESTADISTICA = 1;
+	public static Integer GRAFICA_RESUM_PERIODE = 7;
+	public static Integer GRAFICA_RESUM_ALTA = 2;
+	public static Integer GRAFICA_RESUM_MODIFICACIO = 3;
+	public static Integer GRAFICA_RESUM_BAIXA = 4;
+	
 }

@@ -114,6 +114,8 @@
 	<classpathentry kind="lib" path="lib/axis2-1.5/xercesImpl-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/XmlSchema-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/caib-utilities.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>

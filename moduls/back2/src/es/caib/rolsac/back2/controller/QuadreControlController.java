@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Estadistica;
 import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -74,11 +76,11 @@ public class QuadreControlController extends ArchivoController {
 		try {
 			EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
 			
-			GregorianCalendar dataActualFi = dataActual;
+			GregorianCalendar dataActualFi = new GregorianCalendar();
 			dataActualFi.add(Calendar.DATE, -7);
 
 			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActual.getTime(),dataActualFi.getTime(), Parametros.NUMERO_REGISTROS,unitatAdministrativa);
-
+			
 			model.put("darreresModificacions", llistaCanvis);
 
 		} catch (DelegateException dEx) {
@@ -122,7 +124,7 @@ public class QuadreControlController extends ArchivoController {
 	}
 	
 
-    @RequestMapping(value = "/estadisticaUA.do", method = GET)
+    @RequestMapping(value = "/grafica.do", method = GET)
     public void mostrarImagen(HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.devolverArchivo(request, response);   
     }
@@ -132,34 +134,77 @@ public class QuadreControlController extends ArchivoController {
 	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {		
         //obtener archivo concreto con el delegate
         Long idUA = new Long(request.getParameter("id"));
-                
-        Periodo periodo = PeriodoUtil.crearPeriodoAnual();
+        Integer tipoOperacion = new Integer(request.getParameter("tipoOperacion"));        
+        
+        
 		EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
-		List<Estadistica> datosEstadistica;
+		Archivo archivo = new Archivo();
 		
-		// Obtenim les dades 
-		datosEstadistica = eDelegate.listarEstadisticasUnidad(idUA, periodo.getFechaInicio(),periodo.getFechaFin());
+		if (Parametros.GRAFICA_ESTADISTICA.equals(tipoOperacion)) {
+			Periodo periodo = PeriodoUtil.crearPeriodoAnual();
+			
+			// Obtenim les dades 
+			List<Estadistica> datosEstadistica = eDelegate.listarEstadisticasUnidad(idUA, periodo.getFechaInicio(),periodo.getFechaFin());
+			
+			// Generam la grafica
+			JFreeChart chart = Graficas.pintarGraficaSimple(datosEstadistica);
+			
+			construirArchivo(idUA, archivo, chart, "estadisticaUnitatAdministrativa");
+			
+		} else {
+			GregorianCalendar dataActual = new GregorianCalendar();
+			GregorianCalendar dataActualFi = new GregorianCalendar();
 		
-		// Generam la grafica
-		JFreeChart chart = Graficas.pintarGrafica(datosEstadistica);
+			List<List<Integer>> datosResumen = new ArrayList();
+			String titulo = "";
+			
+			// Obtenim les dades 
+			for (int i = 0; i < Parametros.GRAFICA_RESUM_PERIODE; i++) {
+				if (Parametros.GRAFICA_RESUM_ALTA.equals(tipoOperacion)) {
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.INSERTAR, idUA));
+					titulo = "resumAlta";
+				} else if (Parametros.GRAFICA_RESUM_MODIFICACIO.equals(tipoOperacion)) {
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.MODIFICAR, idUA));
+					titulo = "resumModificar";
+				} else if (Parametros.GRAFICA_RESUM_BAIXA.equals(tipoOperacion)) {
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, idUA));
+					titulo = "resumBaixa";
+				}
+				dataActual.add(Calendar.DATE,-1);
+				dataActualFi.add(Calendar.DATE, -1);
+			}
+			
+			// Generam la grafica
+			JFreeChart chart = Graficas.pintarGraficaMultiple(datosResumen);
+			
+			construirArchivo(idUA, archivo, chart, titulo);
+		}
+		        		
+        return archivo; 
+	}
+
+	/**
+	 * @param idUA
+	 * @param archivo
+	 * @param chart
+	 * @throws IOException
+	 */
+	private void construirArchivo(Long idUA, Archivo archivo, JFreeChart chart, String nombreArchivo) throws IOException {
 		
 		// Transformacions de la grafica
-		BufferedImage image = chart.createBufferedImage(Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL, Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL);
-        				
+		BufferedImage  image = chart.createBufferedImage(Parametros.WIDTH_ESTADISTICA_QUADRE_CONTROL, Parametros.HEIGHT_ESTADISTICA_QUADRE_CONTROL);
+						
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write(image, "png", baos );
 		baos.flush();
 		byte[] imageInByte = baos.toByteArray();
 		baos.close();
 		
-		Archivo archivo = new Archivo();
-		
+		//Creamos archivo
 		archivo.setDatos(imageInByte);
 		archivo.setId(idUA);
 		archivo.setMime("image/png");
-		archivo.setNombre("estadisticaUA");
-		
-        return archivo; 
+		archivo.setNombre(nombreArchivo);
 	}
 	
 }
