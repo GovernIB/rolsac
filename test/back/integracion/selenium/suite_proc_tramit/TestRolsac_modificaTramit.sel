@@ -235,6 +235,26 @@
 	<td>Datos del Procedimiento&nbsp;&nbsp;(Código:605870) </td>
 	<td></td>
 </tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;Següent&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;Següent&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;Següent&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=img[alt=&quot;Següent&quot;]</td>
+	<td></td>
+</tr>
 </tbody></table>
 </body>
 </html>
