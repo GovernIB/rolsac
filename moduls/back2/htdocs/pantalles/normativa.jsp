@@ -978,7 +978,7 @@
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data_butlleti'/></label></div>
                             <div class="control">
-                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
+                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="data nou" />
                             </div>
                         </div>
                         <div class="element t50p">

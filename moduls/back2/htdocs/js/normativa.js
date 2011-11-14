@@ -70,7 +70,7 @@ function CLlistat(){
 	this.iniciar = function() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
-		
+				
 		Llistat.carregar({});		
 	}
 	
@@ -348,6 +348,9 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
+		jQuery("#item_data").datepicker({ dateFormat: 'dd/mm/yy' });
+		jQuery("#item_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
+				
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
