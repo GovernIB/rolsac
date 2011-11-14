@@ -142,8 +142,8 @@ function CLlistat(){
 		
 	this.iniciar = function() {		
 		$("#cerca_fechaCaducidad").datepicker({ dateFormat: 'dd/mm/yy' });
-		$("#cerca_fechaPublicacion").datepicker({ dateFormat: 'dd/mm/yy' });
-		$("#cerca_fechaActualizacion").datepicker({ dateFormat: 'dd/mm/yy' });
+		$("#cerca_fechaPublicacion").datetimepicker({ timeFormat: 'hh:mm' });
+		$("#cerca_fechaActualizacion").datetimepicker({ timeFormat: 'hh:mm' });
 	
 		Llistat.carregar({});
 		
@@ -397,8 +397,11 @@ function CDetall(){
 	
 	this.iniciar = function() {
 		// dates		
-		$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
-		$("#item_data_publicacio").bind("blur",this.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		$('#item_data_caducitat').datetimepicker({ timeFormat: 'hh:mm'});
+		$("#item_data_publicacio").bind("blur",this.dataPublicacio).datetimepicker({ timeFormat: 'hh:mm'});
+		
+		//$("#item_data_caducitat").datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
+		//$("#item_data_publicacio").bind("blur",this.dataPublicacio).datepicker({ altField: '#actualDate', dateFormat: 'dd/mm/yy' });
 		
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {

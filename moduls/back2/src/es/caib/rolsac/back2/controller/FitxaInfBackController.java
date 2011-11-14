@@ -267,9 +267,9 @@ public class FitxaInfBackController {
 
             resultats.put("item_estat", fitxa.getValidacion());
 
-            resultats.put("item_data_publicacio", DateUtil.formatDate(fitxa.getFechaPublicacion()));
+            resultats.put("item_data_publicacio", DateUtil.formatDateSimpleTime(fitxa.getFechaPublicacion()));
 
-            resultats.put("item_data_caducitat", DateUtil.formatDate(fitxa.getFechaCaducidad()));
+            resultats.put("item_data_caducitat", DateUtil.formatDateSimpleTime(fitxa.getFechaCaducidad()));
 
             //resultats.put("caducat","S");
             
@@ -447,12 +447,12 @@ public class FitxaInfBackController {
                     fitxa.setEnlaces(fitxaOld.getEnlaces());                    
                 }
                 
-                Date data_publicacio = DateUtil.parseDate(request.getParameter("item_data_publicacio"));
+                Date data_publicacio = DateUtil.parseDateSimpleTime(request.getParameter("item_data_publicacio"));
                 if (data_publicacio != null) {
                     fitxa.setFechaPublicacion(data_publicacio);
                 }
                 
-                Date data_caducitat = DateUtil.parseDate(request.getParameter("item_data_caducitat"));
+                Date data_caducitat = DateUtil.parseDateSimpleTime(request.getParameter("item_data_caducitat"));
                 if (data_caducitat != null) {
                     fitxa.setFechaCaducidad(data_caducitat);
                 }

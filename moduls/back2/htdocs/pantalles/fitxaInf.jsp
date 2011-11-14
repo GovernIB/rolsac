@@ -5,6 +5,7 @@
     <link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
     <link href='<c:url value="/css/modul_seccions_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
     <link href='<c:url value="/css/modul_enllassos.css"/>' rel="stylesheet" type="text/css" media="screen" />
+    <link href='<c:url value="/css/jquery-ui-timepicker-addon.css"/>' rel="stylesheet" type="text/css" media="screen" />
     
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
@@ -12,6 +13,7 @@
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
