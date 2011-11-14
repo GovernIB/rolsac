@@ -951,7 +951,7 @@
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_data"><spring:message code='camp.data'/></label></div>
                             <div class="control">
-                                <input id="item_data" name="item_data" type="text" class="data nou" />
+                                <input id="item_data" name="item_data" type="text" class="data nou" readonly="readonly" />
                             </div>
                         </div>  
                         <div class="element t50p">
@@ -978,7 +978,7 @@
                         <div class="element t25p">
                             <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data_butlleti'/></label></div>
                             <div class="control">
-                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="data nou" />
+                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="data nou" readonly="readonly" />
                             </div>
                         </div>
                         <div class="element t50p">
@@ -1312,7 +1312,7 @@
                                  <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
                              </div>
                              <div class="control">
-                                 <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" />
+                                 <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" readonly="readonly" />
                              </div>
                          </div>          
                          
@@ -1321,7 +1321,7 @@
                                  <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
                              </div>
                              <div class="control">
-                                 <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" />
+                                 <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" readonly="readonly"/>
                              </div>
                          </div>
                     </div>

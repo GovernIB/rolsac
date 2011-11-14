@@ -398,7 +398,7 @@
                                 <label for="cerca_fechaCaducidad"><spring:message code='camp.dataCaducitat'/></label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text"/>
+                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -406,7 +406,7 @@
                                 <label for="cerca_fechaPublicacion"><spring:message code='camp.dataPublicacio'/></label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text"/>
+                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -414,7 +414,7 @@
                                 <label for="cerca_fechaActualizacion"><spring:message code='camp.dataActualitzacio'/></label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text"/>
+                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -1157,7 +1157,7 @@
                                     <label for="item_data_publicacio"><spring:message code='camp.dataPublicacio'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" />
+                                    <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
                             <div class="element right">
@@ -1165,7 +1165,7 @@
                                     <label for="item_data_caducitat"><spring:message code='camp.dataCaducitat'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" />
+                                    <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
                         </div>                        

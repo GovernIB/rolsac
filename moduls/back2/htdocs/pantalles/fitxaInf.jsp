@@ -398,7 +398,7 @@
                                 <label for="cerca_fechaCaducidad">Data caducitat</label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text"/>
+                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -406,7 +406,7 @@
                                 <label for="cerca_fechaPublicacion">Data publicaci&oacute;</label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text"/>
+                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -414,7 +414,7 @@
                                 <label for="cerca_fechaActualizacion">Data actualitzaci&oacute;</label>
                             </div>
                             <div class="control">
-                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text"/>
+                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
                             </div>
                         </div>
                         <div class="element t21">
@@ -841,7 +841,7 @@
                                 </div>
                                 <div class="control">
                                     <input id="item_data_publicacio" name="item_data_publicacio"                                        
-                                        type="text" <%-- value="Immediat" --%> class="nou" />
+                                        type="text" <%-- value="Immediat" --%> class="nou" readonly="readonly" />
                                 </div>
                             </div>
                             <div class="element right">
@@ -850,7 +850,7 @@
                                 </div>
                                 <div class="control">
                                     <input id="item_data_caducitat" name="item_data_caducitat"
-                                        type="text" class="nou" />
+                                        type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
                         </div>
