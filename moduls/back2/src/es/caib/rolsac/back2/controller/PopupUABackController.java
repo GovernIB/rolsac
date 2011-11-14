@@ -143,7 +143,6 @@ public class PopupUABackController {
 
                     if (!uaDelegate.listarHijosUA(hijo.getId()).isEmpty()) {
                         tieneHijos.add(hijo.getId());
-                        System.out.println("HIJO"+hijo.getId());
                     }
                 }
 

@@ -1,31 +1,48 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page language="java" contentType="text/html; charset=ISO-8859-15" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
-<%--bean:define id="inicial" name="idUA" type="java.lang.Long" /--%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <html>
 <head>
-   <title>SAC Arbol - Seccion</title>
+	<title><spring:message code='arbreUA.arbre'/></title>
 	<meta content="text/html; charset='ISO-8859-15'" http-equiv="Content-type" />
 	<link href="<c:url value='/img/favicon.ico'/>" rel="shortcut icon" type="image/x-icon" />
 	<link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
-    <link href="<c:url value='/css/comuns_amplaria1.css'/>" rel="stylesheet" type="text/css" media="screen" />  
-    <link href="<c:url value='/css/titol.css'/>" rel="stylesheet" type="text/css" media="screen" />
-    <link href="<c:url value='/css/menu.css'/>" rel="stylesheet" type="text/css" media="screen" />
-    <link href="<c:url value='/css/submenu.css'/>" rel="stylesheet" type="text/css" media="screen" />
-    <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
-   <script type="text/javascript">
-   <!--
+	<link href="<c:url value='/css/arbreUA.css'/>" rel="stylesheet" type="text/css" media="screen" />
+	
+	<script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/inici.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/error.js'/>"></script>    
+    <script type="text/javascript" src="<c:url value='/js/listado_base.js'/>"></script>    
+    <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
+    <script type="text/javascript" src="<c:url value='/js/multipagina.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
+    <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
+
+   	<script type="text/javascript">
+   	<!--
         var ex=new Array;
         var max=1000
         var nivell=0
 
         function carregar(id, nombre){
-        	window.opener.$("#" + "<c:out value='${id_hidden}'/>").val(id);
-        	window.opener.$("#" + "<c:out value='${id_input}'/>").val(nombre);
-        	window.opener.$("#" + "<c:out value='${id_hidden}'/>").change();
-        	window.opener.$("#" + "<c:out value='${id_input}'/>").change();
-            window.close();
+        	$("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
+        	$("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
+        	$("#" + "<c:out value='${id_hidden}'/>",window.top.document).change();
+        	$("#" + "<c:out value='${id_input}'/>",window.top.document).change();
+        	borrarArbreUA('popUA')
+            
+        	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").val(id);
+        	//window.opener.$("#" + "<c:out value='${id_input}'/>").val(nombre);
+        	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").change();
+        	//window.opener.$("#" + "<c:out value='${id_input}'/>").change();
+            //window.close();
         }
 
         function init_ex(level,opened,descripcion,carpeta,codi){
@@ -83,38 +100,6 @@
 			ex.push(new init_ex(-1,"","","",""));
         </c:if>
      
-        
-        /*El segon argument nomes importa per a les carpetes, si es true es mostra el contingut, si es false no */
-        <%--
-        <logic:notEmpty name="raizOptions">
-            <bean:define id="tieneHijos" name="tieneHijos" type="java.util.List" />
-            <logic:iterate id="raiz" name="raizOptions" indexId="idx" >
-                <bean:define id="idActual" name="raiz" property="id" type="java.lang.Long" />
-                <bean:define id="actual" name="raiz" property="id" type="java.lang.Long" />
-                <%if (!idActual.equals(inicial)){%>
-                    <logic:present name="<%=actual.toString()%>">
-                        ex.push(new init_ex(1,true,"<bean:write name='raiz' property='traduccion.nombre' />",true,"<bean:write name='raiz' property='id' />"));
-                    </logic:present>
-                    <logic:notPresent name="<%=actual.toString()%>">
-                        <% if (tieneHijos.contains(actual)) { %>
-                            ex.push(new init_ex(1,false,"<bean:write name='raiz' property='traduccion.nombre' />",true,"<bean:write name='raiz' property='id' />"));
-                        <% } else {%>
-                            ex.push(new init_ex(1,false,"<bean:write name='raiz' property='traduccion.nombre' />",false,"<bean:write name='raiz' property='id' />"));
-                        <% }%>
-                    </logic:notPresent>
-                    <logic:notEmpty name="<%=actual.toString()%>">
-                        <tiles:insert page="/organigrama/unidad/pophijos.jsp" flush="false" >
-                            <tiles:put name="padreActual" value="<%=actual.toString()%>" />
-                            <tiles:put name="nivel" value="<%=new Integer(2)%>" />
-                            <tiles:put name="inicial" value="<%=inicial%>" />
-                        </tiles:insert>
-                    </logic:notEmpty>
-                <% } %>
-            </logic:iterate>
-        	ex.push(new init_ex(-1,"","","",""));
-        </logic:notEmpty>
- 		--%>
-
  		
         function print_explorador(){
             var i=0
@@ -177,32 +162,26 @@
 
         function unopen(nr){
         	window.location = "<c:url value='popArbreUAContreure.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
-            //document.forms[0].idSelect.value = ex[nr].codi;
-            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAContreure.do" />';
-            //document.forms[0].submit()
         }
 
         
 
         function open(nr){
             window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
-            //document.forms[0].idSelect.value = ex[nr].codi;
-            //document.forms[0].action.value = '<c:url value="/pantalles/popArbreUAExpandir.do" />';
-            //document.forms[0].submit()
         }
      -->   
 	</script>
 </head>
 
 <body>
-	<div id="escriptori">
+	<div id="escript">
 	<!-- escriptori_detall -->
-	<div id="escriptori_detall" class="escriptori_detall" style="display: block;">
-		<div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">					
+	<div id="escriptori_detall" class="escriptori_detall" >
+	<!-- 	<div id="modulPrincipal" class="modulPrincipal"> -->		
 			<!-- modul -->
-			<div class="modul" style="-moz-border-radius: 1em 1em 0pt 0pt; margin-left: 10px; width: 472px; margin-top: 10px; height: 380px; overflow: auto;" >		
+			<div class="modul" >		
 				<fieldset>
-					<legend>Llistat de Tipus d'Unitat Administrativa</legend>
+					<legend><spring:message code='arbreUA.llistat'/></legend>
 					<div class="modul_continguts mostrat">		
 						<c:if test='${not empty raizOptions}'>
 					        <script language="JavaScript1.2" type="text/javascript">
@@ -221,48 +200,19 @@
 					    </c:if>
 					    <c:if test='${empty raizOptions}'>
 					        <center>
-					        Arbre buït
+					        	<spring:message code='arbreUA.buit'/>
 					        </center>
 					    </c:if>
 						<div class="botonera">
 							<div class="btnGenerico">
-							   <a href="javascript:window.close();" class="btn tancar"><span><span>Tancar</span></span></a>
+							   <a href="javascript:borrarArbreUA('popUA')" class="btn tancar"><span><span><spring:message code='boto.tancar'/></span></span></a>
 						   </div>
 						</div>								
 					</div>								
 				</fieldset>							
 			</div>
 			<!-- /modul -->
-	</div>
+	 <!--  </div> -->
 	</div>	
-<%--
-<div id="organigrama">
-    <div id="capsalera">
-        <h1><bean:message key="ua.lista" /></h1>
-    </div>
-    <div id="llistat">
-    <logic:notEmpty name="raizOptions">
-        <script language="JavaScript1.2" type="text/javascript">     
-        </script>
-        <html:form action="/organigrama/unidad/poparbol" styleId="padreForm">
-            <input type="hidden" name="action" value='<bean:message key="boton.expandir" />' />
-            <input type="hidden" name="idUA" value='<c:out value="${idUA}" />' />
-            <input type="hidden" name="idSelect" value="" />
-            <logic:present parameter="padres">
-            	<input type="hidden" name="padres" value=""/>
-            </logic:present>
-        </html:form>
-    </logic:notEmpty>
-    <logic:empty name="raizOptions">
-        <center>
-        <bean:message key="ua.vacio" />
-        </center>
-    </logic:empty>
-    </div>
-    <div class="botonera"><center>
-        <input type="button" value="<bean:message key="boton.cerrar" />" onclick="window.close()" />
-    </center></div>
-</div>
---%>
 </body>
 </html>

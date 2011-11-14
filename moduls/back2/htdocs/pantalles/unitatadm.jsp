@@ -319,13 +319,8 @@
                             <div class="element t50p">                                          
                                 <div class="etiqueta"><label for="item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
                                 <div class="control">
-                                <%-- ? if ($_SESSION['rolsac_rol'] == "RSC_SUPER") { ? --%>
-                                    <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
-                                    <input id="item_pare_id" name="item_pare_id" type="hidden" />  
-                                    <%-- <input type="button" onclick="ArbreUA()" value="Canviar UA pare"/> --%>
-                                <%-- ? } else { ?>
-                                    <input id="item_pare" name="item_pare" type="text" />
-                                <? } ? --%>
+                                	<input id="item_pare" name="item_pare" type="text" readonly="readonly" />
+                                    <input id="item_pare_id" name="item_pare_id" type="hidden" />
                                 </div>                                          
                             </div>                                                                          
                         </div>
@@ -334,13 +329,13 @@
                         <div id="cercador">
                             <div class="botonera" style="margin-top: 0px; float:left;">
                                 <div class="boton btnGenerico" style="margin-left: 0px;">
-                                    <a href="javascript:ArbreUA('item_pare','item_pare_id');" class="btn consulta">
-                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
+                                    <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare');" class="btn consulta">
+                                    	<span><span><spring:message code='boto.canviarUAPare'/></span></span>
                                     </a>
                                 </div>
                                 <div class="boton btnGenerico">
                                     <a href="javascript:EliminaArbreUA('item_pare','item_pare_id');" class="btn borrar">
-                                    <span><span><spring:message code='boto.borrar'/></span></span>
+                                    	<span><span><spring:message code='boto.borrar'/></span></span>
                                     </a>
                                 </div>
                             </div>
@@ -1354,3 +1349,4 @@
         ];
     -->
     </script>
+    

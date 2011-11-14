@@ -1018,7 +1018,8 @@
                     <div id="botoneraCambioUA">
                         <div class="botonera" style="margin-top: 0px; float:left;">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
-                                <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta">
+                            	<a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">
+                                <%-- <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta"> --%>
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
                             </div>

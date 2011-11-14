@@ -1,0 +1,32 @@
+@charset "utf-8";
+#escript {
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.modul legend {
+    color: #333333;
+    font: bold 11px Verdana,Arial,Helvetica,Sans-serif;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.escriptori_detall {
+    color: Black;
+    display: none;
+    font: 13px Arial,Helvetica,Sans-serif;
+	display: block;
+}
+
+div.modul{
+	background-color: White;
+    border: 1px solid #D4D4D4;
+    border-radius: 15px 15px 15px 15px;
+    padding: 25px 21px;
+    height: 380px;
+    margin-left: 10px;
+    margin-top: 10px;
+    overflow: auto;
+    width: 472px;
+}

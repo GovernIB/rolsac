@@ -1080,3 +1080,14 @@ function nn(valor) {
 	else
 		return valor;
 }
+
+function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
+	if (typeof llocOnPintar == 'undefined') {
+		$('body').append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
+	} else {
+		$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'"  /></div>');
+	}
+}
+function borrarArbreUA(idDiv){
+	$('#' + idDiv, window.top.document).remove();
+}

@@ -1263,3 +1263,10 @@ div.modulLateral div.seleccionat ul {
 #ajuda div.botonera a:hover { color:#ff9; background-color:#000; }
 
 #ajuda iframe { width:15em; height:18em; }
+
+#popUA {
+	position: fixed;
+  	left: 40%;
+  	top: 15%;
+  	width: 100%;
+}
