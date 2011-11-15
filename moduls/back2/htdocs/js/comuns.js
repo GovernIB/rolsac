@@ -115,7 +115,7 @@ var MollaPa = {
 		mollaPa_elm.find(".uaHijas a").bind("click",MollaPa.despliegaUnidades);
 		
 		$('#mollapaHome').bind("click", function() {			
-			document.location.href = cambioMollaPa + "?redirectTo=" + document.location.href;
+            document.location.href = cambioMollaPa + "?redirectTo=" + document.location.href.split('?', 1)[0];
 		});
 	},			
 	
@@ -178,7 +178,7 @@ var MollaPa = {
 								} else {
 									nodes_codi += "<li><a href=\"" + cambioMollaPa;
 									nodes_codi += "?ua=" + node_ua.id;
-									nodes_codi += "&redirectTo=" + document.location.href;
+									nodes_codi += "&redirectTo=" + document.location.href.split('?', 1)[0];
 									nodes_codi += "\" class=\"n\">";
 									nodes_codi += node_ua.nom + "</a></li>";
 								}
@@ -1081,6 +1081,7 @@ function nn(valor) {
 		return valor;
 }
 
+
 function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 	if (typeof llocOnPintar == 'undefined') {
 		$('body').append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
@@ -1090,4 +1091,24 @@ function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 }
 function borrarArbreUA(idDiv){
 	$('#' + idDiv, window.top.document).remove();
+}
+
+
+/*
+ * Mira si en el queryString hay un 'itemId' y devuelve su valor. Si no existe devuelve 0. 
+ * Usado para determinar si hay que mostrar el listado o la edicion de un elemento al cargar la pagina.
+ */ 
+function itemAEditar() {
+	var queryString = location.search;
+	if (queryString.length > 0) {
+		queryString = queryString.slice(1); // quitar el '?'
+		var params = queryString.split('&'); 
+		for (var i=0; i<params.length; i++) {
+			var param = params[i].split('=');
+			if (param.length > 1 && param[0] == 'itemId') {
+				return param[1];
+			}
+		}
+	}
+	return 0;
 }

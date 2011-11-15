@@ -509,14 +509,12 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_notes", proc.getInfo());
 
-			// TODO: tramites.
-
 		} catch (DelegateException dEx) {
+			log.error("Error: " + dEx.getMessage());
 			if (dEx.getCause() instanceof SecurityException) {
-				// model.put("error", "permisos");
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
-				// model.put("error", "altres");
-				dEx.printStackTrace();
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
 
@@ -525,8 +523,7 @@ public class CatalegProcedimentsBackController {
 	
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
-	public @ResponseBody
-	IdNomTransient esborrarProcediment(HttpServletRequest request) {
+	public @ResponseBody IdNomTransient esborrarProcediment(HttpServletRequest request) {
 		IdNomTransient resultatStatus = new IdNomTransient();
 
 		try {

@@ -360,11 +360,12 @@ public class NormativaBackController {
 	        
 	        
 	    } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
-            	log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-            	log.error("Error: " + dEx.getMessage());
-            }
+	    	log.error("Error: " + dEx.getMessage());
+			if (dEx.getCause() instanceof SecurityException) {
+				normativaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				normativaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
         }
 	    
         return normativaDetall;

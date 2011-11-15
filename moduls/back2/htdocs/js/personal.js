@@ -30,8 +30,19 @@ $(document).ready(function() {
 	Llistat = new CLlistat();
 	Detall = new CDetall();
 	
-	Llistat.iniciar();	
-	Detall.iniciar();				
+//	Llistat.iniciar();	
+//	Detall.iniciar();
+	
+	// Mostrar llistat o detall
+	var itemACarregar = itemAEditar();
+	if (itemACarregar > 0) {
+		Detall.carregar(itemACarregar);
+	} else {
+        Detall.iniciar();
+		// Cercador.iniciar();
+	}
+    Llistat.iniciar();
+    
 });
 
 // idioma
@@ -443,9 +454,11 @@ function CDetall(){
 		
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
-																		
-		dataVars = "accio=elimina" + "&id=" + Llistat.itemID;
-				
+		
+		//dataVars = "accio=elimina" + "&id=" + Llistat.itemID;
+		item_ID = $("#item_id").val();
+		dataVars = "id=" + item_ID;
+		
 		// ajax
 		$.ajax({
 			type: "POST",

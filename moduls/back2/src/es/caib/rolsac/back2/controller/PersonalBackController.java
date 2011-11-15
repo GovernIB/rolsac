@@ -150,11 +150,12 @@ public class PersonalBackController {
 	        personaDetall.put("extensioLlargMobil", persona.getNumeroLargoMovil());
 	        
 	    } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
-            	log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-            	log.error("Error: " + dEx.getMessage());
-            }
+	    	log.error("Error: " + dEx.getMessage());
+			if (dEx.getCause() instanceof SecurityException) {
+				personaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				personaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
         }
 	    
         return personaDetall;

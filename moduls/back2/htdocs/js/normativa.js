@@ -30,9 +30,17 @@ $(document).ready(function() {
 	Llistat = new CLlistat();	
 	Detall = new CDetall();
 	
-	Llistat.iniciar();
-	Cercador.iniciar();
+	
+	// Mostrar llistat o detall
 	Detall.iniciar();
+	var itemACarregar = itemAEditar();
+	if (itemACarregar > 0) {
+		Detall.carregar(itemACarregar);
+//	} else {
+//		// Cercador.iniciar();
+	}
+    Llistat.iniciar();
+    
 	
 	$("#item_ua_id").change( function() {
 		if ($(this).val() != "") {
@@ -424,8 +432,8 @@ function CDetall(){
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
-					Detall.recarregar();
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+//					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+					Detall.recarregar(data.id);
 				}					
 			}
 								

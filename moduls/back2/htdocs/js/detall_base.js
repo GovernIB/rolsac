@@ -112,7 +112,7 @@ function DetallBase(soloFicha, reglasFormulario){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
 					if( !soloFicha ){
-						Detall.recarregar();
+						Detall.recarregar(data.id);
 					}
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
 				}
@@ -160,6 +160,7 @@ function DetallBase(soloFicha, reglasFormulario){
 
 		if (itemID == undefined){
 			itemID = $("#item_id").val();
+			Llistat.itemID = itemID;
 		}
 
 		escriptori_contingut_elm.fadeOut(300, function() {
@@ -176,15 +177,14 @@ function DetallBase(soloFicha, reglasFormulario){
 					data: dataVars,
 					dataType: "json",
 					error: function() {
-
-						// missatge
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-						// error
-						Error.llansar();
-
 					},
 					success: function(data) {
-						Detall.pintar(data);
+						if (typeof data.error != 'undefined') {
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
+						} else {
+							Detall.pintar(data);
+						}
 					}
 				});
 			});
@@ -193,44 +193,45 @@ function DetallBase(soloFicha, reglasFormulario){
 		this.actualizaEventos();
 	}
 
-	this.recarregar = function() {
+	this.recarregar = function(itemId) {
+        var url = location.protocol + "//" + location.host + location.pathname;
+        
+        var itemId = parseInt(itemId);
+        if (!isNaN(itemId) && itemId > 0) {
+            url += "?itemId=" + itemId;
+        }
+        
+        location = url;
+    
+		// // animacio
+		// escriptori_detall_elm.fadeOut(300, function() {
 
-		// animacio
-		escriptori_detall_elm.fadeOut(300, function() {
+			// div_L_elm = resultats_elm.find("div.L:first");
+			// carregant_codi = "<p class=\"executant\">" + txtCarregantItems + "</p>";
+			// div_L_elm.find("div.dades").html(carregant_codi);
 
-			div_L_elm = resultats_elm.find("div.L:first");
-			carregant_codi = "<p class=\"executant\">" + txtCarregantItems + "</p>";
-			div_L_elm.find("div.dades").html(carregant_codi);
+			// escriptori_contingut_elm.fadeIn(300, function() {
 
-			escriptori_contingut_elm.fadeIn(300, function() {
+				// // cercador o llistat?
+				// if (opcions_elm.find("li.actiu").hasClass("L")) {
+					// Llistat.carregar({});
+				// } else {
+					// jQuery("#opcions .actiu").removeClass("actiu");
+					// jQuery("#tabListado").parent().addClass("actiu");
 
-				// cercador o llistat?
-				if (opcions_elm.find("li.actiu").hasClass("L")) {
+					// // resultats
+					// resultats_elm.find("div.actiu:first").removeClass("actiu").slideUp(300,function() {
+						// $(this).find("div.dades").html("");
 
-					Llistat.carregar({});
-
-				} else {
-
-					jQuery("#opcions .actiu").removeClass("actiu");
-					jQuery("#tabListado").parent().addClass("actiu");
-
-					// resultats
-					resultats_elm.find("div.actiu:first").removeClass("actiu").slideUp(300,function() {
-
-						$(this).find("div.dades").html("");
-
-						div_L_elm.slideDown(300,function() {
-
-							$(this).addClass("actiu");
-							Llistat.carregar({});
-
-						});
-
-					});
-				}
-			});
-		});
-
+						// div_L_elm.slideDown(300,function() {
+							// $(this).addClass("actiu");
+							// Llistat.carregar({});
+						// });
+						// Detall.carregar(itemId);
+					// });
+				// }
+			// });
+		// });
 	}
 
 	/**

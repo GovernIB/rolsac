@@ -81,7 +81,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	}
 	
 	// Cambia a la pestaña de listado.
-	this.tabListado = function() {		
+	this.tabListado = function() {
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
 		jQuery(idTabListado).parent().addClass("actiu");
 		

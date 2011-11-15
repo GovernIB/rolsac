@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
@@ -56,6 +58,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/fitxainf/")
 public class FitxaInfBackController {
 
+	private static Log log = LogFactory.getLog(FitxaInfBackController.class);
+	
     private MessageSource messageSource = null;
 
     @Autowired
@@ -382,12 +386,12 @@ public class FitxaInfBackController {
             }
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
-                // model.put("error", "permisos");
-            } else {
-                // model.put("error", "altres");
-                dEx.printStackTrace();
-            }
+        	log.error("Error: " + dEx.getMessage());
+			if (dEx.getCause() instanceof SecurityException) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
         }
         
         return resultats;

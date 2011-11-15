@@ -29,7 +29,9 @@
 												<li class="fitxa">
 											</c:otherwise>
 										</c:choose>
-										<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<span class="tipus"><spring:message code='quadreControl.fitxa'/></span>. 
+										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
+										<a href="<c:url value="/fitxainf/fitxainf.do" />?itemId=<c:out value="${modificacio.value.ficha.id }" />">(<c:out value="${modificacio.value.ficha.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
 									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
 										<c:choose>
@@ -40,10 +42,14 @@
 												<li class="procediment">
 											</c:otherwise>
 										</c:choose>
-										<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<span class="tipus"><spring:message code='quadreControl.procediment'/></span>. 
+										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
+										<a href="<c:url value="/catalegProcediments/catalegProcediments.do" />?itemId=<c:out value="${modificacio.value.procedimiento.id }" />">(<c:out value="${modificacio.value.procedimiento.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
 									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
-										<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. <span class="data"><c:out value="${modificacio.key}" /> h.</span><a href="#<c:out value="${modificacio.value.id }" />">(<c:out value="${modificacio.value.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
+										<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. 
+										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
+										<a href="<c:url value="/normativa/normativa.do" />?itemId=<c:out value="${modificacio.value.normativa.id }" />">(<c:out value="${modificacio.value.normativa.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
 								</c:choose>
 							</c:forEach>

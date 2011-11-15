@@ -86,31 +86,42 @@ $(document).ready(function() {
 	Llistat = new CLlistat();
 	Detall = new CDetall();
 	
-	// es un detall?
-	window_href = window.location.href;
-	if (window_href.indexOf('?/') != -1) {
-		
-		var vars = [], hash;
-		var hashes = window.location.href.slice(window_href.indexOf('?/') + 2).split('&');
-		var hashes_size = hashes.length;
-		
-		if (hashes_size > 0) {
-		
-			for(var i = 0; i < hashes_size; i++) {
-				hash = hashes[i].split('=');
-				vars.push(hash[0]);
-				vars[hash[0]] = hash[1];
-			}
-			
-			Detall.carregar(vars[0]);
-			
-		}
-	
+////	// es un detall?
+////	window_href = window.location.href;
+////	if (window_href.indexOf('?/') != -1) {
+////		
+////		var vars = [], hash;
+////		var hashes = window.location.href.slice(window_href.indexOf('?/') + 2).split('&');
+////		var hashes_size = hashes.length;
+////		
+////		if (hashes_size > 0) {
+////		
+////			for(var i = 0; i < hashes_size; i++) {
+////				hash = hashes[i].split('=');
+////				vars.push(hash[0]);
+////				vars[hash[0]] = hash[1];
+////			}
+////			
+////			Detall.carregar(vars[0]);
+////			
+////		}
+////	
+////	}
+//	
+//	Llistat.iniciar();
+//	Cercador.iniciar();
+//	Detall.iniciar();
+
+	// Mostrar llistat o detall
+	var itemACarregar = itemAEditar();
+	if (itemACarregar > 0) {
+		Detall.carregar(itemACarregar);
+	} else {
+        Detall.iniciar();
+		// Cercador.iniciar();
 	}
+    Llistat.iniciar();
 	
-	Llistat.iniciar();
-	Cercador.iniciar();
-	Detall.iniciar();
 	
 	//Fotos.iniciar();
 	Docs.iniciar();
