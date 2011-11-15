@@ -1,6 +1,12 @@
 // CERRAR Y MENSAJES
 
 $(document).ready(function(){
+	
+	$(window).bind('resize',function(e){
+	    if ($('.falsePopUp').length > 0) {
+	        $('.falsePopUp').css('left',$(window).width() / 2 - 275);
+	    }
+	});
 
 	idiomas = ["ca", "es", "en", "fr", "de"];
 	
@@ -1083,12 +1089,19 @@ function nn(valor) {
 
 
 function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
-	if (typeof llocOnPintar == 'undefined') {
-		$('body').append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
-	} else {
-		$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'"  /></div>');
+	
+	// Aseguram que no estigui creat
+	if ($('#' + idDiv).length == 0 ) {
+		if (typeof llocOnPintar == 'undefined') {
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
+		} else {
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'"  /></div>');
+		}
 	}
 }
+
+
+
 function borrarArbreUA(idDiv){
 	$('#' + idDiv, window.top.document).remove();
 }
