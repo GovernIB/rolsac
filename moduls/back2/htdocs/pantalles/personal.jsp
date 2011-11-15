@@ -102,7 +102,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 250,
+                        "maxim": 230,
                         "mostrar": "si",
                         "abreviat": "no"
                     },
@@ -120,7 +120,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 7,
+                        "maxim": 10,
                         "mostrar": "no",
                         "abreviat": "no"
                     },
@@ -150,7 +150,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 250,
+                        "maxim": 230,
                         "mostrar": "si",
                         "abreviat": "no"
                     },
@@ -167,8 +167,8 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 50,
-                        "mostrar": "no",
+                        "maxim":230,
+                        "mostrar": "si",
                         "abreviat": "no"
                     },
                 "error":
@@ -184,7 +184,7 @@
                 "tipus": "email",
                 "caracters":
                     {
-                        "maxim": 50,
+                        "maxim": 230,
                         "mostrar": "si",
                         "abreviat": "no"
                     },

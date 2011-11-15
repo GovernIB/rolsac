@@ -185,7 +185,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 250,
+                        "maxim": 230,
                         "mostrar": "si",
                         "abreviat": "no"
                     },
@@ -194,13 +194,55 @@
                         "obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
                         "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                     }
-            },           
+            },{
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_enllas_ca",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "si",
+                        "abreviat": "no"
+                    },
+            },{
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_ca",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "si",
+                        "abreviat": "no"
+                    },
+            },{
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_ca",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "si",
+                        "abreviat": "no"
+                    },
+            },
             {
                 "modo": "individual",
                 "etiqueta": "id",
                 "etiquetaValor": "item_pagina_inicial_ca",
                 "obligatori": "no",
                 "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
                 "error":
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
@@ -257,6 +299,12 @@
                 "etiquetaValor": "item_pagina_final_ca",
                 "obligatori": "no",
                 "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
                 "error":
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
@@ -306,13 +354,20 @@
                         "tipus": "<spring:message code='normativa.formulari.pagina_final_fr.tipus'/>"
                     }
             },            
-            
+
+            // No traduibles
             {
                 "modo": "individual",
                 "etiqueta": "id",
                 "etiquetaValor": "item_numero",
                 "obligatori": "si",
                 "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
                 "error":
                     {
                         "obligatori": "<spring:message code='normativa.formulari.numero.obligatori'/>",
@@ -342,6 +397,38 @@
                     {
                         "tipus": "<spring:message code='normativa.formulari.data_butlleti.tipus'/>"
                     }
+            },    
+            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_registre",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.registre.tipus'/>"
+                    }
+            },    
+            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_llei",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                {
+                    "maxim": 230,
+                    "mostrar": "si",
+                    "abreviat": "no"
+                },
             }           
 
         ];

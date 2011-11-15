@@ -1182,7 +1182,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 150,
+                        "maxim": 230,
                         "mostrar": "si",
                         "abreviat": "no"
                     },

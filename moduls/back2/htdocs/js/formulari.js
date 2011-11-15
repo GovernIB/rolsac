@@ -44,9 +44,9 @@ function FormulariComprovar(reglesValidacio) {
 			}
 			
 			// máscara data
-			//if (dada.tipus == "data") {
-			//	$("#" + dada.etiquetaValor).mask("99/99/9999").validar("data");
-			//}
+			if (dada.tipus == "data") {
+				$("#" + dada.etiquetaValor).mask("99/99/9999").validar("data");
+			}
 			
 			// máscara cp
 			if (dada.tipus == "cp") {
