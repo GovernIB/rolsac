@@ -8,7 +8,9 @@
     <property name="package" value="org.ibit.rol.sac.persistence"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
-    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/default.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -95,19 +97,19 @@
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
 
-        <fail unless="persistence.auth.domain" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="persistence.auth.principal" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="datasource.jndi" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="hibernate.dialect" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="hibernate.show_sql" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="hibernate.cglib" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="hibernate.cache.provider_class" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="hibernate.cache.jar" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="role.system" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="role.admin" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="role.super" message="Revise el fichero ${home.dir}/config.properties"/>
-        <fail unless="role.oper" message="Revise el fichero ${home.dir}/config.properties"/>
-    	<fail unless="role.info" message="Revise el fichero ${home.dir}/config.properties"/>
+        <fail unless="persistence.auth.domain" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="persistence.auth.principal" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="datasource.jndi" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="hibernate.dialect" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="hibernate.show_sql" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="hibernate.cglib" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="hibernate.cache.provider_class" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="hibernate.cache.jar" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="role.system" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="role.admin" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="role.super" message="Revise los ficheros ${home.dir}/*.properties"/>
+        <fail unless="role.oper" message="Revise los ficheros ${home.dir}/*.properties"/>
+    	<fail unless="role.info" message="Revise los ficheros ${home.dir}/*.properties"/>
     </target>
 
     <!-- Crea tots els directoris de treball necessaris -->
@@ -306,10 +308,6 @@
 	-format	format the generated SQL nicely in the script
 	-delimiter=;	set an end of line delimiter for the script
 	
-	-->
-	<!--
-		properties="etc/hibernate.properties"
-		properties="${basedir}/../../config.properties_dgtic"
 	-->
 	
 	<target name="schemaupdate">

@@ -4,7 +4,9 @@
 	
 	<property name="projecte" value="${ant.project.name}"/>
 	<property name="home" value="."/>
-	<property file="${home}/config.properties"/>
+	<property file="${home}/build.${user.name}.properties" />
+	<property file="${home}/build.${rolsac.target}.properties"/>
+	<property file="${home}/default.properties"/>
 	<property name="doc" value="${home}/doc"/>
 	<property name="components" value="${home}/moduls"/>
 	<property name="etc" value="${home}/etc"/>
@@ -33,38 +35,50 @@
   <!-- ====================================================================== -->
   <target name="usage">
     <echo>
-		---------------------------------------------------------------------------------------------------
-		Tasques del projecte :
+        ---------------------------------------------------------------------------------------------------
+        Tasques del projecte :
 	
-		****** Tasques d'ajuda :
-		system : informacio sobre la versio de l'ant emprada
-		usage : aquesta ajuda
-		properties : mostra les propietats definides
-		info : system + usage + properties
-
-		****** Tasques de preparacio :
-		prepare : fitxa l'estructura de directoris necessaria per la construccio de l'aplicacio
+    
+        ****** Tasques d'ajuda :
 	
-		****** Tasques d'actualitzaciÃ³ de components :
-		update.XXX.jar : re-construeix el producte final (caib.ear) actualitzant nomes el component jar XXX
-		update.XXX.war : re-construeix el producte final (caib.ear) actualitzant nomes el component war XXX
+        usage             : aquesta ajuda
+        properties        : mostra les propietats definides
+        info              : usage + properties
 
-		Els components existents (valors de XXX) son :
-		boib, forum*, hemeroteca*, moduls**, pidip, portal**, root**, sac,link,fitxer
-		* nomes tenen component jar
-		** nomes tenen component war
-
-		****** Tasques de documentacio i control
-		todo : genera al directori ../todo un informe de les coses que estan documentades al codi com que queden per fer
-		doc-pdf : genera al directori ../doc un fitxer PDF amb la documentacio del projecte
-		doc-html : genera al directori ../doc/html la documentacio del projecte en format html
-		doc-print : genera al directori ../doc/print la documentacio del projecte en format html per imprimir
-		doc-api : genera la documentaciÃ³ javadoc pels components dins dels directori ../doc/api
 	
-		****** Tasques de construccio :
-		assemble : construeix el ear amb tots els components existents
-		main : construeix tota l'aplicacio
-		---------------------------------------------------------------------------------------------------
+        ****** Tasques de preparació :
+	
+        prepare           : crea l'estructura de directoris necessaria per la construcció de l'aplicació
+	
+	
+        ****** Tasques d'actualització de components :
+
+	    update.extractor  : actualitza eines de text
+        update.model      : actualitza el model de dades
+	    update.persistence: actualitza la capa de persistencia
+        update.XDOCLET    : update.extractor + update.model + update.persistence
+		
+	    update.integracion: actualitza la capa d'integració
+	    update.back       : actualitza el mòdul web legacy de backoffice
+        update.back2      : actualitza el mòdul web de backoffice
+	    update.ws         : actualitza el mòdul web de webservices
+	    update.traspasboib: actualitza el mòdul traspas-boib
+
+	
+        ****** Tasques de documentacio i control
+	
+	    test.unitario     : executa els tests unitaris
+	    doc               : genera la documentació de tots els mòduls
+
+	
+        ****** Tasques de construccio :
+	
+	    assemble01ROLSAC  : construeix el ear amb tots els components existents
+	    main01ROLSAC      : construeix tota l'aplicacio
+	    makeSar           : genera el arxiu SAR per al desplegament
+	    clean             : esborra els directoris de treball
+	    deploy01ROLSAC    : copia el ear al directori de deploy
+        ---------------------------------------------------------------------------------------------------
       </echo>
   </target>
   
@@ -88,6 +102,7 @@
           ant.java.version=${ant.java.version}
 		---------------------------------------------------------------------------------------------------
 	</echo>
+	<echoproperties/>
   </target>
 
 
@@ -100,33 +115,34 @@
   <!-- ================================================================== -->
   <target name="info" depends="usage,properties"/>
 
-
+	
   <!-- ================================================================== -->
   <!-- prepare                                                                                                                         -->
   <!-- ================================================================== -->
-  <target name="prepare" description="Crea los directorios necesarios para la construccin de la aplicacin">
+  <target name="prepare" description="Crea los directorios necesarios para la construcción de la aplicación">
   	<mkdir dir="${output.dir}"/>
      <mkdir dir="${product.dir}"/>
      <mkdir dir="${moduls.dir}"/>
      <mkdir dir="${doc.dir}"/>
   </target>
 
+
+
   <!-- ================================================================== -->
   <!-- doc                                                                                                                        -->
   <!-- ================================================================== -->
   <target name="doc" depends="prepare" description="Genera la documentacin">
-  	<antcall target="propagate">
+  	<antcall target="propagate01ROLSAC">
      	<param name="task" value="doc"/>
      </antcall>
   </target>
 
-
-
+	
   <!-- ================================================================== -->
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
   
-	<target name="update.XDOCLET" description="Actualiza los mdulos que generan clases con XDOCLET.">
+	<target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
 		<antcall target="update.extractor"/>
 		<antcall target="update.model"/>
 		<antcall target="update.persistence"/>
@@ -216,7 +232,7 @@
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
 			<manifest>
-				<attribute name="Created-By" value="INDRA"/>
+				<attribute name="Created-By" value="CAIB"/>
 			</manifest>
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
@@ -269,9 +285,6 @@
   <!-- main                                                                                                                              -->
   <!-- ================================================================== -->
   
-  
-
-
 	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
 		 <antcall target="propagate01ROLSAC">
@@ -303,21 +316,9 @@
   <!-- ================================================================== -->
 	
 
-	   <target name="deploy01ROLSAC" if="env.DEPLOY_DIR">
-          <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${env.DEPLOY_DIR}"/>
+	   <target name="deploy01ROLSAC" if="deploy.dir">
+          <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
 	  </target>		  	
 
-	<target name="copiarAOTROS">
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../02microsites/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../02microsites/lib"/>
-		<copy file="${moduls.dir}/extractor.jar" todir="${home}/../02microsites/lib"/>
-
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../04gforum/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../04gforum/lib"/>
-		<copy file="${moduls.dir}/extractor.jar" todir="${home}/../04gforum/lib"/>
-
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../03webcaib/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../03webcaib/lib"/>
-	</target>
 	
 </project>

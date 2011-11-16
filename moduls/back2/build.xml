@@ -6,7 +6,9 @@
     <property name="modul" value="back2"/>
     <property name="package" value="es.caib.rolsac.back2"/>
 	<property name="home.dir" location="${basedir}/../.."/>
-	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/default.properties"/>
 
     <property name="web.dir" value="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>

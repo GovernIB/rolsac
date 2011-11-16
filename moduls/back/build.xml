@@ -8,7 +8,9 @@
     <property name="package" value="org.ibit.rol.sac.back"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
-    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/default.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -108,8 +110,8 @@
             classname="org.apache.jasper.JspC"
             classpathref="jspc.class.path"
             />
-        <fail unless="back.auth.domain" message="La propiedad back.auth.domain no está definida en config.properties"/>
-    	<fail unless="back.web.listener" message="La propiedad back.web.listener no está definida en config.properties"/>
+        <fail unless="back.auth.domain" message="La propiedad back.auth.domain no está definida en los archivos properties"/>
+    	<fail unless="back.web.listener" message="La propiedad back.web.listener no está definida en los archivos properties"/>
     </target>
 
     <!-- Crea tots els directoris de treball necessaris -->
