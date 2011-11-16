@@ -36,8 +36,11 @@
         	$("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
         	$("#" + "<c:out value='${id_hidden}'/>",window.top.document).change();
         	$("#" + "<c:out value='${id_input}'/>",window.top.document).change();
-        	borrarArbreUA('popUA')
-            
+
+        	$("#btnGuardar",window.top.document).parent().removeClass("off");
+
+        	borrarArbreUA('popUA');
+        	            
         	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").val(id);
         	//window.opener.$("#" + "<c:out value='${id_input}'/>").val(nombre);
         	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").change();
