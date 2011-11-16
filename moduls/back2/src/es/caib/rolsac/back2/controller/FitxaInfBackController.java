@@ -224,13 +224,16 @@ public class FitxaInfBackController {
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
             llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);           
-
+            
+            Date dataActual = new Date();
+            
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesTransient.add(new FichaTransient(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtil.formatDate(fitxa.getFechaPublicacion()), 
-                                                             DateUtil.formatDate(fitxa.getFechaCaducidad())));
+                                                             DateUtil.formatDate(fitxa.getFechaCaducidad()),
+                                                             fitxa.getFechaCaducidad() != null ? (fitxa.getFechaCaducidad().after(dataActual) ? Boolean.TRUE : Boolean.FALSE) : Boolean.TRUE));
             }
 
         } catch (DelegateException dEx) {

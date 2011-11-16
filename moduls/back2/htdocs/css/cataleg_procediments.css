@@ -34,3 +34,15 @@ div.publicacion_2campos div.right{
 div.publicacion_2campos input, div.publicacion_2campos select{
     width: 99%;
 }
+
+div.llistat div.tbody div.procedimentCaducat {
+    background: url("../img/taula_llistat/procediment_caducat.gif") no-repeat scroll 21px 7px transparent;
+    padding-left: 50px;
+    width: 400px;
+}
+
+div.llistat div.tbody div.procediment {
+    background: url("../img/taula_llistat/procediment.gif") no-repeat scroll 21px 7px transparent;
+    padding-left: 50px;
+    width: 400px;
+}

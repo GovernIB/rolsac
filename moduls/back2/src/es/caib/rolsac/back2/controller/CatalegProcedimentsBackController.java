@@ -306,13 +306,16 @@ public class CatalegProcedimentsBackController {
 			// llistaProcedimientos = procedimientosDelegate.buscarProcedimientos(paramMap, tradMap);
 			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves);
 
+			Date dataActual = new Date();
+			
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
 				llistaProcedimientoLocalTransient.add(new ProcedimientoLocalTransient(
 								 pl.getId(), 
 								 tpl == null ? "" : tpl.getNombre(), 
 								 DateUtil.formatDate(pl.getFechaPublicacion()),
-								 DateUtil.formatDate(pl.getFechaCaducidad())));
+								 DateUtil.formatDate(pl.getFechaCaducidad()),
+								 pl.getFechaCaducidad() != null ? (pl.getFechaCaducidad().after(dataActual) ? Boolean.TRUE : Boolean.FALSE) : Boolean.TRUE));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {

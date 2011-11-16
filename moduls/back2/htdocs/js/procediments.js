@@ -142,21 +142,26 @@ function CLlistat(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
-			
+			console.log('estic dins');
 			// codi cuerpo
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 				dada_node = this;
+				
+				console.log('dada_node', dada_node);
+				console.log('dada_node.esPublic', dada_node.esPublic);
+
 				parClass = (i%2) ? " par": "";
-				caducat_nom_class = (dada_node.caducat == "S") ? " nomCaducat" : "";
+				caducat_nom_class = (dada_node.caducat) ? " procediment" : " procedimentCaducat";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				
-				codi_taula += "<div class=\"td nom" + caducat_nom_class + "\" role=\"gridcell\">";
+				codi_taula += "<div class=\"td " + caducat_nom_class + "\" role=\"gridcell\">";
+
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 				codi_taula += "<a id=\"procediment_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nombre, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				
-				caducat_class = (dada_node.caducat == "S") ? " caducat" : "";
+				caducat_class = (dada_node.caducat) ? " caducat" : "";
 				codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.publicacio) + "</div>";
 				codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
 				

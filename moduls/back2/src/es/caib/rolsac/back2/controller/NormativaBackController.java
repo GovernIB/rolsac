@@ -354,7 +354,7 @@ public class NormativaBackController {
 	        Set<ProcedimientoLocal> listaProcedimientos = normativa.getProcedimientos();
 	        for (ProcedimientoLocal proc : listaProcedimientos) {
 	        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario); 
-	        	procedimientos.add(new ProcedimientoLocalTransient(proc.getId(), traProc != null ? traProc.getNombre() : "", null, null));
+	        	procedimientos.add(new ProcedimientoLocalTransient(proc.getId(), traProc != null ? traProc.getNombre() : "", null, null, null));
 	        }
 	        normativaDetall.put("procediments", procedimientos);
 	        

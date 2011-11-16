@@ -18,13 +18,15 @@ public class FichaTransient implements ValueObject {
 	private String titulo;
 	private String fechaPublicacion;
 	private String fechaCaducidad;
+	private Boolean caducat;
 
-   public FichaTransient(long id, String titulo, String fechaPublicacion, String fechaCaducidad){
+   public FichaTransient(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
         super();
         this.id = id;
         this.titulo = titulo;
         this.fechaPublicacion = fechaPublicacion;
         this.fechaCaducidad = fechaCaducidad;
+        this.caducat = caducat;
     }
 	
 	public Long getId() {
@@ -58,5 +60,13 @@ public class FichaTransient implements ValueObject {
     public void setFechaCaducidad(String fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
+
+	public void setCaducat(Boolean caducat) {
+		this.caducat = caducat;
+	}
+
+	public Boolean getCaducat() {
+		return caducat;
+	}
     
 }

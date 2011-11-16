@@ -12,13 +12,15 @@ public class ProcedimientoLocalTransient implements ValueObject {
 	private String nombre;
 	private String publicacio;
 	private String caducitat;
+	private Boolean caducat;
 	
-	public ProcedimientoLocalTransient(long id, String nombre, String publicacio, String caducitat) {
+	public ProcedimientoLocalTransient(long id, String nombre, String publicacio, String caducitat, Boolean caducat) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.publicacio = publicacio;
 		this.caducitat = caducitat;
+		this.caducat = caducat;
 	}
 
 	public long getId() {
@@ -44,6 +46,14 @@ public class ProcedimientoLocalTransient implements ValueObject {
 	}
 	public void setCaducitat(String caducitat) {
 		this.caducitat = caducitat;
+	}
+
+	public void setCaducat(Boolean caducat) {
+		this.caducat = caducat;
+	}
+
+	public Boolean getCaducat() {
+		return caducat;
 	}
 	
 }
