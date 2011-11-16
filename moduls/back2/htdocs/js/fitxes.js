@@ -29,58 +29,6 @@ $(document).ready(function() {
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 					
-	// rich text
-	
-	$('textarea.rich').each(function() {
-		
-		rich_elm = $(this);
-		
-		if (rich_elm.hasClass("basic")) {
-		
-			rich_elm.tinymce({
-				// Location of TinyMCE script
-				script_url : tinyMceUrl,
-		
-				// General options
-				theme : "advanced",
-				plugins : "advimage,advlink",
-				
-				// Theme options
-				theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,|,undo,redo",
-				theme_advanced_buttons2 : "",
-				theme_advanced_buttons3 : "",
-				theme_advanced_buttons4 : "",
-				theme_advanced_toolbar_location : "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_resizing : true,
-				theme_advanced_resize_horizontal: false
-			});
-			
-		} else {
-			
-			rich_elm.tinymce({
-				// Location of TinyMCE script
-				script_url : tinyMceUrl,
-		
-				// General options
-				theme : "advanced",
-				plugins : "advimage,advlink",
-				
-				// Theme options
-				theme_advanced_buttons1 : "bold,italic,strikethrough,|,bullist,numlist,|,link,unlink,|,cleanup,code,|,undo,redo",
-				theme_advanced_buttons2 : "",
-				theme_advanced_buttons3 : "",
-				theme_advanced_buttons4 : "",
-				theme_advanced_toolbar_location : "top",
-				theme_advanced_toolbar_align : "left",
-				theme_advanced_statusbar_location : "bottom",
-				theme_advanced_resizing : true,
-				theme_advanced_resize_horizontal: false
-			});
-			
-		}
-			
-	});
 	
 	// INICIEM
 	Llistat = new CLlistat();
