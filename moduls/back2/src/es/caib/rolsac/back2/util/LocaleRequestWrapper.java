@@ -23,16 +23,27 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
     }
 
     public Locale getLocale() {
-    	// TODO: cogerlo de alguna variable de sesion o request y sino coger el por defecto.
 		IdiomaDelegate id = DelegateUtil.getIdiomaDelegate();
 		String idioma;
+		String lang;
+		
 		try {
-			idioma = id.lenguajePorDefecto();
-			if (idioma == null) idioma = "ca";
+			
+			lang = super.getLocale().getLanguage();
+			if (lang != null) {
+				idioma = lang;
+			} else {
+				idioma = id.lenguajePorDefecto();
+				if (idioma == null) idioma = "ca";
+			}
+			
 		} catch (DelegateException e) {
 			idioma = "ca";
 			e.printStackTrace();
 		}
+		// TODO XXX - Fins que totes les traduccions no estiguin disponibles a tots els idiomes 
+		// forsam el catala perque no doni errors. Pensar a comentar o eliminar
+		idioma = "ca";
 		return new Locale(idioma);
     }
 }
