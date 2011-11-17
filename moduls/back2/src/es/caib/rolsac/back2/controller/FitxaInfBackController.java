@@ -1,5 +1,8 @@
 package es.caib.rolsac.back2.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -12,9 +15,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import es.caib.rolsac.back2.util.Parametros;
-import es.caib.rolsac.back2.util.ParseUtil;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -30,10 +30,11 @@ import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.transients.EnlaceTransient;
+import org.ibit.rol.sac.model.transients.FichaTransient;
 import org.ibit.rol.sac.model.transients.FichaUATransient;
 import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.FichaTransient;
 import org.ibit.rol.sac.model.transients.SeccionTransient;
 import org.ibit.rol.sac.model.transients.UnidadTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -52,8 +53,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.DateUtil;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import es.caib.rolsac.back2.util.Parametros;
+import es.caib.rolsac.back2.util.ParseUtil;
 
 @Controller
 @RequestMapping("/fitxainf/")
@@ -226,16 +227,16 @@ public class FitxaInfBackController {
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
             llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);           
-            
-            Date dataActual = new Date();
-            
+                        
+            Boolean visible;
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
+                visible = comprovarVisibilitat(fitxa);
                 llistaFitxesTransient.add(new FichaTransient(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtil.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtil.formatDate(fitxa.getFechaCaducidad()),
-                                                             fitxa.getFechaCaducidad() != null ? (fitxa.getFechaCaducidad().after(dataActual) ? Boolean.TRUE : Boolean.FALSE) : Boolean.TRUE));
+                                                             visible));
             }
 
         } catch (DelegateException dEx) {
@@ -254,6 +255,24 @@ public class FitxaInfBackController {
         return resultats;
     
     }
+
+	/**
+	 * @param fitxa
+	 * @return
+	 */
+	private Boolean comprovarVisibilitat(Ficha fitxa) {
+		
+		Date dataActual = new Date();
+		Boolean visible;
+		if ( fitxa.getValidacion().equals(Validacion.PUBLICA) && 
+				((fitxa.getFechaCaducidad() != null && fitxa.getFechaCaducidad().before(dataActual)) || fitxa.getFechaCaducidad() == null)
+				&& ((fitxa.getFechaPublicacion() != null && fitxa.getFechaPublicacion().after(dataActual)) || fitxa.getFechaPublicacion() == null)){
+			visible = Boolean.TRUE;
+		} else {
+			visible = Boolean.FALSE;
+		}
+		return visible;
+	}
 
     @RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {

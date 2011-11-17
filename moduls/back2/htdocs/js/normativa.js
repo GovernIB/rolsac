@@ -170,10 +170,11 @@ function CLlistat(){
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
+				caducat_titol_class = (dada_node.caducat) ? " normativa" : " normativaCaducada";
 				
 				codi_taula += '<div class="tr' + parClass + '" role="row">';
 				
-				codi_taula += '<div class="td titol" role="gridcell">';
+				codi_taula += '<div class="td titol ' + caducat_titol_class + ' role="gridcell">';
 				codi_taula += '<input type="hidden" value="' + dada_node.id + '" class="id" />';
 				codi_taula += '<a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
 				codi_taula += "</div>";

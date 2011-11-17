@@ -49,9 +49,9 @@ public class DateUtil {
 		try {
 			return sdf.parse(text);
 		} catch (ParseException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			//log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
-		}
+		} 
 		return null;
 	}
 	
@@ -59,7 +59,7 @@ public class DateUtil {
 		try {
 			return sdtf.parse(text);
 		} catch (ParseException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			//log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
 		}
 		return null;
@@ -69,7 +69,7 @@ public class DateUtil {
 		try {
 			return sdstf.parse(text);
 		} catch (ParseException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			//log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
 		}
 		return null;

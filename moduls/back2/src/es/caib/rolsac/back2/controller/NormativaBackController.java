@@ -40,6 +40,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.transients.AfectacionTransient;
 import org.ibit.rol.sac.model.transients.AfectacionesTransient;
 import org.ibit.rol.sac.model.transients.IdNomTransient;
@@ -731,6 +732,7 @@ public class NormativaBackController {
 		
 		List<NormativaTransient> llistaNormativesTransient = new ArrayList<NormativaTransient>();
 		
+		Boolean visible;
 		for (Normativa normativa : llistaNormatives) {
 			
 			TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
@@ -746,6 +748,12 @@ public class NormativaBackController {
 			
 			boolean local = NormativaLocal.class.isInstance(normativa);
 			
+			if (normativa.getValidacion().equals(Validacion.PUBLICA)) {
+				visible = Boolean.TRUE;
+			} else {
+				visible = Boolean.FALSE;
+			}
+				
 			llistaNormativesTransient.add(
 						new NormativaTransient(
 								normativa.getId() != null ? normativa.getId().longValue() : 0, 
@@ -754,7 +762,8 @@ public class NormativaBackController {
 								normativa.getFecha(),
 								normativa.getFechaBoletin(),
 								tipus,
-								local ? "Local" : "Externa")
+								local ? "Local" : "Externa",
+								visible)
 					);
 		}
 		

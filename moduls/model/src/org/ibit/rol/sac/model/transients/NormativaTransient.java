@@ -18,12 +18,13 @@ public class NormativaTransient implements ValueObject, Comparable {
     private String tipo;
     private String tipologia;
     private Date fechaDate; //para el compareTo
+    private Boolean caducat;
 	
     public NormativaTransient() {
     	super();
     }
     
-	public NormativaTransient(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia) {
+	public NormativaTransient(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat) {
 		
 	    super();
 	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -36,6 +37,7 @@ public class NormativaTransient implements ValueObject, Comparable {
 	    this.tipo = tipo;
 	    this.tipologia = tipologia;
 	    this.fecha_boletin = fecha_boletin != null ? df.format(fecha_boletin) : "";
+	    this.caducat = caducat;
 	}
 
 	/**
@@ -219,6 +221,14 @@ public class NormativaTransient implements ValueObject, Comparable {
 	 */
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+
+	public void setCaducat(Boolean caducat) {
+		this.caducat = caducat;
+	}
+
+	public Boolean getCaducat() {
+		return caducat;
 	}
 
 	

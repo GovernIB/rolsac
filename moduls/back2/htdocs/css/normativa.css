@@ -60,3 +60,11 @@ p#tipoNormativa {
     color: #333;
     font-size: 1.25em;
 }
+
+div.llistat div.tbody div.normativa { 
+	background:transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em .1em;
+}
+
+div.llistat div.tbody div.normativaCaducada {
+    background:transparent url(../img/taula_llistat/normativa_caducada.gif) no-repeat 2em .1em;
+}
