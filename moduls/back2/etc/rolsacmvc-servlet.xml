@@ -20,9 +20,17 @@
       <property name="prefix" value="/"/>
       <property name="suffix" value=".jsp"/>
   </bean>
- 
+<!--  
   <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+      <property name="defaultEncoding" value="UTF-8"/>
       <property name="basename" value="WEB-INF/classes/sac-back2-tags"/>
   </bean>
+-->
+  <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+	<property name="fallbackToSystemLocale" value="false"/>
+	<property name="cacheSeconds" value="2"/>
+	<property name="defaultEncoding" value="UTF-8"/>
+	<property name="basename" value="WEB-INF/classes/sac-back2-tags"/>
+  </bean>	
 	
 </beans>
