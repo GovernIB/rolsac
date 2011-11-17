@@ -4,8 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtil {
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+public class DateUtil {
+	
+	private static Log log = LogFactory.getLog(DateUtil.class);
+	
 	public static final String DATE_FORMAT = "dd/MM/yyyy";
 	public static final String DATETIME_FORMAT = DATE_FORMAT + " HH:mm:ss";
 	public static final String DATE_SIMPLE_TIME_FORMAT = DATE_FORMAT + " HH:mm";
@@ -43,7 +49,7 @@ public class DateUtil {
 		try {
 			return sdf.parse(text);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
 		}
 		return null;
@@ -53,7 +59,7 @@ public class DateUtil {
 		try {
 			return sdtf.parse(text);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
 		}
 		return null;
@@ -63,7 +69,7 @@ public class DateUtil {
 		try {
 			return sdstf.parse(text);
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		} catch (NullPointerException e) {
 		}
 		return null;

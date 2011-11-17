@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Enlace;
@@ -111,9 +112,10 @@ public class FitxaInfBackController {
             } catch (DelegateException dEx) {
                 if (dEx.getCause() instanceof SecurityException) {
                     // model.put("error", "permisos");//TODO:mensajes de error
+                	log.error("Error de permisos " + ExceptionUtils.getFullStackTrace(dEx));
                 } else {
                     // model.put("error", "altres");
-                    dEx.printStackTrace();
+                	log.error(ExceptionUtils.getFullStackTrace(dEx));
                 }
             }            
         }
@@ -239,9 +241,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 // model.put("error", "permisos");
+            	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         }
         
@@ -389,7 +392,7 @@ public class FitxaInfBackController {
             }
             
         } catch (DelegateException dEx) {
-        	log.error("Error: " + dEx.getMessage());
+        	log.error("Error: " + ExceptionUtils.getFullStackTrace(dEx));
 			if (dEx.getCause() instanceof SecurityException) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -688,7 +691,7 @@ public class FitxaInfBackController {
             } else {
                 error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomTransient(-2l, error);
-                dEx.printStackTrace();
+                log.error(ExceptionUtils.getFullStackTrace(dEx)); 
             }
         }
 
@@ -728,9 +731,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 // model.put("error", "permisos");
+            	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         }
         
@@ -770,9 +774,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 // model.put("error", "permisos");
+            	log.error("Error de persimos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         }
         
@@ -795,7 +800,7 @@ public class FitxaInfBackController {
                 resultatStatus.setId(-1l);
             } else {
                 resultatStatus.setId(-2l);
-                dEx.printStackTrace();
+                log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         }
 

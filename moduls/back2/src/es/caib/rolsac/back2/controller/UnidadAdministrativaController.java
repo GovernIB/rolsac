@@ -7,24 +7,27 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-
 
 @Controller
 @RequestMapping("/unidadAdministrativa/")
 public class UnidadAdministrativaController {
 
+	private static Log log = LogFactory.getLog(UnidadAdministrativaController.class);
+	
 	@RequestMapping(value = "/listarHijos.do")
 	public @ResponseBody List<IdNomTransient> llistatHijos(HttpSession session, HttpServletRequest request) {
 		
@@ -52,7 +55,7 @@ public class UnidadAdministrativaController {
 			} else {
 				String error = messages.getMessage("error.altres", null, request.getLocale());
 				uaHijosJSON.add(new IdNomTransient(-2l, error));
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 
@@ -77,7 +80,7 @@ public class UnidadAdministrativaController {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 		

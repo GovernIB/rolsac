@@ -1,5 +1,7 @@
 package es.caib.rolsac.back2.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -14,11 +16,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
@@ -33,6 +31,9 @@ import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
+import org.ibit.rol.sac.model.transients.ProcedimientoNormativaTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
@@ -43,16 +44,15 @@ import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoNormativaTransient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.DateUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 
 @Controller
@@ -117,7 +117,7 @@ public class CatalegProcedimentsBackController {
 					model.put("error", "permisos");
 				} else {
 					model.put("error", "altres");
-					dEx.printStackTrace();
+					log.error(ExceptionUtils.getFullStackTrace(dEx));
 				}
 			}
 		}
@@ -322,7 +322,7 @@ public class CatalegProcedimentsBackController {
 				// model.put("error", "permisos");
 			} else {
 				// model.put("error", "altres");
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 
@@ -513,7 +513,7 @@ public class CatalegProcedimentsBackController {
 			resultats.put("item_notes", proc.getInfo());
 
 		} catch (DelegateException dEx) {
-			log.error("Error: " + dEx.getMessage());
+			log.error(ExceptionUtils.getFullStackTrace(dEx));
 			if (dEx.getCause() instanceof SecurityException) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -541,7 +541,7 @@ public class CatalegProcedimentsBackController {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 
@@ -837,7 +837,7 @@ public class CatalegProcedimentsBackController {
 			} else {
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomTransient(-2l, error);
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomTransient(-3l, error);
@@ -917,7 +917,7 @@ public class CatalegProcedimentsBackController {
 				//model.put("error", "permisos");
 			} else {
 				//model.put("error", "altres");
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 		

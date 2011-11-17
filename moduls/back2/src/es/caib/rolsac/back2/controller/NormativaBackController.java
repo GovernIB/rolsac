@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.jackson.JsonParseException;
@@ -66,7 +67,7 @@ import es.caib.rolsac.back2.util.UploadUtil;
 @RequestMapping("/normativa/")
 public class NormativaBackController {
 		
-	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	private static Log log = LogFactory.getLog(NormativaBackController.class);
 	
     private MessageSource messageSource = null;
     
@@ -136,7 +137,7 @@ public class NormativaBackController {
                 model.put("error", "permisos");
             } else {
                 model.put("error", "altres");
-                e.printStackTrace();
+                log.error(ExceptionUtils.getFullStackTrace(e));
             }        	
         }
 		
@@ -239,7 +240,7 @@ public class NormativaBackController {
 			}
 			
 		} catch (ParseException e) {
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 					
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -591,32 +592,32 @@ public class NormativaBackController {
 			} else {
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomTransient(-2l, error);
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}        	        	
         } catch (ParseException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);			
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomTransient(-3l, error);
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (JsonParseException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (IOException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);			
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		}
 		
 		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -640,7 +641,7 @@ public class NormativaBackController {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				return new IdNomTransient(-1l, error);
 			} else {
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
 				return new IdNomTransient(-2l, error);				
 			}        	        	

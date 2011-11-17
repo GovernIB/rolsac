@@ -14,7 +14,7 @@ import es.caib.rolsac.back2.util.RolUtil;
 public class UserIsSystemTag extends TagSupport {
 
     private static final long serialVersionUID = 1398851467859363114L;
-	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	private static Log log = LogFactory.getLog(UserIsSystemTag.class);
 
 	@Override
 	public int doStartTag() {

@@ -16,6 +16,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Materia;
@@ -48,6 +51,8 @@ import es.caib.rolsac.back2.util.UploadUtil;
 @RequestMapping("/unitatadm/")
 public class UnitatAdmBackController {
 
+	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
+	
     private MessageSource messageSource = null;
     
     @Autowired
@@ -97,10 +102,10 @@ public class UnitatAdmBackController {
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
-                //model.put("error", "permisos");//TODO:mensajes de error
+            	log.error("Error de permiso: " + ExceptionUtils.getFullStackTrace(dEx));//TODO:mensajes de error
             } else {
                 //model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         }
 	    
@@ -323,7 +328,7 @@ public class UnitatAdmBackController {
                 //model.put("error", "permisos");//TODO:mensajes de error
             } else {
                 //model.put("error", "altres");
-                dEx.printStackTrace();
+            	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
             
         }
@@ -622,16 +627,16 @@ public class UnitatAdmBackController {
             } else {
                 String error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomTransient(-2l, error);
-                dEx.printStackTrace();
+                log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         } catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomTransient(-2l, error);
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
         } catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomTransient(-3l, error);
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));;
         }
         
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -731,7 +736,7 @@ public class UnitatAdmBackController {
 //                resultatStatus.setId(-1l);
 //            } else {
 //                resultatStatus.setId(-2l);
-//                dEx.printStackTrace();
+//                log.error(ExceptionUtils.getFullStackTrace(dEx));
 //            }
 //        }
 	    

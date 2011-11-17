@@ -14,7 +14,7 @@ import es.caib.rolsac.back2.util.RolUtil;
 public class UserIsAdminTag extends TagSupport {
 
     private static final long serialVersionUID = -3669076772714938021L;
-	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	private static Log log = LogFactory.getLog(UserIsAdminTag.class);
 
 	@Override
 	public int doStartTag() {

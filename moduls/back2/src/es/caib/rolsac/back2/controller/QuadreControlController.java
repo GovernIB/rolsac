@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Estadistica;
@@ -44,6 +46,8 @@ import es.caib.rolsac.back2.util.Parametros;
 @RequestMapping(value = "/quadreControl/")
 public class QuadreControlController extends ArchivoController {
 
+	private static Log log = LogFactory.getLog(QuadreControlController.class);	
+	
 	private MessageSource messageSource = null;
 
 	
@@ -89,7 +93,7 @@ public class QuadreControlController extends ArchivoController {
 				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 			} else {
 				String error = messageSource.getMessage("error.altres", null,request.getLocale());
-				dEx.printStackTrace();
+				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}
 		
@@ -118,7 +122,7 @@ public class QuadreControlController extends ArchivoController {
 			model.put("fitxaTotal", fitxaActiva + fitxaCaducada);
 
 		} catch (DelegateException e) {
-			e.printStackTrace();
+			log.error(ExceptionUtils.getFullStackTrace(e));
 		}
 
 		return "index";

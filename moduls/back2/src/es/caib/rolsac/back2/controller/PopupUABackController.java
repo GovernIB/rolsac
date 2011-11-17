@@ -13,18 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
 import org.ibit.rol.sac.model.transients.IdNomTransient;
+
+import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/pantalles/")
 public class PopupUABackController {
 
+	private static Log log = LogFactory.getLog(PopupUABackController.class);
+		
     private MessageSource messageSource = null;
 
     private UnidadAdministrativaDelegate uaDelegate = null;
@@ -62,10 +69,11 @@ public class PopupUABackController {
 
             } catch (DelegateException dEx) {
                 if (dEx.getCause() instanceof SecurityException) {
+                	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
                     // model.put("error", "permisos");
                 } else {
                     // model.put("error", "altres");
-                    dEx.printStackTrace();
+                	log.error(ExceptionUtils.getFullStackTrace(dEx));
                 }
             }
             /*

@@ -1,13 +1,16 @@
 package es.caib.rolsac.back2.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.transients.EdificioTransient;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -17,11 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import static org.springframework.web.bind.annotation.RequestMethod.*;
-
 @Controller
 @RequestMapping("/edificis/")
 public class EdificisBackController {
+	
+	private static Log log = LogFactory.getLog(EdificisBackController.class);
     	
 	@RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody Map<String, Object> llistatEdificis(HttpServletRequest request) {
@@ -58,14 +61,15 @@ public class EdificisBackController {
                                                                  edifici.getPoblacion()
                                                                     ));                
             }
-//TODO:mensajes de error
+
      } catch (DelegateException dEx) {
-         if (dEx.getCause() instanceof SecurityException) {
-             //model.put("error", "permisos");
-         } else {
-             //model.put("error", "altres");
-             dEx.printStackTrace();
-         }
+    	 if (dEx.getCause() instanceof SecurityException) {
+			log.error("Error de permisos: " + dEx.toString());
+			resultats.put("id", -1);
+		} else {
+			log.error("Error: " + dEx.toString());
+			resultats.put("id", -2);
+		}
      }
                
         resultats.put("total", llistaEdificioTransient.size());        

@@ -34,7 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/personal/")
 public class PersonalBackController {
     
-	private static Log log = LogFactory.getLog(PrintRolTag.class);
+	private static Log log = LogFactory.getLog(PersonalBackController.class);
 	
     private MessageSource messageSource = null;
     

@@ -6,6 +6,8 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -16,6 +18,8 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class UATags extends TagSupport {
 
+	private static Log log = LogFactory.getLog(UATags.class);
+	
 	private static final long serialVersionUID = -3991191110836413697L;
 
 	@Override
@@ -53,9 +57,9 @@ public class UATags extends TagSupport {
 			
             pageContext.getOut().print(mollapa);
         } catch(IOException ioe) {
-            System.out.println("Error: " + ioe);
+        	log.error(ioe);
         } catch(DelegateException de) {
-        	System.out.println("Error: " + de);
+        	log.error(de);
         }
     }
 }
