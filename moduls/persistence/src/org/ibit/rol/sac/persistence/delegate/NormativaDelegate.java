@@ -245,9 +245,9 @@ public class NormativaDelegate implements StatelessDelegate {
    		}
    	}
    	
-   	public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa) throws DelegateException {
+   	public int buscarNormativasActivas(UnidadAdministrativa unidadAdministrativa) throws DelegateException {
    		try {
-   			return getFacade().buscarProcedimientosActivos(unidadAdministrativa);
+   			return getFacade().buscarNormativasActivas(unidadAdministrativa);
    		} catch (RemoteException e) {
    			throw new DelegateException(e);
    		}

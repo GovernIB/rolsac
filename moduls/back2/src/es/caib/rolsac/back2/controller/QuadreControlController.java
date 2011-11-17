@@ -109,7 +109,7 @@ public class QuadreControlController extends ArchivoController {
 
 			// Normativa
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			int normativaActiva = normativaDelegate.buscarProcedimientosActivos(unitatAdministrativa);
+			int normativaActiva = normativaDelegate.buscarNormativasActivas(unitatAdministrativa);
 			model.put("normativaActiva", normativaActiva);
 
 			// Fitxa
