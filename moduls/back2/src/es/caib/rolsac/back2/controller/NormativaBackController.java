@@ -732,7 +732,6 @@ public class NormativaBackController {
 		
 		List<NormativaTransient> llistaNormativesTransient = new ArrayList<NormativaTransient>();
 		
-		Boolean visible;
 		for (Normativa normativa : llistaNormatives) {
 			
 			TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
@@ -747,12 +746,6 @@ public class NormativaBackController {
 			String tipus  = traTip != null ? traTip.getNombre() : "";
 			
 			boolean local = NormativaLocal.class.isInstance(normativa);
-			
-			if (normativa.getValidacion().equals(Validacion.PUBLICA)) {
-				visible = Boolean.TRUE;
-			} else {
-				visible = Boolean.FALSE;
-			}
 				
 			llistaNormativesTransient.add(
 						new NormativaTransient(
@@ -763,7 +756,7 @@ public class NormativaBackController {
 								normativa.getFechaBoletin(),
 								tipus,
 								local ? "Local" : "Externa",
-								visible)
+								normativa.comprovarVisibilitat())
 					);
 		}
 		

@@ -228,15 +228,13 @@ public class FitxaInfBackController {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
             llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);           
                         
-            Boolean visible;
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
-                visible = comprovarVisibilitat(fitxa);
                 llistaFitxesTransient.add(new FichaTransient(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtil.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtil.formatDate(fitxa.getFechaCaducidad()),
-                                                             visible));
+                                                             fitxa.comprovarVisibilitat()));
             }
 
         } catch (DelegateException dEx) {
@@ -255,24 +253,6 @@ public class FitxaInfBackController {
         return resultats;
     
     }
-
-	/**
-	 * @param fitxa
-	 * @return
-	 */
-	private Boolean comprovarVisibilitat(Ficha fitxa) {
-		
-		Date dataActual = new Date();
-		Boolean visible;
-		if ( fitxa.getValidacion().equals(Validacion.PUBLICA) && 
-				((fitxa.getFechaCaducidad() != null && fitxa.getFechaCaducidad().before(dataActual)) || fitxa.getFechaCaducidad() == null)
-				&& ((fitxa.getFechaPublicacion() != null && fitxa.getFechaPublicacion().after(dataActual)) || fitxa.getFechaPublicacion() == null)){
-			visible = Boolean.TRUE;
-		} else {
-			visible = Boolean.FALSE;
-		}
-		return visible;
-	}
 
     @RequestMapping(value = "/pagDetall.do", method = POST)
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {

@@ -150,6 +150,16 @@ public class Normativa extends Traducible implements Indexable, Validable {
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
     }
-
+    
+    public Boolean comprovarVisibilitat() {
+		Boolean visible;
+		if (this.getValidacion().equals(Validacion.PUBLICA)) {
+			visible = Boolean.TRUE;
+		} else {
+			visible = Boolean.FALSE;
+		}
+		
+    	return visible; 
+    }
 
 }

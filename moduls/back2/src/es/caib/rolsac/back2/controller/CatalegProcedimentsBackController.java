@@ -308,17 +308,14 @@ public class CatalegProcedimentsBackController {
 			// llistaProcedimientos = procedimientosDelegate.buscarProcedimientos(paramMap, tradMap);
 			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves);
 
-			Boolean visible;
-			
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
-				visible = comprovarVisibilitat(pl);
 				llistaProcedimientoLocalTransient.add(new ProcedimientoLocalTransient(
 								 pl.getId(), 
 								 tpl == null ? "" : tpl.getNombre(), 
 								 DateUtil.formatDate(pl.getFechaPublicacion()),
 								 DateUtil.formatDate(pl.getFechaCaducidad()),
-								 visible));
+								 pl.comprovarVisibilitat()));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
@@ -335,23 +332,6 @@ public class CatalegProcedimentsBackController {
 		return resultats;
 	}
 
-	/**
-	 * @param procedimientoLocal
-	 * @return
-	 */
-	private Boolean comprovarVisibilitat(ProcedimientoLocal procedimientoLocal) {
-		
-		Date dataActual = new Date();
-		Boolean visible;
-		if ( procedimientoLocal.getValidacion().equals(Validacion.PUBLICA) && 
-				((procedimientoLocal.getFechaCaducidad() != null && procedimientoLocal.getFechaCaducidad().before(dataActual)) || procedimientoLocal.getFechaCaducidad() == null)
-				&& ((procedimientoLocal.getFechaPublicacion() != null && procedimientoLocal.getFechaPublicacion().after(dataActual)) || procedimientoLocal.getFechaPublicacion() == null)){
-			visible = Boolean.TRUE;
-		} else {
-			visible = Boolean.FALSE;
-		}
-		return visible;
-	}
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
