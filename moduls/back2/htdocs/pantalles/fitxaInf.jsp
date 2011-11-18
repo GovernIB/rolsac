@@ -1093,11 +1093,11 @@
 <!-- escriptori_previsualitza -->
 <div id="escriptori_previsualitza">
     <h2>Previsualitzant la fitxa</h2>
-    <p>
-        <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span>Torna</span>
-        </span>
+    <div class="boton btnGenerico clear">
+        <a href="javascript:;" class="btn torna dePrevisualitzar">
+        	<span><span>Torna</span></span>
         </a>
-    </p>
+    </div>
     <div class="previsualitzacio">
         <iframe frameborder="0" scrolling="auto"></iframe>
     </div>
