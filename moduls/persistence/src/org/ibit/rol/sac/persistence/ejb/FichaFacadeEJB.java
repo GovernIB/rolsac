@@ -18,6 +18,7 @@ import org.ibit.rol.sac.model.ws.FichaUATransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
@@ -375,29 +376,46 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 if (paramsQuery.length() != 0) {
                     i18nQuery += paramsQuery + " and ";
                 }
-                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")"; // TODO: dejarlo asi o buscar textos traducidos en lucene?
+                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
             }
             
+            
+            ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
             Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+            Set<Long> uasIds = new HashSet<Long>();
+            
+            uas.add(ua);
+            
+            if (uaMeves) {
+            	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+            } 
+            
             if (uaFilles) {
-                uas.add(ua);
-                ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
-                Hibernate.initialize(ua.getHijos());
-                uas.addAll(ua.getHijos());
-            } else if (uaMeves) {
-                uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+            	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate(); 
+            	for (UnidadAdministrativa uaActual : uas) {
+            		uasIds.add(uaActual.getId());
+            		List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
+            		uasIds.addAll(idsDescendientes);                		
+            	}
             } else {
-                uas.add(ua);
+            	for (UnidadAdministrativa uaActual : uas) {
+            		uasIds.add(uaActual.getId());
+            	}
             }
-            String uaQuery = " and fsua.unidadAdministrativa.id in (";
-            for (Iterator<UnidadAdministrativa> it = uas.iterator(); it.hasNext();) {
-                uaQuery += it.next().getId();
-                if (it.hasNext()) {
-                    uaQuery += ", ";
-                } else {
-                    uaQuery += ")";
+            
+            String uaQuery;
+            if (!uasIds.isEmpty()) {
+            	uaQuery = " and fsua.unidadAdministrativa.id in (";
+	            String sep = "";
+                for (Long uaId : uasIds) {
+                	uaQuery += sep + uaId;
+                	sep = ", ";
                 }
+                uaQuery += ")";
+            } else {
+            	uaQuery = " ";
             }
+            
             
             if(idFetVital != null){
               mainQuery += ",ficha.hechosVitales as hec ";  
@@ -430,6 +448,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 }
                 return fichasAcceso;
             }
+        } catch (DelegateException de) {
+            throw new EJBException(de);
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {

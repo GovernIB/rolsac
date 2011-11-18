@@ -79,7 +79,7 @@ public class NormativaBackController {
     	
 
 	@RequestMapping(value = "/normativa.do", method = GET)
-	public String llistatNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
+	public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
 		String idioma = request.getLocale().getLanguage();
 		

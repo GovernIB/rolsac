@@ -310,6 +310,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             if ("local".equals(tipo)) {
             	//Si la búsqueda es por normativas locales filtramos por unidades administrativas
             	Set<Long> uas = new HashSet<Long>();
+        		uas.add(idUA);
             	
             	//Si se ha indicado mostrar normativas de las unidades administrativas del usuario
                 if (uaMeves) {
@@ -317,13 +318,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 	Set<UnidadAdministrativa> listaUAsUsuario = getUsuario(session).getUnidadesAdministrativas();
                 	for (UnidadAdministrativa ua : listaUAsUsuario) {                		
                 		uas.add(ua.getId());
-                		List<Long> listaDescendientes = uaDelegate.cargarArbolUnidadId(ua.getId());
-                		uas.addAll(listaDescendientes);                		
+                		// Lo siguiente se haria para buscar en las UAs hijas.
+                		// List<Long> listaDescendientes = uaDelegate.cargarArbolUnidadId(ua.getId());
+                		// uas.addAll(listaDescendientes);                		
                 	}
-                	                	
-                } else {
-                	if (idUA != null)
-                		uas.add(idUA);
                 }
 
                 if (!uas.isEmpty()) {
@@ -368,12 +366,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             }
 
             return normativasAcceso;
-        } catch (HibernateException he) {
-            throw new EJBException(he);
             
-        } catch (DelegateException de) {
-        	throw new EJBException(de);
-        	
+//      } catch (DelegateException de) {
+//        	throw new EJBException(de);
+        } catch (HibernateException he) {
+            throw new EJBException(he);        	
         } finally {
             close(session);
         }

@@ -645,88 +645,98 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
 
     /**
-     * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2). 
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
-    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves) {    	
-    	Session session = getSession();
-    	
-        try {        	
-            if (!userIsOper()) {
-                parametros.put("validacion", Validacion.PUBLICA);
-            }
+	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves) {
+		Session session = getSession();
 
-            List params = new ArrayList();
-            String i18nQuery = "";
-            if (traduccion.get("idioma") != null) {
-            	i18nQuery = populateQuery(parametros, traduccion, params);
-            } else {
-            	String paramsQuery = populateQuery(parametros, new HashMap(), params);
-            	if (paramsQuery.length() == 0) {
-            		i18nQuery += " where "; 
-            	} else {
-            		i18nQuery += paramsQuery + " and ";
-            	}
-            	i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
-            }
-            
-            Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
-            if (uaFilles) {
-            	uas.add(ua);
-            	ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
-            	Hibernate.initialize(ua.getHijos());
-            	uas.addAll(ua.getHijos());
-            } else if (uaMeves) {
-            	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
-            } else {
-            	if (ua != null) {
-            		uas.add(ua);
-        		}
-            }
-            
-            String uaQuery;
-            if (!uas.isEmpty()) {
-	            uaQuery = " and procedimiento.unidadAdministrativa.id in (";
-	            for (Iterator<UnidadAdministrativa> it = uas.iterator(); it.hasNext();) {
-	            	uaQuery += it.next().getId();
-	            	if (it.hasNext()) {
-	            		uaQuery += ", ";
-	            	} else {
-	            		uaQuery += ")";
-	            	}
-	            }
-            } else {
-            	uaQuery = " ";
-            }
-            
-            Query query = session.createQuery("select distinct procedimiento from ProcedimientoLocal as procedimiento " +
-                   ", procedimiento.traducciones as trad " + i18nQuery + uaQuery);
-            for (int i = 0; i < params.size(); i++) {
-                String o = (String)params.get(i);
-                query.setString(i, o);
-            }
+		try {
+			if (!userIsOper()) {
+				parametros.put("validacion", Validacion.PUBLICA);
+			}
 
-            List<ProcedimientoLocal> procedimientos = query.list();
-            if (!userIsOper()) {
-                return procedimientos;
-            } else {
-                List procedimientosAcceso = new ArrayList();
-                Usuario usuario = getUsuario(session);
-                for (int i = 0; i < procedimientos.size(); i++) {
-                    ProcedimientoLocal procedimiento =  (ProcedimientoLocal)procedimientos.get(i);
-                    if(tieneAcceso(usuario, procedimiento)){
-                       procedimientosAcceso.add(procedimiento);
-                    }
-                }
-                return procedimientosAcceso;
-            }
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
-    }
+			List params = new ArrayList();
+			String i18nQuery = "";
+			if (traduccion.get("idioma") != null) {
+				i18nQuery = populateQuery(parametros, traduccion, params);
+			} else {
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				if (paramsQuery.length() == 0) {
+					i18nQuery += " where ";
+				} else {
+					i18nQuery += paramsQuery + " and ";
+				}
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+			}
+
+			ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+			Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+			Set<Long> uasIds = new HashSet<Long>();
+
+			uas.add(ua);
+
+			if (uaMeves) {
+				uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+			}
+
+			if (uaFilles) {
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				for (UnidadAdministrativa uaActual : uas) {
+					uasIds.add(uaActual.getId());
+					List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
+					uasIds.addAll(idsDescendientes);
+				}
+			} else {
+				for (UnidadAdministrativa uaActual : uas) {
+					uasIds.add(uaActual.getId());
+				}
+			}
+
+			String uaQuery;
+			if (!uasIds.isEmpty()) {
+				uaQuery = " and procedimiento.unidadAdministrativa.id in (";
+				String sep = "";
+				for (Long uaId : uasIds) {
+					uaQuery += sep + uaId;
+					sep = ", ";
+				}
+				uaQuery += ")";
+			} else {
+				uaQuery = " ";
+			}
+
+			Query query = session.createQuery("select distinct procedimiento from ProcedimientoLocal as procedimiento "
+			        + ", procedimiento.traducciones as trad " + i18nQuery + uaQuery);
+			for (int i = 0; i < params.size(); i++) {
+				String o = (String) params.get(i);
+				query.setString(i, o);
+			}
+
+			List<ProcedimientoLocal> procedimientos = query.list();
+			if (!userIsOper()) {
+				return procedimientos;
+			} else {
+				List procedimientosAcceso = new ArrayList();
+				Usuario usuario = getUsuario(session);
+				for (int i = 0; i < procedimientos.size(); i++) {
+					ProcedimientoLocal procedimiento = (ProcedimientoLocal) procedimientos.get(i);
+					if (tieneAcceso(usuario, procedimiento)) {
+						procedimientosAcceso.add(procedimiento);
+					}
+				}
+				return procedimientosAcceso;
+			}
+		} catch (DelegateException de) {
+			throw new EJBException(de);
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
     
     
     /**

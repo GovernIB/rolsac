@@ -558,8 +558,7 @@ public class CatalegProcedimentsBackController {
 		try {
 			UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 			if (ua == null) {
-//				String error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
-				error = "Error, falten camps.";
+				error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
 				result = new IdNomTransient(-3l, error);
 			} else {
 				
@@ -581,9 +580,13 @@ public class CatalegProcedimentsBackController {
 				
 				if (edicion) {
 					// Mantenemos los valores originales que tiene el procedimiento.
+					procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
 					procediment.setId(procedimentOld.getId());
 					procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
 					procediment.setTramites(procedimentOld.getTramites());
+				} else {
+					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
+					procediment.setUnidadAdministrativa(ua);
 				}
 
 
@@ -733,9 +736,6 @@ public class CatalegProcedimentsBackController {
 				// Fin idiomas
 				
 				
-				procediment.setUnidadAdministrativa(ua);
-				
-				
 				try {
 					Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
 					// Comprobar que no se haya cambiado la validacion/estado siendo operador
@@ -823,7 +823,7 @@ public class CatalegProcedimentsBackController {
 				procediment.setInfo(request.getParameter("item_notes"));
 
 				
-				procedimentDelegate.grabarProcedimiento(procediment, ua.getId());
+				procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
 
 				
 				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());

@@ -142,14 +142,11 @@ function CLlistat(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
-			console.log('estic dins');
+
 			// codi cuerpo
 			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
 				dada_node = this;
 				
-				console.log('dada_node', dada_node);
-				console.log('dada_node.esPublic', dada_node.esPublic);
-
 				parClass = (i%2) ? " par": "";
 				caducat_nom_class = (dada_node.caducat) ? " procediment" : " procedimentCaducat";
 				

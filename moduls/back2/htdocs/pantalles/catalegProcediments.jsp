@@ -88,7 +88,7 @@
     var txtNoHiHaNormativesSeleccionades = txtNoHiHa + " " + txtNormatives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
     var txtNumero = "<spring:message code='camp.numero'/>";
     
-    // var txtImmediat = ""; //"Immediat"; // Comentado por si la funcionalidad fuese necesaria en el futuro (en el procediments.js se usa esta variable).
+    var txtImmediat = "<spring:message code='txt.immediat'/>";
     var txtPublicacio = "<spring:message code='boto.publicacio'/>";
     
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
