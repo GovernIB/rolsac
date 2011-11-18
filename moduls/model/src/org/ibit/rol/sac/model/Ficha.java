@@ -268,8 +268,19 @@ public class Ficha extends Classificable implements Indexable, Validable {
     */
     
  
-
-
+	public Boolean comprovarVisibilitat() {
+	
+		Date dataActual = new Date();
+		Boolean visible;
+		if ( this.getValidacion().equals(Validacion.PUBLICA) && 
+				((this.getFechaCaducidad() != null && this.getFechaCaducidad().before(dataActual)) || this.getFechaCaducidad() == null)
+				&& ((this.getFechaPublicacion() != null && this.getFechaPublicacion().after(dataActual)) || this.getFechaPublicacion() == null)){
+			visible = Boolean.TRUE;
+		} else {
+			visible = Boolean.FALSE;
+		}
+		return visible;
+	}
 
     
 }

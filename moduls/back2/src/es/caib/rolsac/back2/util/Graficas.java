@@ -2,6 +2,9 @@ package es.caib.rolsac.back2.util;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
@@ -74,8 +77,8 @@ public class Graficas {
 		domainAxis.setUpperMargin(0.02);
 
 		// Ocultar category
-		domainAxis.setTickLabelsVisible(false);
-		domainAxis.setTickMarksVisible(false);
+//		domainAxis.setTickLabelsVisible(false);
+//		domainAxis.setTickMarksVisible(false);
 
 		// set the range axis to display integers only...
 		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -113,8 +116,8 @@ public class Graficas {
 
 	}
 	
-	public static JFreeChart pintarGraficaMultiple(List<List<Integer>> dadesResum) {
-		SlidingCategoryDataset dataset = new SlidingCategoryDataset(crearDatasetMultiple(dadesResum), 0, 12);
+	public static JFreeChart pintarGraficaMultiple(List<List<Integer>> dadesResum, GregorianCalendar dataActual) {
+		SlidingCategoryDataset dataset = new SlidingCategoryDataset(crearDatasetMultiple(dadesResum, dataActual), 0, 12);
 
 		JFreeChart chart = ChartFactory.createBarChart("", // chart title
 				"", // domain axis label
@@ -208,22 +211,22 @@ public class Graficas {
 
 	private static CategoryDataset crearDatasetSimple(List<Estadistica> dadesEstadistica) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
 		int i = 0;
 		for (Estadistica estadistica : dadesEstadistica){
-			dataset.addValue(estadistica.getContador(), "Mes", "Mes " + i++);
+			dataset.addValue(estadistica.getContador(), "Mes", sdf.format(estadistica.getFecha()));
 		}
 		return dataset;
 	}
 	
-	private static CategoryDataset crearDatasetMultiple(List<List<Integer>> dadesResum) {
+	private static CategoryDataset crearDatasetMultiple(List<List<Integer>> dadesResum, GregorianCalendar dataActual) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-		int i = 7;
-		for (Iterator iterator = dadesResum.iterator(); iterator.hasNext();) {
+		for (Iterator<List<Integer>> iterator = dadesResum.iterator(); iterator.hasNext();) {
 			List<Integer> llista = (List<Integer>) iterator.next();
-			dataset.addValue(llista.get(0),"Procediment", "0" + i);
-			dataset.addValue(llista.get(1),"Normativa", "0" + i);
-			dataset.addValue(llista.get(2),"Fitxa", "0" + i);
-			i--;
+			dataset.addValue(llista.get(0),"Procediment", DateUtil.formatDate(dataActual.getTime()));
+			dataset.addValue(llista.get(1),"Normativa", DateUtil.formatDate(dataActual.getTime()));
+			dataset.addValue(llista.get(2),"Fitxa", DateUtil.formatDate(dataActual.getTime()));
+			dataActual.add(Calendar.DATE,+1);;
 		}		
 		return dataset;
 	}

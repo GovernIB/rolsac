@@ -123,23 +123,29 @@
 					        <li class="opcio actiu" id="liAlta">
 					            <a href="javascript:void(0)" id="tabAlta">Altes</a>
 					        </li>
+					        <%--
 					        <li class="opcio" id="liBaixa">
 					            <a href="javascript:;" id="tabBaixa">Baixes</a>
 					        </li>
+					        --%>
 				            <li class="opcio" id="liModificacio">
 				            	<a href="javascript:;" id="tabModificacio">Modificacions</a>	
 				            </li>
+				            
 					    </ul>
 					    <div id="resultats">
 					        <div class="resultats actiu" id="divAlta" style="display: block;">
 				            	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=2&id=${idUA }"/>" border="0" />			 				
 					        </div>
+					        <%--
 					        <div class="resultats " style="display: none;" id="divBaixa">
 					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=3&id=${idUA }"/>" border="0" />
 					        </div>
+					        --%> 
 					        <div class="resultats " style="display: none;" id="divModificacio">
 					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=4&id=${idUA }"/>" border="0" />
 					        </div>
+					        
 					    </div>	
 	 				</c:when>
 	 				<c:otherwise>

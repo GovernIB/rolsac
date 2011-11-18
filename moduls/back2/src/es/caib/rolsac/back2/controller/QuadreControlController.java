@@ -159,7 +159,12 @@ public class QuadreControlController extends ArchivoController {
 		} else {
 			GregorianCalendar dataActual = new GregorianCalendar();
 			GregorianCalendar dataActualFi = new GregorianCalendar();
-		
+
+			// Invertim Ordre de visualitzacio
+			dataActual.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
+			dataActualFi.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
+			dataActualFi.add(Calendar.DATE, +1);
+			
 			List<List<Integer>> datosResumen = new ArrayList();
 			String titulo = "";
 			
@@ -175,12 +180,12 @@ public class QuadreControlController extends ArchivoController {
 					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, idUA));
 					titulo = "resumBaixa";
 				}
-				dataActual.add(Calendar.DATE,-1);
-				dataActualFi.add(Calendar.DATE, -1);
+				dataActual.add(Calendar.DATE,+1);
+				dataActualFi.add(Calendar.DATE, +1);
 			}
 			
 			// Generam la grafica
-			JFreeChart chart = Graficas.pintarGraficaMultiple(datosResumen);
+			JFreeChart chart = Graficas.pintarGraficaMultiple(datosResumen, dataActual);
 			
 			construirArchivo(idUA, archivo, chart, titulo);
 		}
