@@ -1052,7 +1052,7 @@ function EliminaArbreUA(id_input, id_hidden){
 
 
 //Limpiar un input de un formulario excepto los campos hidden, readonly y disabled.
-//Se usa como callback de un $('selector').each().
+//Se usa como callback de un .each: $('selector').each(limpiarCampo).
 function limpiarCampo(index, input){
 	if (!input.readOnly&& !input.disabled) {
 		var type = input.type;

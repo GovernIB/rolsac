@@ -30,15 +30,14 @@ $(document).ready(function() {
 	Detall = new CDetall();	
 	Error = new CError();
 	
-	// Mostrar llistat o detall
+    Detall.iniciar();
+    // Mostrar detall?
 	var itemACarregar = itemAEditar();
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
-	} else {
-        Detall.iniciar();
-		// Cercador.iniciar();
 	}
     Llistat.iniciar();
+    // Cercador.iniciar();
 });
 
 
@@ -387,12 +386,13 @@ function CDetall(){
 			suggeriment_elm.slideUp(300);
 		}
 		
-        
 //		$("#item_data_publicacio").val(txtImmediat);
+        $("#item_id").val("");
+		$("#item_organ_id").val("");
+		$("#modulPrincipal :input").each(limpiarCampo);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 		escriptori_contingut_elm.fadeOut(300, function() {
-			$("#item_id").val("");
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar				
 				itemID_ultim = 0;

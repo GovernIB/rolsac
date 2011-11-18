@@ -30,17 +30,14 @@ $(document).ready(function() {
 	Llistat = new CLlistat();	
 	Detall = new CDetall();
 	
-	
-	// Mostrar llistat o detall
 	Detall.iniciar();
+    // Mostrar detall?
 	var itemACarregar = itemAEditar();
 	if (itemACarregar > 0) {
 		Detall.carregar(itemACarregar);
-//	} else {
-//		// Cercador.iniciar();
 	}
     Llistat.iniciar();
-    
+    // Cercador.iniciar();
 	
 	$("#item_ua_id").change( function() {
 		if ($(this).val() != "") {

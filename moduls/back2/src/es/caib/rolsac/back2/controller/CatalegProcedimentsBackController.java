@@ -823,11 +823,11 @@ public class CatalegProcedimentsBackController {
 				procediment.setInfo(request.getParameter("item_notes"));
 
 				
-				procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
+				Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
 
 				
 				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
-				result = new IdNomTransient(procediment.getId(), ok);
+				result = new IdNomTransient(procId, ok);
 			}
 
 		} catch (DelegateException dEx) {
