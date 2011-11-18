@@ -166,10 +166,17 @@ public class CatalegProcedimentsBackController {
 		}
 
 		
-		String codi = request.getParameter("codi");
-		if (codi != null && !"".equals(codi)) {
-			paramMap.put("signatura", codi.toUpperCase());
-		}
+		try {
+            Long codi = ParseUtil.parseLong(request.getParameter("codi"));
+            paramMap.put("id", codi);
+        } catch (NumberFormatException e){
+        }
+        
+        
+//      String codi = request.getParameter("codi");
+//		if (codi != null && !"".equals(codi)) {
+//			paramMap.put("signatura", codi.toUpperCase());
+//		}
 
 		
 		Date fechaCaducidad = DateUtil.parseDate(request.getParameter("fechaCaducidad"));

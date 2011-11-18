@@ -333,7 +333,7 @@
                                     <input id="cerca_nom" name="cerca_nom" type="text" maxlength="250" class="nom" />
                                 </div>
                             </div>                                      
-                            <div class="element t6">                    
+                            <div class="element t10">                    
                                 <div class="etiqueta"><label for="cerca_codi"><spring:message code='camp.codi'/></label></div>
                                 <div class="control">                                   
                                     <input id="cerca_codi" name="cerca_codi" type="text" maxlength="7" class="codi" />
@@ -356,12 +356,6 @@
                             <div class="etiqueta"><label for="cerca_carrec"><spring:message code='camp.carrec'/></label></div>
                                 <div class="control">                                   
                                     <input id="cerca_carrec" name="cerca_carrec" maxlength="250" type="text" />
-                                </div>
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_email"><spring:message code='camp.email'/></label></div>
-                                <div class="control">                                   
-                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" class="email" />
                                 </div>
                             </div>
                         </div>
@@ -402,7 +396,15 @@
                                     <input id="cerca_nlm" name="cerca_nlm" type="text" maxlength="9" class="nlm t8" />
                                 </div>
                             </div>
-                        </div>                                          
+                        </div>    
+                        <div class="fila">
+                            <div class="element t21">
+                                <div class="etiqueta"><label for="cerca_email"><spring:message code='camp.email'/></label></div>
+                                <div class="control">                                   
+                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" class="email" />
+                                </div>
+                            </div>                                      
+                        </div>
                         <div class="botonera">
                             <div class="boton btnGenerico">
                               <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
