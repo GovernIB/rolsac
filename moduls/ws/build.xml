@@ -8,7 +8,9 @@
     <property name="package" value="org.ibit.rol.sac.ws"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
-    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/config.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -68,7 +70,7 @@
         <tstamp>
             <format property="TODAY" pattern="dd-MM-yy"/>
         </tstamp>
-        <fail unless="ws.auth.domain" message="La propiedad ws.auth.domain no está definida en config.properties"/>
+        <fail unless="ws.auth.domain" message="La propiedad ws.auth.domain no está definida en los archivos properties"/>
     </target>
 
     <!-- Crea tots els directoris de treball necessaris -->

@@ -8,7 +8,9 @@
     <property name="package" value="es.caib.test"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
-    <property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/config.properties"/>
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
