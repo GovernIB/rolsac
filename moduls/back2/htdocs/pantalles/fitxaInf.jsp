@@ -33,41 +33,44 @@
     var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.do" />';
 
     // texts
-    var txtEspere = "Espere un moment, si us plau.";
-    var txtCarregant = "Carregant";
-    var txtSi = "Sí";
-    var txtNo = "No";
-    var txtTrobats = "Trobades";
-    var txtLlistaItem = "Fitxa";
-    var txtLlistaItems = "Fitxes";
-    var txtAdministrativa = "Administrativa";
-    var txtAdministratives = "Administratives";
-    var txtData = "Data";
-    var txtPublicacio = "Publicació";
-    var txtCaducitat = "Caducitat";
-    var txtMostrem = "Mostrem de la ";
-    var txtMostremAl = " a la ";
-    var txtNoHiHa = "No hi ha";
+    var txtEspere = "<spring:message code='txt.esperi'/>";
+    var txtCarregant = "<spring:message code='txt.carregant'/>";
+    var txtSi = "<spring:message code='txt.si'/>";
+    var txtNo = "<spring:message code='txt.no'/>";
+    var txtTrobats = "<spring:message code='txt.trobades'/>";
+    var txtLlistaItem = "<spring:message code='txt.fitxa'/>";
+    var txtLlistaItems = "<spring:message code='txt.fitxes'/>";
+    var txtAdministrativa = "<spring:message code='txt.administrativa'/>";
+    var txtAdministratives = "<spring:message code='txt.administratives'/>";
+    var txtData = "<spring:message code='txt.data'/>";
+    var txtPublicacio = "<spring:message code='txt.publicacio'/>";
+    var txtCaducitat = "<spring:message code='txt.caducitat'/>";
+    var txtMostrem = "<spring:message code='txt.mostrem'/> <spring:message code='txt.de_la'/> ";
+    var txtMostremAl = "<spring:message code='txt.a_la'/>";
+    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtCarregantItems = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
-    var txtOrdenats = "ordenats";
-    var txtAscendentment = "ascendentment";
-    var txtDescendentment = "descendentment";
-    var txtPer = "per";
-    var txtEsborrarCorrecte = "La Fitxa s'ha esborrat correctament";
+    var txtOrdenats = "<spring:message code='txt.ordenats'/>";
+    var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
+    var txtDescendentment = "<spring:message code='txt.descendentment'/>";
+    var txtPer = "<spring:message code='txt.per'/>";
+    var txtEsborrarCorrecte = "<spring:message code='txt.fitxa_borrat'/>";
     // taula
     var pag_Res = 5;
-    var txtNom = "Nom";
-    var txtPare = "Pare";
-    var txtCercant = "Cercant";
+    var txtNom = "<spring:message code='txt.nom'/>";
+    var txtPare = "<spring:message code='txt.pare'/>";
+    var txtCercant = "<spring:message code='txt.cercant'/>";
     var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
     // paginacio
-    var txtTrobat = "S'ha trobat";
-    var txtSeguents = "Següents";
-    var txtAnteriors = "Anteriors";
-    var txtInici = "Inici";
-    var txtFinal = "Final";
-    var txtPagines = "Pàgines";
+    
+    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
+    var txtSeguents = "<spring:message code='txt.seguents'/>";
+    var txtAnteriors = "<spring:message code='txt.anteriors'/>";
+    var txtInici = "<spring:message code='txt.inici'/>";
+    var txtFinal = "<spring:message code='txt.final'/>";
+    var txtPagines = "<spring:message code='txt.pagines'/>";
+    var txtCercant = "<spring:message code='txt.cercant'/>";
+       
     var txtCercantElements = txtCercant + " " + txtLlistaItems;
     var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
@@ -75,81 +78,70 @@
     var txtCercantSeguents = txtCercantLlistatSeguents;
     
     // detall
-    var txtCarregantDetall = txtCarregant + " detall de la "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
-    var txtNouTitol = "Nova " + txtLlistaItem.toLowerCase();
-    var txtDetallTitol = "Detall de la " + txtLlistaItem.toLowerCase();
-    var txtItemEliminar = "Està segur de voler eliminar aquesta " + txtLlistaItem.toLowerCase() + "?";
-    var txtEnviantDades = "Enviant dades al servidor. " + txtEspere;
-    var txtMostra = "Mostra";
-    var txtAmaga = "Amaga";
-    var txtCaducat = "Caducada";
-    var txtImmediat = "Immediat";
+    var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
+    var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
+    var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
+    var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
+    var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
+    var txtMostra = "<spring:message code='boto.mostra'/>";
+    var txtAmaga = "<spring:message code='txt.amaga'/>";
+    var txtCaducat = "<spring:message code='txt.caducat'/>";
+    var txtImmediat = "<spring:message code='txt.immediat'/>";
     // idioma
-    var txtDesplega = "Desplega";
-    var txtPlega = "Plega";
+    var txtDesplega = "<spring:message code='txt.desplega'/>";
+    var txtPlega = "<spring:message code='txt.plega'/>";
     // fotos
-    var txtImatge = "Imatge";
-    var txtFoto = "Foto";
-    var txtFotos = "Fotos";
-    var txtFotoPetita = txtFoto + " petita";
-    var txtFotoGran = txtFoto + " gran";
-    var txtLleva = "Lleva";
-    var txtInclou = "Inclou";
-    var txtElimina = "Elimina";
-    var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " associades";
+    var txtImatge = "<spring:message code='txt.imatge'/>";
+    var txtFoto = "<spring:message code='txt.foto'/>";
+    var txtFotos = "<spring:message code='txt.fotos'/>";
+    var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
+    var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
+    var txtLleva = "<spring:message code='txt.lleva'/>";
+    var txtInclou = "<spring:message code='txt.inclou'/>";
+    var txtElimina = "<spring:message code='txt.elimina'/>";
+    var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
     // docs
-    var txtNom = "Nom";
-    var txtArxiu = "Arxiu"
+    var txtNom = "<spring:message code='txt.nom'/>";
+    var txtArxiu = "<spring:message code='txt.arxiu'/>"
     // enllasos
-    var txtAdresa = "Adreça web";
+    var txtAdresa = "<spring:message code='txt.adresa'/>";
     // moduls
-    var txtHiHa = "Hi ha";
-    var txtNoHiHa = "No hi ha";
-    var txtSeleccionat = "Seleccionat";
-    var txtSeleccionats = "Seleccionats";
+    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     // modul documents
-    var txtDocument = "document";
-    var txtDocuments = "documents";
+    var txtDocument = "<spring:message code='txt.document'/>";
+    var txtDocuments = "<spring:message code='txt.documents.lower'/>";
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
-    var txtEsborra = "Esborra";
-    var txtInclou = "Inclou";
-    var txtLleva = "Lleva";
+    var txtEsborra = "<spring:message code='txt.esborra'/>";
+    var txtInclou = "<spring:message code='txt.inclou'/>";
+    var txtLleva = "<spring:message code='txt.lleva'/>";
     // modul materies
-    var txtMateria = "matèria";
-    var txtMateries = "matèries";
+    var txtMateria = "<spring:message code='txt.materia'/>";
+    var txtMateries = "<spring:message code='txt.materies'/>";
     var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
     // modul fets vitals
-    var txtFet = "fet vital";
-    var txtFets = "fets vitals";
+    var txtFet = "<spring:message code='txt.fet_vital'/>";
+    var txtFets = "<spring:message code='txt.fets_vitals'/>";
     var txtNoHiHaFets = txtNoHiHa + " " + txtFets;
     // modul seccio/ua
-    var txtSeccioUA = "Secció/UA";
-    var txtSeccionsUA = "Seccions/UA";
-    var txtNoHiHaSeccioUA = "No hi ha cap " + txtSeccioUA.toLowerCase();
-    var txtLaSeccio = "La secció";
-    var txtAmbLaUnitat = "amb la unitat";
+    var txtSeccioUA = "<spring:message code='txt.seccio_ua'/>";
+    var txtSeccionsUA = "<spring:message code='txt.seccions_ua'/>";
+    var txtNoHiHaSeccioUA = "<spring:message code='txt.no_hi_ha_cap'/> " + txtSeccioUA.toLowerCase();
+    var txtLaSeccio = "<spring:message code='txt.la_seccio'/>";
+    var txtAmbLaUnitat = "<spring:message code='txt.amb_la_unitat'/>";
     // modul ua arbre
-    var txtArrel = "Arrel";
-    var txtNodesFills = "Nodes fills";
-    var txtCarregantArrel = "Carregant node arrel de l'arbre. " + txtEspere;
-    var txtCarregantNodes = txtCarregant + " nodes fills. " + txtEspere;
+    var txtArrel = "<spring:message code='txt.arrel'/>";
+    var txtNodesFills = "<spring:message code='txt.nodes_fills.titol'/>";
+    var txtCarregantArrel = "<spring:message code='txt.carregant_node_arrel'/> " + txtEspere;
+    var txtCarregantNodes = txtCarregant + " <spring:message code='txt.nodes_fills_dot'/> " + txtEspere;
 	// enllassos
-	var txtEnllas = "Enllaç";
-    var txtEnllassos = "Enllassos";
-    var txtNoHiHaEnllassos = "No hi ha cap " + txtEnllas.toLowerCase();
-    var txtNoHiHaEnllassosSeleccionats = "No hi ha " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
-    
-    // error conexio
-    var txtCalcularTotal = "Calcular el total";
-    var txtAjaxError = "S'ha produït un error de conexió.";
-    var txtIntenteho = "Intente-ho de nou en uns minuts.";
-    var txtConexionIntentar = "Intentar conexió en";
-    var txtSegon = "segon";
-    var txtSegons = "segons";
-    var txtConectar = "Conectar ara";
-    var txtFuncions = "Les funcions de l'aplicació s'han deshabilitat";
-    var txtFuncionsFins = "fins que no es restableixi la comunicació";
-    
+	var txtEnllas = "<spring:message code='txt.enllas'/>";
+    var txtEnllassos = "<spring:message code='txt.enllassos'/>";
+    var txtNoHiHaEnllassos = "<spring:message code='txt.no_hi_ha_cap'/> " + txtEnllas.toLowerCase();
+    var txtNoHiHaEnllassosSeleccionats = "<spring:message code='txt.no_hi_ha'/> " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
+        
     // suggeriments
     var suggeriments = "";
 
@@ -158,7 +150,7 @@
     
     <script type="text/javascript">
     //validacio
-    var txtSeccUa = "Es necessari definir una relació Fitxa -Secció -  UA";
+    var txtSeccUa = "<spring:message code='fitxes.missatge.es_necessari'/>";
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtMax = "<spring:message code='txt.max'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
@@ -184,10 +176,11 @@
                 },
             "error":
                 {
-                    "obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
-                    "tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"
+                    "obligatori": "<spring:message code='fitxes.missatge.titol.obligatori'/>",
+                    "tipus": "El camp '<spring:message code='fitxes.missatge.titol.tipus'/>"
                 }
         },
+        /*
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -255,7 +248,8 @@
                 {
                     "tipus": "El camp 'Títol de la fitxa en l'idioma francés' no pot estar compost només de números"
                 }
-        },
+        }
+        ,*/
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -264,7 +258,7 @@
             "tipus": "numeric",
             "error":
                 {
-                    "obligatori": "El camp 'Estat' es obligatori"                   
+                    "obligatori": "<spring:message code='fitxes.missatge.estat.obligatori'/>"                   
                 }
         } 
     ];
@@ -284,8 +278,8 @@
             },
 		    "error":
 		        {
-            		"obligatori": "El camp 'Títol de la fitxa en l'idioma català' és obligatori",
-		            "tipus": "El camp 'Títol de la fitxa en l'idioma català' no pot estar compost només de números"                   
+            		"obligatori": "<spring:message code='fitxes.missatge.titol.enllas.obligatori'/>",
+		            "tipus": "<spring:message code='fitxes.missatge.titol.enllas.tipus'/>"                   
 		        }
 		}   
 	];
@@ -305,22 +299,21 @@
     <div id="resultats">
         <div class="resultats L actiu">
             <div class="dades">
-                <p class="executant">Carregant llistat de fitxes. Espere un
-                    moment, si us plau.</p>
+                <p class="executant"><spring:message code='fitxes.llistat.carregant_dades'/></p>
             </div>
-            <input type="hidden" value="0" class="pagPagina" /> <input
-                type="hidden" value="DESC" class="ordreTipus" /> <input
-                type="hidden" value="publicacio" class="ordreCamp" />
+            <input type="hidden" value="0" class="pagPagina" />
+            <input type="hidden" value="DESC" class="ordreTipus" />
+            <input type="hidden" value="publicacio" class="ordreCamp" />
         </div>
         <div class="resultats C">
             <!-- cercador -->
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2>
+                    <h2><spring:message code='fitxes.llistat.cercador'/></h2>
                     <div class="fila">
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_textes">Textes</label>
+                                <label for="cerca_textes"><spring:message code='fitxes.llistat.textes'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_textes" name="cerca_textes" type="text"/>
@@ -328,7 +321,7 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_codi">Codi</label>
+                                <label for="cerca_codi"><spring:message code='fitxes.llistat.codi'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_codi" name="cerca_codi" type="text" />
@@ -336,24 +329,24 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_estat">Estat</label>
+                                <label for="cerca_estat"><spring:message code='fitxes.llistat.estat'/></label>
                             </div>
                             <div class="control">
                                 <select id="cerca_estat" name="cerca_estat" class="t8">
-                                    <option value="" selected="selected">Tria una opci&oacute;</option>
-                                    <option value="1">P&uacute;blica</option>
-                                    <option value="2">Interna</option>
-                                    <option value="3">Reserva</option>
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                 </select>
                             </div>
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_materia">Matèria</label>
+                                <label for="cerca_materia"><spring:message code='fitxes.llistat.materia'/></label>
                             </div>
                             <div class="control select">
                                 <select id="cerca_materia" name="cerca_materia" class="materia">
-                                    <option value="">Tria una opci&oacute;</option>
+                                    <option value=""><spring:message code='camp.tria.opcio'/></option>
                                     <c:forEach items="${llistaMateries}" var="materia">
                                         <option value='<c:out value="${materia.id}" />'><c:out value="${materia.nom}" /></option>
                                     </c:forEach>
@@ -364,11 +357,11 @@
                     <div class="fila">
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_fetVital">Fet vital</label>
+                                <label for="cerca_fetVital"><spring:message code='fitxes.llistat.fet_vital'/></label>
                             </div>
                             <div class="control select">
                                 <select id="cerca_fetVital" name="cerca_fetVital" class="fetVital">
-                                    <option value="">Tria una opci&oacute;</option>
+                                    <option value=""><spring:message code='camp.tria.opcio'/></option>
                                     <c:forEach items="${llistaFetsVitals}" var="fetVital">
                                         <option value='<c:out value="${fetVital.id}" />'><c:out value="${fetVital.nom}" /></option>
                                     </c:forEach>
@@ -377,7 +370,7 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_url">URL Fórum</label>
+                                <label for="cerca_url"><spring:message code='fitxes.llistat.url_forum'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_url" name="cerca_url" type="text"/>
@@ -385,7 +378,7 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_responsable">Responsable</label>
+                                <label for="cerca_responsable"><spring:message code='fitxes.llistat.responsable'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_responsable" name="cerca_responsable" type="text"/>
@@ -395,7 +388,7 @@
                     <div class="fila">
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_fechaCaducidad">Data caducitat</label>
+                                <label for="cerca_fechaCaducidad"><spring:message code='fitxes.llistat.data.caducitat'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
@@ -403,7 +396,7 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_fechaPublicacion">Data publicaci&oacute;</label>
+                                <label for="cerca_fechaPublicacion"><spring:message code='fitxes.llistat.data.publicacio'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
@@ -411,7 +404,7 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_fechaActualizacion">Data actualitzaci&oacute;</label>
+                                <label for="cerca_fechaActualizacion"><spring:message code='fitxes.llistat.data.actualitzacio'/></label>
                             </div>
                             <div class="control">
                                 <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
@@ -419,12 +412,12 @@
                         </div>
                         <div class="element t21">
                             <div class="etiqueta">
-                                <label for="cerca_uaFilles">Inclou UA filles</label>
+                                <label for="cerca_uaFilles"><spring:message code='fitxes.llistat.inclou_ua_filles'/></label>
                             </div>
                             <div class="control">
                                 <select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
-                                    <option value="0" selected="selected">No</option>
-                                    <option value="1">Sí</option>
+                                    <option value="0" selected="selected"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
                                 </select>
                             </div>
                         </div>
@@ -432,7 +425,7 @@
                     <div class="fila">
                         <div class="element t30">
                             <div class="control">
-                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/> <label for="cerca_uaMeves" class="etiqueta">Busca a totes les meves unitats org&agrave;niques</label>
+                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/> <label for="cerca_uaMeves" class="etiqueta"><spring:message code='fitxes.llistat.cerca_a_totes'/></label>
                             </div>
                         </div>
                         <div class="botonera noClear">
@@ -459,28 +452,28 @@
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="false">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
-        <h2>Detall de la fitxa</h2>
-        <p>Recorde que les dades amb asterisc (<span class="obligatori">*</span>) són obligatòries.</p>            
+        <h2><spring:message code='fitxes.formulari.detall'/></h2>
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul mostrat">Amaga</a>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend>Dades</legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">
-                            <p class="introIdiomas">Idioma:</p>
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca">Català</a></li>
-                                <li class="idioma"><a href="javascript:;" class="es">Español</a></li>
-                                <li class="idioma"><a href="javascript:;" class="en">English</a></li>
-                                <li class="idioma"><a href="javascript:;" class="de">Deutsch</a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr">Français</a></li>
+                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
                                 
                                 <li class="traduix btnGenerico">
-                                    <a href="javascript:;" class="btn traduix"><span><span>Traduïx</span></span></a>
+                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
                                 </li>
                             </ul>
                             <div class="idiomes">
@@ -489,7 +482,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_ca">Títol de la fitxa</label>
+                                                <label for="item_titol_ca"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_titol_ca" name="item_titol_ca" type="text"
@@ -500,7 +493,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_curta_ca">Descripció abreviada</label>
+                                                <label for="item_des_curta_ca"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_curta_ca" name="item_des_curta_ca" cols="70" rows="5" style="width: 100%" class="rich basic nou"></textarea>
@@ -510,7 +503,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_llarga_ca">Descripció extensa</label>
+                                                <label for="item_des_llarga_ca"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_llarga_ca" name="item_des_llarga_ca" cols="70" rows="10" style="width: 100%" class="rich complexe nou"></textarea>
@@ -520,7 +513,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_url_ca">Adreça web externa</label>
+                                                <label for="item_url_ca"><spring:message code='fitxes.formulari.adresa_web_externa'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_url_ca" name="item_url_ca" type="text"
@@ -535,7 +528,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_es">Título de la ficha</label>
+                                                <label for="item_titol_es"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_titol_es" name="item_titol_es" type="text"
@@ -546,7 +539,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_curta_es">Descripción abreviada</label>
+                                                <label for="item_des_curta_es"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_curta_es" name="item_des_curta_es" cols="70" rows="5" style="width: 100%" class="rich nou"></textarea>
@@ -556,7 +549,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_llarga_es">Descripción extensa</label>
+                                                <label for="item_des_llarga_es"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_llarga_es" name="item_des_llarga_es" cols="70" rows="10" style="width: 100%" class="rich nou"></textarea>
@@ -566,7 +559,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_url_es">Dirección web externa</label>
+                                                <label for="item_url_es"><spring:message code='fitxes.formulari.adresa_web_externa'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_url_es" name="item_url_es" type="text"
@@ -581,7 +574,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_en">Headline</label>
+                                                <label for="item_titol_en"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_titol_en" name="item_titol_en" type="text"
@@ -592,7 +585,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_curta_en">Shorten description</label>
+                                                <label for="item_des_curta_en"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_curta_en" name="item_des_curta_en" cols="70" rows="5" style="width: 100%" class="rich nou"></textarea>
@@ -602,7 +595,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_llarga_en">Detailed description</label>
+                                                <label for="item_des_llarga_en"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_llarga_en" name="item_des_llarga_en" cols="70" rows="10" style="width: 100%" class="rich nou"></textarea>
@@ -612,7 +605,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_url_en">Extern web adress</label>
+                                                <label for="item_url_en"><spring:message code='fitxes.formulari.adresa_web_externa'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_url_en" name="item_url_en" type="text"
@@ -627,7 +620,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_de">Títol de la fitxa</label>
+                                                <label for="item_titol_de"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_titol_de" name="item_titol_de" type="text"
@@ -638,7 +631,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_curta_de">Descripció abreviada</label>
+                                                <label for="item_des_curta_de"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_curta_de" name="item_des_curta_de" cols="70" rows="5" style="width: 100%" class="rich nou"></textarea>
@@ -648,7 +641,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_llarga_de">Descripció extensa</label>
+                                                <label for="item_des_llarga_de"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_llarga_de" name="item_des_llarga_de" cols="70" rows="10" style="width: 100%" class="rich nou"></textarea>
@@ -658,7 +651,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_url_de">Adreça web externa</label>
+                                                <label for="item_url_de"><spring:message code='fitxes.formulari.adresa_web_externa'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_url_de" name="item_url_de" type="text"
@@ -673,7 +666,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_fr">Títol de la fitxa</label>
+                                                <label for="item_titol_fr"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_titol_fr" name="item_titol_fr" type="text"
@@ -684,7 +677,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_curta_fr">Descripció abreviada</label>
+                                                <label for="item_des_curta_fr"><spring:message code='fitxes.formulari.descripcio.abreviada'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_curta_fr" name="item_des_curta_fr" cols="70" rows="5" style="width: 100%" class="rich basic nou"></textarea>
@@ -694,7 +687,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_des_llarga_fr">Descripció extensa</label>
+                                                <label for="item_des_llarga_fr"><spring:message code='fitxes.formulari.descripcio.extensa'/></label>
                                             </div>
                                             <div class="control">
                                                 <textarea id="item_des_llarga_fr" name="item_des_llarga_fr" cols="70" rows="10" style="width: 100%" class="rich complexe nou"></textarea>
@@ -704,7 +697,7 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_url_fr">Adreça web externa</label>
+                                                <label for="item_url_fr"><spring:message code='fitxes.formulari.adresa_web_externa'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_url_fr" name="item_url_fr" type="text"
@@ -724,14 +717,14 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul amagat">Mostra</a>
-                    <legend>Multimèdia</legend>
+                    <a class="modul amagat"><spring:message code='boto.mostra'/></a>
+                    <legend><spring:message code='fitxes.formulari.multimedia'/></legend>
                     <div class="modul_continguts">
                         <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_icona">Icona</label>
+                                    <label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_icona" name="item_icona" type="file" class="nou" />
@@ -739,7 +732,7 @@
                             </div>
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_banner">Banner</label>
+                                    <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_banner" name="item_banner" type="file"
@@ -752,7 +745,7 @@
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_imatge">Imatge</label>
+                                    <label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_imatge" name="item_imatge" type="file"
@@ -761,7 +754,7 @@
                             </div>
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_youtube">Adreça video YouTube</label>
+                                    <label for="item_youtube"><spring:message code='fitxes.formulari.adresa_youtube'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_youtube" name="item_youtube" type="text"
@@ -774,7 +767,7 @@
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_forum">Enllaç fòrum / Línia de debat</label>
+                                    <label for="item_forum"><spring:message code='fitxes.formulari.enllas_forum'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_forum" name="item_forum" type="text" class="nou" />
@@ -789,13 +782,13 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul amagat">Mostra</a>
-                    <legend>Responsable</legend>
+                    <a class="modul amagat"><spring:message code='boto.mostra'/></a>
+                    <legend><spring:message code='fitxes.formulari.responsable'/></legend>
                     <div class="modul_continguts">
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_notes">Notes</label>
+                                    <label for="item_notes"><spring:message code='fitxes.formulari.notes'/></label>
                                 </div>
                                 <div class="control">
                                     <textarea id="item_notes" name="item_notes" cols="50" rows="7" class="nou"></textarea>
@@ -820,14 +813,14 @@
                         <div class="fila">
                             <div class="element left">
                                 <div class="etiqueta">
-                                    <label for="item_estat">Estat</label>
+                                    <label for="item_estat"><spring:message code='camp.estat'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="item_estat" name="item_estat">
-                                        <option value="" selected="selected">Tria una opci&oacute;</option>
-                                        <option value="1">P&uacute;blica</option>
-                                        <option value="2">Interna</option>
-                                        <option value="3">Reserva</option>
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -837,7 +830,7 @@
                         <div class="fila">
                             <div class="element left">
                                 <div class="etiqueta">
-                                    <label for="item_data_publicacio">Data publicació</label>
+                                    <label for="item_data_publicacio"><spring:message code='fitxes.formulari.data.publicacio'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_data_publicacio" name="item_data_publicacio"                                        
@@ -846,7 +839,7 @@
                             </div>
                             <div class="element right">
                                 <div class="etiqueta">
-                                    <label for="item_data_caducitat">Data caducitat</label>
+                                    <label for="item_data_caducitat"><spring:message code='fitxes.formulari.data.caducitat'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_data_caducitat" name="item_data_caducitat"
@@ -859,16 +852,16 @@
                         <div class="botonera dalt">
                           <ul>
                               <li class="btnVolver impar">
-                                  <a id="btnVolver" href="javascript:;" class="btn torna"><span><span>Torna</span></span></a>
+                                  <a id="btnVolver" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
                               </li>
                               <li class="btnGuardar par">
-                                  <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span>Guarda!</span></span></a>
+                                  <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
                               </li>                                                    
                               <li class="btnEliminar impar" style="display:none;">
-                                  <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span>Elimina</span></span></a>
+                                  <a id="btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
                               </li>
                               <li class="btnPrevisualizar par">
-                                  <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span>Previsualitza</span></span></a>
+                                  <a id="btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
                               </li>                              
                           </ul>
                         </div>                                                
@@ -881,36 +874,36 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul mostrat">Amaga</a>
-                    <legend>Documents relacionats</legend>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.documents_relacionats'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulDocuments -->
                         <div class="modulDocuments multilang">
                             <ul class="idiomes">
-                                <li class="ca seleccionat">ca</li>
-                                <li class="es">es</li>
-                                <li class="en">en</li>
-                                <li class="de">de</li>
-                                <li class="fr">fr</li>
+                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
+                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
                             </ul>
                             <div class="seleccionats">
                                 <div class="ca seleccionat cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_documents'/></p>
                                 </div>
                                 <div class="es cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_documents'/></p>
                                 </div>
                                 <div class="en cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_documents'/></p>
                                 </div>
                                 <div class="de cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_documents'/></p>
                                 </div>
                                 <div class="fr cajaIdioma">
-                                    <p class="info">No hi ha documents.</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_documents'/></p>
                                 </div>
                                 <p class="btnGenerico">
-                                    <a class="btn afegeix" href="javascript:;"><span><span>Afegeix document</span></span></a>
+                                    <a class="btn afegeix" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
                                 </p>
                             </div>
                         </div>
@@ -922,16 +915,16 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul mostrat">Amaga</a>
-                    <legend>Matèries relacionades</legend>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.materies_relacionades'/></legend>
                     <div class="modul_continguts mostrat">                    
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
                             <div class="seleccionats">
-                                <p class="info">No hi ha matèries.</p>
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_materies'/></p>
                                 <div class="listaOrdenable"></div>
                                 <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona matèries</span></span></a>
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_materies'/></span></span></a>
                                 </div>
                             </div>
                             <div class="llistat">
@@ -951,10 +944,10 @@
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span>Finalitza</span></span></a>
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                                     </div>
                                     <div class="btnGenerico">
-                                        <a href="javascript:;" class="cancela"><span><span>Cancel·la</span></span></a>
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -967,16 +960,16 @@
             <!-- modul -->
             <div class="modul">
                 <fieldset>
-                    <a class="modul mostrat">Amaga</a>
-                    <legend>Fets vitals relacionats</legend>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.fets_vitals'/></legend>
                     <div class="modul_continguts mostrat">                    
                         <!-- modulFetsVitals -->
                         <div class="modulFetsVitals selectorChecks">
                             <div class="seleccionats">
-                                <p class="info">No hi ha fets vitals.</p>
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
                                 <div class="listaOrdenable"></div>
                                 <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona fets vitals</span></span></a>
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
                                 </div>
                             </div>
                             <div class="llistat">
@@ -996,10 +989,10 @@
                                 </ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span>Finalitza</span></span></a>
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
                                     </div>
                                     <div class="btnGenerico">
-                                        <a href="javascript:;" class="cancela"><span><span>Cancel·la</span></span></a>
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
                                     </div>
                                 </div>
                             </div>
@@ -1014,17 +1007,17 @@
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend>
-                        Relació: Secció - <abbr title="Unitat Administrativa">UA</abbr>
+                        <spring:message code='fitxes.relacio_seccio'/><abbr title="<spring:message code='fitxes.relacio_seccio.ua'/>"><spring:message code='fitxes.relacio_seccio.ua_abr'/></abbr>
                     </legend>
                     <div class="modul_continguts mostrat">
                         <!-- modulSeccionsUA -->
                         <div class="modulSeccionsUA">
                             <div class="seleccionats">
-                                <p class="info">No hi ha seccions amb Unitat Administrativa.</p>
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_seccions_ua'/></p>
                                 <div class="listaOrdenable"></div>
                                 <div class="botonera">
                                     <div class="btnGenerico">
-                                        <a class="btn gestiona" href="javascript:;"><span><span>Gestiona seccions</span></span></a>
+                                        <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_seccions'/></span></span></a>
                                     </div>
                                 </div>
                                 
@@ -1039,44 +1032,44 @@
             <div class="modul">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                    <legend>Enllaços relacionats</legend>                               
+                    <legend><spring:message code='fitxes.enllasos_relacionats'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulEnllaços -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulEnllassos multilang">
                             <ul class="idiomes">
-                            	<li class="introIdiomas">Idioma:</li>
-                                <li class="ca">ca</li>
-                                <li class="es">es</li>
-                                <li class="en">en</li>
-                                <li class="de">de</li>
-                                <li class="fr">fr</li>
+                            	<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/></li>
+                                <li class="ca"><spring:message code='txt.idioma.ca_abr'/></li>
+                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
                             </ul>                            
                             <div class="seleccionats">
                                 <%-- dsanchez: multiidioma --%>
                                 <div class="seleccionat cajaIdioma ca">
-                                    <p class="info">No hi ha enllaços</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="es cajaIdioma">
-                                    <p class="info">No hi ha enllaços</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>
                                 <div class="en cajaIdioma">
-                                    <p class="info">No hi ha enllaços</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>                                
                                 <div class="de cajaIdioma">
-                                    <p class="info">No hi ha enllaços</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>                                
                                 <div class="fr cajaIdioma">
-                                    <p class="info">No hi ha enllaços</p>
+                                    <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                                     <div class="listaOrdenable"></div>
                                 </div>                                
                                 
                                 <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span>Gestiona enllaços</span></span></a>
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.torna'/></span></span></a>
                                 </div>
                             </div>                                  
                         </div>
@@ -1092,10 +1085,10 @@
 <!-- /escriptori_detall -->
 <!-- escriptori_previsualitza -->
 <div id="escriptori_previsualitza">
-    <h2>Previsualitzant la fitxa</h2>
+    <h2><spring:message code='fitxes.previsualitzant'/></h2>
     <div class="boton btnGenerico clear">
         <a href="javascript:;" class="btn torna dePrevisualitzar">
-        	<span><span>Torna</span></span>
+        	<span><span><spring:message code='boto.torna'/></span></span>
         </a>
     </div>
     <div class="previsualitzacio">
@@ -1106,24 +1099,23 @@
 <!-- escriptori_seccions_ua -->
 <div id="escriptori_seccions_ua">
 	<ul id="opcions">
-		<li class="opcio actiu">Gestió de la relació entre les Seccions i les Unitats
-        Administratives</li>
+		<li class="opcio actiu"><spring:message code='fitxes.seccions.gestio'/></li>
 	</ul>
     <!-- llistat -->
     <div id="resultats" class="escriptori_items_llistat">
         <div class="escriptori_selector_seccions">
-            <h3>Seccions</h3>
+            <h3><spring:message code='fitxes.seccions'/></h3>
             <div class="escriptori_seccions_arbre"></div>
         </div>
         <div class="escriptori_selector_uas">
-            <h3>Unitats Administratives</h3>
+            <h3><spring:message code='fitxes.seccions.ua'/></h3>
             <div class="escriptori_ua_arbre"></div>
         </div>
         <div id="cercador">
         	<div class="botonera">
 				<div class="boton btnGenerico btnVolverDetalle">
 					<a class="btn torna" href="javascript:;">
-						<span><span>Torna al detall</span></span>
+						<span><span><spring:message code='boto.torna_detall'/></span></span>
 					</a>
 				</div>
 			</div>
@@ -1137,18 +1129,18 @@
 			<div class="interior">
 				<div class="seleccionats">
 					<div class="seleccionat">
-						<p class="info">No hi ha cap secció/UA.</p>
+						<p class="info"><spring:message code='fitxes.seccions.no_hi_ha'/></p>
 						<div class="listaOrdenable"></div>
 					</div>
 					<div class="botonera">
 						<p class="botonera btnGenerico">
 							<a id="btnInsertar" class="btn inserta important" href="javascript:;">
-								<span><span>Inserta</span></span>
+								<span><span><spring:message code='boto.inserta'/></span></span>
 							</a>							
 						</p>
 						<p class="botonera btnGenerico">
 							<a id="btnFinalizar" class="btn finalitza important" href="javascript:;">
-								<span><span>Finalitza</span></span>
+								<span><span><spring:message code='boto.finalitza'/></span></span>
 							</a>
 						</p>
 					</div>					
@@ -1161,7 +1153,7 @@
 <!-- escriptori_enllassos -->
 <div id="escriptori_enllassos">
    <ul id="opcions">
-        <li class="opcio actiu">Administració de enllaços</li>                                 
+        <li class="opcio actiu"><spring:message code='fitxes.enllasos.administracio'/></li>                                 
     </ul>    
     <form id="formEnllassos" class="grupoModulosFormulario">
     	<input id="id_enllas_actual" type="hidden"/>
@@ -1169,13 +1161,13 @@
 	        <fieldset>
 		        <!-- fila -->
 		        <div class="fila">
-		            <p class="introIdiomas">Idioma:</p>
+		            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
 		            <ul class="idiomes">
-		                <li class="idioma"><a href="javascript:;" class="ca">Català</a></li>
-		                <li class="idioma"><a href="javascript:;" class="es">Español</a></li>
-		                <li class="idioma"><a href="javascript:;" class="en">English</a></li>
-		                <li class="idioma"><a href="javascript:;" class="de">Deutsch</a></li>
-		                <li class="idioma"><a href="javascript:;" class="fr">Français</a></li>                                
+		                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+		                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+		                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+		                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+		                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>                                
 		            </ul>
 		            <div class="idiomes">
 		                <!-- ca -->
@@ -1183,7 +1175,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_titol_ca">Títol</label>
+		                                <label for="enllas_titol_ca"><spring:message code='fitxes.enllasos.titol'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_titol_ca" name="item_titol_ca" type="text"
@@ -1194,7 +1186,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_url_ca">Adreça web</label>
+		                                <label for="enllas_url_ca"><spring:message code='fitxes.enllasos.url'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_url_ca" name="item_url_ca" type="text"
@@ -1209,7 +1201,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_titol_es">Título</label>
+		                                <label for="enllas_titol_es"><spring:message code='fitxes.enllasos.titol'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_titol_es" name="item_titol_es" type="text"
@@ -1220,7 +1212,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_url_es">Dirección web</label>
+		                                <label for="enllas_url_es"><spring:message code='fitxes.enllasos.url'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_url_es" name="item_url_es" type="text"
@@ -1235,7 +1227,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_titol_en">Headline</label>
+		                                <label for="enllas_titol_en"><spring:message code='fitxes.enllasos.titol'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_titol_en" name="item_titol_en" type="text"
@@ -1246,7 +1238,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_url_en">Web adress</label>
+		                                <label for="enllas_url_en"><spring:message code='fitxes.enllasos.url'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_url_en" name="item_url_en" type="text"
@@ -1261,7 +1253,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_titol_de">Títol</label>
+		                                <label for="enllas_titol_de"><spring:message code='fitxes.enllasos.titol'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_titol_de" name="item_titol_de" type="text"
@@ -1272,7 +1264,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_url_de">Adreça web externa</label>
+		                                <label for="enllas_url_de"><spring:message code='fitxes.enllasos.url.externa'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_url_de" name="item_url_de" type="text"
@@ -1287,7 +1279,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_titol_fr">Títol</label>
+		                                <label for="enllas_titol_fr"><spring:message code='fitxes.enllasos.titol'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_titol_fr" name="item_titol_fr" type="text"
@@ -1298,7 +1290,7 @@
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="enllas_url_fr">Adreça web</label>
+		                                <label for="enllas_url_fr"><spring:message code='fitxes.enllasos.url'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input id="enllas_url_fr" name="item_url_fr" type="text"
@@ -1314,17 +1306,17 @@
 			        <div class="botonera">
 						<div class="boton btnGenerico">
 							<a id="btnLimpiarCampos" class="btn borrar" href="javascript:;">
-								<span><span>Borrar</span></span>
+								<span><span><spring:message code='boto.borrar'/></span></span>
 							</a>
 						</div>
 						<div class="boton btnGenerico">
 							<a id="btnInsertarEnllas" class="btn inserta important" href="javascript:;">
-								<span><span>Inserta</span></span>
+								<span><span><spring:message code='boto.inserta'/></span></span>
 							</a>							
 						</div>
 						<div id="btnVolverDetalle" class="boton btnGenerico">
 							<a class="btn torna" href="javascript:;">
-								<span><span>Torna al detall</span></span>
+								<span><span><spring:message code='boto.finalitza'/></span></span>
 							</a>
 						</div>
 					</div>
@@ -1337,32 +1329,32 @@
         <div class="modul">
             <div class="interior multilang">            	
                 <ul class="idiomes">
-                	<li class="introIdiomas">Idioma:</li>
-                    <li class="ca">ca</li>
-                    <li class="es">es</li>
-                    <li class="en">en</li>
-                    <li class="de">de</li>
-                    <li class="fr">fr</li>
+                	<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/></li>
+                    <li class="ca"><spring:message code='txt.idioma.ca_abr'/></li>
+                    <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+                    <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+                    <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+                    <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
                 </ul>
                 <div class="seleccionats">
                     <div class="seleccionat cajaIdioma ca">
-                        <p class="info">No hi ha enllaços</p>
+                        <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                         <div class="listaOrdenable"></div>
                     </div>
                     <div class="es cajaIdioma">
-                        <p class="info">No hi ha enllaços</p>
+                        <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                         <div class="listaOrdenable"></div>
                     </div>
                     <div class="en cajaIdioma">
-                        <p class="info">No hi ha enllaços</p>
+                        <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                         <div class="listaOrdenable"></div>
                     </div>                                
                     <div class="de cajaIdioma">
-                        <p class="info">No hi ha enllaços</p>
+                        <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                         <div class="listaOrdenable"></div>
                     </div>                                
                     <div class="fr cajaIdioma">
-                        <p class="info">No hi ha enllaços</p>
+                        <p class="info"><spring:message code='fitxes.no_hi_ha_enllasos'/></p>
                         <div class="listaOrdenable"></div>                      
                     </div>                    
                     <p class="botonera btnGenerico">
