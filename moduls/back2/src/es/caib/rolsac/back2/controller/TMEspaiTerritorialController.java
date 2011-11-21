@@ -27,8 +27,8 @@ public class TMEspaiTerritorialController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatEspaisTerritorials(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMEspaiTerritorial.jsp");
-        model.put("escriptori", "pantalles/tmEspaiTerritorial.jsp");
+        model.put("submenu", "layout/submenu/submenuTMEspaiTerritorial.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmEspaiTerritorial.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

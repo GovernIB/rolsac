@@ -27,8 +27,8 @@ public class TMPublicObjectiuController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatFetsVitals(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMPublicObjectiu.jsp");
-        model.put("escriptori", "pantalles/tmPublicObjectiu.jsp");
+        model.put("submenu", "layout/submenu/submenuTMPublicObjectiu.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmPublicObjectiu.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

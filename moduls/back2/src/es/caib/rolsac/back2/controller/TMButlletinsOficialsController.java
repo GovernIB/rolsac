@@ -27,8 +27,8 @@ public class TMButlletinsOficialsController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMButlletinsOficials.jsp");
-        model.put("escriptori", "pantalles/tmButlletinsOficials.jsp");
+        model.put("submenu", "layout/submenu/submenuTMButlletinsOficials.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmButlletinsOficials.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

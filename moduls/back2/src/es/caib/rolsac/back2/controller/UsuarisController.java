@@ -27,7 +27,7 @@ public class UsuarisController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 2);
-        model.put("submenu", "layout/submenuUsuaris.jsp");
+        model.put("submenu", "layout/submenu/submenuUsuaris.jsp");
         model.put("escriptori", "pantalles/Usuaris.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){

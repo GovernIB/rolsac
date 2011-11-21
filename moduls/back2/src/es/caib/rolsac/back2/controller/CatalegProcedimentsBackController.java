@@ -74,7 +74,7 @@ public class CatalegProcedimentsBackController {
 	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
 		model.put("menu", 0);
-		model.put("submenu", "layout/submenuOrganigrama.jsp");
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);
 		model.put("escriptori", "pantalles/catalegProcediments.jsp");
 		if (session.getAttribute("unidadAdministrativa") != null) {

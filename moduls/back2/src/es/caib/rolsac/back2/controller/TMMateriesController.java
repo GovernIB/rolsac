@@ -27,8 +27,8 @@ public class TMMateriesController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMMateries.jsp");
-        model.put("escriptori", "pantalles/tmMateries.jsp");
+        model.put("submenu", "layout/submenu/submenuTMMateries.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmMateries.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

@@ -27,8 +27,8 @@ public class TMFamiliaController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMFamilia.jsp");
-        model.put("escriptori", "pantalles/tmFamilia.jsp");
+        model.put("submenu", "layout/submenu/submenuTMFamilia.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmFamilia.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

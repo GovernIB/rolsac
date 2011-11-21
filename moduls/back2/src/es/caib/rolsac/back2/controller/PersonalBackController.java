@@ -49,7 +49,7 @@ public class PersonalBackController {
     public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 
         model.put("menu", 0);
-        model.put("submenu", "layout/submenuOrganigrama.jsp");
+        model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 5);
         
         RolUtil rolUtil= new RolUtil(request);

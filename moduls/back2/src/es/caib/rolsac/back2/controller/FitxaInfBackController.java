@@ -73,7 +73,7 @@ public class FitxaInfBackController {
     public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
         model.put("menu", 0);
-        model.put("submenu", "layout/submenuOrganigrama.jsp");
+        model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 3);
         model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
         model.put("escriptori", "pantalles/fitxaInf.jsp");

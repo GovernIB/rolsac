@@ -84,7 +84,7 @@ public class NormativaBackController {
 		String idioma = request.getLocale().getLanguage();
 		
 		model.put("menu", 0);
-		model.put("submenu", "layout/submenuOrganigrama.jsp");
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 4);
 		model.put("titol_escriptori", "Normativa");
 		model.put("escriptori", "pantalles/normativa.jsp");

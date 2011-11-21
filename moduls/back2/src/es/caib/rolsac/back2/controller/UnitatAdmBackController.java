@@ -110,7 +110,7 @@ public class UnitatAdmBackController {
         }
 	    
 		model.put("menu", 0);
-		model.put("submenu", "layout/submenuOrganigrama.jsp");
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 2);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");

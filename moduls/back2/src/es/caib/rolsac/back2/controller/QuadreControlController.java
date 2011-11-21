@@ -72,7 +72,7 @@ public class QuadreControlController extends ArchivoController {
 		}
 
 		model.put("menu", 0);
-		model.put("submenu", "layout/submenuOrganigrama.jsp");
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 0);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.quadre_control", null, request.getLocale()));
 		model.put("escriptori", "pantalles/quadreControl.jsp");

@@ -27,8 +27,8 @@ public class TMTipusResponsableController {
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenuTMTipusResponsable.jsp");
-        model.put("escriptori", "pantalles/tmTipusResponsable.jsp");
+        model.put("submenu", "layout/submenu/submenuTMTipusResponsable.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmTipusResponsable.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
