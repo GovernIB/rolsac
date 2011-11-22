@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.util.Map;
 
@@ -6,13 +6,13 @@ import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.Traducible;
 
 
-public class EnlaceTransient extends Traducible {
+public class EnlaceDTO extends Traducible {
 
     private Long id;  
     private long orden;
 
     
-    public EnlaceTransient (Long id, Long orden, Map<String,Traduccion> traducciones){
+    public EnlaceDTO (Long id, Long orden, Map<String,Traduccion> traducciones){
         this.id = id;
         this.orden = orden;
         this.setTraducciones(traducciones);

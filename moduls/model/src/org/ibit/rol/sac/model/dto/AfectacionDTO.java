@@ -1,8 +1,8 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class AfectacionTransient implements ValueObject {
+public class AfectacionDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 	
@@ -11,7 +11,7 @@ public class AfectacionTransient implements ValueObject {
     private String afectacioNom;
     private long afectacioId;
 	
-    public AfectacionTransient() {
+    public AfectacionDTO() {
     	super();
     }
     	

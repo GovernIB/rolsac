@@ -1,19 +1,19 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class ProcedimientoNormativaTransient implements ValueObject {
+public class ProcedimientoNormativaDTO implements ValueObject {
 	
 	private long id;
 	private String titulo;
     private String fecha;
     private String fechaBoletin;
 	
-    public ProcedimientoNormativaTransient() {
+    public ProcedimientoNormativaDTO() {
     	super();
     }
     
-	public ProcedimientoNormativaTransient(long id, String titulo, String fecha, String fechaBoletin) {
+	public ProcedimientoNormativaDTO(long id, String titulo, String fecha, String fechaBoletin) {
 	    super();
 	    this.id = id;
 	    this.titulo = titulo;

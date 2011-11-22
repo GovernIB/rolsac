@@ -11,7 +11,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
@@ -29,9 +29,9 @@ public class UnidadAdministrativaController {
 	private static Log log = LogFactory.getLog(UnidadAdministrativaController.class);
 	
 	@RequestMapping(value = "/listarHijos.do")
-	public @ResponseBody List<IdNomTransient> llistatHijos(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody List<IdNomDTO> llistatHijos(HttpSession session, HttpServletRequest request) {
 		
-		List<IdNomTransient> uaHijosJSON = new ArrayList<IdNomTransient>();
+		List<IdNomDTO> uaHijosJSON = new ArrayList<IdNomDTO>();
 		List<UnidadAdministrativa> uaHijos = null;
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 
@@ -45,16 +45,16 @@ public class UnidadAdministrativaController {
 			
 			String lang = request.getLocale().getLanguage();
 			for (UnidadAdministrativa ua: uaHijos) {
-				uaHijosJSON.add(new IdNomTransient(ua.getId(), ua.getNombreUnidadAdministrativa(lang)));
+				uaHijosJSON.add(new IdNomDTO(ua.getId(), ua.getNombreUnidadAdministrativa(lang)));
 			}
 		} catch (DelegateException dEx) {
 			MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
 			if (dEx.getCause() instanceof SecurityException) {
 				String error = messages.getMessage("error.permisos", null, request.getLocale());
-				uaHijosJSON.add(new IdNomTransient(-1l, error));
+				uaHijosJSON.add(new IdNomDTO(-1l, error));
 			} else {
 				String error = messages.getMessage("error.altres", null, request.getLocale());
-				uaHijosJSON.add(new IdNomTransient(-2l, error));
+				uaHijosJSON.add(new IdNomDTO(-2l, error));
 				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		}

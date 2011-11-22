@@ -1,8 +1,8 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class PersonalTransient implements ValueObject {
+public class PersonalDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 	private long   id;
@@ -12,7 +12,7 @@ public class PersonalTransient implements ValueObject {
 	private String email;
 	private	String extensionPublica;
 	
-	public PersonalTransient(long id, String nombre, String username, String uniAdmin, String email, String extensionPublica){
+	public PersonalDTO(long id, String nombre, String username, String uniAdmin, String email, String extensionPublica){
 	    super();
 	    this.id = id;
 	    this.nombre = nombre;

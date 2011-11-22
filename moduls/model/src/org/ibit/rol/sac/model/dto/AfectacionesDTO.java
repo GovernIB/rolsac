@@ -1,17 +1,17 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.util.List;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class AfectacionesTransient implements ValueObject {
+public class AfectacionesDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 	
-	private List<AfectacionTransient> listaAfectaciones;
+	private List<AfectacionDTO> listaAfectaciones;
 	
 	
-    public AfectacionesTransient() {
+    public AfectacionesDTO() {
     	super();
     }
 
@@ -21,7 +21,7 @@ public class AfectacionesTransient implements ValueObject {
 	 *
 	 * @return Valor de listaAfectaciones.
 	 */
-	public List<AfectacionTransient> getListaAfectaciones() {
+	public List<AfectacionDTO> getListaAfectaciones() {
 		return listaAfectaciones;
 	}
 
@@ -31,7 +31,7 @@ public class AfectacionesTransient implements ValueObject {
 	 *
 	 * @param listaAfectaciones Nuevo valor de listaAfectaciones.
 	 */
-	public void setListaAfectaciones(List<AfectacionTransient> listaAfectaciones) {
+	public void setListaAfectaciones(List<AfectacionDTO> listaAfectaciones) {
 		this.listaAfectaciones = listaAfectaciones;
 	}
     	

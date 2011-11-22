@@ -1,19 +1,19 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.io.Serializable;
 
-public class IdNomTransient implements Serializable {
+public class IdNomDTO implements Serializable {
 
 	private static final long serialVersionUID = -1227937193155485933L;
 
 	private Long id;
 	private String nom;
 	
-	public IdNomTransient() {
+	public IdNomDTO() {
 		super();
 	}
 	
-	public IdNomTransient(Long id, String nom) {
+	public IdNomDTO(Long id, String nom) {
 		super();
 		this.id = id;
 		this.nom = nom;

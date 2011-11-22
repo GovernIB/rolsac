@@ -1,10 +1,10 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.util.Date;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class ProcedimientoLocalTransient implements ValueObject {
+public class ProcedimientoLocalDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 
@@ -14,7 +14,7 @@ public class ProcedimientoLocalTransient implements ValueObject {
 	private String caducitat;
 	private Boolean caducat;
 	
-	public ProcedimientoLocalTransient(long id, String nombre, String publicacio, String caducitat, Boolean caducat) {
+	public ProcedimientoLocalDTO(long id, String nombre, String publicacio, String caducitat, Boolean caducat) {
 		super();
 		this.id = id;
 		this.nombre = nombre;

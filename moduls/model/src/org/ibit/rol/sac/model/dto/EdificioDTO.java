@@ -1,8 +1,8 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class EdificioTransient implements ValueObject {
+public class EdificioDTO implements ValueObject {
 
 	private static final long serialVersionUID = 3258125847574821172L;
     private Long id;
@@ -10,7 +10,7 @@ public class EdificioTransient implements ValueObject {
     private String codigoPostal;
     private String poblacion;    
     
-    public EdificioTransient(long id, String direccion, String codigoPostal, String poblacion){
+    public EdificioDTO(long id, String direccion, String codigoPostal, String poblacion){
         super();
         this.id = id;
         this.direccion = direccion;

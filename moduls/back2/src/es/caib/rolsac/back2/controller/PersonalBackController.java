@@ -22,8 +22,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.PersonalTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.PersonalDTO;
 
 import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -71,7 +71,7 @@ public class PersonalBackController {
 	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
 
        List<Personal> llistaPersonal = new ArrayList<Personal>();
-       List<PersonalTransient> llistaPersonalTransient = new ArrayList<PersonalTransient>();
+       List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
 	   Map<String, Object> paramMap = new HashMap<String, Object>();
 	   
@@ -98,7 +98,7 @@ public class PersonalBackController {
 			llistaPersonal = personalDelegate.listarPersonalFiltro(paramMap);
 			
 			for(Personal persona : llistaPersonal){                
-	               llistaPersonalTransient.add(new PersonalTransient(  persona.getId(), 
+	               llistaPersonalDTO.add(new PersonalDTO(  persona.getId(), 
 	                                                                   persona.getNombre(),
 	                                                                   persona.getUsername(),
 	                                                                   persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(request.getLocale().getLanguage()),
@@ -115,8 +115,8 @@ public class PersonalBackController {
             }
 		}
 
-		resultats.put("total", llistaPersonalTransient.size());
-        resultats.put("nodes", llistaPersonalTransient);
+		resultats.put("total", llistaPersonalDTO.size());
+        resultats.put("nodes", llistaPersonalDTO);
 
 		return resultats;
 	}
@@ -163,9 +163,9 @@ public class PersonalBackController {
 
 	
 	@RequestMapping(value = "/esborrarPersonal.do", method = POST)
-    public @ResponseBody IdNomTransient esborrarPersonal(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO esborrarPersonal(HttpServletRequest request) {
 	    
-	    IdNomTransient resultatStatus = new IdNomTransient(); 
+	    IdNomDTO resultatStatus = new IdNomDTO(); 
 	    
 	    try {
             
@@ -192,9 +192,9 @@ public class PersonalBackController {
 	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomTransient guardarPersonal(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarPersonal(HttpSession session, HttpServletRequest request) {
         
-		IdNomTransient result = null;
+		IdNomDTO result = null;
         
         try {
 //        	UnidadAdministrativa ua = (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
@@ -212,7 +212,7 @@ public class PersonalBackController {
     	    
         	if (ua == null || nom == null || username == null || "".equals(nom) || "".equals(username)) {
         		String error = messageSource.getMessage("persona.error.falten.camps", null, request.getLocale());
-				result = new IdNomTransient(-3l, error);
+				result = new IdNomDTO(-3l, error);
         	} else {
         		PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
         		Personal persona = null;
@@ -240,17 +240,17 @@ public class PersonalBackController {
                 personalDelegate.grabarPersonal(persona, ua.getId());
                 
                 String ok = messageSource.getMessage("personal.guardat.correcte", null, request.getLocale());
-                result = new IdNomTransient(persona.getId(), ok);
+                result = new IdNomDTO(persona.getId(), ok);
     	    }
         	
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				result = new IdNomTransient(-1l, error);
+				result = new IdNomDTO(-1l, error);
 				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
-				result = new IdNomTransient(-2l, error);
+				result = new IdNomDTO(-2l, error);
 				log.error("Error: " + dEx.getMessage());
 			}
 		}

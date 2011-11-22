@@ -19,7 +19,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
@@ -125,37 +125,37 @@ public class DocumentBackController extends ArchivoController {
 			if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
 				Long procId = Long.parseLong(valoresForm.get("procId"));
 				docId = docDelegate.grabarDocumento(doc, procId, null);
-				jsonResult = new IdNomTransient(docId,  messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
+				jsonResult = new IdNomDTO(docId,  messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
 			} else if (valoresForm.get("fitxaId") != null && !"".equals(valoresForm.get("fitxaId"))) {
 				Long fitxaId = Long.parseLong(valoresForm.get("fitxaId"));
 				docId = docDelegate.grabarDocumento(doc, null, fitxaId);
-				jsonResult = new IdNomTransient(docId,  messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
+				jsonResult = new IdNomDTO(docId,  messageSource.getMessage("document.guardat.correcte", null, locale)).getJson();
 			} else {
 				String error = messageSource.getMessage("error.altres", null, locale);
-				jsonResult = new IdNomTransient(-2l, error).getJson();
+				jsonResult = new IdNomDTO(-2l, error).getJson();
 				log.error("Error guardant document: No s'ha especificat id de procediment o de fitxer.");
 			}
 			
 		} catch (FileUploadException fue) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
-			jsonResult = new IdNomTransient(-3l, error).getJson();
+			jsonResult = new IdNomDTO(-3l, error).getJson();
 			log.error(error + ": " + fue.toString());
 		} catch (UnsupportedEncodingException uee) {
 			String error = messageSource.getMessage("error.altres", null, locale);
-			jsonResult = new IdNomTransient(-2l, error).getJson();
+			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + uee.toString());
 		} catch (NumberFormatException nfe) {
 			String error = messageSource.getMessage("error.altres", null, locale);
-			jsonResult = new IdNomTransient(-2l, error).getJson();
+			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + nfe.toString());
 		} catch (DelegateException de) {
 			String error = null;
 			if (de.getCause() instanceof SecurityException) {
 				error = messageSource.getMessage("error.permisos", null, locale);
-				jsonResult = new IdNomTransient(-1l, error).getJson();
+				jsonResult = new IdNomDTO(-1l, error).getJson();
 			} else {
 				error = messageSource.getMessage("error.altres", null, locale);
-				jsonResult = new IdNomTransient(-2l, error).getJson();
+				jsonResult = new IdNomDTO(-2l, error).getJson();
 			}
 			log.error(error + ": " + de.toString());
 		}

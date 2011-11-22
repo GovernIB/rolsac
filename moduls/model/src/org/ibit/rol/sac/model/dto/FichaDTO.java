@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.util.Set;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.ibit.rol.sac.model.ValueObject;
  * Bean que representa a una ficha. Modificado para (PORMAD)
  */
 
-public class FichaTransient implements ValueObject {
+public class FichaDTO implements ValueObject {
 
 	private static final long serialVersionUID = 1L;
 	private Long id;
@@ -20,7 +20,7 @@ public class FichaTransient implements ValueObject {
 	private String fechaCaducidad;
 	private Boolean caducat;
 
-   public FichaTransient(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
+   public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
         super();
         this.id = id;
         this.titulo = titulo;

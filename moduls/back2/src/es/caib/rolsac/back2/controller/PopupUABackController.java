@@ -21,7 +21,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
-import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 
 import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import static org.springframework.web.bind.annotation.RequestMethod.*;

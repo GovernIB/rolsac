@@ -33,6 +33,8 @@ jQuery(document).ready(function(){
 		});
 	}
 
+	var Error = new CError();
+	
 });
 
 /**

@@ -1,8 +1,8 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.io.Serializable;
 
-public class FichaUATransient implements Serializable {
+public class FichaUADTO implements Serializable {
 
 	private static final long serialVersionUID = -1227937193155485933L;
 
@@ -16,11 +16,11 @@ public class FichaUATransient implements Serializable {
 	private int orden;
     private int ordenseccion;
 	
-	public FichaUATransient() {
+	public FichaUADTO() {
 		super();
 	}
 	
-	public FichaUATransient(Long id, Long idUA, String nombreUA, Long idSec, String nombreSec, Long idFic, String nombreFic, int orden, int ordenseccion) {
+	public FichaUADTO(Long id, Long idUA, String nombreUA, Long idSec, String nombreSec, Long idFic, String nombreFic, int orden, int ordenseccion) {
 		super();
 		this.id = id;
 		this.idUA = idUA;		

@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.ibit.rol.sac.model.ValueObject;
 
-public class NormativaTransient implements ValueObject, Comparable {
+public class NormativaDTO implements ValueObject, Comparable {
 
 	private static final long serialVersionUID = 3258125847574821172L;
 	
@@ -20,11 +20,11 @@ public class NormativaTransient implements ValueObject, Comparable {
     private Date fechaDate; //para el compareTo
     private Boolean caducat;
 	
-    public NormativaTransient() {
+    public NormativaDTO() {
     	super();
     }
     
-	public NormativaTransient(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat) {
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat) {
 		
 	    super();
 	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -41,16 +41,16 @@ public class NormativaTransient implements ValueObject, Comparable {
 	}
 
 	/**
-	 * Función de comparación para permitir la ordenación de listas de NormativaTransient.
+	 * Función de comparación para permitir la ordenación de listas de NormativaDTO.
 	 * 
-	 * @param o Objeto a comparar. Se espera NormativaTransient.
+	 * @param o Objeto a comparar. Se espera NormativaDTO.
 	 * 
 	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parámetro.
 	 */
 	public int compareTo(Object o) {
-		NormativaTransient cmp = (NormativaTransient)o;
+		NormativaDTO cmp = (NormativaDTO)o;
 		if (cmp == null)
-			cmp = new NormativaTransient();
+			cmp = new NormativaDTO();
 			
 		if (this.fechaDate == null) {
 			if (cmp.fechaDate != null)

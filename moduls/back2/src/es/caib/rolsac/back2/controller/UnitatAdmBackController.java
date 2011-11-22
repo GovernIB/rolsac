@@ -26,7 +26,7 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
@@ -71,15 +71,15 @@ public class UnitatAdmBackController {
 	    List<Materia> llistaMateries = new ArrayList<Materia>();
 	    List<Tratamiento> llistaTractaments = new ArrayList<Tratamiento>();
 	    List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
-	    List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
-	    List<IdNomTransient> llistaTractamentsTransient = new ArrayList<IdNomTransient>();
-	    List<IdNomTransient> llistaEspaiTerritorialTransient = new ArrayList<IdNomTransient>();
+	    List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+	    List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
+	    List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 	    
 	    try {                                
             llistaMateries = materiaDelegate.listarMaterias();	    	            
             
             for(Materia materia : llistaMateries){                
-                llistaMateriesTransient.add(new IdNomTransient(  materia.getId(), 
+                llistaMateriesDTO.add(new IdNomDTO(  materia.getId(), 
                                                                  materia.getNombreMateria(request.getLocale().getLanguage())
                                                                        ));                
                }
@@ -87,7 +87,7 @@ public class UnitatAdmBackController {
             llistaTractaments = tratamientoDelegate.listarTratamientos();
             
             for(Tratamiento tractament : llistaTractaments){                
-                llistaTractamentsTransient.add(new IdNomTransient(  tractament.getId(), 
+                llistaTractamentsDTO.add(new IdNomDTO(  tractament.getId(), 
                                                                    tractament.getNombreTratamiento(request.getLocale().getLanguage())
                                                                        ));                
                }                       
@@ -95,7 +95,7 @@ public class UnitatAdmBackController {
             llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
             
             for(EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial){                
-                llistaEspaiTerritorialTransient.add(new IdNomTransient(  espaiTerritorial.getId(), 
+                llistaEspaiTerritorialDTO.add(new IdNomDTO(  espaiTerritorial.getId(), 
                                                                    espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())
                                                                        ));                
                }                       
@@ -119,9 +119,9 @@ public class UnitatAdmBackController {
             model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
         }               
         
-        model.put("llistaMateries", llistaMateriesTransient);        
-        model.put("llistaTractaments", llistaTractamentsTransient);
-        model.put("llistaEspaiTerritorial", llistaEspaiTerritorialTransient);
+        model.put("llistaMateries", llistaMateriesDTO);        
+        model.put("llistaTractaments", llistaTractamentsDTO);
+        model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
         
 		return "index";
 	}
@@ -130,8 +130,8 @@ public class UnitatAdmBackController {
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
         
 	    Map<String,Object> resultats = new HashMap<String,Object>();	    
-	    List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
-	    List<IdNomTransient> llistaEdificisTransient = new ArrayList<IdNomTransient>();
+	    List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+	    List<IdNomDTO> llistaEdificisDTO = new ArrayList<IdNomDTO>();
 	    
 	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();	    	    	    	    
 
@@ -295,12 +295,12 @@ public class UnitatAdmBackController {
             if (uni.getUnidadesMaterias() != null) {             
             
                 for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
-                    llistaMateriesTransient.add(new IdNomTransient(  unidadMateria.getMateria().getId(), 
+                    llistaMateriesDTO.add(new IdNomDTO(  unidadMateria.getMateria().getId(), 
                                                                      unidadMateria.getMateria().getNombreMateria(request.getLocale().getLanguage())
                                                                            ));                
                    }
                 
-                resultats.put("materies", llistaMateriesTransient);
+                resultats.put("materies", llistaMateriesDTO);
             
             } else {
                 resultats.put("materies", null);
@@ -312,12 +312,12 @@ public class UnitatAdmBackController {
             if (uni.getEdificios() != null) {             
             
                 for(Object edifici : uni.getEdificios()){                
-                    llistaEdificisTransient.add(new IdNomTransient(  ((Edificio)edifici).getId(), 
+                    llistaEdificisDTO.add(new IdNomDTO(  ((Edificio)edifici).getId(), 
                                                                      ((Edificio)edifici).getDireccion())
                                                                            );                
                    }
                 
-                resultats.put("edificis", llistaEdificisTransient);
+                resultats.put("edificis", llistaEdificisDTO);
             
             } else {
                 resultats.put("edificis", null);
@@ -400,7 +400,7 @@ public class UnitatAdmBackController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 
-        IdNomTransient result = null;
+        IdNomDTO result = null;
         
         Map<String, String> valoresForm = new HashMap<String, String>();
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
@@ -426,7 +426,7 @@ public class UnitatAdmBackController {
             
             if (nom == null || "".equals(nom) || validacio == null || "".equals(validacio) || sexeResponsable == null || "".equals(sexeResponsable) || tractament == null || "".equals(tractament)) {
                 String error = messageSource.getMessage("unitatadm.formulari.error.falten_camps", null, request.getLocale());
-                result = new IdNomTransient(-3l, error);
+                result = new IdNomDTO(-3l, error);
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
             } 
             
@@ -516,7 +516,7 @@ public class UnitatAdmBackController {
 				unitatAdministrativa.setTratamiento(tratamiento);
 			} else {
 				String error = messageSource.getMessage("unitatadm.formulari.error.tractament_incorrecte", null, request.getLocale());
-				result = new IdNomTransient(-3l, error);	
+				result = new IdNomDTO(-3l, error);	
 				return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 			}
 		
@@ -617,25 +617,25 @@ public class UnitatAdmBackController {
 			session.setAttribute("unidadAdministrativa", unitatAdministrativa);
 			
             String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
-            result = new IdNomTransient(unitatAdministrativa.getId(), ok);
+            result = new IdNomDTO(unitatAdministrativa.getId(), ok);
             
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomTransient(-1l, error);
+                result = new IdNomDTO(-1l, error);
             } else {
                 String error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomTransient(-2l, error);
+                result = new IdNomDTO(-2l, error);
                 log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
         } catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomTransient(-2l, error);
+			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
         } catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
-			result = new IdNomTransient(-3l, error);
+			result = new IdNomDTO(-3l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));;
         }
         
@@ -681,9 +681,9 @@ public class UnitatAdmBackController {
 //    }
     
 	@RequestMapping(value = "/esborrar.do", method = POST)
-    public @ResponseBody IdNomTransient esborrarUniAdm(HttpServletRequest request) {
+    public @ResponseBody IdNomDTO esborrarUniAdm(HttpServletRequest request) {
 	    
-	    IdNomTransient resultatStatus = new IdNomTransient(); 
+	    IdNomDTO resultatStatus = new IdNomDTO(); 
 	    
 //	    try {
 //            

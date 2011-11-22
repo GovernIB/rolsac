@@ -1,8 +1,8 @@
-package org.ibit.rol.sac.model.transients;
+package org.ibit.rol.sac.model.dto;
 
 import java.io.Serializable;
 
-public class SeccionTransient implements Serializable {
+public class UnidadDTO implements Serializable {
 
 	private static final long serialVersionUID = -1227937193155485933L;
 
@@ -11,11 +11,11 @@ public class SeccionTransient implements Serializable {
 	private Long idPare;
 	private boolean filles;
 	
-	public SeccionTransient() {
+	public UnidadDTO() {
 		super();
 	}
 	
-	public SeccionTransient(Long id, String nom, Long idPare, boolean filles) {
+	public UnidadDTO(Long id, String nom, Long idPare, boolean filles) {
 		super();
 		this.id = id;
 		this.nom = nom;

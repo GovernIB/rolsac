@@ -41,11 +41,11 @@ import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.transients.AfectacionTransient;
-import org.ibit.rol.sac.model.transients.AfectacionesTransient;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.NormativaTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
+import org.ibit.rol.sac.model.dto.AfectacionDTO;
+import org.ibit.rol.sac.model.dto.AfectacionesDTO;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.NormativaDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
@@ -96,42 +96,42 @@ public class NormativaBackController {
         
         //Listas para el buscador
         try {
-        	//Las pasamos a transient
+        	//Las pasamos a DTO
         	
         	//Boletines
         	List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
-        	List<IdNomTransient> listaBoletinesTransient = new ArrayList<IdNomTransient>();
+        	List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
         	for (Boletin boletin : listaBoletines) {        		       		
-        		IdNomTransient bol = new IdNomTransient(boletin.getId(), boletin.getNombre());
-        		listaBoletinesTransient.add(bol);
+        		IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
+        		listaBoletinesDTO.add(bol);
         	}
-        	model.put("llistaButlletins", listaBoletinesTransient);
+        	model.put("llistaButlletins", listaBoletinesDTO);
         	
         	//Tipos normativa
         	List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
-        	List<IdNomTransient> listaTiposNormativaTransient = new ArrayList<IdNomTransient>();
+        	List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
         	for (Tipo tipo : listaTiposNormativa) {
         		TraduccionTipo traTipo = (TraduccionTipo)tipo.getTraduccion(idioma);
         		if (traTipo == null) {
         			traTipo = (TraduccionTipo)tipo.getTraduccion();        			
         		}
-        		IdNomTransient tipoTran = new IdNomTransient(tipo.getId(), traTipo.getNombre());
-        		listaTiposNormativaTransient.add(tipoTran);
+        		IdNomDTO tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+        		listaTiposNormativaDTO.add(tipoTran);
         	}        	
-        	model.put("llistaTipusNormativa", listaTiposNormativaTransient);
+        	model.put("llistaTipusNormativa", listaTiposNormativaDTO);
         	
         	//Tipos afectacion
         	List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
-        	List<IdNomTransient> listaTiposAfectacionTransient = new ArrayList<IdNomTransient>();
+        	List<IdNomDTO> listaTiposAfectacionDTO = new ArrayList<IdNomDTO>();
         	for (TipoAfectacion tipoAfec : listaTiposAfectacion) {
         		TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion(idioma);
         		if (traTipAfec == null)
         			traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion();
         		
-        		IdNomTransient tipAfecTran = new IdNomTransient(tipoAfec.getId(), traTipAfec.getNombre());
-        		listaTiposAfectacionTransient.add(tipAfecTran);
+        		IdNomDTO tipAfecTran = new IdNomDTO(tipoAfec.getId(), traTipAfec.getNombre());
+        		listaTiposAfectacionDTO.add(tipAfecTran);
         	}
-        	model.put("llistaTipusAfectacio", listaTiposAfectacionTransient);
+        	model.put("llistaTipusAfectacio", listaTiposAfectacionDTO);
         	        	
         } catch (DelegateException e) {
             if (e.getCause() instanceof SecurityException) {
@@ -151,7 +151,7 @@ public class NormativaBackController {
 
 		//Listar las normativas de la unidad administrativa
 		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
-		List<NormativaTransient>llistaNormativesTransient= new ArrayList<NormativaTransient>();
+		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
@@ -233,11 +233,11 @@ public class NormativaBackController {
 				llistaNormatives.addAll(listaExternas);
 			}
 			
-			llistaNormativesTransient = pasarListaNormativasATransient(llistaNormatives, idioma);
+			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
 			
 			//Ordenar lista si se combinan locales y externas
 			if (buscaExternas) {				
-				Collections.sort(llistaNormativesTransient);
+				Collections.sort(llistaNormativesDTO);
 			}
 			
 		} catch (ParseException e) {
@@ -251,8 +251,8 @@ public class NormativaBackController {
             }
 		}
 		
-		resultats.put("total", llistaNormativesTransient.size());
-		resultats.put("nodes", llistaNormativesTransient);
+		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
 	}
@@ -333,7 +333,7 @@ public class NormativaBackController {
 	        Set<Afectacion> listaAfectadas = normativa.getAfectadas();	        
 	        for (Afectacion afec : listaAfectadas) {
 	        	Normativa normativaAfectada = afec.getNormativa();	        	        		        		       
-	        	AfectacionTransient afeTran = new AfectacionTransient();	        	
+	        	AfectacionDTO afeTran = new AfectacionDTO();	        	
 	        	afeTran.setAfectacioId(afec.getTipoAfectacion().getId());
 	        	
 	        	TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
@@ -356,7 +356,7 @@ public class NormativaBackController {
 	        Set<ProcedimientoLocal> listaProcedimientos = normativa.getProcedimientos();
 	        for (ProcedimientoLocal proc : listaProcedimientos) {
 	        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario); 
-	        	procedimientos.add(new ProcedimientoLocalTransient(proc.getId(), traProc != null ? traProc.getNombre() : "", null, null, null));
+	        	procedimientos.add(new ProcedimientoLocalDTO(proc.getId(), traProc != null ? traProc.getNombre() : "", null, null, null));
 	        }
 	        normativaDetall.put("procediments", procedimientos);
 	        
@@ -388,7 +388,7 @@ public class NormativaBackController {
 		
     	Normativa normativa = null;
     	Normativa normativaOld = null; 		
-		IdNomTransient result = null;
+		IdNomDTO result = null;
 		boolean normativaLocal;
         
 		Map<String, String> valoresForm = new HashMap<String, String>();
@@ -437,22 +437,22 @@ public class NormativaBackController {
         		
         		//Comprobar permisos para modificar normativa
             	if (!normativaDelegate.autorizaModificarNormativa(normativaOld.getId())) {
-    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
             	
             	//Comprobar que si la normativa es local se ha indicado UA y que si es externa no se ha hecho
             	if (NormativaLocal.class.isInstance(normativaOld) && ua == null) {
-    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
+    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	} else if (NormativaExterna.class.isInstance(normativaOld) && ua != null) {
-    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
+    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.altres", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
             	
             	//Comprobar que no se haya cambiado la validacion siendo operador
             	if (request.isUserInRole("sacoper") && !normativaOld.getValidacion().equals(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
-    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);            	
             	}
         		
@@ -463,7 +463,7 @@ public class NormativaBackController {
         	} else {
         		//Comprobar permisos de creación
             	if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
-    				IdNomTransient error = new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
             	}
         	}
@@ -555,7 +555,7 @@ public class NormativaBackController {
     		//Gestionar afectaciones
     		ObjectMapper mapper = new ObjectMapper();    	
     		String jsonAfectaciones = valoresForm.get("afectaciones");
-    		AfectacionesTransient afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesTransient.class);
+    		AfectacionesDTO afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesDTO.class);
 
     		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
     		if (edicion) {
@@ -564,7 +564,7 @@ public class NormativaBackController {
     				
     				//Buscar la afectación afectacionOld en la lista nueva recibida en el post
     				boolean estaEnLaListaNueva = false;
-    				for (AfectacionTransient afectacionNew : afectaciones.getListaAfectaciones()) {
+    				for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
     					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
     						estaEnLaListaNueva = true;
     						afectaciones.getListaAfectaciones().remove(afectacionNew);
@@ -579,45 +579,45 @@ public class NormativaBackController {
     		}
     		
     		//Añadir afectaciones
-			for (AfectacionTransient afectacion : afectaciones.getListaAfectaciones()) {
+			for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
 				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
 			}         	
         	
 			//Finalizado correctamente
-        	result = new IdNomTransient(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
+        	result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
         	
         } catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				result = new IdNomTransient(-1l, error);
+				result = new IdNomDTO(-1l, error);
 			} else {
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
-				result = new IdNomTransient(-2l, error);
+				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}        	        	
         } catch (ParseException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomTransient(-2l, error);			
+			result = new IdNomDTO(-2l, error);			
 			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
-			result = new IdNomTransient(-3l, error);
+			result = new IdNomDTO(-3l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomTransient(-2l, error);
+			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (JsonParseException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomTransient(-2l, error);
+			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (IOException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomTransient(-2l, error);			
+			result = new IdNomDTO(-2l, error);			
 			log.error(ExceptionUtils.getFullStackTrace(e));
 		}
 		
@@ -626,7 +626,7 @@ public class NormativaBackController {
 
 
 	@RequestMapping(value = "/eliminar.do", method = POST)
-	public @ResponseBody IdNomTransient eliminar(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO eliminar(HttpSession session, HttpServletRequest request) {
 		Long id = ParseUtil.parseLong(request.getParameter("id"));
 		NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 		
@@ -634,21 +634,21 @@ public class NormativaBackController {
 			if (normativaDelegate.autorizaModificarNormativa(id)) {			
 				normativaDelegate.borrarNormativa(id);
 			} else {
-				return new IdNomTransient(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));				
+				return new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));				
 			}
 			
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				return new IdNomTransient(-1l, error);
+				return new IdNomDTO(-1l, error);
 			} else {
 				log.error(ExceptionUtils.getFullStackTrace(dEx));
 				String error = messageSource.getMessage("error.altres", null, request.getLocale());
-				return new IdNomTransient(-2l, error);				
+				return new IdNomDTO(-2l, error);				
 			}        	        	
         }
 		
-        return  new IdNomTransient(id, messageSource.getMessage("normativa.eliminat.correcte", null, request.getLocale()));		
+        return  new IdNomDTO(id, messageSource.getMessage("normativa.eliminat.correcte", null, request.getLocale()));		
 	}
 	
 	
@@ -657,7 +657,7 @@ public class NormativaBackController {
 
 		//Listar las normativas de la unidad administrativa
 		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
-		List<NormativaTransient>llistaNormativesTransient = new ArrayList<NormativaTransient>();
+		List<NormativaDTO>llistaNormativesDTO = new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
@@ -699,10 +699,10 @@ public class NormativaBackController {
 			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, campoOrdenacion, orden));
 			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", null, false, campoOrdenacion, orden));
 			
-			llistaNormativesTransient = pasarListaNormativasATransient(llistaNormatives, idioma);
+			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
 			
 			//Ordenar lista (por fecha descendente)		
-			Collections.sort(llistaNormativesTransient);
+			Collections.sort(llistaNormativesDTO);
 			
 			
 		} catch (ParseException e) {			
@@ -716,21 +716,21 @@ public class NormativaBackController {
             }
 		}
 		
-		resultats.put("total", llistaNormativesTransient.size());
-		resultats.put("nodes", llistaNormativesTransient);
+		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
 		
 	}	
 	
 	/**
-	 * Obtiene una lista de NormativaTransient a partir de una lista de Normativa.
+	 * Obtiene una lista de NormativaDTO a partir de una lista de Normativa.
 	 * @param llistaNormatives Lista de Normativa.
 	 * @param idioma Idioma seleccionado por el usuario.
 	 */
-	private List<NormativaTransient> pasarListaNormativasATransient(List<Normativa> llistaNormatives,	 String idioma) {
+	private List<NormativaDTO> pasarListaNormativasADTO(List<Normativa> llistaNormatives,	 String idioma) {
 		
-		List<NormativaTransient> llistaNormativesTransient = new ArrayList<NormativaTransient>();
+		List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
 		
 		for (Normativa normativa : llistaNormatives) {
 			
@@ -747,8 +747,8 @@ public class NormativaBackController {
 			
 			boolean local = NormativaLocal.class.isInstance(normativa);
 				
-			llistaNormativesTransient.add(
-						new NormativaTransient(
+			llistaNormativesDTO.add(
+						new NormativaDTO(
 								normativa.getId() != null ? normativa.getId().longValue() : 0, 
 								normativa.getNumero() != null ? normativa.getNumero().longValue() : 0, 
 								titulo, 
@@ -760,7 +760,7 @@ public class NormativaBackController {
 					);
 		}
 		
-		return llistaNormativesTransient;
+		return llistaNormativesDTO;
 	}	
 	
 	

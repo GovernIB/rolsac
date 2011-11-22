@@ -31,12 +31,12 @@ import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.transients.EnlaceTransient;
-import org.ibit.rol.sac.model.transients.FichaTransient;
-import org.ibit.rol.sac.model.transients.FichaUATransient;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.SeccionTransient;
-import org.ibit.rol.sac.model.transients.UnidadTransient;
+import org.ibit.rol.sac.model.dto.EnlaceDTO;
+import org.ibit.rol.sac.model.dto.FichaDTO;
+import org.ibit.rol.sac.model.dto.FichaUADTO;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.SeccionDTO;
+import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
@@ -86,29 +86,29 @@ public class FitxaInfBackController {
                 
                 MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
                 List<Materia> llistaMateries = new ArrayList<Materia>();
-                List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
+                List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
                 
                 llistaMateries = materiaDelegate.listarMaterias();
     
                 for (Materia materia : llistaMateries) {
-                    llistaMateriesTransient.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));
+                    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
                 }
     
-                model.put("llistaMateries", llistaMateriesTransient);
+                model.put("llistaMateries", llistaMateriesDTO);
                 
                 HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();  
                 List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();                
-                List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
+                List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
                 
                 llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
                 
                 for (HechoVital fetVital : llistaFetsVitals) {
                     TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-                    llistaFetsVitalsTransient.add(new IdNomTransient(fetVital.getId(), 
+                    llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
                                                                      thv == null ? null : thv.getNombre()));
                 }
                 
-                model.put("llistaFetsVitals", llistaFetsVitalsTransient);
+                model.put("llistaFetsVitals", llistaFetsVitalsDTO);
     
             } catch (DelegateException dEx) {
                 if (dEx.getCause() instanceof SecurityException) {
@@ -127,7 +127,7 @@ public class FitxaInfBackController {
     public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
         
         List<Ficha> llistaFitxes = new ArrayList<Ficha>();
-        List<FichaTransient> llistaFitxesTransient = new ArrayList<FichaTransient>();
+        List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
         Map<String, Object> resultats = new HashMap<String, Object>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Map<String, String> tradMap = new HashMap<String, String>();
@@ -230,7 +230,7 @@ public class FitxaInfBackController {
                         
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
-                llistaFitxesTransient.add(new FichaTransient(fitxa.getId(), 
+                llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtil.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtil.formatDate(fitxa.getFechaCaducidad()),
@@ -247,8 +247,8 @@ public class FitxaInfBackController {
             }
         }
         
-        resultats.put("total", llistaFitxesTransient.size());
-        resultats.put("nodes", llistaFitxesTransient);
+        resultats.put("total", llistaFitxesDTO.size());
+        resultats.put("nodes", llistaFitxesDTO);
 
         return resultats;
     
@@ -258,10 +258,10 @@ public class FitxaInfBackController {
     public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
-        List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
-        List<IdNomTransient> llistaFetsVitalsTransient = new ArrayList<IdNomTransient>();
-        List<FichaUATransient> llistaFichaUATransient = new ArrayList<FichaUATransient>();
-        List<EnlaceTransient> llistaEnllassosTransient = new ArrayList<EnlaceTransient>();
+        List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+        List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+        List<FichaUADTO> llistaFichaUADTO = new ArrayList<FichaUADTO>();
+        List<EnlaceDTO> llistaEnllassosDTO = new ArrayList<EnlaceDTO>();
         
         FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         
@@ -326,12 +326,12 @@ public class FitxaInfBackController {
             if (fitxa.getMaterias() != null) {             
             
                 for(Materia materia : fitxa.getMaterias()){                
-                    llistaMateriesTransient.add(new IdNomTransient(  materia.getId(), 
+                    llistaMateriesDTO.add(new IdNomDTO(  materia.getId(), 
                                                                      materia.getNombreMateria(lang)
                                                                            ));                
                    }
                 
-                resultats.put("materies", llistaMateriesTransient);
+                resultats.put("materies", llistaMateriesDTO);
             
             } else {
                 resultats.put("materies", null);
@@ -343,12 +343,12 @@ public class FitxaInfBackController {
                 
                 for(HechoVital fetVital : fitxa.getHechosVitales()){
                     TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-                    llistaFetsVitalsTransient.add(new IdNomTransient(fetVital.getId(), 
+                    llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
                                                                      thv == null ? "" : thv.getNombre()                                                                       
                                                                      ));                
                    }
                 
-                resultats.put("fetsVitals", llistaFetsVitalsTransient);
+                resultats.put("fetsVitals", llistaFetsVitalsDTO);
             
             } else {
                 resultats.put("fetsVitals", null);
@@ -359,7 +359,7 @@ public class FitxaInfBackController {
             if (fitxa.getFichasua() != null){
                 for(FichaUA fichaUA : fitxaDelegate.listFichasUA(fitxa.getId())){
                     TraduccionSeccion tse = (TraduccionSeccion) fichaUA.getSeccion().getTraduccion(lang);
-                    llistaFichaUATransient.add(new FichaUATransient(fichaUA.getId(),
+                    llistaFichaUADTO.add(new FichaUADTO(fichaUA.getId(),
                                                                     fichaUA.getUnidadAdministrativa().getId(),
                                                                     fichaUA.getUnidadAdministrativa().getNombreUnidadAdministrativa(lang),
                                                                     fichaUA.getSeccion().getId(),
@@ -370,7 +370,7 @@ public class FitxaInfBackController {
                                                                     fichaUA.getOrdenseccion())
                                                                     );                    
                 }
-                resultats.put("seccUA", llistaFichaUATransient);
+                resultats.put("seccUA", llistaFichaUADTO);
             } else {
                 resultats.put("seccUA", null);
             }
@@ -380,12 +380,12 @@ public class FitxaInfBackController {
           
             if (fitxa.getEnlaces() != null){
                 for (Enlace enllas : fitxa.getEnlaces()){
-                    llistaEnllassosTransient.add(new EnlaceTransient(enllas.getId(),
+                    llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(),
                                                                     enllas.getOrden(),
                                                                     enllas.getTraduccionMap()));
                     
                 }
-                resultats.put("enllassos", llistaEnllassosTransient);
+                resultats.put("enllassos", llistaEnllassosDTO);
             } else {
                 resultats.put("enllassos", null);
             }
@@ -403,9 +403,9 @@ public class FitxaInfBackController {
     }
 
     @RequestMapping(value = "/guardar.do", method = POST)
-    public @ResponseBody IdNomTransient guardarFicha(HttpSession session, HttpServletRequest request) {
+    public @ResponseBody IdNomDTO guardarFicha(HttpSession session, HttpServletRequest request) {
 
-        IdNomTransient result = null;
+        IdNomDTO result = null;
         String error = null;
         Integer validacion = null;
 
@@ -426,7 +426,7 @@ public class FitxaInfBackController {
             
             if (ua == null || titolCatala == null || "".equals(titolCatala)) {//Camps obligatoris
                 error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
-                result = new IdNomTransient(-3l, error);
+                result = new IdNomDTO(-3l, error);
             } else {
                 FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
                 Ficha fitxa = new Ficha();
@@ -680,16 +680,16 @@ public class FitxaInfBackController {
                 }                                                                                
                 
                 String ok = "Fitxa guardada correctament.";
-                result = new IdNomTransient(fitxa.getId(), ok);
+                result = new IdNomDTO(fitxa.getId(), ok);
             }
 
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomTransient(-1l, error);
+                result = new IdNomDTO(-1l, error);
             } else {
                 error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomTransient(-2l, error);
+                result = new IdNomDTO(-2l, error);
                 log.error(ExceptionUtils.getFullStackTrace(dEx)); 
             }
         }
@@ -702,7 +702,7 @@ public class FitxaInfBackController {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
         List<Seccion> llistaSeccions = new ArrayList<Seccion>();
-        List<SeccionTransient> llistaSeccionsTransient = new ArrayList<SeccionTransient>();
+        List<SeccionDTO> llistaSeccionsDTO = new ArrayList<SeccionDTO>();
         
         SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
         
@@ -718,14 +718,14 @@ public class FitxaInfBackController {
             
             for (Seccion seccio: llistaSeccions){
                 TraduccionSeccion tse = (TraduccionSeccion) seccio.getTraduccion(lang);
-                llistaSeccionsTransient.add(new SeccionTransient(seccio.getId(),
+                llistaSeccionsDTO.add(new SeccionDTO(seccio.getId(),
                                                                 tse == null ? "" : tse.getNombre().length() > 25 ? tse.getNombre().substring(0, 21)+"..." : tse.getNombre(),
                                                                 seccio.getPadre() == null ? null : seccio.getPadre().getId(),                                                                        
                                                                 seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false                                                                
                                                                ));
             }
 
-            resultats.put("llistaSeccions", llistaSeccionsTransient);
+            resultats.put("llistaSeccions", llistaSeccionsDTO);
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -745,7 +745,7 @@ public class FitxaInfBackController {
 
         Map<String, Object> resultats = new HashMap<String, Object>();
         List<UnidadAdministrativa> llistaUnitats = new ArrayList<UnidadAdministrativa>();
-        List<UnidadTransient> llistaUnitatsTransient = new ArrayList<UnidadTransient>();
+        List<UnidadDTO> llistaUnitatsDTO = new ArrayList<UnidadDTO>();
         
         UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
         
@@ -761,14 +761,14 @@ public class FitxaInfBackController {
             
             for (UnidadAdministrativa unitat: llistaUnitats){
                 String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
-                llistaUnitatsTransient.add(new UnidadTransient(unitat.getId(),
+                llistaUnitatsDTO.add(new UnidadDTO(unitat.getId(),
                                                                 nomUnitat == null ? "" : nomUnitat.length() > 25 ? nomUnitat.substring(0, 21)+"..." : nomUnitat,
                                                                 unitat.getPadre() == null ? null : unitat.getPadre().getId(),                                                                        
                                                                 unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false                                                                
                                                                ));
             }
 
-            resultats.put("llistaUnitats", llistaUnitatsTransient);
+            resultats.put("llistaUnitats", llistaUnitatsDTO);
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
@@ -784,8 +784,8 @@ public class FitxaInfBackController {
     }
     
     @RequestMapping(value = "/esborrarFitxa.do", method = POST)
-    public @ResponseBody IdNomTransient esborrarFitxa(HttpServletRequest request) {
-        IdNomTransient resultatStatus = new IdNomTransient();
+    public @ResponseBody IdNomDTO esborrarFitxa(HttpServletRequest request) {
+        IdNomDTO resultatStatus = new IdNomDTO();
 
         try {
             Long id = new Long(request.getParameter("id"));

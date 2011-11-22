@@ -33,9 +33,9 @@ import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.transients.IdNomTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoLocalTransient;
-import org.ibit.rol.sac.model.transients.ProcedimientoNormativaTransient;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
@@ -84,34 +84,34 @@ public class CatalegProcedimentsBackController {
 
 			try {
                 MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                List<IdNomTransient> materiesTransientList = new ArrayList<IdNomTransient>();
+                List<IdNomDTO> materiesDTOList = new ArrayList<IdNomDTO>();
                 List<Materia> llistaMateries = materiaDelegate.listarMaterias();
                 for (Materia materia : llistaMateries) {
-                	materiesTransientList.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));
+                	materiesDTOList.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
                 }
-                model.put("llistaMateries", materiesTransientList);
+                model.put("llistaMateries", materiesDTOList);
 				
                 
 				FamiliaDelegate fd = DelegateUtil.getFamiliaDelegate();
-				List<IdNomTransient> familiasTransientList = new LinkedList<IdNomTransient>();
+				List<IdNomDTO> familiasDTOList = new LinkedList<IdNomDTO>();
 				List<Familia> familias = fd.listarFamilias();
 				TraduccionFamilia tf;
 				for (Familia f : familias) {
 					tf = (TraduccionFamilia) f.getTraduccion(lang);
-					familiasTransientList.add(new IdNomTransient(f.getId(), tf.getNombre()));
+					familiasDTOList.add(new IdNomDTO(f.getId(), tf.getNombre()));
 				}
-				model.put("families", familiasTransientList);
+				model.put("families", familiasDTOList);
 				
 				
 				IniciacionDelegate id = DelegateUtil.getIniciacionDelegate();
-				List<IdNomTransient> iniciacionTransientList = new LinkedList<IdNomTransient>();
+				List<IdNomDTO> iniciacionDTOList = new LinkedList<IdNomDTO>();
 				List<Iniciacion> iniciaciones = id.listarIniciacion();
 				TraduccionIniciacion ti;
 				for (Iniciacion i : iniciaciones) {
 					ti = (TraduccionIniciacion) i.getTraduccion(lang);
-					iniciacionTransientList.add(new IdNomTransient(i.getId(), ti.getNombre()));
+					iniciacionDTOList.add(new IdNomDTO(i.getId(), ti.getNombre()));
 				}
-				model.put("iniciacions", iniciacionTransientList);
+				model.put("iniciacions", iniciacionDTOList);
 				
 
 			} catch (DelegateException dEx) {
@@ -132,7 +132,7 @@ public class CatalegProcedimentsBackController {
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
 		List<ProcedimientoLocal> llistaProcedimientos = new ArrayList<ProcedimientoLocal>();
-		List<ProcedimientoLocalTransient> llistaProcedimientoLocalTransient = new ArrayList<ProcedimientoLocalTransient>();
+		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -317,7 +317,7 @@ public class CatalegProcedimentsBackController {
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
-				llistaProcedimientoLocalTransient.add(new ProcedimientoLocalTransient(
+				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
 								 pl.getId(), 
 								 tpl == null ? "" : tpl.getNombre(), 
 								 DateUtil.formatDate(pl.getFechaPublicacion()),
@@ -333,8 +333,8 @@ public class CatalegProcedimentsBackController {
 			}
 		}
 
-		resultats.put("total", llistaProcedimientoLocalTransient.size());
-		resultats.put("nodes", llistaProcedimientoLocalTransient);
+		resultats.put("total", llistaProcedimientoLocalDTO.size());
+		resultats.put("nodes", llistaProcedimientoLocalDTO);
 
 		return resultats;
 	}
@@ -437,11 +437,11 @@ public class CatalegProcedimentsBackController {
             
 			// Materias asociadas
             if (proc.getMaterias() != null) {             
-                List<IdNomTransient> llistaMateriesTransient = new ArrayList<IdNomTransient>();
+                List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
                 for(Materia materia : proc.getMaterias()){                
-                    llistaMateriesTransient.add(new IdNomTransient(materia.getId(), materia.getNombreMateria(lang)));                
+                    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));                
                 }
-                resultats.put("materies", llistaMateriesTransient);
+                resultats.put("materies", llistaMateriesDTO);
             } else {
                 resultats.put("materies", null);
             } 
@@ -533,8 +533,8 @@ public class CatalegProcedimentsBackController {
 	
 
 	@RequestMapping(value = "/esborrarProcediment.do", method = POST)
-	public @ResponseBody IdNomTransient esborrarProcediment(HttpServletRequest request) {
-		IdNomTransient resultatStatus = new IdNomTransient();
+	public @ResponseBody IdNomDTO esborrarProcediment(HttpServletRequest request) {
+		IdNomDTO resultatStatus = new IdNomDTO();
 
 		try {
 			Long id = new Long(request.getParameter("id"));
@@ -557,16 +557,16 @@ public class CatalegProcedimentsBackController {
 
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomTransient guardarProcediment(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request) {
 
-		IdNomTransient result = null;
+		IdNomDTO result = null;
 		String error = null;
 
 		try {
 			UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 			if (ua == null) {
 				error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
-				result = new IdNomTransient(-3l, error);
+				result = new IdNomDTO(-3l, error);
 			} else {
 				
 				ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
@@ -834,20 +834,20 @@ public class CatalegProcedimentsBackController {
 
 				
 				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
-				result = new IdNomTransient(procId, ok);
+				result = new IdNomDTO(procId, ok);
 			}
 
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());
-				result = new IdNomTransient(-1l, error);
+				result = new IdNomDTO(-1l, error);
 			} else {
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
-				result = new IdNomTransient(-2l, error);
+				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getFullStackTrace(dEx));
 			}
 		} catch (NumberFormatException nfe) {
-			result = new IdNomTransient(-3l, error);
+			result = new IdNomDTO(-3l, error);
 		}
 
 		return result;
@@ -859,7 +859,7 @@ public class CatalegProcedimentsBackController {
 		
 		//Listar las normativas de la unidad administrativa
 		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
-		List<ProcedimientoNormativaTransient>llistaNormativesTransient= new ArrayList<ProcedimientoNormativaTransient>();
+		List<ProcedimientoNormativaDTO>llistaNormativesDTO= new ArrayList<ProcedimientoNormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
@@ -911,7 +911,7 @@ public class CatalegProcedimentsBackController {
 					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo());
 				}					
 
-				llistaNormativesTransient.add(new ProcedimientoNormativaTransient(
+				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
 						normativa.getId(),
 						titulo,
 						DateUtil.formatDate(normativa.getFecha()),
@@ -928,8 +928,8 @@ public class CatalegProcedimentsBackController {
 			}
 		}
 		
-		resultats.put("total", llistaNormativesTransient.size());
-		resultats.put("nodes", llistaNormativesTransient);
+		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
 	}

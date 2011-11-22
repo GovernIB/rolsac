@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.transients.EdificioTransient;
+import org.ibit.rol.sac.model.dto.EdificioDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
@@ -31,7 +31,7 @@ public class EdificisBackController {
 	    	    	    
 	    Map<String,Object> resultats = new HashMap<String,Object>();
         List<Edificio> llistaEdificis = new ArrayList<Edificio>();
-        List<EdificioTransient> llistaEdificioTransient = new ArrayList<EdificioTransient>();
+        List<EdificioDTO> llistaEdificioDTO = new ArrayList<EdificioDTO>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
         Map<String, Object> tradMap = new HashMap<String, Object>();
         
@@ -55,7 +55,7 @@ public class EdificisBackController {
          llistaEdificis = edificiDelegate.buscarEdificios(paramMap, tradMap);
          
          for(Edificio edifici : llistaEdificis){                
-             llistaEdificioTransient.add(new EdificioTransient(  edifici.getId(), 
+             llistaEdificioDTO.add(new EdificioDTO(  edifici.getId(), 
                                                                  edifici.getDireccion(),
                                                                  edifici.getCodigoPostal(),
                                                                  edifici.getPoblacion()
@@ -72,8 +72,8 @@ public class EdificisBackController {
 		}
      }
                
-        resultats.put("total", llistaEdificioTransient.size());        
-        resultats.put("nodes", llistaEdificioTransient);        
+        resultats.put("total", llistaEdificioDTO.size());        
+        resultats.put("nodes", llistaEdificioDTO);        
         
         return resultats;
 	}
