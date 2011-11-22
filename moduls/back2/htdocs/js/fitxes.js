@@ -32,6 +32,7 @@ $(document).ready(function() {
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();
+	Error = new CError();
 
 	Detall.iniciar();
     // Mostrar detall?
@@ -311,6 +312,7 @@ function CDetall(){
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
+		/*
 		var dataVars = EscriptoriSeccionsUA.llistaSeccUa() + "&";
 		//TODO:incloure aquest error dins la verificacio de procediment.js
 
@@ -319,7 +321,46 @@ function CDetall(){
 		} else {		
 			dataVars += ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
 
-			this._baseGuarda(dataVars);
+			//this._baseGuarda(dataVars);
+		*/
+		// Omplim els camps amb els valors per enviar al formulari
+		var llistaSeccions = EscriptoriSeccionsUA.llistaSeccUa();
+		$("#llistaSeccions").val(llistaSeccions);
+		
+		if (llistaSeccions.lenght < 1 ) {
+				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});	
+		} else {		
+			var llista_materies = ModulMateries.listaMaterias();
+			llista_materies = llista_materies.slice(9);
+			$("#llistaMateries").val(llista_materies);
+			$("#llistaFetsVitals").val(ModulFetsVitals.listaHechosVitales());	
+			
+			// Validamos el formulario
+			if(!that.formulariValid()){
+				return false;
+			}
+					
+			//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+			$("#formGuardar").ajaxSubmit({			
+				url: pagGuardar,
+				dataType: 'json',
+				beforeSubmit: function() {
+					Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+				},
+				success: function(data) {
+								
+					Llistat.cacheDatosListado = null;
+					
+					if (data.id < 0) {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+					} else {
+//						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+						Detall.recarregar(data.id);
+					}					
+				}
+									
+			});
+			return false;
 		}
 	}
 
@@ -409,6 +450,7 @@ function CDetall(){
 		$("#item_id").val(dada_node.item_id);
 		
 		$("#item_estat").val(dada_node.item_estat);
+		marcarOpcionSelect("item_estat",dada_node.item_estat);
 
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
 		$("#item_data_caducitat").val(dada_node.item_data_caducitat);
@@ -445,6 +487,71 @@ function CDetall(){
 		$("#item_des_curta_de").val(printStringFromNull(dada_node.fr.descAbr));
 		$("#item_des_llarga_de").val(printStringFromNull(dada_node.fr.descripcion));
 		$("#item_url_de").val(printStringFromNull(dada_node.fr.url));
+		
+		
+		// Icona
+		$("#item_icona").val("");
+		$("#grup_item_icona input").removeAttr("checked");
+		
+		//if (dada_node["enllas_arxiu"]) {
+		if (dada_node["item_icona_enllas_arxiu"]) {
+			$("#grup_item_icona a").show();					
+			
+			$("#grup_item_icona a").attr("href", pagArrel + dada_node["item_icona_enllas_arxiu"]);				
+			$("#grup_item_icona a").text(dada_node["item_icona"]);
+			
+			$("#grup_item_icona span").hide();
+			$("#grup_item_icona input").show();
+			$("#grup_item_icona label.eliminar").show();
+						
+		} else {
+			$("#grup_item_icona span").show();
+			$("#grup_item_icona input").hide();
+			$("#grup_item_icona label.eliminar").hide();
+			$("#grup_item_icona a").hide();			
+		}
+		
+		// Banner
+		$("#item_banner").val("");
+		$("#grup_item_banner input").removeAttr("checked");
+		
+		if (dada_node["item_banner_enllas_arxiu"]) {
+			$("#grup_item_banner a").show();					
+			
+			$("#grup_item_banner a").attr("href", pagArrel + dada_node["item_banner_enllas_arxiu"]);
+			$("#grup_item_banner a").text(dada_node["item_banner"]);
+			
+			$("#grup_item_banner span").hide();
+			$("#grup_item_banner input").show();
+			$("#grup_item_banner label.eliminar").show();
+						
+		} else {
+			$("#grup_item_banner span").show();
+			$("#grup_item_banner input").hide();
+			$("#grup_item_banner label.eliminar").hide();
+			$("#grup_item_banner a").hide();			
+		}
+		
+		// Imatge
+		$("#item_imatge").val("");
+		$("#grup_item_imatge input").removeAttr("checked");
+		if (dada_node["item_imatge_enllas_arxiu"]) {
+			
+			$("#grup_item_imatge a").show();					
+			
+			$("#grup_item_imatge a").attr("href", pagArrel + dada_node["item_imatge_enllas_arxiu"]);
+			$("#grup_item_imatge a").text(dada_node["item_imatge"]);
+			
+			$("#grup_item_imatge span").hide();
+			$("#grup_item_imatge input").show();
+			$("#grup_item_imatge label.eliminar").show();
+						
+		} else {
+			$("#grup_item_imatge span").show();
+			$("#grup_item_imatge input").hide();
+			$("#grup_item_imatge label.eliminar").hide();
+			$("#grup_item_imatge a").hide();			
+		}
 				
 		$("#item_notes").val(dada_node.item_notes);
 		$("#item_youtube").val(dada_node.item_youtube);

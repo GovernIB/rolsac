@@ -96,7 +96,7 @@ function CModulFetsVitals(){
 	//devuelve un string con el formato fetsVitals=n1,n2,...,nm donde n son codigos de hechos vitales
 	this.listaHechosVitales = function (){
 		
-		var llistaFets = "fetsVitals=";
+		var llistaFets = "";
 		
 		$("div.modulFetsVitals div.seleccionats div.listaOrdenable input").each(function() {
 			llistaFets += $(this).val() + ",";										

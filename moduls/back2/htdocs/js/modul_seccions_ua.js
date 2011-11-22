@@ -255,7 +255,7 @@ var EscriptoriSeccionsUA = {
 	llistaSeccUa: function(){
 		//Retorna una llista de parelles idSecc, idUA.
 		
-		var listaSeccUa = "seccUA=";
+		var listaSeccUa = "";
 		
 		$("div.modulSeccionsUA div.seleccionats ul li").each(function() {			
 			listaSeccUa += $(this).find("input.idSeccUa[type=hidden]").val() + "#" + $(this).find("input.seccio[type=hidden]").val() + "#" + $(this).find("input.ua[type=hidden]").val() + ",";										

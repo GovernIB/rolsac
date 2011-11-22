@@ -14,6 +14,7 @@
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
@@ -450,7 +451,7 @@
 <!-- /escriptori_contingut -->
 <!-- escriptori_detall -->
 <div id="escriptori_detall" class="escriptori_detall">
-    <form id="formGuardar" action="false">
+    <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <h2><spring:message code='fitxes.formulari.detall'/></h2>
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
@@ -722,36 +723,75 @@
                     <div class="modul_continguts">
                         <!-- fila -->
                         <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_icona" name="item_icona" type="file" class="nou" />
-                                </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_banner" name="item_banner" type="file"
-                                        class="nou" />
-                                </div>
-                            </div>
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
+	                            <div class="control archivo">   
+	                            	<div id="grup_item_icona" class="file">
+	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                            		<a href="#" target="_blank"></a>
+	                            		<input type="checkbox" name="item_icona_delete" id="item_icona_delete" value="1"/>
+	                            		<label for="item_icona_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                            	</div>
+	                            </div>
+	                        </div>    
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
+	                            <div class="control">                                      		
+	                                <input id="item_icona" name="item_icona" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
                         </div>
                         <!-- /fila -->
                         <!-- fila -->
                         <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label>
+	                        <div class="element t50p">
+	                            <div class="etiqueta">
+                                    <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
                                 </div>
-                                <div class="control">
-                                    <input id="item_imatge" name="item_imatge" type="file"
-                                        class="nou" />
-                                </div>
-                            </div>
+	                            <div class="control archivo">   
+	                            	<div id="grup_item_banner" class="file">
+	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                            		<a href="#" target="_blank"></a>
+	                            		<input type="checkbox" name="item_banner_delete" id="item_banner_delete" value="1"/>
+	                            		<label for="item_banner_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                            	</div>
+	                            </div>
+	                        </div>    
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label></div>
+	                            <div class="control">                                      		
+	                                <input id="item_banner" name="item_banner" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                        <!-- fila -->
+                        <div class="fila">
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
+	                            <div class="control archivo">   
+	                            	<div id="grup_item_imatge" class="file">
+	                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                            		<a href="#" target="_blank"></a>
+	                            		<input type="checkbox" name="item_imatge_delete" id="item_imatge_delete" value="1"/>
+	                            		<label for="item_imatge_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                            	</div>
+	                            </div>
+	                        </div>    
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
+	                            <div class="control">                                      		
+	                                <input id="item_imatge" name="item_imatge" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                        
+                        <!-- fila -->
+                        <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_youtube"><spring:message code='fitxes.formulari.adresa_youtube'/></label>
@@ -914,6 +954,7 @@
             <!-- /modul -->
             <!-- modul -->
             <div class="modul">
+            	<input type="hidden" id="llistaMateries" name="materies" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='fitxes.materies_relacionades'/></legend>
@@ -959,6 +1000,7 @@
             <!-- /modul -->
             <!-- modul -->
             <div class="modul">
+            	<input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='fitxes.fets_vitals'/></legend>
@@ -1004,6 +1046,7 @@
             <!-- /modul -->
             <!-- modul -->
             <div class="modul">
+            	<input type="hidden" id="llistaSeccions" name="seccUA" value=""/>
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend>
@@ -1039,7 +1082,7 @@
                         <div class="modulEnllassos multilang">
                             <ul class="idiomes">
                             	<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/></li>
-                                <li class="ca"><spring:message code='txt.idioma.ca_abr'/></li>
+                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
                                 <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
                                 <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
                                 <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
@@ -1069,7 +1112,7 @@
                                 </div>                                
                                 
                                 <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.torna'/></span></span></a>
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_enllasos'/></span></span></a>
                                 </div>
                             </div>                                  
                         </div>
@@ -1316,7 +1359,7 @@
 						</div>
 						<div id="btnVolverDetalle" class="boton btnGenerico">
 							<a class="btn torna" href="javascript:;">
-								<span><span><spring:message code='boto.finalitza'/></span></span>
+								<span><span><spring:message code='boto.torna_detall'/></span></span>
 							</a>
 						</div>
 					</div>
@@ -1330,7 +1373,7 @@
             <div class="interior multilang">            	
                 <ul class="idiomes">
                 	<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/></li>
-                    <li class="ca"><spring:message code='txt.idioma.ca_abr'/></li>
+                    <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
                     <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
                     <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
                     <li class="de"><spring:message code='txt.idioma.de_abr'/></li>

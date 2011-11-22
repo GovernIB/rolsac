@@ -224,7 +224,7 @@ public class UnitatAdmBackController {
                 resultats.put("item_responsable_foto_petita", "");
             }
             if (uni.getFotog() != null) {
-            	resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipuus=2");
+            	resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=2");
                 resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
             } else {
                 resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
