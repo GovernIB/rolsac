@@ -1060,6 +1060,7 @@
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
         var pagArrel = '<c:url value="/" />';    
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -1182,7 +1183,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 230,
+                        "maxim": 150,
                         "mostrar": "si",
                         "abreviat": "no"
                     },
@@ -1348,4 +1349,4 @@
             }
         ];
     -->
-    </script>
+    </script>    

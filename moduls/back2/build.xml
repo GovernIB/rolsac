@@ -49,6 +49,7 @@
         	<include name="axis-1.4/axis.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="micromodel.jar"/>
+        	<include name="sac-micropersistence.jar"/>
         	<include name="json.jar"/>
         	<include name="quartz.jar"/>
         	<include name="mail.jar"/>

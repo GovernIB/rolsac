@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,9 +17,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Materia;
@@ -573,7 +576,7 @@ public class UnitatAdmBackController {
 			}
 			
 			//Materias asociadas						
-            if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))) {
+			if (valoresForm.get("materies") != null ) {
             	
             	UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
             	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
@@ -587,28 +590,34 @@ public class UnitatAdmBackController {
 										
 					borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
 					
-	                for (int i = 0; i < codisMateriesNoves.length; i++) {
-	                		   
-	                    for ( UnidadMateria unidadMateria: unitatAdministrativa.getUnidadesMaterias() ) {
-	                    	
-	                        if ( unidadMateria.getMateria().getId().equals(Long.valueOf(codisMateriesNoves[i]) ) ) { //materia ya existente
-	                            unidadesMateriasNuevas.add(unidadMateria);
-	                            codisMateriesNoves[i] = null;
-	                            break;
-	                        }
-	                        	                        
-	                    }                            
+					//Saltamos este paso si se han borrado todas las materias
+					if ( !"".equals(valoresForm.get("materies")) ) {
+						
+		                for (int i = 0; i < codisMateriesNoves.length; i++) {
+		                		   
+		                    for ( UnidadMateria unidadMateria: unitatAdministrativa.getUnidadesMaterias() ) {
+		                    	
+		                        if ( unidadMateria.getMateria().getId().equals(Long.valueOf(codisMateriesNoves[i]) ) ) { //materia ya existente
+		                            unidadesMateriasNuevas.add(unidadMateria);
+		                            codisMateriesNoves[i] = null;
+		                            break;
+		                        }
+		                        	                        
+		                    }    
+		                }
 	                }                         					
 				}
-								
-                for (String codiMateria: codisMateriesNoves) {
-                	
-                    if (codiMateria != null) {                    	
-                    	UnidadMateria nuevaUnidadMateria = new UnidadMateria();
-                    	Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
-                    	unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());                     	                        
-                    }
-                }                
+					
+				if ( !"".equals(valoresForm.get("materies")) ) {				
+	                for (String codiMateria: codisMateriesNoves) {
+	                	
+	                    if (codiMateria != null) {                    	
+	                    	UnidadMateria nuevaUnidadMateria = new UnidadMateria();
+	                    	Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
+	                    	unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());                     	                        
+	                    }
+	                }
+				}
             }
             
 			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
@@ -683,209 +692,191 @@ public class UnitatAdmBackController {
 	@RequestMapping(value = "/esborrar.do", method = POST)
     public @ResponseBody IdNomDTO esborrarUniAdm(HttpServletRequest request) {
 	    
-	    IdNomDTO resultatStatus = new IdNomDTO(); 
+
+		Long id = new Long(request.getParameter("id"));
+		IdNomDTO resultatStatus = new IdNomDTO(); 
 	    
-//	    try {
-//            
-//	    	UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
-//	    	
-//            Long id = new Long(request.getParameter("id"));
-//                       
-//            if (!hayMicrositesUA(id)) {
-//            
-//            	UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
-//            	
-//            	// Validamos que se pueda eliminar la UA. Se podra elimnar si no tiene elementos relacionados. Ha excepción de usuarios y edificios.
-//            	ActionErrors errores =  validarEliminacionUA(unitatAdministrativa,unidadAdministrativaDelegate);
-//            	if(!errores.isEmpty()){
-//            	//	saveErrors(request, errores);
-//            		request.setAttribute("idUA", id);
-//            		return dispatchMethod(mapping, form, request, response, "seleccionar");
-//            		//return mapping.findForward("success");
-//    	        }
-//    	
-//            	unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);  
-//
-//            	resultatStatus.setId(1l);
-//                resultatStatus.setNom("correcte");
-//            	
-//            	dForm.reset(mapping, request);
-//    	        request.setAttribute("alert", "confirmacion.baja");
-//    	        log.debug("Eliminada Unidad Administrativa: " + id);
-//
-//            } else {
-//    	        request.setAttribute("alert", "microsites.ua.asociados");
-//    	        log.debug("No se ha eliminado Unidad Administrativa: " + id + " . Causa: Tiene asociado algún microsite");
-//            	
-//            }
-//            
-//            
-//            if (!hayMicrositesUA(id)) {
-//            
-//            unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);             
-//            
-//            resultatStatus.setId(1l);
-//            resultatStatus.setNom("correcte");
-//            } else {
-//            	resultatStatus.setId(-1l);
-//                resultatStatus.setNom("No s'ha eliminat l'Unitat Orgànica perquè té microsites associats");
-//            }
-//            
-//        } catch (DelegateException dEx) {
-//            if (dEx.getCause() instanceof SecurityException) {
-//                resultatStatus.setId(-1l);
-//            } else {
-//                resultatStatus.setId(-2l);
-//                log.error(ExceptionUtils.getFullStackTrace(dEx));
-//            }
-//        }
-	    
-	    return resultatStatus;
+	    try {
+	    	UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
+	    		    		    	
+	    	if ( !hayMicrositesUA(id) ) {
+	    		UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
+	    	
+	    		// Validamos que se pueda eliminar la UA. Se podrá eliminar si no tiene elementos relacionados. A excepción de 
+	    		// usuarios y edificios.
+	    		boolean esBorrable = validarPermisosEliminacionUA(unitatAdministrativa,unidadAdministrativaDelegate);
+	    		
+            	if (!esBorrable )
+            		return new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
+	    	
+            	String errorElementosRelacionados = validarElementosRelacionados(unitatAdministrativa);
+            	
+            	if ( "".equals(errorElementosRelacionados ) )
+            		unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);                	            	
+            	else
+            		return new IdNomDTO(-1l, messageSource.getMessage(errorElementosRelacionados, null, request.getLocale()));
+            	
+	    	} else 
+	    		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));	    	
+
+	    } catch (DelegateException dEx) {
+          if (dEx.getCause() instanceof SecurityException) {
+              resultatStatus.setId(-1l);
+          } else {
+              resultatStatus.setId(-2l);              
+          }	
+          log.error(ExceptionUtils.getFullStackTrace(dEx));
+	    }
+
+	    request.getSession().setAttribute("unidadAdministrativa", null);	    
+	    return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()) );	    
 	}
-    
 	
-//	/**
-//     * Método que comprueba si hay microsites para una Unidad Orgánica
-//     * @param idua identificador de la unidad organica
-//     * @return boolean
-//     */
-//    private boolean hayMicrositesUA(Long idua){
-//    	boolean retorno=false;
-//    	
-//    	try {
-//	    	String value = System.getProperty("es.caib.rolsac.microsites");
-//	    	
-//	    	if ((value == null) || value.equals("N")) {
-//	    		retorno=false;
-//	    	} else {
-//	            retorno = tieneMicrosites(idua);
-//	    	}    	
-//		} catch (Exception e) {
-//			retorno=true; //para evitar inconsistencias
-//		}
-//    	
-//    	
-//    	return retorno;
-//    }
-//    
-//    private boolean tieneMicrosites(Long idua) throws Exception {
-//		boolean retorno = false;
-//		MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
-//		List micros = micro.listarMicrosites();
-//		           
-//		Iterator iter = micros.iterator();
-//		while (iter.hasNext()) 
-//		{
-//			Microsite mic = (Microsite) iter.next();
-//			if (mic.getUnidadAdministrativa()==idua.intValue()) {
-//	        			retorno=true;
-//				break;
-//			}
-//		}
-//		return retorno;
-//	}
-//	
-//    /**
-//     * Descripción: Método que valida si la UA puede ser eliminada.
-//     * 
-//     * @author Indra
-//     * @param  ua  Unidad administrativa
-//     * @param  unidadDelegate  Delegado de la Unidad administrativa
-//     * @return Devuelve un objeto actionerrors, si el objeto contiene errores la UnidadAdministrativa no podra ser borrada
-//     */
-//    private ActionErrors validarEliminacionUA(UnidadAdministrativa ua, UnidadAdministrativaDelegate unidadDelegate) {
-//    	
-//    	ActionErrors errores = new ActionErrors();
-//    	String ids ="";
-//    	boolean boolProcedIsEmpty =ua.getProcedimientos().isEmpty();
-//    	
-//    	// Comprobar si el usuari puede eliminar UA
-//    	try{
-//    		if (!ua.isRaiz()) { 
-//    			if (!unidadDelegate.autorizarEliminarUA(ua.getPadre().getId()))
-//    				errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisosAntecesorUA"));
-//    		} else {
-//    			if (!unidadDelegate.autorizarEliminarUA(ua.getId()))
-//    				errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisosUA"));
-//    		}
-//    		
-//    	}catch(Exception e){
-//    		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.permisos"));
-//    		return errores;  
-//    	}
-//
-//    	//Compronbar si la UA tiene elementos relacionados
-//        if(!ua.getHijos().isEmpty()){
-//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneHijos"));
-//        }else if(!ua.getFichasUA().isEmpty()){
-//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneFichas"));
-//        }else if(!ua.getPersonal().isEmpty()){
-//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tienePersonal"));
-//        }else if(!ua.getUnidadesMaterias().isEmpty()){
-//        	errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneUnidadesMaterias"));
-//        }else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ){
-//       	
-//        	List <Long> idsList=new ArrayList<Long>();
-//
-//        	if(!boolProcedIsEmpty)
-//        		idsList = ua.getIdsProcedimientos();
-//        	else
-//        		idsList = ua.getIdsNormativas();
-//        	    	
-//        	Iterator<Long> iter = idsList.iterator();
-//        	int count = 0;
-//        	while(iter.hasNext()){
-//        		Long id = iter.next();
-//        		if (ids.equals("")){
-//          			ids = id.toString();
-//          			count++;
-//        		}else{
-//          			if ((count % 10) == 0)
-//          				ids = ids + ",<BR> " + id.toString();
-//          			else
-//          				ids = ids + ", " + id.toString();
-//          			
-//          			count++;
-//          		}
-//        	}
-//        	
-//        	if(!boolProcedIsEmpty)
-//        		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneProcedimientos",ids));
-//        	else
-//        		errores.add("ErrorEliminarUA", new ActionError("errors.borrarUA.tieneNormativas",ids));
-//        	
-//        }
-//
-//        return errores;
-//    }
+	/**
+     * Método que comprueba si hay microsites para una Unidad Orgánica
+     * @param idua identificador de la unidad organica
+     * @return boolean
+     */
+    private boolean hayMicrositesUA(Long idua){
+    	boolean retorno=false;
+    	
+    	try {
+	    	String value = System.getProperty("es.caib.rolsac.microsites");
+	    	
+	    	if ((value == null) || value.equals("N")) {
+	    		retorno=false;
+	    	} else {
+	            retorno = tieneMicrosites(idua);
+	    	}    	
+		} catch (Exception e) {
+			retorno=true; //para evitar inconsistencias
+		}
+    	
+    	
+    	return retorno;
+    }
+    
+    private boolean tieneMicrosites(Long idua) throws Exception {
+		boolean retorno = false;
+		org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
+		List micros = micro.listarMicrosites();
+		           
+		Iterator iter = micros.iterator();
+		while (iter.hasNext()) 
+		{
+			org.ibit.rol.sac.micromodel.Microsite mic = (org.ibit.rol.sac.micromodel.Microsite) iter.next();
+			if (mic.getUnidadAdministrativa()==idua.intValue()) {
+	        			retorno=true;
+				break;
+			}
+		}
+		return retorno;
+	}
+	
+    /**
+     * Descripción: Método que valida si la UA puede ser eliminada.
+     * 
+     * @author Indra
+     * @param  ua Unidad administrativas
+     * @param  unidadDelegate  Delegado de la Unidad administrativa
+     * @return Devuelve true o false en función de si la unidad administrativa puede ser o no borrada
+     */
+    private boolean validarPermisosEliminacionUA(UnidadAdministrativa ua, UnidadAdministrativaDelegate unidadDelegate) {
+    	
+    	// Comprobar si el usuari puede eliminar UA
+    	try {    		
+    		Long id = ua.isRaiz() ? ua.getId() : ua.getPadre().getId();    		
+    		return unidadDelegate.autorizarEliminarUA(id);    		    		
+    	} catch(Exception e) {
+    		return false;  
+    	}
+    }
+    
+    private String validarElementosRelacionados(UnidadAdministrativa ua) {
+    	
+    	boolean boolProcedIsEmpty =ua.getProcedimientos().isEmpty();    	
+    	String ids = "";
+    	
+    	//Compronbar si la UA tiene elementos relacionados
+        if(!ua.getHijos().isEmpty())
+        	return "unitatadm.esborrat.incorrecte.uafilles";
+        else if(!ua.getFichasUA().isEmpty())
+        	return "unitatadm.esborrat.incorrecte.fitxes";
+        else if(!ua.getPersonal().isEmpty())       
+        	return "unitatadm.esborrat.incorrecte.personal";
+        else if(!ua.getUnidadesMaterias().isEmpty())        	
+        	return "unitatadm.esborrat.incorrecte.materies";
+        else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ){
+       	
+        	List <Long> idsList=new ArrayList<Long>();
+
+        	if(!boolProcedIsEmpty)
+        		idsList = ua.getIdsProcedimientos();
+        	else
+        		idsList = ua.getIdsNormativas();
+        	    	
+        	Iterator<Long> iter = idsList.iterator();
+        	int count = 0;
+        	while(iter.hasNext()){
+        		Long id = iter.next();
+        		if (ids.equals("")){
+          			ids = id.toString();
+          			count++;
+        		}else{
+          			if ((count % 10) == 0)
+          				ids = ids + ",<BR> " + id.toString();
+          			else
+          				ids = ids + ", " + id.toString();
+          			
+          			count++;
+          		}
+        	}
+        	
+        	if(!boolProcedIsEmpty)
+        		return "unitatadm.esborrat.incorrecte.procediments";
+        	else
+        		return "unitatadm.esborrat.incorrecte.normatives";        	
+        }
+
+        //return errores;
+        return "";
+    }
+    
 	/**
 	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecerán
-	 * a ella, según los códigos de Materia pasados por parámetro. 
+	 * a ella, según los códigos de Materia pasados por parámetro. Si la lista de códigos está vacía, se 
+	 * borrarán todas las materias de la UA. 
 	 */
 	private void borrarUnidadesMateriaObsoletas(UnidadAdministrativa unidadAdministrativa, String[] codigosMateriasNuevas) throws DelegateException {
 		
 		UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
 		Set<UnidadMateria> listaUnidadMateria = unidadAdministrativa.getUnidadesMaterias();			
 		List<Long> listaIdUnidadMateriaObsoleta = new ArrayList();
-		
-		for ( UnidadMateria unidadMateria : listaUnidadMateria ) {
+				
+		if ( !"".equals(codigosMateriasNuevas[0]) ) {
+			for ( UnidadMateria unidadMateria : listaUnidadMateria ) {
+				
+				Materia materia = unidadMateria.getMateria();
+				int totalMateriasNuevas = codigosMateriasNuevas.length;
+				
+				int i = 0;
+				while ( i < totalMateriasNuevas && ( !materia.getId().equals(new Long(codigosMateriasNuevas[i])) ) ) 
+					i++;
+				
+				//Si la materia no está entre los codigos nuevos, significa que ha sido eliminada
+				//y, por tanto, la borraremos
+				if ( i == totalMateriasNuevas  ) 
+					listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
+				
+			}
 			
-			Materia materia = unidadMateria.getMateria();
-			int totalMateriasNuevas = codigosMateriasNuevas.length;
-			
-			int i = 0;
-			while ( i < totalMateriasNuevas && ( !materia.getId().equals(new Long(codigosMateriasNuevas[i])) ) ) 
-				i++;
-			
-			//Si la materia no está entre los codigos nuevos, significa que ha sido eliminada
-			//y, por tanto, la borraremos
-			if ( i == totalMateriasNuevas  ) 
+		//Si la lista de códigos está vacía, significará que hay que borrar todas las materias de la UA
+		} else {
+			for ( UnidadMateria unidadMateria : listaUnidadMateria ) 
 				listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
-			
 		}
 		
 		for ( Long id : listaIdUnidadMateriaObsoleta ) 
-			unidadMateriaDelegate.borrarUnidadMateria( id );
-		
+			unidadMateriaDelegate.borrarUnidadMateria( id );	
 	}
 }

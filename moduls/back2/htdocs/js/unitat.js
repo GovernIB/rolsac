@@ -474,25 +474,18 @@ function CDetall(soloFicha){
 			},
 			success: function(data) {
 				
-				Missatge.cancelar();
+				//Missatge.cancelar();
 				
-				if (data.id > -1) {
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
+				if (data.id > -1) {					
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte, funcio: carregarInici });
+				} else {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});					
 				}
-//				else {
-//					// tratar error;
-//					data.id;
-//					data.errores[]
-//
-//					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtTitulo, text: erroresHTML});
-//				}
-				
 				// array
 				Detall.array({id: dada_node.id, accio: "elimina"});
 				
 				// recarregar
-				Detall.recarregar();				
-					
+				//window.location.replace(pagArrel);					
 			}			
 		});
 	}
@@ -520,3 +513,5 @@ function posarValorsInput(idInput, valor)
 {
 	$(idInput).val(valor);
 }
+
+function carregarInici() { window.location.replace(pagArrel); }
