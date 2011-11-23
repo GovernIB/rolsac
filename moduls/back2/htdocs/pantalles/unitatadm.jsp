@@ -1,11 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
 
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />    
-    	    
+
+	<input type="hidden" id="rolusuario" value="<rol:printRol/>"/>	
+	    	    
     <div id="escriptori_contingut">
     </div>
     
@@ -642,6 +645,29 @@
             <div class="modul publicacio">
                 <fieldset>
                     <legend><spring:message code='boto.publicacio'/></legend>
+                    
+                      <div class="element right">
+                          <div class="etiqueta">
+                              <label for="item_validacio"><spring:message code='camp.validacio'/></label>
+                          </div>
+                          <div class="control">
+                              <select id="item_validacio" name="item_validacio">
+                              
+                                  <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                  <c:choose>
+                                      <c:when test="${rolSuper}" >
+                                          <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                          <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                          <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                      </c:when>
+                                      <c:otherwise>
+                                          <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                      </c:otherwise>
+                                  </c:choose>                                                               
+                              </select>
+                          </div>
+                    </div>
+                    
                     <div class="modul_continguts mostrat">
                         <!-- botonera dalt -->
                         <div class="botonera dalt">
