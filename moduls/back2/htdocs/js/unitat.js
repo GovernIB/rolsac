@@ -109,9 +109,16 @@ function CDetall(soloFicha){
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
-					Detall.recarregar();
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-				}					
+					//Si s'ha creat una nova UA hem de actualitzar la molla de pa
+					itemId = $("#item_id").val();
+					if (itemId == undefined || itemId == "") 
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom, funcio: Detall.carregarUA } );
+					else {
+						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom } );						
+						Detall.recarregar();
+					}										
+				}										
+										
 			}
 								
 		});
@@ -477,15 +484,12 @@ function CDetall(soloFicha){
 				//Missatge.cancelar();
 				
 				if (data.id > -1) {					
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte, funcio: carregarInici });
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte, funcio: Detall.carregarInici });
 				} else {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});					
 				}
 				// array
-				Detall.array({id: dada_node.id, accio: "elimina"});
-				
-				// recarregar
-				//window.location.replace(pagArrel);					
+				Detall.array({id: dada_node.id, accio: "elimina"});				
 			}			
 		});
 	}
@@ -507,11 +511,13 @@ function CDetall(soloFicha){
 		});
 		
 	}
+	
+	this.carregarInici = function() { window.location.replace(pagArrel); }
+	
+	this.carregarUA = function() { window.location.replace(pagLlistat); }
 }
 
 function posarValorsInput(idInput, valor)
 {
 	$(idInput).val(valor);
 }
-
-function carregarInici() { window.location.replace(pagArrel); }
