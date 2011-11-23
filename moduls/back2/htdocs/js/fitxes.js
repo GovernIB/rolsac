@@ -305,30 +305,18 @@ function CDetall(){
 	var that = this;
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
-	this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		/*
-		var dataVars = EscriptoriSeccionsUA.llistaSeccUa() + "&";
-		//TODO:incloure aquest error dins la verificacio de procediment.js
-
-		if (dataVars == "seccUA=&") {
-			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});
-		} else {		
-			dataVars += ModulMateries.listaMaterias() + "&" + ModulFetsVitals.listaHechosVitales()
-
-			//this._baseGuarda(dataVars);
-		*/
 		// Omplim els camps amb els valors per enviar al formulari
 		var llistaSeccions = EscriptoriSeccionsUA.llistaSeccUa();
-		$("#llistaSeccions").val(llistaSeccions);
 		
-		if (llistaSeccions.lenght < 1 ) {
-				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});	
+		if (llistaSeccions.length < 1 ) {
+            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});	
 		} else {		
-			var llista_materies = ModulMateries.listaMaterias();
-			llista_materies = llista_materies.slice(9);
+            $("#llistaSeccions").val(llistaSeccions);
 			$("#llistaMateries").val(llista_materies);
 			$("#llistaFetsVitals").val(ModulFetsVitals.listaHechosVitales());	
+            var llista_materies = ModulMateries.listaMaterias();
+			llista_materies = llista_materies.slice(9);
 			
 			// Validamos el formulario
 			if(!that.formulariValid()){
@@ -353,8 +341,8 @@ function CDetall(){
 						Detall.recarregar(data.id);
 					}					
 				}
-									
 			});
+
 			return false;
 		}
 	}
@@ -395,11 +383,9 @@ function CDetall(){
 	}
 
 	this.dataPublicacio = function(e) {
-		
-		if ($(this).val() == "") {
-			$(this).val(txtImmediat);
-		}
-		
+//		if ($(this).val() == "") {
+//			$(this).val(txtImmediat);
+//		}
 	}
 			
 	this.nou = function() {
@@ -426,7 +412,7 @@ function CDetall(){
 			suggeriment_elm.slideUp(300);
 		}
 		
-		$("#item_data_publicacio").val(txtImmediat);
+//		$("#item_data_publicacio").val(txtImmediat);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 		
@@ -664,259 +650,3 @@ function CDetall(){
 		});		
 	}
 }
-/*
-// documents
-var Docs = {
-	iniciar: function() {
-		
-		docs_elm = $("div.documentsRelacionats");
-		docs_table_existix = false;
-		
-		docs_elm.bind("click",Docs.llansar);
-		
-		codi_table_docs = "<div class=\"table llistat docs\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_docs += "<div class=\"thead\">";
-		codi_table_docs += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th nom\">" + txtNom + "</div>";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th arxiu\">" + txtArxiu + "</div>";
-		codi_table_docs += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		codi_table_docs += "<div class=\"tbody\">";
-		codi_table_docs += "</div>";
-		codi_table_docs += "</div>";
-		
-		return codi_table_docs;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("doc"))) {
-			
-			docs_elm.unbind("click",Docs.llansar);
-			
-			A_elm = elm.parents("a:first");
-			doc_elm = elm.parents("div.documentsRelacionats:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (doc_elm.find("div.table").size() == 0) {
-			
-					elm.parents("p:first").before(codi_table_docs);
-					
-					docs_table_elm = doc_elm.find("div.table:first");
-					docs_table_tbody_elm = docs_table_elm.find("div.tbody");
-					
-					docs_table_existix = true;
-					
-				}
-				
-				tr_num = docs_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_docs = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_docs += "<div role=\"gridcell\" class=\"td nom\">";
-				codi_docs += "<input name=\"doc\" type=\"text\" />";
-				codi_docs += "</div>";
-				codi_docs += "<div role=\"gridcell\" class=\"td arxiu\">";
-				codi_docs += "<input name=\"doc\" type=\"file\" />";
-				codi_docs += "</div>";
-				codi_docs += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_docs += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_docs += "</div>";
-				codi_docs += "</div>";
-				
-				docs_table_tbody_elm.append(codi_docs);
-				docs_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = docs_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						docs_table_elm.slideUp(300,function() {
-							$(this).remove();
-							docs_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.doc").addClass("elimina");
-				}
-				
-			}
-			
-			docs_elm.bind("click",Docs.llansar);
-			
-		}
-		
-	}
-};
-*/
-/*
-// fotos
-var Fotos = {
-	iniciar: function() {
-		
-		fotos_elm = $("#fotos");
-		fotos_table_existix = false;
-		
-		fotos_elm.bind("click",Fotos.llansar);
-		
-		codi_table_fotos = "<div class=\"table fotos\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-		codi_table_fotos += "<div class=\"thead\">";
-		codi_table_fotos += "<div role=\"rowheader\" class=\"tr\">";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th img\">" + txtImatge + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th petita\">" + txtFotoPetita + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th gran ASC\">" + txtFotoGran + "</div>";
-		codi_table_fotos += "<div role=\"columnheader\" class=\"th opcions\"></div>";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "<div class=\"tbody\">";
-		codi_table_fotos += "</div>";
-		codi_table_fotos += "</div>";
-		
-		return codi_table_fotos;
-		
-	},
-	llansar: function(e) {
-		elm = $(e.target);
-		
-		if (elm.is("A") || (elm.is("SPAN") && !elm.hasClass("foto"))) {
-			
-			fotos_elm.unbind("click",Fotos.llansar);
-			
-			A_elm = elm.parents("a:first");
-			
-			if (A_elm.hasClass("afegeix")) {
-				
-				if (!fotos_table_existix) {
-			
-					elm.parents("p:first").before(codi_table_fotos);
-					
-					fotos_table_elm = $("#fotos div.table");
-					fotos_table_tbody_elm = fotos_table_elm.find("div.tbody");
-					
-					fotos_table_existix = true;
-					
-				}
-				
-				tr_num = fotos_table_tbody_elm.find("div.tr").size();
-				
-				par_class = (tr_num%2) ? " par" : "";
-				
-				codi_foto = "<div role=\"row\" class=\"tr nou" + par_class + "\">";
-				codi_foto += "<div role=\"gridcell\" class=\"td img\">&nbsp;</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td petita\">";
-				codi_foto += "<input name=\"foto_petita\" type=\"file\" />";
-				codi_foto += "</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td gran\">";
-				codi_foto += "<input name=\"foto_gran\" type=\"file\" />";
-				codi_foto += "</div>";
-				codi_foto += "<div role=\"gridcell\" class=\"td opcions\">";
-				codi_foto += "<a href=\"javascript:;\" class=\"btn lleva\"><span><span>" + txtLleva + "</span></span></a>";
-				codi_foto += "</div>";
-				codi_foto += "</div>";
-				
-				fotos_table_tbody_elm.append(codi_foto);
-				fotos_table_tbody_elm.find("div.tr:last").slideDown(300,function() {
-					$(this).removeClass("nou");
-				});
-				
-			} else if (A_elm.hasClass("lleva")) {
-				
-				tr_elm = elm.parents("div.tr:first");
-				
-				tr_elm.slideUp(300,function() {
-					$(this).remove();
-					
-					tr_num = fotos_table_tbody_elm.find("div.tr").size();
-					if (tr_num == 0) {
-						fotos_table_elm.slideUp(300,function() {
-							$(this).remove();
-							fotos_table_existix = false;
-						});
-					}
-					
-				});
-				
-			} else if (A_elm.hasClass("elimina") || A_elm.hasClass("inclou")) {
-				
-				if (A_elm.hasClass("inclou")) {
-					A_elm.removeClass("inclou").addClass("elimina").html("<span><span>" + txtElimina + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.foto").removeClass("elimina");
-				} else {
-					A_elm.removeClass("elimina").addClass("inclou").html("<span><span>" + txtInclou + "</span></span>");
-					A_elm.parents("div.tr:first").find("span.foto").addClass("elimina");
-				}
-				
-			}
-			
-			fotos_elm.bind("click",Fotos.llansar);
-			
-		}
-		
-	}
-};
-*/
-
-
-
-/*
-var Error = {
-	llansar: function() {
-		if (escriptori_detall_elm.css("display") != "none") {
-			escriptori_detall_elm.attr('aria-hidden', 'true').attr('aria-disabled', 'true').fadeOut(300);
-		}
-		escriptori_elm.fadeOut(300, function() {
-			segundos = 60;
-			conex = setInterval("Error.conexion()",1000);
-			codi = "<div id=\"error\">";
-			codi += "<h1>" + txtAjaxError + "</h1>";
-			codi += "<p><strong>" + txtFuncions + "</strong> " + txtFuncionsFins + ".</p>";
-			codi += "<p>" + txtConexionIntentar + " <span id=\"temps\">" + segundos + " " + txtSegons + "</span>.</p>";
-			codi += "<p><a onclick=\"Error.reiniciar();\">" + txtConectar + "</a></p>";
-			codi += "</div>";
-			// mostrem
-			escriptori_elm.attr('aria-hidden', 'false').attr('aria-disabled', 'false').html(codi).fadeIn(300);
-		});
-	},
-	conexion: function() {
-		segundos--;
-		if (segundos == 0) {
-			Error.reiniciar();
-		} else if (segundos == 1) {
-			$("#temps").html(segundos + " " + txtSegon);
-		} else {
-			$("#temps").html(segundos + " " + txtSegons);
-		}
-	},
-	reiniciar: function() {
-		escriptori_elm.fadeOut(300, function() {
-			if (conex) { clearInterval(conex); }
-			// escriptori, carregant
-			codi = "<p class=\"executant\">" + txtCargandoEntidades + "</p>";
-			escriptori_elm.html(codi).fadeIn(300, function() {
-				// INICIAMOS
-				Entidades.carregar({entidad:entidad_ID});
-			});
-		});
-	}
-};
-*/

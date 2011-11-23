@@ -1,269 +1,200 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-    <link href='<c:url value="/css/fitxes.css"/>' rel="stylesheet" type="text/css" media="screen" />    
-    <link href='<c:url value="/css/modul_seccions_ua.css"/>' rel="stylesheet" type="text/css" media="screen" />
-    <link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
-    <link href='<c:url value="/css/modul_seccions_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
-    <link href='<c:url value="/css/modul_enllassos.css"/>' rel="stylesheet" type="text/css" media="screen" />
-    <link href="<c:url value="/css/modul_documents.css"/>" rel="stylesheet" type="text/css" media="screen" />
-    <link href='<c:url value="/css/jquery-ui-timepicker-addon.css"/>' rel="stylesheet" type="text/css" media="screen" />
-    
-    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
-    <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
-    
-    <script type="text/javascript">
-    // accesos
-    var pagLlistat = '<c:url value="/fitxainf/llistat.do" />';
-    var pagDetall = '<c:url value="/fitxainf/pagDetall.do" />';
-    var pagGuardar = '<c:url value="/fitxainf/guardar.do" />';
-    var pagSeccions = '<c:url value="/fitxainf/seccions.do" />';
-    var pagUnitats = '<c:url value="/fitxainf/unitats.do" />';
-    var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.do" />';
-    var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
-    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
+<%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+<link href='<c:url value="/css/fitxes.css"/>' rel="stylesheet" type="text/css" media="screen" />    
+<link href='<c:url value="/css/modul_seccions_ua.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/modul_seccions_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/modul_enllassos.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href="<c:url value="/css/modul_documents.css"/>" rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/jquery-ui-timepicker-addon.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
-    // texts
-    var txtEspere = "<spring:message code='txt.esperi'/>";
-    var txtCarregant = "<spring:message code='txt.carregant'/>";
-    var txtSi = "<spring:message code='txt.si'/>";
-    var txtNo = "<spring:message code='txt.no'/>";
-    var txtTrobats = "<spring:message code='txt.trobades'/>";
-    var txtLlistaItem = "<spring:message code='txt.fitxa'/>";
-    var txtLlistaItems = "<spring:message code='txt.fitxes'/>";
-    var txtAdministrativa = "<spring:message code='txt.administrativa'/>";
-    var txtAdministratives = "<spring:message code='txt.administratives'/>";
-    var txtData = "<spring:message code='txt.data'/>";
-    var txtPublicacio = "<spring:message code='txt.publicacio'/>";
-    var txtCaducitat = "<spring:message code='txt.caducitat'/>";
-    var txtMostrem = "<spring:message code='txt.mostrem'/> <spring:message code='txt.de_la'/> ";
-    var txtMostremAl = "<spring:message code='txt.a_la'/>";
-    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
-    var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
-    var txtCarregantItems = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
-    var txtOrdenats = "<spring:message code='txt.ordenats'/>";
-    var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
-    var txtDescendentment = "<spring:message code='txt.descendentment'/>";
-    var txtPer = "<spring:message code='txt.per'/>";
-    var txtEsborrarCorrecte = "<spring:message code='txt.fitxa_borrat'/>";
-    // taula
-    var pag_Res = 5;
-    var txtNom = "<spring:message code='txt.nom'/>";
-    var txtPare = "<spring:message code='txt.pare'/>";
-    var txtCercant = "<spring:message code='txt.cercant'/>";
-    var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
-    // paginacio
-    
-    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
-    var txtSeguents = "<spring:message code='txt.seguents'/>";
-    var txtAnteriors = "<spring:message code='txt.anteriors'/>";
-    var txtInici = "<spring:message code='txt.inici'/>";
-    var txtFinal = "<spring:message code='txt.final'/>";
-    var txtPagines = "<spring:message code='txt.pagines'/>";
-    var txtCercant = "<spring:message code='txt.cercant'/>";
+<script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui-timepicker-addon.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_ua_arbre.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_seccions_arbre.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
+
+<script type="text/javascript">
+   // accesos
+   var pagLlistat = '<c:url value="/fitxainf/llistat.do" />';
+   var pagDetall = '<c:url value="/fitxainf/pagDetall.do" />';
+   var pagGuardar = '<c:url value="/fitxainf/guardar.do" />';
+   var pagSeccions = '<c:url value="/fitxainf/seccions.do" />';
+   var pagUnitats = '<c:url value="/fitxainf/unitats.do" />';
+   var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.do" />';
+   var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
+   var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
+
+   // texts
+   var txtEspere = "<spring:message code='txt.esperi'/>";
+   var txtCarregant = "<spring:message code='txt.carregant'/>";
+   var txtSi = "<spring:message code='txt.si'/>";
+   var txtNo = "<spring:message code='txt.no'/>";
+   var txtTrobats = "<spring:message code='txt.trobades'/>";
+   var txtLlistaItem = "<spring:message code='txt.fitxa'/>";
+   var txtLlistaItems = "<spring:message code='txt.fitxes'/>";
+   var txtAdministrativa = "<spring:message code='txt.administrativa'/>";
+   var txtAdministratives = "<spring:message code='txt.administratives'/>";
+   var txtData = "<spring:message code='txt.data'/>";
+   var txtPublicacio = "<spring:message code='txt.publicacio'/>";
+   var txtCaducitat = "<spring:message code='txt.caducitat'/>";
+   var txtMostrem = "<spring:message code='txt.mostrem'/> <spring:message code='txt.de_la'/> ";
+   var txtMostremAl = "<spring:message code='txt.a_la'/>";
+   var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+   var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
+   var txtCarregantItems = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
+   var txtOrdenats = "<spring:message code='txt.ordenats'/>";
+   var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
+   var txtDescendentment = "<spring:message code='txt.descendentment'/>";
+   var txtPer = "<spring:message code='txt.per'/>";
+   var txtEsborrarCorrecte = "<spring:message code='txt.fitxa_borrat'/>";
+   // taula
+   var pag_Res = 5;
+   var txtNom = "<spring:message code='txt.nom'/>";
+   var txtPare = "<spring:message code='txt.pare'/>";
+   var txtCercant = "<spring:message code='txt.cercant'/>";
+   var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
+   // paginacio
+   
+   var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
+   var txtSeguents = "<spring:message code='txt.seguents'/>";
+   var txtAnteriors = "<spring:message code='txt.anteriors'/>";
+   var txtInici = "<spring:message code='txt.inici'/>";
+   var txtFinal = "<spring:message code='txt.final'/>";
+   var txtPagines = "<spring:message code='txt.pagines'/>";
+   var txtCercant = "<spring:message code='txt.cercant'/>";
+      
+   var txtCercantElements = txtCercant + " " + txtLlistaItems;
+   var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
+   var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
+   var txtCercantAnteriors = txtCercantLlistatAnteriors;
+   var txtCercantSeguents = txtCercantLlistatSeguents;
+   
+   // detall
+   var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
+   var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
+   var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
+   var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
+   var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
+   var txtMostra = "<spring:message code='boto.mostra'/>";
+   var txtAmaga = "<spring:message code='txt.amaga'/>";
+   var txtCaducat = "<spring:message code='txt.caducat'/>";
+   var txtImmediat = "<spring:message code='txt.immediat'/>";
+   // idioma
+   var txtDesplega = "<spring:message code='txt.desplega'/>";
+   var txtPlega = "<spring:message code='txt.plega'/>";
+   // fotos
+   var txtImatge = "<spring:message code='txt.imatge'/>";
+   var txtFoto = "<spring:message code='txt.foto'/>";
+   var txtFotos = "<spring:message code='txt.fotos'/>";
+   var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
+   var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
+   var txtLleva = "<spring:message code='txt.lleva'/>";
+   var txtInclou = "<spring:message code='txt.inclou'/>";
+   var txtElimina = "<spring:message code='txt.elimina'/>";
+   var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
+   // docs
+   var txtNom = "<spring:message code='txt.nom'/>";
+   var txtArxiu = "<spring:message code='txt.arxiu'/>"
+   // enllasos
+   var txtAdresa = "<spring:message code='txt.adresa'/>";
+   // moduls
+   var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+   var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+   var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
+   var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+   // modul documents
+   var txtDocument = "<spring:message code='txt.document'/>";
+   var txtDocuments = "<spring:message code='txt.documents'/>";
+   var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
+   var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
+   // modul materies
+   var txtMateria = "<spring:message code='txt.materia'/>";
+   var txtMateries = "<spring:message code='txt.materies'/>";
+   var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+   // modul fets vitals
+   var txtFet = "<spring:message code='txt.fet_vital'/>";
+   var txtFets = "<spring:message code='txt.fets_vitals'/>";
+   var txtNoHiHaFets = txtNoHiHa + " " + txtFets;
+   // modul seccio/ua
+   var txtSeccioUA = "<spring:message code='txt.seccio_ua'/>";
+   var txtSeccionsUA = "<spring:message code='txt.seccions_ua'/>";
+   var txtNoHiHaSeccioUA = "<spring:message code='txt.no_hi_ha_cap'/> " + txtSeccioUA.toLowerCase();
+   var txtLaSeccio = "<spring:message code='txt.la_seccio'/>";
+   var txtAmbLaUnitat = "<spring:message code='txt.amb_la_unitat'/>";
+   // modul ua arbre
+   var txtArrel = "<spring:message code='txt.arrel'/>";
+   var txtNodesFills = "<spring:message code='txt.nodes_fills.titol'/>";
+   var txtCarregantArrel = "<spring:message code='txt.carregant_node_arrel'/> " + txtEspere;
+   var txtCarregantNodes = txtCarregant + " <spring:message code='txt.nodes_fills_dot'/> " + txtEspere;
+   // enllassos
+   var txtEnllas = "<spring:message code='txt.enllas'/>";
+   var txtEnllassos = "<spring:message code='txt.enllassos'/>";
+   var txtNoHiHaEnllassos = "<spring:message code='txt.no_hi_ha_cap'/> " + txtEnllas.toLowerCase();
+   var txtNoHiHaEnllassosSeleccionats = "<spring:message code='txt.no_hi_ha'/> " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
        
-    var txtCercantElements = txtCercant + " " + txtLlistaItems;
-    var txtCercantLlistatAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
-    var txtCercantLlistatSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
-    var txtCercantAnteriors = txtCercantLlistatAnteriors;
-    var txtCercantSeguents = txtCercantLlistatSeguents;
-    
-    // detall
-    var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
-    var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
-    var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
-    var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
-    var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
-    var txtMostra = "<spring:message code='boto.mostra'/>";
-    var txtAmaga = "<spring:message code='txt.amaga'/>";
-    var txtCaducat = "<spring:message code='txt.caducat'/>";
-    var txtImmediat = "<spring:message code='txt.immediat'/>";
-    // idioma
-    var txtDesplega = "<spring:message code='txt.desplega'/>";
-    var txtPlega = "<spring:message code='txt.plega'/>";
-    // fotos
-    var txtImatge = "<spring:message code='txt.imatge'/>";
-    var txtFoto = "<spring:message code='txt.foto'/>";
-    var txtFotos = "<spring:message code='txt.fotos'/>";
-    var txtFotoPetita = txtFoto + " <spring:message code='txt.petita'/>";
-    var txtFotoGran = txtFoto + " <spring:message code='txt.gran'/>";
-    var txtLleva = "<spring:message code='txt.lleva'/>";
-    var txtInclou = "<spring:message code='txt.inclou'/>";
-    var txtElimina = "<spring:message code='txt.elimina'/>";
-    var txtNoHiHaFotos = txtNoHiHa + " " + txtFotos.toLowerCase() + " <spring:message code='txt.associades'/>";
-    // docs
-    var txtNom = "<spring:message code='txt.nom'/>";
-    var txtArxiu = "<spring:message code='txt.arxiu'/>"
-    // enllasos
-    var txtAdresa = "<spring:message code='txt.adresa'/>";
-    // moduls
-    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
-    var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
-    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
-    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
-    // modul documents
-    var txtDocument = "<spring:message code='txt.document'/>";
-    var txtDocuments = "<spring:message code='txt.documents'/>";
-    var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
-    var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
-    // modul materies
-    var txtMateria = "<spring:message code='txt.materia'/>";
-    var txtMateries = "<spring:message code='txt.materies'/>";
-    var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
-    // modul fets vitals
-    var txtFet = "<spring:message code='txt.fet_vital'/>";
-    var txtFets = "<spring:message code='txt.fets_vitals'/>";
-    var txtNoHiHaFets = txtNoHiHa + " " + txtFets;
-    // modul seccio/ua
-    var txtSeccioUA = "<spring:message code='txt.seccio_ua'/>";
-    var txtSeccionsUA = "<spring:message code='txt.seccions_ua'/>";
-    var txtNoHiHaSeccioUA = "<spring:message code='txt.no_hi_ha_cap'/> " + txtSeccioUA.toLowerCase();
-    var txtLaSeccio = "<spring:message code='txt.la_seccio'/>";
-    var txtAmbLaUnitat = "<spring:message code='txt.amb_la_unitat'/>";
-    // modul ua arbre
-    var txtArrel = "<spring:message code='txt.arrel'/>";
-    var txtNodesFills = "<spring:message code='txt.nodes_fills.titol'/>";
-    var txtCarregantArrel = "<spring:message code='txt.carregant_node_arrel'/> " + txtEspere;
-    var txtCarregantNodes = txtCarregant + " <spring:message code='txt.nodes_fills_dot'/> " + txtEspere;
-	// enllassos
-	var txtEnllas = "<spring:message code='txt.enllas'/>";
-    var txtEnllassos = "<spring:message code='txt.enllassos'/>";
-    var txtNoHiHaEnllassos = "<spring:message code='txt.no_hi_ha_cap'/> " + txtEnllas.toLowerCase();
-    var txtNoHiHaEnllassosSeleccionats = "<spring:message code='txt.no_hi_ha'/> " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
-        
-    // suggeriments
-    var suggeriments = "";
+   // suggeriments
+   var suggeriments = "";
 
-    </script>
-    
-    
-    <script type="text/javascript">
-    //validacio
-    var txtSeccUa = "<spring:message code='fitxes.missatge.es_necessari'/>";
-    var txtMaxim = "<spring:message code='txt.maxim'/>";
-    var txtMax = "<spring:message code='txt.max'/>";
-    var txtCaracters = "<spring:message code='txt.caracters'/>";
-    var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
-    var txtAnyMal = "<spring:message code='txt.any_mal'/>";
-    var txtMesMal = "<spring:message code='txt.mes_mal'/>";
-    var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
-    var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
-    
-    // dades formularis
-    var FormulariDades = [
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_titol_ca",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 230,
-                    "mostrar": "si",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": "<spring:message code='fitxes.missatge.titol.obligatori'/>",
-                    "tipus": "El camp '<spring:message code='fitxes.missatge.titol.tipus'/>"
-                }
-        },
-        /*
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_titol_es",
-            "obligatori": "no",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 250,
-                    "mostrar": "si",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "tipus": "El camp 'Títol de la fitxa en l'idioma castellà' no pot estar compost només de números"
-                }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_titol_en",
-            "obligatori": "no",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 250,
-                    "mostrar": "si",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "tipus": "El camp 'Títol de la fitxa en l'idioma anglés' no pot estar compost només de números"
-                }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_titol_de",
-            "obligatori": "no",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 250,
-                    "mostrar": "si",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "tipus": "El camp 'Títol de la fitxa en l'idioma alemany' no pot estar compost només de números"
-                }
-        },
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_titol_fr",
-            "obligatori": "no",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 250,
-                    "mostrar": "si",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "tipus": "El camp 'Títol de la fitxa en l'idioma francés' no pot estar compost només de números"
-                }
-        }
-        ,*/
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_estat",
-            "obligatori": "si",
-            "tipus": "numeric",
-            "error":
-                {
-                    "obligatori": "<spring:message code='fitxes.missatge.estat.obligatori'/>"                   
-                }
-        } 
-    ];
+</script>
+   
+   
+<script type="text/javascript">
+   //validacio
+   var txtSeccUa = "<spring:message code='fitxes.missatge.es_necessari'/>";
+   var txtMaxim = "<spring:message code='txt.maxim'/>";
+   var txtMax = "<spring:message code='txt.max'/>";
+   var txtCaracters = "<spring:message code='txt.caracters'/>";
+   var txtCampObligatori = "<spring:message code='txt.camp_obligatori'/>";
+   var txtAnyMal = "<spring:message code='txt.any_mal'/>";
+   var txtMesMal = "<spring:message code='txt.mes_mal'/>";
+   var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
+   var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
+   
+   // dades formularis
+   var FormulariDades = [
+       {
+           "modo": "individual",
+           "etiqueta": "id",
+           "etiquetaValor": "item_titol_ca",
+           "obligatori": "si",
+           "tipus": "alfanumeric",
+           "caracters":
+               {
+                   "maxim": 230,
+                   "mostrar": "si",
+                   "abreviat": "no"
+               },
+           "error":
+               {
+                   "obligatori": "<spring:message code='fitxes.missatge.titol.obligatori'/>",
+                   "tipus": "El camp '<spring:message code='fitxes.missatge.titol.tipus'/>"
+               }
+       },
+       {
+           "modo": "individual",
+           "etiqueta": "id",
+           "etiquetaValor": "item_estat",
+           "obligatori": "si",
+           "tipus": "numeric",
+           "error":
+               {
+                   "obligatori": "<spring:message code='fitxes.missatge.estat.obligatori'/>"                   
+               }
+       } 
+   ];
 
     var FormulariEnllassos = [
 		{
@@ -273,20 +204,21 @@
 		    "obligatori": "si",
 		    "tipus": "alfanumeric",
 		    "caracters":
-            {
-                "maxim": 250,
-                "mostrar": "si",
-                "abreviat": "no"
-            },
+	           {
+	               "maxim": 250,
+	               "mostrar": "si",
+	               "abreviat": "no"
+	           },
 		    "error":
 		        {
-            		"obligatori": "<spring:message code='fitxes.missatge.titol.enllas.obligatori'/>",
+	           		"obligatori": "<spring:message code='fitxes.missatge.titol.enllas.obligatori'/>",
 		            "tipus": "<spring:message code='fitxes.missatge.titol.enllas.tipus'/>"                   
 		        }
 		}   
-	];
-    </script>
-    <div id="escriptori_contingut"> 
+    ];
+</script>
+
+ <div id="escriptori_contingut"> 
     <ul id="opcions">
         <li class="opcio L actiu">
             <a id="tabListado" href="javascript:void(0)"><spring:message code='tab.llistat'/></a>
@@ -844,7 +776,6 @@
         <!-- /modulPrincipal -->        
         <!-- modulLateral -->
         <div class="modulLateral">
-            <? if ($_SESSION['rolsac_rol'] != "RSC_OPERADOR") { ?>
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
@@ -858,10 +789,18 @@
                                 </div>
                                 <div class="control">
                                     <select id="item_estat" name="item_estat">
-                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
-                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                        <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                        <c:choose>
+                                           <c:when test="${rolSuper}" >
+                                               <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                               <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                               <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                               <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                           </c:when>
+                                           <c:otherwise>
+                                               <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                           </c:otherwise>
+                                       </c:choose>
                                     </select>
                                 </div>
                             </div>
@@ -874,8 +813,7 @@
                                     <label for="item_data_publicacio"><spring:message code='fitxes.formulari.data.publicacio'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_publicacio" name="item_data_publicacio"                                        
-                                        type="text" <%-- value="Immediat" --%> class="nou" readonly="readonly" />
+                                    <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
                             <div class="element right">
@@ -883,8 +821,7 @@
                                     <label for="item_data_caducitat"><spring:message code='fitxes.formulari.data.caducitat'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_caducitat" name="item_data_caducitat"
-                                        type="text" class="nou" readonly="readonly" />
+                                    <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
                         </div>
@@ -911,7 +848,6 @@
                 </fieldset>
             </div>
             <!-- /modul -->
-            <? } ?>
             <!-- modul -->
             <div class="modul" id="modul_documents">
                 <fieldset>

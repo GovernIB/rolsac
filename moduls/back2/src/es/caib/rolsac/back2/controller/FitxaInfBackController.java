@@ -495,6 +495,8 @@ public class FitxaInfBackController {
 		IdNomDTO result = null;
         
         Integer validacion = null;
+        
+        String error = null;
 
         Map<String, String> valoresForm = new HashMap<String, String>();
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
@@ -523,34 +525,27 @@ public class FitxaInfBackController {
     		}
 
     		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-    		
     		Ficha fitxa = new Ficha();
-    		// Es comprova que l'estat es un estat permes
-    		try {
-    			validacion = Integer.parseInt(valoresForm.get("item_estat")); 
-    			fitxa.setValidacion(validacion);
-            } catch (NumberFormatException e) {
-            	String error = messageSource.getMessage("fitxes.error.estat_incorrecte", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED); 
-            }   
+    		
             
             // Comprovam camps obligatoris 
-            // Validacio previa
+    		
             UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-            String titolCatala = valoresForm.get("item_titol_ca");
-            
+            String titolCatala = valoresForm.get("item_titol_ca");           
             if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
-            	String error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
+            	error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
                 result = new IdNomDTO(-3l, error);
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
             }
-    		
+            if (valoresForm.get("seccUA") == null || valoresForm.get("seccUA").split("#").length < 1) {
+            	error = messageSource.getMessage("fitxes.missatge.es_necessari", null, request.getLocale());
+                result = new IdNomDTO(-3l, error);
+                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+            }
             
-           
+            
             Ficha fitxaOld = null;
             boolean edicion;
-            
             Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
 			if (id != null) { 
 				fitxaOld = fitxaDelegate.obtenerFicha(id);
@@ -560,6 +555,20 @@ public class FitxaInfBackController {
 				edicion = false;
 			}
     		
+			
+			// Es comprova que l'estat es un estat permes
+            try {
+				validacion = Integer.parseInt(valoresForm.get("item_estat"));
+				// Comprobar que no se haya cambiado la validacion/estado siendo operador
+            	if (request.isUserInRole("sacoper") && fitxaOld != null && !fitxaOld.getValidacion().equals(validacion)) {
+            		throw new DelegateException(new SecurityException());
+            	}
+            	fitxa.setValidacion(validacion);
+			} catch (NumberFormatException e) {
+				error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
+				throw new NumberFormatException();
+			}
+			
 			
 			if (edicion) {
 				// Mantenim els valors que te la fitxa.
@@ -769,7 +778,7 @@ public class FitxaInfBackController {
                     esborrarFichaUA = true;
                     for (int i = 0; i<codisSeccUaNous.length; i++){
                         if (codisSeccUaNous[i] != null){//Per a no repetir cerques
-                            String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesario verificar si les relacions anteriors se mantenen
+                            String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
                             if(fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))){
                                 esborrarFichaUA = false;
                                 codisSeccUaNous[i] = null;
@@ -786,7 +795,7 @@ public class FitxaInfBackController {
             //Tots els que tenen id = -1, son nous i se poden afegir directament
             for (String codiSeccUa: codisSeccUaNous){
                 if (codiSeccUa != null){
-                    String[] seccUA = codiSeccUa.split("#");                        
+                    String[] seccUA = codiSeccUa.split("#");
                     Long idSeccion = ParseUtil.parseLong(seccUA[1]);
                     Long idUA = ParseUtil.parseLong(seccUA[2]);
                     
@@ -797,7 +806,7 @@ public class FitxaInfBackController {
                         // Si se anyade una ficha a la seccion Actualidad, se añade tambien a Portada Actualidad (PIDIP)
                         if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
                         {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
-                            int existe=0;Long ficodi;Long codficha;
+                            int existe=0;
                             List listac = fitxaDelegate.listarFichasSeccionTodas(new Long(Parametros.PORTADAS_ACTUALIDAD));
                             Iterator iter = listac.iterator();
                             while (iter.hasNext())
@@ -884,22 +893,24 @@ public class FitxaInfBackController {
             
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
-                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+                error = messageSource.getMessage("error.permisos", null, request.getLocale());
                 result = new IdNomDTO(-1l, error);
             } else {
-                String error = messageSource.getMessage("error.altres", null, request.getLocale());
+                error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomDTO(-2l, error);
                 log.error(ExceptionUtils.getFullStackTrace(dEx)); 
             }
         } catch (FileUploadException e) {
-			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
+			error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
 			
 		} catch (UnsupportedEncodingException e) {
-			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getFullStackTrace(e));
+		} catch (NumberFormatException nfe) {
+			result = new IdNomDTO(-3l, error);
 		}
 
         //return result;
