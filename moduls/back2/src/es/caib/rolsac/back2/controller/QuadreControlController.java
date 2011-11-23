@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ import org.ibit.rol.sac.persistence.delegate.EstadisticaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.util.PeriodoUtil;
 import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,18 +67,43 @@ public class QuadreControlController extends ArchivoController {
 		model.put("dataActual", dataActual.getTime());
 		UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
 
+		// Comprovamos si tenemos que recorrer todos los nodos
+		List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
+		
 		if (session.getAttribute("unidadAdministrativa") != null) {
 			unitatAdministrativa = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 			model.put("idUA", unitatAdministrativa.getId());
 			model.put("nomUA",unitatAdministrativa.getNombreUnidadAdministrativa());
+			
+			try {
+				String allNodos = request.getParameter("allUA");
+				UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+				
+				if (allNodos != null && !"".equals(allNodos) && unitatAdministrativa != null && unitatAdministrativa.getId() != null) {
+					llistaUnitatAdministrativaId = unitatAdministrativaDelegate.cargarArbolUnidadId(unitatAdministrativa.getId());
+					model.put("allUA", "S");
+				} else {
+					llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
+				}
+				
+			} catch (DelegateException dEx) {
+				if (dEx.getCause() instanceof SecurityException) {
+					String error = messageSource.getMessage("error.permisos", null,request.getLocale());
+				} else {
+					String error = messageSource.getMessage("error.altres", null,request.getLocale());
+					log.error(ExceptionUtils.getFullStackTrace(dEx));
+				}
+			}
 		}
 
+		
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 0);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.quadre_control", null, request.getLocale()));
 		model.put("escriptori", "pantalles/quadreControl.jsp");
-
+		
+				
 		// Darreres Modificacions
 		try {
 			EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
@@ -84,7 +111,8 @@ public class QuadreControlController extends ArchivoController {
 			GregorianCalendar dataActualFi = new GregorianCalendar();
 			dataActualFi.add(Calendar.DATE, -7);
 
-			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActual.getTime(),dataActualFi.getTime(), Parametros.NUMERO_REGISTROS,unitatAdministrativa);
+			
+			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActual.getTime(),dataActualFi.getTime(), Parametros.NUMERO_REGISTROS,llistaUnitatAdministrativaId);
 			
 			model.put("darreresModificacions", llistaCanvis);
 
@@ -101,21 +129,21 @@ public class QuadreControlController extends ArchivoController {
 		try {
 			// Procediment
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-			int procedimentActiu = procedimientoDelegate.buscarProcedimientosActivos(unitatAdministrativa,dataActual.getTime());
-			int procedimentCaducat = procedimientoDelegate.buscarProcedimientosCaducados(unitatAdministrativa,dataActual.getTime());
+			int procedimentActiu = procedimientoDelegate.buscarProcedimientosActivos(llistaUnitatAdministrativaId,dataActual.getTime());
+			int procedimentCaducat = procedimientoDelegate.buscarProcedimientosCaducados(llistaUnitatAdministrativaId,dataActual.getTime());
 			model.put("procedimentActiu", procedimentActiu);
 			model.put("procedimentCaducat", procedimentCaducat);
 			model.put("procedimentTotal", procedimentActiu + procedimentCaducat);
 
 			// Normativa
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			int normativaActiva = normativaDelegate.buscarNormativasActivas(unitatAdministrativa);
+			int normativaActiva = normativaDelegate.buscarNormativasActivas(llistaUnitatAdministrativaId);
 			model.put("normativaActiva", normativaActiva);
 
 			// Fitxa
 			FichaDelegate fichaDelegate = DelegateUtil.getFichaDelegate();
-			int fitxaActiva = fichaDelegate.buscarFichasActivas(unitatAdministrativa, dataActual.getTime());
-			int fitxaCaducada = fichaDelegate.buscarFichasCaducadas(unitatAdministrativa, dataActual.getTime());
+			int fitxaActiva = fichaDelegate.buscarFichasActivas(llistaUnitatAdministrativaId, dataActual.getTime());
+			int fitxaCaducada = fichaDelegate.buscarFichasCaducadas(llistaUnitatAdministrativaId, dataActual.getTime());
 
 			model.put("fitxaActiva", fitxaActiva);
 			model.put("fitxaCaducada", fitxaCaducada);
@@ -139,8 +167,19 @@ public class QuadreControlController extends ArchivoController {
 	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {		
         //obtener archivo concreto con el delegate
         Long idUA = new Long(request.getParameter("id"));
-        Integer tipoOperacion = new Integer(request.getParameter("tipoOperacion"));        
+        Integer tipoOperacion = new Integer(request.getParameter("tipoOperacion"));
         
+        
+        // Comprovamos si tenemos que recorrer todos los nodos
+        String todoArbol = request.getParameter("allUA");
+        List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
+        
+        if (todoArbol != null && !"".equals(todoArbol)) {
+        	UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+			llistaUnitatAdministrativaId = 	unitatAdministrativaDelegate.cargarArbolUnidadId(idUA);
+		} else {
+			llistaUnitatAdministrativaId.add(idUA);
+		}
         
 		EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
 		Archivo archivo = new Archivo();
@@ -149,7 +188,7 @@ public class QuadreControlController extends ArchivoController {
 			Periodo periodo = PeriodoUtil.crearPeriodoAnual();
 			
 			// Obtenim les dades 
-			List<Estadistica> datosEstadistica = eDelegate.listarEstadisticasUnidad(idUA, periodo.getFechaInicio(),periodo.getFechaFin());
+			List<Estadistica> datosEstadistica = eDelegate.listarEstadisticasListaUnidadAdministrativaId(llistaUnitatAdministrativaId, periodo.getFechaInicio(),periodo.getFechaFin());
 			
 			// Generam la grafica
 			JFreeChart chart = Graficas.pintarGraficaSimple(datosEstadistica);
@@ -171,13 +210,13 @@ public class QuadreControlController extends ArchivoController {
 			// Obtenim les dades 
 			for (int i = 0; i < Parametros.GRAFICA_RESUM_PERIODE; i++) {
 				if (Parametros.GRAFICA_RESUM_ALTA.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.INSERTAR, idUA));
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.INSERTAR, llistaUnitatAdministrativaId));
 					titulo = "resumAlta";
 				} else if (Parametros.GRAFICA_RESUM_MODIFICACIO.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.MODIFICAR, idUA));
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.MODIFICAR, llistaUnitatAdministrativaId));
 					titulo = "resumModificar";
 				} else if (Parametros.GRAFICA_RESUM_BAIXA.equals(tipoOperacion)) {
-					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, idUA));
+					datosResumen.add(eDelegate.resumenOperativa(dataActual.getTime(), dataActualFi.getTime(), Auditoria.BORRAR, llistaUnitatAdministrativaId));
 					titulo = "resumBaixa";
 				}
 				dataActual.add(Calendar.DATE,+1);

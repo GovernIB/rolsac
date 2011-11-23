@@ -506,16 +506,16 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	
 	
 	
-	public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
 		try {
-	           return getFacade().buscarFichasActivas(unidadAdministrativa, fechaCaducidad);
+	           return getFacade().buscarFichasActivas(listaUnidadAdministrativaId, fechaCaducidad);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }
 	}
-	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad )throws DelegateException {
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		try {
-	           return getFacade().buscarFichasCaducadas(unidadAdministrativa,fechaCaducidad);
+	           return getFacade().buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }

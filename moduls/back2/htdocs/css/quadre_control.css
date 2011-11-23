@@ -94,6 +94,10 @@ div.modul table tbody th a {
     font: 1em Georgia,"Times New Roman",Times,serif;
 }
 
+div.check {
+	padding-bottom: 1em;
+}
+	
 #opcions {
 	padding-top: 0em;
 }

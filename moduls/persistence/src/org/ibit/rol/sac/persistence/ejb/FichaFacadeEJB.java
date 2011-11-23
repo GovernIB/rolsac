@@ -2159,25 +2159,26 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
 		Integer resultado = 0;
 		Session session = getSession();
 	
 		try {
 			
         	Query query = null;
-        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
-        		query = session.createQuery(" select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ficUA.unidadAdministrativa.id= :id " +
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery(" select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id " +
         				" and fic.validacion = :validacion " +
-        				" and (fic.fechaCaducidad > :fecha or fic.fechaCaducidad is null) " +
-        				" and (fic.fechaPublicacion < :fecha or fic.fechaPublicacion is null) ");
-        		query.setLong("id", unidadAdministrativa.getId());
+        				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
+        				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) " +
+        				" and ficUA.unidadAdministrativa.id in (:lId)  ");
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
+        		query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         	} else {
         		query = session.createQuery(" select count(*) from Ficha as fic where fic.validacion = :validacion " +
-        				" and (fic.fechaCaducidad > :fecha or fic.fechaCaducidad is null) " +
-        				" and (fic.fechaPublicacion < :fecha or fic.fechaPublicacion is null) ");
+        				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
+        				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) ");
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
 	        	
@@ -2204,21 +2205,31 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
 		
 		Integer resultado = 0;		
 		Session session = getSession();
 		try {
         	Query query = null;
-        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
-        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ficUA.unidadAdministrativa.id= :id " +
-        				" and fic.validacion != :validacion " +
-        				" or fic.fechaCaducidad < :fecha " +
-						" or ((fic.fechaCaducidad is null or fic.fechaCaducidad > :fecha) and fic.fechaPublicacion > :fecha) ");
-        		query.setLong("id", unidadAdministrativa.getId());
-        		query.setInteger("validacion", Validacion.PUBLICA);
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ( " +
+	        			" ( fic.validacion != :validacion ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad is null and fic.fechaPublicacion > :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad >= :fecha and fic.fechaPublicacion > :fecha ) " +
+	        			" ) and ficUA.unidadAdministrativa.id in (:lId) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         	} else {
+        		query = session.createQuery("select count(*) from Ficha as fic where ( " +
+	        			" ( fic.validacion != :validacion ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad is null and fic.fechaPublicacion > :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad >= :fecha and fic.fechaPublicacion > :fecha ) " +
+	        			" ) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
         		query = session.createQuery("select count(*) from Ficha as fic where fic.validacion != :validacion " +
         				" or fic.fechaCaducidad < :fecha " +
         				" or ((fic.fechaCaducidad is null or fic.fechaCaducidad > :fecha) and fic.fechaPublicacion > :fecha) ");

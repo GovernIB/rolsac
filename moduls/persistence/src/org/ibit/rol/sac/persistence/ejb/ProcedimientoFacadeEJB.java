@@ -3212,31 +3212,31 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     /**
      * Buscamos el numero de procedimientos activos des de la fecha actual
      * 
-     * @param unidadAdministrativa
-     * @param fecha
+     * @param List<Long> listaUnidadAdministrativaId
+     * @param Date fechaCaducidad
      * @return numero de Procedimientos activos
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
 		Integer resultado = 0;
 		Session session = getSession();
 	
 		try {
 			
         	Query query = null;
-        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
-        		query = session.createQuery(" select count(*) from ProcedimientoLocal as prc where prc.unidadAdministrativa.id= :id " +
-        				" and prc.validacion = :validacion " +
-        				" and (prc.fechaCaducidad > :fecha or prc.fechaCaducidad is null) " +
-        				" and (prc.fechaPublicacion < :fecha or prc.fechaPublicacion is null) ");
-        		query.setLong("id", unidadAdministrativa.getId());
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery(" select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
+        				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
+        				" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) " +
+        				" and prc.unidadAdministrativa.id in (:lId) ");
         		query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         	} else {
         		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
-        				" and (prc.fechaCaducidad > :fecha or prc.fechaCaducidad is null) " +
-						" and (prc.fechaPublicacion < :fecha or prc.fechaPublicacion is null) ");
+        				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
+						" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) ");
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
         	}
@@ -3256,33 +3256,38 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 /**
      * Buscamos el numero de procedimientos activos des de la fecha actual
      * 
-     * @param unidadAdministrativa
-     * @param fecha
+     * @param List<Long> listaUnidadAdministrativaId
+     * @param Date fechaCaducidad
      * @return numero de Procedimientos caducados
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad){
+	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
 		
 		Integer resultado = 0;		
 		Session session = getSession();
 		try {
         	Query query = null;
-        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
-	        	query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.unidadAdministrativa.id= :id " +
-	        			" and prc.validacion != :validacion " +
-	        			" or prc.fechaCaducidad < :fecha " +
-	        			" or ((prc.fechaCaducidad is null or prc.fechaCaducidad > :fecha) and prc.fechaPublicacion > :fecha) ");
-	        	query.setLong("id", unidadAdministrativa.getId());
+        	if (listaUnidadAdministrativaId.size() > 0) {
+	        	query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
+	        			" ( prc.validacion != :validacion ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad is null and prc.fechaPublicacion > :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
+	        			" ) and prc.unidadAdministrativa.id in (:lId) ");
 	        	query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         	} else {
-        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.validacion != :validacion " +
-        				" or prc.fechaCaducidad < :fecha " +
-        				" or ((prc.fechaCaducidad is null or prc.fechaCaducidad > :fecha) and prc.fechaPublicacion > :fecha) ");
-        		query.setInteger("validacion", Validacion.PUBLICA);
-        		query.setDate("fecha", fechaCaducidad);
-        	}
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
+	        			" ( prc.validacion != :validacion ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad is null and prc.fechaPublicacion > :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
+	        			" ) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+	        }
         	resultado = (Integer) query.uniqueResult();
     		
         } catch (HibernateException he) {

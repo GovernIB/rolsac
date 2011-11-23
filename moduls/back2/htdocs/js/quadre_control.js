@@ -4,6 +4,7 @@ $(document).ready(function() {
 	inicializarTab('#tabAlta');
 	inicializarTab('#tabBaixa');
 	inicializarTab('#tabModificacio');
+	clickArbre('#allUA');
 });
 
 
@@ -38,5 +39,19 @@ function inicializarTab(tab) {
 			}
 		});
 		
+	});
+}
+
+function clickArbre(idInput) {
+	jQuery(idInput).live('change', function() {
+		var checkeds = jQuery(idInput+":checked");
+		
+	    var url = location.protocol + "//" + location.host + location.pathname;
+	    
+	    if (checkeds.length > 0) {
+	    	url += "?allUA=S";
+	    } 
+	    
+	    location.href = url;
 	});
 }

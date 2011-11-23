@@ -3,8 +3,18 @@
 
 	<link href="<c:url value='/css/quadre_control.css'/>" rel="stylesheet" type="text/css" media="screen" />
 	<p id="quadreControl"><spring:message code='quadreControl.grafica_resum'/></p>
-	
-
+	<!-- /mostrat tots els nodes -->
+	<c:if test="${not empty idUA}">
+		<div id="totsElements" class="check">
+			<c:if test="${not empty allUA }">
+				<!-- dentro -->
+				<c:set value="checked=checked" var="checked" />
+			</c:if>
+			<input type="checkbox" name="allUA" id="allUA" value="S" <c:out value="${checked}" /> />
+			<span><spring:message code='quadreControl.tots_nodes'/></span>
+	    </div>
+    </c:if>
+	<!-- /mostrat tots els nodes -->
 	<!-- escriptori_contingut -->
 	<div id="escriptori_contingut">
 					
@@ -97,15 +107,20 @@
 					</tbody>
 				</table>
 			</div>
-			
 			<!-- /continguts -->
+			
+			<%-- Recorrer tot arbre UA --%>
+	 		<c:if test="${not empty allUA }">
+	 			<c:set value="&allUA=S" var="totUA" />
+	 		</c:if>
+	 		<%-- /Recorrer tot arbre UA --%>
 	 		
 	 		<!-- grafica estadistiques UA -->
 	 		<div id="graficaEstadistiques" class="modul m100">
 	 			<h2><spring:message code='quadreControl.grafica.estadistica_ua'/><c:out value="${nomUA }" /></h2>
 	 			<c:choose>
 	 				<c:when test="${idUA > 0}">
-	 					<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=1&id=${idUA }"/>" border="0" />
+	 					<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=1&id=${idUA }${totUA }"/>" border="0" />
 	 				</c:when>
 	 				<c:otherwise>
 	 					<spring:message code='quadreControl.grafica.escull_ua'/>
@@ -135,15 +150,15 @@
 					    </ul>
 					    <div id="resultats">
 					        <div class="resultats actiu" id="divAlta" style="display: block;">
-				            	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=2&id=${idUA }"/>" border="0" />			 				
+				            	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=2&id=${idUA }${totUA }"/>" border="0" />			 				
 					        </div>
 					        <%--
 					        <div class="resultats " style="display: none;" id="divBaixa">
-					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=3&id=${idUA }"/>" border="0" />
+					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=3&id=${idUA }${totUA }"/>" border="0" />
 					        </div>
 					        --%> 
 					        <div class="resultats " style="display: none;" id="divModificacio">
-					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=4&id=${idUA }"/>" border="0" />
+					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=4&id=${idUA }${totUA }"/>" border="0" />
 					        </div>
 					        
 					    </div>	

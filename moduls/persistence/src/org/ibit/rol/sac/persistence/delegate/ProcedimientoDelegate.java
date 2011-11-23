@@ -265,12 +265,12 @@ public class ProcedimientoDelegate {
     	return impl.actuacionsByFamiliaMat(codiFamilia, codiMateria, idioma);
     }
     
-    public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
-    	return impl.buscarProcedimientosActivos(unidadAdministrativa, fechaCaducidad);
+    public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
+    	return impl.buscarProcedimientosActivos(listaUnidadAdministrativaId, fechaCaducidad);
     }
     
-    public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
-    	return impl.buscarProcedimientosCaducados(unidadAdministrativa, fechaCaducidad);
+    public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
+    	return impl.buscarProcedimientosCaducados(listaUnidadAdministrativaId, fechaCaducidad);
     }
     
 }

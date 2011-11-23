@@ -150,8 +150,8 @@ public interface FichaDelegateI {
 
 	public abstract Ficha obtenerFichaPMA(Long id) throws DelegateException;
 	
-	public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException;
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	   
-	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException;
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 
 }

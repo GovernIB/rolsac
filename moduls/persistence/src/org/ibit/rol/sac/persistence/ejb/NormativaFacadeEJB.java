@@ -1283,17 +1283,18 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	     * @ejb.interface-method
 	     * @ejb.permission unchecked="true"
 	     */
-		public int buscarNormativasActivas(UnidadAdministrativa unidadAdministrativa){
+		public int buscarNormativasActivas(List<Long> listaUnitatAdministrativaId){
 			Integer resultado = 0;
 			Session session = getSession();
 		
 			try {
 				
 	        	Query query = null;
-	        	if (unidadAdministrativa != null && unidadAdministrativa.getId() != null) {
-	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.unidadAdministrativa.id= :id and nor.validacion = :validacion ");
-	        		query.setLong("id", unidadAdministrativa.getId());
+	        	if (listaUnitatAdministrativaId.size() > 0) {
+	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.validacion = :validacion " +
+	        				"and nor.unidadAdministrativa.id in (:lId)");
 	        		query.setInteger("validacion", Validacion.PUBLICA);
+	        		query.setParameterList("lId", listaUnitatAdministrativaId, Hibernate.LONG);
 	        	} else {
 	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.validacion = :validacion ");
 	        		query.setInteger("validacion", Validacion.PUBLICA);

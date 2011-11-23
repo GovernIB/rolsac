@@ -537,9 +537,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosActivos(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.Date)
 	 */
-    public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+    public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
         try {
-            return getFacade().buscarProcedimientosActivos(unidadAdministrativa, fechaCaducidad);
+            return getFacade().buscarProcedimientosActivos(listaUnidadAdministrativaId, fechaCaducidad);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -548,9 +548,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosCaducados(org.ibit.rol.sac.model.UnidadAdministrativa, java.util.Date)
 	 */
-    public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
+    public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
         try {
-            return getFacade().buscarProcedimientosCaducados(unidadAdministrativa, fechaCaducidad);
+            return getFacade().buscarProcedimientosCaducados(listaUnidadAdministrativaId, fechaCaducidad);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

@@ -150,9 +150,9 @@ public interface ProcedimientoDelegateI {
 	public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) throws DelegateException;
 	
 	
-	public int buscarProcedimientosActivos(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException; 
+	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException; 
 	    
-	public int buscarProcedimientosCaducados(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException;
+	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	    
 
 }

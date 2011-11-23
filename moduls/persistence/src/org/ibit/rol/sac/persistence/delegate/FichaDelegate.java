@@ -235,11 +235,11 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 	
     
-    public int buscarFichasActivas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad) throws DelegateException {
-		return impl.buscarFichasActivas(unidadAdministrativa,fechaCaducidad);
+    public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
+		return impl.buscarFichasActivas(listaUnidadAdministrativaId,fechaCaducidad);
 	}
-	public int buscarFichasCaducadas(UnidadAdministrativa unidadAdministrativa, Date fechaCaducidad )throws DelegateException {
-		return impl.buscarFichasCaducadas(unidadAdministrativa,fechaCaducidad);
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
+		return impl.buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
 	}
 
 

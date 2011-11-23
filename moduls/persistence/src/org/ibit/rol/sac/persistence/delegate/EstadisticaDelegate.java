@@ -10,6 +10,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.Estadistica;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.intf.EstadisticaFacade;
 import org.ibit.rol.sac.persistence.intf.EstadisticaFacadeHome;
@@ -143,22 +144,29 @@ public class EstadisticaDelegate implements StatelessDelegate {
         }
     }
     
-    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, UnidadAdministrativa unidadAdministrativa) throws DelegateException {
+    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, List<Long> listaIdUA) throws DelegateException {
         try {
-            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, unidadAdministrativa);
+            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, listaIdUA);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
     
-    public List<Integer> resumenOperativa(Date fechaInicio, Date fechaFin, Integer tipoOperacion, Long idUnidadAdministrativa) throws DelegateException {
+    public List<Integer> resumenOperativa(Date fechaInicio, Date fechaFin, Integer tipoOperacion, List<Long> listaIdUA) throws DelegateException {
         try {
-            return getFacade().resumenOperativa(fechaInicio, fechaFin, tipoOperacion, idUnidadAdministrativa);
+            return getFacade().resumenOperativa(fechaInicio, fechaFin, tipoOperacion, listaIdUA);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
     }
     
+    public List<Estadistica> listarEstadisticasListaUnidadAdministrativaId(List<Long> listaIdUA, Date fechaInicio, Date fechaFin) throws DelegateException {
+        try {
+            return getFacade().listarEstadisticasListaUnidadAdministrativaId(listaIdUA, fechaInicio, fechaFin);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
