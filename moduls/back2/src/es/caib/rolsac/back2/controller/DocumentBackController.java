@@ -100,15 +100,15 @@ public class DocumentBackController extends ArchivoController {
 			
 			for (String lang: langs) {
 				tradDoc = new TraduccionDocumento();
-				tradDoc.setTitulo(valoresForm.get("item_titol_" + lang));
-				tradDoc.setDescripcion(valoresForm.get("item_descripcio_" + lang));
+				tradDoc.setTitulo(valoresForm.get("doc_titol_" + lang));
+				tradDoc.setDescripcion(valoresForm.get("doc_descripcio_" + lang));
 				
 				// Archivo
-        		FileItem fileItem = ficherosForm.get("item_arxiu_doc_" + lang);
+        		FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang);
         		if (fileItem != null && fileItem.getSize() > 0) {
         			// nuevo fichero
         			tradDoc.setArchivo(UploadUtil.obtenerArchivo(tradDoc.getArchivo(), fileItem));
-        		} else if (valoresForm.get("item_arxiu_doc_" + lang + "_delete") != null && !"".equals(valoresForm.get("item_arxiu_doc_" + lang + "_delete"))) {
+        		} else if (valoresForm.get("doc_arxiu_" + lang + "_delete") != null && !"".equals(valoresForm.get("doc_arxiu_" + lang + "_delete"))) {
         			// borrar fichero
         			tradDoc.setArchivo(null);
         		} else if (docOld != null) {
@@ -140,14 +140,17 @@ public class DocumentBackController extends ArchivoController {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, locale);
 			jsonResult = new IdNomDTO(-3l, error).getJson();
 			log.error(error + ": " + fue.toString());
+			
 		} catch (UnsupportedEncodingException uee) {
 			String error = messageSource.getMessage("error.altres", null, locale);
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + uee.toString());
+			
 		} catch (NumberFormatException nfe) {
 			String error = messageSource.getMessage("error.altres", null, locale);
 			jsonResult = new IdNomDTO(-2l, error).getJson();
 			log.error(error + ": " + nfe.toString());
+			
 		} catch (DelegateException de) {
 			String error = null;
 			if (de.getCause() instanceof SecurityException) {

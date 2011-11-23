@@ -41,11 +41,6 @@ $(document).ready(function() {
 		Detall.carregar(itemACarregar);
 	}
     Llistat.iniciar();
-    // Cercador.iniciar();
-    
-	//Fotos.iniciar();
-	Docs.iniciar();
-	//Enllasos.iniciar();
 	
 	$.suggeriments();
 	
@@ -398,6 +393,7 @@ function CDetall(){
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");				
 	}
+
 	this.dataPublicacio = function(e) {
 		
 		if ($(this).val() == "") {
@@ -407,6 +403,8 @@ function CDetall(){
 	}
 			
 	this.nou = function() {
+		//Ocultar paneles
+		jQuery("#modul_documents").hide();
 		
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -441,6 +439,8 @@ function CDetall(){
 	}
 			
 	this.pintar = function(dades) {
+		// Mostrar paneles
+		jQuery("#modul_documents").show();
 		
 		escriptori_detall_elm.find("h2:first").text(txtDetallTitol);
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").show();
@@ -589,6 +589,8 @@ function CDetall(){
 						
 		}	
 		
+		ModulDocuments.inicializarDocuments(dada_node.documents);
+		
 		ModulEnllas.cargarEnlaces();
 		
 		// mostrem
@@ -662,7 +664,7 @@ function CDetall(){
 		});		
 	}
 }
-
+/*
 // documents
 var Docs = {
 	iniciar: function() {
@@ -766,7 +768,7 @@ var Docs = {
 		
 	}
 };
-
+*/
 /*
 // fotos
 var Fotos = {

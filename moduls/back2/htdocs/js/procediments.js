@@ -403,7 +403,7 @@ function CDetall(){
 	
 	this.pintar = function(dades) {
 		// Mostrar paneles
-		jQuery("#modul_documents, #modul_tramits").show();
+		jQuery("#modul_documents").show();
         
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		

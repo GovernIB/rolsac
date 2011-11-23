@@ -3,7 +3,7 @@
 jQuery(document).ready(function() {
 	// elements
 	escriptori_documents_elm = jQuery("#escriptori_documents");
-    moduls_elm = escriptori_detall_elm.find("div.modul");		
+    moduls_elm = escriptori_detall_elm.find("div.modul");
     modul_documents_elm = jQuery("div.modulDocuments:first");
     
 	ModulDocuments = new CModulDocuments();
@@ -184,7 +184,13 @@ function CModulDocuments(){
             return false;
         }
         
-        jQuery("#procId").val(jQuery("#item_id").val()); 
+        // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
+        var procId = jQuery("#procId");
+        if (procId.length > 0) {
+        	procId.val(jQuery("#item_id").val());
+        } else {
+        	jQuery("#fitxaId").val(jQuery("#item_id").val());
+        }
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardarDoc").ajaxSubmit({			
@@ -202,7 +208,7 @@ function CModulDocuments(){
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
                     
 					var nom = new Object();
-                    escriptori_documents_elm.find("input[id^='item_titol_']").each(function (index) {
+                    escriptori_documents_elm.find("input[id^='doc_titol_']").each(function (index) {
 						var $titolDoc = jQuery(this);
 						var idioma = $titolDoc.attr('id').split('_')[2];
 						nom[idioma] = $titolDoc.val();
@@ -244,8 +250,8 @@ function CModulDocuments(){
             jQuery("#docId").val("");
             for (var i in idiomas) {
                 var idioma = idiomas[i];
-                jQuery("#item_titol_" + idioma).val("");
-                jQuery("#item_descripcio_" + idioma).val("");
+                jQuery("#doc_titol_" + idioma).val("");
+                jQuery("#doc_descripcio_" + idioma).val("");
                 jQuery("#grup_arxiu_actual_doc_" + idioma + " span").show();
 				jQuery("#grup_arxiu_actual_doc_" + idioma + " input").hide();
 				jQuery("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").hide();
@@ -270,11 +276,11 @@ function CModulDocuments(){
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
             
-			jQuery("#item_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
-			jQuery("#item_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
+			jQuery("#doc_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
+			jQuery("#doc_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
 			
 			// archivos
-			$("#item_arxiu_doc_" + idioma).val("");
+			$("#doc_arxiu_" + idioma).val("");
 			$("#grup_arxiu_actual_doc_" + idioma + " input").removeAttr("checked");
 			var anchors = $("#grup_arxiu_actual_doc_" + idioma + " a");
 

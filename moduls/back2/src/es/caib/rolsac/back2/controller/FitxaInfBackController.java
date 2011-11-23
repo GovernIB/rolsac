@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,12 +22,14 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionEnlace;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
@@ -42,6 +43,7 @@ import org.ibit.rol.sac.model.dto.SeccionDTO;
 import org.ibit.rol.sac.model.dto.UnidadDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
@@ -321,6 +323,49 @@ public class FitxaInfBackController {
             
             // Fin idiomas
 
+            
+            // Documentos relacionados
+			if (fitxa.getDocumentos() != null) {
+				Map<String, Object> mapDoc;
+				List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
+			
+				for(Documento doc: fitxa.getDocumentos()) {
+					if (doc != null) {
+						// Montar map solo con los campos 'titulo' de las traducciones del documento.
+						Map<String, String> titulos = new HashMap<String, String>();
+						IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+						List<String> idiomas = idiomaDelegate.listarLenguajes();
+						String nombre;
+						TraduccionDocumento traDoc;
+						
+						for (String idioma: idiomas) {
+							traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
+							if (traDoc != null && traDoc.getTitulo() != null) {
+								nombre = traDoc.getTitulo();
+							} else {
+								nombre = "";
+							}
+							titulos.put(idioma, nombre);
+						}
+		
+						mapDoc = new HashMap<String, Object>(3);
+						mapDoc.put("id", doc.getId());
+						mapDoc.put("orden", doc.getOrden());
+						mapDoc.put("nombre", titulos);
+						
+		                llistaDocuments.add(mapDoc);
+					} else {
+						log.error("La fitxa " + fitxa.getId() + " te un document null.");
+					}
+	            }
+				
+				resultats.put("documents", llistaDocuments);
+			} else {
+	            resultats.put("documents", null);
+	        } 
+            // Fin documentos relacionados
+            
+            
             // Icona
             if (fitxa.getIcono() != null){
             	resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=1");
@@ -462,10 +507,14 @@ public class FitxaInfBackController {
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
     		Set<String> enllasos = new HashSet<String>();
+    		Set<String> docsIds = new HashSet<String>();
     		for (FileItem item : items) {
     			if (item.isFormField()) {
     				if (item.getFieldName().startsWith("enllas_")){
     					enllasos.add(item.getFieldName());
+    				} 
+    				if (item.getFieldName().startsWith("documents_id_")){
+    					docsIds.add(item.getFieldName());
     				} 
     				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
     			} else {
@@ -559,7 +608,8 @@ public class FitxaInfBackController {
                 fitxa.setTraduccion(lang, tfi);
             }
             // Fin idiomas
-                
+            
+            
             fitxa.setFechaActualizacion(new Date());
             
             // Icona
@@ -658,6 +708,56 @@ public class FitxaInfBackController {
                 fitxa.setHechosVitales(fetsVitalsNous);                                                 
             }
                 
+            
+            
+           // Documents
+	        Documento document;
+	        DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
+	        List<Documento> documents = new ArrayList<Documento>();
+	        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+	
+	        // obtenim  els documents i els seus ordres
+            for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
+        	    String docParameter = (String)iterator.next();
+                String[] elements = docParameter.split("_");
+              
+          	    Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx                	
+          	    if (idDoc != null) {
+                    document = docDelegate.obtenerDocumento(idDoc);
+              	    documents.add(document);
+                    // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+                    String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
+                    actulitzadorMap.put("orden_doc" + idDoc, orden);
+            	} else {
+            		log.warn("S'ha rebut un id de document no númeric: " + idDoc);
+            	}
+            }
+	          
+	        // actualitzam ordres
+	        docDelegate.actualizarOrdenDocs(actulitzadorMap);
+	          
+	        // assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
+	        fitxa.setDocumentos(documents);
+	        if (edicion){
+	            List<Documento> docsOld = fitxaOld.getDocumentos();                                    
+	              
+	            for(Documento doc: documents){
+	                for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
+	                	Documento currentDoc = it.next();
+	                    if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
+	                        it.remove();
+	                    }
+	                }
+	            }                    
+	             
+	            for (Documento doc: docsOld){
+	            	if (doc != null) docDelegate.borrarDocumento(doc.getId());
+	            }
+	        } 
+	        // Fi documents 
+            
+	        
+	        // Guardar
             Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
                 
             //Asociacion de ficha con Unidad administrativa                                
@@ -713,8 +813,7 @@ public class FitxaInfBackController {
                 }
             }                                                                                                           
                 
-            //Tractament d'enllaçós                
-        
+            //Tractament d'enllassos        
             List<Enlace> enllassosNous = new ArrayList<Enlace>();
             
             for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
@@ -777,11 +876,12 @@ public class FitxaInfBackController {
                 }
                 
             }                                                                                
+            // Fi enllassos
+            
             
             // Finalitzat correctament
             result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()) );
             
-
         } catch (DelegateException dEx) {
             if (dEx.getCause() instanceof SecurityException) {
                 String error = messageSource.getMessage("error.permisos", null, request.getLocale());
