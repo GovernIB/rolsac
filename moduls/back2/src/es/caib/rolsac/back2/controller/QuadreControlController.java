@@ -89,7 +89,7 @@ public class QuadreControlController extends ArchivoController {
 				}
 				
 			} catch (DelegateException dEx) {
-				if (dEx.getCause() instanceof SecurityException) {
+				if (dEx.isSecurityException()) {
 					String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 				} else {
 					String error = messageSource.getMessage("error.altres", null,request.getLocale());
@@ -119,7 +119,7 @@ public class QuadreControlController extends ArchivoController {
 			model.put("darreresModificacions", llistaCanvis);
 
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 			} else {
 				String error = messageSource.getMessage("error.altres", null,request.getLocale());

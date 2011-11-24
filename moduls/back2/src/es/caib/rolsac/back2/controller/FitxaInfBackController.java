@@ -119,7 +119,7 @@ public class FitxaInfBackController {
                 model.put("llistaFetsVitals", llistaFetsVitalsDTO);
     
             } catch (DelegateException dEx) {
-                if (dEx.getCause() instanceof SecurityException) {
+                if (dEx.isSecurityException()) {
                     // model.put("error", "permisos");//TODO:mensajes de error
                 	log.error("Error de permisos " + ExceptionUtils.getFullStackTrace(dEx));
                 } else {
@@ -246,7 +246,7 @@ public class FitxaInfBackController {
             }
 
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
             	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
@@ -470,7 +470,7 @@ public class FitxaInfBackController {
             
         } catch (DelegateException dEx) {
         	log.error("Error: " + ExceptionUtils.getFullStackTrace(dEx));
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
@@ -892,7 +892,7 @@ public class FitxaInfBackController {
             result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()) );
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 error = messageSource.getMessage("error.permisos", null, request.getLocale());
                 result = new IdNomDTO(-1l, error);
             } else {
@@ -948,7 +948,7 @@ public class FitxaInfBackController {
             resultats.put("llistaSeccions", llistaSeccionsDTO);
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
             	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
@@ -991,7 +991,7 @@ public class FitxaInfBackController {
             resultats.put("llistaUnitats", llistaUnitatsDTO);
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
             	log.error("Error de persimos: " + ExceptionUtils.getFullStackTrace(dEx));
             } else {
@@ -1015,7 +1015,7 @@ public class FitxaInfBackController {
             resultatStatus.setId(1l);
             resultatStatus.setNom("correcte");
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 resultatStatus.setId(-1l);
             } else {
                 resultatStatus.setId(-2l);

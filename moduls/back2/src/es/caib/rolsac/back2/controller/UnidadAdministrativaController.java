@@ -49,7 +49,7 @@ public class UnidadAdministrativaController {
 			}
 		} catch (DelegateException dEx) {
 			MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				String error = messages.getMessage("error.permisos", null, request.getLocale());
 				uaHijosJSON.add(new IdNomDTO(-1l, error));
 			} else {
@@ -76,7 +76,7 @@ public class UnidadAdministrativaController {
 			session.setAttribute("forzarUA", Boolean.FALSE); // No forzar a UAServletFilter a elegir una UA.
 		} catch (DelegateException dEx) {
 			session.setAttribute("forzarUA", Boolean.FALSE);
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");

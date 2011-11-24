@@ -134,7 +134,7 @@ public class NormativaBackController {
         	model.put("llistaTipusAfectacio", listaTiposAfectacionDTO);
         	        	
         } catch (DelegateException e) {
-            if (e.getCause() instanceof SecurityException) {
+            if (e.isSecurityException()) {
                 model.put("error", "permisos");
             } else {
                 model.put("error", "altres");
@@ -244,7 +244,7 @@ public class NormativaBackController {
 			log.error(ExceptionUtils.getFullStackTrace(e));
 					
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
             	log.error("Error: " + dEx.getMessage());
@@ -363,7 +363,7 @@ public class NormativaBackController {
 	        
 	    } catch (DelegateException dEx) {
 	    	log.error("Error: " + dEx.getMessage());
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				normativaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				normativaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
@@ -587,7 +587,7 @@ public class NormativaBackController {
         	result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
         	
         } catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
 			} else {
@@ -638,7 +638,7 @@ public class NormativaBackController {
 			}
 			
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				return new IdNomDTO(-1l, error);
 			} else {
@@ -709,7 +709,7 @@ public class NormativaBackController {
 			log.error("Error: " + e.getMessage());
 					
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
             	log.error("Error: " + dEx.getMessage());

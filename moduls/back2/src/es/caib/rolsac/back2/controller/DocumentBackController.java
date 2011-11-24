@@ -153,7 +153,7 @@ public class DocumentBackController extends ArchivoController {
 			
 		} catch (DelegateException de) {
 			String error = null;
-			if (de.getCause() instanceof SecurityException) {
+			if (de.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, locale);
 				jsonResult = new IdNomDTO(-1l, error).getJson();
 			} else {
@@ -216,7 +216,7 @@ public class DocumentBackController extends ArchivoController {
 			log.error("El id del document no es númeric: " + nfe.toString());
 			resultats.put("id", -3);
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				log.error("Error de permisos: " + dEx.toString());
 				resultats.put("id", -1);
 			} else {

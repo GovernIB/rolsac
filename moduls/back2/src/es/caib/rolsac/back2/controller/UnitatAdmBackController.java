@@ -104,7 +104,7 @@ public class UnitatAdmBackController {
                }                       
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
             	log.error("Error de permiso: " + ExceptionUtils.getFullStackTrace(dEx));//TODO:mensajes de error
             } else {
                 //model.put("error", "altres");
@@ -327,7 +327,7 @@ public class UnitatAdmBackController {
             } 
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 //model.put("error", "permisos");//TODO:mensajes de error
             } else {
                 //model.put("error", "altres");
@@ -628,9 +628,9 @@ public class UnitatAdmBackController {
             String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
             result = new IdNomDTO(unitatAdministrativa.getId(), ok);
             
-            
+
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 String error = messageSource.getMessage("error.permisos", null, request.getLocale());
                 result = new IdNomDTO(-1l, error);
             } else {
@@ -720,7 +720,7 @@ public class UnitatAdmBackController {
 	    		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));	    	
 
 	    } catch (DelegateException dEx) {
-          if (dEx.getCause() instanceof SecurityException) {
+          if (dEx.isSecurityException()) {
               resultatStatus.setId(-1l);
           } else {
               resultatStatus.setId(-2l);              

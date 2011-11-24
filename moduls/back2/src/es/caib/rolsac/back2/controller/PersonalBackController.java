@@ -108,7 +108,7 @@ public class PersonalBackController {
 	           }
 
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
             	log.error("Error: " + dEx.getMessage());
@@ -151,7 +151,7 @@ public class PersonalBackController {
 	        
 	    } catch (DelegateException dEx) {
 	    	log.error("Error: " + dEx.getMessage());
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				personaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				personaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
@@ -178,7 +178,7 @@ public class PersonalBackController {
             resultatStatus.setNom("correcte");
             
         } catch (DelegateException dEx) {
-            if (dEx.getCause() instanceof SecurityException) {
+            if (dEx.isSecurityException()) {
                 resultatStatus.setId(-1l);
                 log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
@@ -244,7 +244,7 @@ public class PersonalBackController {
     	    }
         	
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				String error = messageSource.getMessage("error.permisos", null, request.getLocale());
 				result = new IdNomDTO(-1l, error);
 				log.error("Permisos insuficients: " + dEx.getMessage());

@@ -113,7 +113,7 @@ public class CatalegProcedimentsBackController {
 				
 
 			} catch (DelegateException dEx) {
-				if (dEx.getCause() instanceof SecurityException) {
+				if (dEx.isSecurityException()) {
 					model.put("error", "permisos");
 				} else {
 					model.put("error", "altres");
@@ -323,7 +323,7 @@ public class CatalegProcedimentsBackController {
 								 pl.isVisible()));
 			}
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				// model.put("error", "permisos");
 			} else {
 				// model.put("error", "altres");
@@ -519,7 +519,7 @@ public class CatalegProcedimentsBackController {
 
 		} catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getFullStackTrace(dEx));
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
@@ -542,7 +542,7 @@ public class CatalegProcedimentsBackController {
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
@@ -918,7 +918,7 @@ public class CatalegProcedimentsBackController {
 			}
 
 		} catch (DelegateException dEx) {
-			if (dEx.getCause() instanceof SecurityException) {
+			if (dEx.isSecurityException()) {
 				//model.put("error", "permisos");
 			} else {
 				//model.put("error", "altres");

@@ -63,7 +63,7 @@ public class EdificisBackController {
             }
 
      } catch (DelegateException dEx) {
-    	 if (dEx.getCause() instanceof SecurityException) {
+    	 if (dEx.isSecurityException()) {
 			log.error("Error de permisos: " + dEx.toString());
 			resultats.put("id", -1);
 		} else {
