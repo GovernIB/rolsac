@@ -226,6 +226,8 @@ public class QuadreControlController extends ArchivoController {
 			}
 			
 			// Generam la grafica
+			// Invertim Ordre de visualitzacio
+			dataActual.add(Calendar.DATE, -Parametros.GRAFICA_RESUM_PERIODE);
 			JFreeChart chart = Graficas.pintarGraficaMultiple(datosResumen, dataActual);
 			
 			construirArchivo(idUA, archivo, chart, titulo);
