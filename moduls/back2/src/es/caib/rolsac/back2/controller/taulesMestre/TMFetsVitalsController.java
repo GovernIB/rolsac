@@ -1,4 +1,4 @@
-package es.caib.rolsac.back2.controller;
+package es.caib.rolsac.back2.controller.taulesMestre;
 
 import java.util.Map;
 
@@ -14,8 +14,8 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
-@RequestMapping("/tipusUnitat/")
-public class TMTipusUnitatController {
+@RequestMapping("/fetsVitals/")
+public class TMFetsVitalsController {
     
     private MessageSource messageSource = null;
     
@@ -25,10 +25,10 @@ public class TMTipusUnitatController {
     }
     
     @RequestMapping(value = "/llistat.do", method = GET)
-    public String llistatMateries(Map<String, Object> model, HttpSession session) {
+    public String llistatFetsVitals(Map<String, Object> model, HttpSession session) {
         model.put("menu", 1);
-        model.put("submenu", "layout/submenu/submenuTMTipusUnitat.jsp");
-        model.put("escriptori", "pantalles/taulesMestres/tmTipusUnitat.jsp");
+        model.put("submenu", "layout/submenu/submenuTMFetsVitals.jsp");
+        model.put("escriptori", "pantalles/taulesMestres/tmFetsVitals.jsp");
 
 //        if (session.getAttribute("unidadAdministrativa")!=null){
 //            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());

@@ -4,7 +4,7 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="submenu.tipus_responsable" /></span>
+	            <span><spring:message code="submenu.edificis" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>			
