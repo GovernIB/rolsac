@@ -242,7 +242,7 @@ public class FitxaInfBackController {
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtil.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtil.formatDate(fitxa.getFechaCaducidad()),
-                                                             fitxa.comprovarVisibilitat()));
+                                                             fitxa.isVisible()));
             }
 
         } catch (DelegateException dEx) {

@@ -320,7 +320,7 @@ public class CatalegProcedimentsBackController {
 								 tpl == null ? "" : tpl.getNombre(), 
 								 DateUtil.formatDate(pl.getFechaPublicacion()),
 								 DateUtil.formatDate(pl.getFechaCaducidad()),
-								 pl.comprovarVisibilitat()));
+								 pl.isVisible()));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.getCause() instanceof SecurityException) {

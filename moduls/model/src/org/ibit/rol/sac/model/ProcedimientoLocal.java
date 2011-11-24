@@ -1,9 +1,13 @@
 package org.ibit.rol.sac.model;
 
-import org.apache.commons.beanutils.PropertyUtils;
-
-import java.util.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * Modificado para (PORMAD)
@@ -366,19 +370,27 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		 return "1".equals(getVentanillaUnica());
 	}
 	
-	
-	public Boolean comprovarVisibilitat() {
+
+	public Boolean isVisible() {
 		
-		Date dataActual = new Date();
+		GregorianCalendar dataActual = new GregorianCalendar(); 
 		Boolean visible;
-		if (this.getValidacion().equals(Validacion.PUBLICA) && 
-				((this.getFechaCaducidad() != null && this.getFechaCaducidad().before(dataActual)) || this.getFechaCaducidad() == null)
-				&& ((this.getFechaPublicacion() != null && this.getFechaPublicacion().after(dataActual)) || this.getFechaPublicacion() == null)){
+		
+		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
+		Boolean noCaducat = (this.getFechaCaducidad() != null && this.getFechaCaducidad().after(dataActual.getTime())) || this.getFechaCaducidad() == null;
+		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
+		
+		if (esPublic && noCaducat && esPublicat) {
 			visible = Boolean.TRUE;
 		} else {
 			visible = Boolean.FALSE;
 		}
 		return visible;
+	}
+	
+	// Metode creat per poder ser cridad des de la JSP atraves de jstl
+	public Boolean getIsVisible() {
+		return this.isVisible();
 	}
 	
 }

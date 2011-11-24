@@ -32,7 +32,7 @@
 								<c:choose>
 									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoFicha'}">
 										<c:choose>
-											<c:when test="${modificacio.value.ficha.fechaActualizacion < dataActual}">
+											<c:when test="${modificacio.value.ficha.isVisible == false}">
 												<li class="fitxa_caducat">
 											</c:when>
 											<c:otherwise>
@@ -45,7 +45,7 @@
 									</c:when>
 									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoProcedimiento'}">
 										<c:choose>
-											<c:when test="${modificacio.value.procedimiento.fechaActualizacion < dataActual}">
+											<c:when test="${modificacio.value.procedimiento.isVisible == false}">
 												<li class="procediment_caducat">
 											</c:when>
 											<c:otherwise>
@@ -57,7 +57,15 @@
 										<a href="<c:url value="/catalegProcediments/catalegProcediments.do" />?itemId=<c:out value="${modificacio.value.procedimiento.id }" />">(<c:out value="${modificacio.value.procedimiento.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>
 									<c:when test="${modificacio.value.class.name == 'org.ibit.rol.sac.model.HistoricoNormativa'}">
-										<li class="normativa"><span class="tipus"><spring:message code='quadreControl.normativa'/></span>. 
+										<c:choose>
+											<c:when test="${modificacio.value.normativa.isVisible == false}">
+												<li class="normativa_caducat">
+											</c:when>
+											<c:otherwise>
+												<li class="normativa">
+											</c:otherwise>
+										</c:choose>
+										<span class="tipus"><spring:message code='quadreControl.normativa'/></span>. 
 										<span class="data"><c:out value="${modificacio.key}" /> h.</span>
 										<a href="<c:url value="/normativa/normativa.do" />?itemId=<c:out value="${modificacio.value.normativa.id }" />">(<c:out value="${modificacio.value.normativa.id }" />) <c:out value="${modificacio.value.nombre }" /></a></li>
 									</c:when>

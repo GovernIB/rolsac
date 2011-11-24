@@ -64,7 +64,9 @@ public class QuadreControlController extends ArchivoController {
 			throws ServletException, IOException {
 
 		GregorianCalendar dataActual = new GregorianCalendar();
-		model.put("dataActual", dataActual.getTime());
+		
+		//Afegim un dia mes per no haver de mirar les hores i minuts al between
+		dataActual.add(Calendar.DATE, +1);
 		UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
 
 		// Comprovamos si tenemos que recorrer todos los nodos
@@ -112,7 +114,7 @@ public class QuadreControlController extends ArchivoController {
 			dataActualFi.add(Calendar.DATE, -7);
 
 			
-			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActual.getTime(),dataActualFi.getTime(), Parametros.NUMERO_REGISTROS,llistaUnitatAdministrativaId);
+			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS,llistaUnitatAdministrativaId);
 			
 			model.put("darreresModificacions", llistaCanvis);
 

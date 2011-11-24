@@ -151,7 +151,7 @@ public class Normativa extends Traducible implements Indexable, Validable {
         return (id != null ? id.hashCode() : 0);
     }
     
-    public Boolean comprovarVisibilitat() {
+    public Boolean isVisible() {
 		Boolean visible;
 		if (this.getValidacion().equals(Validacion.PUBLICA)) {
 			visible = Boolean.TRUE;
@@ -161,5 +161,10 @@ public class Normativa extends Traducible implements Indexable, Validable {
 		
     	return visible; 
     }
+    
+    // Metode creat per poder ser cridad des de la JSP atraves de jstl
+	public Boolean getIsVisible() {
+		return this.isVisible();
+	}
 
 }

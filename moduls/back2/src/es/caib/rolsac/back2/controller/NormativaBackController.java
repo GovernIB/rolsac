@@ -756,7 +756,7 @@ public class NormativaBackController {
 								normativa.getFechaBoletin(),
 								tipus,
 								local ? "Local" : "Externa",
-								normativa.comprovarVisibilitat())
+								normativa.isVisible())
 					);
 		}
 		
