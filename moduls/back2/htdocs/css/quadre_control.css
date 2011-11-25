@@ -24,6 +24,9 @@ div.modul h2 {
     margin-bottom: 1em;
     margin-top: 0;
 }
+#darreresModificacions {
+	overflow: hidden;
+}
 #darreresModificacions ul {
     list-style: none outside none;
 }

@@ -144,15 +144,15 @@
 	 				<c:when test="${idUA > 0}">
 	 					<ul id="opcions">
 					        <li class="opcio actiu" id="liAlta">
-					            <a href="javascript:void(0)" id="tabAlta">Altes</a>
+					            <a href="javascript:void(0)" id="tabAlta"><spring:message code="quadreControl.altes" /></a>
 					        </li>
 					        <%--
 					        <li class="opcio" id="liBaixa">
-					            <a href="javascript:;" id="tabBaixa">Baixes</a>
+					            <a href="javascript:;" id="tabBaixa"><spring:message code="quadreControl.baixes" /></a>
 					        </li>
 					        --%>
 				            <li class="opcio" id="liModificacio">
-				            	<a href="javascript:;" id="tabModificacio">Modificacions</a>	
+				            	<a href="javascript:;" id="tabModificacio"><spring:message code="quadreControl.modificacions" /></a>	
 				            </li>
 				            
 					    </ul>
