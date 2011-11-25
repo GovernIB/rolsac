@@ -11,18 +11,20 @@ después de la columna LONG o LOB real
 - evitar que el usuari pugui modificar una UA posant com a pare a si mateixa 
 
 
-versio 1.0.1  - 10.nov.2011
+versio 1.0.1  - 25.nov.2011
 ------------
+- 0000001: [Documentació] Eliminades les propietats db.texttype.descabr i db.texttype.descri - resolved.
+- 0000142: [test] tests aceptació per la versió 1.0.1 (ejaen-dgtic) - resolved.
 - 0000138: [bug] S'envien Unitats Administratives de més baix nivell que el sincronitzat. (mgonzalez-ibit) - resolved.
-- 0000086: [millora] Mejora en las consultas de novedades/destacados de fichas - resolved.
-- 0000080: [bug] Problemas en el crawler para mostrar búsquedas por título de ficha (eschouten-ibit) - resolved.
-- 0000001: [GUI] Eliminades les propietats db.texttype.descabr i db.texttype.descri - resolved.
-- 0000081: [base de dades] Error als scripts d'update de la versió 177. - resolved.
-- 0000092: [GUI] Afegir Scroll a la finestra per triar una Unitat Administrativa al procediment i a la unitat administrativa (mgonzalez-ibit) - resolved.
 - 0000094: [configuració] conflicte de standard.jar amb el portal informador (ejaen-dgtic) - resolved.
-- 0000077: [bug] no es poden crear tràmits (ejaen-dgtic) - resolved.
+- 0000092: Afegir Scroll a la finestra per triar una Unitat Administrativa al procediment i a la unitat administrativa (mgonzalez-ibit) - resolved.
 - 0000090: [refactorització] substitució caràcters latins per ascii (ejaen-dgtic) - resolved.
-- 0000073: [bug] apareix null pointer quan algunes propietats no estan definides (ejaen-dgtic) - resolved.
-- 0000082: [base de dades] Scripts de POSTGRES per fer l'update a la versió 1.0 no funcionen. (mgonzalez-ibit) - resolved.
+- 0000086: [millora] Mejora en las consultas de novedades/destacados de fichas - resolved.
 - 0000085: [millora] Millores en la sincronització de FItxes per reduir el volum d'informació que pasa via WS. - resolved.
 - 0000084: [millora] Millores en la sincronització de Procediments per reduir el volum d'informació que pasa via WS. (mgonzalez-ibit) - resolved.
+- 0000082: [base de dades] Scripts de POSTGRES per fer l'update a la versió 1.0 no funcionen. (mgonzalez-ibit) - resolved.
+- 0000080: [bug] Problemas en el crawler para mostrar búsquedas por título de ficha (eschouten-ibit) - resolved.
+- 0000077: [bug] no es poden crear tràmits (ejaen-dgtic) - resolved.
+- 0000081: [base de dades] Error als scripts d'update de la versió 177. - resolved.
+- 0000145: [construcció (build)] desacoplar el config.properties del build.xml (ejaen-dgtic) - resolved.
+- 0000073: [bug] apareix null pointer quan algunes propietats no estan definides (ejaen-dgtic) - resolved.
