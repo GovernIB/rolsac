@@ -9,13 +9,13 @@ jQuery(document).ready(function() {
 	ModulDocuments = new CModulDocuments();
     ModulDocuments.iniciar();
     
-    EscriptoriProcediments = new CEscriptoriProcediments();
-    EscriptoriProcediments.iniciar();
+    EscriptoriPare = new CEscriptoriPare();
+    EscriptoriPare.iniciar();
 });
 
 
-// Lista ordenable para elimiar/ordenar docs en catalogo de procedimientos
-function CEscriptoriProcediments(){
+// Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
+function CEscriptoriPare(){
 	this.extend = ListaOrdenable;
 	this.extend();		
     
@@ -112,6 +112,8 @@ function CEscriptoriProcediments(){
             
             ModulDocuments.inicializarDocuments();
 		}
+		
+		that.habilitarBotonGuardar();
 		
 		return actualizar;
 	}
@@ -217,10 +219,10 @@ function CModulDocuments(){
 					var docItem = new Object();
 					docItem['id'] = data.id;
 					docItem['nombre'] = nom;
-					EscriptoriProcediments.agregaActualizaItem(docItem);
+					EscriptoriPare.agregaActualizaItem(docItem);
 
 					that.torna();
-				}					
+				}
 			}
 
 		});
@@ -322,7 +324,7 @@ function CModulDocuments(){
 	this.inicializarDocuments = function(listaDocuments) {
 		if (typeof listaDocuments != 'undefined' && listaDocuments != null && listaDocuments.length > 0) {
             modul_documents_elm.find(".listaOrdenable").empty();		
-			EscriptoriProcediments.agregaItems(listaDocuments, true);
+			EscriptoriPare.agregaItems(listaDocuments, true);
         }
         
         // Editar el documento al hacer click sobre el.
@@ -359,14 +361,14 @@ function CModulDocuments(){
 		modul_documents_elm.find(".listaOrdenable ul").sortable({ 
 			axis: 'y', 
 			update: function(event,ui){
-				EscriptoriProcediments.calculaOrden(ui,"origen");
-				EscriptoriProcediments.habilitarBotonGuardar();
+				EscriptoriPare.calculaOrden(ui,"origen");
+				EscriptoriPare.habilitarBotonGuardar();
 			}
 		}).css({cursor:"move"});
 		
 		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
 			var itemLista = jQuery(this).parents("li:first");
-			EscriptoriProcediments.eliminaItem(itemLista);
+			EscriptoriPare.eliminaItem(itemLista);
 			that.contaSeleccionats();
 		});
 	}
