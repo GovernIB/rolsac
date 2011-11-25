@@ -1210,7 +1210,7 @@
                 "caracters":
                     {
                         "maxim": 150,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":

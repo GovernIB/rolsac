@@ -103,7 +103,7 @@
                 "caracters":
                     {
                         "maxim": 230,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":
@@ -151,7 +151,7 @@
                 "caracters":
                     {
                         "maxim": 230,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":
@@ -168,7 +168,7 @@
                 "caracters":
                     {
                         "maxim":230,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":
@@ -185,7 +185,7 @@
                 "caracters":
                     {
                         "maxim": 230,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":

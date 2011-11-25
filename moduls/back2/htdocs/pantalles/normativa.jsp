@@ -186,7 +186,7 @@
                 "caracters":
                     {
                         "maxim": 230,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
                 "error":
@@ -203,7 +203,7 @@
                 "caracters":
                     {
                         "maxim": 480,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
             },{
@@ -215,7 +215,7 @@
                 "caracters":
                     {
                         "maxim": 480,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
             },{
@@ -227,7 +227,7 @@
                 "caracters":
                     {
                         "maxim": 480,
-                        "mostrar": "si",
+                        "mostrar": "no",
                         "abreviat": "no"
                     },
             },
@@ -365,7 +365,7 @@
                 "caracters":
                 {
                     "maxim": 18,
-                    "mostrar": "si",
+                    "mostrar": "no",
                     "abreviat": "no"
                 },
                 "error":
@@ -408,7 +408,7 @@
                 "caracters":
                 {
                     "maxim": 18,
-                    "mostrar": "si",
+                    "mostrar": "no",
                     "abreviat": "no"
                 },
                 "error":
@@ -426,7 +426,7 @@
                 "caracters":
                 {
                     "maxim": 230,
-                    "mostrar": "si",
+                    "mostrar": "no",
                     "abreviat": "no"
                 },
             }           

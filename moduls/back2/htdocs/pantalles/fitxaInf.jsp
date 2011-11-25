@@ -174,7 +174,7 @@
            "caracters":
                {
                    "maxim": 230,
-                   "mostrar": "si",
+                   "mostrar": "no",
                    "abreviat": "no"
                },
            "error":
@@ -206,7 +206,7 @@
 		    "caracters":
 	           {
 	               "maxim": 250,
-	               "mostrar": "si",
+	               "mostrar": "no",
 	               "abreviat": "no"
 	           },
 		    "error":
@@ -1102,7 +1102,7 @@
                 "tipus": "alfanumeric",
                 "caracters": {
                     "maxim": 230,
-                    "mostrar": "si",
+                    "mostrar": "no",
                     "abreviat": "no"
                 },
                 "error":{
