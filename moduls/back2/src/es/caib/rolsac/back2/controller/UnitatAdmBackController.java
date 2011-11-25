@@ -17,11 +17,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
-
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Materia;
@@ -32,6 +30,7 @@ import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -614,12 +613,30 @@ public class UnitatAdmBackController {
 	                    if (codiMateria != null) {                    	
 	                    	UnidadMateria nuevaUnidadMateria = new UnidadMateria();
 	                    	Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
-	                    	unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());                     	                        
+	                    	unidadMateriaDelegate.grabarUnidadMateria(nuevaUnidadMateria, unitatAdministrativa.getId(), materia.getId());	                    		                    
 	                    }
 	                }
 				}
             }
             
+			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
+			
+			//Recoger los edificios actuales de la UA
+			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
+			
+			//Borrar los edificios actuales
+			for (Edificio edificio : edificiosActuales)
+				edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
+			
+			//Crear una lista con los edificios asignados de la unidad
+			String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
+			
+			//Grabar en la unidad cada edificio de la lista (parámetro "listaEdificios")			
+			if (!"".equals(listaEdificios[0])) {				
+				for (int i = 0; i < listaEdificios.length; i++) 
+					edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
+			}
+			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
 			
 			// Sobre escrivim la unitat administrativa de la mollapa

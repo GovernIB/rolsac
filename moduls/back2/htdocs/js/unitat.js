@@ -94,7 +94,20 @@ function CDetall(soloFicha){
 		if(!that.formulariValid()){
 			return false;
 		}
+			
+		//Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
+		if ( !$("#llistaEdificis").length ) {		
+			htmlEdificios = '<input type="hidden" id="llistaEdificis" name="llistaEdificis" value="">';
+			$("#formGuardar").append(htmlEdificios);
+		} else {
+			$("#llistaEdificis").attr("value", "");	
+		}
 				
+		//Obtener todos los inputs que empiezan por edifici_id_ 
+		$(".modulEdificis input[name^='edifici_id_']").each( function() {
+			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");			
+		});		
+		
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
