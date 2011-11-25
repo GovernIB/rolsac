@@ -17,7 +17,6 @@
     <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/inici.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/error.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/listado_base.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
