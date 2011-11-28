@@ -125,7 +125,7 @@
 	 		
 	 		<!-- grafica estadistiques UA -->
 	 		<div id="graficaEstadistiques" class="modul m100">
-	 			<h2><spring:message code='quadreControl.grafica.estadistica_ua'/><c:out value="${nomUA }" /></h2>
+	 			<h2><spring:message code='quadreControl.grafica.estadistica_ua'/> <c:out value="${nomUA }" /></h2>
 	 			<c:choose>
 	 				<c:when test="${idUA > 0}">
 	 					<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=1&id=${idUA }${totUA }"/>" border="0" />

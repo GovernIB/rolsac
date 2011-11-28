@@ -1,19 +1,19 @@
 @charset "utf-8";
 
 p#index {
-	color: #333333;
+    color: #333333;
     font-size: 1.25em;
     font-weight: bold;
-}	
+}   
 div.modul {
-    border: 1px solid #F2F2F2;
+    border: 1px solid #D4D4D4;
     float: left;
     margin-bottom: 1em;
     margin-right: 1em;
     padding: 1em;
     width: 53em;
     background-color: White;
-    -moz-border-radius: 1em 1em 1em 1em;
+    border-radius: 15px 15px 15px 15px;
 }
 
 div.m100 {
@@ -26,18 +26,42 @@ div.modul h2 {
     margin-top: 0;
 }
 
-div.icona {
-    margin-bottom: 1em;
-    padding-left: 2em;
+span.missatge {
     background: url("../img/missatge/alerta.gif") no-repeat scroll 0 0.0em transparent;
-    height: 2em;
-    display: none;
+    padding-left: 2em;    
+    padding-bottom: 22px;
+    display: inline-block;
+    font-size: 1.1em;
 }
-div.icona.actiu {
+
+div.actiu {
     display: block;
 }
+
+#indexContainer { 
+    margin-top: 110px;
+    text-align: center;
+}
+
+#indexContainer div.indexContainer { 
+    display: none;
+}
+
+#indexContainer  span.btnGenerico{ 
+    display: inline-block;
+    float: none;
+}
+
+#indexContainer div.actiu {
+    display: block !important;
+}
+
+#indexContainer p {
+    font-size: 1.1em;
+}
+
 #opcionsIndex li.actiu {
-	color: Black;
+    color: Black;
     text-decoration: none;
     font-size: 13px;
     font-weight: bold;
@@ -58,8 +82,4 @@ div.icona.actiu {
 }
 #submenu_contingut ul li.primer {
     border-left: 0px solid #000000;
-}
-
-#carregantDetall{
-	display: none;	
 }
