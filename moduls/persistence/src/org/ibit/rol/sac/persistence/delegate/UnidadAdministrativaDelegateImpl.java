@@ -995,6 +995,19 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	        }
     }
      
+     
+     /* (non-Javadoc)
+ 	  * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
+ 	  */
+ 	public Boolean autorizarCrearUA() throws DelegateException {
+ 		try {
+            return getFacade().autorizarCrearUA();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+ 	}
+ 	
+ 	
      public void eliminarUaSinRelaciones(Long idUA) throws DelegateException {
          try {
 	            getFacade().eliminarUaSinRelaciones(idUA);

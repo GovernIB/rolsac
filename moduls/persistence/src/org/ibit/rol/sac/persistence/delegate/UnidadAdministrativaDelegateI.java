@@ -534,6 +534,10 @@ public interface UnidadAdministrativaDelegateI {
     public boolean autorizarEliminarUA(Long idUa)
     		throws DelegateException;
 
+    /* (non-Javadoc)
+	 * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
+	 */
+	public Boolean autorizarCrearUA() throws DelegateException;
     
     public void eliminarUaSinRelaciones(Long idUA)
     		throws DelegateException;

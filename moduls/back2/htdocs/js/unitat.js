@@ -180,15 +180,21 @@ function CDetall(soloFicha){
 				$("#carregantDetall").fadeIn(300);
 			},
 			error: function() {
-				
 				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-				
 			},
-			success: function(data) {
-				Detall.pintar(data);								
+			success: function(dada) {
+				if (dada.id == -1) {
+					$("#carregantDetall").fadeOut(300, function() {
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos, text: "<p>" + dada.error + "</p>"});
+                    });
+				} else if (dada.id < -1) {
+					$("#carregantDetall").fadeOut(300, function() {
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio, text: "<p>" + dada.error + "</p>"});
+                    });
+				} else {
+					Detall.pintar(dada);
+				}
 			}
 		});
 		
@@ -209,7 +215,7 @@ function CDetall(soloFicha){
 		dada_node = dades;
 		
 		
-		if (dada_node.id != -1){							
+		if (dada_node.id > 0){							
 								
 			$("#item_id").val(dada_node.id);
 			
@@ -438,37 +444,15 @@ function CDetall(soloFicha){
 			}			
 			
 		}
-		// Eliminam missatge per poder crear de noves
- 		//else {
-			
-		//	$("#escriptori_detall").html("<p class=\"noUnitat\">" + noUnitat +"</p>");			
-			
-		//}
-			
-		// mostrem
-		//if ($("#carregantDetall").size() > 0) {
-			
-			$("#carregantDetall").fadeOut(300, function() {
-				
-				//$(this).remove();
-				
-				// array
-				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
-				
-				escriptori_detall_elm.fadeIn(300);
-											
-			});
-		/*
-		} else {
-			
-			escriptori_contingut_elm.fadeOut(300, function() {
-				escriptori_detall_elm.fadeIn(300);
-			});			
-			
-		}
-		*/
+
+		$("#carregantDetall").fadeOut(300, function() {
+			Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
+			escriptori_detall_elm.fadeIn(300);
+		});
+		
 	}
 	
+    
 	this.elimina = function() {
 		
 		// missatge

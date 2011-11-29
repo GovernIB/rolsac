@@ -1009,8 +1009,25 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      */
     public boolean autorizarEliminarUA(Long idUa){
     	return (getAccesoManager().tieneAccesoUnidad(idUa, true));  
-        }
+    }
 
+    
+    /**
+	 * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public Boolean autorizarCrearUA() {
+		Boolean autorizacion;
+		try {
+			autorizacion = getAccesoManager().tieneAccesoCrearUnidad();
+		} catch (SecurityException se) {
+			autorizacion = Boolean.FALSE;
+		}
+		return autorizacion;
+	}
+	
+    
     /**
      * Descripción: Eliminar una unidad administrativa. Se podra eliminar la UA, 
      * si no tiene elementos relacionados (Procedimientos,Normativas,etc.

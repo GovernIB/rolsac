@@ -241,6 +241,13 @@ public class UnidadAdministrativaDelegate {
     }
 
     /**
+	 * Comprobar si el usuario tiene privilegios para crear una UA.
+	 */
+	public Boolean autorizarCrearUA() throws DelegateException {
+		return impl.autorizarCrearUA();
+	}
+	
+    /**
      * Eliminar una unidad administrativa. Se podra eliminar la UA, si no tiene elementos relacionados (Procedimientos,Normativas,etc
      * Antes de elminar la UA ha de validar que la UA no tenga relaciones.
      */

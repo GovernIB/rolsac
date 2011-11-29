@@ -137,17 +137,29 @@ public class UnitatAdmBackController {
 	    
 	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();	    	    	    	    
 
-	    Long idUA = null;
-	    
-	    if (request.getParameter("id") == null || "".equals(request.getParameter("id"))){
-	        resultats.put("id", -1);
-            return resultats;//Si no hay unidad administrativa se devuelve vacio
-        } else {
-            idUA = new Long(request.getParameter("id"));            
-        } 	  
-   
-	    try {                                
-
+	    if (request.getParameter("id") == null || "".equals(request.getParameter("id"))) {
+	    	try {
+		    	if (unitatDelegate.autorizarCrearUA()) {
+		    		resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
+		    	} else {
+		    		resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
+		    		resultats.put("id", -1);
+		    	}
+	    	} catch (DelegateException dEx) {
+	    		if (dEx.isSecurityException()) {
+	    			resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
+	    			resultats.put("id", -1);
+	    		} else {
+	    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+	            	resultats.put("id", -2);
+	            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+		    	}
+	    	} 
+	    	return resultats;
+        }
+         
+	    Long idUA = new Long(request.getParameter("id"));            
+	    try {
 	        UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativa(idUA);
 	        
 	        resultats.put("id", idUA);
@@ -270,21 +282,6 @@ public class UnitatAdmBackController {
             	resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "");
             	resultats.put("item_logo_salutacio_vertical", "");
             }
-                        
-//            if(mostrarLogosUA()){    //Codigo de del sacback original       
-//                if (uni.getLogoh() != null) {
-//                    resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
-//                }
-//                if (uni.getLogov() != null) {
-//                    resultats.put("item_logo_vertical", uni.getLogov().getNombre());
-//                }
-//                if (uni.getLogos() != null) {
-//                    resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
-//                }
-//                if (uni.getLogot() != null) {
-//                    resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
-//                }
-//            }                        
             
             //Fichas de la portada web            
             resultats.put("item_nivell_1", uni.getNumfoto1());
@@ -327,68 +324,18 @@ public class UnitatAdmBackController {
             
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
-                //model.put("error", "permisos");//TODO:mensajes de error
+                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+                resultats.put("id", -1);
             } else {
-                //model.put("error", "altres");
+            	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+            	resultats.put("id", -2);
             	log.error(ExceptionUtils.getFullStackTrace(dEx));
             }
-            
         }
-/*
-        request.setAttribute("edificioOptions", uni.getEdificios());
-        log.info("edificioOptions ->"+Arrays.toString(uni.getEdificios().toArray()));
-
-        request.setAttribute("unidadesmateriasOptions", uni.getUnidadesMaterias());
-        request.setAttribute("usuarioOptions", uni.getUsuarios());
-        //request.setAttribute("fichaUAOptions", unidad.getFichasUA());
-        TreeMap treesecciones = (TreeMap)uni.getMapSeccionFichasUA();
-        TreeMap treeSortSecciones = ordenartreeseccion(treesecciones);
-        request.setAttribute("fichaUAOptions", treeSortSecciones);
         
-        ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
-        List listaProcedimientos;
-        
-        if (uni.getPadre() == null) // es el govern, ( su padre es nulo)
-        {
-             
-            request.setAttribute("conse",1 );
-            listaProcedimientos = procedimientoDelegate.listarProcedimientosUO(id,1);
-        }
-        else // la unidad tiene padre distinto de nulo.
-        {
-            
-            UnidadAdministrativa elpadre = uni.getPadre();
-            //Listamos los procedimiento asociados a la UA.
-            // vemos si es a nievel conselleria o si es  a nivel interno.
-            if (elpadre.getPadre()==null) //nivel conselleria
-            {
-                request.setAttribute("conse",1 );
-                listaProcedimientos = procedimientoDelegate.listarProcedimientosUO(id,1);
-            }
-            else
-            {
-                // analizamos el padre del padre para ver si es nivel direccion o servicio
-                UnidadAdministrativa padrepadre = uni.getPadre().getPadre();
-                if (padrepadre.getPadre()==null)
-                {
-                    request.setAttribute("conse",2 );
-                    listaProcedimientos = procedimientoDelegate.listarProcedimientosUO(id,2);
-                }
-                else
-                {
-                    request.setAttribute("conse",3 );
-                    listaProcedimientos = procedimientoDelegate.listarProcedimientosUO(id,3);
-                }   
-              
-            }
-        }
-
-
-        request.setAttribute("procedimientoOptions",listaProcedimientos ); 
-
-*/        
 	    return resultats;
     }
+	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
