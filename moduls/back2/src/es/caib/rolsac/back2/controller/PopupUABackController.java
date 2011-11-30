@@ -69,11 +69,11 @@ public class PopupUABackController {
 
             } catch (DelegateException dEx) {
                 if (dEx.isSecurityException()) {
-                	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
+                	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
                     // model.put("error", "permisos");
                 } else {
                     // model.put("error", "altres");
-                	log.error(ExceptionUtils.getFullStackTrace(dEx));
+                	log.error(ExceptionUtils.getStackTrace(dEx));
                 }
             }
             /*

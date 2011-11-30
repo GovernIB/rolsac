@@ -128,7 +128,7 @@ public class TMTipusAfectacioController {
 	        // fi idiomes
 			
 	    } catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getFullStackTrace(dEx));
+			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -196,7 +196,7 @@ public class TMTipusAfectacioController {
 			} else {
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
@@ -220,11 +220,11 @@ public class TMTipusAfectacioController {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus de Afectacio no númeric: " + ExceptionUtils.getFullStackTrace(nfEx));
+			log.error("Error: Id de tipus de Afectacio no númeric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

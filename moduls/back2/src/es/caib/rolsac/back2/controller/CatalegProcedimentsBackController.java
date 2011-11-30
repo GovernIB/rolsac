@@ -117,7 +117,7 @@ public class CatalegProcedimentsBackController {
 					model.put("error", "permisos");
 				} else {
 					model.put("error", "altres");
-					log.error(ExceptionUtils.getFullStackTrace(dEx));
+					log.error(ExceptionUtils.getStackTrace(dEx));
 				}
 			}
 		}
@@ -327,7 +327,7 @@ public class CatalegProcedimentsBackController {
 				// model.put("error", "permisos");
 			} else {
 				// model.put("error", "altres");
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 
@@ -518,7 +518,7 @@ public class CatalegProcedimentsBackController {
 			resultats.put("item_notes", proc.getInfo());
 
 		} catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getFullStackTrace(dEx));
+			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -546,7 +546,7 @@ public class CatalegProcedimentsBackController {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 
@@ -842,7 +842,7 @@ public class CatalegProcedimentsBackController {
 			} else {
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
@@ -922,7 +922,7 @@ public class CatalegProcedimentsBackController {
 				//model.put("error", "permisos");
 			} else {
 				//model.put("error", "altres");
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 		

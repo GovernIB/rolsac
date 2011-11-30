@@ -55,7 +55,7 @@ public class UnidadAdministrativaController {
 			} else {
 				String error = messages.getMessage("error.altres", null, request.getLocale());
 				uaHijosJSON.add(new IdNomDTO(-2l, error));
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 
@@ -80,7 +80,7 @@ public class UnidadAdministrativaController {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 		

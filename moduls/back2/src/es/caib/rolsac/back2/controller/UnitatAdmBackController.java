@@ -104,10 +104,10 @@ public class UnitatAdmBackController {
             
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
-            	log.error("Error de permiso: " + ExceptionUtils.getFullStackTrace(dEx));//TODO:mensajes de error
+            	log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));//TODO:mensajes de error
             } else {
                 //model.put("error", "altres");
-            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+            	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
 	    
@@ -152,7 +152,7 @@ public class UnitatAdmBackController {
 	    		} else {
 	    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 	            	resultats.put("id", -2);
-	            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+	            	log.error(ExceptionUtils.getStackTrace(dEx));
 		    	}
 	    	} 
 	    	return resultats;
@@ -329,7 +329,7 @@ public class UnitatAdmBackController {
             } else {
             	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
             	resultats.put("id", -2);
-            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+            	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
         
@@ -600,16 +600,16 @@ public class UnitatAdmBackController {
             } else {
                 String error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getFullStackTrace(dEx));
+                log.error(ExceptionUtils.getStackTrace(dEx));
             }
         } catch (UnsupportedEncodingException e) {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			log.error(ExceptionUtils.getStackTrace(e));
         } catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
-			log.error(ExceptionUtils.getFullStackTrace(e));;
+			log.error(ExceptionUtils.getStackTrace(e));;
         }
         
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -689,7 +689,7 @@ public class UnitatAdmBackController {
           } else {
               resultatStatus.setId(-2l);              
           }	
-          log.error(ExceptionUtils.getFullStackTrace(dEx));
+          log.error(ExceptionUtils.getStackTrace(dEx));
 	    }
 
 	    request.getSession().setAttribute("unidadAdministrativa", null);	    

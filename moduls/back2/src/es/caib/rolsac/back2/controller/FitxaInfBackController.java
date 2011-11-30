@@ -121,10 +121,10 @@ public class FitxaInfBackController {
             } catch (DelegateException dEx) {
                 if (dEx.isSecurityException()) {
                     // model.put("error", "permisos");//TODO:mensajes de error
-                	log.error("Error de permisos " + ExceptionUtils.getFullStackTrace(dEx));
+                	log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
                 } else {
                     // model.put("error", "altres");
-                	log.error(ExceptionUtils.getFullStackTrace(dEx));
+                	log.error(ExceptionUtils.getStackTrace(dEx));
                 }
             }            
         }
@@ -248,10 +248,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
-            	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
+            	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+            	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
         
@@ -469,7 +469,7 @@ public class FitxaInfBackController {
             }
             
         } catch (DelegateException dEx) {
-        	log.error("Error: " + ExceptionUtils.getFullStackTrace(dEx));
+        	log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -898,17 +898,17 @@ public class FitxaInfBackController {
             } else {
                 error = messageSource.getMessage("error.altres", null, request.getLocale());
                 result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getFullStackTrace(dEx)); 
+                log.error(ExceptionUtils.getStackTrace(dEx)); 
             }
         } catch (FileUploadException e) {
 			error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			log.error(ExceptionUtils.getStackTrace(e));
 			
 		} catch (UnsupportedEncodingException e) {
 			error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			log.error(ExceptionUtils.getStackTrace(e));
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
 		}
@@ -950,10 +950,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
-            	log.error("Error de permisos: " + ExceptionUtils.getFullStackTrace(dEx));
+            	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+            	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
         
@@ -993,10 +993,10 @@ public class FitxaInfBackController {
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
-            	log.error("Error de persimos: " + ExceptionUtils.getFullStackTrace(dEx));
+            	log.error("Error de persimos: " + ExceptionUtils.getStackTrace(dEx));
             } else {
                 // model.put("error", "altres");
-            	log.error(ExceptionUtils.getFullStackTrace(dEx));
+            	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
         
@@ -1019,7 +1019,7 @@ public class FitxaInfBackController {
                 resultatStatus.setId(-1l);
             } else {
                 resultatStatus.setId(-2l);
-                log.error(ExceptionUtils.getFullStackTrace(dEx));
+                log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
 

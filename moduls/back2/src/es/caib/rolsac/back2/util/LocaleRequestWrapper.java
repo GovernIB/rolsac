@@ -45,7 +45,7 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 			
 		} catch (DelegateException e) {
 			idioma = "ca";
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			log.error(ExceptionUtils.getStackTrace(e));
 		}
 		// TODO XXX - Fins que totes les traduccions no estiguin disponibles a tots els idiomes 
 		// forsam el catala perque no doni errors. Pensar a comentar o eliminar

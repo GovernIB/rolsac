@@ -93,7 +93,7 @@ public class QuadreControlController extends ArchivoController {
 					String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 				} else {
 					String error = messageSource.getMessage("error.altres", null,request.getLocale());
-					log.error(ExceptionUtils.getFullStackTrace(dEx));
+					log.error(ExceptionUtils.getStackTrace(dEx));
 				}
 			}
 		}
@@ -123,7 +123,7 @@ public class QuadreControlController extends ArchivoController {
 				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
 			} else {
 				String error = messageSource.getMessage("error.altres", null,request.getLocale());
-				log.error(ExceptionUtils.getFullStackTrace(dEx));
+				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
 		
@@ -152,7 +152,7 @@ public class QuadreControlController extends ArchivoController {
 			model.put("fitxaTotal", fitxaActiva + fitxaCaducada);
 
 		} catch (DelegateException e) {
-			log.error(ExceptionUtils.getFullStackTrace(e));
+			log.error(ExceptionUtils.getStackTrace(e));
 		}
 
 		return "index";
