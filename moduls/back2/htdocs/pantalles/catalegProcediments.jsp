@@ -1115,7 +1115,7 @@
             <div class="modul publicacio">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>Publicació</legend>
+                    <legend><spring:message code='txt.publicacio'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">

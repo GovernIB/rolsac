@@ -20,6 +20,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.RolUtil;
+
 @Controller
 @RequestMapping("/index/")
 public class TMIndexController {
@@ -33,18 +35,17 @@ public class TMIndexController {
         this.messageSource = messageSource;
     }
     
-    @RequestMapping(value = "/llistat.do", method = GET)
-    public String llistatMateries(Map<String, Object> model, HttpSession session) {
+    @RequestMapping(value = "/index.do", method = GET)
+    public String pantallaIndex(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMIndex.jsp");
-        model.put("escriptori", "pantalles/taulesMestres/tmIndex.jsp");
 
-//        if (session.getAttribute("unidadAdministrativa")!=null){
-//            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-//            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa("ca"));            
-//        }        
-        
-        // TODO: cargar los datos de BB.DD.
+        RolUtil rolUtil= new RolUtil(request);
+        if (rolUtil.userIsAdmin()) {
+        	model.put("escriptori", "pantalles/taulesMestres/tmIndex.jsp");
+        } else {
+        	model.put("error", "permisos");
+        }
 
         return "index";
     }

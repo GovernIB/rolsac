@@ -104,7 +104,7 @@
 						<span class="titol"><spring:message code="menu.normativa" /></span>
 						<ul>
 							<li>
-								<a href="<c:url value="/tipusNormatives/llistat.do"/>"><spring:message code="menu.tipus_normatives" /></a>
+								<a href="<c:url value="/tipusNormatives/tipusNormatives.do"/>"><spring:message code="menu.tipus_normatives" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/tipusAfectacio/llistat.do"/>"><spring:message code="menu.tipus_afectacio" /></a>
@@ -118,7 +118,7 @@
 						<span class="titol"><spring:message code="menu.index" /></span>
 						<ul>
 							<li>
-								<a href="<c:url value="/index/llistat.do"/>"><spring:message code="menu.reiniciar_index" /></a>
+								<a href="<c:url value="/index/index.do"/>"><spring:message code="menu.reiniciar_index" /></a>
 							</li>
 						</ul>
 					</li>
