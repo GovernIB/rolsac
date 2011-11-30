@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -61,7 +60,7 @@ public class TMTipusNormativesController {
     
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request) {
 
        List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
@@ -143,7 +142,7 @@ public class TMTipusNormativesController {
     
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpSession session, HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;

@@ -107,7 +107,7 @@
 								<a href="<c:url value="/tipusNormatives/tipusNormatives.do"/>"><spring:message code="menu.tipus_normatives" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/tipusAfectacio/llistat.do"/>"><spring:message code="menu.tipus_afectacio" /></a>
+								<a href="<c:url value="/tipusAfectacio/tipusAfectacions.do"/>"><spring:message code="menu.tipus_afectacio" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/butlletinsOficials/llistat.do"/>"><spring:message code="menu.butlletins_oficials" /></a>
@@ -123,7 +123,6 @@
 						</ul>
 					</li>
 				</ul>
-										
 					
 				<c:choose>
 	                <c:when test="${menu==2}">

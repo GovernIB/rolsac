@@ -1,4 +1,4 @@
-// TM tipus normativa
+// TM tipus afectacio
 
 $(document).ready(function() {
 	// elements
@@ -133,9 +133,9 @@ function CLlistat(){
 				parClass = (i%2) ? " par": "";
 				
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-				codi_taula += "<div class=\"td tipusNormativa\" role=\"gridcell\">";
+				codi_taula += "<div class=\"td tipusAfectacio\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-				codi_taula += "<a id=\"tipusNormativa_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
+				codi_taula += "<a id=\"tipusAfectacio_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
 				codi_taula += "</div></div>";
 			});
 			
