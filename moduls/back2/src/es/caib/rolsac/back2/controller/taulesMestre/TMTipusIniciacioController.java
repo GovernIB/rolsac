@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -18,16 +17,12 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Iniciacion;
-import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
-import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
-import org.ibit.rol.sac.persistence.delegate.TipoAfectacionDelegate;
 
 import es.caib.rolsac.back2.util.RolUtil;
 
@@ -37,7 +32,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/tipusIniciacio/")
 public class TMTipusIniciacioController {
     
-	private static Log log = LogFactory.getLog(TMTipusAfectacioController.class);
+	private static Log log = LogFactory.getLog(TMTipusIniciacioController.class);
 	
     private MessageSource messageSource = null;
     
@@ -215,7 +210,6 @@ public class TMTipusIniciacioController {
 		return result;
 	}	
 	
-	
 
 	@RequestMapping(value = "/esborrarTipusIniciacio.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarTipusIniciacio(HttpServletRequest request) {
@@ -234,7 +228,7 @@ public class TMTipusIniciacioController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus de Afectacio no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus d'iniciació no númeric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

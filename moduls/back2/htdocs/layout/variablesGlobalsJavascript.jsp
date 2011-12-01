@@ -17,7 +17,7 @@
 //    var pagFitxes = "fitxes.php"
 //    var pagInici = "json/iniciJSON.php";
     //resultados por pagina
-    var pag_Res = 10; //TODO: Se tiene que recuperar de BBDD
+    var pag_Res = 5; //TODO: Se tiene que recuperar de BBDD
     
     // eixir aplicacio
     var txtEixirAplicacio = '<spring:message code="aplicacio.logout.missatge"/>';

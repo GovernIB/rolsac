@@ -110,7 +110,7 @@
 								<a href="<c:url value="/tipusAfectacio/tipusAfectacions.do"/>"><spring:message code="menu.tipus_afectacio" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/butlletinsOficials/llistat.do"/>"><spring:message code="menu.butlletins_oficials" /></a>
+								<a href="<c:url value="/butlletinsOficials/butlletins.do"/>"><spring:message code="menu.butlletins_oficials" /></a>
 							</li>
 						</ul>
 					</li>
