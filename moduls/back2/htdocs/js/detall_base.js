@@ -99,12 +99,8 @@ function DetallBase(soloFicha, reglasFormulario){
 			data: dataForm,
 			dataType: "json",
 			error: function() {
-
 				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-
 			},
 			success: function(data) {
 

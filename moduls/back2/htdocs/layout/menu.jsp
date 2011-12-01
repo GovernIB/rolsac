@@ -77,7 +77,7 @@
 								<a href="<c:url value="/familia/llistat.do"/>"><spring:message code="menu.familia" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/tipusIniciacio/llistat.do"/>"><spring:message code="menu.tipus_iniciacio" /></a>
+								<a href="<c:url value="/tipusIniciacio/tipusIniciacions.do"/>"><spring:message code="menu.tipus_iniciacio" /></a>
 							</li>
 						</ul>
 					</li>
