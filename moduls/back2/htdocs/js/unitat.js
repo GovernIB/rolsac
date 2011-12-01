@@ -33,6 +33,7 @@ function CDetall(soloFicha){
 	var that = this;
 	var materias = "";
 	
+	
 	this.iniciar = function() {
 		
 		//Sobreescribimos la función del botón finalizar para añadir a los parámetros enviados
@@ -511,7 +512,7 @@ function CDetall(soloFicha){
 			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
 			fitxa_ID = escriptori_detall_elm.find("#item_id").val();
 			
-			previsualitza_url = "http://www.caib.es/govern/organigrama/area.do?lang=" + fitxa_idiomaSeleccionat + "&coduo=6"; //+ fitxa_ID;
+			previsualitza_url = "http://www.caib.es/govern/organigrama/area.do?lang=" + fitxa_idiomaSeleccionat + "&coduo=" + fitxa_ID;
 			
 			escriptori_previsualitza_elm.find("iframe").attr("src", previsualitza_url).end().fadeIn(300, function() {
 			
