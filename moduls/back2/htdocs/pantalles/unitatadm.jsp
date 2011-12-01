@@ -690,7 +690,7 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul">
+            <div class="modul" id="modul_materies">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
@@ -737,7 +737,7 @@
             </div>
             <!-- /modul -->                     
             <!-- modul -->
-            <div class="modul">                 
+            <div class="modul" id="modul_seccions">                 
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.seccions'/></legend>                               
@@ -754,7 +754,7 @@
             </div>
             <!-- /modul -->                     
             <!-- modul -->
-            <div class="modul">                     
+            <div class="modul" id="modul_edificis">                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               

@@ -442,7 +442,20 @@ function CDetall(soloFicha){
 				txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
 				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");				
 			}			
+
+			$("#modul_materies").show();
+			$("#modul_seccions").show();
+			$("#modul_edificis").show();			
 			
+		} else {
+			//No hay datos que pintar -> estamos en creación de UA
+			//Esconder módulos laterales
+			$("#modul_materies").hide();
+			$("#modul_seccions").hide();
+			$("#modul_edificis").hide();
+			//Deshabilitar botón eliminar
+			$("#btnEliminar").parent().addClass("off");
+			$("#btnEliminar").unbind("click");
 		}
 
 		$("#carregantDetall").fadeOut(300, function() {

@@ -566,23 +566,26 @@ public class UnitatAdmBackController {
 				}
             }
             
-			EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
-			
-			//Recoger los edificios actuales de la UA
-			Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
-			
-			//Borrar los edificios actuales
-			for (Edificio edificio : edificiosActuales)
-				edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
-			
-			//Crear una lista con los edificios asignados de la unidad
-			String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
-			
-			//Grabar en la unidad cada edificio de la lista (parámetro "listaEdificios")			
-			if (!"".equals(listaEdificios[0])) {				
-				for (int i = 0; i < listaEdificios.length; i++) 
-					edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
-			}
+			//Sólo en caso de edición
+			if (id != null) {
+				EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
+				
+				//Recoger los edificios actuales de la UA
+				Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
+				
+				//Borrar los edificios actuales
+				for (Edificio edificio : edificiosActuales)
+					edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
+				
+				//Crear una lista con los edificios asignados de la unidad
+				String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
+				
+				//Grabar en la unidad cada edificio de la lista (parámetro "listaEdificios")			
+				if (!"".equals(listaEdificios[0])) {				
+					for (int i = 0; i < listaEdificios.length; i++) 
+						edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
+				}
+			} 
 			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
 			
