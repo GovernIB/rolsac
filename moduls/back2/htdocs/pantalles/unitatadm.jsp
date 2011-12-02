@@ -823,9 +823,9 @@
     <!-- escriptori_previsualitza -->
     <div id="escriptori_previsualitza">
         <h2><spring:message code='unitatadm.formulari.previsualitzaFitxa'/></h2>
-        <p>
+        <div class="boton btnGenerico clear">
             <a href="javascript:;" class="btn torna dePrevisualitzar"><span><span><spring:message code='boto.torna'/></span></span></a>
-        </p>                    
+        </div>                    
         <div class="previsualitzacio">                      
             <iframe frameborder="0" scrolling="auto"></iframe>              
         </div>              
