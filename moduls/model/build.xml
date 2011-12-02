@@ -2,9 +2,6 @@
 
 <project name="sac.model" default="main" basedir=".">
 
-	
-    <property file="${basedir}/build.properties"/>
-
     <property name="modul" value="model"/>
     <property name="package" value="org.ibit.rol.sac.model"/>
 
@@ -12,6 +9,7 @@
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>

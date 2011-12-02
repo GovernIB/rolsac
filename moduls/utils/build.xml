@@ -2,9 +2,6 @@
 
 <project name="sac.utils" default="main" basedir=".">
 
-	
-    <property file="${basedir}/build.properties"/>
-
     <property name="modul" value="utils"/>
     <property name="package" value="es.caib.rolsac.utils"/>
 
@@ -12,6 +9,7 @@
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -67,7 +65,7 @@
     <target name="jar.jar" depends="jar.compile">
         <delete file="${jar.product}/${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${jar.product}/${modul}.jar"
+            jarfile="${jar.product}/${prefix.modul}-${modul}.jar"
             basedir="${jar.classes}">
             <manifest/>
         	<fileset dir="${jar.gen.etc}" includes="url.properties"/>

@@ -2,7 +2,6 @@
 
 <project name="caib.traspas-boib" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="traspasboib"/>
     <property name="package" value="es.caib.traspasa"/>
@@ -11,6 +10,7 @@
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -69,7 +69,7 @@
         <fileset dir="${web.product}">
             <include name="model.jar"/>
           <!--  <include name="integracion.jar"/>-->
-            <include name="sac-persistence-client.jar"/>
+            <include name="${prefix.modul}-persistence-client.jar"/>
         </fileset>
        <!-- <pathelement location="${output.dir}/back/classes"/>-->
     </path>
@@ -197,7 +197,7 @@
             excludes="WEB-INF/**">
             <manifest>
                 <attribute name="Created-By" value="Govern"/>
-            	<attribute name="Class-Path" value="sac-back.jar"/>
+            	<attribute name="Class-Path" value="${prefix.modul}-back.jar"/>
             </manifest>
 
         	<classes dir="${web.classes}"/>

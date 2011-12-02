@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="back2" basedir="." default="main">
     
-	<property file="${basedir}/build.properties"/>
 
     <property name="modul" value="back2"/>
     <property name="package" value="es.caib.rolsac.back2"/>
@@ -9,6 +8,8 @@
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
+	<property file="${basedir}/build.properties"/>
+
 
     <property name="web.dir" value="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
@@ -70,9 +71,9 @@
     	    <include name="**/*.jar" />
     	</fileset>
         <fileset dir="${web.product}">
-        	<include name="rolsac-utils.jar"/>
+        	<include name="${prefix.modul}-utils.jar"/>
             <include name="model.jar"/>
-        	<include name="sac-persistence.jar"/>
+        	<include name="${prefix.modul}-persistence.jar"/>
         </fileset>
     </path>
 	
@@ -85,8 +86,8 @@
 	
 	
 	<target name="main" depends="build" description="Packages app as WAR">
-    	<delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
-        <war destfile="${web.product}/sac-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
+    	<delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
             <classes dir="${web.classes}" />
 			<webinf dir="${home.dir}" includes="lib/**/*.jar"/>
 			<webinf dir="${web.etc}" includes="*-servlet.xml"/>

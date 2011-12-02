@@ -2,7 +2,6 @@
 
 <project name="sac.ws" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="ws"/>
     <property name="package" value="org.ibit.rol.sac.ws"/>
@@ -11,6 +10,7 @@
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -140,8 +140,8 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/sac-${modul}.war"
+        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
@@ -159,7 +159,7 @@
 
     <target name="web.rewar" depends="web.war">
         <unwar
-            src="${web.product}/sac-${modul}.war"
+            src="${web.product}/${prefix.modul}-${modul}.war"
             dest="${web.webapp}"
             />
         <jspc
@@ -183,8 +183,8 @@
         <replace file="${web.gen.etc}/web.xml">
             <replacefilter token="&lt;!-- @jspc.mappings --&gt;" value="${jspc.mappings}"/>
         </replace>
-        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/sac-${modul}.war"
+        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
             basedir="${web.webapp}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/web.xml,META-INF/MANIFEST.MF">

@@ -221,6 +221,7 @@
             <replacefilter token="@context.back@" value="${context.back}"/>
 			<replacefilter token="@context.back2@" value="${context.back2}"/>
             <replacefilter token="@context.ws@" value="${context.ws}"/>
+            <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
         </replace>
 
 
@@ -242,16 +243,16 @@
 	
 			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
-				<include name="rolsac-utils.jar" />
+				<include name="${prefix.modul}-utils.jar" />
 				<include name="extractor.jar" />
 				<include name="model.jar" />
 				<include name="integracion.war" />
-				<include name="sac-persistence.jar" />				
-				<include name="sac-persistence-client.jar" />
-				<include name="sac-back2-persistence.jar" />
-				<include name="sac-back2.war" />
-				<include name="sac-back.war" />
-				<include name="sac-ws.war" />
+				<include name="${prefix.modul}-persistence.jar" />				
+				<include name="${prefix.modul}-persistence-client.jar" />
+				<include name="${prefix.modul}-back2-persistence.jar" />
+				<include name="${prefix.modul}-back2.war" />
+				<include name="${prefix.modul}-back.war" />
+				<include name="${prefix.modul}-ws.war" />
 				<include name="traspasboib.war" />
 			</fileset>
 			
