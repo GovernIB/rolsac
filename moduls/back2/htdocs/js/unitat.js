@@ -523,8 +523,8 @@ function CDetall(soloFicha){
 		
 	}
 	
-	this.carregarInici = function() { window.location.replace(pagArrel); }
-	
+//	this.carregarInici = function() { window.location.replace(pagArrel); }
+	this.carregarInici = function() { window.location.replace(pagLlistat); }
 	this.carregarUA = function() { window.location.replace(pagLlistat); }
 }
 
