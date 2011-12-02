@@ -50,7 +50,7 @@
 
     var txtTitol = '<spring:message code="camp.titol_normativa"/>';
     var txtData = '<spring:message code="camp.data"/>';
-    var txtDataBulleti = '<spring:message code="camp.data_butlleti"/>';
+    var txtDataButlleti = '<spring:message code="camp.data_butlleti"/>';
     
     var txtElimina = '<spring:message code="txt.elimina"/>';
     var txtSeleccionat = '<spring:message code="txt.seleccionat"/>';

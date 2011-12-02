@@ -133,7 +133,7 @@ public class TMButlletinsOficialsController {
 			butlleti.setEnlace(request.getParameter("item_enllas"));
 			Long tipusId = butlletiDelegate.grabarBoletin(butlleti);
 			
-			String ok = messageSource.getMessage("tipusIniciacio.guardat.correcte", null, request.getLocale());
+			String ok = messageSource.getMessage("butlleti.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(tipusId, ok);
 
 		} catch (DelegateException dEx) {

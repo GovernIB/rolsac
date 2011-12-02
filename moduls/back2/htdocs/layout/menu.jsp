@@ -63,7 +63,7 @@
 								<a href="<c:url value="/perfils/llistat.do"/>"><spring:message code="menu.perfils" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/destinataris/llistat.do"/>"><spring:message code="menu.destinatari" /></a>
+								<a href="<c:url value="/destinataris/destinataris.do"/>"><spring:message code="menu.destinatari" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/administracioRemota/llistat.do"/>"><spring:message code="menu.administracio_remota" /></a>

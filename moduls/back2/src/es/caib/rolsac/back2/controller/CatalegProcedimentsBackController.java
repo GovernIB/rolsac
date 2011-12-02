@@ -883,7 +883,7 @@ public class CatalegProcedimentsBackController {
 			}			
 
 			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
-				Date fechaBoletin = DateUtil.parseDate(request.getParameter("dataBulleti"));
+				Date fechaBoletin = DateUtil.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
 			

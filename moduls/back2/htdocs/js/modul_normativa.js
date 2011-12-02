@@ -33,7 +33,7 @@ function CModulNormativa(){
 	
 	this.iniciar = function() {
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
-		jQuery("#cerca_normativa_data_bulleti").datepicker({ dateFormat: 'dd/mm/yy' });
+		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
 
         normatives_llistat_elm = escriptori_normatives_elm.find("div.escriptori_items_llistat:first");
 		normatives_cercador_elm = escriptori_normatives_elm.find("div.escriptori_items_cercador:first");
@@ -200,7 +200,7 @@ function CEscriptoriNormativa(){
 				} else if (ordre_C == "data") {
 					txt_per = txtData;
 				} else {
-					txt_per = txtDataBulleti;
+					txt_per = txtDataButlleti;
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
@@ -216,7 +216,7 @@ function CEscriptoriNormativa(){
 			*/
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtTitol + "</a></div>";
 			codi_cap2 = "<div class=\"th data" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
-			codi_cap3 = "<div class=\"th dataBulleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataBulleti + "</a></div>";
+			codi_cap3 = "<div class=\"th dataButlleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataButlleti + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat normatives\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -242,7 +242,7 @@ function CEscriptoriNormativa(){
 				codi_taula += "</div>";
 				
 				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
-				codi_taula += "<div class=\"td dataBulleti\" role=\"gridcell\">" + dada_node.fechaBoletin+ "</div>";
+				codi_taula += "<div class=\"td dataButlleti\" role=\"gridcell\">" + dada_node.fechaBoletin+ "</div>";
 				
 				codi_taula += "</div>";
 			});
@@ -303,7 +303,7 @@ function CEscriptoriNormativa(){
 		// cercador
 		dataVars_cercador = "&titol=" + $("#cerca_normativa_titol").val();
 		dataVars_cercador += "&data=" + $("#cerca_normativa_data").val();
-		dataVars_cercador += "&dataBulleti=" + $("#cerca_normativa_data_bulleti").val();
+		dataVars_cercador += "&dataButlleti=" + $("#cerca_normativa_data_butlleti").val();
 
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {

@@ -1668,9 +1668,9 @@
                             </div>                                  
                         </div>                              
                         <div class="element t12">                               
-                            <div class="etiqueta"><label for="cerca_normativa_data_bulleti"><spring:message code='txt.dataBulleti'/></label></div>
+                            <div class="etiqueta"><label for="cerca_normativa_data_butlleti"><spring:message code='txt.dataButlleti'/></label></div>
                             <div class="control">
-                                <input id="cerca_normativa_data_bulleti" name="cerca_normativa_data_bulleti" type="text" class="data_bulleti" />
+                                <input id="cerca_normativa_data_butlleti" name="cerca_normativa_data_butlleti" type="text" class="data_butlleti" />
                             </div>                                  
                         </div>                              
                     </div>
