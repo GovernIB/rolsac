@@ -60,10 +60,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.util.DateUtil;
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.DateUtils;
 
 @Controller
 @RequestMapping("/fitxainf/")
@@ -188,17 +188,17 @@ public class FitxaInfBackController {
             paramMap.put("responsable", responsable.toUpperCase());
         }
 
-        Date fechaCaducidad = DateUtil.parseDate(request.getParameter("fechaCaducidad"));
+        Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
         if (fechaCaducidad != null) {
             paramMap.put("fechaCaducidad", fechaCaducidad);
         }
              
-        Date fechaPublicacion = DateUtil.parseDate(request.getParameter("fechaPublicacion"));
+        Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
         if (fechaPublicacion != null) {
             paramMap.put("fechaPublicacion", fechaPublicacion);
         }
                 
-        Date fechaActualizacion = DateUtil.parseDate(request.getParameter("fechaActualizacion"));
+        Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
         if (fechaActualizacion != null) {
             paramMap.put("fechaActualizacion", fechaActualizacion);
         }
@@ -240,8 +240,8 @@ public class FitxaInfBackController {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
-                                                             DateUtil.formatDate(fitxa.getFechaPublicacion()), 
-                                                             DateUtil.formatDate(fitxa.getFechaCaducidad()),
+                                                             DateUtils.formatDate(fitxa.getFechaPublicacion()), 
+                                                             DateUtils.formatDate(fitxa.getFechaCaducidad()),
                                                              fitxa.isVisible()));
             }
 
@@ -284,9 +284,9 @@ public class FitxaInfBackController {
 
             resultats.put("item_estat", fitxa.getValidacion());
 
-            resultats.put("item_data_publicacio", DateUtil.formatDateSimpleTime(fitxa.getFechaPublicacion()));
+            resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
 
-            resultats.put("item_data_caducitat", DateUtil.formatDateSimpleTime(fitxa.getFechaCaducidad()));
+            resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
 
             //resultats.put("caducat","S");
             
@@ -432,7 +432,7 @@ public class FitxaInfBackController {
                 resultats.put("fetsVitals", null);
             }
             
-            //Relació Ficha-Seccio-UA
+            //Relaciï¿½ Ficha-Seccio-UA
             
             if (fitxa.getFichasua() != null){
                 for(FichaUA fichaUA : fitxaDelegate.listFichasUA(fitxa.getId())){
@@ -453,7 +453,7 @@ public class FitxaInfBackController {
                 resultats.put("seccUA", null);
             }
            
-            //Enllaços
+            //Enllaï¿½os
             
           
             if (fitxa.getEnlaces() != null){
@@ -484,9 +484,9 @@ public class FitxaInfBackController {
     public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request) {
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -503,8 +503,8 @@ public class FitxaInfBackController {
         
         try {      
         	
-        	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+        	//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
@@ -584,12 +584,12 @@ public class FitxaInfBackController {
 			} 
 			
 			                
-            Date data_publicacio = DateUtil.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
+            Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
             if (data_publicacio != null) {
                 fitxa.setFechaPublicacion(data_publicacio);
             }
             
-            Date data_caducitat = DateUtil.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
+            Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
             if (data_caducitat != null) {
                 fitxa.setFechaCaducidad(data_caducitat);
             }
@@ -738,7 +738,7 @@ public class FitxaInfBackController {
                     String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
                     actulitzadorMap.put("orden_doc" + idDoc, orden);
             	} else {
-            		log.warn("S'ha rebut un id de document no númeric: " + idDoc);
+            		log.warn("S'ha rebut un id de document no nï¿½meric: " + idDoc);
             	}
             }
 	          
@@ -803,7 +803,7 @@ public class FitxaInfBackController {
 
                     String pidip = System.getProperty("es.caib.rolsac.pidip");
                     if(!((pidip == null) || pidip.equals("N"))) {
-                        // Si se anyade una ficha a la seccion Actualidad, se añade tambien a Portada Actualidad (PIDIP)
+                        // Si se anyade una ficha a la seccion Actualidad, se aï¿½ade tambien a Portada Actualidad (PIDIP)
                         if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
                         {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
                             int existe=0;
@@ -1029,7 +1029,7 @@ public class FitxaInfBackController {
     
     
     /**
-     * Método que comprueba si hay que mostrar los logos
+     * Mï¿½todo que comprueba si hay que mostrar los logos
      * 
      * @return boolean
      */

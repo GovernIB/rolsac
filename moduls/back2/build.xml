@@ -70,6 +70,7 @@
     	    <include name="**/*.jar" />
     	</fileset>
         <fileset dir="${web.product}">
+        	<include name="rolsac-utils.jar"/>
             <include name="model.jar"/>
         	<include name="sac-persistence.jar"/>
         </fileset>

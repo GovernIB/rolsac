@@ -27,6 +27,8 @@ import org.jfree.data.category.SlidingCategoryDataset;
 import org.jfree.ui.HorizontalAlignment;
 import org.jfree.ui.RectangleEdge;
 
+import es.caib.rolsac.utils.DateUtils;
+
 public class Graficas {
 
 	public Graficas() {
@@ -223,9 +225,9 @@ public class Graficas {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		for (Iterator<List<Integer>> iterator = dadesResum.iterator(); iterator.hasNext();) {
 			List<Integer> llista = (List<Integer>) iterator.next();
-			dataset.addValue(llista.get(0),"Procediment", DateUtil.formatDate(dataActual.getTime()));
-			dataset.addValue(llista.get(1),"Normativa", DateUtil.formatDate(dataActual.getTime()));
-			dataset.addValue(llista.get(2),"Fitxa", DateUtil.formatDate(dataActual.getTime()));
+			dataset.addValue(llista.get(0),"Procediment", DateUtils.formatDate(dataActual.getTime()));
+			dataset.addValue(llista.get(1),"Normativa", DateUtils.formatDate(dataActual.getTime()));
+			dataset.addValue(llista.get(2),"Fitxa", DateUtils.formatDate(dataActual.getTime()));
 			dataActual.add(Calendar.DATE,+1);;
 		}		
 		return dataset;

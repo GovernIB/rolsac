@@ -50,9 +50,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.util.DateUtil;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.utils.DateUtils;
 
 
 @Controller
@@ -177,19 +177,19 @@ public class CatalegProcedimentsBackController {
 //		}
 
 		
-		Date fechaCaducidad = DateUtil.parseDate(request.getParameter("fechaCaducidad"));
+		Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
 		if (fechaCaducidad != null) {
 			paramMap.put("fechaCaducidad", fechaCaducidad);
 		}
 		
 		
-		Date fechaPublicacion = DateUtil.parseDate(request.getParameter("fechaPublicacion"));
+		Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
 		if (fechaPublicacion != null) {
 			paramMap.put("fechaPublicacion", fechaPublicacion);
 		}
 		
 		
-		Date fechaActualizacion = DateUtil.parseDate(request.getParameter("fechaActualizacion"));
+		Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
 		if (fechaActualizacion != null) {
 			paramMap.put("fechaActualizacion", fechaActualizacion);
 		}
@@ -318,8 +318,8 @@ public class CatalegProcedimentsBackController {
 				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
 								 pl.getId(), 
 								 tpl == null ? "" : tpl.getNombre(), 
-								 DateUtil.formatDate(pl.getFechaPublicacion()),
-								 DateUtil.formatDate(pl.getFechaCaducidad()),
+								 DateUtils.formatDate(pl.getFechaPublicacion()),
+								 DateUtils.formatDate(pl.getFechaCaducidad()),
 								 pl.isVisible()));
 			}
 		} catch (DelegateException dEx) {
@@ -352,11 +352,11 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_estat", proc.getValidacion());
 
-			resultats.put("item_data_actualitzacio", DateUtil.formatDate(proc.getFechaActualizacion()));
+			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			
-			resultats.put("item_data_publicacio", DateUtil.formatDate(proc.getFechaPublicacion()));
+			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
 
-			resultats.put("item_data_caducitat", DateUtil.formatDate(proc.getFechaCaducidad()));
+			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
 
 			// Idiomas
 			if (proc.getTraduccion("ca") != null) {
@@ -682,7 +682,7 @@ public class CatalegProcedimentsBackController {
 	                    	String[] orden = {request.getParameter("documents_orden_" + elements[2])};
 	                    	actulitzadorMap.put("orden_doc" + id, orden);
                     	} else {
-                    		log.warn("S'ha rebut un id de document no númeric: " + id);
+                    		log.warn("S'ha rebut un id de document no nï¿½meric: " + id);
                     	}
                     }
                 }
@@ -754,13 +754,13 @@ public class CatalegProcedimentsBackController {
 				}
 
 				
-				Date data_publicacio = DateUtil.parseDate(request.getParameter("item_data_publicacio"));
+				Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
 				if (data_publicacio != null) {
 					procediment.setFechaPublicacion(data_publicacio);
 				}
 				
 				
-				Date data_caducitat = DateUtil.parseDate(request.getParameter("item_data_caducitat"));
+				Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
 				if (data_caducitat != null) {
 					procediment.setFechaCaducidad(data_caducitat);
 				}
@@ -862,28 +862,28 @@ public class CatalegProcedimentsBackController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		
-		// TODO obtener la ordenación por parámetro
+		// TODO obtener la ordenaciï¿½n por parï¿½metro
 		String campoOrdenacion = "normativa.fecha";
 		String orden = "desc";		
 				
 		String idioma = request.getLocale().getLanguage();
 		
 		if (session.getAttribute("unidadAdministrativa") == null){
-			return resultats;//Si no hay unidad administrativa se devuelve vacío
+			return resultats;//Si no hay unidad administrativa se devuelve vacï¿½o
 		}
 		UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");		
 		
 		
 		try {
-			//Obtener parámetros de búsqueda
+			//Obtener parï¿½metros de bï¿½squeda
 		
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
-				Date fecha = DateUtil.parseDate(request.getParameter("data"));
+				Date fecha = DateUtils.parseDate(request.getParameter("data"));
 				paramMap.put("fecha", fecha);
 			}			
 
 			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
-				Date fechaBoletin = DateUtil.parseDate(request.getParameter("dataButlleti"));
+				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
 			}
 			
@@ -912,8 +912,8 @@ public class CatalegProcedimentsBackController {
 				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
 						normativa.getId(),
 						titulo,
-						DateUtil.formatDate(normativa.getFecha()),
-						DateUtil.formatDate(normativa.getFechaBoletin())
+						DateUtils.formatDate(normativa.getFecha()),
+						DateUtils.formatDate(normativa.getFechaBoletin())
 				));
 			}
 

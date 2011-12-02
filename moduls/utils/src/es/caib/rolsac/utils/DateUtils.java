@@ -1,4 +1,4 @@
-package es.caib.rolsac.back2.util;
+package es.caib.rolsac.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,9 +8,9 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class DateUtil {
+public class DateUtils {
 	
-	private static Log log = LogFactory.getLog(DateUtil.class);
+	private static Log log = LogFactory.getLog(DateUtils.class);
 	
 	public static final String DATE_FORMAT = "dd/MM/yyyy";
 	public static final String DATETIME_FORMAT = DATE_FORMAT + " HH:mm:ss";

@@ -148,6 +148,9 @@
 		<antcall target="update.persistence"/>
 	</target>
 	
+	<target name="update.utils" description="Actualizar utilidades">
+		<ant dir="moduls/utils" target="main" inheritall="false"/>
+	</target>
 
 	
 	<target name="update.extractor" description="Actualizar herramientas de texto">
@@ -239,6 +242,7 @@
 	
 			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
+				<include name="rolsac-utils.jar" />
 				<include name="extractor.jar" />
 				<include name="model.jar" />
 				<include name="integracion.war" />
@@ -300,6 +304,7 @@
   <!-- ================================================================== -->
 
 	  <target name="propagate01ROLSAC">
+		<ant dir="moduls/utils" target="${task}" inheritall="false"/>
 		<ant dir="moduls/extractor" target="${task}" inheritall="false"/>
 		<ant dir="moduls/model" target="${task}" inheritall="false"/>
 	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
