@@ -51,7 +51,7 @@
             <one-to-many class="org.ibit.rol.sac.model.Tramite"/>
         </list>
 
-        <list name="documentos" cascade="delete" inverse="true" lazy="true">
+        <list name="documentos" inverse="true" lazy="true">
             <cache usage="read-write"/>
             <key column="DOC_CODPRO" foreign-key="RSC_DOCPRO_FK"/>
             <index column="DOC_ORDEN"/>

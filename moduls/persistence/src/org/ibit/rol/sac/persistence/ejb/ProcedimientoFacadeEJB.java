@@ -129,7 +129,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
     /**
-     * Autoriza la creación de un procedimiento
+     * Autoriza la creaciï¿½n de un procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -139,7 +139,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
         
     /**
-     * Autoriza la modificación de un procedimiento
+     * Autoriza la modificaciï¿½n de un procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -159,7 +159,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         	Date FechaActualizacionBD = new Date();
             if (procedimiento.getId() == null) {
                 if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear un procedimiento público");
+                    throw new SecurityException("No puede crear un procedimiento pï¿½blico");
                 }
             } else {
                 if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento.getId())) {
@@ -174,7 +174,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 throw new SecurityException("No tiene acceso a la unidad");
             }
 
-            /* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
+            /* Se alimenta la fecha de actualizaciï¿½n de forma automï¿½tica si no se ha introducido dato*/                      
             if (procedimiento.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD,procedimiento.getFechaActualizacion())) {
             	procedimiento.setFechaActualizacion(new Date());
             }
@@ -740,7 +740,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
     
     /**
-     * Construye el query de búsqueda multiidioma en todos los campos
+     * Construye el query de bï¿½squeda multiidioma en todos los campos
      */
     private String i18nPopulateQuery(Map traducciones, List params) {
         String aux = "";
@@ -958,7 +958,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Añade una nueva materia al procedimiento
+     * Aï¿½ade una nueva materia al procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -1011,7 +1011,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Añade un nuevo tramite al procedimiento (el tramite ya existe en la base de datos)
+     * Aï¿½ade un nuevo tramite al procedimiento (el tramite ya existe en la base de datos)
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -1071,13 +1071,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             }
             ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
             procedimiento.getNormativas().clear();
+
+            //Borram els documents directament amb query per evitar el problema del ordres.
+            //S'ha llevat el cascade=delete de l'hbm.
+            session.delete("from Documento as doc where doc.procedimiento.id = ?",id, Hibernate.LONG);
+
             addOperacion(session, procedimiento, Auditoria.BORRAR);
             Historico historico = getHistorico(session, procedimiento);
             ((HistoricoProcedimiento) historico).setProcedimiento(null);
-            //for (HechoVitalProcedimiento hvp : (Set<HechoVitalProcedimiento>)procedimiento.getHechosVitalesProcedimientos()) {
-            //    HechoVital hv = hvp.getHechoVital();
-            //    hv.removeHechoVitalProcedimiento(hvp);
-            //}
             procedimiento.getUnidadAdministrativa().removeProcedimientoLocal(procedimiento);
             
             if(procedimiento instanceof ProcedimientoRemoto){
@@ -1421,7 +1422,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Obtiene los procedimientos públicos de un Hecho Vital
+     * Obtiene los procedimientos pï¿½blicos de un Hecho Vital
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -1471,7 +1472,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
                 return procedimiento;
             } else {
-                throw new SecurityException("Procedimiento no público.");
+                throw new SecurityException("Procedimiento no pï¿½blico.");
             }
 
         } catch (HibernateException he) {
@@ -1483,7 +1484,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Construye el query de búsqueda segun los parámetros
+     * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
@@ -1595,11 +1596,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * 
 	 * Debemos incluir las materias y los hechos vitales, la unidad administrativa de la que depende y la familia.
 	 * 
-	 * Método válido para Procedimientos los 3 tipos:
+	 * Mï¿½todo vï¿½lido para Procedimientos los 3 tipos:
 	 * 
-	 * Procedimiento No telemático, los de Rolsac por defecto (sin url, ni version ni modelo)
-	 * Procedimiento Telemático de Sistra (tiene versión y modelo)
-	 * Procedimiento Telemático Externo (tiene url)
+	 * Procedimiento No telemï¿½tico, los de Rolsac por defecto (sin url, ni version ni modelo)
+	 * Procedimiento Telemï¿½tico de Sistra (tiene versiï¿½n y modelo)
+	 * Procedimiento Telemï¿½tico Externo (tiene url)
 	 * @throws DelegateException 
 	 * 
      * @ejb.interface-method
@@ -1719,7 +1720,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	
     /**
-     * Añade los procedimientos al indice en todos los idiomas
+     * Aï¿½ade los procedimientos al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1777,7 +1778,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	            	if (trad.getPlazos()!=null)			io.addTextLine(trad.getPlazos());
 	            	if (trad.getResolucion()!=null)		io.addTextLine(trad.getResolucion());
 	            	if (trad.getNotificacion()!=null)	io.addTextLine(trad.getNotificacion());
-	            	if (trad.getRecursos()!=null)		io.addTextLine(trad.getRecursos()); // No está en el mantenimiento
+	            	if (trad.getRecursos()!=null)		io.addTextLine(trad.getRecursos()); // No estï¿½ en el mantenimiento
 	            	if (trad.getRequisitos()!=null)		io.addTextLine(trad.getRequisitos());
 	            	if (trad.getSilencio()!=null)		io.addTextLine(trad.getSilencio());
 					
@@ -1786,7 +1787,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
 				io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
 				io.addTextopcionalLine(filter.getTraduccion(idi).getFamilia_text());
-				// Añadimos colecciones pero solo títulos como opcional
+				// Aï¿½adimos colecciones pero solo tï¿½tulos como opcional
 				if (proc.getTramites()!=null) {
 					Iterator iter1 = proc.getTramites().iterator();
 					while (iter1.hasNext()) {
@@ -1816,7 +1817,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 					}
 				}
-	            //se añaden todos los documentos en todos los idiomas
+	            //se aï¿½aden todos los documentos en todos los idiomas
 				if (proc.getDocumentos()!=null) {
 					Iterator iterdocs = proc.getDocumentos().iterator();
 					while (iterdocs.hasNext()) {
@@ -1828,8 +1829,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 						//io.addArchivo((Archivo)documento.getArchivo());
 
-						// Se crea la indexación del documento individual y se añade la información 
-		            	// para la indexación de la ficha.
+						// Se crea la indexaciï¿½n del documento individual y se aï¿½ade la informaciï¿½n 
+		            	// para la indexaciï¿½n de la ficha.
 							IndexObject ioDoc = new IndexObject();
 			            	String textDoc = null;								
 			            	//ioDoc.addArchivo((Archivo)documento.getArchivo());	
@@ -2025,7 +2026,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
 	 /**
 	  * WEBCAIB
-     * Obtiene una actuación.
+     * Obtiene una actuaciï¿½n.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -2115,9 +2116,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     		actuacioModel.setRecursos(traProc.getRecursos() != null ? traProc.getRecursos() : traProcDefecto.getRecursos());
     		actuacioModel.setLloc(traProc.getLugar() != null ? traProc.getLugar() : traProcDefecto.getLugar());
     		    		
-    		//trámites
+    		//trï¿½mites
     		
-    		//List<Tramite> listaTramites = (List)proc.getTramites(); //así no salen todos...
+    		//List<Tramite> listaTramites = (List)proc.getTramites(); //asï¿½ no salen todos...
     		Query queryTramites = session.createQuery(
     				"select tra " +
     				"from Tramite as tra " + 					
@@ -2159,7 +2160,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     			tramitModel.setTermini(traTramite.getPlazos() != null ? traTramite.getPlazos() : traTramiteDefecto.getPlazos());
     			tramitModel.setLugar(traTramite.getLugar() != null ? traTramite.getLugar() : traTramiteDefecto.getLugar());
     			
-    			//Documentos informativos del trámite
+    			//Documentos informativos del trï¿½mite
     			Set<DocumentTramit> documentosInformativos = tramite.getDocsInformatius();
     			for (DocumentTramit doc : documentosInformativos) {
     				DocumentModel docModel = new DocumentModel();
@@ -2175,7 +2176,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     				tramitModel.addDocInformatiu(docModel);
     			}
     			
-    			//Formularios del trámite
+    			//Formularios del trï¿½mite
     			Set<DocumentTramit> forms = tramite.getFormularios();
     			for (DocumentTramit doc : forms) {
     				DocumentModel docModel = new DocumentModel();
@@ -2191,7 +2192,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     				tramitModel.addFormulari(docModel);    				
     			}
     			
-    			//Tasas del trámite
+    			//Tasas del trï¿½mite
     			if ("on".equals(proc.getTaxa())) {
     				Set<Taxa> tasas = tramite.getTaxes();
     				for (Taxa tasa : tasas) {
@@ -2264,13 +2265,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
 	/** 
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions que estan relacionades amb la 
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
 	 * fitxa especificada, en l'idioma especificat
 	 *
 	 * @param codiFitxa codi de la fitxa que interessa
-	 * @param idioma en el que volem la informació.
+	 * @param idioma en el que volem la informaciï¿½.
 	 * 
-	 * @return col.lecció de ActuacioMinModel amb informació reduida de les actuacions
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2312,12 +2313,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/** 
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions que estan relacionades amb la 
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
 	 * fitxa especificada, en l'idioma especificat
 	 *
 	 * @param codiFitxa codi de la fitxa que interessa
-	 * @param idioma en el que volem la informació.
-	 * @return col.lecció de ActuacioMinModel amb informació reduida de les actuacions
+	 * @param idioma en el que volem la informaciï¿½.
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2381,12 +2382,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/** 
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions que estan relacionades amb la 
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
 	 * fitxa especificada, en l'idioma especificat
 	 *
 	 * @param codiFitxa codi de la fitxa que interessa
-	 * @param idioma en el que volem la informació.
-	 * @return col.lecció de ActuacioMinModel amb informació reduida de les actuacions
+	 * @param idioma en el que volem la informaciï¿½.
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2450,7 +2451,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/** 
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions mes cercades 
+	 * Retorna una informaciï¿½ de totes les actuacions mes cercades 
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2499,13 +2500,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/** 
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions que estan relacionades amb la 
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
 	 * paraula de cerca
 	 *
 	 * @param word
-	 * @param idioma en el que volem la informació.
+	 * @param idioma en el que volem la informaciï¿½.
 	 * 
-	 * @return col.lecció de ActuacioMinModel amb informació reduida de les actuacions
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2581,14 +2582,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		
 	/** 
 	 * WEBCAIB
-	 * Realiza una búsqueda avanzada en procedimientos.
+	 * Realiza una bï¿½squeda avanzada en procedimientos.
 	 * 
-	 * Este método se ha copiado directamente del proyecto WEBCAIB durante la migración de métodos de este proyecto a ROLSAC.
-	 * No ha sido posible su implementación en Hibernate debido a que hace uso de las instrucciones start with connect by de ORACLE.
-	 * Además recibe en el parámetro condi condiciones where en lenguaje SQL que no entiende HQL y sería bastante costoso traducir de forma
-	 * dinámica.
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que hace uso de las instrucciones start with connect by de ORACLE.
+	 * Ademï¿½s recibe en el parï¿½metro condi condiciones where en lenguaje SQL que no entiende HQL y serï¿½a bastante costoso traducir de forma
+	 * dinï¿½mica.
 	 * 
-	 * @return col.lecció de ActuacioMinModel amb informació reduida de les actuacions
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
 	 * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2622,13 +2623,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			"from rsc_proced, " +
 			"rsc_trapro, " +
 			"rsc_trauna ";
-			//solo si hemos filtrado por tema, añadimos la tabla  
+			//solo si hemos filtrado por tema, aï¿½adimos la tabla  
 			if(!(condi.indexOf("prm_codmat")==-1))
 				query+=",rsc_promat ";	
 			//query+="where (pro_coduna =? "+ 
 			//"or pro_coduna in (select una_codi from rsc_uniadm where una_coduna =? or  una_coduna in (select una_codi from rsc_uniadm where una_coduna =?))) ";
 			
-			//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgànica
+			//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgï¿½nica
 			//NOCYCLE query+="where (pro_coduna in (select una_codi from rsc_uniadm start with una_codi=? connect by NOCYCLE prior una_codi=una_coduna))";
 			query+="where (pro_coduna in (select una_codi from rsc_uniadm start with una_codi=? connect by prior una_codi=una_coduna))";
 			if(solovigor.equals("si")){
@@ -2668,7 +2669,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				stmt.setString(2,uo);
 				stmt.setString(3,uo);
 				stmt.setString(4,idioma);*/
-				//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgànica
+				//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgï¿½nica
 				stmt.setString(1,uo);
 				stmt.setString(2,idioma);
 
@@ -2698,12 +2699,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * WEBCAIB
-	 * Retorna el número de actuaciones que tiene la uo.<br/>
+	 * Retorna el nï¿½mero de actuaciones que tiene la uo.<br/>
 	 * 
-	 * @param codiUO, int código de unidad orgánica
-	 * @param idioma, String en el que volem la informació.
+	 * @param codiUO, int cï¿½digo de unidad orgï¿½nica
+	 * @param idioma, String en el que volem la informaciï¿½.
 
-	 * @return int, número de actuaciones que tiene la uo.
+	 * @return int, nï¿½mero de actuaciones que tiene la uo.
 	 *
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2744,12 +2745,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * WEBCAIB
-	 * Retorna el número de actuaciones que tiene la uo.<br/>
+	 * Retorna el nï¿½mero de actuaciones que tiene la uo.<br/>
 	 * 
-	 * @param codiUO, int código de unidad orgánica
-	 * @param idioma, String en el que volem la informació.
+	 * @param codiUO, int cï¿½digo de unidad orgï¿½nica
+	 * @param idioma, String en el que volem la informaciï¿½.
 
-	 * @return int, número de actuaciones que tiene la uo.
+	 * @return int, nï¿½mero de actuaciones que tiene la uo.
 	 *
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -2790,11 +2791,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions d'una familia determinada 
-	 * ordenada per data publicació.
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia determinada 
+	 * ordenada per data publicaciï¿½.
 	 * 
-	 * Este método se ha copiado directamente del proyecto WEBCAIB durante la migración de métodos de este proyecto a ROLSAC.
-	 * No ha sido posible su implementación en Hibernate debido a que existe un bug en Hibernate 2 con la instrucción group by. En resumen
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
 	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
 	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
 	 *
@@ -2873,11 +2874,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions d'una familia  i unitat orgànica determinada 
-	 * ordenada per data publicació.
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia  i unitat orgï¿½nica determinada 
+	 * ordenada per data publicaciï¿½.
 	 * 
-	 * Este método se ha copiado directamente del proyecto WEBCAIB durante la migración de métodos de este proyecto a ROLSAC.
-	 * No ha sido posible su implementación en Hibernate debido a que existe un bug en Hibernate 2 con la instrucción group by. En resumen
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
 	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
 	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
 	 *
@@ -2958,11 +2959,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	/**
 	 * WEBCAIB
-	 * Retorna una informació de totes les actuacions d'una familia i matèria determinada 
-	 * ordenada per data publicació.
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia i matï¿½ria determinada 
+	 * ordenada per data publicaciï¿½.
 	 * 
-	 * Este método se ha copiado directamente del proyecto WEBCAIB durante la migración de métodos de este proyecto a ROLSAC.
-	 * No ha sido posible su implementación en Hibernate debido a que existe un bug en Hibernate 2 con la instrucción group by. En resumen
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
 	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
 	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
 	 *
@@ -3043,7 +3044,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		
 	
 	/**
-	 * Método de apoyo para transformar datos de la entidad ProcedimientoLocal a la entidad WEBCAIB ActuacioMinModel.
+	 * Mï¿½todo de apoyo para transformar datos de la entidad ProcedimientoLocal a la entidad WEBCAIB ActuacioMinModel.
 	 * @param pro ProcedimientoLocal.
 	 * @param idioma idioma preferido.
 	 * @return ActuacioMinModel.
@@ -3080,7 +3081,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	}	
 	
 	
-	//Método adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
+	//Mï¿½todo adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
 	private ActuacioMinModel getMinModelFromResultSet (ResultSet result, String idioma, Connection dbConnection) throws Exception {
 
 		ActuacioMinModel model = new ActuacioMinModel();
@@ -3125,7 +3126,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	}	
 	
 	
-	//Método adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
+	//Mï¿½todo adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
 	private Traduccio getTraduccio ( String query, int camps, Connection dbConnection ) throws Exception {
 
 		PreparedStatement stmt = null;
@@ -3136,7 +3137,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			resultTrad = stmt.executeQuery();
 
 			if (!resultTrad.next()) {
-				//throw new Exception("No s'ha trobat traducció per aquest idioma");
+				//throw new Exception("No s'ha trobat traducciï¿½ per aquest idioma");
 				return null;
 			}
 
@@ -3193,10 +3194,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 		}
 	}   	
 	
-	//Método copiado de WEBCAIB para actuacionsByAvanzado.
+	//Mï¿½todo copiado de WEBCAIB para actuacionsByAvanzado.
     /**
-     * Mètode d'utilitat per poder evitar els valors nulls
-     * (versió amb valor per defecte explícit)
+     * Mï¿½tode d'utilitat per poder evitar els valors nulls
+     * (versiï¿½ amb valor per defecte explï¿½cit)
      * 
      * @param value valor que volem comprovar que no sigui null
      * @param defaultValue valor que emprarem si value es null
