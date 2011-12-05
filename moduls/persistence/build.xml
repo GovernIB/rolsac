@@ -333,5 +333,7 @@
 	<property name="module.classes"  location="${ejb.classes}"/>
 	
 	<import file="../build_test.xml"/>
+	<import file="../build_sonar.xml"/>
+
 	
 </project>

@@ -326,5 +326,31 @@
           <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
 	  </target>		  	
 
+	  <!-- ================================================================== -->
+	  <!-- sonar (analitzador de codi)                                                                                                                             -->
+	  <!-- ================================================================== -->
+	
+	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+	    <classpath path="${lib}/sonar-ant-task-1.2.jar" /> 
+	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
+	    <!-- In such case this classpath node is no more mandatory -->
+	  </taskdef>
+	 
+	  <property name="sonar.host.url" value="http://localhost:9000" />
+		  
+	  <target name="sonar">
+	    <!-- list of mandatories Sonar properties -->
+	    <property name="sonar.modules" 
+	    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml" />
+	 
+	    <!-- list of optional Sonar properties -->
+<!--
+	    <property name="sonar.binaries" value="..." />
+	  	<property name="sonar.projectName" value="this value overrides the name defined in Ant root node" />
+	    <property name="sonar.tests" value="list of test source directories separated by a comma" />
+	    <property name="sonar.libraries" value="list of paths to libraries separated by a comma (These libraries are for example used by the Sonar Findbugs plugin)" />
+-->	 
+	    <sonar:sonar key="caib:rolsac" version="1.1" xmlns:sonar="antlib:org.sonar.ant"/>
+	  </target>
 	
 </project>

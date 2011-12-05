@@ -296,4 +296,6 @@
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
     <target name="main" depends="web.war" description="Construeye el war"/>
 
+	<import file="../build_sonar.xml"/>
+
 </project>

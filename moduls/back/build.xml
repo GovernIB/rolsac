@@ -363,5 +363,6 @@
 	<property name="module.classes"  location="${web.classes}"/>
 		
 	<import file="../build_test.xml"/>
+	<import file="../build_sonar.xml"/>
 	
 </project>

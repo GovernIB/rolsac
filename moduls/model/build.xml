@@ -128,5 +128,6 @@
 	<property name="module.classes"  location="${jar.classes}"/>
 
 	<import file="../build_test.xml"/>
+	<import file="../build_sonar.xml"/>
 	
 </project>
