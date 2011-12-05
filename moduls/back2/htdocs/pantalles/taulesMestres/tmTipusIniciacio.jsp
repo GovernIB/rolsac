@@ -33,6 +33,7 @@
     var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
     var txtDescendentment = "<spring:message code='txt.descendentment'/>";
     var txtPer = "<spring:message code='txt.per'/>";
+    var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
 
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
