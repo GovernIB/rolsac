@@ -394,13 +394,12 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
     height:37px; 
     list-style:none; 
     padding-top:1em; 
-    margin-left:0; 
-    /*border-bottom: 1px solid #D3D3D3;*/
+    margin-left:0;     
 }
 #opcions li { 
     display:block; 
     float:left; 
-    position:relative; 
+    position:relative;
     top:9px; 
     height: 27px; 
     line-height: 27px;
@@ -414,7 +413,9 @@ div.informacion { background:#fff url(../img/missatge/informacion.gif) no-repeat
     background-color: White;    
     background-repeat: no-repeat;
     background-position: 11px 50%;
-    border-radius: 15px 15px 0 0;  
+    border-radius: 15px 15px 0 0;
+
+    /*behavior: url(/sacback2/js/pie/PIE.htc);    */
 }
 #opcions li a{
     color: #666666;

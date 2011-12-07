@@ -259,7 +259,7 @@ function CEscriptoriNormativa(){
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "EscriptoriNormativa.cambiaPagina",
+				funcionPagina: "EscriptoriNormativa.cambiaPagina"
 			});
 			
 			codi_navegacio = multipagina_normativa.getHtml();

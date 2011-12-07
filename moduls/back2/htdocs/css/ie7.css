@@ -1,0 +1,42 @@
+#submenu{        
+    overflow: hidden;
+}
+#submenu_contingut{
+    overflow: hidden;
+    height: 44px;    
+}
+#menu_contingut ul li { 
+    z-index: 1;
+}
+
+/* Ocultamos la "colita" */
+#menu_contingut ul li span.cueta{
+    display: none;
+}
+
+#submenu_contingut ul li {  
+    position: static;    
+}
+
+/* Ocultamos la flechita de la opción actual */
+#submenu_contingut ul li.seleccionat .actual{
+    display: none;
+}
+
+#opcions li {
+    position: static;
+    margin-top: 9px;
+}
+#opcions li.actiu{
+    margin-top: 1px;
+}
+
+.escriptori_detall .botonera ul li{
+    list-style: none;    
+    float: none;        
+    margin-bottom: 10px;
+    width: 48%;
+}
+.escriptori_detall .botonera ul li.impar{    
+    margin-left: 10px;
+}

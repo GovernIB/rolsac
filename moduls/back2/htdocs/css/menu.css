@@ -44,9 +44,11 @@
     display:block;
     position:absolute;
     width: 100%;
+    left: 0;
     height: 6px;        
     bottom: -6px;   
     background: url(../img/menu/flecha_off.gif) 50% 0 no-repeat;
+    z-index: 1;
 }
 #menu_contingut ul li.seleccionat span.text,
 #menu_contingut ul li:hover a{ 
