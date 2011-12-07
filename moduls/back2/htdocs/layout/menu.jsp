@@ -88,7 +88,7 @@
 								<a href="<c:url value="/tipusUnitat/tipusUnitat.do"/>"><spring:message code="menu.tipus_unitat" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/edifici/llistat.do"/>"><spring:message code="menu.edificis" /></a>
+								<a href="<c:url value="/edifici/edifici.do"/>"><spring:message code="menu.edificis" /></a>
 							</li>
 						</ul>
 					</li>

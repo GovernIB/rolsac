@@ -148,8 +148,8 @@ public class TMAdministracioRemotaController {
             	resultats.put("item_logo_gran_enllas_arxiu", "administracioRemota/archivo.do?id=" + adRemota.getId() + "&tipus=2");
                 resultats.put("item_logo_gran", adRemota.getLogog().getNombre());
             } else {
-                resultats.put("item_responsable_logo_gran_enllas_arxiu", "");
-                resultats.put("item_responsable_logo_gran", "");
+                resultats.put("item_logo_gran_enllas_arxiu", "");
+                resultats.put("item_logo_gran", "");
             } 
 	        
 	        if (adRemota.getEspacioTerrit() != null) {
