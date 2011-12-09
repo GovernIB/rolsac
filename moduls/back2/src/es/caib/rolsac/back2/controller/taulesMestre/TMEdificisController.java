@@ -146,7 +146,6 @@ public class TMEdificisController {
                 resultats.put("item_planol", "");
             } 
 
-	        // s'omplen els camps traduibles
 			omplirCampsTraduibles(resultats, edifici);
 	        
 	        
