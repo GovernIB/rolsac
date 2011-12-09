@@ -112,6 +112,7 @@
                 <property name="presentacion" length="4000" column="TUN_PRESEN"/>
                 <property name="abreviatura" length="64" column="TUN_ABREVI"/>
                 <property name="url" length="256" column="TUN_URL" />
+                <property name="cvResponsable" type="text" column="TUN_CVRESP" />
             </composite-element>
         </map>
 

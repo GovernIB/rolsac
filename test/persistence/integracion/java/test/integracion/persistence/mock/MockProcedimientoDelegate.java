@@ -75,7 +75,7 @@ public class MockProcedimientoDelegate extends ProcedimientoDelegate {
 			e.printStackTrace();
 		}
 		EasyMock.replay(destDelegate);
-		Actualizador.setDestDelegate(destDelegate);
+		//Actualizador.setDestDelegate(destDelegate);
 		
 		return super.grabarProcedimiento(procedimiento, idUA);
 	}

@@ -23,7 +23,9 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
@@ -61,12 +63,10 @@ import es.caib.test.common.LogSpy;
 @PrepareForTest(ReportarFallo.class)
 @PowerMockIgnore("org.apache.commons.logging")  // para q no salga duplicate visibility error
 
-public class UnidadAdministrativaFacadeEJB_SpringTest extends 
-//AbstractDependencyInjectionSpringContextTests {
-AbstractTransactionalSpringContextTests {
+public class UnidadAdministrativaFacadeEJBTest extends AbstractTransactionalSpringContextTests {
 
 	
-	protected static Log log = LogFactory.getLog(UnidadAdministrativaFacadeEJB_SpringTest.class);
+	protected static Log log = LogFactory.getLog(UnidadAdministrativaFacadeEJBTest.class);
 	
 	MockUnidadFacadeEJB uaBean;	//afegit en dao.xml
 	
@@ -75,18 +75,14 @@ AbstractTransactionalSpringContextTests {
 	
 	protected String[] getConfigLocations() {
 		return new String[] {
-				"dataSource.xml",
-				"dao.xml"
+				"dataSource_persistence.xml",
+				"dao_persistence.xml"
 				};
 	}
 
 	public void onSetUp() throws Exception {
 		uaBean = (MockUnidadFacadeEJB) applicationContext.getBean("unidadFacadeEJB");
 
-//		AccesoManagerLocal accesoManager = EasyMock.createMock(AccesoManagerLocal.class);
-//		EasyMock.expect(accesoManager.tieneAccesoProcedimiento(EasyMock.anyLong())).andReturn(true).anyTimes();
-//		EasyMock.expect(accesoManager.tieneAccesoUnidad(EasyMock.anyLong(), EasyMock.anyBoolean())).andReturn(true).anyTimes();
-//		EasyMock.replay(accesoManager);
 
 		Principal p=EasyMock.createMock(Principal.class);
 		EasyMock.expect(p.getName()).andReturn("u92770");
@@ -104,6 +100,7 @@ AbstractTransactionalSpringContextTests {
 		//procBean.setAccesoManager(accesoManager);
 		uaBean.setSessionFactory(sf);
 		uaBean.setSessionContext(sctx);
+
 		
 		
 		edificioBean = (MockEdificioFacadeEJB) applicationContext.getBean("edificioFacadeEJB");
@@ -134,61 +131,102 @@ AbstractTransactionalSpringContextTests {
 	}
 /* */
 	
+	/**
+	 * ESCENARI: afegir un edifici a una UA
+	 * 
+	 * DONAT QUE: existeix la UA=7
+	 * I QUE: existeix un edifici=1
+	 * I QUE: tenim un mock del actualitzador
+	 * I QUE: tenim el nombre d'edificis d'aquesta UA  
+	 * QUAN: es crida a unidadFacadeEJB.anyadirEdificio
+	 * ALESHORES: el nombre d'edificis s'incrementa en 1
+	 * I: per restaurar tot s'esborra l'edifici en la UA
+	 */
 	@PrepareForTest({Actualizador.class})
-	public void test01AÒadirEdificioAUnidad() {
-		
+	public void test01AnyadirEdificioUnidad() {
+
+		// DONAT QUE: existeix la UA=7
+		Long ua_id=1L;
+		UnidadAdministrativa ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
+
+		//I QUE: existeix un edifici=1
+		Long edificio_id=7L;
+
+		// I QUE: tenim un mock del actualitzador
 		PowerMock.mockStatic(Actualizador.class);
 		Actualizador.actualizar(EasyMock.anyObject(),EasyMock.anyObject());
 		Actualizador.borrar(EasyMock.anyObject(),EasyMock.anyObject());
     	PowerMock.expectLastCall();
     	PowerMock.replay(Actualizador.class);
-		
-		Long edificio_id=7L;
-		Long ua_id=1L;
-		
-		UnidadAdministrativa ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
+    	
+    	// I QUE: tenim el nombre d'edificis d'aquesta UA
 		int nedificios = ua.getEdificios().size();
 
+		// QUAN: es crida a unidadFacadeEJB.anyadirEdificio
 		uaBean.anyadirEdificio(edificio_id, ua_id);
 
+		// ALESHORES: el nombre d'edificis s'incrementa en 1
 		ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
 		int nedificiosAfter = ua.getEdificios().size();
 
 		assertEquals(nedificios+1,nedificiosAfter);
 	
+		//I: per restaurar tot s'esborra l'edifici en la UA
 		uaBean.eliminarEdificio(edificio_id, ua_id);
 		
 		ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
 		nedificiosAfter = ua.getEdificios().size();
 		assertEquals(nedificios,nedificiosAfter);
-
-		
 	
 	}
 	
-	/*
+	
+	/**
+	 * ESCENARI: afegir un curriculum del responsable
+	 * 
+	 * DONAT QUE: existeix la UA=7
+	 * I QUE: tenim un mock del actualitzador
+	 * I QUE: la UA t√© el curriculum HTML del responsable en catala
+	 * I QUE: te permisos tieneAccesoMoverOrganigrama
+	 * I QUE: te permisos tieneAccesoUnidad
+	 * QUAN: es crida a unidadFacadeEJB.actualizarUnidadAdministrativa
+	 * ALESHORES: quan es recupera la UA te el cv  
+	 * 
+	 */
 	@PrepareForTest({Actualizador.class})
-	public void test02AÒadirUnidadAEdificio() {
-		
+	public void testA√±adirCVResponsable() {
+		// DONAT QUE: existeix la UA=7
+		Long ua_id=1L;
+		UnidadAdministrativa ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
+
+		// I QUE: tenim un mock del actualitzador
 		PowerMock.mockStatic(Actualizador.class);
-		Actualizador.actualizar(EasyMock.anyObject(),EasyMock.anyObject());
+		Actualizador.actualizar(EasyMock.anyObject());
     	PowerMock.expectLastCall();
     	PowerMock.replay(Actualizador.class);
+	
+		// I QUE: la UA t√© el curriculum HTML del responsable en catala  
+		String cv ="tengo master del universo";
+		TraduccionUA traduccioUA=(TraduccionUA)ua.getTraduccion("ca");
+		traduccioUA.setCvResponsable(cv);
+
+		// I QUE: te permisos tieneAccesoMoverOrganigrama
+		// ver MockAccesoManager
 		
-		Long edificio_id=77L;
-		Long ua_id=1L;
+		// I QUE: te permisos tieneAccesoUnidad
+		// ver MockAccesoManager
 		
-		Edificio edificio = edificioBean.obtenerEdificio(edificio_id);
-		_(edificio.getUnidadesAdministrativas().size());
+		// QUAN: es crida a unidadFacadeEJB.actualizarUnidadAdministrativa
+		uaBean.actualizarUnidadAdministrativa(ua, 1L);
 		
-		edificioBean.anyadirUnidad(ua_id, edificio_id);
+		// ALESHORES: quan es recupera la UA te el cv  
+		ua = uaBean.obtenerUnidadAdministrativaPM(ua_id);
+		traduccioUA=(TraduccionUA)ua.getTraduccion("ca");
 		
-		edificio = edificioBean.obtenerEdificio(edificio_id);
-		_(edificio.getUnidadesAdministrativas().size());
+		assertEquals(cv,traduccioUA.getCvResponsable());
 		
 	}
-	*/
-		
+
 	private void _(Object o){ System.out.println(o); }
 }
  

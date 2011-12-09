@@ -11,6 +11,9 @@
 	<classpathentry kind="src" path="test/persistence/unitario/java"/>
 	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
 	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
+	<classpathentry kind="src" path="test/persistence/integracion/java"/>
+	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
+	<classpathentry kind="src" path="test/model/unitario/java"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/aclibico.jar"/>
@@ -32,7 +35,6 @@
 	<classpathentry kind="lib" path="lib/lucene-core-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/lucene-spellchecker-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
-	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/pdfbox.jar"/>
 	<classpathentry kind="lib" path="lib/poi.jar"/>
 	<classpathentry kind="lib" path="lib/quartz.jar"/>

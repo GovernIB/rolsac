@@ -407,11 +407,11 @@ tinyMCE.init({
                     </div>
                     <div class="component">
                         
-           				<!-- tiny  -->
-						<div>
-							<div class="etiqueta tiny"><bean:message key="ua.presentacion" /></div>
-							<html:textarea name="traducciones" property="presentacion" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
-						</div>
+           			<!-- tiny  -->
+					<div>
+						<div class="etiqueta tiny"><bean:message key="ua.presentacion" /></div>
+						<html:textarea name="traducciones" property="presentacion" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
+					</div>
 						
                     </div>
                     <div class="component">
@@ -422,6 +422,13 @@ tinyMCE.init({
                         <div class="etiqueta"><bean:message key="ua.url" /></div>
                         <html:text styleClass="btext" property="url" name="traducciones" indexed="true" maxlength="512"/>
                     </div>
+                    
+                    <!-- tiny  -->
+					<div>
+						<div class="etiqueta tiny"><bean:message key="ua.cvResponsable" /></div>
+						<html:textarea name="traducciones" property="cvResponsable" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
+					</div>
+                    
                 </div>
             </div>
         </logic:iterate>
