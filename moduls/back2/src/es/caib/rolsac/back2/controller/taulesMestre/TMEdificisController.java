@@ -145,34 +145,9 @@ public class TMEdificisController {
                 resultats.put("item_planol_enllas_arxiu", "");
                 resultats.put("item_planol", "");
             } 
-	        
-	        // idiomes
-	        if (edifici.getTraduccion("ca") != null) {
-				resultats.put("ca", (TraduccionEdificio) edifici.getTraduccion("ca"));
-			} else {
-				resultats.put("ca", new TraduccionEdificio());
-			}
-	        if (edifici.getTraduccion("es") != null) {
-				resultats.put("es", (TraduccionEdificio) edifici.getTraduccion("es"));
-			} else {
-				resultats.put("es", new TraduccionEdificio());
-			}
-	        if (edifici.getTraduccion("en") != null) {
-				resultats.put("en", (TraduccionEdificio) edifici.getTraduccion("en"));
-			} else {
-				resultats.put("en", new TraduccionEdificio());
-			}
-	        if (edifici.getTraduccion("de") != null) {
-				resultats.put("de", (TraduccionEdificio) edifici.getTraduccion("de"));
-			} else {
-				resultats.put("de", new TraduccionEdificio());
-			}
-	        if (edifici.getTraduccion("fr") != null) {
-				resultats.put("fr", (TraduccionEdificio) edifici.getTraduccion("fr"));
-			} else {
-				resultats.put("fr", new TraduccionEdificio());
-			}
-	        // fi idiomes
+
+	        // s'omplen els camps traduibles
+			omplirCampsTraduibles(resultats, edifici);
 	        
 	        
 	    } catch (DelegateException dEx) {
@@ -186,14 +161,29 @@ public class TMEdificisController {
 	    
         return resultats;
 	}
+
+
+	private void omplirCampsTraduibles(Map<String, Object> resultats,
+			Edificio edifici) throws DelegateException {
+		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		List<String> langs = idiomaDelegate.listarLenguajes();
+		
+		for (String lang: langs) {
+		    if (null!=edifici.getTraduccion(lang)) {
+				resultats.put(lang, (TraduccionEdificio) edifici.getTraduccion(lang));
+			} else {
+				resultats.put(lang, new TraduccionEdificio());
+			}
+		}
+	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
     public ResponseEntity<String> guardarEdifici(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -205,8 +195,8 @@ public class TMEdificisController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
         
         try {
-        	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+        	//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
         	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
     		for (FileItem item : items) {
@@ -333,7 +323,7 @@ public class TMEdificisController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
