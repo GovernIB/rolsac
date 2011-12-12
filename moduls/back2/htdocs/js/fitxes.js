@@ -172,7 +172,7 @@ function CLlistat(){
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "Llistat.cambiaPagina",
+				funcionPagina: "Llistat.cambiaPagina"
 			});					
 			
 			codi_navegacio = multipagina.getHtml();

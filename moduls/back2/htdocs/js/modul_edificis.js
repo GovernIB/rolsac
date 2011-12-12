@@ -219,7 +219,7 @@ function CEscriptoriEdifici(){
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "EscriptoriEdifici.cambiaPagina",
+				funcionPagina: "EscriptoriEdifici.cambiaPagina"
 			});
 			
 			codi_navegacio = multipagina.getHtml();
