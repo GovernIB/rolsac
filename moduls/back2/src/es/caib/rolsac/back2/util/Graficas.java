@@ -228,7 +228,7 @@ public class Graficas {
 			dataset.addValue(llista.get(0),"Procediment", DateUtils.formatDate(dataActual.getTime()));
 			dataset.addValue(llista.get(1),"Normativa", DateUtils.formatDate(dataActual.getTime()));
 			dataset.addValue(llista.get(2),"Fitxa", DateUtils.formatDate(dataActual.getTime()));
-			dataActual.add(Calendar.DATE,+1);;
+			dataActual.add(Calendar.DATE,+1);
 		}		
 		return dataset;
 	}

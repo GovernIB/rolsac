@@ -66,9 +66,7 @@ function CLlistat(){
 			
 			// minim per cercador
 			if (resultats_total > numCercadorMinim) {
-				opcions_elm.find("li.C").animate({
-					duration: "slow", width: 'show'
-					}, 300);
+				opcions_elm.find("li.C").animate({duration: "slow", width: 'show'}, 300);
 			}
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
@@ -336,7 +334,18 @@ function CDetall(){
         $("#item_id").val("");
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
-		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select").val("").end().find("h2:first").text(txtNouTitol);
+		
+		//Resetear upload de archivos			
+		$("#grup_item_logo_petit span").show();
+		$("#grup_item_logo_petit input").hide();
+		$("#grup_item_logo_petit label.eliminar").hide();
+		$("#grup_item_logo_petit a").hide();
+		
+		$("#grup_item_logo_gran span").show();
+		$("#grup_item_logo_gran input").hide();
+		$("#grup_item_logo_gran label.eliminar").hide();
+		$("#grup_item_logo_gran a").hide();
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {

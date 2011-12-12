@@ -253,7 +253,7 @@
 	                        <div class="element t50p">
 	                            <div class="etiqueta"><label for="item_logo_petit"><spring:message code='administracioRemota.formulari.logo_petit'/></label></div>
 	                            <div class="control archivo">   
-	                                <div id="grup_item_logo_petit" class="file">
+	                                <div id="grup_item_logo_petit" class="file grup_arxiu_actual">
 	                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
 	                                    <a href="#" target="_blank"></a>
 	                                    <input type="checkbox" name="item_logo_petit_delete" id="item_logo_petit_delete" value="1"/>
@@ -276,7 +276,7 @@
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_logo_gran"><spring:message code='administracioRemota.formulari.logo_gran'/></label></div>
                                 <div class="control archivo">   
-                                    <div id="grup_item_logo_gran" class="file">
+                                    <div id="grup_item_logo_gran" class="file grup_arxiu_actual">
                                         <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                         <a href="#" target="_blank"></a>
                                         <input type="checkbox" name="item_logo_gran_delete" id="item_logo_gran_delete" value="1"/>
