@@ -4,6 +4,8 @@
 <link href='<c:url value="/css/tm_edifici.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/tm_edifici.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_unitats_adminstratives.js'/>"></script>
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/edifici/llistat.do" />';
     var pagDetall = '<c:url value="/edifici/pagDetall.do" />';
@@ -70,6 +72,15 @@
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
 
+    var txtUnitatAdministrativa = "<spring:message code='unitatAdministrativa.ua'/>";
+	var txtUnitatsAdministratives = "<spring:message code='unitatAdministrativa.uas'/>";
+	var txtNoHiHaUA = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase();
+    var txtNoHiHaUAs = txtNoHiHa + " " + txtUnitatsAdministratives.toLowerCase();
+    var txtSeleccionada =  "<spring:message code='txt.seleccionada'/>";
+    var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
+    var txtNoHiHaUASeleccionada = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase() + " " + txtSeleccionada.toLowerCase();
+    var txtNoHiHaUAsSeleccionades = txtNoHiHa + " " + txtUnitatsAdministratives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
+    
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
@@ -186,167 +197,7 @@
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">          
-              <div class="modul">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.dades'/></legend>
-                    <div class="modul_continguts mostrat">
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_direccio"><spring:message code='edifici.formulari.direccio'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_direccio" name="item_direccio" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_codi_postal"><spring:message code='edifici.formulari.codi_postal'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_codi_postal" name="item_codi_postal" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_poblacio"><spring:message code='edifici.formulari.poblacio'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_poblacio" name="item_poblacio" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t50">
-                                <div class="etiqueta">
-                                    <label for="item_latitud"><spring:message code='edifici.formulari.coordenades'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_latitud" name="item_latitud" type="text" class="nou" />
-                                </div>
-                            </div>
-                            <div class="element t50">
-                                <div class="etiqueta">
-                                    <label for="item_longitud"><spring:message code='edifici.formulari.coordenades'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_longitud" name="item_longitud" type="text" class="nou" />
-                                </div>
-                            </div>
-                        	<div class="element t50">
-			                    <span class="btnGenerico">
-			                        <a href="javascript:;" class="btn coordenades"><span><span><spring:message code='boto.coordenades'/></span></span></a>
-			                    </span>
-                        	</div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_telefon"><spring:message code='edifici.formulari.telefon'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_telefon" name="item_telefon" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_fax"><spring:message code='edifici.formulari.fax'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_fax" name="item_fax" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_email"><spring:message code='edifici.formulari.email'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_email" name="item_email" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <!-- fila -->
-	                    <div class="fila">
-	                        <div class="element t50p">
-	                            <div class="etiqueta"><label for="item_foto_petita"><spring:message code='edifici.formulari.foto_petita'/></label></div>
-	                            <div class="control archivo">   
-	                                <div id="grup_item_foto_petita" class="file">
-	                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
-	                                    <a href="#" target="_blank"></a>
-	                                    <input type="checkbox" name="item_foto_petita_delete" id="item_foto_petita_delete" value="1"/>
-	                                    <label for="item_foto_petita_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-	                                </div>
-	                            </div>
-	                        </div>    
-	                        
-	                        
-	                        <div class="element t50p">
-	                            <div class="etiqueta"><label for="item_foto_petita"><spring:message code='edifici.formulari.foto_petita'/></label></div>
-	                            <div class="control">
-	                                <input id="item_foto_petita" name="item_foto_petita" type="file" class="nou" />
-	                            </div>
-	                        </div>                                                                                      
-	                    </div>
-                        <!-- /fila -->
-                        <!-- fila -->
-                        <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta"><label for="item_foto_gran"><spring:message code='edifici.formulari.foto_gran'/></label></div>
-                                <div class="control archivo">   
-                                    <div id="grup_item_foto_gran" class="file">
-                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        <a href="#" target="_blank"></a>
-                                        <input type="checkbox" name="item_foto_gran_delete" id="item_foto_gran_delete" value="1"/>
-                                        <label for="item_foto_gran_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                    </div>
-                                </div>
-                            </div>    
-                            
-                            
-                            <div class="element t50p">
-                                <div class="etiqueta"><label for="item_foto_gran"><spring:message code='edifici.formulari.foto_gran'/></label></div>
-                                <div class="control">
-                                    <input id="item_foto_gran" name="item_foto_gran" type="file" class="nou" />
-                                </div>
-                            </div>                                                                                      
-                        </div>
-                        <!-- /fila -->
-                        <!-- fila -->
-                        <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta"><label for="item_planol"><spring:message code='edifici.formulari.planol'/></label></div>
-                                <div class="control archivo">   
-                                    <div id="grup_item_planol" class="file">
-                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
-                                        <a href="#" target="_blank"></a>
-                                        <input type="checkbox" name="item_planol_delete" id="item_planol_delete" value="1"/>
-                                        <label for="item_planol_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-                                    </div>
-                                </div>
-                            </div>    
-                            
-                            
-                            <div class="element t50p">
-                                <div class="etiqueta"><label for="item_planol"><spring:message code='edifici.formulari.planol'/></label></div>
-                                <div class="control">
-                                    <input id="item_planol" name="item_planol" type="file" class="nou" />
-                                </div>
-                            </div>                                                                                      
-                        </div>
-                        <!-- /fila -->
-                </fieldset>
-            </div>
-            <!-- /modul -->
-            <!-- modul -->
+                <!-- modul -->
             <div class="modul">                 
                 <fieldset>                              
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                         
@@ -442,6 +293,170 @@
                 </fieldset>                 
             </div>
             <!-- /modul -->
+              <!-- modul -->
+              <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.dades'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_direccio"><spring:message code='edifici.formulari.direccio'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_direccio" name="item_direccio" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_codi_postal"><spring:message code='edifici.formulari.codi_postal'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_codi_postal" name="item_codi_postal" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_poblacio"><spring:message code='edifici.formulari.poblacio'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_poblacio" name="item_poblacio" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="item_latitud"><spring:message code='edifici.formulari.coordenades'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_latitud" name="item_latitud" type="text" class="nou" />
+                                </div>
+                            </div>
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="item_longitud"><spring:message code='edifici.formulari.coordenades'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_longitud" name="item_longitud" type="text" class="nou" />
+                                </div>
+                            </div>
+                        	<div class="element t50">
+                        		<div class="etiqueta">
+                                    <label for="item_longitud">&nbsp;</label>
+                                </div>
+			                    <span class="btnGenerico">
+			                        <a href="javascript:;" class="btn coordenades"><span><span><spring:message code='boto.coordenades'/></span></span></a>
+			                    </span>
+                        	</div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_telefon"><spring:message code='edifici.formulari.telefon'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_telefon" name="item_telefon" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_fax"><spring:message code='edifici.formulari.fax'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_fax" name="item_fax" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_email"><spring:message code='edifici.formulari.email'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_email" name="item_email" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- fila -->
+	                    <div class="fila">
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_foto_petita"><spring:message code='edifici.formulari.foto_petita'/></label></div>
+	                            <div class="control archivo">   
+	                                <div id="grup_item_foto_petita" class="file grup_arxiu_actual">
+	                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                    <a href="#" target="_blank"></a>
+	                                    <input type="checkbox" name="item_foto_petita_delete" id="item_foto_petita_delete" value="1"/>
+	                                    <label for="item_foto_petita_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                </div>
+	                            </div>
+	                        </div>    
+	                        
+	                        
+	                        <div class="element t50p">
+	                            <div class="etiqueta"><label for="item_foto_petita"><spring:message code='edifici.formulari.foto_petita'/></label></div>
+	                            <div class="control">
+	                                <input id="item_foto_petita" name="item_foto_petita" type="file" class="nou" />
+	                            </div>
+	                        </div>                                                                                      
+	                    </div>
+                        <!-- /fila -->
+                        <!-- fila -->
+                        <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_foto_gran"><spring:message code='edifici.formulari.foto_gran'/></label></div>
+                                <div class="control archivo">   
+                                    <div id="grup_item_foto_gran" class="file grup_arxiu_actual">
+                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                        <a href="#" target="_blank"></a>
+                                        <input type="checkbox" name="item_foto_gran_delete" id="item_foto_gran_delete" value="1"/>
+                                        <label for="item_foto_gran_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                    </div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_foto_gran"><spring:message code='edifici.formulari.foto_gran'/></label></div>
+                                <div class="control">
+                                    <input id="item_foto_gran" name="item_foto_gran" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                        <!-- fila -->
+                        <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_planol"><spring:message code='edifici.formulari.planol'/></label></div>
+                                <div class="control archivo">   
+                                    <div id="grup_item_planol" class="file grup_arxiu_actual">
+                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                        <a href="#" target="_blank"></a>
+                                        <input type="checkbox" name="item_planol_delete" id="item_planol_delete" value="1"/>
+                                        <label for="item_planol_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                    </div>
+                                </div>
+                            </div>    
+                            
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_planol"><spring:message code='edifici.formulari.planol'/></label></div>
+                                <div class="control">
+                                    <input id="item_planol" name="item_planol" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                </fieldset>
+            </div>
+            <!-- /modul -->
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->
@@ -471,6 +486,33 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- modul -->
+            <div class="modul">
+            	<input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='unitatAdministrativa.uaRelacionats'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulUnitatAdministrativa -->
+                        <div class="modulUnitatAdministratives">
+                            <div class="seleccionats">
+                                <%-- dsanchez: un solo idioma --%>
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaUnitatAdministrativaRelacionada'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="boton btnGenerico" style="margin-left: 0px;">
+                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA');" class="btn consulta">
+                                    	<span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
+                                    </a>
+                                </div>
+                            </div>                                  
+                        </div>
+                        <!-- /modulUnitatAdministrativa -->                                 
+                    </div>                              
+                </fieldset>                     
+            </div>
+            <!-- /modul -->  
         </div>
         <!-- /modulLateral -->
     </form>

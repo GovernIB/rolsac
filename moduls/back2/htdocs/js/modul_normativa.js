@@ -96,9 +96,9 @@ function CModulNormativa(){
 		if (seleccionats_val == 0) {
 			info_elm.text(txtNoHiHaNormativesSeleccionades+ ".");
 		} else if (seleccionats_val == 1) {
-			info_elm.html(txtSeleccionada + " <strong>" + seleccionats_val + " " + txtNormativa.toLowerCase() + "</strong>.");
+			info_elm.html(txtSeleccionada + " <strong>" + seleccionats_val + " " + txtUnitatAdministrativa.toLowerCase() + "</strong>.");
 		} else if (seleccionats_val > 1) {
-			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtNormatives.toLowerCase() + "</strong>.");						
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtUnitatAdministratives.toLowerCase() + "</strong>.");						
 		}
 	}
 	

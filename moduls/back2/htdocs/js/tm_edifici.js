@@ -301,6 +301,8 @@ function CDetall(){
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 				
+		$("#llistaUnitatsAdministratives").val(ModulUnitatAdministrativa.listaUnidadesAdministrativas());
+		
 		// Validamos el formulario
 		if(!that.formulariValid()){
 			return false;
@@ -335,8 +337,29 @@ function CDetall(){
 	this.nou = function() {
         $("#item_id").val("");
         
+        ModulUnitatAdministrativa.nuevo();
+        
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		
+		
+		//Resetear upload de archivos			
+		$("#grup_item_foto_petita span").show();
+		$("#grup_item_foto_petita input").hide();
+		$("#grup_item_foto_petita label.eliminar").hide();
+		$("#grup_item_foto_petita a").hide();
+		
+		$("#grup_item_foto_gran span").show();
+		$("#grup_item_foto_gran input").hide();
+		$("#grup_item_foto_gran label.eliminar").hide();
+		$("#grup_item_foto_gran a").hide();
+		
+		$("#grup_item_planol span").show();
+		$("#grup_item_planol input").hide();
+		$("#grup_item_planol label.eliminar").hide();
+		$("#grup_item_planol a").hide();
+		
+		
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
@@ -437,6 +460,8 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 		
+		
+		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dada_node.unitatsAdm);
 		
 		
         // mostrem

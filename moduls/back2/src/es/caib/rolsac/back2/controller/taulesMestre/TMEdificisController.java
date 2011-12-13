@@ -5,8 +5,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,19 +19,16 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.TraduccionEdificio;
-import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
-import org.ibit.rol.sac.persistence.delegate.AdministracionRemotaDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
-import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +38,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -147,6 +148,35 @@ public class TMEdificisController {
             } 
 
 			omplirCampsTraduibles(resultats, edifici);
+	        
+	        
+	        String lang = request.getLocale().getLanguage();
+	        // Unitats Administratives asociadas
+            if (edifici.getUnidadesAdministrativas() != null) {             
+            	Map<String, String> map;
+            	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();            	
+            	TraduccionUA traUA;
+				String nombre;
+                
+				
+				for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
+					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
+					traUA = (TraduccionUA) unitatAdministrativa.getTraduccion(lang);
+					nombre = "";
+    				if (traUA != null) {
+    					//Retirar posible enlace incrustado en titulo
+    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traUA.getNombre());
+    				}
+    				map = new HashMap<String, String>(2);
+    				map.put("id", unitatAdministrativa.getId().toString());
+    				map.put("nombre", nombre);
+                    llistaUnitatsAdministratives.add(map);
+				}
+				resultats.put("unitatsAdm", llistaUnitatsAdministratives);
+            } else {
+                resultats.put("unitatsAdm", null);
+            } 
+            // Fin unitatsAdm asociadas
 	        
 	        
 	    } catch (DelegateException dEx) {
@@ -277,6 +307,37 @@ public class TMEdificisController {
 			}
 			edifici.setTraduccionMap(traduccions);
 			   	
+			
+			//Unitats Administratives
+            
+            if (valoresForm.get("unitatsAdministratives") != null && !"".equals(valoresForm.get("unitatsAdministratives"))){
+                UnidadAdministrativaDelegate unitatAdminsitrativaDelegate = DelegateUtil.getUADelegate();
+                Set<UnidadAdministrativa> unitatAdmNoves = new HashSet<UnidadAdministrativa>();
+                String[] codisUANous = valoresForm.get("unitatsAdministratives").split(",");
+                
+                if (edifici.getId() != null){
+                    for (int i = 0; i<codisUANous.length; i++){
+                    	for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
+        					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
+        					if(unitatAdministrativa.getId().equals(ParseUtil.parseLong(codisUANous[i]))){
+                                unitatAdmNoves.add(unitatAdministrativa);
+                                codisUANous[i] = null;
+                                break;
+                            }
+                        }                            
+                    }                         
+                }                    
+                
+                for (String codiUA: codisUANous){
+                    if (codiUA != null){
+                        unitatAdmNoves.add(unitatAdminsitrativaDelegate.obtenerUnidadAdministrativa(ParseUtil.parseLong(codiUA)));
+                    }                        
+                }
+                
+                edifici.setUnidadesAdministrativas(unitatAdmNoves);                                                 
+            }
+			
+			
             edificiDelegate.grabarEdificio(edifici);
             
             String ok = messageSource.getMessage("administracioRemota.guardat.correcte", null, request.getLocale());

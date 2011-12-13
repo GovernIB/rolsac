@@ -22,7 +22,6 @@
     <script type="text/javascript" src="<c:url value='/js/multipagina.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
-    <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
 
    	<script type="text/javascript">
@@ -32,20 +31,28 @@
         var nivell=0
 
         function carregar(id, nombre){
-        	$("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
-        	$("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
-        	$("#" + "<c:out value='${id_hidden}'/>",window.top.document).change();
-        	$("#" + "<c:out value='${id_input}'/>",window.top.document).change();
 
-        	$("#btnGuardar",window.top.document).parent().removeClass("off");
+        	<c:choose>
+		    	<c:when test="${not empty id_input}">
+			    	$("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
+		        	$("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
+		        	$("#" + "<c:out value='${id_hidden}'/>",window.top.document).change();
+		        	$("#" + "<c:out value='${id_input}'/>",window.top.document).change();
+		    	</c:when>
+			    <c:otherwise>
+				    var uaItem = new Object();
+				    uaItem['id'] = id;
+				    uaItem['nombre'] = nombre;
+				    window.top.ModulUnitatAdministrativa.agregaItem(uaItem);
+				    window.top.ModulUnitatAdministrativa.contaSeleccionats();
+			    </c:otherwise>
+			</c:choose>
+			
+						
+        	window.top.Detall.modificado();
 
         	borrarArbreUA('popUA');
         	            
-        	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").val(id);
-        	//window.opener.$("#" + "<c:out value='${id_input}'/>").val(nombre);
-        	//window.opener.$("#" + "<c:out value='${id_hidden}'/>").change();
-        	//window.opener.$("#" + "<c:out value='${id_input}'/>").change();
-            //window.close();
         }
 
         function init_ex(level,opened,descripcion,carpeta,codi){
