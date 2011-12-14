@@ -119,6 +119,14 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List buscadorEdificios(Map parametros, Map traduccion) throws DelegateException {
+        try {
+            return getFacade().buscadorEdificios(parametros, traduccion);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
   
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

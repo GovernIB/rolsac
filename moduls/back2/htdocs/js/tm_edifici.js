@@ -202,9 +202,16 @@ function CLlistat(){
 			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
 			ordreCamp_elm = ordreCamp_cercador_elm;
-			
+
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
-			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
+			dataVars_cercador += "&descripcio=" + $("#cerca_descripcio").val();
+			dataVars_cercador += "&direccio=" + $("#cerca_direccio").val();
+			dataVars_cercador += "&codiPostal=" + $("#cerca_codiPostal").val();
+			dataVars_cercador += "&poblacio=" + $("#cerca_poblacio").val();
+			dataVars_cercador += "&telefon=" + $("#cerca_telefon").val();
+			dataVars_cercador += "&fax=" + $("#cerca_fax").val();
+			dataVars_cercador += "&email=" + $("#cerca_email").val();
+			
 		} else {
 			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;

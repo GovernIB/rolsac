@@ -139,11 +139,9 @@
         <li class="opcio L actiu">
             <a id="tabListado" href="javascript:void(0)"><spring:message code='tab.llistat'/></a>
         </li>
-        <%-- Mientras no haya metodos en el EJB para buscar con parametros, no habra buscador.
         <li class="opcio C">
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
-        --%>
         <li class="opcions nuevo">
             <a id="btnNuevaFicha" href="javascript:;" class="btn nou">
                 <span><span><spring:message code='edifici.crea_nou_edifici'/></span></span>
@@ -159,16 +157,55 @@
             <input type="hidden" value="DESC" class="ordreTipus" />
             <input type="hidden" value="nombre" class="ordreCamp" />                            
         </div>
-        <%-- Mientras no haya metodos en el EJB para buscar con parametros, no habra buscador.
         <div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2>                 
+                    <h2><spring:message code='tab.cercador'/></h2>                 
                         <div class="fila">
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>
+                            <div class="element t50">
+                                <div class="etiqueta"><label for="cerca_descripcio"><spring:message code='edifici.formulari.descripcio'/></label></div>
                                 <div class="control">                           
-                                    <input id="cerca_nom" name="cerca_nom" type="text" maxlength="250" class="nom" />
+                                    <input id="cerca_descripcio" name="cerca_descripcio" type="text" maxlength="250" />
+                                </div>
+                            </div>
+                            <div class="element t50">
+                                <div class="etiqueta"><label for="cerca_direccio"><spring:message code='edifici.formulari.direccio'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_direccio" name="cerca_direccio" type="text" maxlength="250" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filla">
+                            <div class="element t21">
+                                <div class="etiqueta"><label for="cerca_codiPostal"><spring:message code='edifici.formulari.codi_postal'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_codiPostal" name="cerca_codiPostal" type="text" maxlength="250" />
+                                </div>    
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta"><label for="cerca_poblacio"><spring:message code='edifici.formulari.poblacio'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_poblacio" name="cerca_poblacio" type="text" maxlength="250" />
+                                </div>    
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta"><label for="cerca_telefon"><spring:message code='edifici.formulari.telefon'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_telefon" name="cerca_telefon" type="text" maxlength="250" />
+                                </div>    
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta"><label for="cerca_fax"><spring:message code='edifici.formulari.fax'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_fax" name="cerca_fax" type="text" maxlength="250" />
+                                </div>    
+                            </div>
+                        </div>
+                        <div class="filla">
+                            <div class="element t50">
+                                <div class="etiqueta"><label for="cerca_email"><spring:message code='edifici.formulari.email'/></label></div>
+                                <div class="control">                           
+                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" />
                                 </div>
                             </div>
                         </div>
@@ -186,8 +223,7 @@
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
             <input type="hidden" value="nom" class="ordreCamp" />
-        </div>
-        --%>      
+        </div>      
     </div>
 </div>
 

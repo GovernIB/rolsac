@@ -632,6 +632,9 @@ div.table div.tbody div.td a:hover{
 #cercador .element.t30{
     width: 29.9%;
 }
+#cercador .element.t50{
+    width: 49.9%;
+}
 #cercador div.element .control{
     padding-right: 20px;
 }

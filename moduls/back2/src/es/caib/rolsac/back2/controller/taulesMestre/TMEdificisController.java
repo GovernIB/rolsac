@@ -79,9 +79,57 @@ public class TMEdificisController {
 		Map<String, Object> edificiDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, String> tradMap = new HashMap<String, String>();
+
+		String lang = request.getLocale().getLanguage();
+		
+		// Parametres de cerca
+		
+		String direccio = request.getParameter("direccio");
+		if (direccio != null && !"".equals(direccio)) {
+			paramMap.put("direccion", direccio.toUpperCase());
+		}
+		
+		String codiPostal = request.getParameter("codiPostal");
+		if (codiPostal != null && !"".equals(codiPostal)) {
+			paramMap.put("codigoPostal", codiPostal.toUpperCase());
+		}
+		
+		String poblacio = request.getParameter("poblacio");
+		if (poblacio != null && !"".equals(poblacio)) {
+			paramMap.put("poblacion", poblacio.toUpperCase());
+		}
+		
+		String telefon = request.getParameter("telefon");
+		if (telefon != null && !"".equals(telefon)) {
+			paramMap.put("telefono", telefon.toUpperCase());
+		}
+		
+		String fax = request.getParameter("fax");
+		if (fax != null && !"".equals(fax)) {
+			paramMap.put("fax", fax.toUpperCase());
+		}
+		
+		String email = request.getParameter("email");
+		if (email != null && !"".equals(email)) {
+			paramMap.put("email", email.toUpperCase());
+		}
+		
+		
+		// Textes (en todos los campos todos los idiomas)
+		String descripcio = request.getParameter("descripcio");
+		if (descripcio != null && !"".equals(descripcio)) {
+			descripcio = descripcio.toUpperCase();
+			tradMap.put("descripcion", descripcio);
+		} else {
+			tradMap.put("idioma", lang);
+		}
+		
+		
 		try {
 			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-			List<Edificio> llistaEdificis = edificiDelegate.listarEdificios();
+			List<Edificio> llistaEdificis = edificiDelegate.buscadorEdificios(paramMap, tradMap) ;
 			for (Edificio edifici: llistaEdificis) {
 				TraduccionEdificio tp = (TraduccionEdificio) edifici.getTraduccion(request.getLocale().getLanguage());
 				edificiDTO = new HashMap<String, Object>();

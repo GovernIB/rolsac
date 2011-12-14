@@ -131,6 +131,42 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    /**
+     * Obtiene una lista de edificios
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public List buscadorEdificios(Map parametros, Map traduccion) {
+        Session session = getSession();
+        try {
+            List params = new ArrayList();
+            
+            String i18nQuery = "";
+            
+            if (traduccion.get("idioma") != null) {
+                i18nQuery = populateQuery(parametros, traduccion, params);
+            } else {
+                String paramsQuery = populateQuery(parametros, new HashMap(), params);
+                if (paramsQuery.length() != 0) {
+                    i18nQuery += paramsQuery + " and ";
+                }
+                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+            }
+            
+
+            Query query = session.createQuery("from Edificio as edificio, edificio.traducciones as trad where " + i18nQuery);
+            for (int i = 0; i < params.size(); i++) {
+                String o = (String)params.get(i);
+                query.setString(i, o);
+            }
+            return query.list();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
 
     /**
      * obtiene la foto pequenya del edificio
@@ -266,9 +302,11 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
         }
 
         // Tratamiento de traducciones
-        if (aux.length() > 0) aux = aux + " and ";
-        aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
-        traduccion.remove("idioma");
+        if (!traduccion.isEmpty()) {
+	        if (aux.length() > 0) aux = aux + " and ";
+	        aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
+	        traduccion.remove("idioma");
+        }
         for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
             String key = (String) iter2.next();
             Object value = traduccion.get(key);
@@ -343,6 +381,40 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
+    }
+    
+    
+    /**
+     * Construye el query de b�squeda multiidioma en todos los campos
+     */
+    private String i18nPopulateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            if (value != null) {
+                if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
     }
     
 }
