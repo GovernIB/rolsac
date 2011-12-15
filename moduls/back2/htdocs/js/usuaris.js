@@ -381,15 +381,12 @@ function CDetall(){
 			},
 			success: function(data) {
                 Llistat.anulaCache();
-
 				if (data.id > 0) {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
 					Detall.recarregar();
 				} else if (data.id == -1){
-                    console.log('-1a');
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
-                    console.log('-1b');
 				} else if (data.id < -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}

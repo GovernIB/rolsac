@@ -619,33 +619,19 @@ function CDetall(){
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				Missatge.cancelar();
-			
-				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-				
 			},
 			success: function(data) {
-
 				Llistat.anulaCache();
-			
-				Missatge.cancelar();//No s'ha de veure el missatge de confirmacio d'esborrat
-								
 				if (data.id > -1) {
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});					
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
+					Detall.array({id: dada_node.id, accio: "elimina"});
+					Detall.recarregar();
 				} else if (data.id == -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 				} else if (data.id == -2){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}
-								
-				// array
-				Detall.array({id: dada_node.id, accio: "elimina"});
-				// recarregar
-				Detall.recarregar();
-				
 			}			
 		});		
 	}

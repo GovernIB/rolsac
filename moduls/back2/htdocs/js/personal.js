@@ -475,20 +475,14 @@ function CDetall(){
 				
 			},
 			success: function(data) {
-
 				Llistat.anulaCache();
-			
-				Missatge.cancelar();
-				
 				if (data.id > -1) {
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});					
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
+					Detall.array({id: pro_node.id, accio: "elimina"});
+					Detall.recarregar();
+				} else {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}
-								
-				// array
-				Detall.array({id: pro_node.id, accio: "elimina"});
-				// recarregar
-				Detall.recarregar();
-				
 			}			
 		});		
 	}

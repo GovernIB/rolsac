@@ -521,33 +521,19 @@ function CDetall(){
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				
-				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-				
 			},
 			success: function(data) {
-
 				Llistat.anulaCache();
-			
-				Missatge.cancelar();
-				
 				if (data.id > 0) {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
+					Detall.array({id: dada_node.item_id, accio: "elimina"});
+					Detall.recarregar();
 				} else if (data.id == -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 				} else if (data.id == -2){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}
-								
-				// array
-				Detall.array({id: dada_node.item_id, accio: "elimina"});
-				
-				// recarregar
-				Detall.recarregar();
-
 			}
 		});
 	}

@@ -681,29 +681,17 @@ function CDetall(){
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 			},			
 			error: function() {
-				
-				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
-				Error.llansar();
-				
 			},
 			success: function(data) {	
-			
 				Llistat.anulaCache();				
-				
 				if (data.id > -1) {		
-					// recarregar
-					Detall.recarregar();				
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-					
-					// array
 					Detall.array({id: data.id, accio: "elimina"});
-
+					Detall.recarregar();
 				} else {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				}
-						
 			}
 		});			
 	}

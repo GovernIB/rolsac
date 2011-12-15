@@ -507,23 +507,15 @@ function CDetall(){
 			},
 			success: function(data) {
 				Llistat.anulaCache();
-				Missatge.cancelar();
-				
 				if (data.id > 0) {
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte});
-					
-					// array
 					Detall.array({id: dada_node.item_id, accio: "elimina"});
-					
-					// recarregar
 					Detall.recarregar();
 				} else if (data.id == -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 				} else if (data.id < -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
 				}
-								
-				
 			}
 		});
 	}
