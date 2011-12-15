@@ -1,0 +1,46 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+/* llistats table */
+
+div.llistat div.nom{ 
+    width: 328px;   
+    padding-left: 21px;
+}
+div.publicacion_2campos {
+    clear: both;
+}
+div.publicacion_2campos div.element{
+    width: 49%;
+    margin-bottom: 20px;
+}
+div.publicacion_2campos div.left{
+    float: left;
+}
+div.publicacion_2campos div.right{
+    float: right;
+}
+div.publicacion_2campos input, div.publicacion_2campos select{
+    width: 99%;
+}
+
+div.llistat div.tbody div.usuari {
+    background: url("../img/taula_llistat/personal.gif") no-repeat scroll 21px 7px transparent;
+    padding-left: 50px;
+    width: 300px;
+}
+div.llistat div.username {
+    padding: 0 12px;
+    width: 150px;
+}
+div.llistat  div.perfil {
+    padding: 0 12px;
+    width: 150px;
+}
+div.llistat  div.email {
+    padding: 0 12px;
+    width: 250px;
+}

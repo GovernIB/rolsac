@@ -325,7 +325,7 @@
         <div class="resultats C">
             <div id="cercador"> <%-- style="display:none/block" --%>
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2><%--action="<c:url value="/personal/processaCerca.do"/>" --%>                 
+                    <h2><spring:message code='tab.cercador'/></h2>                 
                         <div class="fila">
                             <div class="element t21">
                                 <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>

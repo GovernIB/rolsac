@@ -36,7 +36,7 @@ textarea.focus {
     color: Black !important;
 }
 
-input[type=text], select, textarea{
+input[type=text], input[type=password], select, textarea{
     border: 1px solid #CACACA;
     border-radius: 5px 5px 5px 5px;
     font-size: 13px;
@@ -638,13 +638,13 @@ div.table div.tbody div.td a:hover{
 #cercador div.element .control{
     padding-right: 20px;
 }
-#cercador div.element:last-child .control{
+/*#cercador div.element:last-child .control{
     padding-right: 2px;
-}
-#cercador input[type=text], #cercador select{
+}*/
+#cercador input[type=text], #cercador select, #cercador input[type=password]{
     width: 99.9%;
 }
-#cercador input[type=text] {
+#cercador input[type=text], #cercador input[type=password] {
     height: 20px;
 }
 
@@ -768,14 +768,13 @@ div.table div.tbody div.td a:hover{
     margin-bottom: 20px;
     overflow: hidden;
 }
-.escriptori_detall .grupoModulosFormulario input[type=text]{    
+.escriptori_detall .grupoModulosFormulario input[type=text], .escriptori_detall .grupoModulosFormulario input[type=password]{    
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     color: Black;
     height: 21px;   
     width: 99.8%;
     padding: 2px 0;
-    
     border-radius: 5px 5px 5px 5px;
 }
 .escriptori_detall .grupoModulosFormulario textarea{    
@@ -814,9 +813,9 @@ div.table div.tbody div.td a:hover{
 .escriptori_detall .grupoModulosFormulario .element .control{   
     margin-right: 25px;
 }
-.escriptori_detall .grupoModulosFormulario .element:last-child .control{
+/*.escriptori_detall .grupoModulosFormulario .element:last-child .control{
     margin-right: 0;
-}
+}*/
 .escriptori_detall .grupoModulosFormulario .t20p{
     width: 19.9%;
 }

@@ -133,28 +133,11 @@
 	                </c:when>
 	                <c:otherwise>
 	                    <li>
-	                        <a href="<c:url value="/usuaris/llistat.do"/>"><spring:message code="menu.usuaris" /></a>
+	                        <a href="<c:url value="/usuaris/usuaris.do"/>"><spring:message code="menu.usuaris" /></a>
 	                        <span class="cueta"></span>
 	                    </li>
 	                </c:otherwise>
 	            </c:choose>
-					
-				<%--				
-				<c:choose>
-	                <c:when test="${menu==3}">
-	                    <li class="seleccionat">
-	                        <span class="text"><spring:message code="menu.administracio" /></span>
-	                        <span class="cueta"></span>
-	                    </li>
-	                </c:when>
-	                <c:otherwise>
-	                    <li>
-	                        <a href="<c:url value="/administracio/llistat.do"/>"><spring:message code="menu.administracio" /></a>
-	                        <span class="cueta"></span>
-	                    </li>
-	                </c:otherwise>
-	            </c:choose>
-	            --%>
 			</c:if>	       
 		</ul>
 		<div id="cap_pestanya">

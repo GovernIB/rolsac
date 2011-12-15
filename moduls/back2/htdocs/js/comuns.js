@@ -1062,7 +1062,7 @@ function limpiarCampo(index, input){
 	    } else if (type == 'checkbox' || type == 'radio') {
 	    	input.checked = false;
 	    } else if (tag == 'select') {
-	    	input.selectedIndex = -1;
+	    	input.selectedIndex = 0;
 	    }
 	}
 }

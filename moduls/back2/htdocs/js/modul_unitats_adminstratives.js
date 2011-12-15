@@ -69,16 +69,16 @@ function CModulUnitatAdministrativa(){
 	
 	
 	this.inicializarUnidadesAdministrativas = function(listaUnidadesAdministrativas) {
-		modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();		
 		if (typeof listaUnidadesAdministrativas != 'undefined' && listaUnidadesAdministrativas != null && listaUnidadesAdministrativas.length > 0) {
-			that.agregaItems(listaUnidadesAdministrativas,true);
+			modul_unitatsAdministratives_elm.find(".listaOrdenable").empty();
+			that.agregaItems(listaUnidadesAdministrativas, true);
 		}
 		that.contaSeleccionats();
 		
 		modul_unitatsAdministratives_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
 			var itemLista = jQuery(this).parents("li:first");
 			that.eliminaItem(itemLista);
-			that.contaSeleccionats();
+			Detall.modificado();
 		});
 	}
 	

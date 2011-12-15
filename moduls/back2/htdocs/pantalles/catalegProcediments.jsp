@@ -34,8 +34,8 @@
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
     var txtEsborrarIncorrecte = "";
     var txtEspere = "<spring:message code='txt.esperi'/>";
-    var txtLlistaItem = "Procediment";
-    var txtLlistaItems = "Procediments";
+    var txtLlistaItem = "<spring:message code='txt.procediment'/>";
+    var txtLlistaItems = "<spring:message code='txt.procediments'/>";
     var txtPer = "<spring:message code='txt.per'/>";
     var txtDel = "<spring:message code='txt.del'/>";
     var txtAl = "<spring:message code='txt.al'/>";
@@ -262,7 +262,7 @@
             <!-- cercador -->
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2>Cercador</h2>
+                    <h2><spring:message code='tab.cercador'/></h2>
                     <div class="fila">
                         <div class="element t21">
                             <div class="etiqueta">
