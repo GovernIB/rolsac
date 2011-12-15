@@ -308,8 +308,19 @@ public class TMEdificisController {
 			edifici.setDireccion(direccio);
 			edifici.setCodigoPostal(valoresForm.get("item_codi_postal"));
 			edifici.setPoblacion(valoresForm.get("item_poblacio"));
-			edifici.setLatitud(valoresForm.get("item_latitud"));
-			edifici.setLongitud(valoresForm.get("item_longitud"));
+			if (valoresForm.get("item_latitud").length() < 15) {
+				edifici.setLatitud(valoresForm.get("item_latitud"));
+			} else {
+				edifici.setLatitud(valoresForm.get("item_latitud").substring(0,14));
+			}
+			if (valoresForm.get("item_longitud").length() < 15){
+				edifici.setLongitud(valoresForm.get("item_longitud"));
+			} else {
+				edifici.setLongitud(valoresForm.get("item_longitud").substring(0, 14));
+			}
+				
+			
+			
 			edifici.setTelefono(valoresForm.get("item_telefon"));
 			edifici.setFax(valoresForm.get("item_fax"));
 			edifici.setEmail(valoresForm.get("item_email"));

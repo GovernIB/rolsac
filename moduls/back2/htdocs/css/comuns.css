@@ -1272,3 +1272,9 @@ div.modulLateral div.seleccionat ul {
   	left: 30%;
   	top: 15%;
 }
+
+#popCoordenades {
+    position: fixed;
+    left: 30%;
+    top: 15%;
+}

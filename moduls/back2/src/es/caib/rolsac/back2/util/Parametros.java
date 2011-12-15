@@ -67,4 +67,8 @@ public class Parametros {
 	public static Integer GRAFICA_RESUM_MODIFICACIO = 3;
 	public static Integer GRAFICA_RESUM_BAIXA = 4;
 	
+	public static String COORDENADA_LATITUD = "39.5690036";
+	public static String COORDENADA_LONGITUD = "2.6436571";
+	
 }
+

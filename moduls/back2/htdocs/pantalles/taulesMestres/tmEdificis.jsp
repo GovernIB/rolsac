@@ -368,7 +368,7 @@
                         <div class="fila">
                             <div class="element t50">
                                 <div class="etiqueta">
-                                    <label for="item_latitud"><spring:message code='edifici.formulari.coordenades'/></label>
+                                    <label for="item_latitud"><spring:message code='edifici.formulari.latitud'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_latitud" name="item_latitud" type="text" class="nou" />
@@ -376,7 +376,7 @@
                             </div>
                             <div class="element t50">
                                 <div class="etiqueta">
-                                    <label for="item_longitud"><spring:message code='edifici.formulari.coordenades'/></label>
+                                    <label for="item_longitud"><spring:message code='edifici.formulari.longitud'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_longitud" name="item_longitud" type="text" class="nou" />
@@ -387,7 +387,9 @@
                                     <label for="item_longitud">&nbsp;</label>
                                 </div>
 			                    <span class="btnGenerico">
-			                        <a href="javascript:;" class="btn coordenades"><span><span><spring:message code='boto.coordenades'/></span></span></a>
+			                        <a href="javascript:carregarCoordenades('<c:url value="/pantalles/popCoordenades.do"/>','popCoordenades','item_id','item_latitud','item_longitud');" class="btn coordenades">
+			                         <span><span><spring:message code='boto.coordenades'/></span></span>
+			                        </a>
 			                    </span>
                         	</div>
                         </div>

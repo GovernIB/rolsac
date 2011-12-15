@@ -1102,7 +1102,7 @@ function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 
 
 
-function borrarArbreUA(idDiv){
+function borrarPopUp(idDiv){
 	$('#' + idDiv, window.top.document).remove();
 }
 
@@ -1138,3 +1138,18 @@ function carregarModulArbreUA (url, idDiv, llocOnPintar ){
 		}
 	}
 }
+
+function carregarCoordenades (url, idDiv, idEdifici, latitud, longitud, llocOnPintar ){
+	var id = $('#'+ idEdifici).val();
+	
+	// Aseguram que no estigui creat
+	if ($('#' + idDiv).length == 0 ) {
+		if (typeof llocOnPintar == 'undefined') {
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 380)+'px"><iframe src="' + url + '?id=' + id + '&latitud='+ latitud + '&longitud=' + longitud +'" style="width:760px; height:510px;" /></div>');
+		} else {
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?id=' + id + '&latitud='+ latitud + '&longitud=' + longitud +'"  /></div>');
+		}
+	}
+}
+
+

@@ -44,7 +44,7 @@
             
             window.top.Detall.modificado();
 
-            borrarArbreUA('popUA');
+            borrarPopUp('popUA');
         }
 
         function init_ex(level,opened,descripcion,carpeta,codi){
