@@ -2,8 +2,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <link href='<c:url value="/css/tm_perfils.css"/>' rel="stylesheet" type="text/css" media="screen" />
-<script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
 
 <script type="text/javascript" src="<c:url value='/js/tm_perfils.js'/>"></script>
 <script type="text/javascript">
@@ -186,35 +184,7 @@
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
         <!-- modulPrincipal -->
-        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">          
-              <div class="modul">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.dades'/></legend>
-                    <div class="modul_continguts mostrat">
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_codi_estandard"><spring:message code='perfil.formulari.codi_estandard'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_path_iconografia"><spring:message code='perfil.formulari.path_iconografia'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_path_iconografia" name="item_path_iconografia" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                </fieldset>
-            </div>
-            <!-- /modul -->
+        <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">
             <!-- modul -->
             <div class="modul">                 
                 <fieldset>                              
@@ -250,7 +220,7 @@
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_ca"><spring:message code='perfil.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_ca" name="item_descripcio_ca" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_descripcio_ca" name="item_descripcio_ca" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -272,7 +242,7 @@
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_es"><spring:message code='perfil.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_es" name="item_descripcio_es" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_descripcio_es" name="item_descripcio_es" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -294,7 +264,7 @@
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_en"><spring:message code='perfil.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_en" name="item_descripcio_en" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_descripcio_en" name="item_descripcio_en" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -316,7 +286,7 @@
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_de"><spring:message code='perfil.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_de" name="item_descripcio_de" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_descripcio_de" name="item_descripcio_de" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -338,7 +308,7 @@
                                         <div class="element t99p">
                                             <div class="etiqueta"><label for="item_descripcio_fr"><spring:message code='perfil.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_fr" name="item_descripcio_fr" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_descripcio_fr" name="item_descripcio_fr" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -349,6 +319,35 @@
                         <!-- /fila -->
                     </div>                          
                 </fieldset>                 
+            </div>
+            <!-- /modul -->
+            <!-- modul -->  
+              <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.dades'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_codi_estandard"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_path_iconografia"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_path_iconografia" name="item_path_iconografia" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                </fieldset>
             </div>
             <!-- /modul -->
         </div>             
