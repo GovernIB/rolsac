@@ -7,7 +7,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 import org.apache.struts.action.RequestProcessor;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.form.DocumentoForm;
 import org.ibit.rol.sac.back.form.ProcedimientoForm;
 import org.ibit.rol.sac.back.form.TraDynaValidatorForm;

@@ -11,7 +11,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.ProcedimientoLocal;

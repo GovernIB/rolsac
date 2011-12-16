@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.action.contenido.procedimiento.EditarProcedimientoAction;
 import org.ibit.rol.sac.back.form.ProcedimientoForm;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;

@@ -11,12 +11,12 @@
 	<classpathentry kind="src" path="test/persistence/unitario/java"/>
 	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
 	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
-	<classpathentry kind="src" path="test/persistence/integracion/java"/>
+	<classpathentry excluding="org/ibit/rol/sac/persistence/ejb/FichaFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/ProcedimientoFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/TramiteFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/UnidadAdministrativaFacadeEJB_SpringTest.java" kind="src" path="test/persistence/integracion/java"/>
 	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
-	<classpathentry kind="src" path="test/model/unitario/java"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/aclibico.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/cglib-nodep-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
 	<classpathentry kind="lib" path="lib/chartbuilder.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
@@ -46,51 +46,8 @@
 	<classpathentry kind="lib" path="lib/htmllexer.jar"/>
 	<classpathentry kind="lib" path="lib/jms.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/axis-ws4ee.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/cglib-2.1_3.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/commons-discovery.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/ehcache-1.2.4.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/hibernate-3.2.1.ga.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/hibernate2.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/jta-1.0.1B.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/junit-4.8.2.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/odmg-3.0.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/ojdbc14.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/p6spy.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/spring-hibernate-1.2.6.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/struts.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/asm-1.5.3.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/cglib-nodep-2.2.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/easymock-2.5.1.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/easymockclassextension.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/javassist-3.10.0.GA.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/powermock-easymock-1.3.5-full.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/powermock-mockito-1.4.5-full.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/spring-test.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/spring-webmvc-struts.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/spring.jar"/>
-	<classpathentry kind="lib" path="test/common/resources/lib/mock/strutstest-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/sac-micropersistence.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/cglib-nodep-2.2.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/commons-logging-1.0.4.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/easymock-2.5.1.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/easymockclassextension.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/powermock-easymock-1.3.5-full.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/powermock-mockito-1.4.5-full.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/spring-test.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/spring-webmvc-struts.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/spring.jar"/>
-	<classpathentry kind="lib" path="test/lib/mock/strutstest-2.0.0.jar"/>
 	<classpathentry kind="lib" path="test/lib/commons-discovery.jar"/>
-	<classpathentry kind="lib" path="test/lib/javassist-3.10.0.GA.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring-hibernate-1.2.6.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring-test.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring-webmvc-struts.jar"/>
 	<classpathentry kind="lib" path="test/lib/test_utils.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axiom-api-1.2.8.jar"/>
@@ -111,6 +68,33 @@
 	<classpathentry kind="lib" path="lib/axis2-1.5/wstx-asl-3.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/xercesImpl-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/XmlSchema-1.4.3.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.aop-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.context.support-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.transaction-3.0.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.web-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-hibernate-1.2.6.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-jdbc-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-orm-3.0.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-test-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-webmvc-struts.jar"/>
+	<classpathentry kind="lib" path="C:/Archivos de programa/Java/jdk1.6.0_26/lib/tools.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/easymock-3.0.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/javassist-3.15.0-GA.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/powermock-mockito-1.4.10-full.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/powermock-easymock-1.4.10-full.jar"/>
+	<classpathentry kind="lib" path="test/lib/log4j.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-rule-agent/powermock-module-javaagent-1.4.10.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-rule-agent/powermock-module-junit4-rule-agent-1.4.10.jar"/>
+	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="test/lib/p6spy.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/caib-utilities.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>

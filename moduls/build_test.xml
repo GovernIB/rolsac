@@ -6,7 +6,7 @@
 	<property name="test.unitario.etc.dir" location="${home.dir}/test/${modul}/unitario/resources"/>
 	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
 	<property name="test.integracion.etc.dir" location="${home.dir}/test/${modul}/integracion/resources"/>
-    <property name="test.common.lib.dir" location="${home.dir}/test/common/resources/lib"/>
+    <property name="test.lib.dir" location="${home.dir}/test/lib"/>
     <property name="test.classes" location="${modul.output.dir}/test/classes"/>
 	<property name="test.unitario.resources" location="${modul.output.dir}/test/unitario/resources"/>
 	<property name="test.integracion.resources" location="${modul.output.dir}/test/integracion/resources"/>
@@ -25,10 +25,13 @@
 		<pathelement location="${module.classes}" />
 		<pathelement location="${test.classes}" />
 		<pathelement location="${test.resources}" />
-		<fileset dir="${test.common.lib.dir}">
+		<fileset dir="${test.lib.dir}">
 		    <include name="junit-4.8.2.jar"/>
 		</fileset>
-		<fileset dir="${test.common.lib.dir}"/>
+		<fileset dir="${test.lib.dir}"/>
+		<fileset dir="${test.lib.dir}/powermock-easymock"/>
+		<fileset dir="${test.lib.dir}/powermock-mockito"/>
+		<fileset dir="${test.lib.dir}"/>
 		<fileset dir="${output.dir}/moduls">
 		    <include name="test_utils.jar"/>
 		</fileset>

@@ -20,7 +20,7 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.SessionFactory;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Document;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -136,7 +136,7 @@ AbstractTransactionalSpringContextTests {
 		
 		TraduccionProcedimientoLocal t = (TraduccionProcedimientoLocal) p.getTraduccion();
 		_(t);
-		assertEquals(t.getNombre(),"Sol.licitud de canvi de grup d'agència de viatges");
+		assertEquals(t.getNombre(),"Sol.licitud de canvi de grup d'agï¿½ncia de viatges");
 		
 		List<Tramite> trams = p.getTramites();
 		assertEquals(trams.size(),133);
@@ -196,7 +196,7 @@ AbstractTransactionalSpringContextTests {
 	//public pq es crida en altres tests
 	public Tramite creaTramite(String nomTramit) {
 		/*
-		selectOption("fase", "Instrucción");
+		selectOption("fase", "Instrucciï¿½n");
         setTextField("textoFechaCaducidad","10/02/2010");	
         setTextField("textoFechaPublicacion","10/12/2009");
         setTextField("textoFechaActualizacion","10/12/2009");

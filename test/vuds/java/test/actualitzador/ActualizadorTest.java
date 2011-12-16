@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Formulario;
