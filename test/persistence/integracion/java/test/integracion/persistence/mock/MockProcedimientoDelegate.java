@@ -9,7 +9,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Usuario;
@@ -75,7 +75,7 @@ public class MockProcedimientoDelegate extends ProcedimientoDelegate {
 			e.printStackTrace();
 		}
 		EasyMock.replay(destDelegate);
-		Actualizador.setDestDelegate(destDelegate);
+//		Actualizador.setDestDelegate(destDelegate);
 		
 		return super.grabarProcedimiento(procedimiento, idUA);
 	}

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.RequestProcessor;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.form.DocumentoForm;
 import org.ibit.rol.sac.back.form.TramiteForm;
 import org.ibit.rol.sac.micromodel.Traduccion;
@@ -119,7 +119,7 @@ public class BuscarCodisVudsAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,codis.size());
         for(TramiteVuds t:codis) {_(t.getIdTramiteVuds()+" "+t.getDescripcionTramiteVuds());}
         
-    	//2. Filtrar per codi vàlid
+    	//2. Filtrar per codi vï¿½lid
     	request=createMockRequest(path);
     	request.addParameter("filtre", "C0001");
         actionPerform();
@@ -130,7 +130,7 @@ public class BuscarCodisVudsAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,codis.size());
         for(TramiteVuds t:codis) {_(t.getIdTramiteVuds()+" "+t.getDescripcionTramiteVuds());}
 
-    	//3. Filtrar per codi invàlid
+    	//3. Filtrar per codi invï¿½lid
     	request=createMockRequest(path);
     	request.addParameter("filtre", "M0001");
         actionPerform();
@@ -184,7 +184,7 @@ public class BuscarCodisVudsAction_ITest_STC extends MockStrutsTestCase {
     	String path="/contenido/tramite/vuds/buscarCodis";
     	
     	MockHttpServletRequest request=createMockRequest(path);
-    	//2. Filtrar per texte minúscules
+    	//2. Filtrar per texte minï¿½scules
     	request=createMockRequest(path);
     	request.addParameter("filtre", "permiso");
         actionPerform();
@@ -197,7 +197,7 @@ public class BuscarCodisVudsAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,ncodis);
         for(TramiteVuds t:codis) {_(t.getIdTramiteVuds()+" "+t.getDescripcionTramiteVuds());}
 
-    	//2. Filtrar per texte majúscules 
+    	//2. Filtrar per texte majï¿½scules 
     	request=createMockRequest(path);
     	request.addParameter("filtre", "PERMISO");
         actionPerform();
@@ -291,7 +291,7 @@ public class BuscarCodisVudsAction_ITest_STC extends MockStrutsTestCase {
           request.addParameter("textoFechaPublicacion","10/12/2009");
           request.addParameter("textoFechaActualizacion","11/12/2009");
           request.addParameter("textoFechaCaducidad","10/02/2010");	
-          request.addParameter("fase", "Instrucción");
+          request.addParameter("fase", "Instrucciï¿½n");
           request.addParameter("idOrganCompetent","1"); //1 = "Govern de les Illes Balears");
           request.addParameter("nomOrganCompetent","Govern de les Illes Balears"); 
           request.addParameter("descTaxa","descripcion taxa"); 

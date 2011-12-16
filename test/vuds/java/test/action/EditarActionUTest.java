@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.action.DynaActionFormClass;
 import org.apache.struts.config.FormBeanConfig;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.action.contenido.procedimiento.EditarProcedimientoAction;
 import org.ibit.rol.sac.back.action.contenido.tramite.EditarTramiteAction;
 import org.ibit.rol.sac.back.config.TraFormBeanConfig;

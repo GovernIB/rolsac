@@ -11,7 +11,7 @@ import junit.extensions.TestDecorator;
 
 import net.sf.hibernate.SessionFactory;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Tramite;

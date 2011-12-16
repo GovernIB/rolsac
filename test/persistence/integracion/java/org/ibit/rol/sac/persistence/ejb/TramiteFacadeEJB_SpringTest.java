@@ -22,7 +22,7 @@ import net.sf.hibernate.SessionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.hibernate.hql.ast.tree.DotNode;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Destinatario;
