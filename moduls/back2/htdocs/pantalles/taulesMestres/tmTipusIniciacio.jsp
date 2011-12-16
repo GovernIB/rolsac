@@ -12,7 +12,7 @@
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
-    var txtEsborrarCorrecte = "<spring:message code='txt.usuari_esborrat_correcte'/>";
+    var txtEsborrarCorrecte = "<spring:message code='txt.tipus_iniciacio_esborrat_correcte'/>";
     var txtEspere = "<spring:message code='txt.esperi'/>";
     var txtCarregant = "<spring:message code='txt.carregant'/>";
     var txtSi = "<spring:message code='txt.si'/>";
