@@ -207,7 +207,7 @@
                         </c:if>
                         <div class="botonera">
                             <div class="btnGenerico">
-                               <a href="javascript:borrarArbreUA('popUA')" class="btn tancar"><span><span><spring:message code='boto.tancar'/></span></span></a>
+                               <a href="javascript:borrarPopUp('popUA')" class="btn tancar"><span><span><spring:message code='boto.tancar'/></span></span></a>
                            </div>
                         </div>                              
                     </div>                              
