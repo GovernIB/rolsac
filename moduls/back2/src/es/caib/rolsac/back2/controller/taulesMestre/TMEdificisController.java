@@ -129,7 +129,7 @@ public class TMEdificisController {
 		
 		try {
 			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-			List<Edificio> llistaEdificis = edificiDelegate.buscadorEdificios(paramMap, tradMap) ;
+			List<Edificio> llistaEdificis = edificiDelegate.buscarEdificiosConMultiidioma(paramMap, tradMap) ;
 			for (Edificio edifici: llistaEdificis) {
 				TraduccionEdificio tp = (TraduccionEdificio) edifici.getTraduccion(request.getLocale().getLanguage());
 				edificiDTO = new HashMap<String, Object>();

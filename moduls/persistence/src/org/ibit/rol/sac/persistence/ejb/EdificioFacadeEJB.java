@@ -29,7 +29,7 @@ import java.util.*;
 public abstract class EdificioFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -137,7 +137,7 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List buscadorEdificios(Map parametros, Map traduccion) {
+    public List buscarEdificiosConMultiidioma(Map parametros, Map traduccion) {
         Session session = getSession();
         try {
             List params = new ArrayList();
@@ -271,7 +271,7 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Construye el query de búsqueda segun los parametros
+     * Construye el query de bï¿½squeda segun los parametros
      */
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
@@ -334,7 +334,7 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Añade una nueva unidad
+     * Aï¿½ade una nueva unidad
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */

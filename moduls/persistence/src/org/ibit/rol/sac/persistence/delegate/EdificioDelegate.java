@@ -29,7 +29,7 @@ import java.util.Map;
 public class EdificioDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarEdificio(Edificio edificio) throws DelegateException {
@@ -120,9 +120,9 @@ public class EdificioDelegate implements StatelessDelegate {
         }
     }
     
-    public List buscadorEdificios(Map parametros, Map traduccion) throws DelegateException {
+    public List buscarEdificiosConMultiidioma(Map parametros, Map traduccion) throws DelegateException {
         try {
-            return getFacade().buscadorEdificios(parametros, traduccion);
+            return getFacade().buscarEdificiosConMultiidioma(parametros, traduccion);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
