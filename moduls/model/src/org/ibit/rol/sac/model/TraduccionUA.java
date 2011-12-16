@@ -40,10 +40,19 @@ public class TraduccionUA implements Traduccion {
         this.url = url;
     }
 
-    private String nombre;
+    public String getCvResponsable() {
+		return cvResponsable;
+	}
+
+	public void setCvResponsable(String cvResponsable) {
+		this.cvResponsable = cvResponsable;
+	}
+
+	private String nombre;
     private String presentacion;
     private String abreviatura;
     private String url;
+    private String cvResponsable;
 
 }
    
