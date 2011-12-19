@@ -11,7 +11,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import test.unitario.back.mock.MockMateriaDelegate;
+import test.unitario.persistence.mock.MockMateriaDelegate;
 
 import junit.framework.TestCase;
 

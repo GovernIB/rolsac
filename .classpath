@@ -18,6 +18,8 @@
 	<classpathentry kind="src" path="test/integracion/unitario/java"/>
 	<classpathentry excluding="org/ibit/rol/sac/persistence/ejb/FichaFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/ProcedimientoFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/TramiteFacadeEJB_SpringTest.java" kind="src" path="test/persistence/integracion/java"/>
 	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
+	<classpathentry kind="src" path="test/back2/unitario/java"/>
+	<classpathentry kind="src" path="test/back2/unitario/resources"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/aclibico.jar"/>

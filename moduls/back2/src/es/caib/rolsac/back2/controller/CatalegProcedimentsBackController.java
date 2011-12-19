@@ -16,7 +16,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
@@ -54,6 +53,7 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.utils.DateUtils;
 
+import static es.caib.rolsac.utils.LogUtils.*;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
@@ -68,61 +68,100 @@ public class CatalegProcedimentsBackController {
 		this.messageSource = messageSource;
 	}
 
+	private Map<String, Object> model;
+	private HttpSession session;
+	HttpServletRequest request;
+	
 	@RequestMapping(value = "/catalegProcediments.do")
 	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+	
+		this.model = model;
+		this.session = session;
+		this.request = request;
+		
+		if (estemEnUnitatAdministrativa() )  
+			crearModelSencill_pantalla();
+		else
+			crearModelComplert_pantalla();
 
+		return "index";
+	}
+
+
+	private boolean estemEnUnitatAdministrativa() {
+		return null== getUAFromSession();
+	}
+
+
+	private void crearModelComplert_pantalla() {
+		crearModelSencill_pantalla();
+		model.put("idUA", getUAFromSession().getId());
+		String lang = getRequestLanguage(request);
+		model.put("nomUA", getUAFromSession().getNombreUnidadAdministrativa(lang));
+
+		try {
+			model.put("llistaMateries", llistarMaterias(lang));
+			model.put("families", llistarFamilias(lang));
+			model.put("iniciacions", llistarIniciacions(lang));
+
+
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				model.put("error", "permisos");
+			} else {
+				model.put("error", "altres");
+				logException(log, dEx);
+			}
+		}
+	}
+
+	private void crearModelSencill_pantalla() {
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);
 		model.put("escriptori", "pantalles/catalegProcediments.jsp");
-		if (session.getAttribute("unidadAdministrativa") != null) {
-			model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
-			String lang = request.getLocale().getLanguage();
-			model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
+	}
 
-			try {
-                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                List<IdNomDTO> materiesDTOList = new ArrayList<IdNomDTO>();
-                List<Materia> llistaMateries = materiaDelegate.listarMaterias();
-                for (Materia materia : llistaMateries) {
-                	materiesDTOList.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-                }
-                model.put("llistaMateries", materiesDTOList);
-				
-                
-				FamiliaDelegate fd = DelegateUtil.getFamiliaDelegate();
-				List<IdNomDTO> familiasDTOList = new LinkedList<IdNomDTO>();
-				List<Familia> familias = fd.listarFamilias();
-				TraduccionFamilia tf;
-				for (Familia f : familias) {
-					tf = (TraduccionFamilia) f.getTraduccion(lang);
-					familiasDTOList.add(new IdNomDTO(f.getId(), tf.getNombre()));
-				}
-				model.put("families", familiasDTOList);
-				
-				
-				IniciacionDelegate id = DelegateUtil.getIniciacionDelegate();
-				List<IdNomDTO> iniciacionDTOList = new LinkedList<IdNomDTO>();
-				List<Iniciacion> iniciaciones = id.listarIniciacion();
-				TraduccionIniciacion ti;
-				for (Iniciacion i : iniciaciones) {
-					ti = (TraduccionIniciacion) i.getTraduccion(lang);
-					iniciacionDTOList.add(new IdNomDTO(i.getId(), ti.getNombre()));
-				}
-				model.put("iniciacions", iniciacionDTOList);
-				
+	private String getRequestLanguage(HttpServletRequest request) {
+		return request.getLocale().getLanguage();
+	}
 
-			} catch (DelegateException dEx) {
-				if (dEx.isSecurityException()) {
-					model.put("error", "permisos");
-				} else {
-					model.put("error", "altres");
-					log.error(ExceptionUtils.getStackTrace(dEx));
-				}
-			}
+	private UnidadAdministrativa getUAFromSession() {
+		return (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+	}
+
+	private List<IdNomDTO> llistarIniciacions(String lang) throws DelegateException {
+		IniciacionDelegate id = DelegateUtil.getIniciacionDelegate();
+		List<IdNomDTO> iniciacionDTOList = new LinkedList<IdNomDTO>();
+		List<Iniciacion> iniciaciones = id.listarIniciacion();
+		TraduccionIniciacion ti;
+		for (Iniciacion i : iniciaciones) {
+			ti = (TraduccionIniciacion) i.getTraduccion(lang);
+			iniciacionDTOList.add(new IdNomDTO(i.getId(), ti.getNombre()));
 		}
+		return iniciacionDTOList;
+	}
 
-		return "index";
+	private List<IdNomDTO> llistarFamilias(String lang) throws DelegateException {
+		FamiliaDelegate fd = DelegateUtil.getFamiliaDelegate();
+		List<IdNomDTO> familiasDTOList = new LinkedList<IdNomDTO>();
+		List<Familia> familias = fd.listarFamilias();
+		TraduccionFamilia tf;
+		for (Familia f : familias) {
+			tf = (TraduccionFamilia) f.getTraduccion(lang);
+			familiasDTOList.add(new IdNomDTO(f.getId(), tf.getNombre()));
+		}
+		return familiasDTOList;
+	}
+
+	private List<IdNomDTO> llistarMaterias(String lang) throws DelegateException {
+		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+		List<IdNomDTO> materiesDTOList = new ArrayList<IdNomDTO>();
+		List<Materia> llistaMateries = materiaDelegate.listarMaterias();
+		for (Materia materia : llistaMateries) {
+			materiesDTOList.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+		}
+		return materiesDTOList;
 	}
 
 	
@@ -136,14 +175,14 @@ public class CatalegProcedimentsBackController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap = new HashMap<String, String>();
 
-		String lang = request.getLocale().getLanguage();
+		String lang = getRequestLanguage(request);
 
 		
 		UnidadAdministrativa ua = null;
-		if (session.getAttribute("unidadAdministrativa") == null) {
+		if (getUAFromSession() == null) {
 			return resultats; // Si no hay unidad administrativa se devuelve vacio
 		} else {
-			ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+			ua = (UnidadAdministrativa) getUAFromSession();
 		}
 		// paramMap.put("unidadAdministrativa.id", ua.getId());
 
@@ -327,7 +366,7 @@ public class CatalegProcedimentsBackController {
 				// model.put("error", "permisos");
 			} else {
 				// model.put("error", "altres");
-				log.error(ExceptionUtils.getStackTrace(dEx));
+				logException(log, dEx);
 			}
 		}
 
@@ -341,7 +380,7 @@ public class CatalegProcedimentsBackController {
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		String lang = request.getLocale().getLanguage();
+		String lang = getRequestLanguage(request);
 		try {
 			Long id = new Long(request.getParameter("id"));
 
@@ -518,7 +557,7 @@ public class CatalegProcedimentsBackController {
 			resultats.put("item_notes", proc.getInfo());
 
 		} catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getStackTrace(dEx));
+			logException(log, dEx);
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
@@ -546,7 +585,7 @@ public class CatalegProcedimentsBackController {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
-				log.error(ExceptionUtils.getStackTrace(dEx));
+				logException(log, dEx);
 			}
 		}
 
@@ -561,7 +600,7 @@ public class CatalegProcedimentsBackController {
 		String error = null;
 
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession();
 			if (ua == null) {
 				error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
 				result = new IdNomDTO(-3l, error);
@@ -842,7 +881,7 @@ public class CatalegProcedimentsBackController {
 			} else {
 				error = messageSource.getMessage("error.altres", null, request.getLocale());
 				result = new IdNomDTO(-2l, error);
-				log.error(ExceptionUtils.getStackTrace(dEx));
+				logException(log, dEx);
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
@@ -866,12 +905,12 @@ public class CatalegProcedimentsBackController {
 		String campoOrdenacion = "normativa.fecha";
 		String orden = "desc";		
 				
-		String idioma = request.getLocale().getLanguage();
+		String idioma = getRequestLanguage(request);
 		
-		if (session.getAttribute("unidadAdministrativa") == null){
+		if (getUAFromSession() == null){
 			return resultats;//Si no hay unidad administrativa se devuelve vac�o
 		}
-		UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");		
+		UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession();		
 		
 		
 		try {
@@ -922,7 +961,7 @@ public class CatalegProcedimentsBackController {
 				//model.put("error", "permisos");
 			} else {
 				//model.put("error", "altres");
-				log.error(ExceptionUtils.getStackTrace(dEx));
+				logException(log, dEx);
 			}
 		}
 		
