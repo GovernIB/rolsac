@@ -79,25 +79,26 @@ public class CatalegProcedimentsBackController {
 		this.session = session;
 		this.request = request;
 		
-		if (estemEnUnitatAdministrativa() )  
-			crearModelSencill_pantalla();
-		else
+		if (estemEnUnitatAdministrativa(session) )  
 			crearModelComplert_pantalla();
+		else
+			crearModelSencill_pantalla();
+
 
 		return "index";
 	}
 
 
-	private boolean estemEnUnitatAdministrativa() {
-		return null== getUAFromSession();
+	private boolean estemEnUnitatAdministrativa(HttpSession session) {
+		return null!= getUAFromSession(session);
 	}
 
 
 	private void crearModelComplert_pantalla() {
 		crearModelSencill_pantalla();
-		model.put("idUA", getUAFromSession().getId());
+		model.put("idUA", getUAFromSession(session).getId());
 		String lang = getRequestLanguage(request);
-		model.put("nomUA", getUAFromSession().getNombreUnidadAdministrativa(lang));
+		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
 
 		try {
 			model.put("llistaMateries", llistarMaterias(lang));
@@ -126,7 +127,7 @@ public class CatalegProcedimentsBackController {
 		return request.getLocale().getLanguage();
 	}
 
-	private UnidadAdministrativa getUAFromSession() {
+	private UnidadAdministrativa getUAFromSession(HttpSession session) {
 		return (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
 	}
 
@@ -179,10 +180,10 @@ public class CatalegProcedimentsBackController {
 
 		
 		UnidadAdministrativa ua = null;
-		if (getUAFromSession() == null) {
+		if (getUAFromSession(session) == null) {
 			return resultats; // Si no hay unidad administrativa se devuelve vacio
 		} else {
-			ua = (UnidadAdministrativa) getUAFromSession();
+			ua = (UnidadAdministrativa) getUAFromSession(session);
 		}
 		// paramMap.put("unidadAdministrativa.id", ua.getId());
 
@@ -600,7 +601,7 @@ public class CatalegProcedimentsBackController {
 		String error = null;
 
 		try {
-			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession();
+			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
 			if (ua == null) {
 				error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
 				result = new IdNomDTO(-3l, error);
@@ -907,10 +908,10 @@ public class CatalegProcedimentsBackController {
 				
 		String idioma = getRequestLanguage(request);
 		
-		if (getUAFromSession() == null){
+		if (getUAFromSession(session) == null){
 			return resultats;//Si no hay unidad administrativa se devuelve vac�o
 		}
-		UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession();		
+		UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);		
 		
 		
 		try {
