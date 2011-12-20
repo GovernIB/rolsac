@@ -24,7 +24,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='ccontingut']/div[2]/div[10]/div[2]/form/input[3]</td>
+	<td>//div[@id='ccontingut']/div[2]/div[9]/div[2]/form/input[3]</td>
 	<td>Seleccionar</td>
 </tr>
 <!---- verificar que se guarda OK cuando padre es diferente de la conselleria-->
