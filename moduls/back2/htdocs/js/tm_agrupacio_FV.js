@@ -294,12 +294,50 @@ function CDetall(){
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
 		
+		// Afegir nodes a la llista de fets vitals
+		$('#afegeixFetVital').unbind("click").bind("click",function(){
+	    	$('#popFetVital').css({display:"block"});
+	    });
+		
+		$('#tancaFetVital').unbind("click").bind("click",function(){
+	    	$('#popFetVital').css({display:"none"});
+	    });
+		
+		// Boto afegir node
+		$('#addFetVital').unbind("click").bind("click",function(){
+	    	var id = jQuery('#item_fetVital_relacionat').val();
+	    	if (id != '' || id > 0 ) {
+	    		$('#popFetVital').css({display:"none"});
+	    		
+	    		var vfItem = new Object();
+		    	vfItem['id'] = jQuery('#item_fetVital_relacionat').val();
+		    	vfItem['nombre'] = jQuery('#item_fetVital_relacionat option:selected').text()
+		    	
+		    	var ordenItem = jQuery('#modul_fetsVitals ul li:last input.fetVital_orden').val();
+		    	if (typeof ordenItem == 'undefined') {
+		    		vfItem['orden'] = 0;
+		    	} else {
+		    		vfItem['orden'] = parseInt(ordenItem) + 1;
+		    	}
+		    	ModulFetVital.agregaItem(vfItem);
+		    	ModulFetVital.inicializarFetsVitals();
+		    			    	
+		    	jQuery('#item_fetVital_relacionat').each(limpiarCampo);
+	    	} else {
+	    		Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: errorFetVital});
+	    	} 
+	    	
+	    });
+		
+		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 	}
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
+		
+		$("#llistaFetsVitals").val(ModulFetVital.listaFetsVitals());
 		
 		// Validamos el formulario
 		if(!that.formulariValid()){
@@ -333,6 +371,12 @@ function CDetall(){
 	}
 
 	this.nou = function() {
+		
+		//Ocultar paneles
+		jQuery("#modul_fetsVitals").hide();
+		
+		ModulFetVital.nuevo();
+		
         $("#item_id").val("");
                 
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
@@ -369,6 +413,9 @@ function CDetall(){
 	}		
 	
 	this.pintar = function(dades) {
+		//Mostrar paneles
+		jQuery("#modul_fetsVitals").show();
+		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
@@ -450,6 +497,9 @@ function CDetall(){
 			$("#item_paraules_clau_" + idioma).val(printStringFromNull(dada_node[idioma]["palabrasclave"]));
 		}
 		// Fin bloque de pestanyas de idiomas
+		
+		
+		ModulFetVital.inicializarFetsVitals(dada_node.fetsVitals);
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();

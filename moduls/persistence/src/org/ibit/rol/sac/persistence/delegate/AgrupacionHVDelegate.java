@@ -116,6 +116,15 @@ public class AgrupacionHVDelegate implements StatelessDelegate {
         }
     }
 
+    public Long guardarAgrupacionHV(AgrupacionHechoVital hechov, List<HechoVitalAgrupacionHV> llistaFetsVitalsOld) throws DelegateException {
+    	 try {
+             return getFacade().guardarAgrupacionHV(hechov,llistaFetsVitalsOld);
+         } catch (RemoteException e) {
+             throw new DelegateException(e);
+         }
+		
+	}
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -139,4 +148,5 @@ public class AgrupacionHVDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+
 }

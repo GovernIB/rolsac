@@ -3,8 +3,10 @@
 
 <link href='<c:url value="/css/tm_agrupacio_FV.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_agrupacio_FV.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_fet_vital.js'/>"></script>
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/agrupacioFetsVitals/llistat.do" />';
     var pagDetall = '<c:url value="/agrupacioFetsVitals/pagDetall.do" />';
@@ -70,6 +72,17 @@
     var txtPlega = "<spring:message code='txt.plega'/>";
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
+
+    var txtFetVital = "<spring:message code='fetVital.fet_vital'/>";
+    var txtFetsVitals = "<spring:message code='fetVital.fets_vitals'/>";
+    var txtNoHiHaFetVital = txtNoHiHa + " " + txtFetVital.toLowerCase();
+    var txtNoHiHaFetsVitals = txtNoHiHa + " " + txtFetsVitals.toLowerCase();
+    var txtSeleccionada =  "<spring:message code='txt.seleccionat'/>";
+    var txtSeleccionades = "<spring:message code='txt.seleccionats'/>";
+    var txtNoHiHaFetVitalSeleccionada = txtNoHiHa + " " + txtFetVital.toLowerCase() + " " + txtSeleccionada.toLowerCase();
+    var txtNoHiHaFetsVitalsSeleccionades = txtNoHiHa + " " + txtFetsVitals.toLowerCase() + " " + txtSeleccionades.toLowerCase();
+
+    var errorFetVital= "<spring:message code='fetVital.escull_fet_vital'/>";
   
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -503,6 +516,38 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- PopFetsVitals -->
+            <div id="popFetVital" class="modul">
+                <div class="fila">
+                    <div class="element ">                                      
+	                    <div class="etiqueta"><label for="item_fetVital_relacionat"><spring:message code='agrupacioFV.formulari.fet_vital'/></label></div>
+	                    <div class="control select">
+			                 <select id="item_fetVital_relacionat" name="item_fetVital_relacionat">
+			                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+			                    <c:forEach items="${llistaFets}" var="fetVital">
+			                        <option value='<c:out value="${fetVital.id}" />'><c:out value="${fetVital.nom}" /></option>
+			                    </c:forEach>
+			                </select>
+	                    </div>
+	                </div>
+                    <div class="botonera">
+	                    <div class="etiqueta">
+                            <label for="item_">&nbsp;</label>
+                        </div>
+                        <span class="btnGenerico fetVitals">
+                            <a href="javascript:;" class="btn afegeixFetVital" id="addFetVital" >
+                             <span><span><spring:message code='boto.afegeixFetsVitals'/></span></span>
+                            </a>
+                        </span>
+                        <span class="btnGenerico fetVitals ">
+                            <a href="javascript:;" class="btn tanca" id="tancaFetVital" >
+                             <span><span><spring:message code='boto.tancar'/></span></span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+			</div>
+			<!-- PopFetsVitals -->
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->
@@ -532,6 +577,33 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- modul -->
+            <div class="modul" id="modul_fetsVitals">
+                <input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='fetVital.fets_vitals_relacionats'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulFetVital -->
+                        <div class="modulFetVital">
+                            <div class="seleccionats">
+                                <%-- dsanchez: un solo idioma --%>
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaFetVitalRelacionat'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="boton btnGenerico" style="margin-left: 0px;">
+                                    <a href="javascript:;" class="btn consulta" id="afegeixFetVital">
+                                        <span><span><spring:message code='boto.afegeixFetVital'/></span></span>
+                                    </a>
+                                </div>
+                            </div>                                  
+                        </div>
+                        <!-- /modulFetVital -->                                 
+                    </div>                              
+                </fieldset>                     
+            </div>
+            <!-- /modul -->  
         </div>
         <!-- /modulLateral -->
     </form>

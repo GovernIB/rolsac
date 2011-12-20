@@ -14,3 +14,15 @@ div.llistat div.tbody div.agrupacioFV {
     padding-left: 21px;
     width: 50%;
 }
+
+#popFetVital {
+    position: fixed;
+    left: 30%;
+    top: 15%;
+    display: none;
+    z-index: 10;
+}
+
+.btnGenerico.fetVitals {
+    margin-right: 10px;
+}

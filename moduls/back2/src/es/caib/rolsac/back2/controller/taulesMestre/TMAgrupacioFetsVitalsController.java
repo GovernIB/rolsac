@@ -20,21 +20,19 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
-import org.ibit.rol.sac.model.Edificio;
+import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionAgrupacionHV;
-import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.AgrupacionHVDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -71,13 +69,15 @@ public class TMAgrupacioFetsVitalsController {
         if (rolUtil.userIsAdmin()) {
         	model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioFetsVitals.jsp");
         	
+        	String lang = request.getLocale().getLanguage();
+        	
         	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 			List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
 			List<PublicoObjetivo> llistaPublicObjectiu = new ArrayList<PublicoObjetivo>();
 			try {
 				llistaPublicObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
 				
-				String lang = request.getLocale().getLanguage();
+				
 				for (PublicoObjetivo publicObjectiu : llistaPublicObjectiu) {
 					TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
 					llistaPublicObjectiuDTO.add(new IdNomDTO(publicObjectiu
@@ -94,6 +94,28 @@ public class TMAgrupacioFetsVitalsController {
 			}
 
 			model.put("llistaPublicObjectiu", llistaPublicObjectiuDTO);
+			
+			List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+			List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();
+			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+			try {
+				llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
+
+				for (HechoVital fetVital : llistaFetsVitals) {
+					TraduccionHechoVital tpo = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+					llistaFetsVitalsDTO.add(
+							new IdNomDTO(fetVital.getId(),tpo == null ? null : tpo.getNombre() 
+					));
+				}
+	            
+	        } catch (DelegateException dEx) {
+				if (dEx.isSecurityException()) {
+					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
+				} else {
+					log.error(ExceptionUtils.getStackTrace(dEx));
+				}
+			}
+			model.put("llistaFets", llistaFetsVitalsDTO);
         	
         } else {
         	model.put("error", "permisos");
@@ -174,8 +196,12 @@ public class TMAgrupacioFetsVitalsController {
     		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
         	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
+        	Set<String> fetVitalsForm = new HashSet<String>();
     		for (FileItem item : items) {
     			if (item.isFormField()) {
+    				if (item.getFieldName().startsWith("fetVital_")){
+    					fetVitalsForm.add(item.getFieldName());
+    				} 
     				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
     			} else {
     				ficherosForm.put(item.getFieldName(), item);    				
@@ -257,9 +283,58 @@ public class TMAgrupacioFetsVitalsController {
 				traduccions.put(lang, tafv);
 			}
 			agrupacioFetVital.setTraduccionMap(traduccions);
-			   	
 			
-            agrupacioVFDelegate.grabarAgrupacionHV(agrupacioFetVital);
+			
+			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+			List<HechoVitalAgrupacionHV> fetsVitalsNous = new ArrayList<HechoVitalAgrupacionHV>();
+			
+			List<HechoVitalAgrupacionHV> fetsVitalsOld = agrupacioFetVital.getHechosVitalesAgrupacionHV();
+			
+			if (agrupacioFetVital.getHechosVitalesAgrupacionHV() != null || fetVitalsForm.size()>0 ) {
+				int sizefetsVitalsNous = fetsVitalsNous.size();
+				int sizefetsVitalsNousOld = 0;
+				// Recorrem el formulari
+				for (Iterator<String> iterator = fetVitalsForm.iterator(); iterator.hasNext();) {
+					String nomParameter = (String)iterator.next();
+					String[] elements = nomParameter.split("_");
+					if (elements[0].equals("fetVital") && elements[1].equals("id")){
+	                    //En aquest cas, elements[2] es igual al id del fetVital
+						
+						Long idFetVitalForm = ParseUtil.parseLong(elements[2]);
+						
+						// Recorrem els elements de BBDD
+						for (Iterator<HechoVitalAgrupacionHV> it = agrupacioFetVital.getHechosVitalesAgrupacionHV().iterator(); it.hasNext();) {
+							HechoVitalAgrupacionHV fetVitalAgrupacioFV = it.next();
+							
+							// Coincidencia de la llista nova amb actual de BBDD
+							if (fetVitalAgrupacioFV != null && fetVitalAgrupacioFV.getHechoVital().getId().equals(idFetVitalForm)) {
+								fetVitalAgrupacioFV.setOrden(ParseUtil.parseInt(valoresForm.get("fetVital_orden_" + elements[2])));
+								fetsVitalsNous.add(fetVitalAgrupacioFV);
+								sizefetsVitalsNous++;
+								
+							} 
+						}
+						// Si no es troba l,element es un de nou 
+						if (sizefetsVitalsNous <= sizefetsVitalsNousOld ) {
+							HechoVitalAgrupacionHV hechoVitalAgrupacionHV = new HechoVitalAgrupacionHV();
+							
+							hechoVitalAgrupacionHV.setAgrupacion(agrupacioFetVital);
+							hechoVitalAgrupacionHV.setHechoVital(fetVitalDelegate.obtenerHechoVital(idFetVitalForm));
+							hechoVitalAgrupacionHV.setOrden(ParseUtil.parseInt(valoresForm.get("fetVital_orden_" + elements[2])));
+							
+							fetsVitalsNous.add(hechoVitalAgrupacionHV);
+							
+							sizefetsVitalsNousOld = sizefetsVitalsNous;
+						}
+					}	
+				}
+			}
+			
+			
+			// Objectiu
+			agrupacioFetVital.setHechosVitalesAgrupacionHV(fetsVitalsNous);
+					
+            agrupacioVFDelegate.guardarAgrupacionHV(agrupacioFetVital, fetsVitalsOld);
             
             String ok = messageSource.getMessage("agrupacioFV.guardat.correcte", null, request.getLocale());
             result = new IdNomDTO(agrupacioFetVital.getId(), ok);
@@ -314,7 +389,7 @@ public class TMAgrupacioFetsVitalsController {
             }
             
 	        if (agrupacioFetsVitals.getIcono() != null) {
-            	resultats.put("item_icona_enllas_arxiu", "edifici/archivo.do?id=" + agrupacioFetsVitals.getId() + "&tipus=2");
+            	resultats.put("item_icona_enllas_arxiu", "agrupacioFetsVitals/archivo.do?id=" + agrupacioFetsVitals.getId() + "&tipus=2");
                 resultats.put("item_icona", agrupacioFetsVitals.getIcono().getNombre());
             } else {
                 resultats.put("item_icona_enllas_arxiu", "");
@@ -322,7 +397,7 @@ public class TMAgrupacioFetsVitalsController {
             }
 	        
 	        if (agrupacioFetsVitals.getIconoGrande() != null) {
-            	resultats.put("item_icona_gran_enllas_arxiu", "edifici/archivo.do?id=" + agrupacioFetsVitals.getId() + "&tipus=3");
+            	resultats.put("item_icona_gran_enllas_arxiu", "agrupacioFetsVitals/archivo.do?id=" + agrupacioFetsVitals.getId() + "&tipus=3");
                 resultats.put("item_icona_gran", agrupacioFetsVitals.getIconoGrande().getNombre());
             } else {
                 resultats.put("item_icona_gran_enllas_arxiu", "");
@@ -353,8 +428,9 @@ public class TMAgrupacioFetsVitalsController {
 	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traFV.getNombre());
 	    				}
 	    				map = new HashMap<String, String>(2);
-	    				map.put("id", fetVitalAgrupacioFV.getId().toString());
-	    				map.put("nom", nombre);
+	    				map.put("id", fetVitalAgrupacioFV.getHechoVital().getId().toString());
+	    				map.put("nombre", nombre);
+	    				map.put("orden", Integer.toString(fetVitalAgrupacioFV.getOrden()));
 	                    llistaFetsVitalsAgrupacio.add(map);
 					}
 				}
