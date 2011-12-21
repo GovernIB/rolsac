@@ -298,6 +298,8 @@ function CDetall(){
 	this.nou = function() {
         $("#item_id").val("");
         
+        ModulIconesFamilia.nuevo();
+        
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
@@ -328,6 +330,9 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 
+		
+		ModulIconesFamilia.inicializarIconesFamilia(dada_node.iconesFamilia);
+		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
         

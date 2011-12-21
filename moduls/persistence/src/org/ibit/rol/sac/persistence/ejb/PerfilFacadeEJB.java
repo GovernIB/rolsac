@@ -92,6 +92,9 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
 				((IconoMateria) iter.next()).getIcono().getNombre();
 			}
             
+            for (Iterator iter = perfil.getIconosFamilia().iterator(); iter.hasNext();) {
+				((IconoFamilia) iter.next()).getIcono().getNombre();
+			}
             
             return perfil;
         } catch (HibernateException he) {

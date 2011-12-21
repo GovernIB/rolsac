@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -134,8 +136,32 @@ public class TMPerfilsController {
 			}
 	        // fi idiomes
 	        
-	        resultats.put("item_icones_familia", perfil.getIconosFamilia());
-	        resultats.put("item_icones_materia", perfil.getIconosMateria());
+	        
+	        //Icones Familia 
+	        if (perfil.getIconosFamilia() != null) {
+		        Map<String, Object> iconaDTO;
+		        List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();		        
+		        
+		        for(IconoFamilia iconaFamilia: (Set<IconoFamilia>) perfil.getIconosFamilia()) {
+			        if (iconaFamilia != null && iconaFamilia.getIcono() != null) {
+			        	
+			        	iconaDTO = new HashMap<String, Object>(3);
+				        iconaDTO.put("id", iconaFamilia.getId());
+				        iconaDTO.put("nombre", iconaFamilia.getIcono().getNombre());
+				        llistaIcones.add(iconaDTO);
+			        } else {
+			        	log.error("La família " + perfil.getId() + " te una icona null o sense arxiu.");
+			        }
+		        }
+			    resultats.put("iconesFamilia", llistaIcones);
+	        } else {
+	        	resultats.put("iconesFamilia", null);
+	        }
+	    
+	        // fin iconos
+	        
+	        
+	        //resultats.put("item_icones_materia", perfil.getIconosMateria());
 	        			
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));

@@ -4,6 +4,9 @@
 <link href='<c:url value="/css/tm_perfils.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
 <script type="text/javascript" src="<c:url value='/js/tm_perfils.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_icones_familia.js'/>"></script>
+
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/perfils/llistat.do" />';
     var pagDetall = '<c:url value="/perfils/pagDetall.do" />';
@@ -69,6 +72,10 @@
     var txtPlega = "<spring:message code='txt.plega'/>";
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
+
+    var txtIconaFamilia = "<spring:message code='iconaFamilia.icona_familia'/>";
+    var txtIconesFamilia = "<spring:message code='iconaFamilia.icones_familia'/>";
+    var txtNoHiHaIconesFamiliaSeleccionades = "<spring:message code='txt.noHiHaIconesRelacionades'/>";
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -376,6 +383,27 @@
                         </div>
                         <!-- /botonera dalt -->
                     </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            <!-- modul -->
+            <div class="modul" id="modul_iconesFamilia">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='iconaFamilia.icona_familia'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulIcones -->
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <div class="modulIconesFamila">                            
+                            <div class="seleccionats">
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulIcones -->                                 
+                    </div>    
                 </fieldset>
             </div>
             <!-- /modul -->
