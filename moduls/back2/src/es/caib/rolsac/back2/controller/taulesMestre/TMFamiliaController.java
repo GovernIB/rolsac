@@ -3,8 +3,11 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,10 +17,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.IconoFamilia;
+import org.ibit.rol.sac.model.PerfilCiudadano;
+import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -25,12 +33,14 @@ import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IconoFamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
+import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.IconaFamiliaBackController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 
@@ -56,6 +66,29 @@ public class TMFamiliaController {
         RolUtil rolUtil= new RolUtil(request);
         if (rolUtil.userIsAdmin()) {
         	model.put("escriptori", "pantalles/taulesMestres/tmFamilia.jsp");
+
+        	// afegir llista de perfils
+        	String lang = request.getLocale().getLanguage();
+        	String nombrePerfil;
+        	List<IdNomDTO> perfilsDTO = new LinkedList<IdNomDTO>();
+        	PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
+        	try {
+        		for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
+        			Traduccion traPerfil = perfil.getTraduccion(lang);
+        			nombrePerfil = traPerfil == null ? "" : ((TraduccionPerfilCiudadano) traPerfil).getNombre();   
+        			perfilsDTO.add(new IdNomDTO(perfil.getId(), nombrePerfil));
+        		}
+        		
+        		model.put("perfils", perfilsDTO);
+        	} catch (DelegateException dEx) {
+    			if (dEx.isSecurityException()) {
+    				log.error("Permisos insuficients: " + dEx.getMessage());
+    				model.put("error", "permisos");
+    			} else {
+    				log.error("Error: " + dEx.getMessage());
+    				model.put("error", "altres");
+    			}
+    		}
         } else {
         	model.put("error", "permisos");
         }
@@ -109,6 +142,28 @@ public class TMFamiliaController {
 	        resultats.put("item_id", familia.getId());
 	        omplirCampsTraduibles(resultats, familia);
 			
+	        // iconos
+ 			if (familia.getIconos() != null) {
+ 				Map<String, Object> iconaDTO;
+ 				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
+
+ 				for(IconoFamilia icona: (Set<IconoFamilia>) familia.getIconos()) {
+ 					if (icona != null && icona.getIcono() != null) {
+ 						iconaDTO = new HashMap<String, Object>(3);
+ 						iconaDTO.put("id", icona.getId());
+ 						iconaDTO.put("nombre", icona.getIcono().getNombre());
+ 		                llistaIcones.add(iconaDTO);
+ 					} else {
+ 						log.error("La família " + familia.getId() + " te una icona null o sense arxiu.");
+ 					}
+ 	            }
+ 				
+ 				resultats.put("icones", llistaIcones);
+ 			} else {
+ 	            resultats.put("icones", null);
+ 	        } 
+            // fin iconos
+	        
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
@@ -181,35 +236,45 @@ public class TMFamiliaController {
 			}
 			// Fin idiomas
 			
-			// Iconos
-			/* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
-             * En el primer caso es bastante probable que se repitan la mayoria de iconos.
-             */
-			if (request.getParameter("iconos") != null && !"".equals(request.getParameter("iconos"))){
-				IconoFamiliaDelegate iconoFamiliaDelegate = DelegateUtil.getIconoFamiliaDelegate();
-                Set<IconoFamilia> iconesNoves = new HashSet<IconoFamilia>();
-                String[] codisIconesNoves = request.getParameter("icones").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i<codisIconesNoves.length; i++){
-                    	for (IconoFamilia icone: (Set<IconoFamilia>) familiaOld.getIconos()){
-                          if(icone.getId().equals(Long.valueOf(codisIconesNoves[i]))) { // icono ya existente
-                              iconesNoves.add(icone);
-                              codisIconesNoves[i] = null;
-                              break;
-                          }
-                      }                            
-                    }                         
-                }                    
-                
-                for (String codiUA: codisIconesNoves){
-                    if (codiUA != null){
-                    	iconesNoves.add(iconoFamiliaDelegate.obtenerIconoFamilia(ParseUtil.parseLong(codiUA)));
-                    }                        
+			// Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaFamiliaBackController).
+			if (edicion) {
+				IconoFamiliaDelegate iconaFamiliaDelegate = DelegateUtil.getIconoFamiliaDelegate();
+				List<Long> codisIcones = new LinkedList<Long>();
+	
+				// obtenim  els ids de les icones
+				Enumeration<String> parametersNames = request.getParameterNames();
+	            while(parametersNames.hasMoreElements()) {
+	            	String nomParametre = (String) parametersNames.nextElement();                    
+	                String[] elements = nomParametre.split("_");
+	                
+	                if ("icones".equals(elements[0]) && "id".equals(elements[1])) {
+	                    // En aquest cas, elements[2] es igual al id de la icona
+	                	Long id = ParseUtil.parseLong(request.getParameter(nomParametre));
+	                	if (id != null) {
+	                    	codisIcones.add(id);
+	                	} else {
+	                		log.warn("S'ha rebut un id de icona no numéric: " + id);
+	                	}
+	                }
+	            }
+	            
+	            // eliminar
+	            Set<Long> iconesABorrar = new HashSet<Long>();
+	            Boolean iconaTrobada;
+	            for (IconoFamilia icona: (Set<IconoFamilia>) familiaOld.getIconos()) {
+                	iconaTrobada = Boolean.FALSE;
+	                for (Long iconaId: codisIcones) {
+	                	if (icona.getId().equals(iconaId)) {
+	                		iconaTrobada = Boolean.TRUE;
+	                		break;
+	                	}
+	                }
+	                if (!iconaTrobada) {
+	                	iconesABorrar.add(icona.getId());
+	                }
                 }
-                
-                familia.setIconos(iconesNoves);                                                 
-            }
+	            iconaFamiliaDelegate.borrarIconosFamilia(iconesABorrar);
+			}
             // fin Iconos
 			
 			Long familiaId = familiaDelegate.grabarFamilia(familia);

@@ -252,8 +252,7 @@ function CModulDocuments(){
             jQuery("#docId").val("");
             for (var i in idiomas) {
                 var idioma = idiomas[i];
-                jQuery("#doc_titol_" + idioma).val("");
-                jQuery("#doc_descripcio_" + idioma).val("");
+                jQuery("#doc_descripcio_" + idioma, "#doc_titol_" + idioma, "#doc_arxiu_" + idioma).each(limpiarCampo);
                 jQuery("#grup_arxiu_actual_doc_" + idioma + " span").show();
 				jQuery("#grup_arxiu_actual_doc_" + idioma + " input").hide();
 				jQuery("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").hide();
@@ -322,7 +321,7 @@ function CModulDocuments(){
 	
 	
 	this.inicializarDocuments = function(listaDocuments) {
-		if (typeof listaDocuments != 'undefined' && listaDocuments != null && listaDocuments.length > 0) {
+		if (typeof listaDocuments != 'undefined' && listaDocuments != null) {
             modul_documents_elm.find(".listaOrdenable").empty();		
 			EscriptoriPare.agregaItems(listaDocuments, true);
         }

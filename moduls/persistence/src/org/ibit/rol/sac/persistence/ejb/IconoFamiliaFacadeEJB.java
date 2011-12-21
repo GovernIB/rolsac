@@ -12,6 +12,8 @@ import org.ibit.rol.sac.model.Archivo;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -144,4 +146,28 @@ public abstract class IconoFamiliaFacadeEJB extends HibernateEJB {
         }
     }
 
+    
+    /**
+     * Borra una coleccion de IconoFamilia.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+    public void borrarIconosFamilia(Collection<Long> iconosABorrar) {
+        Session session = getSession();
+        IconoFamilia icono;
+        try {
+            for (Long iconoId: iconosABorrar) {
+            	icono = (IconoFamilia) session.load(IconoFamilia.class, iconoId);
+	            icono.getFamilia().removeIcono(icono);
+	            icono.getPerfil().removeIconoFamilia(icono);
+	            session.delete(icono);
+            }
+            session.flush();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    	
 }

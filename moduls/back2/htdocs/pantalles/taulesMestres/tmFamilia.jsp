@@ -1,14 +1,29 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
+<link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 <link href='<c:url value="/css/tm_familia.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
+<script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
+
+<!--script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script-->
+
+<script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_familia.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
+
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/familia/llistat.do" />';
     var pagDetall = '<c:url value="/familia/pagDetall.do" />';
     var pagGuardar = '<c:url value="/familia/guardar.do" />';
     var pagEsborrar = '<c:url value="/familia/esborrarFamilia.do" />';
+    var pagCarregarIcona = '<c:url value="/iconesFamilia/carregarIcona.do" />';
+    var pagGuardarIcona = '<c:url value="/iconesFamilia/guardarIcona.do" />';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -35,6 +50,13 @@
     var txtPer = "<spring:message code='txt.per'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
 
+    var txtIcona = "<spring:message code='txt.icona'/>";
+    var txtIcones = "<spring:message code='txt.icones'/>";
+    var txtNoHiHaIcones = txtNoHiHa + " " + txtIcones;
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+    var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
+    var txtNoHiHaIconesSeleccionades= txtNoHiHaIcones + " " + txtSeleccionades.toLowerCase();
+    
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
@@ -339,7 +361,131 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- modul -->
+            <div class="modul" id="modul_icones">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='iconaFamilia.icones_familia'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulIcones -->
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <div class="modulIcones">                            
+                            <div class="seleccionats">
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixIcona'/></span></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulIcones -->                                 
+                    </div>    
+                </fieldset>
+            </div>
+            <!-- /modul -->
         </div>
         <!-- /modulLateral -->
     </form>
 </div>
+
+<!-- escriptori_icones -->
+<div id="escriptori_icones" class="escriptori_detall">
+    <script type="text/javascript">
+        // dades formularis
+        var FormulariDadesIcona = [                      
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "icona_perfil",
+                "obligatori": "si",
+                "tipus": "numeric",
+                "error":{
+                    "obligatori": "<spring:message code='icona.error.perfil_obligatori'/>"
+                }
+            }
+        ];
+    </script>
+    <form id="formGuardarIcona" action="" method="POST">
+        <input type="hidden" name="iconaId" id="iconaId" />
+        <input type="hidden" name="familiaId" id="familiaId" />
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    
+        <div id="modulIcones" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.icones'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="icona_perfil"><spring:message code='camp.perfil'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="icona_perfil" name="icona_perfil" class="nou">
+	                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+	                                    <c:forEach items="${perfils}" var="perfil">
+	                                        <option value="<c:out value="${perfil.id}"/>"><c:out value="${perfil.nom}"/></option>
+	                                    </c:forEach>
+	                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="icona_arxiu"><spring:message code='camp.arxiu'/></label></div>
+                                <div class="control archivo">   
+                                    <div id="grup_arxiu_actual_icona" class="grup_arxiu_actual">
+                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                        <a href="#" target="_blank"></a>
+                                        <!-- input type="checkbox" name="icona_arxiu_delete" id="icona_arxiu_delete" value="1"/>
+                                        <label for="icona_arxiu_delete" class="eliminar"><spring:message code='boto.elimina'/></label -->
+                                    </div>
+                                </div>
+                            </div>    
+                            
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="icona_arxiu"><spring:message code='camp.arxiu_nou'/></label></div>
+                                <div class="control">                                           
+                                    <input id="icona_arxiu" name="icona_arxiu" type="file" class="nou" />
+                                </div>
+                            </div>                                                                                      
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_icones" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_icones" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
+</div>
+<!-- escriptori_icones -->

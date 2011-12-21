@@ -292,6 +292,9 @@ function CDetall(){
 	}
 
 	this.nou = function() {
+		//Ocultar paneles
+		jQuery("#modul_icones").hide();
+		
         $("#item_id").val("");
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
@@ -310,6 +313,9 @@ function CDetall(){
 	this.pintar = function(dades) {
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
+		// Mostrar paneles
+		jQuery("#modul_icones").show();
+		
 		dada_node = dades;
 		$("#item_id").val(dada_node.item_id);
 		
@@ -321,6 +327,8 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 
+		ModulIcones.inicializarIcones(dada_node.icones);
+		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
         

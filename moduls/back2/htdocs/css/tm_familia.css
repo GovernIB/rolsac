@@ -4,6 +4,10 @@
     border: 0 none;
 }
 
+#modul_icones li {
+    cursor: pointer;
+}
+
 /* llistats table */
 
 div.llistat div.nom { 
