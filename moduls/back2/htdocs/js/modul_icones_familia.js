@@ -33,7 +33,7 @@ function CModulIconesFamilia(){
 	}	
 			
 	this.nuevo = function() {       
-		fetVitals_seleccionats_elm = escriptori_detall_elm.find("div.modulIconesFamila div.seleccionats");
+		fetVitals_seleccionats_elm = escriptori_detall_elm.find("#modul_iconesFamilia div.seleccionats");
 		fetVitals_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaIconaFamilia + ".");
 	}	
 		

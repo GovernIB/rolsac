@@ -6,6 +6,7 @@
 <script type="text/javascript" src="<c:url value='/js/tm_perfils.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones_familia.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_icones_materia.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/perfils/llistat.do" />';
@@ -76,6 +77,12 @@
     var txtIconaFamilia = "<spring:message code='iconaFamilia.icona_familia'/>";
     var txtIconesFamilia = "<spring:message code='iconaFamilia.icones_familia'/>";
     var txtNoHiHaIconesFamiliaSeleccionades = "<spring:message code='txt.noHiHaIconesRelacionades'/>";
+    var txtNoHiHaIconaFamilia = "<spring:message code='txt.noHiHaIconaFamilia'/>";
+
+    var txtIconaMateria = "<spring:message code='iconaMateria.icona_materia'/>";
+    var txtIconesMateria = "<spring:message code='iconaMateria.icones_materia'/>";
+    var txtNoHiHaIconesMateriaSeleccionades = "<spring:message code='txt.noHiHaIconesRelacionades'/>";
+    var txtNoHiHaIconaMateria = "<spring:message code='txt.noHiHaIconaMateria'/>";   
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -395,6 +402,27 @@
                         <!-- modulIcones -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulIconesFamila">                            
+                            <div class="seleccionats">
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulIcones -->                                 
+                    </div>    
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            <!-- modul -->
+            <div class="modul" id="modul_iconesMateria">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='iconaMateria.icona_materia'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulIcones -->
+                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+                        <div class="modulIconesMateria">                            
                             <div class="seleccionats">
                                 <div class="seleccionat">
                                     <p class="info"><spring:message code='txt.noHiHaIcones'/>.</p>

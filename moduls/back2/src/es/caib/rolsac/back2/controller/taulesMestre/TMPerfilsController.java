@@ -14,6 +14,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.IconoFamilia;
+import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -157,11 +158,30 @@ public class TMPerfilsController {
 	        } else {
 	        	resultats.put("iconesFamilia", null);
 	        }
-	    
-	        // fin iconos
+	        // Fi icones familia
 	        
 	        
-	        //resultats.put("item_icones_materia", perfil.getIconosMateria());
+	      //Icones Materia
+	        if (perfil.getIconosMateria() != null) {
+		        Map<String, Object> iconaDTO;
+		        List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();		        
+		        
+		        for(IconoMateria iconaMateria: (Set<IconoMateria>) perfil.getIconosMateria()) {
+			        if (iconaMateria != null && iconaMateria.getIcono() != null) {
+			        	
+			        	iconaDTO = new HashMap<String, Object>(3);
+				        iconaDTO.put("id", iconaMateria.getId());
+				        iconaDTO.put("nombre", iconaMateria.getIcono().getNombre());
+				        llistaIcones.add(iconaDTO);
+			        } else {
+			        	log.error("La matèria " + perfil.getId() + " te una icona null o sense arxiu.");
+			        }
+		        }
+			    resultats.put("iconesMateria", llistaIcones);
+	        } else {
+	        	resultats.put("iconesMateria", null);
+	        }
+	        // Fi icones materia
 	        			
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));

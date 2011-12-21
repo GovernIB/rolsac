@@ -299,6 +299,7 @@ function CDetall(){
         $("#item_id").val("");
         
         ModulIconesFamilia.nuevo();
+        ModulIconesMateria.nuevo();
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -314,6 +315,9 @@ function CDetall(){
 	}		
 	
 	this.pintar = function(dades) {
+		ModulIconesFamilia.nuevo();
+        ModulIconesMateria.nuevo();
+		
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
@@ -332,6 +336,7 @@ function CDetall(){
 
 		
 		ModulIconesFamilia.inicializarIconesFamilia(dada_node.iconesFamilia);
+		ModulIconesMateria.inicializarIconesMateria(dada_node.iconesMateria);
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
