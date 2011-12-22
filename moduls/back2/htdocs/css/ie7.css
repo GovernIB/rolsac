@@ -1,5 +1,6 @@
 #submenu{        
     overflow: hidden;
+    position: static;
 }
 #submenu_contingut{
     overflow: hidden;
@@ -39,4 +40,15 @@
 }
 .escriptori_detall .botonera ul li.impar{    
     margin-left: 10px;
+}
+.escriptori_detall .grupoModulosFormulario DIV.modul{
+    position: static;
+}
+.escriptori_detall .grupoModulosFormulario div.modul a.modul{
+    position:static;
+    float: right;
+}
+
+#cercador_afectacions DIV.element{
+    width: 235px;
 }
