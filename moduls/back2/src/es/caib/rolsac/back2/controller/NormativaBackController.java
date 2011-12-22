@@ -40,7 +40,6 @@ import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTipo;
 import org.ibit.rol.sac.model.TraduccionTipoAfectacion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.dto.AfectacionDTO;
 import org.ibit.rol.sac.model.dto.AfectacionesDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -59,7 +58,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 

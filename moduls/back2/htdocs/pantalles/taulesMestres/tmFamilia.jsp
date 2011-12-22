@@ -8,11 +8,6 @@
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 
-<!--script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script-->
-
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_familia.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
