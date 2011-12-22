@@ -54,7 +54,7 @@
 								<a href="<c:url value="/agrupacioFetsVitals/agrupacioFetsVitals.do"/>"><spring:message code="menu.agrupacio_fets_vitals" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/publicObjectiu/llistat.do"/>"><spring:message code="menu.public_objectiu" /></a>
+								<a href="<c:url value="/publicObjectiu/publicObjectiu.do"/>"><spring:message code="menu.public_objectiu" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/espaisTerritorials/llistat.do"/>"><spring:message code="menu.espais_territorials" /></a>
