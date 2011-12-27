@@ -139,7 +139,7 @@ public class TMPublicObjectiuController {
 	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarPerfil(HttpServletRequest request) {
+	public @ResponseBody IdNomDTO guardarPublicObjectiu(HttpServletRequest request) {
 
 		IdNomDTO result = null;
 		String error = null;
@@ -155,6 +155,7 @@ public class TMPublicObjectiuController {
 				publicObjectiuOld = perfilDelegate.obtenerPublicoObjetivo(id);
 				edicion = true;
 				publicObjectiu.setId(publicObjectiuOld.getId());
+				publicObjectiu.setOrden(publicObjectiuOld.getOrden());
 			} catch (NumberFormatException nfe) {
 				publicObjectiuOld = null;
 				edicion = false;
