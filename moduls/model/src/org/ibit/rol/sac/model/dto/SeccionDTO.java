@@ -2,7 +2,7 @@ package org.ibit.rol.sac.model.dto;
 
 import java.io.Serializable;
 
-public class SeccionDTO implements Serializable {
+public class SeccionDTO implements Serializable, Comparable {
 
 	private static final long serialVersionUID = -1227937193155485933L;
 
@@ -54,5 +54,15 @@ public class SeccionDTO implements Serializable {
     public void setFills(boolean filles) {
         this.filles = filles;
     }    
+    
+    public int compareTo( Object o ) {    	
+    	
+    	if (!(o instanceof SeccionDTO) ) return -1;
+    	
+    	String primerNom = this.getNom().replaceAll("\\<.*?>", "");
+    	String segonNom =  ((SeccionDTO)o).getNom().replaceAll("\\<.*?>", "");
+    	
+    	return primerNom.compareTo( segonNom );
+    }
     
 }

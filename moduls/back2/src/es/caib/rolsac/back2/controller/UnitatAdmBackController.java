@@ -5,12 +5,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,18 +25,26 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
+import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.SeccionDTO;
+import org.ibit.rol.sac.model.dto.SeccionFichaDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
@@ -62,6 +73,18 @@ public class UnitatAdmBackController {
         this.messageSource = messageSource;
     }
     
+	private static class TreeSeccionComparator implements Comparator {
+		public int compare(Object element1, Object element2) {
+			String lower1 =	 element1.toString();
+			String lower2 =	 element2.toString();
+			
+			lower1 = lower1.substring(lower1.indexOf("#")+1,lower1.length());
+			lower2 = lower2.substring(lower2.indexOf("#")+1,lower2.length());
+			
+			return lower1.compareTo(lower2);
+		}
+	}       
+    
 	@RequestMapping(value = "/unitatadm.do", method = GET)
 	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
 		
@@ -76,7 +99,7 @@ public class UnitatAdmBackController {
 	    List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 	    List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 	    List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
-	    
+	    	    
 	    try {                                
             llistaMateries = materiaDelegate.listarMaterias();	    	            
             
@@ -288,9 +311,49 @@ public class UnitatAdmBackController {
             resultats.put("item_nivell_2", uni.getNumfoto2());
             resultats.put("item_nivell_3", uni.getNumfoto3());
             resultats.put("item_nivell_4", uni.getNumfoto4());
-	          
-            //Materias asociadas
-           
+	        
+            //Secciones-Fichas           
+            TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
+            List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
+            
+        	//Obtenemos el id y el nombre de la sección
+        	Set secciones = arbolSecciones.keySet();
+        	
+        	for (Iterator iterator = secciones.iterator(); iterator.hasNext();) {
+        		SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
+        		
+        		String claveSeccion = (String) iterator.next();
+				String datosSeccion[] = claveSeccion.split("#");
+				
+				seccionFichaDTO.setId( new Long(datosSeccion[0]) );
+				seccionFichaDTO.setNom( datosSeccion[1]);
+				
+				List<FichaUA> listaFichasUA = (ArrayList<FichaUA>) arbolSecciones.get(claveSeccion);
+				List<FichaDTO> listaFichasDTO = new ArrayList<FichaDTO>();
+				
+				if (listaFichasUA != null) {
+					
+					for ( Iterator iterator2 = listaFichasUA.iterator(); iterator2.hasNext(); ) {
+						
+						FichaUA fichaUA = (FichaUA) iterator2.next();
+						FichaDTO fichaDTO = new FichaDTO();
+						
+						fichaDTO.setId( fichaUA.getFicha().getId() );
+						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
+						
+						listaFichasDTO.add( fichaDTO );
+						
+					}
+					
+					seccionFichaDTO.setListaFichas( listaFichasDTO );
+				}
+				
+				listaSecciones.add(seccionFichaDTO);
+			} 
+
+        	resultats.put("seccions", listaSecciones);
+        	
+            //Materias asociadas           
             if (uni.getUnidadesMaterias() != null) {             
             
                 for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
@@ -699,6 +762,53 @@ public class UnitatAdmBackController {
 	    return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()) );	    
 	}
 	
+	@RequestMapping(value = "/llistatSeccions.do", method = POST)	
+	public @ResponseBody Map<String, Object> llistaSeccions(HttpServletRequest request) {
+		
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		
+		try {	
+			
+			String filtreNom = request.getParameter("nomSeccio").trim();									
+			SeccionDelegate secDel = DelegateUtil.getSeccionDelegate();			
+					
+			List<Seccion> listaSecciones = secDel.listarSecciones();
+			List<SeccionDTO> listaSeccionesDTO = new ArrayList<SeccionDTO>();
+			
+			for ( Iterator iterator = listaSecciones.iterator(); iterator.hasNext(); ) {
+				
+				SeccionDTO seccionDTO = new SeccionDTO();				
+				Seccion seccion = (Seccion) iterator.next();
+				
+				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion( request.getLocale().getLanguage()) ).getNombre();
+				
+				if ( toFormatComparacio( nomSeccio ).contains( toFormatComparacio(filtreNom) ) || "".equals(filtreNom) ) { 
+					seccionDTO.setId( seccion.getId() );
+					seccionDTO.setNom( nomSeccio );
+
+					listaSeccionesDTO.add(seccionDTO);
+				}
+			}
+			
+			Collections.sort( listaSeccionesDTO );			
+			
+	        resultats.put("total", listaSeccionesDTO.size());        
+	        resultats.put("nodes", listaSeccionesDTO);        			
+			
+		} catch (DelegateException dEx) {
+            if (dEx.isSecurityException()) {
+                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+                resultats.put("id", -1);
+            } else {
+            	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+            	resultats.put("id", -2);
+            	log.error(ExceptionUtils.getStackTrace(dEx));
+            }
+		}
+		
+		return resultats;
+	} 
+	
 	/**
      * Método que comprueba si hay microsites para una Unidad Orgánica
      * @param idua identificador de la unidad organica
@@ -846,4 +956,43 @@ public class UnitatAdmBackController {
 		for ( Long id : listaIdUnidadMateriaObsoleta ) 
 			unidadMateriaDelegate.borrarUnidadMateria( id );	
 	}
+	
+	/**
+	 * Ordena un treemap segun el key
+	 *
+	 */
+	private TreeMap ordenarArbolSecciones(TreeMap arbolSecciones) {
+	
+		TreeMap newtreesecciones = new TreeMap( new TreeSeccionComparator() );
+		 
+		for( Iterator it = arbolSecciones.keySet().iterator(); it.hasNext(); ) {
+	    	String key = (String)it.next();
+	    	
+	    	//Eliminamos el código html que pueda haber en el nombre de la sección.
+	    	key = key.split("#")[0] + "#" + (key.split("#")[1]).replaceAll("\\<.*?>", "");
+	    	
+	    	newtreesecciones.put(key, arbolSecciones.get(key));
+	    }
+		    
+	    return newtreesecciones;
+		  	
+	  }	 
+	
+	/**
+	 * Retorna una cadena que canvia les vocals amb accent 
+	 * per vocals sense ell (emprat per cercar registres coincidents 
+	 * de seccions).
+	 * 
+	 * @param cadena
+	 * @return String
+	 */
+	private String toFormatComparacio( String cadena ) {
+		
+		return cadena.toLowerCase().replaceAll("[áàä]", "a")
+					 			   .replaceAll("[éèë]", "e")
+					 			   .replaceAll("[íìï]", "i")
+					 			   .replaceAll("[óòö]", "o")
+					 			   .replaceAll("[úùü]", "u");		
+	}
+	
 }

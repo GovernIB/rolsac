@@ -1,24 +1,58 @@
-// MODUL PROCEDIMENTS
-
+// MODUL SECCIONS
 $(document).ready(function() {
-	
+		
 	// elements
-	modul_seccions_elm = $("div.modulSeccions:first");
+	modul_seccions_elm = $("div.modulSeccions");
 	escriptori_seccions_elm = $("#escriptori_seccions");
+
+	EscriptoriSeccio = new CEscriptoriSeccio();
+	Llistat = EscriptoriSeccio;
 	
-	if (modul_seccions_elm.size() == 1) {
-		
-		// INICIEM
-		ModulSeccio.iniciar();
-		
-	}
+	multipagina = new Multipagina();
+	
+	// Evento para el botón de volver al detalle
+	jQuery(".btnVolverDetalleSecciones").bind("click",function(){EscriptoriSeccio.torna();});	
+	jQuery("#btnFinalizarSecciones").bind("click",function(){EscriptoriSeccio.finalizar();});	
 	
 });
 
-var ModulSeccio = {
-	iniciar: function() {
+function CModulSeccio() {
+
+	var that = this;
+	var params; 
+	var seccions_llistat_seccions;
+	
+	//Necessitem una còpia de la llista original de seccions-fitxes. Es necessari perquè l'usuari podria
+	//esborrar una secció amb les seves fitxes i tornar a afegir-la des de els resultats de la cerca de 
+	//seccions si troba que s'ha equivocat.
+	var copiaNodesOrigen;
+	
+	if ( modul_seccions_elm.size() != 1)
+		return 0;
+	
+	this.extend = ListaOrdenable;
+	this.extend();
+	
+	this.mostraFitxes = function(e)  {
+		
+		//Mostrar panel de fichas de la sección actual
+		divFichas = $(e).next();
+		
+		if ($(divFichas).is(":visible"))
+			divFichas.fadeOut(200);
+		else
+			divFichas.fadeIn(200);
+		
+		return false;
+	},
+
+	this.iniciar = function(dades) {
+		
+		seccions_nodes = dades;		
+		seccions_nodes_size = dades.length;
 		
 		seccions_llistat_elm = escriptori_seccions_elm.find("div.escriptori_items_llistat:first");
+		
 		seccions_cercador_elm = escriptori_seccions_elm.find("div.escriptori_items_cercador:first");
 		seccions_seleccionats_elm = escriptori_seccions_elm.find("div.escriptori_items_seleccionats:first");
 		
@@ -36,19 +70,105 @@ var ModulSeccio = {
 				botonera_elm.before("<div class=\"rabillo\">&nbsp;</div>").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 			}
 		});
-		
-		seccions_llistat_elm.add(seccions_seleccionats_elm).css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
-		
+				
 		seccions_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
+				
+		// enllaços
+		modul_seccions_elm.bind("click", CModulSeccio.cerca);
 		
-		// botonera seleccionats
-		seccions_seleccionats_elm.find("p.botonera").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
+		if (seccions_nodes_size > 0) {
+			
+			codi_seccions = "<ul>";
+			
+			$(seccions_nodes).each( function() {
+				seccio_node = this;
+				
+				texteFitxes = "(0 fitxes)";
+				llistaFitxes = seccio_node.listaFichas;
+				
+				if (llistaFitxes != null)
+					texteFitxes = " (" + llistaFitxes.length  + " " + ( llistaFitxes.length > 1 ? txtFitxes : txtFitxa ) + ")";
+				
+				// crearem una llista ordenable per a cada enllaç de secció, que contindrà les fitxes que té assignades
+				codi_seccions += "<li class=\"nodoListaSecciones\"><input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a>" + texteFitxes;
+				codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
+				codi_seccions += "<div class=\"listaOrdenable\">";
+				codi_seccions += "<ul>";
+				
+				if ( llistaFitxes != null && llistaFitxes.length > 0 ) {
+	
+					for ( n = 0; n < llistaFitxes.length; n++ ) {
+						codi_seccions += "<li>";
+						codi_seccions += "<input type=\"hidden\" value=\"" + llistaFitxes[n].id + "\"/>" + llistaFitxes[n].titulo;
+						codi_seccions += "</li>"
+					}
+										
+				} else {
+					codi_seccions += txtNoHiHaFitxes;
+				}
+				
+				codi_seccions += "</ul>";
+				codi_seccions += "</div>";
+				
+                codi_seccions += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
+                codi_seccions += "<a class=\"btn gestiona\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
+                codi_seccions += "</div>";
+                
+                codi_seccions += "</div>";
+				codi_seccions += "</li>";
+			});
+			
+			codi_seccions += "</ul>";
+			
+			txt_seccions = (seccions_nodes.size == 1) ? txtSeccio : txtSeccions;
+			
+			seccions_llistat_seccions = $("div.modulSeccions").find("div.seleccionats");		 
+			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + seccions_nodes_size + " " + txt_seccions + ""  + "</strong>");			
+			seccions_llistat_seccions.find(".listaOrdenable").html(codi_seccions);
+
+			this.activaEnllasosFitxes();
+		}
+			
+		copiaNodesOrigen = modul_seccions_elm.find(".listaOrdenable:first").html();
+		params = {
+				nombre: "seccio",
+				nodoOrigen: modul_seccions_elm.find(".listaOrdenable:first"),
+				nodoDestino: seccions_seleccionats_elm.find(".listaOrdenable"),
+				atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+				//multilang: true
+				multilang: false
+		} 
 		
-		// enllaÃ§os
-		modul_seccions_elm.bind("click", ModulSeccio.cerca);
+		// Configuramos la lista ordenable  
+		this.configurar( params );
+		 
+		modul_seccions_elm.find("a.gestiona").one("click", function(){ModulSeccions.gestiona();} );
 		
 	},
-	cerca: function(e) {
+			
+	this.gestiona = function() {
+		
+		lis_size = modul_seccions_elm.find(".nodoListaSecciones").size();
+		
+		if (lis_size > 0) {
+		
+			this.copiaInicial();
+															
+			EscriptoriSeccio.contaSeleccionats();
+			
+		} else {
+			
+			seccions_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaSeccionsSeleccionades + ".");			
+			seccions_seleccionats_elm.find(".listaOrdenable").html("");
+		}
+		
+		// animacio
+		escriptori_detall_elm.fadeOut(300, function() {			
+			escriptori_seccions_elm.fadeIn(300);			
+		});
+	}
+	
+	this.cerca = function(e) {
 		elm = $(e.target);
 		
 		if (elm.is("A")) {
@@ -77,35 +197,280 @@ var ModulSeccio = {
 					codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
 					seccions_dades_elm.html(codi_cercant);
 					
-					EscriptoriSeccio.carregar({});
+					//EscriptoriSeccio.carregar({});
 					
 					// activar
 					//escriptori_seccions_elm.bind("click",EscriptoriSeccio.llansar);
 					
 				});
-				
 			});
+		}
+	}
+	
+	/**
+	 * Copia les dades de la llista origen a la de destinació (mètode sobre-escrit).  
+	 * En aquest cas hem de copiar només la llista de seccions sense tenir en compte les 
+	 * seves fitxes (el mètode per defecte inclou ambues en fer ".find('li')" ).
+	 */
+	this.copiaInicial = function() {		
+		var i;
+		var html;
+		var idioma;
+		var clases;
 		
+		var _this = this;
+		
+		html = "<ul>";
+	
+		jQuery(params.nodoOrigen).find(".nodoListaSecciones").each(function() {			
+			
+			var li_elm = jQuery(this);			
+			var item = [];
+			var atributo;
+					
+			for( i = 0; i < params.atributos.length; i++ ){
+				
+				atributo = params.atributos[i];
+				
+				if ( atributo != "nombre" ) 						
+					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
+				else 
+					item[atributo] = li_elm.find("a." + params.nombre + "_" + atributo ).html();					
+			}
+						
+			html += _this.getHtmlItem( item, true );
+		});
+		
+		html += "</ul>";
+		
+		jQuery(params.nodoDestino).html(html);
+	}
+	
+	/**
+	 * Sobre-escrivim també el mètode de finalització i de còpia final perquè hem de 
+	 * tenir en compte els nodes fills (fitxes) en la llista de destinació.
+	 */	
+	this.copiaFinal = function() {
+		
+		html = "<ul>";
+		
+		numSecciones = $(".escriptori_items_seleccionats .listaOrdenable ul").find("li").length;
+		
+		//Per a cada node comprovam si ha estat actualitzat i l'eliminarem o afegirem 
+		//a la nova llista, des de copiaNodesOrigen, segons correspongui.		
+		$(params.nodoDestino).find("li").each( function(i) {
+
+			tmpSeccio = $(copiaNodesOrigen).find( "#seccio_id_" + $(this).find(".seccio_id").val() ).parent();
+			
+			//Si es troba el node, l'afegim a la nova llista
+			//juntament amb les seves fitxes filles. Si no el trobem
+			//es crearà un de nou
+			if ( tmpSeccio.length != 0 ) 
+				html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
+			else 				
+				html += "<li class=\"nodoListaSecciones\"><a class=\"enllasGestioFitxa seccio_nombre\">" + 
+						$(this).find("div.seccio span").html() + 
+						"</a></li>";
+		});
+		
+		html += "</ul>";
+		$(params.nodoOrigen).html(html);
+					
+		if ( seccions_llistat_seccions != undefined ) {
+			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + numSecciones + " " + txt_seccions + ""  + "</strong>");					
+			this.activaEnllasosFitxes();
 		}
 		
+		return numSecciones;
 	}
+	
+	this.finalizar = function(){		
+		return this.copiaFinal();		
+	}	
+	
+	this.activaEnllasosFitxes = function() {
+		$(".enllasGestioFitxa").each( function() {
+			$(this).bind("click", function() {					
+				return that.mostraFitxes( this ); 
+			});
+		});									
+	};
+	
 };
 
-var EscriptoriSeccio = {
-	carregar: function(opcions) {
-		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
+function CEscriptoriSeccio() {
+	
+	this.extend = ListadoBase;
+	this.extend();
+	
+	var that = this;
+	
+	this.agregarItem = function( itemID, titulo ) {
 		
-		dataVars = "";
-		
-		// cercador
-		dataVars_cercador = "&titol=" + $("#cerca_fixta_titol").val();
-		dataVars_cercador += "&codi=" + $("#cerca_fixta_codi").val();
-		dataVars_cercador += "&seccio=" + $("#cerca_fixta_seccio").val();
+		var item = {
+			id: itemID,
+			nombre: titulo
+		};
 			
+		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
+		if( ModulSeccio.agregaItem( item ) ) {		
+			this.contaSeleccionats();		
+		}		
+	}			
+	
+	this.contaSeleccionats = function() {
+		
+		seleccionats_val = seccions_seleccionats_elm.find(".seleccionat").find("li").size();
+		info_elm = seccions_seleccionats_elm.find("p.info:first");
+		
+		if (seleccionats_val == 0) {
+			
+			seccions_seleccionats_elm.find("ul").remove();
+			info_elm.text(txtNoHiHaSeccionsSeleccionades + ".");
+			
+		} else if (seleccionats_val == 1) {
+			
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
+			
+		} else {
+			
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");						
+			seccions_seleccionats_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				update: function(event,ui){
+					ModulSeccions.calculaOrden(ui,"origen");
+					EscriptoriSeccio.contaSeleccionats();
+				}
+			}).css({cursor:"move"});
+			
+		}
+		
+		seccions_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+			var itemLista = jQuery(this).parents("li:first");
+			ModulSeccions.eliminaItem(itemLista);
+			EscriptoriSeccio.contaSeleccionats();
+		});
+	}
+	
+	this.finCargaListado = function(data, opcions) {
+
+		// total
+		resultats_total = parseInt(data.total, 10);		
+		
+		if (resultats_total > 0) {
+			
+			txtT = (resultats_total > 1) ? txtSeccions : txtSeccio;
+			
+			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
+			if (resultats_total % pag_Res > 0){
+				ultimaPag++;
+			}
+			if (pag_Pag > ultimaPag) {
+				pag_Pag = ultimaPag;
+			}
+			
+			resultatInici = (pag_Pag * pag_Res) + 1;
+			resultatFinal = ( ( pag_Pag * pag_Res) + pag_Res > resultats_total ) ? resultats_total : ( pag_Pag * pag_Res ) + pag_Res;
+			
+			// ordenacio
+			ordre_T = ordre_Tipus;
+			ordre_C = ordre_Camp;
+			ordre_c1 = (ordre_C == "seccio") ? " " + ordre_T : "";
+			
+			txt_ordenacio = "";
+			
+			if ( resultats_total > 1 ) {
+			
+				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
+				txt_ordenacio += ", " + txt_ordenats + " " + txtSeccio + " <em>" + txtSeccio + "</em>";
+			
+			}
+			
+			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtSeccio + "</a></div>";
+			
+			// codi taula
+			codi_taula = "<div class=\"table llistat seccions\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
+			
+			// codi cap + cuerpo
+			codi_taula += "<div class=\"thead\">";
+			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
+			codi_taula += codi_cap1;
+			codi_taula += "</div>";
+			codi_taula += "</div>";
+			codi_taula += "<div class=\"tbody\">";
+			
+			// codi cuerpo
+			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+				dada_node = this;
+				parClass = (i%2) ? " par": "";
+				
+				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
+				
+				codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
+				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
+				codi_taula += "<a class=\"seccion_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nom + "</a>";
+				codi_taula += "</div>";
+				codi_taula += "<div class=\"td cp\" role=\"gridcell\">" + dada_node.codigoPostal + "</div>";
+				codi_taula += "<div class=\"td poblacio\" role=\"gridcell\">" + dada_node.poblacion + "</div>";
+				codi_taula += "</div>";
+			});
+			
+			codi_taula += "</div>";
+			codi_taula += "</div>";
+			
+			if($.browser.opera) {
+				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
+			}
+			
+			// Actualizamos el navegador multipágina.
+			multipagina.init({
+				total: resultats_total,
+				itemsPorPagina: pag_Res,
+				paginaActual: pag_Pag,
+				funcionPagina: "EscriptoriSeccio.cambiaPagina",
+			});
+			
+			codi_navegacio = multipagina.getHtml();
+			
+			// codi final
+			codi_final = codi_totals + codi_taula + codi_navegacio;
+		
+		} else {
+			
+			// no hi ha items
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaSeccions + ".</p>";
+			
+		}
+		
+		// animacio
+		seccions_dades_elm.fadeOut(300, function() {
+			// pintem
+			seccions_dades_elm.html(codi_final).fadeIn(300, function() {
+														
+				// Evento lanzado al hacer click en un elemento de la lista.
+				jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
+					var partesItem = jQuery(this).attr("class").split("_");
+					var itemID = partesItem[1];
+					var titulo = jQuery(this).html();
+					that.agregaItem(itemID,titulo);
+					});
+				
+				// cercador
+				seccions_cercador_elm.find("input, select").removeAttr("disabled");
+				
+			});
+		});	
+		
+	}	
+	
+	this.carregar = function(opcions) {		
+							
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {
 			ordreTipus_seccio_elm.val(opcions.ordreTipus);
 		}
+		
 		// ordreCamp
 		if (typeof opcions.ordreCamp != "undefined") {
 			ordreCamp_seccio_elm.val(opcions.ordreCamp);
@@ -119,390 +484,59 @@ var EscriptoriSeccio = {
 		ordre_Camp = ordreCamp_seccio_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars = "nomSeccio=" + $("#cerca_seccions_nom").val();
 		
 		// ajax
 		$.ajax({
 			type: "POST",
-			url: pagFitxes,
+			url: pagSeccions,
 			data: dataVars,
 			dataType: "json",
 			error: function() {
 				
 				if (!a_enllas) {
 					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					Missatge.llansar( { tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>" } );
 					// error
 					Error.llansar();
 				}
 				
 			},
 			success: function(data) {
-				// estat json
-				json_estat = data.json.estat;
-				json_mode = (json_estat == "CORRECTE") ? "correcte" : (json_estat == "WARNING") ? "atencio" : (json_estat == "ERROR") ? "error" : "fatal";
-				if (json_estat == "FATAL") {
-					
-					Missatge.llansar({tipus: "alerta", modo: json_mode, fundit: "si", titol: data.json.missatge, funcio: function() { document.location = pagTancarAplicacio; }});
-					$("#contenidor").html("");
-					return false;
-				
-				} else if (json_estat == "ERROR") {
-					
-					// missatge
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + data.json.missatge + "</p>"});
-					// error
-					Error.llansar();
-				
-				} else {
-					
-					// total
-					resultats_total = parseInt(data.json.data.total,10);
-					
-					if (resultats_total > 0) {
-						
-						txtT = (resultats_total > 1) ? txtFitxes : txtFitxa;
-						
-						resultatInici = ((pag_Pag*pag_Res)+1);
-						resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
-						
-						// ordenacio
-						ordre_T = ordre_Tipus;
-						ordre_C = ordre_Camp;
-						ordre_c1 = (ordre_C == "fitxa") ? " " + ordre_T : "";
-						ordre_c2 = (ordre_C == "ordre") ? " " + ordre_T : "";
-						ordre_c3 = (ordre_C == "publicacio") ? " " + ordre_T : "";
-						ordre_c4 = (ordre_C == "caducitat") ? " " + ordre_T : "";
-						
-						txt_ordenacio = "";
-						
-						if (resultats_total > 1) {
-						
-							txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
-							
-							if (ordre_C == "fitxa") {
-								txt_per = txtFitxa;
-							} else if (ordre_C == "ordre") {
-								txt_per = txtOrdre;
-							} else if (ordre_C == "publicacio") {
-								txt_per = txtPublicacio;
-							} else {
-								txt_per = txtCaducitat;
-							}
-							
-							txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
-						
-						}
-						
-						codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
-
-						codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtFitxa + "</a></div>";
-						codi_cap2 = "<div class=\"th ordre" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtOrdre + "</a></div>";
-						codi_cap3 = "<div class=\"th publicacio" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
-						codi_cap4 = "<div class=\"th caducitat" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
-						
-						// codi taula
-						codi_taula = "<div class=\"table llistat fitxes\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
-						
-						// codi cap + cuerpo
-						codi_taula += "<div class=\"thead\">";
-						codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-						codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
-						codi_taula += "</div>";
-						codi_taula += "</div>";
-						codi_taula += "<div class=\"tbody\">";
-						
-						// codi cuerpo
-						$(data.json.data.nodes).each(function(i) {
-							dada_node = this;
-							parClass = (i%2) ? " par": "";
-							
-							codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
-							
-							codi_taula += "<div class=\"td fitxa\" role=\"gridcell\">";
-							codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-							codi_taula += "<a href=\"javascript:;\" class=\"fitxa\">" + dada_node.titol + "</a>";
-							codi_taula += "</div>";
-							
-							codi_taula += "<div class=\"td ordre\" role=\"gridcell\"><input type=\"text\" value=\"" + dada_node.ordre + "\" size=\"3\" maxlength=\"3\" class=\"id\" /></div>";
-							
-							caducat_class = (dada_node.caducat == "S") ? " caducat" : "";
-							codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + dada_node.publicacio + "</div>";
-							codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + dada_node.caducitat + "</div>";
-							
-							codi_taula += "</div>";
-						});
-						
-						codi_taula += "</div>";
-						codi_taula += "</div>";
-						
-						if($.browser.opera) {
-							escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
-						}
-						
-						// paginacio
-						if (resultats_total > (pag_Res * (pag_Pag+1)) || pag_Pag > 0) {
-							// inici, final
-							inici_esta = false;
-							final_esta = false;
-							// anterior
-							codi_anteriors = "";
-							if (pag_Pag > 0) {
-								codi_anteriors = "&lt; <a href=\"javascript:;\" class=\"anteriors\">" + txtAnteriors + "</a> - ";
-							}
-							// num pagines
-							codi_paginas = "";
-							paginasNum = Math.ceil(resultats_total/pag_Res);
-							if (pag_Pag - paginacio_marge >= 0) {
-								codi_paginas += "... ";
-							}
-							for (i=0; i<paginasNum; i++) {
-								if (i > pag_Pag - paginacio_marge && i < pag_Pag + paginacio_marge) {
-									codi_paginas += (i == pag_Pag) ? (i+1) : "<a href=\"javascript:;\">" + (i+1) + "</a>";
-									codi_paginas += (i == paginasNum-1) ? "" : ", ";
-									if (i+1 == 1) {
-										inici_esta = true;
-									}
-									if (i+1 == paginasNum) {
-										final_esta = true;
-									}
-								}
-							}
-							if (pag_Pag + paginacio_marge < paginasNum) {
-								codi_paginas += " ...";
-							}
-							codi_paginas_todo = "[ " + txtPagines + ": " + codi_paginas + " ]";
-							// siguiente
-							codi_seguents = "";
-							if (resultats_total > (pag_Res * (pag_Pag+1))) {
-								codi_seguents = " - <a href=\"javascript:;\" class=\"seguents\">" + txtSeguents + "</a> &gt;";
-							}
-							// inici
-							if (!inici_esta) {
-								codi_anteriors = "&lt; <a href=\"javascript:;\" class=\"inici\">" + txtInici + "</a> - " + codi_anteriors;
-							}
-							// final
-							if (!final_esta) {
-								codi_seguents = codi_seguents + " - <a href=\"javascript:;\" class=\"final\">" + txtFinal + "</a> &gt;";
-							}
-							// pintamos
-							codi_navegacio = "<p class=\"paginacio\" role=\"navigation\">" + codi_anteriors + codi_paginas_todo + codi_seguents + "</p>";
-						} else {
-							codi_navegacio = "";
-						}
-						
-						// codi final
-						codi_final = codi_totals + codi_taula + codi_navegacio;
-					
-					} else {
-						
-						// no hi ha items
-						codi_final = "<p class=\"noItems\">" + txtNoHiHaFitxes + ".</p>";
-						
-					}
-					
-					// animacio
-					seccions_dades_elm.fadeOut(300, function() {
-						// pintem
-						seccions_dades_elm.html(codi_final).fadeIn(300, function() {
-						
-							// events
-							escriptori_seccions_elm.bind("click",EscriptoriSeccio.llansar);
-							
-							// cercador
-							seccions_cercador_elm.find("input, select").removeAttr("disabled");
-							
-						});
-					});
-					
-					// missatge?
-					if (data.json.missatge != "") {
-						Missatge.llansar({tipus: "alerta", modo: json_mode, fundit: "si", titol: data.json.missatge});
-					}
-					
-				}
-			
+				that.finCargaListado(data, opcions);
 			}
-		});
+		});	
+	}
 	
-	},
-	llansar: function(e) {
+	this.finalizar = function(){		
 		
-		elm = $(e.target);
+		nombre_llistat = ModulSeccions.finalizar();
 		
-		if (elm.is("A")) {
-			
-			escriptori_seccions_elm.unbind("click",EscriptoriSeccio.llansar);
-				
-			// llancem
-			pare_elm = elm.parent();
-			
-			if (pare_elm.is("LI") && pare_elm.hasClass("opcio")) {
-				
-				// opcions pestanya
-				EscriptoriSeccio.opcions(elm);
-				
-			} else if (pare_elm.hasClass("th")) {
-				
-				// ordenacio
-				if (pare_elm.hasClass("ASC")) {
-					ordreTipus_seccio_elm.val("DESC");
-				} else if (pare_elm.hasClass("DESC")) {
-					ordreTipus_seccio_elm.val("ASC");
-				} else {
-					pare_class = pare_elm.attr("class");
-					c = pare_class.substr(pare_class.indexOf(" ")+1);
-					ordreCamp_seccio_elm.val(c);
-				}
-				
-				// animacio
-				seccions_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_ordre = "<p class=\"executant\">" + txtCarregantItems + "</p>";
-					seccions_dades_elm.html(codi_ordre).fadeIn(300, function() {
-						
-						EscriptoriSeccio.carregar({});
-						
-					});
-				});
-				
-			} else if (pare_elm.is("P") && pare_elm.attr("class") == "paginacio") {
-				
-				pag_Pag = pagPagina_seccio_elm.val();
-				enlace_html = elm.html();
-				EscriptoriSeccio.anar(enlace_html);
-				
-			} else if (elm.hasClass("nom")) {
-				
-				procediment_id = elm.parent().find("input.id").val();
-				procediment_titol = elm.html();
-				
-				lis_size = seccions_seleccionats_elm.find("li").size();
-				
-				procediment_esta = false;
-				
-				if (lis_size == 0) {
-					
-					$("<ul>").appendTo(seccions_seleccionats_elm);
-					
-				} else {
-					
-					seccions_seleccionats_elm.find("input").each(function() {
-						
-						if ($(this).val() == procediment_id) {
-							procediment_esta = true;
-						}
-					
-					});
-					
-				}
-				
-				if (!procediment_esta) {
-				
-					codi_seleccionat = "<li>";
-					codi_seleccionat += "<div class=\"procediment\">";
-					codi_seleccionat += "<input type=\"hidden\" value=\"" + procediment_id + "\" />";
-					codi_seleccionat += "<span class=\"procediment\">" + procediment_titol + "</span>";
-					codi_seleccionat += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
-					codi_seleccionat += "</div>";
-					codi_seleccionat += "</li>";
-					
-					seccions_seleccionats_elm.find("ul").append(codi_seleccionat);
-					
-					EscriptoriSeccio.contaSeleccionats();
-				
-				}
-				
-				escriptori_seccions_elm.bind("click",EscriptoriSeccio.llansar);
-				
-			}
-			
-		} else if (elm.is("SPAN") && elm.parent().parent().is("A") && elm.parent().parent().hasClass("btn")) {
-			
-			a_elm = elm.parents("a.btn:first");
-			
-			if (a_elm.hasClass("torna")) {
-				
-				escriptori_seccions_elm.unbind("click",EscriptoriSeccio.llansar);
-				
-				EscriptoriSeccio.torna();
-				
-			} else if (a_elm.hasClass("elimina")) {
-				
-				a_elm.parents("li:first").remove();
-				
-				EscriptoriSeccio.contaSeleccionats();
-				
-				
-			} else if (a_elm.hasClass("finalitza")) {
-				
-				escriptori_seccions_elm.unbind("click",EscriptoriSeccio.llansar);
-				
-				nombre_llistat = 0;
-				
-				codi_llistat = "<ul>";
-				
-				seccions_seleccionats_elm.find("li").each(function(i) {
-				
-					li_elm = $(this);
-					input_elm = li_elm.find("input");
-					codi_llistat += "<li><input type=\"hidden\" value=\"" + li_elm.find("input").val() + "\" />" + li_elm.find("span.procediment").text() + "</li>";
-					nombre_llistat++;
-					
-				});
-				
-				codi_llistat += "</ul>";
-				
-				codi_seccions_txt = (nombre_llistat == 1) ? txtProcediment : txtProcediments;
-				codi_info = (nombre_llistat == 0) ? txtNoHiHaNormatives + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_seccions_txt.toLowerCase() + "</strong>.";
-				
-				modul_seccions_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
-				
-				if (nombre_llistat > 1) {
-					modul_seccions_elm.find("ul").sortable({ axis: 'y', cursor: 'url(img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(img/cursor/grab.cur), move");
-				}
-				
-				EscriptoriSeccio.torna();
-				
-			} else if (a_elm.hasClass("consulta")) {
-				
-				// desactivem taula
-				escriptori_seccions_elm.unbind("click",EscriptoriSeccio.llansar);
-				
-				seccions_cercador_elm.find("input, select").attr("disabled", "disabled");
-				
-				// animacio
-				seccions_dades_elm.fadeOut(300, function() {
-					// pintem
-					codi_cercant = "<p class=\"executant\">" + txtCercantItems + "</p>";
-					seccions_dades_elm.html(codi_cercant).fadeIn(300, function() {
-					
-						// events taula
-						EscriptoriSeccio.carregar({});
-						
-					});
-				});
-				
-			}
-			
-		}
+//		codi_seccions_txt = (nombre_llistat == 1) ? txtSeccio : txtSeccions;
+//		codi_info = (nombre_llistat == 0) ? txtNoHiHaSeccions + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_seccions_txt.toLowerCase() + "</strong>.";
+//		
+//		modul_seccions_elm.find("p.info").html(codi_info);		
+//		
+//		if (nombre_llistat > 1) {			
+//			modul_seccions_elm.find(".listaOrdenable ul").sortable({ 
+//				axis: 'y', 
+//				update: function(event,ui){
+//					ModulSeccions.calculaOrden(ui,"origen");
+//					EscriptoriSeccio.contaSeleccionats();
+//				}
+//			}).css({cursor:"move"});
+//		}
 		
-	},
-	anar: function(enlace_html) {
+		// Marcamos el formulario como modificado para habilitar el botón de guardar.
+		Detall.modificado();
 		
-		if (isNaN(parseInt(enlace_html,10))) {
-			if (elm.hasClass("inici")) {
-				num = 1;
-			} else if (elm.hasClass("anteriors")) {
-				num = parseInt(pag_Pag,10);
-			} else if (elm.hasClass("final")) {
-				num = paginasNum;
-			} else {
-				num = parseInt(pag_Pag,10)+2;
-			}
-		} else {
-			num = parseInt(enlace_html,10);
-		}
+		this.torna();
+	}	
+	
+	// Método sobreescrito
+	this.anar = function(enlace_html) {
+				
+		num = parseInt(enlace_html,10);
 		
 		// text cercant
 		txt = (num <= pag_Pag) ? txtCercantItemsAnteriors : txtCercantItemsAnteriors;
@@ -510,48 +544,38 @@ var EscriptoriSeccio = {
 			// pintem
 			codi_anar = "<p class=\"executant\">" + txt + "</p>";
 			seccions_dades_elm.html(codi_anar).fadeIn(300, function() {
-				pagPagina_seccio_elm.val(num-1);
-				
-				// llancem!
-				EscriptoriSeccio.carregar({pagina: num-1});
-				
+				pagPagina_seccio_elm.val(num-1);								
+				that.carregar({pagina: num-1});				
 			});
 		});
-		
-	},
-	torna: function() {
-		
+	}	
+	
+	this.torna = function() {
 		// animacio
-		escriptori_seccions_elm.fadeOut(300, function() {
-			
+		escriptori_seccions_elm.fadeOut(300, function() {			
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
-				modul_seccions_elm.find("a.gestiona").one("click", ModulSeccio.gestiona);
+				modul_seccions_elm.find("a.gestiona").one( "click", function() { ModulSeccions.gestiona(); } );
 			});
 			
 		});
+	}	
 		
-	},
-	contaSeleccionats: function() {
+	/**
+	 * Agrega un item a la lista.
+	 */
+	this.agregaItem = function( itemID, titulo ){	
+					
+		// dsanchez: Componemos el item para enviar a la lista.
+		var item = {
+			id: itemID,
+			nombre: titulo
+		};
 		
-		seleccionats_val = seccions_seleccionats_elm.find("li").size();
-		info_elm = seccions_seleccionats_elm.find("p.info:first");
+		// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
+		if( ModulSeccions.agregaItem( item ) ){		
+			this.contaSeleccionats();		
+		}				
+	}	
 		
-		if (seleccionats_val == 0) {
-			
-			seccions_seleccionats_elm.find("ul").remove();
-			info_elm.text(txtNoHiHaProcedimentsSeleccionats + ".");
-			
-		} else if (seleccionats_val == 1) {
-			
-			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtProcediment.toLowerCase() + "</strong>.");
-			
-		} else {
-			
-			info_elm.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtProcediments.toLowerCase() + "</strong>.");
-			seccions_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(img/cursor/grab.cur), move");
-			
-		}
-		
-	}
-};
+}

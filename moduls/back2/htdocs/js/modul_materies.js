@@ -121,7 +121,7 @@ function CModulMateries(){
 		that.mostrarMateriasSeleccionadas();
 	}
 	
-	//devuelve un string con el formato materies=n1,n2,...,nm donde n son codigos de materias
+	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias
 	this.listaMaterias = function (){
 		var listaMaterias = "materies=";
 		

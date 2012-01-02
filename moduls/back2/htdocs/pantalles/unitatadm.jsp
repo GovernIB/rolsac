@@ -745,7 +745,12 @@
                         <!-- modulSeccions -->
                         <div class="modulSeccions">                                     
                             <div class="seleccionats">                                          
-                                <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>                              
+                                <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
+                                <!--   <div class="listaOrdenable"></div> -->
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.seccions.gestiona'/></span></span></a>                 
+                                </div>                                                                           
                             </div>                                  
                         </div>
                         <!-- /modulSeccions -->                                 
@@ -833,58 +838,66 @@
     <!-- /escriptori_previsualitza -->
                     
     <!-- escriptori_seccions -->
-    <div id="escriptori_seccions">              
-        <h2><spring:message code='unitatadm.formulari.seccions.unitat'/></h2>                  
-        <div class="botonera dalt">
-            <ul>
-                <li>
-                    <a href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna_detall'/></span></span></a>
-                </li>
-            </ul>
-        </div>                  
-        <!-- llistat -->
-        <div class="escriptori_items_llistat">                      
-            <!-- cercador -->
-            <div class="escriptori_items_cercador">                     
-                <h3>Cercador</h3>                               
-                <div class="fila">                                  
-                    <div class="element t18">                               
-                        <div class="etiqueta"><label for="cerca_fixta_titol"><spring:message code='unitatadm.formulari.previsualitzaFitxa.titol'/></label></div>
-                        <div class="control">
-                            <input id="cerca_fixta_titol" name="cerca_fixta_titol" type="text" class="adresa" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t7">                                
-                        <div class="etiqueta"><label for="cerca_fixta_codi"><spring:message code='unitatadm.formulari.previsualitzaFitxa.codi'/></label></div>
-                        <div class="control">
-                            <input id="cerca_fixta_codi" name="cerca_fixta_codi" type="text" class="cp" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t23">                               
-                        <div class="etiqueta"><label class="cerca_fixta_seccio"><spring:message code='unitatadm.formulari.previsualitzaFitxa.seccio'/></label></div>
-                        <div class="control">
-                            <!--<input id="cerca_fixta_seccion" name="cerca_fixta_seccion" type="text" class="poblacio" />-->
-                        </div>                                  
-                    </div>                              
-                </div>                          
-                <div class="botonera">
-                    <a href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar_exclamacio'/></span></span></a>
-                </div>                      
+    <div id="escriptori_seccions">    
+       <ul id="opcions">
+            <li class="opcio C actiu"><spring:message code='unitatadm.formulari.seccions.gestio'/></li>                                 
+        </ul>
+        
+        <div id="resultats" class="escriptori_items_llistat">            
+            <div class="resultats C actiu" style="display: block;">
+                <div id="cercador" class="escriptori_items_cercador"> 
+                    <div id="cercador_contingut">
+                        
+                        <div class="fila">                                  
+                            <div class="element t18">                               
+                                <div class="etiqueta"><label for="cerca_seccions_nom"><spring:message code='unitatadm.formulari.seccions.nom'/></label></div>
+                                <div class="control">
+                                    <input id="cerca_seccions_nom" name="cerca_seccions_nom" type="text" class="nom" />
+                                </div>                                  
+                            </div>                              
+                        </div>
+                        
+                        <div class="botonera">
+                            <div class="boton btnGenerico"><a id="btnLimpiarForm" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                            <div class="boton btnGenerico"><a id="btnBuscarForm" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                            <div class="boton btnGenerico btnVolverDetalleSecciones"><a class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                   
+                <div class="dades"></div>
+                                       
+                <input type="hidden" value="0" class="pagPagina" />
+                <input type="hidden" value="DESC" class="ordreTipus" />
+                <input type="hidden" value="nom" class="ordreCamp" />
+                             
             </div>
-            <!-- /cercador -->                      
-            <div class="dades"></div>                       
-            <input type="hidden" value="0" class="pagPagina" />
-            <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="publicacio" class="ordreCamp" />                    
+        </div>        
+        
+        <div class="modulLateral escriptori_items_seleccionats">
+        
+            <div class="modul">
+                
+                <!--<div class="interior multilang">-->
+                <div class="interior">
+                    <div class="seleccionats">
+                        <div class="seleccionat">
+                            <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
+                            <div class="listaOrdenable"></div>
+                        </div>
+                    
+                        <p class="botonera btnGenerico">
+                            <a id="btnFinalizarSecciones" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                        </p>  
+                    </div>    
+                </div>
+                
+            </div>
+            
         </div>
-        <!-- /llistat -->                   
-        <div class="botonera baix">
-            <ul>
-                <li>
-                    <a href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna_detall'/></span></span></a>
-                </li>
-            </ul>
-        </div>              
+        <!-- seleccionats -->                  
     </div>
     <!-- /escriptori_seccions -->   
                 
@@ -1082,11 +1095,13 @@
         var pagLlistat = '<c:url value="/unitatadm/unitatadm.do" />';
         
         var pagDetall = '<c:url value="/unitatadm/pagDetall.do" />';
-        var pagEdificis = '<c:url value="/edificis/llistat.do" />';
+        var pagEdificis = '<c:url value="/edificis/llistat.do" />';        
+        var pagSeccions = '<c:url value="/unitatadm/llistatSeccions.do" />';        
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
         var pagArrel = '<c:url value="/" />';    
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
+		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -1102,6 +1117,7 @@
         var txtMostremAl = " al ";
         var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
         var txtNoHiHaUnitats = txtNoHiHa + " " + txtUnitats.toLowerCase();
+        var txtNoHiHaFitxes = "Aquesta secció no té fitxes";
         var txtCarregantUnitats = txtCarregant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         var txtOrdenats = "<spring:message code='txt.ordenats'/>";
         var txtAscendentment = "<spring:message code='txt.ascendent'/>";
@@ -1153,6 +1169,7 @@
         var txtMateria = "matèria";
         var txtMateries = "matèries";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+        
         // modul seccions
         var txtSeccio = "secció";
         var txtSeccions = "seccions";
@@ -1162,6 +1179,9 @@
         var txtPublicacio = "publicació";
         var txtCaducitat = "caducitat";
         var txtOrdre = "ordre";
+        var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona' />";
+        var txtNoHiHaSeccionsSeleccionades = "No hi ha " + txtSeccions.toLowerCase() + " " + txtSeleccionats.toLowerCase();
+        
         // modul edificis
         var txtEdifici = "Edifici";
         var txtEdificis = "Edificis";

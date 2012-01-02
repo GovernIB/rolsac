@@ -1,10 +1,5 @@
 package org.ibit.rol.sac.model.dto;
 
-import java.util.Set;
-import java.util.List;
-import java.util.Date;
-import java.util.Iterator;
-
 import org.ibit.rol.sac.model.ValueObject;
 
 /**
@@ -19,15 +14,30 @@ public class FichaDTO implements ValueObject {
 	private String fechaPublicacion;
 	private String fechaCaducidad;
 	private Boolean caducat;
-
-   public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
-        super();
-        this.id = id;
-        this.titulo = titulo;
-        this.fechaPublicacion = fechaPublicacion;
-        this.fechaCaducidad = fechaCaducidad;
-        this.caducat = caducat;
-    }
+	private Long ordre;
+		
+	public Long getOrdre() { 
+		return ordre; 
+	}
+  
+	public void setOrdre( Long ordre ) {
+		this.ordre = ordre;	   
+	}
+	
+	public FichaDTO() {
+		super();
+	}
+	
+	public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
+		
+		super();
+		
+		this.id = id;
+		this.titulo = titulo;
+		this.fechaPublicacion = fechaPublicacion;
+		this.fechaCaducidad = fechaCaducidad;
+		this.caducat = caducat;
+	}
 	
 	public Long getId() {
         return id;

@@ -33,8 +33,9 @@ function CDetall(soloFicha){
 	var that = this;
 	var materias = "";
 	
-	
 	this.iniciar = function() {
+		
+		ModulSeccions = new CModulSeccio();
 		
 		//Sobreescribimos la función del botón finalizar para añadir a los parámetros enviados
 		//las materias seleccionadas por el usuario
@@ -216,7 +217,7 @@ function CDetall(soloFicha){
 		dada_node = dades;
 		
 		
-		if (dada_node.id > 0){							
+		if (dada_node.id > 0) {							
 								
 			$("#item_id").val(dada_node.id);
 			
@@ -404,6 +405,9 @@ function CDetall(soloFicha){
 			//Materias
 			ModulMateries.inicializarMaterias(dada_node.materies);
 
+			//Seccions			
+			ModulSeccions.iniciar(dada_node.seccions);
+			
 			//Edificis			
 			edi_seleccionats_elm = escriptori_detall_elm.find("div.modulEdificis div.seleccionats");
 			edi_llistat_elm = escriptori_detall_elm.find("div.modulEdificis div.llistat");

@@ -326,21 +326,6 @@ function CEscriptoriEdifici(){
 			}).css({cursor:"move"});
 		}
 		
-		codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
-		
-		modul_edificis_elm.find("p.info").html(codi_info);
-		
-		if (nombre_llistat > 1) {			
-			modul_edificis_elm.find(".listaOrdenable ul").sortable({ 
-				axis: 'y', 
-				update: function(event,ui){
-					ModulEdifici.calculaOrden(ui,"origen");
-					EscriptoriEdifici.contaSeleccionats();
-				}
-			}).css({cursor:"move"});
-		}
-
 		// Marcamos el formulario como modificado para habilitar el botón de guardar.
 		Detall.modificado();
 		
