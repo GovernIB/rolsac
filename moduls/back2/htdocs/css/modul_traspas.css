@@ -52,7 +52,7 @@
 #escriptori_traspas div.boib div.tbody div.registre { width:8em; }
 #escriptori_traspas div.boib div.tbody div.data { width:8em; }
 
-#escriptori_traspas div.boib div.tbody div.titol a, div.llistat div.tbody div.titol span { font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
+#escriptori_traspas div.boib div.tbody div.titol a { font:normal 1.1em Georgia, "Times New Roman", Times, serif; }
 #escriptori_traspas div.boib div.tbody div.td span.titol { font-style:italic; }
 
 #escriptori_traspas div.escriptori_items_llistat p.paginacio { text-align:center; padding:.5em 1em; background-color:#ffecd9; }

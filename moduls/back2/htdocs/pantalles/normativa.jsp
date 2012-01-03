@@ -59,9 +59,13 @@
         // taula
 
         var txtNumero = "<spring:message code='camp.numero'/>";
+        var txtNumBoletin = "Número Butlletí";
         var txtTipus = "<spring:message code='camp.tipus'/>";
+        var txtTipoBoletin = "Tipus Butlletí";
         var txtTipologia = "<spring:message code='camp.tipologia'/>";
+        var txtTipologiaNorma = "Tipología Norma";
         var txtData = "<spring:message code='camp.data'/>";
+        var txtFechaBoletin = "Data butlletí";
         var txtLocal = "<spring:message code='txt.local'/>";
         var txtExterna = "<spring:message code='txt.externa'/>";
         var txtBOIB = "BOIB";

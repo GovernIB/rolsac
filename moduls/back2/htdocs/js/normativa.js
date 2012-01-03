@@ -137,19 +137,19 @@ function CLlistat(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
-			//De momento no habr· ordenaciÛn
+			//De momento no habr√° ordenaci√≥n
 			/*
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNumero + "</a></div>";
 			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtTipus + "</a></div>";
 			codi_cap4 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtData + "</a></div>";
 			*/
-
+            
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titol\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
-			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumero + "</a></div>";
-			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipus\" href=\"javascript:void(0)\">" + txtTipus + "</a></div>";
-			codi_cap4 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"tipologia\" href=\"javascript:void(0)\">" + txtTipologia + "</a></div>";
-			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a class=\"data\" href=\"javascript:void(0)\">" + txtData + "</a></div>";						
+            codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"tipologia\" href=\"javascript:void(0)\">" + txtTipologiaNorma + "</a></div>";
+			codi_cap3 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
+			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipus\" href=\"javascript:void(0)\">" + txtTipoBoletin + "</a></div>";			
+			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a class=\"data\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
 			
 			
 			// codi taula
@@ -173,12 +173,12 @@ function CLlistat(){
 				
 				codi_taula += '<div class="td titol ' + caducat_titol_class + ' role="gridcell">';
 				codi_taula += '<input type="hidden" value="' + dada_node.id + '" class="id" />';
-				codi_taula += '<a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
+				codi_taula += '<span class="id">'+ dada_node.id +'</span><a id="normativa_'+dada_node.id+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
 				codi_taula += "</div>";
 				
+                codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.tipologia + "</div>";
 				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.numero + "</div>";
-				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";
-				codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.tipologia + "</div>";
+				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";				
 				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
 				
 				codi_taula += "</div>";
@@ -191,7 +191,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -337,7 +337,7 @@ function CLlistat(){
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p·gina.
+				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p√°gina.
 				Llistat.carregar({cercador: "si"});
 				
 			});
@@ -356,7 +356,7 @@ function CDetall(){
 	var that = this;
 	
 	this.iniciar = function() {			
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
 		jQuery("#item_data").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -392,7 +392,7 @@ function CDetall(){
 	},
 	
 
-	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
 	    // Validamos el formulario
@@ -421,7 +421,7 @@ function CDetall(){
 		$("#afectaciones").val( ModulAfectacions.jsonAfectacions() );
 		
 
-		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({			
 			url: pagGuardar,
 			dataType: 'json',
@@ -487,7 +487,7 @@ function CDetall(){
 		//Poner tipo Normativa local por defecto
 		$("#tipoNormativa").text(txtNormativaLocal);
 		
-		//Establecer ValidaciÛn por defecto si el usuario es operador
+		//Establecer Validaci√≥n por defecto si el usuario es operador
 		if ( $("#rolusuario").val() == "RSC_OPER" ) {
 			$("#item_validacio").val(2);
 		}
