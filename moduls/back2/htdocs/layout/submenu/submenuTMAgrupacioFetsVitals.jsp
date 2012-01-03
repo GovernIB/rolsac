@@ -4,7 +4,7 @@
 	<div id="submenu_contingut">
 		<ul>
 	        <li class="seleccionat">
-	            <span><spring:message code="submenu.fets_vitals" /></span>
+	            <span><spring:message code="submenu.agrupacio_fets_vitals" /></span>
 	            <span class="actual"></span>
 	        </li>
         </ul>			

@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,6 +21,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -114,39 +116,39 @@ public class TMMateriesController {
 	        omplirCampsTraduibles(resultats, materia);
 	        
 	        resultats.put("item_id", materia.getId());
-	        resultats.put("codi_hita", materia.getCodiHita());
-	        resultats.put("codi_estandar", materia.getCodigoEstandar());
-	        	        
+	        resultats.put("item_codi_hita", materia.getCodiHita());
+	        resultats.put("item_codi_estandard", materia.getCodigoEstandar());
+
 	        // Foto
             if (materia.getFoto() != null) {
-            	resultats.put("foto_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=1");
-            	resultats.put("foto", materia.getFoto().getNombre());
+            	resultats.put("item_foto_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=1");
+            	resultats.put("item_foto", materia.getFoto().getNombre());
             } else {
-            	resultats.put("foto_enllas_arxiu", "");
-            	resultats.put("foto", "");
+            	resultats.put("item_foto_enllas_arxiu", "");
+            	resultats.put("item_foto", "");
             }
             
             // Icona
             if (materia.getIcono() != null){
-            	resultats.put("icona_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=2");
-                resultats.put("icona", materia.getIcono().getNombre());
+            	resultats.put("item_icona_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=2");
+                resultats.put("item_icona", materia.getIcono().getNombre());
             } else {
-            	resultats.put("icona_enllas_arxiu", "");
-                resultats.put("icona", "");
+            	resultats.put("item_icona_enllas_arxiu", "");
+                resultats.put("item_icona", "");
             }
             
             // Icona gran
             if (materia.getIconoGrande() != null){
-            	resultats.put("icona_gran_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=3");
-                resultats.put("icona_gran", materia.getIcono().getNombre());
+            	resultats.put("item_icona_gran_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&tipus=3");
+                resultats.put("item_icona_gran", materia.getIconoGrande().getNombre());
             } else {
-            	resultats.put("icona_enllas_arxiu", "");
-                resultats.put("icona", "");
+            	resultats.put("item_icona_gran_enllas_arxiu", "");
+                resultats.put("item_icona_gran", "");
             }  
             
-            resultats.put("uas_materia", materia.getUnidadesmaterias());
-            resultats.put("ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
-            resultats.put("destacada", materia.isDestacada());
+            resultats.put("item_uas_materia", getJSONUnidadesAdministrativas(materia));
+            resultats.put("item_ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
+            resultats.put("item_destacada", materia.isDestacada());
             
             // TODO: Icones materies
             
@@ -172,37 +174,37 @@ public class TMMateriesController {
 		    	HashMap<String, String> traduccionMateriaDTO = new HashMap<String, String>();
 		    	TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(lang);
 		    	
-		    	traduccionMateriaDTO.put("nombre", tm.getNombre());
-		    	traduccionMateriaDTO.put("descripcion", tm.getDescripcion());
-		    	traduccionMateriaDTO.put("palabras_clave", tm.getPalabrasclave());
+		    	traduccionMateriaDTO.put("item_nombre", tm.getNombre());
+		    	traduccionMateriaDTO.put("item_descripcion", tm.getDescripcion());
+		    	traduccionMateriaDTO.put("item_palabras_clave", tm.getPalabrasclave());
 		    	
 		    	if (tm.getDistribComp() != null) {
-		    		traduccionMateriaDTO.put("distribucion_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=4");
-		    		traduccionMateriaDTO.put("distribucion", tm.getDistribComp().getNombre());
+		    		traduccionMateriaDTO.put("item_distribucion_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=4");
+		    		traduccionMateriaDTO.put("item_distribucion", tm.getDistribComp().getNombre());
 		    	} else {
-		    		traduccionMateriaDTO.put("distribucion_enllas_arxiu", "");
-		    		traduccionMateriaDTO.put("distribucion", "");
+		    		traduccionMateriaDTO.put("item_distribucion_enllas_arxiu", "");
+		    		traduccionMateriaDTO.put("item_distribucion", "");
 		    	}
 		    	
 		    	if (tm.getNormativa() != null) {
-		    		traduccionMateriaDTO.put("normativa_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=5");
-		    		traduccionMateriaDTO.put("normativa", tm.getNormativa().getNombre());
+		    		traduccionMateriaDTO.put("item_normativa_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=5");
+		    		traduccionMateriaDTO.put("item_normativa", tm.getNormativa().getNombre());
 		    	} else {
-		    		traduccionMateriaDTO.put("normativa_enllas_arxiu", "");
-		    		traduccionMateriaDTO.put("normativa", "");
+		    		traduccionMateriaDTO.put("item_normativa_enllas_arxiu", "");
+		    		traduccionMateriaDTO.put("item_normativa", "");
 		    	}
 		    	
 		    	if (tm.getContenido() != null) {
-					traduccionMateriaDTO.put("contenido_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=6");
+					traduccionMateriaDTO.put("item_contenido_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=6");
 		    		traduccionMateriaDTO.put("contenido", tm.getContenido().getNombre());
 		    	} else {
-		    		traduccionMateriaDTO.put("contenido_enllas_arxiu", "");
-		    		traduccionMateriaDTO.put("contenido", "");
+		    		traduccionMateriaDTO.put("item_contenido_enllas_arxiu", "");
+		    		traduccionMateriaDTO.put("item_contenido", "");
 		    	}
 		    	
 	        	resultats.put(lang, traduccionMateriaDTO);
 			} else {
-				resultats.put(lang, null);
+				resultats.put(lang, new HashMap<String, String>());
 			}
 		}
 	}
@@ -221,22 +223,33 @@ public class TMMateriesController {
     
     // Dado un set lo actualizamos con la principal seleccionada
     private Set setUAPrincipal(Set uas, Long id) {
-    	Iterator it=uas.iterator();
-
-    	if (id==null) return uas;
-    	
-    	while (it.hasNext()) {
-    		UnidadMateria unimat= (UnidadMateria)it.next();
-    		if (unimat.getId().longValue()==id.longValue()) {
-    			unimat.setUnidadPrincipal("S");
-    		}
-    		else {
-    			unimat.setUnidadPrincipal("N");
-    		}
+    	if (id != null) {
+	    	Iterator it=uas.iterator();
+	    	while (it.hasNext()) {
+	    		UnidadMateria unimat= (UnidadMateria)it.next();
+	    		if (unimat.getId().longValue()==id.longValue()) {
+	    			unimat.setUnidadPrincipal("S");
+	    		}
+	    		else {
+	    			unimat.setUnidadPrincipal("N");
+	    		}
+	    	}
     	}
     	return uas;
     }
     
+    
+    // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
+    private List<IdNomDTO> getJSONUnidadesAdministrativas(Materia materia) {
+    	List<IdNomDTO> uaList = new LinkedList<IdNomDTO>(); 
+    	for (UnidadMateria uam: (Set<UnidadMateria>) materia.getUnidadesmaterias()) {
+    		String nombre = uam.getUnidad().getTraduccion() != null ? ((TraduccionUA)uam.getUnidad().getTraduccion()).getNombre() : "";
+    		Long id = uam.getId();
+    		uaList.add(new IdNomDTO(id, nombre));
+    	}
+    	return uaList;
+    }
+
     
     @RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
@@ -250,7 +263,7 @@ public class TMMateriesController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
 		
-    	Materia materia = null;
+    	Materia materia = new Materia();
     	Materia materiaOld = null; 		
 		IdNomDTO result = null;
         
@@ -279,13 +292,6 @@ public class TMMateriesController {
         	if (edicion) {      		        		
 				Long idMateria = ParseUtil.parseLong(valoresForm.get("item_id"));
         		materiaOld = materiaDelegate.obtenerMateria(idMateria);
-        		
-        		//Comprobar permisos para modificar normativa
-//            	if (!materiaDelegate.autorizaModificarNormativa(materiaOld.getId())) {
-//    				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
-//    				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
-//            	}
-            	
         	    materia.setId(idMateria);
         	    materia.setProcedimientosLocales(materiaOld.getProcedimientosLocales());
         		materia.setUnidadesmaterias(materiaOld.getUnidadesmaterias());
@@ -309,13 +315,13 @@ public class TMMateriesController {
 
         		traMat.setDescripcion(valoresForm.get("item_descripcio_" + idioma));
         		traMat.setNombre(valoresForm.get("item_nom_" + idioma));
-        		traMat.setPalabrasclave(valoresForm.get("item_paraula_clau_" + idioma));
+        		traMat.setPalabrasclave(valoresForm.get("item_paraules_clau_" + idioma));
         		
         		// Archivos
-        		fileItem = ficherosForm.get("item_distribucio_" + idioma);
+        		fileItem = ficherosForm.get("item_distribucion_" + idioma);
         		if (fileItem.getSize() > 0) {
         			traMat.setDistribComp(UploadUtil.obtenerArchivo(traMat.getDistribComp(), fileItem));
-        		} else if (valoresForm.get("item_distribucio_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_distribucio_" + idioma + "_delete"))){
+        		} else if (valoresForm.get("item_distribucion_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_distribucion_" + idioma + "_delete"))){
         			traMat.setDistribComp(null);
         		}
         		
@@ -326,23 +332,23 @@ public class TMMateriesController {
         			traMat.setNormativa(null);
         		}
 		    	
-        		fileItem = ficherosForm.get("item_contingut_" + idioma);
+        		fileItem = ficherosForm.get("item_contenido_" + idioma);
         		if (fileItem.getSize() > 0) {
         			traMat.setContenido(UploadUtil.obtenerArchivo(traMat.getContenido(), fileItem));
-        		} else if (valoresForm.get("item_contingut_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_contingut_" + idioma + "_delete"))){
+        		} else if (valoresForm.get("item_contenido_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_contenido_" + idioma + "_delete"))){
         			traMat.setContenido(null);
         		}
         	}
 
         	//Obtener los demás campos
         	materia.setCodiHita(valoresForm.get("item_codi_hita"));
-        	materia.setCodigoEstandar(valoresForm.get("item_codi_estandar"));
+        	materia.setCodigoEstandar(valoresForm.get("item_codi_estandard"));
+        	materia.setDestacada(valoresForm.get("item_destacada") != null && !"".equals(valoresForm.get("item_destacada")));
         	if (edicion){
                 // ACTUALIZAMOS LA UA SELECCIONADA COMO UA PRINCIPAL
                 Long uaprincipal = ParseUtil.parseLong(valoresForm.get("item_ua_principal"));
                 materia.setUnidadesmaterias(setUAPrincipal(materiaOld.getUnidadesmaterias(), uaprincipal));        	
             }
-            materia.setDestacada(valoresForm.get("item_destacada") != null && !"".equals(valoresForm.get("item_destacada")));
             
 	        // Foto
             fileItem = ficherosForm.get("item_foto");
@@ -350,6 +356,8 @@ public class TMMateriesController {
     			materia.setFoto(UploadUtil.obtenerArchivo(materia.getFoto(), fileItem));
     		} else if (valoresForm.get("item_foto_delete") != null && !"".equals(valoresForm.get("item_foto_delete"))){
     			materia.setFoto(null);
+    		} else if (edicion) {
+    			materia.setFoto(materiaOld.getFoto());
     		}
     		
             // Icona
@@ -358,6 +366,8 @@ public class TMMateriesController {
     			materia.setIcono(UploadUtil.obtenerArchivo(materia.getIcono(), fileItem));
     		} else if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))){
     			materia.setIcono(null);
+    		} else if (edicion) {
+    			materia.setIcono(materiaOld.getIcono());
     		}
     		
             // Icona gran
@@ -366,6 +376,8 @@ public class TMMateriesController {
     			materia.setIconoGrande(UploadUtil.obtenerArchivo(materia.getIconoGrande(), fileItem));
     		} else if (valoresForm.get("item_icona_gran_delete") != null && !"".equals(valoresForm.get("item_icona_gran_delete"))){
     			materia.setIconoGrande(null);
+    		} else if (edicion) {
+    			materia.setIconoGrande(materiaOld.getIconoGrande());
     		}
 
         	materiaDelegate.grabarMateria(materia);

@@ -1153,3 +1153,56 @@ function carregarCoordenades (url, idDiv, idEdifici, latitud, longitud, llocOnPi
 }
 
 
+// Funciones para pintar y limpiar campos de archivos //
+
+function pintarArchivo(campo, datos) {
+	$("#" + campo).val("");
+	$("#grup_" + campo + " input").removeAttr("checked");
+	if (datos[campo + "_enllas_arxiu"]) {
+		$("#grup_" + campo + " a")
+				.attr("href", pagArrel + datos[campo + "_enllas_arxiu"])
+				.text(datos[campo])
+				.show();
+		$("#grup_" + campo + " span").hide();
+		$("#grup_" + campo + " input").show();
+		$("#grup_" + campo + " label.eliminar").show();
+	} else {
+		$("#grup_" + campo + " span").show();
+		$("#grup_" + campo + " input").hide();
+		$("#grup_" + campo + " label.eliminar").hide();
+		$("#grup_" + campo + " a").hide();			
+	}
+}
+
+function pintarArchivoMultiidioma(campo, idioma, datos) {
+	$("#" + campo + "_idioma").val("");
+	$("#grup_" + campo + "_" + idioma + " input").removeAttr("checked");
+	if (datos[idioma][campo + "_enllas_arxiu"]) {
+		$("#grup_" + campo + "_" + idioma + " a")
+				.attr("href", pagArrel + datos[idioma][campo + "_enllas_arxiu"])
+				.text(datos[idioma][campo])
+				.show();
+		$("#grup_" + campo + "_" + idioma + " span").hide();
+		$("#grup_" + campo + "_" + idioma + " input").show();
+		$("#grup_" + campo + "_" + idioma + " label.eliminar").show();
+	} else {
+		$("#grup_" + campo + "_" + idioma + " span").show();
+		$("#grup_" + campo + "_" + idioma + " input").hide();
+		$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
+		$("#grup_" + campo + "_" + idioma + " a").hide();			
+	}
+}
+
+function limpiarArchivo(campo) {
+	$("#grup_" + campo + " span").show();
+	$("#grup_" + campo + " input").hide();
+	$("#grup_" + campo + " label.eliminar").hide();
+	$("#grup_" + campo + " a").hide();	
+}
+
+function limpiarArchivoMultiidioma(campo, idioma) {
+	$("#grup_" + campo + "_" + idioma + " span").show();
+	$("#grup_" + campo + "_" + idioma + " input").hide();
+	$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
+	$("#grup_" + campo + "_" + idioma + " a").hide();	
+}

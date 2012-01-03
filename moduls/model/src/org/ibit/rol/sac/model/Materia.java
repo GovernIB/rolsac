@@ -2,7 +2,6 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,7 +10,9 @@ import java.util.Set;
 
 public class Materia extends Traducible {
 
-    public Long getId() {
+	private static final long serialVersionUID = -4138848500142267423L;
+
+	public Long getId() {
         return id;
     }
 
@@ -196,5 +197,4 @@ public class Materia extends Traducible {
         return tma == null ? null : tma.getNombre();
     }    
 
-    
 }

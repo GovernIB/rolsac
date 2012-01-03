@@ -10,7 +10,7 @@
 
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_materia.js'/>"></script>
-<!-- script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script -->
+<script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/materies/llistat.do" />';
@@ -21,6 +21,7 @@
     var pagGuardarIcona = '<c:url value="/iconesMateria/guardarIcona.do" />';
 
     //texts
+    var txtTria = "<spring:message code='camp.tria.opcio'/>";
     var txt_per = "<spring:message code='txt.per'/>";
     var txtEsborrarCorrecte = "<spring:message code='txt.materia_esborrada_correcte'/>";
     var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -56,7 +57,7 @@
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
     var txtDescripcio = "<spring:message code='camp.descripcio'/>";
-    var txtCodiEstandar = "<spring:message code='camp.codi_estandar'/>";
+    var txtCodiEstandar = "<spring:message code='camp.codiEstandard'/>";
 
     //paginacio
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
@@ -195,7 +196,7 @@
 </div>
 
 <div id="escriptori_detall" class="escriptori_detall">
-    <form id="formGuardar" action="false">
+    <form id="formGuardar" action="false" method="post">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
         <!-- modulPrincipal -->
@@ -253,23 +254,63 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t50p">
-	                                        <div class="etiqueta"><label for="item_distribucio_ca"><spring:message code='camp.distribucio'/></label></div>
-	                                        <div class="control archivo">   
-	                                            <div id="gurp_item_distribucio_ca" class="grup_arxiu_actual">
-	                                                <span><spring:message code='txt.no_arxiu_assignat'/></span>
-	                                                <a href="#" target="_blank"></a>
-	                                                <input type="checkbox" name="item_distribucio_ca_delete" id="item_distribucio_ca_delete" value="1"/>
-	                                                <label for="item_distribucio_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
-	                                            </div>
-	                                        </div>
-	                                    </div>    
-	                                    
-	                                    <div class="element t50p">
-	                                        <div class="etiqueta"><label for="item_distribucio_ca"><spring:message code='camp.arxiu_nou'/></label></div>
-	                                        <div class="control">                                           
-	                                            <input id="item_distribucio_ca" name="item_distribucio_ca" type="file" class="nou" />
-	                                        </div>
-	                                    </div>    
+                                            <div class="etiqueta"><label for="item_distribucion_ca"><spring:message code='camp.distribucio'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_item_distribucion_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_distribucion_ca_delete" id="item_distribucion_ca_delete" value="1"/>
+                                                    <label for="item_distribucion_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_distribucion_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_distribucion_ca" name="item_distribucion_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_ca"><spring:message code='camp.normativa'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_normativa_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_normativa_ca_delete" id="item_normativa_ca_delete" value="1"/>
+                                                    <label for="item_normativa_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_normativa_ca" name="item_normativa_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_ca"><spring:message code='camp.contingut'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_contenido_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_contenido_ca_delete" id="item_contenido_ca_delete" value="1"/>
+                                                    <label for="item_contenido_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_contenido_ca" name="item_contenido_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>    
                                     </div>
                                 </div>
                                 <!-- /ca -->
@@ -307,21 +348,61 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_es"><spring:message code='camp.distribucio'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_es"><spring:message code='camp.distribucio'/></label></div>
                                             <div class="control archivo">   
-                                                <div id="gurp_item_distribucio_es" class="grup_arxiu_actual">
+                                                <div id="grup_item_distribucion_es" class="grup_arxiu_actual">
                                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                                     <a href="#" target="_blank"></a>
-                                                    <input type="checkbox" name="item_distribucio_es_delete" id="item_distribucio_es_delete" value="1"/>
-                                                    <label for="item_distribucio_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                    <input type="checkbox" name="item_distribucion_es_delete" id="item_distribucion_es_delete" value="1"/>
+                                                    <label for="item_distribucion_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
                                                 </div>
                                             </div>
                                         </div>    
                                         
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_es"><spring:message code='camp.arxiu_nou'/></label></div>
                                             <div class="control">                                           
-                                                <input id="item_distribucio_es" name="item_distribucio_es" type="file" class="nou" />
+                                                <input id="item_distribucion_es" name="item_distribucion_es" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_es"><spring:message code='camp.normativa'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_normativa_es" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_normativa_es_delete" id="item_normativa_es_delete" value="1"/>
+                                                    <label for="item_normativa_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_normativa_es" name="item_normativa_es" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_es"><spring:message code='camp.contingut'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_contenido_es" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_contenido_es_delete" id="item_contenido_es_delete" value="1"/>
+                                                    <label for="item_contenido_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_contenido_es" name="item_contenido_es" type="file" class="nou" />
                                             </div>
                                         </div>    
                                     </div>
@@ -361,21 +442,61 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_en"><spring:message code='camp.distribucio'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_en"><spring:message code='camp.distribucio'/></label></div>
                                             <div class="control archivo">   
-                                                <div id="gurp_item_distribucio_en" class="grup_arxiu_actual">
+                                                <div id="grup_item_distribucion_en" class="grup_arxiu_actual">
                                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                                     <a href="#" target="_blank"></a>
-                                                    <input type="checkbox" name="item_distribucio_en_delete" id="item_distribucio_en_delete" value="1"/>
-                                                    <label for="item_distribucio_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                    <input type="checkbox" name="item_distribucion_en_delete" id="item_distribucion_en_delete" value="1"/>
+                                                    <label for="item_distribucion_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
                                                 </div>
                                             </div>
                                         </div>    
                                         
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_en"><spring:message code='camp.arxiu_nou'/></label></div>
                                             <div class="control">                                           
-                                                <input id="item_distribucio_en" name="item_distribucio_en" type="file" class="nou" />
+                                                <input id="item_distribucion_en" name="item_distribucion_en" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_en"><spring:message code='camp.normativa'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_normativa_en" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_normativa_en_delete" id="item_normativa_en_delete" value="1"/>
+                                                    <label for="item_normativa_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_normativa_en" name="item_normativa_en" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_en"><spring:message code='camp.contingut'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_contenido_en" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_contenido_en_delete" id="item_contenido_en_delete" value="1"/>
+                                                    <label for="item_contenido_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_contenido_en" name="item_contenido_en" type="file" class="nou" />
                                             </div>
                                         </div>    
                                     </div>
@@ -415,21 +536,61 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_de"><spring:message code='camp.distribucio'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_de"><spring:message code='camp.distribucio'/></label></div>
                                             <div class="control archivo">   
-                                                <div id="gurp_item_distribucio_de" class="grup_arxiu_actual">
+                                                <div id="grup_item_distribucion_de" class="grup_arxiu_actual">
                                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                                     <a href="#" target="_blank"></a>
-                                                    <input type="checkbox" name="item_distribucio_de_delete" id="item_distribucio_de_delete" value="1"/>
-                                                    <label for="item_distribucio_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                    <input type="checkbox" name="item_distribucion_de_delete" id="item_distribucion_de_delete" value="1"/>
+                                                    <label for="item_distribucion_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
                                                 </div>
                                             </div>
                                         </div>    
                                         
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_de"><spring:message code='camp.arxiu_nou'/></label></div>
                                             <div class="control">                                           
-                                                <input id="item_distribucio_de" name="item_distribucio_de" type="file" class="nou" />
+                                                <input id="item_distribucion_de" name="item_distribucion_de" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_de"><spring:message code='camp.normativa'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_normativa_de" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_normativa_de_delete" id="item_normativa_de_delete" value="1"/>
+                                                    <label for="item_normativa_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_normativa_de" name="item_normativa_de" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_de"><spring:message code='camp.contingut'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_contenido_de" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_contenido_de_delete" id="item_contenido_de_delete" value="1"/>
+                                                    <label for="item_contenido_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_contenido_de" name="item_contenido_de" type="file" class="nou" />
                                             </div>
                                         </div>    
                                     </div>
@@ -469,21 +630,61 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_fr"><spring:message code='camp.distribucio'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_fr"><spring:message code='camp.distribucio'/></label></div>
                                             <div class="control archivo">   
-                                                <div id="gurp_item_distribucio_fr" class="grup_arxiu_actual">
+                                                <div id="grup_item_distribucion_fr" class="grup_arxiu_actual">
                                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                                     <a href="#" target="_blank"></a>
-                                                    <input type="checkbox" name="item_distribucio_fr_delete" id="item_distribucio_fr_delete" value="1"/>
-                                                    <label for="item_distribucio_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                    <input type="checkbox" name="item_distribucion_fr_delete" id="item_distribucion_fr_delete" value="1"/>
+                                                    <label for="item_distribucion_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
                                                 </div>
                                             </div>
                                         </div>    
                                         
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_distribucio_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="etiqueta"><label for="item_distribucion_fr"><spring:message code='camp.arxiu_nou'/></label></div>
                                             <div class="control">                                           
-                                                <input id="item_distribucio_fr" name="item_distribucio_fr" type="file" class="nou" />
+                                                <input id="item_distribucion_fr" name="item_distribucion_fr" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_fr"><spring:message code='camp.normativa'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_normativa_fr" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_normativa_fr_delete" id="item_normativa_fr_delete" value="1"/>
+                                                    <label for="item_normativa_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_normativa_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_normativa_fr" name="item_normativa_fr" type="file" class="nou" />
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_fr"><spring:message code='camp.contingut'/></label></div>
+                                            <div class="control archivo">
+                                                <div id="grup_item_contenido_fr" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="item_contenido_fr_delete" id="item_contenido_fr_delete" value="1"/>
+                                                    <label for="item_contenido_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="item_contenido_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="item_contenido_fr" name="item_contenido_fr" type="file" class="nou" />
                                             </div>
                                         </div>    
                                     </div>
@@ -504,10 +705,32 @@
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila">
+                        <div class="element t99p">
+                            <div class="etiqueta">
+                                <label for="item_codi_hita"><spring:message code='camp.codiHita'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="item_codi_hita" name="item_codi_hita" type="text" class="nou" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- fila -->
+                    <div class="fila">
+                        <div class="element t99p">
+                            <div class="etiqueta">
+                                <label for="item_codi_estandard"><spring:message code='camp.codiEstandard'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- fila -->
+                    <div class="fila">
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_foto"><spring:message code='camp.foto'/></label></div>
                             <div class="control archivo">   
-                                <div id="gurp_item_foto" class="grup_arxiu_actual">
+                                <div id="grup_item_foto" class="grup_arxiu_actual">
                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                     <a href="#" target="_blank"></a>
                                     <input type="checkbox" name="item_foto_delete" id="item_foto_delete" value="1"/>
@@ -528,7 +751,7 @@
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_icona"><spring:message code='camp.icona'/></label></div>
                             <div class="control archivo">   
-                                <div id="gurp_item_icona" class="grup_arxiu_actual">
+                                <div id="grup_item_icona" class="grup_arxiu_actual">
                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                     <a href="#" target="_blank"></a>
                                     <input type="checkbox" name="item_icona_delete" id="item_icona_delete" value="1"/>
@@ -549,7 +772,7 @@
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_icona_gran"><spring:message code='camp.icona_gran'/></label></div>
                             <div class="control archivo">   
-                                <div id="gurp_item_icona_gran" class="grup_arxiu_actual">
+                                <div id="grup_item_icona_gran" class="grup_arxiu_actual">
                                     <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                     <a href="#" target="_blank"></a>
                                     <input type="checkbox" name="item_icona_gran_delete" id="item_icona_gran_delete" value="1"/>
@@ -560,9 +783,31 @@
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_icona_gran"><spring:message code='camp.arxiu_nou'/></label></div>
                             <div class="control">                                           
-                                <input id="item_icona_gran" name="item_icona" type="file" class="nou" />
+                                <input id="item_icona_gran" name="item_icona_gran" type="file" class="nou" />
                             </div>
                         </div> 
+                    </div>
+                    <!-- /fila -->
+                    <!-- fila -->
+                    <div class="fila">
+                        <div class="element t50p">
+                            <div class="etiqueta">
+                                <label for="item_ua_principal"><spring:message code='camp.uaPrincipal'/></label>
+                            </div>
+                            <div class="control select">
+                                <select id="item_ua_principal" name="item_ua_principal" class="nou">
+                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t50p">
+                            <div class="etiqueta">
+                                <label for="item_destacada"><spring:message code='camp.destacada'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="item_destacada" name="item_destacada" type="checkbox" class="nou" />
+                            </div>
+                        </div>
                     </div>
                     <!-- /fila -->
                 </div>
