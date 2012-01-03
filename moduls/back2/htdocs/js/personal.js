@@ -1,4 +1,4 @@
-// TIPUS UNITATS ADMINISTRATIVES
+// PERSONAL
 
 $(document).ready(function() {
 	
@@ -103,7 +103,7 @@ function CLlistat(){
 			if (resultats_total > 1) {
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenades + " <em>" + txtAscendentment + "</em>" : txtOrdenades + " <em>" + txtDescendentment + "</em>";
-
+                
 				if (ordre_C == "nombre") {
 					txt_per = txtLlistaItem;
 				} else if (ordre_C == "username") {
@@ -114,13 +114,15 @@ function CLlistat(){
 					txt_per = txtEmail;
 				} else if (ordre_C == "extensionPublica") {
 					txt_per = txtEpui;
-				}
+				} else{
+                    txt_per = "XX";
+                }
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
 			}
 			
-			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDela + " " + resultatInici + txtAla + " " + resultatFinal + txt_ordenacio + ".</p>";
+			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDela + " " + resultatInici + " " + txtAla + " " + resultatFinal + txt_ordenacio + ".</p>";
 
 			// De momento no habra ordenacion.
 //						codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
@@ -129,11 +131,11 @@ function CLlistat(){
 //						codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtEmail + "</a></div>";
 //						codi_cap5 = "<div class=\"th epui" + ordre_c5 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtEpui + "</a></div>";
 			
-			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
-			codi_cap2 = "<div class=\"th codi" + ordre_c2 + "\" role=\"columnheader\">" + txtCodi + "</div>";
-			codi_cap3 = "<div class=\"th ua" + ordre_c3 + "\" role=\"columnheader\">" + txtUA + "</div>";
-			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\">" + txtEmail + "</div>";
-			codi_cap5 = "<div class=\"th epui" + ordre_c5 + "\" role=\"columnheader\">" + txtEpui + "</div>";
+			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a class=\"nombre\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+			codi_cap2 = "<div class=\"th codi" + ordre_c2 + "\" role=\"columnheader\"><a class=\"username\" href=\"javascript:void(0)\">" + txtCodi + "</a></div>";
+			codi_cap3 = "<div class=\"th ua" + ordre_c3 + "\" role=\"columnheader\"><a class=\"uniAdmin\" href=\"javascript:void(0)\">" + txtUA + "</a></div>";
+			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\"><a class=\"email\" href=\"javascript:void(0)\">" + txtEmail + "</a></div>";
+			codi_cap5 = "<div class=\"th epui" + ordre_c5 + "\" role=\"columnheader\"><a class=\"extensionPublica\" href=\"javascript:void(0)\">" + txtEpui + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -200,6 +202,11 @@ function CLlistat(){
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+                
+                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
+                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                    Llistat.ordena(this,opcions);
+                });
 							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
@@ -220,9 +227,9 @@ function CLlistat(){
 		// cercador
 		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
 			
-			/*pagPagina_elm = pagPagina_cercador_elm;
+			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
-			ordreCamp_elm = ordreCamp_cercador_elm;*/
+			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador
 			dataVars_cercador = "&nom=" + $("#cerca_nom").val();
@@ -240,9 +247,9 @@ function CLlistat(){
 		
 		} else {
 			
-			/*pagPagina_elm = pagPagina_llistat_elm;
+			pagPagina_elm = pagPagina_llistat_elm;
 			ordreTipus_elm = ordreTipus_llistat_elm;
-			ordreCamp_elm = ordreCamp_llistat_elm;*/
+			ordreCamp_elm = ordreCamp_llistat_elm;
 			
 			// cercador
 			
@@ -264,10 +271,10 @@ function CLlistat(){
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
-		/*ordre_Tipus = ordreTipus_elm.val();
-		ordre_Camp = ordreCamp_elm.val();*/
-		ordre_Tipus = "";
-		ordre_Camp = "";
+		ordre_Tipus = ordreTipus_elm.val();
+		ordre_Camp = ordreCamp_elm.val();
+		/*ordre_Tipus = "";
+		ordre_Camp = "";*/
 			
 		// variables
 		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;

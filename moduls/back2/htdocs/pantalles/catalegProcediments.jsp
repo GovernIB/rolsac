@@ -61,6 +61,8 @@
     var txtAmaga = "<spring:message code='txt.amaga'/>";
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
+    var txtFamilia = "Familia";
+    var txtFechaActualizacion = "Data d\'actualització";
     
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
@@ -256,7 +258,7 @@
             </div>
             <input type="hidden" value="0" class="pagPagina" /> <input
                 type="hidden" value="DESC" class="ordreTipus" /> <input
-                type="hidden" value="publicacio" class="ordreCamp" />
+                type="hidden" value="nom" class="ordreCamp" />
         </div>
         <div class="resultats C">
             <!-- cercador -->

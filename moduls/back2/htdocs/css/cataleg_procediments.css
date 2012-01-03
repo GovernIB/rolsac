@@ -7,8 +7,15 @@ div.llistat div.nom {
     width: 400px;   
     padding-left: 21px;
 }
-div.llistat div.tbody div.nom {
-    width: 400px;
+div.llistat div.th.procedimiento{
+    width: 429px;
+    padding-left: 21px;
+}
+div.llistat div.familia{
+    width: 300px;
+}
+div.llistat div.fechaActualizacion{
+    width: 200px;
 }
 div.llistat div.publicacio{ 
     width: 200px;
@@ -40,7 +47,6 @@ div.llistat div.tbody div.procedimentCaducat {
     padding-left: 50px;
     width: 400px;
 }
-
 div.llistat div.tbody div.procediment {
     background: url("../img/taula_llistat/procediment.gif") no-repeat scroll 21px 7px transparent;
     padding-left: 50px;

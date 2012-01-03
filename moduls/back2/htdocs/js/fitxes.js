@@ -118,16 +118,16 @@ function CLlistat(){
 			
 			}
 			
-			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + ' ' + resultatInici + ' ' + txtMostremAl + ' ' + resultatFinal + txt_ordenacio + ".</p>";
 			
 			/* De moment, sense ordre
 			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
 			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
 			*/
-			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
-			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\">" + txtPublicacio + "</div>";
-			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\">" + txtCaducitat + "</div>";
+			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titulo\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a class=\"fechaPublicacion\" href=\"javascript:void(0)\">" + txtPublicacio + "</a></div>";
+			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a class=\"fechaCaducidad\" href=\"javascript:void(0)\">" + txtCaducitat + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -150,6 +150,7 @@ function CLlistat(){
 				
 				codi_taula += "<div class=\"td " + caducat_titol_class + "\" role=\"gridcell\">";
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
+                codi_taula += '<span class="id">'+dada_node.id+'</span>';
 				codi_taula += "<a id=\"fitxa_"+dada_node.id+"\" href=\"javascript:;\" class=\"fitxa\">" + printStringFromNull(dada_node.titulo, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				
@@ -194,6 +195,11 @@ function CLlistat(){
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+                
+                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
+                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                    Llistat.ordena(this,opcions);
+                });                
 							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {

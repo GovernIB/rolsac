@@ -176,6 +176,42 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		});	
 	}
 
+    /**
+     * Método de ordenación.
+     */
+    this.ordena = function(domObj,opciones){
+        var $enlace = jQuery(domObj);
+        var $header = $enlace.parent();
+        var tipo = "asc";
+        
+        // Obtenemos el tipo de ordenación a partir de la clase del enlace.
+        if( $header.hasClass("DESC") ){            
+            $header.removeClass("DESC").addClass("ASC");
+            tipo = "ASC";
+        }else if( $header.hasClass("ASC") ){
+            $header.removeClass("ASC").addClass("DESC");
+            tipo = "DESC";
+        }else{
+            $header.addClass("ASC");
+            tipo = "ASC";
+        }
+        
+        // Actualizamos los campos de información de orden.
+        ordreTipus_elm.val(tipo);
+		ordreCamp_elm.val($enlace.attr("class"));        
+        
+        this.anulaCache();        
+        
+        // Recargamos los datos.
+        resultats_dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
+		resultats_dades_elm.fadeOut(300, function() {            
+            resultats_dades_elm.html( "<p class=\"executant\">Ordenant...</p>" ).fadeIn(300, function() {
+                // Recargamos los datos.
+                that.carregar(opciones);
+            });
+        });
+    }    
+
     // Bindings
 	jQuery(idTabListado).bind("click",function(){that.tabListado();});
 	jQuery(idBtnNuevo).bind("click",function(){that.nuevaFicha();});

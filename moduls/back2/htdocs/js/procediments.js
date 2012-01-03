@@ -69,7 +69,7 @@ function CLlistat(){
 		this.carregar({});
 	}
 	
-	this.finCargaListado = function(opcions,data){
+	this.finCargaListado = function(opcions,data){        
 		// total
 		resultats_total = parseInt(data.total,10);
 		
@@ -98,9 +98,9 @@ function CLlistat(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "nom") ? " " + ordre_T : "";
-			ordre_c2 = (ordre_C == "publicacio") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "caducitat") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "nom") ? " " + ordre_T : "";            
+            ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "fecha") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -110,10 +110,10 @@ function CLlistat(){
 				
 				if (ordre_C == "nom") {
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "publicacio") {
-					txt_per = txtPublicacio;
+				} else if (ordre_C == "familia") {					
+                    txt_per = txtFamilia;
 				} else {
-					txt_per = txtCaducitat;
+					txt_per = txtFechaActualizacion;
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
@@ -123,13 +123,13 @@ function CLlistat(){
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + "</strong> " + txtT.toLowerCase() + ". " + txtMostrem + " " + txtDel + " " + resultatInici + " " + txtAl + " " + resultatFinal + txt_ordenacio + ".</p>";
 			
 			// De momento no habra ordenacion.
-//						codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
-//						codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
-//						codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
+            //	codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
+            //	codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
+            //	codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
 			
-			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
-			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\">" + txtPublicacio + "</div>";
-			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\">" + txtCaducitat + "</div>";
+			codi_cap1 = "<div class=\"th procedimiento "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"nom\">" + txtLlistaItem + "</a></div>";
+            codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia\">" + txtFamilia + "</a></div>";
+			codi_cap3 = "<div class=\"th fechaActualizacion "+ ordre_c3 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"fechaActualizacion\">" + txtFechaActualizacion + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -154,14 +154,18 @@ function CLlistat(){
 				codi_taula += "<div class=\"td " + caducat_nom_class + "\" role=\"gridcell\">";
 
 				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
+                codi_taula += '<span class="id">'+ dada_node.id +'</span>';
 				codi_taula += "<a id=\"procediment_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nombre, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				
 				caducat_class = (dada_node.caducat) ? " caducat" : "";
-				codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.publicacio) + "</div>";
-				codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
+				//codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.publicacio) + "</div>";
+                codi_taula += '<div class="td familia">[dinamizar]</div>';
+                
+				//codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
+                codi_taula += "<div class=\"td fechaActualizacion" + caducat_class + "\" role=\"gridcell\">[dinamizar]</div>";
 				
-				codi_taula += "</div>";
+				codi_taula += "</div>";                
 			});
 			
 			codi_taula += "</div>";
@@ -199,6 +203,11 @@ function CLlistat(){
 			
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+                
+                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
+                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                    Llistat.ordena(this,opcions);
+                });
 							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
@@ -274,7 +283,7 @@ function CLlistat(){
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;               
 		
 		// ajax
 		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
@@ -303,9 +312,8 @@ function CLlistat(){
 			});
 		}else{
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
-		}
-	
-	}
+		}	
+	}    
 };
 
 // items array

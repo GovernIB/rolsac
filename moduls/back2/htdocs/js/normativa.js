@@ -145,11 +145,11 @@ function CLlistat(){
 			codi_cap4 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtData + "</a></div>";
 			*/
 
-			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
-			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\">" + txtNumero + "</div>";
-			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\">" + txtTipus + "</div>";
-			codi_cap4 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\">" + txtTipologia + "</div>";
-			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\">" + txtData + "</div>";						
+			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titol\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumero + "</a></div>";
+			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipus\" href=\"javascript:void(0)\">" + txtTipus + "</a></div>";
+			codi_cap4 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"tipologia\" href=\"javascript:void(0)\">" + txtTipologia + "</a></div>";
+			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a class=\"data\" href=\"javascript:void(0)\">" + txtData + "</a></div>";						
 			
 			
 			// codi taula
@@ -219,6 +219,11 @@ function CLlistat(){
 			
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.ficha(this);});
+                
+                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
+                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                    Llistat.ordena(this,opcions);
+                });
 							
 				// cercador
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
