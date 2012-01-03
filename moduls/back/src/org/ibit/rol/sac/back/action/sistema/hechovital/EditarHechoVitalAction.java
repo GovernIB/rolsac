@@ -91,7 +91,7 @@ public class EditarHechoVitalAction extends BaseDispatchAction{
         	hechovitalOld = (HechoVital)hechoVitalDelegate.obtenerHechoVital((Long)dForm.get("id"));
         }
         
-//tractam tots els fitxers associats a les traduccions
+        //tractam tots els fitxers associats a les traduccions
         Iterator lang = idiomaDelegate.listarLenguajes().iterator();
         Iterator distribs =  Arrays.asList((FormFile[]) dForm.get("distribs")).iterator();
         Iterator normats =  Arrays.asList((FormFile[]) dForm.get("normats")).iterator();

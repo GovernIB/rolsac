@@ -48,7 +48,7 @@
 								<a href="<c:url value="/materies/materia.do"/>"><spring:message code="menu.materies" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/fetsVitals/llistat.do"/>"><spring:message code="menu.fets_vitals" /></a>
+								<a href="<c:url value="/fetsVitals/fetsVitals.do"/>"><spring:message code="menu.fets_vitals" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/agrupacioFetsVitals/agrupacioFetsVitals.do"/>"><spring:message code="menu.agrupacio_fets_vitals" /></a>
