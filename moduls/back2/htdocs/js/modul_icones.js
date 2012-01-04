@@ -206,7 +206,7 @@ function CModulIcones(){
 
 					var iconaItem = new Object();
 					iconaItem['id'] = data.id;
-					iconaItem['nombre'] = jQuery('#grup_arxiu_actual_icona a').text();
+					iconaItem['nombre'] = jQuery('#icona_arxiu').val(); //jQuery('#grup_arxiu_actual_icona a').text();
 					EscriptoriPare.agregaActualizaItem(iconaItem);
 
 					that.torna();

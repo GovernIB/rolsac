@@ -1,8 +1,12 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.Collection;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
@@ -114,4 +118,27 @@ public abstract class IconoMateriaFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Borra una coleccion de IconoMateria.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+    public void borrarIconosMateria(Collection<Long> iconosABorrar) {
+        Session session = getSession();
+        IconoMateria icono;
+        try {
+            for (Long iconoId: iconosABorrar) {
+            	icono = (IconoMateria) session.load(IconoMateria.class, iconoId);
+	            icono.getMateria().removeIcono(icono);
+	            icono.getPerfil().removeIconoMateria(icono);
+	            session.delete(icono);
+            }
+            session.flush();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
 }

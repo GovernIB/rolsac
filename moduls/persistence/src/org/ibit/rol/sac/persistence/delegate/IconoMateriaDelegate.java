@@ -10,6 +10,7 @@ import javax.ejb.Handle;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -49,6 +50,14 @@ public class IconoMateriaDelegate implements StatelessDelegate{
     public void borrarIconoMateria(Long id) throws DelegateException {
         try {
             getFacade().borrarIconoMateria(id);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public void borrarIconosMateria(Collection<Long> iconosABorrar) throws DelegateException {
+        try {
+            getFacade().borrarIconosMateria(iconosABorrar);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
