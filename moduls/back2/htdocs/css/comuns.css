@@ -785,18 +785,21 @@ div.table div.tbody div.td a:hover{
     padding: 2px 0;
     border-radius: 5px 5px 5px 5px;
 }
-.escriptori_detall .grupoModulosFormulario textarea{    
+.escriptori_detall .grupoModulosFormulario textarea,
+#escriptori_tramits .control textarea{    
     background-color: #ECF6FC;
     width: 733px;
 }
-.escriptori_detall .grupoModulosFormulario .control.select{
+.escriptori_detall .grupoModulosFormulario .control.select,
+#escriptori_tramits .control.select{
     border-radius: 5px 5px 5px 5px;
     border: 1px solid #C7DDEB;
     background-color: #ECF6FC;
     height: 21px;   
     padding: 2px 0;
 }
-.escriptori_detall .grupoModulosFormulario .control.select select{
+.escriptori_detall .grupoModulosFormulario .control.select select,
+#escriptori_tramits .control.select select{
     background-color: transparent;
     width: 99.9%;
     border: none;
@@ -821,9 +824,16 @@ div.table div.tbody div.td a:hover{
 .escriptori_detall .grupoModulosFormulario .element .control{   
     margin-right: 25px;
 }
-/*.escriptori_detall .grupoModulosFormulario .element:last-child .control{
-    margin-right: 0;
-}*/
+.escriptori_detall .grupoModulosFormulario .element.checkbox {
+    margin-right: 25px;
+}
+.escriptori_detall .grupoModulosFormulario .element.checkbox .etiqueta,
+.escriptori_detall .grupoModulosFormulario .element.checkbox .control{
+    float: left;
+}
+.escriptori_detall .grupoModulosFormulario .element.checkbox .control{
+    margin: 0 3px 0 0;
+}
 .escriptori_detall .grupoModulosFormulario .t20p{
     width: 19.9%;
 }
@@ -845,11 +855,13 @@ div.table div.tbody div.td a:hover{
 
 /* Botones */
 
-.escriptori_detall .botonera{
+.escriptori_detall .botonera,
+.menuPublicacion .botonera{
     float: right;
     width: 286px;    
 }
-.escriptori_detall .botonera ul{
+.escriptori_detall .botonera ul,
+.menuPublicacion .botonera ul{
     background-color: #F3F3F3;
     border: 1px solid #D3D3D3;  
     overflow: hidden;
@@ -859,31 +871,39 @@ div.table div.tbody div.td a:hover{
 }
 .escriptori_detall .botonera ul li,
 .escriptori_detall .botonera ul li a,
-.escriptori_detall .botonera ul li span{
+.escriptori_detall .botonera ul li span,
+.menuPublicacion .botonera ul li,
+.menuPublicacion .botonera ul li a,
+.menuPublicacion .botonera ul li span{
     height: 38px;
     font: 16px/38px Impact, Arial, Helvetica, Sans-serif;
     color: White;
     display:block;
     text-align: center; 
 }
-.escriptori_detall .botonera ul li{
+.escriptori_detall .botonera ul li,
+.menuPublicacion .botonera ul li{
     list-style: none;
     float: left;
     background: url(../img/botons/opcion1/cen.gif) 0 0 repeat-x;
     min-width: 105px;
     margin-bottom: 10px;
 }
-.escriptori_detall .botonera ul li a{   
+.escriptori_detall .botonera ul li a,
+.menuPublicacion .botonera ul li a{   
     background: url(../img/botons/opcion1/izq.gif) 0 0 no-repeat;
     text-decoration: none;
 }
-.escriptori_detall .botonera ul li a:hover{ 
+.escriptori_detall .botonera ul li a:hover,
+.menuPublicacion .botonera ul li a:hover{ 
     text-decoration: underline;
 }
-.escriptori_detall .botonera ul li a > span{
+.escriptori_detall .botonera ul li a > span,
+.menuPublicacion .botonera ul li a > span{
     background: url(../img/botons/opcion1/der.gif) 100% 0 no-repeat; 
 }
-.escriptori_detall .botonera ul li a > span span{
+.escriptori_detall .botonera ul li a > span span,
+.menuPublicacion .botonera ul li a > span span{
     padding: 0 15px 0 32px;
     text-transform: uppercase;
 }
@@ -891,19 +911,24 @@ div.table div.tbody div.td a:hover{
 
 /* Boton eliminar */
 
-.escriptori_detall .botonera ul li.btnEliminar{
+.escriptori_detall .botonera ul li.btnEliminar,
+.menuPublicacion .botonera ul li.btnEliminar{
     clear: left;
 }
-.escriptori_detall .botonera ul li.btnEliminar{
+.escriptori_detall .botonera ul li.btnEliminar,
+.menuPublicacion .botonera ul li.btnEliminar{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
-.escriptori_detall .botonera ul li.btnEliminar a{   
+.escriptori_detall .botonera ul li.btnEliminar a,
+.menuPublicacion .botonera ul li.btnEliminar a{   
     background-image: url(../img/botons/opcion2/izq.gif);    
 }
-.escriptori_detall .botonera ul li.btnEliminar a > span{
+.escriptori_detall .botonera ul li.btnEliminar a > span,
+.menuPublicacion .botonera ul li.btnEliminar a > span{
     background-image: url(../img/botons/opcion2/der.gif);    
 }
-.escriptori_detall .botonera ul li.btnEliminar a span span{
+.escriptori_detall .botonera ul li.btnEliminar a span span,
+.menuPublicacion .botonera ul li.btnEliminar a span span{
     background: url(../img/botons/iconos/borrar.png) 10px 50% no-repeat; 
 }
 
@@ -913,77 +938,89 @@ div.table div.tbody div.td a:hover{
 /*.escriptori_detall .botonera ul li.btnPrevisualizar{
     float: right;
 }*/
-.escriptori_detall .botonera ul li.btnPrevisualizar{
+.escriptori_detall .botonera ul li.btnPrevisualizar,
+.menuPublicacion .botonera ul li.btnPrevisualizar{
     background-image: url(../img/botons/opcion2/cen.gif);
 }
-.escriptori_detall .botonera ul li.btnPrevisualizar a{  
+.escriptori_detall .botonera ul li.btnPrevisualizar a,
+.menuPublicacion .botonera ul li.btnPrevisualizar a{  
     background-image: url(../img/botons/opcion2/izq.gif);    
 }
-.escriptori_detall .botonera ul li.btnPrevisualizar a > span{
+.escriptori_detall .botonera ul li.btnPrevisualizar a > span,
+.menuPublicacion .botonera ul li.btnPrevisualizar a > span{
     background-image: url(../img/botons/opcion2/der.gif);    
 }
-.escriptori_detall .botonera ul li.btnPrevisualizar a span span{
+.escriptori_detall .botonera ul li.btnPrevisualizar a span span,
+.menuPublicacion .botonera ul li.btnPrevisualizar a span span{
     background: url(../img/botons/iconos/previsualizar.png) 13px 50% no-repeat;  
 }
 
 
 /* Boton volver */
 
-.escriptori_detall .botonera ul li.btnVolver a span span{
+.escriptori_detall .botonera ul li.btnVolver a span span,
+.menuPublicacion .botonera ul li.btnVolver a span span{
     background: url(../img/botons/iconos/volver.png) 13px 50% no-repeat; 
 }
 
 
 /* Boton guardar */
 
-/*.escriptori_detall .botonera ul li.btnGuardar{
-    clear: left;
-}*/
-.escriptori_detall .botonera ul li.btnGuardar a span span{
+.escriptori_detall .botonera ul li.btnGuardar a span span,
+.menuPublicacion .botonera ul li.btnGuardar a span span{
     background: url(../img/botons/iconos/guardar.png) 13px 50% no-repeat;    
 }
 
 
 /* Boton publicar */
 
-.escriptori_detall .botonera ul li.btnPublicar span span{
+.escriptori_detall .botonera ul li.btnPublicar span span,
+.menuPublicacion .botonera ul li.btnPublicar span span{
     background: url(../img/botons/iconos/publicar.png) 5px 50% no-repeat;    
 }
 
 
 /* Boton deshabilitado */
 
-.escriptori_detall .botonera ul li.off{ 
+.escriptori_detall .botonera ul li.off,
+.menuPublicacion .botonera ul li.off{ 
     background-image: url(../img/botons/opcion_off/cen.gif); 
 }
-.escriptori_detall .botonera ul li.off a{   
+.escriptori_detall .botonera ul li.off a,
+.menuPublicacion .botonera ul li.off a{   
     background-image: url(../img/botons/opcion_off/izq.gif);     
     cursor: default;
 }
-.escriptori_detall .botonera ul li.off a:hover{ 
+.escriptori_detall .botonera ul li.off a:hover,
+.menuPublicacion .botonera ul li.off a:hover{ 
     text-decoration: none;
 }
-.escriptori_detall .botonera ul li.off a > span{
+.escriptori_detall .botonera ul li.off a > span,
+.menuPublicacion .botonera ul li.off a > span{
     background-image: url(../img/botons/opcion_off/der.gif); 
 }
 
-.escriptori_detall .botonera ul li.par{
+.escriptori_detall .botonera ul li.par,
+.menuPublicacion .botonera ul li.par{
     clear: left;
 }
-.escriptori_detall .botonera ul li.impar{
+.escriptori_detall .botonera ul li.impar,
+.menuPublicacion .botonera ul li.impar{
     float:right;
 }
 
 
 /* Módulo lateral */
 
-.escriptori_detall .modulLateral{
+.escriptori_detall .modulLateral,
+.menuPublicacion{
     margin-top: 0;
     float: right;
     width: 286px;    
 }
 
-.escriptori_detall .modulLateral div.modul{
+.escriptori_detall .modulLateral div.modul,
+.menuPublicacion  div.modul{
     background-color: #F3F3F3;
     border: 1px solid #D3D3D3;  
     overflow: hidden;
@@ -994,18 +1031,60 @@ div.table div.tbody div.td a:hover{
     border-radius: 15px 15px 15px 15px;
 }
 
-.escriptori_detall .modulLateral div.modul a.modul{
+.escriptori_detall .modulLateral div.modul.destacado,
+.menuPublicacion div.modul.destacado{
+    padding: 0;
+    background-color: White;        
+    
+    border-radius: 0px 15px 15px 0px;
+    border-left: none;        
+    left: -21px;
+    width: 306px;
+    overflow: visible;
+    
+    /*left: -19px;    
+    width: 304px;*/
+}
+
+.escriptori_detall .modulLateral div.modul.destacado .dec1,
+.escriptori_detall .modulLateral div.modul.destacado .dec2,
+.menuPublicacion div.modul.destacado .dec1,
+.menuPublicacion div.modul.destacado .dec2{
+    position: absolute;
+    left: 0;    
+    width: 42px;
+    height: 13px;
+}
+.escriptori_detall .modulLateral div.modul.destacado .dec1,
+.menuPublicacion div.modul.destacado .dec1{
+    top: -13px;        
+    background-image: url(../img/marcos/modulo_borde_sup.gif);
+}
+.escriptori_detall .modulLateral div.modul.destacado .dec2,
+.menuPublicacion div.modul.destacado .dec2{
+    bottom: -13px;        
+    background-image: url(../img/marcos/modulo_borde_inf.gif);
+}
+.escriptori_detall .modulLateral div.modul.destacado .interior,
+.menuPublicacion div.modul.destacado .interior{
+    position: relative;    
+    padding: 15px 15px 15px 36px;
+    
+}
+.escriptori_detall .modulLateral div.modul a.modul,
+.menuPublicacion div.modul a.modul{
     position:absolute;
     right: 9px;
     top: 9px;
     display:block;
-    text-indent: -1000px;
+    text-indent: -9000px;
     width: 16px;
     height: 16px;
     background-image: url(../img/botons/desplegar.png);
 }
 
-.escriptori_detall .modulLateral .modul fieldset legend{
+.escriptori_detall .modulLateral .modul fieldset legend,
+.menuPublicacion .modul fieldset legend{
     font: bold 11px Verdana, Helvetica, Sans-serif;
     color: #333333;
     text-transform: uppercase;
@@ -1013,7 +1092,8 @@ div.table div.tbody div.td a:hover{
     padding-bottom: 15px;
 }
 
-.escriptori_detall .modulLateral .botonera{
+.escriptori_detall .modulLateral .botonera,
+.menuPublicacion  .botonera{
     border: none;
     background-color: transparent;
     margin: 0;
@@ -1023,20 +1103,23 @@ div.table div.tbody div.td a:hover{
     clear:both;
 }
 
-.escriptori_detall .modulLateral .botonera ul{
+.escriptori_detall .modulLateral .botonera ul,
+.menuPublicacion .botonera ul{
     padding: 0;
     border: none;
     border-radius: 0;    
 }
 
-.escriptori_detall .modulLateral .left {
+.escriptori_detall .modulLateral .left,
+.menuPublicacion .left {
     clear: both;
     float:left;
     width: 49%;
     padding-bottom: 10px;
 }
 
-.escriptori_detall .modulLateral .right {
+.escriptori_detall .modulLateral .right,
+.menuPublicacion .right {
     float:left;
     width: 49%;
     padding-bottom: 10px;
@@ -1044,7 +1127,10 @@ div.table div.tbody div.td a:hover{
 
 .escriptori_detall .modulLateral .left input,
 .escriptori_detall .modulLateral .right input,
-escriptori_detall .modulLateral .left select {
+.escriptori_detall .modulLateral .left select,
+.menuPublicacion .left input,
+.menuPublicacion .right input,
+.menuPublicacion .left select {
     width: 80%;
 }
 

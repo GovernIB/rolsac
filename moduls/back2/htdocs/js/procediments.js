@@ -175,7 +175,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -363,7 +363,15 @@ function CDetall(){
 		}
 		
 		// moduls
-		moduls_elm = escriptori_detall_elm.find("div.modul");		
+		moduls_elm = escriptori_detall_elm.find("div.modul");		                
+       
+        jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
+            jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").attr("checked", jQuery(this).is(":checked"));
+        });
+        
+        jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").change(function(){
+            jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").attr("checked", jQuery(this).is(":checked"));
+        });
 	}
 	
 	this.dataPublicacio = function(e) {		
@@ -375,6 +383,7 @@ function CDetall(){
 	this.nou = function() {
         //Ocultar paneles
 		jQuery("#modul_documents").hide();
+        jQuery("#modul_tramits").hide();
 		
 		ModulMateries.nuevo();
 		ModulNormativa.nuevo();
@@ -412,6 +421,7 @@ function CDetall(){
 	this.pintar = function(dades) {
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
+        jQuery("#modul_tramits").show();
         
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -470,7 +480,8 @@ function CDetall(){
 		$("#item_url").val(dada_node.item_url);
 		
 		if (dada_node.item_fi_vida_administrativa != undefined) {
-			$('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);
+			jQuery('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);                        
+            jQuery("#item_fi_vida_administrativa").change();
 		}
 		
 		if (dada_node.item_finestreta_unica != undefined) {
@@ -478,12 +489,19 @@ function CDetall(){
 		}
 		
 		if (dada_node.item_taxa != undefined) {
-			$('#item_taxa').attr('checked', dada_node.item_taxa);
+			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);                        
+            jQuery("#item_taxa").change();
 		}
 		
 		$("#item_notes").val(dada_node.item_notes);
-		
-		
+
+        //ModulTramit.inicializarTramites(dada_node.tramits);
+        ModulTramit.inicializarTramites(
+            [
+                {id:1,nombre:"Tramite inicial 1",orden:0},
+                {id:2,nombre:"Tramite inicial 2",orden:1}
+            ]);        
+		        
 		ModulDocuments.inicializarDocuments(dada_node.documents);
         
 		ModulMateries.inicializarMaterias(dada_node.materies);

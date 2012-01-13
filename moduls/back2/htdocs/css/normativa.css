@@ -29,7 +29,7 @@ div.llistat div.tbody div.titol {
     padding-right: 20px;
     padding-bottom:1em; 
     padding-left: 60px;     
-    background:transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em 1em;
+    background: transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em 1em;
 }
 div.llistat div.tbody div.numero { 
     width: 160px;

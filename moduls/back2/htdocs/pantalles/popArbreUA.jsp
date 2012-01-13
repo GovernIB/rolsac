@@ -30,8 +30,11 @@
                 <c:when test="${not empty id_input}">
                     $("#" + "<c:out value='${id_hidden}'/>", window.top.document).val(id);
                     $("#" + "<c:out value='${id_input}'/>",window.top.document).val(nombre);
-                    $("#" + "<c:out value='${id_hidden}'/>",window.top.document).change();
-                    $("#" + "<c:out value='${id_input}'/>",window.top.document).change();
+                    
+                    // Al disparar eventos hay que hacerlo directamente desde la ventana a la que corresponden.
+                    window.top.jQuery("#" + "<c:out value='${id_hidden}'/>").change();
+                    window.top.jQuery("#" + "<c:out value='${id_input}'/>").change();                    
+                    
                 </c:when>
                 <c:otherwise>
                     var uaItem = new Object();

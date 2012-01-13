@@ -52,3 +52,14 @@
 #cercador_afectacions DIV.element{
     width: 235px;
 }
+
+.escriptori_detall .modulLateral div.modul.destacado {
+    width: 304px;
+    left: -19px;
+}
+.escriptori_detall .modulLateral div.modul.destacado .dec1{        
+    background-image: none;
+}
+.escriptori_detall .modulLateral div.modul.destacado .dec2{    
+    background-image: none;
+}

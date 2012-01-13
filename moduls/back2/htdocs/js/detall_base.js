@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
 
-	// El botÛn de guardar est· inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
+	// El bot√≥n de guardar est√° inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
 	jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
@@ -44,8 +44,10 @@ jQuery(document).ready(function(){
 function DetallBase(soloFicha, reglasFormulario){
 	var that = this;
 	var soloFicha = soloFicha || false;
+    
+    this.idiomas = ["es","ca","en","de","fr"];
 
-	// Url de la previsualizaciÛn (tiene que sobreescribirse al extender la clase).
+	// Url de la previsualizaci√≥n (tiene que sobreescribirse al extender la clase).
 	this.urlPrevisualizar = null;
 
 
@@ -120,7 +122,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el botÛn de guardar.
+		// Habilitamos el bot√≥n de guardar.
 		jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
 	}
 
@@ -141,7 +143,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	/**
-	 * Inicia la eliminaciÛn de un item confirmando la operaciÛn.
+	 * Inicia la eliminaci√≥n de un item confirmando la operaci√≥n.
 	 */
 	this.eliminar = function() {
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
@@ -151,7 +153,7 @@ function DetallBase(soloFicha, reglasFormulario){
 
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el botÛn de guardar.
+		// Deshabilitamos inicialmente el bot√≥n de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
