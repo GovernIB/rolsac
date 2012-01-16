@@ -12,7 +12,7 @@
     <!--  property name="location" value="classpath:/db.properties" /-->
     <property name="locations">
      	<list>
-     		<value>classpath:/db.properties</value>
+     		<value>classpath:/db-persistence.properties</value>
      		<!-- value>classpath:/db.seycon.properties</value-->
 		</list>
 	</property>    
@@ -119,7 +119,7 @@
       <props>
         <prop key="hibernate.dialect">${hibernate.dialect}</prop>
         <prop key="hibernate.connection.autocommit">false</prop>
-        <prop key="hibernate.show_sql">true</prop>
+        <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
         <prop key="use_outer_join">true</prop>
         <prop key="jdbc.batch_size">50</prop>
         <prop key="hibernate.cache.use_second_level_cache">false</prop>
