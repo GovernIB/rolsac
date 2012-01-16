@@ -188,11 +188,11 @@
      <priority value="DEBUG"/>
    </category>	
    
-   
+    
     <category name="org.hibernate">
         <priority value="DEBUG"/>
    </category>	
-  
+
     <category name="org.springframework.orm.jpa">
         <priority value="DEBUG"/>
    </category>	
@@ -216,11 +216,10 @@
    <category name="oracle.jdbc">
      <priority value="ERROR"/>
    </category>
-
+   
    <category name="net.sf.hibernate">
      <priority value="DEBUG"/>
    </category>
-
 	<category name="net.sf.ehcache">
      <priority value="DEBUG"/>
    </category>
@@ -292,11 +291,9 @@
   
    -->
 
-<!--      
 <logger name="net.sf.hibernate">
   <level value="debug"/> 
 </logger>
--->
 
 <!--  loggers per debugar http -->
 <!--
@@ -336,7 +333,7 @@
 
    <root>
       <appender-ref ref="CONSOLE"/>
-      <appender-ref ref="FILE"/>
+      <appender-ref ref="FILE"/> 
    </root>
 
    <!-- Clustering logging -->
