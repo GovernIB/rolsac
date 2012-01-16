@@ -19,7 +19,7 @@ import javax.ejb.SessionContext;
 import net.sf.hibernate.SessionFactory;
 
 import org.apache.poi.hssf.record.formula.PowerPtg;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Document;

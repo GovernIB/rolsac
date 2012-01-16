@@ -44,6 +44,7 @@ public class ListaUsuarioController implements Controller{
             ArrayList listaresultante;
             if (request.isUserInRole("sacsystem")) {
             	Collection lista = delegate.listarUsuariosPerfil("sacoper");
+            	listatodos.addAll(lista);
             	lista = delegate.listarUsuariosPerfil("sacsuper");
             	listatodos.addAll(lista);
             	lista = delegate.listarUsuariosPerfil("sacadmin");

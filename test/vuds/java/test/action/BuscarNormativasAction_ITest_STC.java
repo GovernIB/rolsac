@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.RequestProcessor;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.form.DocumentoForm;
 import org.ibit.rol.sac.back.form.TramiteForm;
 import org.ibit.rol.sac.micromodel.Traduccion;
@@ -114,9 +114,9 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,codis.size());
         for(Normativa t:codis) {_(t.getIdNormativa()+" "+t.getDescripcionNormativa());}
         
-    	//2. Filtrar per codi vàlid
+    	//2. Filtrar per codi vï¿½lid
     	request=createMockRequest(path);
-    	request.addParameter("filtre", "autorización");
+    	request.addParameter("filtre", "autorizaciï¿½n");
         actionPerform();
         verifyNoActionErrors();
         verifyForward("success");
@@ -125,7 +125,7 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,codis.size());
         for(Normativa t:codis) {_(t.getIdNormativa()+" "+t.getDescripcionNormativa());}
 
-    	//3. Filtrar per codi invàlid
+    	//3. Filtrar per codi invï¿½lid
     	request=createMockRequest(path);
     	request.addParameter("filtre", "M0001");
         actionPerform();
@@ -177,7 +177,7 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
     	String path="/contenido/tramite/vuds/buscarNormativas";
     	
     	MockHttpServletRequest request=createMockRequest(path);
-    	//2. Filtrar per texte minúscules
+    	//2. Filtrar per texte minï¿½scules
     	request=createMockRequest(path);
     	request.addParameter("filtre", "autoriza");
         actionPerform();
@@ -190,7 +190,7 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
         assertNotSame(0,ncodis);
         for(Normativa t:codis) {_(t.getIdNormativa()+" "+t.getDescripcionNormativa());}
 
-    	//2. Filtrar per texte majúscules 
+    	//2. Filtrar per texte majï¿½scules 
     	request=createMockRequest(path);
     	request.addParameter("filtre", "AUTORIZA");
         actionPerform();
@@ -209,7 +209,7 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
     	//peticio sense codis en sessio
     	MockHttpServletRequest request=createMockRequest(path);
     	request=createMockRequest(path);
-    	request.addParameter("filtre", "autorización");
+    	request.addParameter("filtre", "autorizaciï¿½n");
     	
     	long t1=System.currentTimeMillis();
         actionPerform();
@@ -223,7 +223,7 @@ public class BuscarNormativasAction_ITest_STC extends MockStrutsTestCase {
     	
 
     	//peticio amb codis en sessio
-    	request.setParameter("filtre", "autorización");
+    	request.setParameter("filtre", "autorizaciï¿½n");
     	t1=System.currentTimeMillis();
         actionPerform();
         verifyNoActionErrors();

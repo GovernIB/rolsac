@@ -2,8 +2,11 @@
 
 <project name="01rolsac" default="usage">
 	
+     
 	<property name="projecte" value="${ant.project.name}"/>
 	<property name="home" value="."/>
+	<property file="${home}/build.${user.name}.properties" />
+	<property file="${home}/build.${rolsac.target}.properties"/>
 	<property file="${home}/config.properties"/>
 	<property name="doc" value="${home}/doc"/>
 	<property name="components" value="${home}/moduls"/>
@@ -22,13 +25,6 @@
 	<property name="projecte.name.rolsac" value="rolsac"/>	
 
 	<property name="etc.approlsac" value="${etc}/approlsac"/>	
-
-
-	<!--<property name="deploy.dir" value="D:\servers\slave1-jboss-3.2.8-caib4\server\default\deploycaib"/>-->
-
-	<property environment="env"/>
-	<property name="deploy.dir" value="${env.DEPLOY_DIR}"/>
-
 	
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
@@ -41,33 +37,35 @@
 		Tasques del projecte :
 	
 		****** Tasques d'ajuda :
-		system : informacio sobre la versio de l'ant emprada
+	
 		usage : aquesta ajuda
 		properties : mostra les propietats definides
-		info : system + usage + properties
+        info              : usage + properties
 
-		****** Tasques de preparacio :
-		prepare : fitxa l'estructura de directoris necessaria per la construccio de l'aplicacio
+        ****** Tasques de preparació :
+        prepare           : crea l'estructura de directoris necessaria per la construcció de l'aplicació
 	
-		****** Tasques d'actualitzaciÃ³ de components :
-		update.XXX.jar : re-construeix el producte final (caib.ear) actualitzant nomes el component jar XXX
-		update.XXX.war : re-construeix el producte final (caib.ear) actualitzant nomes el component war XXX
+        ****** Tasques d'actualització de components :
+	    update.extractor  : actualitza eines de text
+        update.model      : actualitza el model de dades
+	    update.persistence: actualitza la capa de persistencia
+        update.XDOCLET    : update.extractor + update.model + update.persistence
 
-		Els components existents (valors de XXX) son :
-		boib, forum*, hemeroteca*, moduls**, pidip, portal**, root**, sac,link,fitxer
-		* nomes tenen component jar
-		** nomes tenen component war
+	    update.integracion: actualitza la capa d'integració
+	    update.back       : actualitza el mòdul web legacy de backoffice
+	    update.ws         : actualitza el mòdul web de webservices
+	    update.traspasboib: actualitza el mòdul traspas-boib
 
 		****** Tasques de documentacio i control
-		todo : genera al directori ../todo un informe de les coses que estan documentades al codi com que queden per fer
-		doc-pdf : genera al directori ../doc un fitxer PDF amb la documentacio del projecte
-		doc-html : genera al directori ../doc/html la documentacio del projecte en format html
-		doc-print : genera al directori ../doc/print la documentacio del projecte en format html per imprimir
-		doc-api : genera la documentaciÃ³ javadoc pels components dins dels directori ../doc/api
+	
+	    test.unitario     : executa els tests unitaris
+	    doc               : genera la documentació de tots els mòduls
 	
 		****** Tasques de construccio :
-		assemble : construeix el ear amb tots els components existents
-		main : construeix tota l'aplicacio
+	    assemble01ROLSAC  : construeix el ear amb tots els components existents
+	    main01ROLSAC      : construeix tota l'aplicacio
+	    clean             : esborra els directoris de treball
+	    deploy01ROLSAC    : copia el ear al directori de deploy
 		---------------------------------------------------------------------------------------------------
       </echo>
   </target>
@@ -86,12 +84,13 @@
 		product.dir=${product.dir}
 		lib=${lib}
 		doc=${doc}
-          ant.file=${ant.file}
-          ant.version=${ant.version}
-          ant.project.name=${ant.project.name}
-          ant.java.version=${ant.java.version}
+        ant.file=${ant.file}
+        ant.version=${ant.version}
+        ant.project.name=${ant.project.name}
+        ant.java.version=${ant.java.version}
 		---------------------------------------------------------------------------------------------------
 	</echo>
+	<echoproperties/>
   </target>
 
 
@@ -288,21 +287,11 @@
   <!-- ================================================================== -->
 	
 
-	  <target name="deploy01ROLSAC">
-	  	  <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>	  
+	   <target name="deploy01ROLSAC" if="deploy.dir">
+          <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
 	  </target>		  	
 
-	<target name="copiarAOTROS">
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../02microsites/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../02microsites/lib"/>
-		<copy file="${moduls.dir}/extractor.jar" todir="${home}/../02microsites/lib"/>
 
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../04gforum/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../04gforum/lib"/>
-		<copy file="${moduls.dir}/extractor.jar" todir="${home}/../04gforum/lib"/>
 
-		<copy file="${moduls.dir}/model.jar" todir="${home}/../03webcaib/lib"/>
-		<copy file="${moduls.dir}/sac-persistence.jar" todir="${home}/../03webcaib/lib"/>
-	</target>
 	
 </project>

@@ -71,7 +71,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 
     /**
-     * Autoriza la creación de un procedimiento
+     * Autoriza la creaciï¿½n de un procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -81,7 +81,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     
         
     /**
-     * Autoriza la modificación de un procedimiento
+     * Autoriza la modificaciï¿½n de un procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -101,7 +101,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         	Date FechaActualizacionBD = new Date();
             if (procedimiento.getId() == null) {
                 if (procedimiento.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear un procedimiento público");
+                    throw new SecurityException("No puede crear un procedimiento pï¿½blico");
                 }
             } else {
                 if (!getAccesoManager().tieneAccesoProcedimiento(procedimiento.getId())) {
@@ -116,7 +116,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 throw new SecurityException("No tiene acceso a la unidad");
             }
 
-            /* Se alimenta la fecha de actualización de forma automática si no se ha introducido dato*/                      
+            /* Se alimenta la fecha de actualizaciï¿½n de forma automï¿½tica si no se ha introducido dato*/                      
             if (procedimiento.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD,procedimiento.getFechaActualizacion())) {
             	procedimiento.setFechaActualizacion(new Date());
             }
@@ -772,7 +772,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Añade una nueva materia al procedimiento
+     * Aï¿½ade una nueva materia al procedimiento
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -825,7 +825,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Añade un nuevo tramite al procedimiento (el tramite ya existe en la base de datos)
+     * Aï¿½ade un nuevo tramite al procedimiento (el tramite ya existe en la base de datos)
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -885,13 +885,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             }
             ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
             procedimiento.getNormativas().clear();
+
+            //Borram els documents directament amb query per evitar el problema del ordres.
+            //S'ha llevat el cascade=delete de l'hbm.
+            session.delete("from Documento as doc where doc.procedimiento.id = ?",id, Hibernate.LONG);
+
             addOperacion(session, procedimiento, Auditoria.BORRAR);
             Historico historico = getHistorico(session, procedimiento);
             ((HistoricoProcedimiento) historico).setProcedimiento(null);
-            //for (HechoVitalProcedimiento hvp : (Set<HechoVitalProcedimiento>)procedimiento.getHechosVitalesProcedimientos()) {
-            //    HechoVital hv = hvp.getHechoVital();
-            //    hv.removeHechoVitalProcedimiento(hvp);
-            //}
             procedimiento.getUnidadAdministrativa().removeProcedimientoLocal(procedimiento);
             
             if(procedimiento instanceof ProcedimientoRemoto){
@@ -1062,6 +1063,69 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     		close(session);
     	}
     }
+
+    /**
+     * Obtiene los ids de los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(Long idUA, String[] codEstMat, String[] codEstHV) {
+    	Session session = getSession();
+    	try {
+    		UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, idUA);
+    		Hibernate.initialize(unidadAdministrativa.getProcedimientos());
+
+    		Set<ProcedimientoLocal> procs = unidadAdministrativa.getProcedimientos();
+    		List<Long> procsFinales = new ArrayList<Long>();
+    		for(ProcedimientoLocal proc: procs){
+    			if(publico(proc)){
+    				//Variable que indica si el procedimiento tiene alguna relacion
+    				boolean relacionada = false;
+
+    				//comprobamos materias
+    				Query queryMat = session.createQuery("select mat.codigoEstandar from ProcedimientoLocal p, p.materias as mat where p.id =:id");
+    				queryMat.setParameter("id", proc.getId(), Hibernate.LONG);
+
+    				List<String> codigosMaterias = queryMat.list();
+
+    				//si el procedimiento esta relacionada con alguna materia la marcamos
+    				for(String codigoMat: codEstMat){
+    					if (relacionada = codigosMaterias.contains(codigoMat)){
+    						break;
+    					}
+    				}
+
+    				//Si no tiene niguna relacion con ninguna materia miramos si teiene ralacion con algun HV
+    				if(!relacionada){
+    					Query queryHechos = session.createQuery("select hpv.hechoVital.codigoEstandar from ProcedimientoLocal p, p.hechosVitalesProcedimientos as hpv where p.id =:id");
+    					queryHechos.setParameter("id", proc.getId(), Hibernate.LONG);
+
+    					List<String> codigosHechos = queryHechos.list();
+
+    					// si la ficha esta relacionada con el hechovital la marcamos
+    					for(String codigoHev: codEstHV){
+    						if (relacionada = codigosHechos.contains(codigoHev)){
+    							break;
+    						}
+    					}
+    				}
+
+    				if(relacionada){
+    				/*	Hibernate.initialize(proc.getMaterias());
+    					Hibernate.initialize(proc.getHechosVitalesProcedimientos());
+                        Hibernate.initialize(proc.getDocumentos());
+    				*/	procsFinales.add(proc.getId());
+    				}
+    			}
+    		}
+    		return procsFinales;
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+    }
     
     /*
      * Obtiene los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
@@ -1172,7 +1236,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Obtiene los procedimientos públicos de un Hecho Vital
+     * Obtiene los procedimientos pï¿½blicos de un Hecho Vital
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -1222,7 +1286,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
                 return procedimiento;
             } else {
-                throw new SecurityException("Procedimiento no público.");
+                throw new SecurityException("Procedimiento no pï¿½blico.");
             }
 
         } catch (HibernateException he) {
@@ -1234,7 +1298,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
 
     /**
-     * Construye el query de búsqueda segun los parámetros
+     * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
@@ -1346,11 +1410,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * 
 	 * Debemos incluir las materias y los hechos vitales, la unidad administrativa de la que depende y la familia.
 	 * 
-	 * Método válido para Procedimientos los 3 tipos:
+	 * Mï¿½todo vï¿½lido para Procedimientos los 3 tipos:
 	 * 
-	 * Procedimiento No telemático, los de Rolsac por defecto (sin url, ni version ni modelo)
-	 * Procedimiento Telemático de Sistra (tiene versión y modelo)
-	 * Procedimiento Telemático Externo (tiene url)
+	 * Procedimiento No telemï¿½tico, los de Rolsac por defecto (sin url, ni version ni modelo)
+	 * Procedimiento Telemï¿½tico de Sistra (tiene versiï¿½n y modelo)
+	 * Procedimiento Telemï¿½tico Externo (tiene url)
 	 * @throws DelegateException 
 	 * 
      * @ejb.interface-method
@@ -1470,7 +1534,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	
 	
     /**
-     * Añade los procedimientos al indice en todos los idiomas
+     * Aï¿½ade los procedimientos al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1528,7 +1592,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	            	if (trad.getPlazos()!=null)			io.addTextLine(trad.getPlazos());
 	            	if (trad.getResolucion()!=null)		io.addTextLine(trad.getResolucion());
 	            	if (trad.getNotificacion()!=null)	io.addTextLine(trad.getNotificacion());
-	            	if (trad.getRecursos()!=null)		io.addTextLine(trad.getRecursos()); // No está en el mantenimiento
+	            	if (trad.getRecursos()!=null)		io.addTextLine(trad.getRecursos()); // No estï¿½ en el mantenimiento
 	            	if (trad.getRequisitos()!=null)		io.addTextLine(trad.getRequisitos());
 	            	if (trad.getSilencio()!=null)		io.addTextLine(trad.getSilencio());
 					
@@ -1537,7 +1601,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				io.addTextopcionalLine(filter.getTraduccion(idi).getSeccion_text());
 				io.addTextopcionalLine(filter.getTraduccion(idi).getUo_text());
 				io.addTextopcionalLine(filter.getTraduccion(idi).getFamilia_text());
-				// Añadimos colecciones pero solo títulos como opcional
+				// Aï¿½adimos colecciones pero solo tï¿½tulos como opcional
 				if (proc.getTramites()!=null) {
 					Iterator iter1 = proc.getTramites().iterator();
 					while (iter1.hasNext()) {
@@ -1567,7 +1631,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 					}
 				}
-	            //se añaden todos los documentos en todos los idiomas
+	            //se aï¿½aden todos los documentos en todos los idiomas
 				if (proc.getDocumentos()!=null) {
 					Iterator iterdocs = proc.getDocumentos().iterator();
 					while (iterdocs.hasNext()) {
@@ -1579,8 +1643,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						}
 						//io.addArchivo((Archivo)documento.getArchivo());
 
-						// Se crea la indexación del documento individual y se añade la información 
-		            	// para la indexación de la ficha.
+						// Se crea la indexaciï¿½n del documento individual y se aï¿½ade la informaciï¿½n 
+		            	// para la indexaciï¿½n de la ficha.
 							IndexObject ioDoc = new IndexObject();
 			            	String textDoc = null;								
 			            	//ioDoc.addArchivo((Archivo)documento.getArchivo());	

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 
 public interface ProcedimientoDelegateI {
 
@@ -78,6 +79,13 @@ public interface ProcedimientoDelegateI {
 	public abstract List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(
 			Long idUA, String[] codEstMat, String[] codEstHV)
 			throws DelegateException;
+
+    /* PORMAD */
+    @SuppressWarnings("unchecked")
+    public abstract List<Long> listarIdsProcedimientosPublicosUAHVMateria(
+            Long idUA, String[] codEstMat, String[] codEstHV)
+            throws DelegateException;
+
 
 	/* PORMAD*/
 	public abstract List listarProcedimientosMateriaUA(Long materia_id,

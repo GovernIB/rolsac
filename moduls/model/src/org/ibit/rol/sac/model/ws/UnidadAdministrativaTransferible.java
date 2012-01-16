@@ -17,7 +17,7 @@ import org.ibit.rol.sac.model.Validacion;
  * User: mgonzalez
  * Date: 13-jun-2007
  * Time: 15:21:25
- * Clase que representa la información traducida a transferir de una UA(PORMAD)
+ * Clase que representa la informaciï¿½n traducida a transferir de una UA(PORMAD)
  */
 public class UnidadAdministrativaTransferible extends ActuacionTransferible implements Serializable {
 
@@ -39,6 +39,7 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     private String telefono;
     private String fax;
     private String email;
+    private int nivel;
     
     private Integer sexoResponsable;
     private ArchivoTransferible fotop;
@@ -248,6 +249,13 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
     	this.edificiosTransferibles = edificiosTransferibles;
     }
     
+    public int getNivel() {
+        return nivel;
+    }
+
+    public void setNivel(int nivel) {
+        this.nivel = nivel;
+    }
     
     //Funciones Extra
     
@@ -279,7 +287,15 @@ public class UnidadAdministrativaTransferible extends ActuacionTransferible impl
 
         //Relleno el id del padre
         if(unidad.getPadre()!=null)
-            this.setIdPadre(unidad.getPadre().getId());        
+            this.setIdPadre(unidad.getPadre().getId());
+
+        int niv =1;
+        UnidadAdministrativa padre = unidad.getPadre();
+        while (padre!= null){
+            niv++;
+            padre= padre.getPadre();
+        }
+        this.setNivel(niv);
 
         //Relleno el id de los hijos
 		final List<UnidadAdministrativa> hijos = unidad.getHijos();

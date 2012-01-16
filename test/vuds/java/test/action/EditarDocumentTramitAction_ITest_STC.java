@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.struts.action.RequestProcessor;
 import org.apache.struts.upload.FormFile;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.form.DocumentoForm;
 import org.ibit.rol.sac.micromodel.Traduccion;
 import org.ibit.rol.sac.model.Document;
@@ -254,7 +254,7 @@ public class EditarDocumentTramitAction_ITest_STC extends MockStrutsTestCase {
           request.addParameter("textoFechaPublicacion","10/12/2009");
           request.addParameter("textoFechaActualizacion","11/12/2009");
           request.addParameter("textoFechaCaducidad","10/02/2010");	
-          request.addParameter("fase", "Instrucción");
+          request.addParameter("fase", "Instrucciï¿½n");
           request.addParameter("idOrganCompetent","1"); //1 = "Govern de les Illes Balears");
           request.addParameter("nomOrganCompetent","Govern de les Illes Balears"); 
           request.addParameter("descTaxa","descripcion taxa"); 

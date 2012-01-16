@@ -14,7 +14,7 @@ import net.sf.hibernate.SessionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Ficha;

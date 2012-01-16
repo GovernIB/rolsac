@@ -24,28 +24,17 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='ccontingut']/div[2]/div[16]/div[2]/form/input[3]</td>
-	<td></td>
+	<td>//div[@id='ccontingut']/div[2]/div[9]/div[2]/form/input[3]</td>
+	<td>Seleccionar</td>
 </tr>
 <!---- verificar que se guarda OK cuando padre es diferente de la conselleria-->
 <tr>
 	<td>waitForValue</td>
 	<td>traducciones[0].nombre</td>
-	<td>Conselleria Proves</td>
+	<td>Curs octubre</td>
 </tr>
 <tr>
-	<td>storeText</td>
-	<td>traducciones[0].nombre</td>
-	<td>nombreUA</td>
-</tr>
-<tr>
-	<td>storeText</td>
-	<td>nombrePadre</td>
-	<td>padreUA</td>
-</tr>
-<!---- TODO comparar en js dos strings-->
-<tr>
-	<td>clickAndWait</td>
+	<td>click</td>
 	<td>action</td>
 	<td></td>
 </tr>
@@ -77,12 +66,12 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='llistat']/ul/li/a[1]/img</td>
+	<td>//div[@id='llistat']/ul/li[3]/a/img</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Conselleria Proves</td>
+	<td>link=Curs octubre</td>
 	<td></td>
 </tr>
 <tr>
@@ -97,10 +86,9 @@
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>La unidad no puede tener como padre a sí misma </td>
+	<td>La unidad no puede tener como padre a sí misma</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

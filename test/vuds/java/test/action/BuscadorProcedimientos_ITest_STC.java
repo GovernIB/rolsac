@@ -12,7 +12,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.RequestProcessor;
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.back.form.DocumentoForm;
 import org.ibit.rol.sac.back.form.ProcedimientoForm;
 import org.ibit.rol.sac.back.form.TramiteForm;
@@ -71,7 +71,7 @@ public class BuscadorProcedimientos_ITest_STC extends MockStrutsTestCase {
 	//OK
 	public void _test01BusquedaProcedimientos_PRO() throws DelegateException {
 		String path="/contenido/procedimiento/editar";
-		String action="Búsqueda";
+		String action="Bï¿½squeda";
 
 		//buscar PRO
 		MockHttpServletRequest request=createMockRequest(path);
@@ -104,7 +104,7 @@ public class BuscadorProcedimientos_ITest_STC extends MockStrutsTestCase {
 	 */
 	public void test02BusquedaProcedimientos_PRO_UA() throws DelegateException {
 		String path="/contenido/procedimiento/editar";
-		String action="Búsqueda";
+		String action="Bï¿½squeda";
 		MockHttpServletRequest request=createMockRequest(path);
 		request.addParameter("action", action);
 		
@@ -132,7 +132,7 @@ public class BuscadorProcedimientos_ITest_STC extends MockStrutsTestCase {
 
 	public void test03BusquedaProcedimientos_PRO_nombre() throws DelegateException {
 		String path="/contenido/procedimiento/editar";
-		String action="Búsqueda";
+		String action="Bï¿½squeda";
 		MockHttpServletRequest request=createMockRequest(path);
 		request.addParameter("action", action);
 
@@ -162,7 +162,7 @@ public class BuscadorProcedimientos_ITest_STC extends MockStrutsTestCase {
 
 	public void test04BusquedaProcedimientos_UA() throws DelegateException {
 		String path="/contenido/procedimiento/editar";
-		String action="Búsqueda";
+		String action="Bï¿½squeda";
 		MockHttpServletRequest request=createMockRequest(path);
 		request.addParameter("action", action);
 		

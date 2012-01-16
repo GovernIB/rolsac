@@ -57,8 +57,13 @@
 	<td></td>
 </tr>
 <tr>
+	<td>assertValue</td>
+	<td>//div[@id='ccontingut']/div[3]/div[2]/div[2]/form/input[5]</td>
+	<td>Eliminar</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='ccontingut']/div[3]/div[3]/div[2]/form/input[5]</td>
+	<td>//div[@id='ccontingut']/div[3]/div[2]/div[2]/form/input[5]</td>
 	<td></td>
 </tr>
 <tr>
@@ -66,7 +71,6 @@
 	<td>Aeroport de Son Sant Joan</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -97,6 +97,54 @@ public class SincronizacionServicio extends StandardInvoker{
     }
 
 
+    public Long[] recogerIdsFichasUASeccion(String codEstSecc, Long idUA, String[] codEstHV, String[] codEstMat) throws WSInvocatorException {
+        try {
+            setOperationName("recogerIdsFichasUASeccion");
+
+            addParameter("codEstSecc",
+			                  org.apache.axis.Constants.XSD_STRING,
+					          javax.xml.rpc.ParameterMode.IN);
+            addParameter("idUA",
+            		  		  org.apache.axis.Constants.XSD_LONG,
+            		  		  javax.xml.rpc.ParameterMode.IN);
+            addParameter("codEstHV",
+							   org.apache.axis.Constants.SOAP_ARRAY,
+			                   javax.xml.rpc.ParameterMode.IN);
+            addParameter("codEstMat",
+							   org.apache.axis.Constants.SOAP_ARRAY,
+			                   javax.xml.rpc.ParameterMode.IN);
+
+            setReturnType(new QName("http://org.ibit.rol.sac.integracion.ws", "ArrayOf_Long"));
+            setReturnClass(Long[].class);
+            setReturnQName(new QName("", "recogerIdsFichasUASeccionReturn"));
+
+            return (Long[]) invoke(codEstSecc, idUA, codEstHV, codEstMat);
+        } catch(RemoteException e) {
+            throw new WSInvocatorException(e);
+        }
+    }
+
+
+     public FichaTransferible recogerFicha(Long idFicha) throws WSInvocatorException {
+        try {
+            setOperationName("recogerFicha");
+
+            addParameter("idFicha",
+            		  		  org.apache.axis.Constants.XSD_LONG,
+            		  		  javax.xml.rpc.ParameterMode.IN);
+
+
+            setReturnType(NAMESPACEURI, FichaTransferible.class);
+            setReturnQName(new QName("", "recogerFichaReturn"));
+
+            return (FichaTransferible) invoke(idFicha);
+
+        } catch(RemoteException e) {
+            throw new WSInvocatorException(e);
+        }
+    }
+
+
     public UnidadAdministrativaTransferible recogerUnidadAdministrativa(Long idUA) throws WSInvocatorException {
         try {
         	
@@ -133,6 +181,48 @@ public class SincronizacionServicio extends StandardInvoker{
             setReturnQName(new QName("", "recogerProcedimientosRelacionadosReturn"));
             return (ProcedimientoTransferible[]) invoke(idUA, codEstHV, codEstMap);
             
+        } catch(RemoteException e) {
+            throw new WSInvocatorException(e);
+        }
+    }
+
+
+     public Long[] recogerIdsProcedimientosRelacionados(Long idUA, String[] codEstHV, String[] codEstMap) throws WSInvocatorException {
+        try {
+            setOperationName("recogerIdsProcedimientosRelacionados");
+            addParameter("idUA",
+            		  		  org.apache.axis.Constants.XSD_LONG,
+            		  		  javax.xml.rpc.ParameterMode.IN);
+            addParameter("codEstHV",
+							   org.apache.axis.Constants.SOAP_ARRAY,
+			                   javax.xml.rpc.ParameterMode.IN);
+            addParameter("codEstMat",
+							   org.apache.axis.Constants.SOAP_ARRAY,
+			                   javax.xml.rpc.ParameterMode.IN);
+            setReturnType(new QName("http://org.ibit.rol.sac.integracion.ws", "ArrayOf_Long"));
+            setReturnClass(Long[].class);
+            setReturnQName(new QName("", "recogerIdsProcedimientosRelacionadosReturn"));
+            return (Long[]) invoke(idUA, codEstHV, codEstMap);
+
+        } catch(RemoteException e) {
+            throw new WSInvocatorException(e);
+        }
+    }
+
+    public ProcedimientoTransferible recogerProcedimiento(Long idProc) throws WSInvocatorException {
+        try {
+            setOperationName("recogerProcedimiento");
+
+            addParameter("idProc",
+            		  		  org.apache.axis.Constants.XSD_LONG,
+            		  		  javax.xml.rpc.ParameterMode.IN);
+
+
+            setReturnType(NAMESPACEURI, ProcedimientoTransferible.class);
+            setReturnQName(new QName("", "recogerProcedimientoReturn"));
+
+            return (ProcedimientoTransferible) invoke(idProc);
+
         } catch(RemoteException e) {
             throw new WSInvocatorException(e);
         }

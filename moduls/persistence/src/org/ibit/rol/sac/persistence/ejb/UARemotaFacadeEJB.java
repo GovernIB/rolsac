@@ -993,9 +993,10 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	        	
 	        	//Obtemos las fichas
 	            Query queryFic = session.createQuery(
-	                    "Select DISTINCT f from FichaRemota as f " +
+	                    "Select DISTINCT f from FichaRemota as f , fua in f.fichasua " +
 	                    "where f.validacion = :validacion " +
 	                    "and f.fechaActualizacion is not null " +
+	                    "and fua is not null " +
 	                    "and f.administracionRemota.id = :idRemota " +
 	                    (!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +
 	                    "order by f.fechaActualizacion desc");
@@ -1068,8 +1069,9 @@ public abstract class UARemotaFacadeEJB extends HibernateEJB {
 	        try {
 	        	
 	            Query queryFic = session.createQuery(
-	                    "select f from FichaRemota f, HistoricoFicha hf, Estadistica e " +
+	                    "select f from FichaRemota f, HistoricoFicha hf, Estadistica e , fua in f.fichasua " +
 	                    "where hf.ficha = f and e.historico = hf " +
+	                    "and fua is not null " +
 	                    "and f.validacion = :validacion " +
 	                    "and f.administracionRemota.id = :idRemota " +
 	                    (!caducados ? "AND ( f.fechaCaducidad is null or f.fechaCaducidad >= :fecha ) " : "") +

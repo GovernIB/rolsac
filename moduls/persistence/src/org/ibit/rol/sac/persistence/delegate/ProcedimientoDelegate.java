@@ -166,6 +166,13 @@ public class ProcedimientoDelegate {
 				codEstHV);
 	}
 
+	public List<Long> listarIdsProcedimientosPublicosUAHVMateria(
+			Long idUA, String[] codEstMat, String[] codEstHV)
+			throws DelegateException {
+		return impl.listarIdsProcedimientosPublicosUAHVMateria(idUA, codEstMat,
+				codEstHV);
+	}
+
 	public List listarProcedimientosUA(Long id) throws DelegateException {
 		return impl.listarProcedimientosUA(id);
 	}

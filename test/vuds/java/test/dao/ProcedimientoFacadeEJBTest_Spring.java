@@ -18,7 +18,7 @@ import javax.ejb.SessionContext;
 import net.sf.ehcache.CacheManager;
 import net.sf.hibernate.SessionFactory;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.model.Document;
 import org.ibit.rol.sac.model.DocumentTramit;
@@ -176,7 +176,7 @@ AbstractTransactionalSpringContextTests {
 		
 		TraduccionProcedimientoLocal t = (TraduccionProcedimientoLocal) p.getTraduccion();
 		_(t);
-		assertEquals(t.getNombre(),"Sol.licitud de canvi de grup d'agència de viatges");
+		assertEquals(t.getNombre(),"Sol.licitud de canvi de grup d'agï¿½ncia de viatges");
 		
 		List<Tramite> trams = p.getTramites();
 		assertEquals(trams.size(),133);
@@ -310,7 +310,7 @@ AbstractTransactionalSpringContextTests {
 		long tid=tramiteBean.grabarTramite(t, 202L);
 		_(tid);
 		int ntrams = p.getTramites().size();
-		procBean.anyadirTramite(tid, pid);  //añade el tramite en un proc. temporal. Ull! p no se modifica.
+		procBean.anyadirTramite(tid, pid);  //aï¿½ade el tramite en un proc. temporal. Ull! p no se modifica.
 		
 		p=procBean.consultarProcedimiento(pid); //hem de tornar a consultar el proc, perque p no es modifica. 
 		assertEquals(ntrams+1,p.getTramites().size());
@@ -351,7 +351,7 @@ AbstractTransactionalSpringContextTests {
 		long tid=tramiteBean.grabarTramite(t, 202L);
 		_("afegir tramit "+tid);
 		int ntrams = p.getTramites().size();
-		procBean.anyadirTramite(tid, pid);  //añade el tramite en un proc. temporal. Ull! p no se modifica.
+		procBean.anyadirTramite(tid, pid);  //aï¿½ade el tramite en un proc. temporal. Ull! p no se modifica.
 		
 		p=procBean.consultarProcedimiento(pid); //hem de tornar a consultar el proc, perque p no es modifica.
 		assertEquals(ntrams+1,p.getTramites().size());
@@ -447,7 +447,7 @@ AbstractTransactionalSpringContextTests {
 	//public pq es crida en altres tests
 	public Tramite creaTramite(String nomTramit) {
 		/*
-		selectOption("fase", "Instrucción");
+		selectOption("fase", "Instrucciï¿½n");
         setTextField("textoFechaCaducidad","10/02/2010");	
         setTextField("textoFechaPublicacion","10/12/2009");
         setTextField("textoFechaActualizacion","10/12/2009");

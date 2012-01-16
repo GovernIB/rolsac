@@ -151,7 +151,7 @@
 	<td>//div[@id='ccontingut']/div[4]/h2</td>
 	<td>Sin clasificar</td>
 </tr>
-<!---- verificar que al insertar una materia apareix la materia-->
+<!-- verificar que al insertar una materia apareix la materia-->
 <tr>
 	<td>click</td>
 	<td>//div[@id='ccontingut']/center[4]/a</td>
@@ -164,7 +164,7 @@
 </tr>
 <tr>
 	<td>selectWindow</td>
-	<td>name=Seleccionar</td>
+	<td>title=SAC Procedimiento - POPUP</td>
 	<td></td>
 </tr>
 <tr>
@@ -179,7 +179,7 @@
 </tr>
 <tr>
 	<td>assertTextNotPresent</td>
-	<td>Sense classificar </td>
+	<td>Sense classificar</td>
 	<td></td>
 </tr>
 <tr>
@@ -212,7 +212,7 @@
 	<td>sin clasificar</td>
 	<td></td>
 </tr>
-<!---- verificar que s'esborra el procediment creat-->
+<!-- verificar que s'esborra el procediment creat -->
 <tr>
 	<td>storeText</td>
 	<td>//div[@id='ccontingut']/div[1]/h2</td>
@@ -288,7 +288,6 @@
 	<td>Se ha realizado la baja correctamente</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -91,8 +91,7 @@ public class MockAccesoManagerLocal implements AccesoManagerLocal {
 	}
 
 	public boolean tieneAccesoMoverOrganigrama(Long oldParent, Long newParent) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 	
 }

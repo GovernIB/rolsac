@@ -42,6 +42,9 @@ public class SincronizadorSingleton {
             else if(adminRemota.getVersion()==3){
                 sinc = new SincronizadorAltaThreadV3(adminRemota);
             }
+            else if(adminRemota.getVersion()==4){
+                sinc= new SincronizadorAltaThreadV4(adminRemota);
+            }
             sinc.start();
 		} else {
 			throw new SincronizacionTrabajadoException("Ya se esta procesando");
