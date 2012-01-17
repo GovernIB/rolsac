@@ -366,6 +366,9 @@ function CDetall(){
 		moduls_elm = escriptori_detall_elm.find("div.modul");		                
        
         // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").change(function(){
+            jQuery("#item_codigo_pro,#item_codigo_pro_es,#item_codigo_pro_en,#item_codigo_pro_de,#item_codigo_pro_fr").val( jQuery(this).val() );
+        });
         jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
             jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").attr("checked", jQuery(this).is(":checked"));
         });
