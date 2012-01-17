@@ -52,3 +52,17 @@ div.llistat div.tbody div.procediment {
     padding-left: 50px;
     width: 400px;
 }
+
+#escriptori_detall .organoCompetente{
+    float: none;
+}
+#escriptori_detall .organoCompetente .campo{
+    width: 502px;
+    float: left;
+}
+#escriptori_detall .organoCompetente .botones{
+    float: right;
+}
+#escriptori_detall .organoCompetente .botones .btnCambiar{
+    margin-right: 17px;
+}

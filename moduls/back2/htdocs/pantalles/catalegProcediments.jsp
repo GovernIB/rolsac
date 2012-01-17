@@ -501,7 +501,7 @@
                                 <!-- ca -->
                                 <div class="idioma ca">
                                     <div class="fila">
-                                        <div class="element">
+                                        <div class="element t50p">
                                             <div class="etiqueta">                                            
                                                 <label for="item_codigo_pro_ca">Codi</label>
                                             </div>
@@ -511,12 +511,20 @@
                                         </div>
                                     </div>
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_ca"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -576,6 +584,48 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoCompetente">
+                                            <div class="etiqueta">
+                                                <label for="item_organ"><spring:message code='camp.organCompetent'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_organ_id" name="item_organ_id" type="hidden" />
+                                                <div class="campo">
+                                                    <input id="item_organ" name="item_organ" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_iniciacio"><spring:message code='camp.formaIniciacio'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_iniciacio" name="item_iniciacio" class="nou">
+                                                    <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_silenci_ca"><spring:message code='camp.silenciAdministratiu'/></label>
@@ -622,7 +672,7 @@
                                 <!-- es -->
                                 <div class="idioma es">
                                     <div class="fila">
-                                        <div class="element">
+                                        <div class="element t50p">
                                             <div class="etiqueta">                                            
                                                 <label for="item_codigo_pro_es">Codi</label>
                                             </div>
@@ -632,13 +682,21 @@
                                         </div>
                                     </div>
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_es"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_nom_es" name="item_nom_es" type="text"
                                                     class="nou" />
+                                            </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_es">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -699,6 +757,45 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoCompetente">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_es"><spring:message code='camp.organCompetent'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_es" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ_es');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_es', 'item_organ_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_iniciacio_es"><spring:message code='camp.formaIniciacio'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_iniciacio_es" name="item_iniciacio_es" class="nou">
+                                                    <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_silenci_es"><spring:message code='camp.silenciAdministratiu'/></label>
@@ -745,24 +842,32 @@
                                 <!-- /es -->
                                 <!-- en -->
                                 <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="fila">
-                                            <div class="element">
-                                                <div class="etiqueta">                                            
-                                                    <label for="item_codigo_pro_en">Codi</label>
-                                                </div>
-                                                <div class="control">
-                                                    <input id="item_codigo_pro_en" name="item_codigo_pro_en" type="text" value=""/>
-                                                </div>
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">                                            
+                                                <label for="item_codigo_pro_en">Codi</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codigo_pro_en" name="item_codigo_pro_en" type="text" value=""/>
                                             </div>
                                         </div>
-                                        <div class="element t99p">
+                                    </div>  
+                                    <div class="fila">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_en"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_nom_en" name="item_nom_en" type="text"
                                                     class="nou" />
+                                            </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_en">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -823,6 +928,45 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoCompetente">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_en"><spring:message code='camp.organCompetent'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_en" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ_en');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_en', 'item_organ_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_iniciacio_en"><spring:message code='camp.formaIniciacio'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_iniciacio_en" name="item_iniciacio_en" class="nou">
+                                                    <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_silenci_en"><spring:message code='camp.silenciAdministratiu'/></label>
@@ -870,7 +1014,7 @@
                                 <!-- de -->
                                 <div class="idioma de">
                                     <div class="fila">
-                                        <div class="element">
+                                        <div class="element t50p">
                                             <div class="etiqueta">                                            
                                                 <label for="item_codigo_pro_de">Codi</label>
                                             </div>
@@ -880,13 +1024,21 @@
                                         </div>
                                     </div>
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_de"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_nom_de" name="item_nom_de" type="text"
                                                     class="nou" />
+                                            </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_de">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -947,6 +1099,45 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoCompetente">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_de"><spring:message code='camp.organCompetent'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_de" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ_de');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_de', 'item_organ_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_iniciacio_de"><spring:message code='camp.formaIniciacio'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_iniciacio_de" name="item_iniciacio_de" class="nou">
+                                                    <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_silenci_de"><spring:message code='camp.silenciAdministratiu'/></label>
@@ -956,8 +1147,7 @@
                                                     cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
-                                    </div>
-                                    
+                                    </div>                                    
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
@@ -994,7 +1184,7 @@
                                 <!-- fr -->
                                 <div class="idioma fr">
                                     <div class="fila">
-                                        <div class="element">
+                                        <div class="element t50p">
                                             <div class="etiqueta">                                            
                                                 <label for="item_codigo_pro_fr">Codi</label>
                                             </div>
@@ -1004,13 +1194,21 @@
                                         </div>
                                     </div>
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_fr"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_nom_fr" name="item_nom_fr" type="text"
                                                     class="nou" />
+                                            </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_fr">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -1071,6 +1269,45 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoCompetente">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_fr"><spring:message code='camp.organCompetent'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_fr" name="item_organ_fr" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ_fr');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_fr', 'item_organ_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_iniciacio_fr"><spring:message code='camp.formaIniciacio'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_iniciacio_fr" name="item_iniciacio_fr" class="nou">
+                                                    <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_silenci_fr"><spring:message code='camp.silenciAdministratiu'/></label>
@@ -1122,55 +1359,38 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
             <!-- modul -->
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
+                    <legend>CANALS DE PRESENTACIÓ</legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
-                            <div class="element t50p">
+                            <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_codi"><spring:message code='camp.codi'/></label>
+                                    <label for="item_presentacio">Presentació</label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_codi" name="item_codi" type="text" class="nou" />
+                                    <input id="item_presentacio" name="item_presentacio" type="text" class="nou" />
                                 </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_iniciacio"><spring:message code='camp.formaIniciacio'/></label>
-                                </div>
-                                <div class="control select">
-                                    <select id="item_iniciacio" name="item_iniciacio" class="nou">
-                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${iniciacions}" var="iniciacio">
-                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
+                            </div>                            
                         </div>
                         <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_lloc">Lloc</label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_lloc" name="item_lloc" type="text" class="nou" />
+                                </div>
+                            </div>                            
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_url"><spring:message code='camp.urlTramitExtern'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_url" name="item_url" type="text" class="nou" />
-                                </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_familia"><spring:message code='camp.familia'/></label>
-                                </div>
-                                <div class="control select">
-                                    <select id="item_familia" name="item_familia" class="nou">
-                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${families}" var="familia">
-                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -1192,8 +1412,163 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>INFORMADORS</legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
+                                </div>
+                            </div>                            
+                        </div>                                               
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_notes"><spring:message code='camp.notesInformadors'/></label>
+                                </div>
+                                <div class="control">
+                                    <textarea id="item_notes" name="item_notes" cols="50" rows="2"
+                                        class="nou"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>ESTADÍSTIQUES</legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul auditorias">                
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>AUDITORIES</legend>
+                <div class="modul_continguts mostrat">
+                    <table>
+                        <thead>
+                            <th class="usuario"><div>USUARIO</div></th>
+                            <th class="fecha"><div>FECHA</div></th>
+                            <th class="operacion"><div>OPERACION</div></th>
+                        </thead>                    
+                        <tbody>
+                            <tr>
+                                <td class="usuario"><div>rsanz</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificat</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>jfernandez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificat</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>flopez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Insertat</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <%--
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
+                    <div class="modul_continguts mostrat">
                         <div class="fila">
                             <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_codi"><spring:message code='camp.codi'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_codi" name="item_codi" type="text" class="nou" />
+                                </div>
+                            </div>
+                            <!--<div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_iniciacio"><spring:message code='camp.formaIniciacio'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="item_iniciacio" name="item_iniciacio" class="nou">
+                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${iniciacions}" var="iniciacio">
+                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>-->
+                        </div>
+                        <div class="fila">
+                            <!--<div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_url"><spring:message code='camp.urlTramitExtern'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_url" name="item_url" type="text" class="nou" />
+                                </div>
+                            </div>-->
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_familia"><spring:message code='camp.familia'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="item_familia" name="item_familia" class="nou">
+                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                        <c:forEach items="${families}" var="familia">
+                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_tramite"><spring:message code='camp.idTramit'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_tramite" name="item_tramite" type="text" class="nou" />
+                                </div>
+                            </div>
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_version"><spring:message code='camp.versioTramit'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_version" name="item_version" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="fila">
+                            <!--<div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_organ"><spring:message code='camp.organCompetent'/></label>
                                 </div>
@@ -1201,7 +1576,7 @@
                                     <input id="item_organ" name="item_organ" type="text" class="nou" readonly="true" />
                                     <input id="item_organ_id" name="item_organ_id" type="hidden" />
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
@@ -1216,8 +1591,7 @@
                                 <div id="cercador">
                                     <div class="botonera" style="margin-top: 0px; float:left;">
                                         <div class="boton btnGenerico" style="margin-left: 0px;">
-                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
-                                           <%--  <a href="javascript:ArbreUA('item_organ', 'item_organ_id');" class="btn consulta"> --%>
+                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">                                           
                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                             </a>
                                         </div>
@@ -1255,7 +1629,7 @@
                                     <input id="item_taxa" name="item_taxa" type="checkbox" class="nou" />
                                 </div>
                             </div>
-                        </div>-->
+                        </div>
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
@@ -1266,11 +1640,13 @@
                                         class="nou"></textarea>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </fieldset>
             </div>
-            <!-- /modul -->
+            <!-- /modul -->                        
+            --%>
+            
         </div>
         <!-- /modulPrincipal -->
         <!-- modulLateral -->

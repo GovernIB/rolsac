@@ -746,7 +746,7 @@ div.table div.tbody div.td a:hover{
     background-color: White;
     margin-bottom: 30px;    
     position:relative;    
-    padding: 25px 21px 25px 21px;
+    padding: 25px 0 25px 21px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul a.modul{
     position:absolute;
@@ -757,6 +757,57 @@ div.table div.tbody div.td a:hover{
     width: 16px;
     height: 16px;
     background-image: url(../img/botons/desplegar.png);
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias{
+    padding: 0;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias legend{
+    padding: 25px 0 0 21px;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table{
+    width: 100%;
+    border-collapse: collapse;    
+    margin-bottom: 20px;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table div{    
+    padding: 6px 17px 6px 17px;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table th{
+    text-align: left;    
+    text-transform: uppercase;
+    color: Black;
+    font: bold 11px Verdana, Helvetica, Sans-serif;
+    padding: 0;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table th div{
+    padding-bottom: 10px;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table tbody tr{
+    background-color: #F9F8F2;    
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .usuario{
+    width: 60%;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .usuario div{
+    padding-left: 21px;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .fecha div,
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .operacion div{
+    border-left: 1px dashed #A2A2A2;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .fecha{
+    width: 20%;
+    color: #666666;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table .operacion{
+    width: 20%;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table tbody tr td{
+    padding: 3px 0;
+    text-align: left;
+}
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table tbody tr:nth-child(2n){
+    background-color: White;
 }
 .escriptori_detall .grupoModulosFormulario legend{
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;

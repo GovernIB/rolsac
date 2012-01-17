@@ -365,12 +365,25 @@ function CDetall(){
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		                
        
+        // Sincronizar campos sin idioma en zona multi-idioma.   
         jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").change(function(){
             jQuery("#item_fi_vida_administrativa,#item_fi_vida_administrativa_es,#item_fi_vida_administrativa_en,#item_fi_vida_administrativa_de,#item_fi_vida_administrativa_fr").attr("checked", jQuery(this).is(":checked"));
         });
         
         jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").change(function(){
             jQuery("#item_taxa,#item_taxa_es,#item_taxa_en,#item_taxa_de,#item_taxa_fr").attr("checked", jQuery(this).is(":checked"));
+        });
+        
+        jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
+            jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
+        });
+        
+        jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").change(function(){        
+            jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").val( jQuery(this).val() );        
+        });
+        
+        jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").change(function(){
+            jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").val( jQuery(this).val() );
         });
 	}
 	
@@ -455,7 +468,8 @@ function CDetall(){
 		$("#item_codi").val(dada_node.item_codi);
 		
 		if (dada_node.item_iniciacio != undefined) {
-			$("#item_iniciacio").val(dada_node.item_iniciacio);
+			jQuery("#item_iniciacio").val(dada_node.item_iniciacio);
+            jQuery("#item_iniciacio").change();
 		}
 		
 		if (dada_node.item_organ_id != undefined) {
@@ -495,12 +509,15 @@ function CDetall(){
 		
 		$("#item_notes").val(dada_node.item_notes);
 
-        //ModulTramit.inicializarTramites(dada_node.tramits);
+        ModulTramit.inicializarTramites(dada_node.tramits);
+        /*
+        // debug
         ModulTramit.inicializarTramites(
             [
                 {id:1,nombre:"Tramite inicial 1",orden:0},
                 {id:2,nombre:"Tramite inicial 2",orden:1}
             ]);        
+            */
 		        
 		ModulDocuments.inicializarDocuments(dada_node.documents);
         
