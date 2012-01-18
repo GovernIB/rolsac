@@ -799,6 +799,9 @@ div.table div.tbody div.td a:hover{
     width: 20%;
     color: #666666;
 }
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias table th.fecha{
+    color: Black;
+}
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table .operacion{
     width: 20%;
 }

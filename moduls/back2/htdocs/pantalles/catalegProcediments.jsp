@@ -1456,7 +1456,7 @@
                     <legend>ESTADÍSTIQUES</legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
-                            
+                            <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
                         </div>
                     </div>
                 </fieldset>

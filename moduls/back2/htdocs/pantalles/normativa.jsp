@@ -198,7 +198,8 @@
                         "obligatori": "<spring:message code='normativa.formulari.titol_ca.obligatori'/>",
                         "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                     }
-            },{
+            },
+            /*{
                 "modo": "individual",
                 "etiqueta": "id",
                 "etiquetaValor": "item_enllas_ca",
@@ -210,22 +211,11 @@
                         "mostrar": "no",
                         "abreviat": "no"
                     },
-            },{
+            },*/
+            {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_apartat_ca",
-                "obligatori": "no",
-                "tipus": "alfanumeric",
-                "caracters":
-                    {
-                        "maxim": 480,
-                        "mostrar": "no",
-                        "abreviat": "no"
-                    },
-            },{
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_responsable_ca",
+                "etiquetaValor": "item_apartat",
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
@@ -238,7 +228,20 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_ca",
+                "etiquetaValor": "item_responsable",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial",
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -251,56 +254,11 @@
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
                     }
-            },    
+            },            
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_es",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_es.tipus'/>"
-                    }
-            },  
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_en",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_en.tipus'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_de",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_de.tipus'/>"
-                    }
-            },             
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial_fr",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_fr.tipus'/>"
-                    }
-            },   
-            
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_ca",
+                "etiquetaValor": "item_pagina_final",
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -314,50 +272,6 @@
                         "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
                     }
             },    
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_es",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_es.tipus'/>"
-                    }
-            },  
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_en",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_en.tipus'/>"
-                    }
-            },
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_de",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_de.tipus'/>"
-                    }
-            },             
-            {
-                "modo": "individual",
-                "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final_fr",
-                "obligatori": "no",
-                "tipus": "numeric",
-                "error":
-                    {
-                        "tipus": "<spring:message code='normativa.formulari.pagina_final_fr.tipus'/>"
-                    }
-            },            
 
             // No traduibles
             {
@@ -650,13 +564,45 @@
                             <!-- ca -->
                             <div class="idioma ca">
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_titol_ca"><spring:message code='camp.titol_normativa'/></label></div>
                                         <div class="control">
                                             <input id="item_titol_ca" name="item_titol_ca" type="text" class="nou" />
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_clave_primaria">Clave primaria</label></div>
+                                        <div class="control">
+                                            <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" />
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="fila">
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_tipus"><spring:message code='camp.tipus_normativa'/></label></div>
+                                        <div class="control select">
+                                            <select id="item_tipus" name="item_tipus" class="nou">
+                                                <option value=""><spring:message code='txt.no_definit'/></option>
+                                                <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                                    <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_num_norma">Nº norma (Llei)</label></div>
+                                        <div class="control">
+                                            <input id="item_num_norma" name="item_num_norma" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_data_norma">Data norma (Data)</label></div>
+                                        <div class="control">
+                                            <input id="item_data_norma" name="item_data_norma" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--
                                 <div class="fila">
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_enllas_ca"><spring:message code='camp.enllas'/></label></div>
@@ -670,20 +616,8 @@
                                             <input id="item_apartat_ca" name="item_apartat_ca" type="text" class="nou" />
                                         </div>
                                     </div>
-                                </div>
-                                <div class="fila">
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_pagina_inicial_ca"><spring:message code='camp.pagina_inicial'/></label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_inicial_ca" name="item_pagina_inicial_ca" type="text" class="nou" />
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_pagina_final_ca"><spring:message code='camp.pagina_final'/></label></div>
-                                        <div class="control">
-                                            <input id="item_pagina_final_ca" name="item_pagina_final_ca" type="text" class="nou" />
-                                        </div>
-                                    </div>
+                                </div>                                     
+                                <div class="fila">                                    
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_responsable_ca"><spring:message code='camp.responsable'/></label></div>
                                         <div class="control">
@@ -703,14 +637,13 @@
                                             </div>
                                         </div>
                                     </div>    
-                                    
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_ca"><spring:message code='camp.arxiu_nou'/></label></div>
                                         <div class="control">                                           
                                             <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
                                         </div>
                                     </div>                                                                                      
-                                </div>
+                                </div>                                
                                 <div class="fila">
                                     <div class="element t99p">
                                         <div class="etiqueta"><label for="item_des_curta_ca"><spring:message code='camp.observacions'/></label></div>
@@ -719,18 +652,52 @@
                                         </div>
                                     </div>
                                 </div>
+                                --%>
+                                
                             </div>
                             <!-- /ca -->
                             <!-- es -->
                             <div class="idioma es">
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_titol_es"><spring:message code='camp.titol_normativa'/></label></div>
                                         <div class="control">
                                             <input id="item_titol_es" name="item_titol_es" type="text" class="nou" />
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_clave_primaria_es">Clave primaria</label></div>
+                                        <div class="control">
+                                            <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" class="nou" />
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="fila">
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_tipus_es"><spring:message code='camp.tipus_normativa'/></label></div>
+                                        <div class="control select">
+                                            <select id="item_tipus_es" name="item_tipus_es" class="nou">
+                                                <option value=""><spring:message code='txt.no_definit'/></option>
+                                                <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                                    <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_num_norma_es">Nº norma (Llei)</label></div>
+                                        <div class="control">
+                                            <input id="item_num_norma_es" name="item_num_norma_es" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_data_norma_es">Data norma (Data)</label></div>
+                                        <div class="control">
+                                            <input id="item_data_norma_es" name="item_data_norma_es" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--
                                 <div class="fila">
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_enllas_es"><spring:message code='camp.enllas'/></label></div>
@@ -776,8 +743,7 @@
                                                 <label for="item_arxiu_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
                                             </div>
                                         </div>
-                                    </div>    
-                                    
+                                    </div>                                    
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_arxiu_es"><spring:message code='camp.arxiu_nou'/></label></div>
                                         <div class="control">                                           
@@ -793,18 +759,51 @@
                                         </div>
                                     </div>
                                 </div>
+                                --%>
                             </div>
                             <!-- /es -->
                             <!-- en -->
                             <div class="idioma en">
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_titol_en"><spring:message code='camp.titol_normativa'/></label></div>
                                         <div class="control">
                                             <input id="item_titol_en" name="item_titol_en" type="text" class="nou" />
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_clave_primaria_en">Clave primaria</label></div>
+                                        <div class="control">
+                                            <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" class="nou" />
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="fila">
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_tipus_en"><spring:message code='camp.tipus_normativa'/></label></div>
+                                        <div class="control select">
+                                            <select id="item_tipus_en" name="item_tipus_en" class="nou">
+                                                <option value=""><spring:message code='txt.no_definit'/></option>
+                                                <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                                    <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_num_norma_en">Nº norma (Llei)</label></div>
+                                        <div class="control">
+                                            <input id="item_num_norma_en" name="item_num_norma_en" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_data_norma_en">Data norma (Data)</label></div>
+                                        <div class="control">
+                                            <input id="item_data_norma_en" name="item_data_norma_en" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--
                                 <div class="fila">
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_enllas_en"><spring:message code='camp.enllas'/></label></div>
@@ -867,18 +866,51 @@
                                         </div>
                                     </div>
                                 </div>
+                                --%>
                             </div>
                             <!-- /en -->
                             <!-- de -->
                             <div class="idioma de">
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_titol_de"><spring:message code='camp.titol_normativa'/></label></div>
                                         <div class="control">
                                             <input id="item_titol_de" name="item_titol_de" type="text" class="nou" />
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_clave_primaria_de">Clave primaria</label></div>
+                                        <div class="control">
+                                            <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" class="nou" />
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="fila">
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_tipus_de"><spring:message code='camp.tipus_normativa'/></label></div>
+                                        <div class="control select">
+                                            <select id="item_tipus_de" name="item_tipus_de" class="nou">
+                                                <option value=""><spring:message code='txt.no_definit'/></option>
+                                                <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                                    <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_num_norma_de">Nº norma (Llei)</label></div>
+                                        <div class="control">
+                                            <input id="item_num_norma_de" name="item_num_norma_de" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_data_norma_de">Data norma (Data)</label></div>
+                                        <div class="control">
+                                            <input id="item_data_norma_de" name="item_data_norma_de" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--
                                 <div class="fila">
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_enllas_de"><spring:message code='camp.enllas'/></label></div>
@@ -941,18 +973,51 @@
                                         </div>
                                     </div>
                                 </div>
+                                --%>
                             </div>
                             <!-- /de -->
                             <!-- fr -->
                             <div class="idioma fr">
                                 <div class="fila">
-                                    <div class="element t99p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_titol_fr"><spring:message code='camp.titol_normativa'/></label></div>
                                         <div class="control">
                                             <input id="item_titol_fr" name="item_titol_fr" type="text" class="nou" />
                                         </div>
                                     </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_clave_primaria_fr">Clave primaria</label></div>
+                                        <div class="control">
+                                            <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" class="nou" />
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="fila">
+                                    <div class="element t50p">
+                                        <div class="etiqueta"><label for="item_tipus_fr"><spring:message code='camp.tipus_normativa'/></label></div>
+                                        <div class="control select">
+                                            <select id="item_tipus_fr" name="item_tipus_fr" class="nou">
+                                                <option value=""><spring:message code='txt.no_definit'/></option>
+                                                <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                                    <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                                </c:forEach>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_num_norma_fr">Nº norma (Llei)</label></div>
+                                        <div class="control">
+                                            <input id="item_num_norma_fr" name="item_num_norma_fr" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                    <div class="element t25p">
+                                        <div class="etiqueta"><label for="item_data_norma_fr">Data norma (Data)</label></div>
+                                        <div class="control">
+                                            <input id="item_data_norma_fr" name="item_data_norma_fr" type="text" class="nou" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <%--
                                 <div class="fila">
                                     <div class="element t50p">
                                         <div class="etiqueta"><label for="item_enllas_fr"><spring:message code='camp.enllas'/></label></div>
@@ -1016,6 +1081,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                --%>
                             </div>
                             <!-- /fr -->
                         </div>
@@ -1029,33 +1095,11 @@
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend><spring:message code='txt.gestio'/></legend>
+                <legend>DADES BUTLLETÍ</legend>
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila">
-                        <div class="element t25p">
-                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.numero'/></label></div>
-                            <div class="control">
-                                <input id="item_numero" name="item_numero" type="text" class="nou" />
-                            </div>
-                        </div>
-                        <div class="element t25p">
-                            <div class="etiqueta"><label for="item_data"><spring:message code='camp.data'/></label></div>
-                            <div class="control">
-                                <input id="item_data" name="item_data" type="text" class="data nou" readonly="readonly" />
-                            </div>
-                        </div>  
                         <div class="element t50p">
-                            <div class="etiqueta"><label for="item_registre"><spring:message code='camp.registre'/></label></div>
-                            <div class="control">
-                                <input id="item_registre" name="item_registre" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /fila -->
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t25p">
                             <div class="etiqueta"><label for="item_butlleti_id"><spring:message code='camp.butlleti'/></label></div>
                             <div class="control select">
                                 <select id="item_butlleti_id" name="item_butlleti_id" class="nou">
@@ -1067,11 +1111,40 @@
                             </div>       
                         </div>
                         <div class="element t25p">
+                            <div class="etiqueta"><label for="item_data"><spring:message code='camp.data'/></label></div>
+                            <div class="control">
+                                <input id="item_data" name="item_data" type="text" class="data nou" readonly="readonly" />
+                            </div>
+                        </div>  
+                        <div class="element t25p">
+                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.numero'/></label></div>
+                            <div class="control">
+                                <input id="item_numero" name="item_numero" type="text" class="nou" />
+                            </div>
+                        </div>                                                
+                    </div>
+                    <!-- /fila -->
+                    <!-- fila -->
+                    <div class="fila">                        
+                        <div class="element t50p">
+                            <div class="etiqueta"><label for="item_registre"><spring:message code='camp.registre'/></label></div>
+                            <div class="control">
+                                <input id="item_registre" name="item_registre" type="text" class="nou" />
+                            </div>
+                        </div>
+                        <div class="element t50p">
+                            <div class="etiqueta"><label for="item_apartat"><spring:message code='camp.apartat'/></label></div>
+                            <div class="control">
+                                <input id="item_apartat" name="item_apartat" type="text" class="nou" />
+                            </div>
+                        </div>
+                        <%--<div class="element t25p">
                             <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data_butlleti'/></label></div>
                             <div class="control">
                                 <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="data nou" readonly="readonly" />
                             </div>
-                        </div>
+                        </div>-->
+                        <%--
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_tipus"><spring:message code='camp.tipus_normativa'/></label></div>
                             <div class="control select">
@@ -1084,8 +1157,27 @@
                                 
                             </div>
                         </div>                      
+                        --%>
                     </div>
                     <!-- /fila -->
+                    
+                    <!-- fila -->
+                    <div class="fila">
+                        <div class="element t50p">
+                            <div class="etiqueta"><label for="item_pagina_inicial"><spring:message code='camp.pagina_inicial'/></label></div>
+                            <div class="control">
+                                <input id="item_pagina_inicial" name="item_pagina_inicial" type="text" class="nou" />
+                            </div>
+                        </div>
+                        <div class="element t50p">
+                            <div class="etiqueta"><label for="item_pagina_final"><spring:message code='camp.pagina_final'/></label></div>
+                            <div class="control">
+                                <input id="item_pagina_final" name="item_pagina_final" type="text" class="nou" />
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /fila -->
+                    
                     <!-- fila -->
                     <div class="fila">
                         <div class="element t50p">                          
@@ -1095,13 +1187,16 @@
                                 <input id="item_ua_nom" name="item_ua_nom" type="text" readonly="readonly"/>
                             </div>
                         </div>
-                                            
+                        
+                        <%--
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_llei"><spring:message code='camp.llei'/></label></div>
                             <div class="control">
                                 <input id="item_llei" name="item_llei" type="text" class="nou" />
                             </div>
                         </div>                  
+                        --%>
+                        
                     </div>
                     <!-- /fila -->
                     
@@ -1127,6 +1222,73 @@
             </fieldset>
         </div>
         <!-- /modul -->
+        
+        <!-- modul -->
+        <div class="modul">
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>INFORMADOR</legend>
+                <div class="modul_continguts mostrat">
+                    <div class="fila">                        
+                        <div class="element t99p">
+                            <div class="etiqueta"><label for="item_responsable"><spring:message code='camp.responsable'/></label></div>
+                            <div class="control">
+                                <input id="item_responsablea" name="item_responsable" type="text" class="nou" />
+                            </div>
+                        </div>                                    
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <!-- /modul -->
+        
+        <!-- modul -->
+        <div class="modul">
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>ESTADÍSTIQUES</legend>
+                <div class="modul_continguts mostrat">
+                    <div class="fila">
+                        <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <!-- /modul -->
+        
+        <!-- modul -->
+        <div class="modul auditorias">                
+            <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+            <legend>AUDITORIES</legend>
+            <div class="modul_continguts mostrat">
+                <table>
+                    <thead>
+                        <th class="usuario"><div>USUARIO</div></th>
+                        <th class="fecha"><div>FECHA</div></th>
+                        <th class="operacion"><div>OPERACION</div></th>
+                    </thead>                    
+                    <tbody>
+                        <tr>
+                            <td class="usuario"><div>rsanz</div></td>
+                            <td class="fecha"><div>16/01/2012</div></td>
+                            <td class="operacion"><div>Modificat</div></td>
+                        </tr>
+                        <tr>
+                            <td class="usuario"><div>jfernandez</div></td>
+                            <td class="fecha"><div>16/01/2012</div></td>
+                            <td class="operacion"><div>Modificat</div></td>
+                        </tr>
+                        <tr>
+                            <td class="usuario"><div>flopez</div></td>
+                            <td class="fecha"><div>16/01/2012</div></td>
+                            <td class="operacion"><div>Insertat</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /modul -->
+        
     </div>
     <!-- /modulPrincipal -->
 
