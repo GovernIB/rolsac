@@ -37,7 +37,7 @@ function CDetall(soloFicha){
 		
 		ModulSeccions = new CModulSeccio();
 		
-		//Sobreescribimos la funci髇 del bot髇 finalizar para a馻dir a los par醡etros enviados
+		//Sobreescribimos la funci贸n del bot贸n finalizar para a帽adir a los par谩metros enviados
 		//las materias seleccionadas por el usuario
 		ModulMateries.extend = CModulMateries;
 		ModulMateries._finaliza = ModulMateries.finaliza;		
@@ -45,7 +45,7 @@ function CDetall(soloFicha){
 						
 			ModulMateries._finaliza();
 			
-			// A馻dir las materias a la informaci髇 a enviar una vez actualizada la selecci髇		
+			// A帽adir las materias a la informaci贸n a enviar una vez actualizada la selecci贸n		
 			d = ModulMateries.listaMaterias();
 			
 			if ( $("#materies").val() == undefined ) {
@@ -57,7 +57,7 @@ function CDetall(soloFicha){
 			
 		}
 		
-		//redigirimos el m閠odo que guarda porque en este caso tambi閚 hacemos un upload de archivos				
+		//redigirimos el m茅todo que guarda porque en este caso tambi茅n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 				
 		// idioma
@@ -83,13 +83,30 @@ function CDetall(soloFicha){
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
+        
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codi_estandar,#item_codi_estandar_es,#item_codi_estandar_en,#item_codi_estandar_de,#item_codi_estandar_fr").change(function(){
+            jQuery("#item_codi_estandar,#item_codi_estandar_es,#item_codi_estandar_en,#item_codi_estandar_de,#item_codi_estandar_fr").val( jQuery(this).val() );
+        });
+        
+        jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
+            jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
+        });
+        
+        jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function(){
+            jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
+        });
+        
+        jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").change(function(){
+            jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
+        });
 				
 		// carregar
 		Detall.carregar();
 		
 	}
 	
-	//Sobreescribe el m閠odo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m茅todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 				
 		// Validamos el formulario
@@ -110,7 +127,7 @@ function CDetall(soloFicha){
 			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");			
 		});		
 		
-		//Enviamos el formulario mediante el m閠odo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m茅todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -142,7 +159,7 @@ function CDetall(soloFicha){
 		
 	}
 	
-	// M閠odo sobreescrito
+	// M茅todo sobreescrito
 	this.busca = function(){
 			
 		edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
@@ -154,14 +171,14 @@ function CDetall(soloFicha){
 			edificis_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_edifici_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p醙ina.
+				pagPagina_edifici_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p谩gina.
 				EscriptoriEdifici.carregar({});
 				
 			});
 		});
 	}
 			
-	// M閠odo sobreescrito.
+	// M茅todo sobreescrito.
 	this.carregar = function(itemID) {
 			
 		if (itemID == undefined){
@@ -255,9 +272,10 @@ function CDetall(soloFicha){
 			$("#item_fax").val(dada_node.item_fax);
 			$("#item_email").val(dada_node.item_email);
 			marcarOpcionSelect("item_espai_territorial",dada_node.item_espai_territorial);
-			//$("#item_espai_territorial").val(dada_node.item_espai_territorial);
-			$("#item_pare_id").val(dada_node.pareId);
-			$("#item_pare").val(dada_node.pareNom);
+			//$("#item_espai_territorial").val(dada_node.item_espai_territorial);			
+            jQuery("#item_pare_id").val(dada_node.pareId);
+			jQuery("#item_pare").val(dada_node.pareNom);
+            jQuery("#item_pare").change();
 			
 			//Responsable			
 			$("#item_responsable").val(dada_node.item_responsable);	
@@ -453,12 +471,12 @@ function CDetall(soloFicha){
 			$("#modul_edificis").show();			
 			
 		} else {
-			//No hay datos que pintar -> estamos en creaci髇 de UA
-			//Esconder m骴ulos laterales
+			//No hay datos que pintar -> estamos en creaci贸n de UA
+			//Esconder m贸dulos laterales
 			$("#modul_materies").hide();
 			$("#modul_seccions").hide();
 			$("#modul_edificis").hide();
-			//Deshabilitar bot髇 eliminar
+			//Deshabilitar bot贸n eliminar
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");
 		}
