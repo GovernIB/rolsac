@@ -150,7 +150,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -291,6 +291,11 @@ function CDetall(){
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+            jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });        
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 	}
@@ -315,8 +320,9 @@ function CDetall(){
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
-		$("#item_id").val(dada_node.item_id);
-		$("#item_codi_estandard").val(dada_node.item_codi_estandard);
+		jQuery("#item_id").val(dada_node.item_id);
+		jQuery("#item_codi_estandard").val(dada_node.item_codi_estandard);
+        jQuery("#item_codi_estandard").change();
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {

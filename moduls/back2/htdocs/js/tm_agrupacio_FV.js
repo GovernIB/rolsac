@@ -150,7 +150,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -329,12 +329,16 @@ function CDetall(){
 	    	
 	    });
 		
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+            jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos				
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 	}
 	
-	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
 		$("#llistaFetsVitals").val(ModulFetVital.listaFetsVitals());
@@ -344,7 +348,7 @@ function CDetall(){
 			return false;
 		}
 		
-		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -420,7 +424,8 @@ function CDetall(){
 		
 		dada_node = dades;
 		$("#item_id").val(dada_node.item_id);
-		$("#item_codi_estandard").val(dada_node.item_codi_estandard);
+		jQuery("#item_codi_estandard").val(dada_node.item_codi_estandard);
+        jQuery("#item_codi_estandard").change();
 
 		$("#item_public_objectiu").val(dada_node.item_public_objectiu).attr('selected',true);
 		

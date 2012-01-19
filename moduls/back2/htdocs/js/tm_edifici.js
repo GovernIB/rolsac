@@ -150,7 +150,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -297,15 +297,32 @@ function CDetall(){
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
+        
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_direccio,#item_direccio_es,#item_direccio_en,#item_direccio_de,#item_direccio_fr").change(function(){
+            jQuery("#item_direccio,#item_direccio_es,#item_direccio_en,#item_direccio_de,#item_direccio_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_codi_postal,#item_codi_postal_es,#item_codi_postal_en,#item_codi_postal_de,#item_codi_postal_fr").change(function(){
+            jQuery("#item_codi_postal,#item_codi_postal_es,#item_codi_postal_en,#item_codi_postal_de,#item_codi_postal_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_poblacio,#item_poblacio_es,#item_poblacio_en,#item_poblacio_de,#item_poblacio_fr").change(function(){
+            jQuery("#item_poblacio,#item_poblacio_es,#item_poblacio_en,#item_poblacio_de,#item_poblacio_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_latitud,#item_latitud_es,#item_latitud_en,#item_latitud_de,#item_latitud_fr").change(function(){
+            jQuery("#item_latitud,#item_latitud_es,#item_latitud_en,#item_latitud_de,#item_latitud_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").change(function(){
+            jQuery("#item_longitud,#item_longitud_es,#item_longitud_en,#item_longitud_de,#item_longitud_fr").val( jQuery(this).val() );
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos				
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 	}
 	
-	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 				
 		$("#llistaUnitatsAdministratives").val(ModulUnitatAdministrativa.listaUnidadesAdministrativas());
@@ -315,7 +332,7 @@ function CDetall(){
 			return false;
 		}
 		
-		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -383,16 +400,21 @@ function CDetall(){
 		
 		dada_node = dades;
 		$("#item_id").val(dada_node.item_id);
-		$("#item_direccio").val(dada_node.item_direccio);
-		$("#item_codi_postal").val(dada_node.item_codi_postal);
-		$("#item_poblacio").val(dada_node.item_poblacio);
+		jQuery("#item_direccio").val(dada_node.item_direccio);
+        jQuery("#item_direccio").change();
+		jQuery("#item_codi_postal").val(dada_node.item_codi_postal);
+        jQuery("#item_codi_postal").change();
+		jQuery("#item_poblacio").val(dada_node.item_poblacio);
+        jQuery("#item_poblacio").change();
 		
 		$("#item_telefon").val(dada_node.item_telefon);
 		$("#item_fax").val(dada_node.item_fax);
 		$("#item_email").val(dada_node.item_email);
 		
-		$("#item_longitud").val(dada_node.item_longitud);
-		$("#item_latitud").val(dada_node.item_latitud);
+		jQuery("#item_longitud").val(dada_node.item_longitud);
+        jQuery("#item_longitud").change();
+		jQuery("#item_latitud").val(dada_node.item_latitud);
+        jQuery("#item_latitud").change();
 		
 		
 		//Fotos

@@ -221,6 +221,16 @@
                                 <!-- ca -->
                                 <div class="idioma ca">
                                     <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
                                                 <label for="item_nom_ca"><spring:message code='perfil.formulari.nom'/></label>
@@ -238,10 +248,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_path_iconografia"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_path_iconografia" name="item_path_iconografia" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
                                 <div class="idioma es">
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_es"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_es" name="item_codi_estandard_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="fila">                              
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -260,10 +290,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_path_iconografia_es"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_path_iconografia_es" name="item_path_iconografia_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
                                 <div class="idioma en">
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_en"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_en" name="item_codi_estandard_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -282,10 +332,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_path_iconografia_en"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_path_iconografia_en" name="item_path_iconografia_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
                                 <div class="idioma de">
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_de"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_de" name="item_codi_estandard_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -304,10 +374,30 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_path_iconografia_de"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_path_iconografia_de" name="item_path_iconografia_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
                                 <div class="idioma fr">
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_fr"><spring:message code='perfil.formulari.codi_estandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_fr" name="item_codi_estandard_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -326,6 +416,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_path_iconografia_fr"><spring:message code='perfil.formulari.path_iconografia'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_path_iconografia_fr" name="item_path_iconografia_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- /fr -->
                             </div>
@@ -335,35 +435,7 @@
                 </fieldset>                 
             </div>
             <!-- /modul -->
-            <!-- modul -->  
-              <div class="modul">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.dades'/></legend>
-                    <div class="modul_continguts mostrat">
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_codi_estandard"><spring:message code='perfil.formulari.codi_estandard'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_path_iconografia"><spring:message code='perfil.formulari.path_iconografia'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_path_iconografia" name="item_path_iconografia" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                </fieldset>
-            </div>
-            <!-- /modul -->
+            
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->

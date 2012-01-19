@@ -147,7 +147,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -286,11 +286,16 @@ function CDetall(){
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
+               
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+            jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
 
@@ -375,8 +380,10 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 
-		$("#item_codi_hita").val(dades.item_codi_hita);
-		$("#item_codi_estandard").val(dades.item_codi_estandard);
+		jQuery("#item_codi_hita").val(dades.item_codi_hita);
+		jQuery("#item_codi_estandard").val(dades.item_codi_estandard);
+        jQuery("#item_codi_estandard").change();
+        
 		pintarArchivo("item_foto", dades);
 		pintarArchivo("item_icona", dades);
 		pintarArchivo("item_icona_gran", dades);

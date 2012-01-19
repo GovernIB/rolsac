@@ -38,6 +38,7 @@
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
     var txtCodi = "<spring:message code='txt.codi'/>";
     var txtEnllas = "<spring:message code='camp.enllas'/>";
+    var txtUrl = "<spring:message code='camp.url'/>";
 
     //paginacio
     var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
@@ -198,7 +199,7 @@
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_enllas"><spring:message code='camp.enllas'/></label>
+                                    <label for="item_enllas"><spring:message code='camp.url'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="item_enllas" name="item_enllas" type="text" class="nou" />
