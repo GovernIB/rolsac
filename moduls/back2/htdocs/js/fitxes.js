@@ -168,7 +168,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -329,7 +329,7 @@ function CDetall(){
 				return false;
 			}
 					
-			//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+			//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 			$("#formGuardar").ajaxSubmit({			
 				url: pagGuardar,
 				dataType: 'json',
@@ -386,6 +386,11 @@ function CDetall(){
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");				
+        
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
+            jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
+        });
 	}
 
 	this.dataPublicacio = function(e) {

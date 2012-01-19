@@ -74,25 +74,8 @@ function CLlistat(){
 	
 	this.iniciar = function() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
-		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
+		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });				
         
-        // Sincronizar campos sin idioma en zona multi-idioma.   
-        jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
-            jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
-        });
-        
-        jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").change(function(){
-            jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").val( jQuery(this).val() );
-        });
-        
-        jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").change(function(){
-            jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").val( jQuery(this).val() );
-        });
-        
-        jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").change(function(){
-            jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").val( jQuery(this).val() );
-        });
-				
 		Llistat.carregar({});		
 	}
 	
@@ -400,6 +383,20 @@ function CDetall(){
 			ul_idiomes_elm.bind("click",function(e){Detall.idioma(e);});			
 		}
 		
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
+            jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
+        });        
+        jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").change(function(){
+            jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").val( jQuery(this).val() );
+        });        
+        jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").change(function(){
+            jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").val( jQuery(this).val() );
+        });        
+        jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").change(function(){
+            jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").val( jQuery(this).val() );
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		

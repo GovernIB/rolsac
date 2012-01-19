@@ -414,7 +414,7 @@
                                 <!-- ca -->
                                 <div class="idioma ca">
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_titol_ca"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
@@ -422,6 +422,14 @@
                                                 <input id="item_titol_ca" name="item_titol_ca" type="text"
                                                     class="nou" />
                                             </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" />
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -460,7 +468,7 @@
                                 <!-- es -->
                                 <div class="idioma es">
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_titol_es"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
@@ -468,6 +476,14 @@
                                                 <input id="item_titol_es" name="item_titol_es" type="text"
                                                     class="nou" />
                                             </div>
+                                        </div>                                    
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_es">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" class="nou" />
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -506,7 +522,7 @@
                                 <!-- en -->
                                 <div class="idioma en">
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_titol_en"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
@@ -514,6 +530,14 @@
                                                 <input id="item_titol_en" name="item_titol_en" type="text"
                                                     class="nou" />
                                             </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_en">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" class="nou" />
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -552,7 +576,7 @@
                                 <!-- de -->
                                 <div class="idioma de">
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_titol_de"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
@@ -560,6 +584,14 @@
                                                 <input id="item_titol_de" name="item_titol_de" type="text"
                                                     class="nou" />
                                             </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_de">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" class="nou" />
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -598,7 +630,7 @@
                                 <!-- fr -->
                                 <div class="idioma fr">
                                     <div class="fila">
-                                        <div class="element t99p">
+                                        <div class="element t75p">
                                             <div class="etiqueta">
                                                 <label for="item_titol_fr"><spring:message code='fitxes.formulari.titol'/></label>
                                             </div>
@@ -606,6 +638,14 @@
                                                 <input id="item_titol_fr" name="item_titol_fr" type="text"
                                                     class="nou" />
                                             </div>
+                                        </div>
+                                        <div class="element t25p">
+                                            <div class="etiqueta">
+                                                <label for="item_clave_primaria_fr">Clave primaria</label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" class="nou" />
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -656,7 +696,8 @@
                     <div class="modul_continguts">
                         <!-- fila -->
                         <div class="fila">
-	                        <div class="element t50p">
+	                        <div class="element t50p campoImagen">
+                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
 	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
 	                            <div class="control archivo">   
 	                            	<div id="grup_item_icona" class="file">
@@ -678,7 +719,8 @@
                         <!-- /fila -->
                         <!-- fila -->
                         <div class="fila">
-	                        <div class="element t50p">
+	                        <div class="element t50p campoImagen">
+                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
 	                            <div class="etiqueta">
                                     <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
                                 </div>
@@ -700,9 +742,11 @@
 	                        </div>                                                                                      
                         </div>
                         <!-- /fila -->
+                        
                         <!-- fila -->
                         <div class="fila">
-	                        <div class="element t50p">
+	                        <div class="element t50p campoImagen">
+                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
 	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
 	                            <div class="control archivo">   
 	                            	<div id="grup_item_imatge" class="file">
@@ -712,8 +756,7 @@
 	                            		<label for="item_imatge_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
 	                            	</div>
 	                            </div>
-	                        </div>    
-	                        
+	                        </div>
 	                        <div class="element t50p">
 	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
 	                            <div class="control">                                      		
@@ -734,10 +777,7 @@
                                         class="nou" />
                                 </div>
                             </div>
-                        </div>
-                        <!-- /fila -->
-                        <!-- fila -->
-                        <div class="fila">
+                        
                             <div class="element t50p">
                                 <div class="etiqueta">
                                     <label for="item_forum"><spring:message code='fitxes.formulari.enllas_forum'/></label>
@@ -756,8 +796,18 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul amagat"><spring:message code='boto.mostra'/></a>
-                    <legend><spring:message code='fitxes.formulari.responsable'/></legend>
+                    <legend>INFORMADOR</legend>
                     <div class="modul_continguts">
+                        <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta">
+                                    <label for="item_responsable"><spring:message code='fitxes.formulari.responsable'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
@@ -770,6 +820,53 @@
                         </div>
                     </div>
                 </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>ESTADÍSTIQUES</legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul auditorias">                
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>AUDITORIES</legend>
+                <div class="modul_continguts mostrat">
+                    <table>
+                        <thead>
+                            <th class="usuario"><div>USUARIO</div></th>
+                            <th class="fecha"><div>FECHA</div></th>
+                            <th class="operacion"><div>OPERACION</div></th>
+                        </thead>                    
+                        <tbody>
+                            <tr>
+                                <td class="usuario"><div>rsanz</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificat</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>jfernandez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificat</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>flopez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Insertat</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <!-- /modul -->
         </div>
