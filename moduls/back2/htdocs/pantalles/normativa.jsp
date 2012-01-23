@@ -381,139 +381,185 @@
         <div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2><spring:message code='tab.cercador'/></h2>
-                    
-                    <input id="cerca_ua_id" name="cerca_ua_id" type="hidden" value='<c:out value="${idUA}" />'/>
-                    
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_numero"><spring:message code='camp.numero'/></label>
+                    <div class="opcionesBusqueda">
+                        <h2>OPCIONS DE CERCA</h2>
+                        <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
+                                <input id="cerca_uaFilles" type="checkbox" name="cerca_uaFilles" value="1" />
+                                <%--<select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
+                                    <option value="0" selected="selected"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
+                                </select>--%>                                
                             </div>
-                            <div class="control">
-                                <input id="cerca_numero" name="cerca_numero" type="text" />
-                            </div>                          
                         </div>
-                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
+                        <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_totes_unitats"><spring:message code='camp.cerca_totes_unitats'/></label>                                
+                                <input id="cerca_totes_unitats" name="cerca_totes_unitats" type="checkbox" value="1"/>
                             </div>
-                            <div class="control">
-                                <select id="cerca_validacio" name="cerca_validacio">
-                                
-                                    <c:set var="rolSuper"><rol:userIsSuper/></c:set>
-                                    <c:choose>
-                                        <c:when test="${rolSuper}" >
-                                            <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
-                                            <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                            <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
-                                        </c:when>
-                                        <c:otherwise>
-                                            <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
-                                        </c:otherwise>
-                                    </c:choose>
+                        </div>
+                        <div class="fila">
+                            <div class="element checkbox">                           
+                                <input type="checkbox" id="cerca_externes" name="cerca_externes" />
+                                <label for="cerca_externes"><spring:message code='camp.cerca_externes'/></label>
+                            </div>                      
+                        </div>
+                        <div class="fila">
+                            <div class="element">
+                                <label for="visibilitat">Visibilitat</label>                            
+                                <select id="visibilitat" name="visibilitat">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                 </select>
-                            </div>
-                        </div>                          
-                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_tipus_normativa" name="cerca_tipus_normativa">
-                                    <option value=""><spring:message code='txt.tots'/></option>
-                                    <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
-                                        <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
-                                    </c:forEach>
-                                </select>                               
-                            </div>                          
+                            </div>                        
                         </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_butlleti"><spring:message code='camp.butlleti'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_butlleti" name="cerca_butlleti">
-                                    <option value=""><spring:message code='txt.tots'/></option>
-                                    <c:forEach items="${llistaButlletins}" var="butlleti">                                      
-                                        <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
-                                    </c:forEach>
-                                </select>                               
-                            </div>                          
-                        </div>                                              
-                    </div>      
-                    
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_registre"><spring:message code='camp.registre'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_registre" name="cerca_registre" type="text" />
-                            </div>                          
-                        </div>  
-                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_llei"><spring:message code='camp.llei'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_llei" name="cerca_llei" type="text" />
-                            </div>                          
-                        </div>      
-                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_data"><spring:message code='camp.data'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_data" name="cerca_data" type="text" class="data" />
-                            </div>
-                        </div>          
-                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_data_butlleti" name="cerca_data_butlleti" type="text" class="data" />
-                            </div>
-                        </div>
-                    </div>          
-                    
-                    <div class="fila">                        
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_text"><spring:message code='camp.text'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_text" name="cerca_text" type="text" maxlength="250" class="text" />
-                            </div>
-                        </div>                      
                     </div>
+                       
+                    <div class="busquedaBasica">
+                        <h2><spring:message code='tab.cercador'/></h2>
                     
-                    <div class="fila">
-                        <div class="element t18">
-                            <input type="checkbox" id="cerca_totes_unitats" name="cerca_totes_unitats"/>
-                            <label for="cerca_totes_unitats" class="checkbox"><spring:message code='camp.cerca_totes_unitats'/></label>                     
+                        <input id="cerca_ua_id" name="cerca_ua_id" type="hidden" value='<c:out value="${idUA}" />'/>
+                    
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_codi">Codi</label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_codi" name="cerca_codi" type="text" value="[dinamizar]" />
+                                </div>                          
+                            </div>
+                            
+                            <div class="element t75">
+                                <div class="etiqueta">
+                                    <label for="cerca_text"><spring:message code='camp.text'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_text" name="cerca_text" type="text" maxlength="250" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="busquedaAvanzada">
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_validacio" name="cerca_validacio">
+                                    
+                                        <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                        <c:choose>
+                                            <c:when test="${rolSuper}" >
+                                                <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+                                                <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                                <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                            </c:when>
+                                            <c:otherwise>
+                                                <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </select>
+                                </div>
+                            </div>   
+
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_numero"><spring:message code='camp.numero'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_numero" name="cerca_numero" type="text" />
+                                </div>                          
+                            </div>
+                            
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="cerca_butlleti"><spring:message code='camp.butlleti'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_butlleti" name="cerca_butlleti">
+                                        <option value=""><spring:message code='txt.tots'/></option>
+                                        <c:forEach items="${llistaButlletins}" var="butlleti">                                      
+                                            <option value='<c:out value="${butlleti.id}" />'><c:out value="${butlleti.nom}" /></option>
+                                        </c:forEach>
+                                    </select>                               
+                                </div>                          
+                            </div>                                              
+                                                        
+                        </div>      
+                    
+                        <div class="fila">
+                        
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_data_butlleti" name="cerca_data_butlleti" type="text" class="data" />
+                                </div>
+                            </div>
+                        
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="cerca_tipus_normativa"><spring:message code='camp.tipus_normativa'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_tipus_normativa" name="cerca_tipus_normativa">
+                                        <option value=""><spring:message code='txt.tots'/></option>
+                                        <c:forEach items="${llistaTipusNormativa}" var="tipus">                                     
+                                            <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
+                                        </c:forEach>
+                                    </select>                               
+                                </div>                          
+                            </div>
+                        </div>
+                            
+                        <div class="fila">
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="cerca_registre"><spring:message code='camp.registre'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_registre" name="cerca_registre" type="text" />
+                                </div>                          
+                            </div>  
+                                                                                    
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_data"><spring:message code='camp.data'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_data" name="cerca_data" type="text" class="data" />
+                                </div>
+                            </div>          
+                                                        
                         </div>
 
-                        <div class="element t18">                           
-                            <input type="checkbox" id="cerca_externes" name="cerca_externes" />
-                            <label for="cerca_externes" class="checkbox"><spring:message code='camp.cerca_externes'/></label>
-                        </div>                      
-                    </div>                    
-                    
-                    <div class="botonera">
-                        <div class="boton btnGenerico">
-                          <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+                        <%--
+                        <div class="fila">                        
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_llei"><spring:message code='camp.llei'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_llei" name="cerca_llei" type="text" />
+                                </div>                          
+                            </div>      
                         </div>
-                        <div class="boton btnGenerico">
-                         <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+                        --%>
+                        
+                        <div class="botonera">
+                            <div class="boton btnGenerico">
+                              <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+                            </div>
+                            <div class="boton btnGenerico">
+                             <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+                            </div>
                         </div>
                     </div>
+                                        
                 </div>
             </div>
             <!-- /cercador -->
