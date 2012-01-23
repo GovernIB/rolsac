@@ -275,188 +275,229 @@
             <!-- cercador -->
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2><spring:message code='tab.cercador'/></h2>
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_textes"><spring:message code='camp.textes'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_textes" name="cerca_textes" type="text"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_codi"><spring:message code='txt.codi'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_codi" name="cerca_codi" type="text" />
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_estat"><spring:message code='camp.estat'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_estat" name="cerca_estat" class="t8">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-	                                <option value="1"><spring:message code='txt.validacio.publica'/></option>
-                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_familia"><spring:message code='camp.familia'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_familia" name="cerca_familia">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <c:forEach items="${families}" var="familia">
-                                        <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_iniciacio"><spring:message code='camp.iniciacio'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_iniciacio" name="cerca_iniciacio">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <c:forEach items="${iniciacions}" var="iniciacio">
-                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_tramit"><spring:message code='camp.identificadorTramit'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_tramit" name="cerca_tramit" type="text"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_versio"><spring:message code='camp.versioTramit'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_versio" name="cerca_versio" type="text"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_url"><spring:message code='camp.urlTramitExtern'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_url" name="cerca_url" type="text"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_indicador"><spring:message code='camp.fiViaAdministrativa'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_indicador" name="cerca_indicador" class="t8">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_taxa"><spring:message code='camp.taxa'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_taxa" name="cerca_taxa" class="t8">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_responsable" name="cerca_responsable" type="text"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="fila">
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_fechaCaducidad"><spring:message code='camp.dataCaducitat'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_fechaPublicacion"><spring:message code='camp.dataPublicacio'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_fechaActualizacion"><spring:message code='camp.dataActualitzacio'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="element t21">
-                            <div class="etiqueta">
-                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>
-                            </div>
-                            <div class="control">
-                                <select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
+                    <div class="opcionesBusqueda">
+                        <h2>OPCIONS DE CERCA</h2>
+                        <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
+                                <input id="cerca_uaFilles" type="checkbox" name="cerca_uaFilles" value="1" />
+                                <%--<select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
                                     <option value="0" selected="selected"><spring:message code='txt.no'/></option>
                                     <option value="1"><spring:message code='txt.si'/></option>
-                                </select>
+                                </select>--%>                                
                             </div>
                         </div>
+                        <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_uaMeves"><spring:message code='camp.cerca_totes_unitats'/></label>                                
+                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
+                            </div>
+                        </div>
+                        <div class="element>                        
+                            <label for="visibilitat">Visibilitat</label>                            
+                            <select id="visibilitat" name="visibilitat">
+                                <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
+                            </select>
+                        </div>                        
                     </div>
-                    <div class="fila">
-                        <div class="element t30">
-                            <div class="control">
-                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/> <label for="cerca_uaMeves" class="etiqueta"><spring:message code='camp.cerca_totes_unitats'/></label>
+                    <div class="busquedaBasica">
+                        <h2><spring:message code='tab.cercador'/></h2>
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_codi"><spring:message code='txt.codi'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_codi" name="cerca_codi" type="text" />
+                                </div>
+                            </div>
+                            <div class="element t75">
+                                <div class="etiqueta">
+                                    <label for="cerca_textes"><spring:message code='camp.textes'/></label>
+                                </div>
+                                <div class="control">                                    
+                                    <input id="cerca_textes" name="cerca_textes" type="text"/>
+                                </div>                                
                             </div>
                         </div>
-                        <div class="botonera noClear">
-                            <div class="boton btnGenerico">
-                              <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+                    </div>                    
+                    <div class="busquedaAvanzada">
+                        <h2>CERCADOR AVANÇAT</h2>
+                        <div class="fila">                                                                                    
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_tramit"><spring:message code='camp.identificadorTramit'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_tramit" name="cerca_tramit" type="text"/>
+                                </div>
                             </div>
-                            <div class="boton btnGenerico">
-                             <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_estat"><spring:message code='camp.estat'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_estat" name="cerca_estat" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                        <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                        <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_materia">Matèria</label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_materia" name="cerca_materia" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_fet_vital">Fet Vital</label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_fet_vital" name="cerca_fet_vital" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t50">
+                                <div class="etiqueta">
+                                    <label for="cerca_familia"><spring:message code='camp.familia'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_familia" name="cerca_familia">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <c:forEach items="${families}" var="familia">
+                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_iniciacio"><spring:message code='camp.iniciacio'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_iniciacio" name="cerca_iniciacio">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <c:forEach items="${iniciacions}" var="iniciacio">
+                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_indicador"><spring:message code='camp.fiViaAdministrativa'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_indicador" name="cerca_indicador" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0">No</option>
+                                        <option value="1">Sí</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0">No</option>
+                                        <option value="1">Sí</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <%--
+                        <div class="fila">                                                                                
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_versio"><spring:message code='camp.versioTramit'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_versio" name="cerca_versio" type="text"/>
+                                </div>
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_url"><spring:message code='camp.urlTramitExtern'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_url" name="cerca_url" type="text"/>
+                                </div>
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_taxa"><spring:message code='camp.taxa'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="cerca_taxa" name="cerca_taxa" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0">No</option>
+                                        <option value="1">Sí</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_responsable" name="cerca_responsable" type="text"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_fechaCaducidad"><spring:message code='camp.dataCaducitat'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
+                                </div>
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_fechaPublicacion"><spring:message code='camp.dataPublicacio'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
+                                </div>
+                            </div>
+                            <div class="element t21">
+                                <div class="etiqueta">
+                                    <label for="cerca_fechaActualizacion"><spring:message code='camp.dataActualitzacio'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
+                                </div>
+                            </div>                            
+                        </div>
+                        --%>                                                
+                        <div class="fila">                            
+                            <div class="botonera noClear">
+                                <div class="boton btnGenerico">
+                                  <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+                                </div>
+                                <div class="boton btnGenerico">
+                                 <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <!-- /cercador -->

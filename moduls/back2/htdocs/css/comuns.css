@@ -598,8 +598,6 @@ div.table div.tbody div.td a:hover{
 
 /* cercador */
 
-#cercador { 
-}
 #cercador_contingut { 
     overflow:hidden;     
     padding:1em; 
@@ -637,11 +635,17 @@ div.table div.tbody div.td a:hover{
 #cercador .element.t21{
     width: 20.9%;
 }
+#cercador .element.t25{
+    width: 24.9%;
+}
 #cercador .element.t30{
     width: 29.9%;
 }
 #cercador .element.t50{
     width: 49.9%;
+}
+#cercador .element.t75{
+    width: 74.9%;
 }
 #cercador div.element .control{
     padding-right: 20px;
@@ -711,6 +715,38 @@ div.table div.tbody div.td a:hover{
 
 #cercador a.mesDades { padding-left:1.2em; background:transparent url(../img/cercador/mesDades_off.gif) no-repeat left center; }
 #cercador a.on { background-image:url(../img/cercador/mesDades_on.gif); }
+
+#cercador_contingut  .busquedaBasica,
+#cercador_contingut .busquedaAvanzada{
+    float: left;
+    width: 735px;
+    padding-bottom: 20px;
+}
+
+#cercador_contingut .opcionesBusqueda{
+    float: right;
+    width: 201px;
+    border-radius: 10px;
+    background-color: #F3F3F3;
+    border: 1px solid #D3D3D3;
+    padding: 20px;
+}
+#cercador_contingut .opcionesBusqueda h2{
+    margin: 0 0 15px 0;
+}
+#cercador_contingut .opcionesBusqueda .fila{
+    padding-bottom: 10px;
+    margin-bottom:0;
+}
+#cercador_contingut .opcionesBusqueda .fila .element{
+    height: auto;
+}
+#cercador_contingut .opcionesBusqueda .fila label{
+    font: 13px Arial, Helvetica, Sans-serif;
+}
+#cercador_contingut .opcionesBusqueda .checkbox  input{
+    float: left;
+}
 
 /* suggeriments_resultats */
 
