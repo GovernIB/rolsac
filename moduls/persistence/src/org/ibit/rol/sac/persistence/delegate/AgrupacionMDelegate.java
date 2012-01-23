@@ -105,4 +105,12 @@ public class AgrupacionMDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public Long guardarAgrupacionM(AgrupacionMateria materia, List<MateriaAgrupacionM> llistaMateriesOld) throws DelegateException {
+        try {
+            return getFacade().guardarAgrupacionM(materia, llistaMateriesOld);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
 }

@@ -47,7 +47,7 @@ function CModulFetVital(){
 			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
 			multilang: false
 		});
-	}	
+	}
 			
 	this.nuevo = function() {       
 		fetVitals_seleccionats_elm = escriptori_detall_elm.find("div.modulFetVital div.seleccionats");
@@ -67,8 +67,8 @@ function CModulFetVital(){
 									
 			modul_fetVital_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
-				update: function(event,ui){
-					ModulFetVital.calculaOrden(ui,"destino");
+				update: function(event,ui) {
+					ModulFetVital.calculaOrden(ui, "destino");
 					that.contaSeleccionats();
 					Detall.modificado();
 				}
@@ -79,8 +79,8 @@ function CModulFetVital(){
 	
 	
 	this.inicializarFetsVitals = function(listaFetsVitals) {
+		modul_fetVital_elm.find(".listaOrdenable").empty();
 		if (typeof listaFetsVitals != 'undefined' && listaFetsVitals != null && listaFetsVitals.length > 0) {
-			modul_fetVital_elm.find(".listaOrdenable").empty();
 			that.agregaItems(listaFetsVitals, true);
 		}
 		that.contaSeleccionats();

@@ -1,11 +1,32 @@
 // MODULO DE MATERIAS RELACIONADAS
 
 jQuery(document).ready(function() {
+	modul_materies_elm = jQuery("div.modulMateries:first");
+
 	ModulMateries = new CModulMateries();
+	
+	if (modul_materies_elm.size() == 1) {
+		ModulMateries.iniciar();
+	}
 });
 
 function CModulMateries(){
+	this.extend = ListaOrdenable;
+	this.extend();
+	
 	var that = this;
+	
+	this.iniciar = function() {
+		// Configuramos la lista ordenable.
+		this.configurar({
+			nombre: "materia",
+			nodoOrigen: modul_materies_elm.find(".listaOrdenable"),
+			nodoDestino: modul_materies_elm.find(".listaOrdenable"),
+			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+			multilang: false
+		});
+	}
+	
 	var modul_materies_elm = jQuery("div.modulMateries");
 	var materies_seleccionats_elm;
 	var materies_llistat_elm;
@@ -82,9 +103,52 @@ function CModulMateries(){
 		
 	}
 	
-	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
-	this.inicializarMaterias = function(dades){
+	this.contaSeleccionats = function() {		
+		seleccionats_val = modul_materies_elm.find(".seleccionat").find("li").size();
+		info_elm = modul_materies_elm.find("p.info:first");
 		
+		if (seleccionats_val == 0) {
+			info_elm.text(txtNoHiHaMateriesSeleccionades + ".");
+		} else if (seleccionats_val == 1) {
+			info_elm.html(txtSeleccionada + " <strong>" + seleccionats_val + " " + txtMateria.toLowerCase() + "</strong>.");
+		} else if (seleccionats_val > 1) {
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtMateries.toLowerCase() + "</strong>.");
+									
+			modul_materies_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				update: function(event, ui) {
+					ModulMateries.calculaOrden(ui, "destino");
+					that.contaSeleccionats();
+					Detall.modificado();
+				}
+			}).css({cursor:"move"});
+
+		}
+	}
+	
+	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
+	this.inicializarMaterias = function(listaMateries){
+		modul_materies_elm.find(".listaOrdenable").empty();
+		if (typeof listaMateries != 'undefined' && listaMateries != null && listaMateries.length > 0) {
+			that.agregaItems(listaMateries, true);
+		}
+		that.contaSeleccionats();
+		
+		modul_materies_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+			var itemLista = jQuery(this).parents("li:first");
+			that.eliminaItem(itemLista);
+			that.contaSeleccionats();
+			Detall.modificado();
+		});
+		
+		/*
+		modul_materies_elm.find(".listaOrdenable a.edita").unbind("click").bind("click", function(){
+			var itemID = jQuery(this).parents(".materia_id").val();
+			// Mostrar datos de materia
+			Detall.carregar(itemID);
+		});
+		*/
+		/*
 		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
 		materies_nodes = dades;
@@ -118,7 +182,7 @@ function CModulMateries(){
 			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
 		}
 		
-		that.mostrarMateriasSeleccionadas();
+		that.mostrarMateriasSeleccionadas();*/
 	}
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias

@@ -291,8 +291,6 @@ public class TMAgrupacioFetsVitalsController {
 			List<HechoVitalAgrupacionHV> fetsVitalsOld = agrupacioFetVital.getHechosVitalesAgrupacionHV();
 			
 			if (agrupacioFetVital.getHechosVitalesAgrupacionHV() != null || fetVitalsForm.size()>0 ) {
-				int sizefetsVitalsNous = fetsVitalsNous.size();
-				int sizefetsVitalsNousOld = 0;
 				// Recorrem el formulari
 				for (Iterator<String> iterator = fetVitalsForm.iterator(); iterator.hasNext();) {
 					String nomParameter = (String)iterator.next();
@@ -302,30 +300,15 @@ public class TMAgrupacioFetsVitalsController {
 						
 						Long idFetVitalForm = ParseUtil.parseLong(elements[2]);
 						
-						// Recorrem els elements de BBDD
-						for (Iterator<HechoVitalAgrupacionHV> it = agrupacioFetVital.getHechosVitalesAgrupacionHV().iterator(); it.hasNext();) {
-							HechoVitalAgrupacionHV fetVitalAgrupacioFV = it.next();
-							
-							// Coincidencia de la llista nova amb actual de BBDD
-							if (fetVitalAgrupacioFV != null && fetVitalAgrupacioFV.getHechoVital().getId().equals(idFetVitalForm)) {
-								fetVitalAgrupacioFV.setOrden(ParseUtil.parseInt(valoresForm.get("fetVital_orden_" + elements[2])));
-								fetsVitalsNous.add(fetVitalAgrupacioFV);
-								sizefetsVitalsNous++;
-								
-							} 
-						}
-						// Si no es troba l,element es un de nou 
-						if (sizefetsVitalsNous <= sizefetsVitalsNousOld ) {
-							HechoVitalAgrupacionHV hechoVitalAgrupacionHV = new HechoVitalAgrupacionHV();
-							
-							hechoVitalAgrupacionHV.setAgrupacion(agrupacioFetVital);
-							hechoVitalAgrupacionHV.setHechoVital(fetVitalDelegate.obtenerHechoVital(idFetVitalForm));
-							hechoVitalAgrupacionHV.setOrden(ParseUtil.parseInt(valoresForm.get("fetVital_orden_" + elements[2])));
-							
-							fetsVitalsNous.add(hechoVitalAgrupacionHV);
-							
-							sizefetsVitalsNousOld = sizefetsVitalsNous;
-						}
+						// Consideram tots els fets vitals com a nous perquè borrarem els antics.
+						HechoVitalAgrupacionHV hechoVitalAgrupacionHV = new HechoVitalAgrupacionHV();
+
+						hechoVitalAgrupacionHV.setAgrupacion(agrupacioFetVital);
+						hechoVitalAgrupacionHV.setHechoVital(fetVitalDelegate.obtenerHechoVital(idFetVitalForm));
+						hechoVitalAgrupacionHV.setOrden(ParseUtil.parseInt(valoresForm.get("fetVital_orden_" + elements[2])));
+
+						fetsVitalsNous.add(hechoVitalAgrupacionHV);
+
 					}	
 				}
 			}

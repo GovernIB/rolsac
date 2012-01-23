@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+/* llistats table */
+
+div.llistat div.nom { 
+    width: 25%;
+    padding-left: 21px;
+}
+div.llistat div.tbody div.nom {
+    width: 25%;
+}
+
+#popMateria {
+    position: fixed;
+    left: 30%;
+    top: 15%;
+    display: none;
+    z-index: 10;
+}
+
+.btnGenerico.materies {
+    margin-right: 10px;
+}

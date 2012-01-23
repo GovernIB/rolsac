@@ -1,7 +1,10 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Order;
+
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.AgrupacionMateria;
@@ -123,5 +126,21 @@ public abstract class MateriaAgrupacionMFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    /**
+     * Lista todas las materias agrupadas.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List listarAgrupacionMaterias() {
+        Session session = getSession();
+        try {
+            Criteria criteri = session.createCriteria(AgrupacionMateria.class);
+            return criteri.addOrder(Order.asc("codigoEstandar")).list();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
 }

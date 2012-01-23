@@ -42,7 +42,7 @@
 						<span class="titol"><spring:message code="menu.sistema_generals" /></span>
 						<ul>
 							<li>
-								<a href="<c:url value="/agrupacioMateries/llistat.do"/>"><spring:message code="menu.agrupacio_materies" /></a>
+								<a href="<c:url value="/agrupacioMateries/agrupacioMateries.do"/>"><spring:message code="menu.agrupacio_materies" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/materies/materia.do"/>"><spring:message code="menu.materies" /></a>
@@ -57,7 +57,7 @@
 								<a href="<c:url value="/publicObjectiu/publicObjectiu.do"/>"><spring:message code="menu.public_objectiu" /></a>
 							</li>
 							<li>
-								<a href="<c:url value="/espaisTerritorials/llistat.do"/>"><spring:message code="menu.espais_territorials" /></a>
+								<a href="<c:url value="/espaisTerritorials/espaiTerritorial.do"/>"><spring:message code="menu.espais_territorials" /></a>
 							</li>
 							<li>
 								<a href="<c:url value="/perfils/perfils.do"/>"><spring:message code="menu.perfils" /></a>

@@ -104,7 +104,11 @@ function ListaOrdenable(){
 			if( btnEliminar ){
 				html += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
 			}
-			
+			/*
+			if( btnVer ){
+				html += "<a href=\"javascript:;\" class=\"btn edita\"><span><span>" + txtEdita + "</span></span></a>";
+			}
+			*/
 			html += "</div>";
 		html += "</li>";
 		
@@ -321,7 +325,7 @@ function ListaOrdenable(){
 				var li_elm = jQuery(this);			
 				var item = [];
 				var atributo;
-						
+				
 				for( i=0; i<params.atributos.length; i++ ){
 					atributo = params.atributos[i];
 					item[atributo] = li_elm.find( "input."+params.nombre+"_"+atributo ).val();
