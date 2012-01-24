@@ -400,6 +400,7 @@ function CDetall(){
         //Ocultar paneles
 		jQuery("#modul_documents").hide();
         jQuery("#modul_tramits").hide();
+        jQuery("#caja_item_clave_primaria").hide();
 		
 		ModulMateries.nuevo();
 		ModulNormativa.nuevo();
@@ -437,7 +438,8 @@ function CDetall(){
 	this.pintar = function(dades) {
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
-        jQuery("#modul_tramits").show();
+        jQuery("#modul_tramits").show();       
+        jQuery("#caja_item_clave_primaria").show();
         
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		

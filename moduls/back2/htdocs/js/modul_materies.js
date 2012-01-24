@@ -22,7 +22,7 @@ function CModulMateries(){
 			nombre: "materia",
 			nodoOrigen: modul_materies_elm.find(".listaOrdenable"),
 			nodoDestino: modul_materies_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+			atributos: ["id", "nom", "orden"],	// Campos que queremos que aparezcan en las listas.
 			multilang: false
 		});
 	}
@@ -104,9 +104,9 @@ function CModulMateries(){
 	}
 	
 	this.contaSeleccionats = function() {		
-		seleccionats_val = modul_materies_elm.find(".seleccionat").find("li").size();
+		seleccionats_val = modul_materies_elm.find(".seleccionats").find("li").size();
 		info_elm = modul_materies_elm.find("p.info:first");
-		
+	        
 		if (seleccionats_val == 0) {
 			info_elm.text(txtNoHiHaMateriesSeleccionades + ".");
 		} else if (seleccionats_val == 1) {
@@ -130,7 +130,7 @@ function CModulMateries(){
 	this.inicializarMaterias = function(listaMateries){
 		modul_materies_elm.find(".listaOrdenable").empty();
 		if (typeof listaMateries != 'undefined' && listaMateries != null && listaMateries.length > 0) {
-			that.agregaItems(listaMateries, true);
+			that.agregaItems(listaMateries, false);
 		}
 		that.contaSeleccionats();
 		
@@ -140,23 +140,21 @@ function CModulMateries(){
 			that.contaSeleccionats();
 			Detall.modificado();
 		});
-		
-		/*
+				
 		modul_materies_elm.find(".listaOrdenable a.edita").unbind("click").bind("click", function(){
 			var itemID = jQuery(this).parents(".materia_id").val();
 			// Mostrar datos de materia
 			Detall.carregar(itemID);
 		});
-		*/
-		/*
+				
 		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
 		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
-		materies_nodes = dades;
+		materies_nodes = listaMateries;
 		materies_nodes_size = materies_nodes.length;
 
 		mat_llistat_elm.find("input").removeAttr("checked");
 		
-		//AÒadimos o eliminamos el atributo "checked" en funciÛn de si est· o no marcado.
+		//A√±adimos o eliminamos el atributo "checked" en funci√≥n de si est√° o no marcado.
 		mat_llistat_elm.find("input").each(
 			function() {
 				$( this ).bind( "click", function() {
@@ -182,7 +180,7 @@ function CModulMateries(){
 			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
 		}
 		
-		that.mostrarMateriasSeleccionadas();*/
+		that.mostrarMateriasSeleccionadas();
 	}
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias

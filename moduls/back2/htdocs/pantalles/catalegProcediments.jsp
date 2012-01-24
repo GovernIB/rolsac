@@ -174,7 +174,7 @@
         },
         
         // Familia
-        {
+        /*{
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_familia",
@@ -184,7 +184,7 @@
                 {
                     "obligatori": "<spring:message code='proc.formulari.error.familia.obligatori'/>"
                 }
-        },
+        },*/
 
         // Plazo máximo para resolución (Catalán)
         {
@@ -561,12 +561,12 @@
                                                 <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria">Clave primaria</label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" />
+                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" readonly="readonly" />
                                             </div>
                                         </div>
                                     </div>

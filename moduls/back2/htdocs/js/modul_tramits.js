@@ -163,28 +163,32 @@ function CModulTramit(){
 };
 
 function CEscriptoriTramit(){	
-    this.extend = CDetall;
-	this.extend();
+    this.extend = DetallBase;
+	this.extend(null,FormulariTramits);
 	
 	var that = this;    
 	
-	var formulariComprovarTramits;
+	//var formulariComprovarTramits;
 	
 	this.iniciar = function () {
         
-		formulariComprovarTramits = new FormulariComprovar(FormulariTramits);		
-		formulariComprovarTramits.iniciar();
+        /*	formulariComprovarTramits = new FormulariComprovar(FormulariTramits);		
+		formulariComprovarTramits.iniciar();*/
 		
 	}
     	
 	this.guardar = function (){			
 		
-		//Validam el formulari de tramit		
-		formulariComprovarTramits.llansar();
-		
+		/*
+		formulariComprovarTramits.llansar();		
 		if (!formulariComprovarTramits.formComprovacio) {				
 			return false;
-		} 
+		} */
+        
+        //Validam el formulari de tramit		
+        if( !this.formulariValid() ){
+            return false;
+        }
         
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
         var procId = jQuery("#procId");

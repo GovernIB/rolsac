@@ -19,7 +19,7 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Replica la ordenaciÛn de la lista actual al resto de listas (solo en modo multi-idioma).
+	 * Replica la ordenaci√≥n de la lista actual al resto de listas (solo en modo multi-idioma).
 	 */
 	var actualizaOrden = function( claves, tipo ){		
 		var id;		
@@ -54,7 +54,7 @@ function ListaOrdenable(){
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
-		
+        		
 		if( idioma ){
 			sufijoIdioma += "_"+idioma;
 		}
@@ -83,6 +83,7 @@ function ListaOrdenable(){
 						break;
 						
 					case "nombre":
+                    case "nom":
 						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
 						if (jQuery.trim(valor) == "") valor = "&nbsp;";
 						html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
@@ -116,12 +117,12 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Establece los par·metros de configuraciÛn.
+	 * Establece los par√°metros de configuraci√≥n.
 	 * _params = {
 	 *		nombre: "etiqueta",
      *		nodoOrigen: modul_edificis_elm.find(".listaOrdenable"), hace referencia a la lista "final" en la que se graban los datos definitivos para guardar.
 	 *		nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"), hace referencia a la lista "intermedia" que el usuario modifica.
-	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deberÌan aparecer siempre.
+	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deber√≠an aparecer siempre.
 	 *	    multilang: true | false // Especifica si la lista es multiidioma.
 	 * }
  	 */
