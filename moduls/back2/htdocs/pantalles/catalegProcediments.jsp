@@ -174,7 +174,7 @@
         },
         
         // Familia
-        /*{
+        {
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_familia",
@@ -184,7 +184,7 @@
                 {
                     "obligatori": "<spring:message code='proc.formulari.error.familia.obligatori'/>"
                 }
-        },*/
+        },
 
         // Plazo máximo para resolución (Catalán)
         {
@@ -1803,6 +1803,23 @@
                 </div>
             </div>            
             <!-- /modul -->  
+            
+            
+            <div class="modul">
+                <fieldset>                    
+                    <legend><spring:message code='camp.familia'/></legend>                               
+                    <div class="element">                        
+                        <div class="control select">
+                            <select id="item_familia" name="item_familia" class="nou">
+                                <option value="" selected="selected"><spring:message code='camp.cap'/></option>
+                                <c:forEach items="${families}" var="familia">
+                                    <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
             
             <!-- modul -->
             <div class="modul" id="modul_documents">
