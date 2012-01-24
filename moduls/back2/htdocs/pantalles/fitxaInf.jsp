@@ -66,6 +66,7 @@
    var txtPare = "<spring:message code='txt.pare'/>";
    var txtCercant = "<spring:message code='txt.cercant'/>";
    var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
+   var txtFechaModificacion = 'Data d\'Actualització';
    // paginacio
    
    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
@@ -124,6 +125,8 @@
    var txtMateria = "<spring:message code='txt.materia'/>";
    var txtMateries = "<spring:message code='txt.materies'/>";
    var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+   var txtNoHiHaMateriesSeleccionades = "No hi ha materies seleccionades";
+   
    // modul fets vitals
    var txtFet = "<spring:message code='txt.fet_vital'/>";
    var txtFets = "<spring:message code='txt.fets_vitals'/>";

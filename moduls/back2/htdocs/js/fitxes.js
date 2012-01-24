@@ -128,6 +128,7 @@ function CLlistat(){
 			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titulo\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a class=\"fechaPublicacion\" href=\"javascript:void(0)\">" + txtPublicacio + "</a></div>";
 			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a class=\"fechaCaducidad\" href=\"javascript:void(0)\">" + txtCaducitat + "</a></div>";
+            codi_cap4 = "<div class=\"th modificacio" + ordre_c3 + "\" role=\"columnheader\"><a class=\"fechaModificacion\" href=\"javascript:void(0)\">" + txtFechaModificacion + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -135,7 +136,7 @@ function CLlistat(){
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -157,6 +158,7 @@ function CLlistat(){
 				caducat_class = (dada_node.caducat) ? " caducat" : "";
 				codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaPublicacion, txtSinValor) + "</div>";
 				codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaCaducidad, txtSinValor) + "</div>";
+                codi_taula += "<div class=\"td modificacio\" role=\"gridcell\">[dinamizar]</div>";
 				
 				codi_taula += "</div>";
 			});

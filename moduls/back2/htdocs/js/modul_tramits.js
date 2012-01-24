@@ -51,7 +51,7 @@ function CModulTramit(){
 		});
 
 		// idioma		
-		/*if (escriptori_tramits_elm.find("div.idiomes").size() != 0) {
+		if (escriptori_tramits_elm.find("div.idiomes").size() != 0) {
 	        // Esconder todos menos el primero
 			escriptori_tramits_elm.find('div.idioma').slice(1).hide();
 	        
@@ -68,8 +68,7 @@ function CModulTramit(){
 	        var div_idiomes_elm = escriptori_tramits_elm.find("div.idiomes:first");
 	        div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");	        	        
 	        ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': true, 'idPare':'#escriptori_tramits'},Detall.idioma);
-	    }
-		*/
+	    }		
         
 		// Configuramos la lista ordenable.
 		this.configurar({

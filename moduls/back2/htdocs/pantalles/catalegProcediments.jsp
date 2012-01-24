@@ -82,6 +82,7 @@
     var txtMateria = "<spring:message code='txt.materia'/>";
     var txtMateries = "<spring:message code='txt.materies'/>";
     var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+    var txtNoHiHaMateriesSeleccionades = "No hi ha materies seleccionades";
     
     var txtTramit = "Tramit";
     var txtTramits = "Tramits";

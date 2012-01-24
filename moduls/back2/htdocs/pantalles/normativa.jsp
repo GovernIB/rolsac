@@ -636,7 +636,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma">Nº norma (Llei)</label></div>
+                                        <div class="etiqueta"><label for="item_num_norma">Nº norma</label></div>
                                         <div class="control">
                                             <input id="item_num_norma" name="item_num_norma" type="text" class="nou" />
                                         </div>
