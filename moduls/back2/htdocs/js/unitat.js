@@ -106,15 +106,19 @@ function CDetall(soloFicha){
 		
 	}
 	
-	//Sobreescribe el mÃ©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
-				
-		// Validamos el formulario
+		
+		// Esta variable nos servirá para detectar si alguna de las secciones a guardar
+		// no tiene fichas asignadas
+		var errorSeccionSinFichas = false;
+		
+		// Validamos el formulario			
 		if(!that.formulariValid()){
 			return false;
 		}
-			
-		//Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
+		
+		// Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
 		if ( !$("#llistaEdificis").length ) {		
 			htmlEdificios = '<input type="hidden" id="llistaEdificis" name="llistaEdificis" value="">';
 			$("#formGuardar").append(htmlEdificios);
@@ -122,12 +126,47 @@ function CDetall(soloFicha){
 			$("#llistaEdificis").attr("value", "");	
 		}
 				
-		//Obtener todos los inputs que empiezan por edifici_id_ 
+		// Obtener todos los inputs que empiezan por edifici_id_ 
 		$(".modulEdificis input[name^='edifici_id_']").each( function() {
 			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");			
 		});		
 		
-		//Enviamos el formulario mediante el mÃ©todo ajaxSubmit del plugin jquery.form
+		// Preparamos la lista de secciones-ficha
+		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
+		// (S = Sección, F = Ficha)
+		if ( !$("#llistaSeccions").length ) {
+			htmlSecciones = '<input type="hidden" id="llistaSeccions" name="llistaSeccions" value="">';
+			$("#formGuardar").append(htmlSecciones);
+		} else {
+			$("#llistaSeccions").attr("value", "");
+		}
+		
+		// Obtener todos los inputs que empiezan por seccio_id_
+		$(".modulSeccions input[name^='seccio_id_']").each( function() {
+			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + $(this).attr("value") + "#");
+
+			// Añadir las fichas del edificio actual
+			idSeccio = $(this).val();			
+			
+			// Aquí tendremos añadir una validación extra y comprobar que todas las secciones contienen fichas, 
+			// en caso contrario deberá mostrarse un error y devolver "false"
+			if ( !errorSeccionSinFichas && $("#seccio_id_" + idSeccio).parent().find("li").size() == 0 )				
+				errorSeccionSinFichas = true;			
+			
+			$("#seccio_id_" + idSeccio).parent().find("li").each( function() {
+				idFitxa = $(this).find("input").val();
+				$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + idFitxa + "|");				
+			});
+			
+			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + ",");			
+		});			
+		
+		if ( errorSeccionSinFichas ) {
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorSeccionsBuides + "</p>"});
+			return false;
+		}
+		
+		// Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -137,11 +176,12 @@ function CDetall(soloFicha){
 			success: function(data) {
 							
 				Llistat.cacheDatosListado = null;
+				LlistatSeccioFitxes.cacheDatosListado = null;
 				
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {
-					//Si s'ha creat una nova UA hem de actualitzar la molla de pa
+					// Si s'ha creat una nova UA hem de actualitzar la molla de pa
 					itemId = $("#item_id").val();
 					if (itemId == undefined || itemId == "") 
 						Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom, funcio: Detall.carregarUA } );
@@ -178,7 +218,7 @@ function CDetall(soloFicha){
 		});
 	}
 			
-	// MÃ©todo sobreescrito.
+	// Método sobreescrito.
 	this.carregar = function(itemID) {
 			
 		if (itemID == undefined){
@@ -545,7 +585,6 @@ function CDetall(soloFicha){
 		
 	}
 	
-//	this.carregarInici = function() { window.location.replace(pagArrel); }
 	this.carregarInici = function() { window.location.replace(pagLlistat); }
 	this.carregarUA = function() { window.location.replace(pagLlistat); }
 }

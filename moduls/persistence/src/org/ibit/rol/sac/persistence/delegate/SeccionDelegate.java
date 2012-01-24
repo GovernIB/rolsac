@@ -76,7 +76,7 @@ public class SeccionDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Seccion obtenerSeccion(String codigo) throws DelegateException {
             try {
                 return getFacade().obtenerSeccion(codigo);

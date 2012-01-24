@@ -139,7 +139,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasMateria(java.lang.Long)
 	 */
@@ -516,6 +516,14 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		try {
 	           return getFacade().buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException {
+		try {
+	           getFacade().crearSeccionesFichas(ua, listaSeccionesFicha);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }

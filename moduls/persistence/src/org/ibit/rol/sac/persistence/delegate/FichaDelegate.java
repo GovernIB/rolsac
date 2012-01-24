@@ -1,25 +1,16 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.persistence.intf.FichaFacade;
-import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
-import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.rmi.RemoteException;
+
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 /**
  * Business delegate para manipular fichas.
@@ -86,7 +77,7 @@ public class FichaDelegate implements FichaDelegateI {
 	public Ficha obtenerFicha(Long id) throws DelegateException {
 		return impl.obtenerFicha(id);
 	}
-
+	
 	public List buscarFichasMateria(Long id) throws DelegateException {
 		return impl.buscarFichasMateria(id);
 	}
@@ -238,9 +229,13 @@ public class FichaDelegate implements FichaDelegateI {
     public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
 		return impl.buscarFichasActivas(listaUnidadAdministrativaId,fechaCaducidad);
 	}
+    
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
 		return impl.buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
 	}
 
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException {
+		impl.crearSeccionesFichas(ua, listaSeccionesFicha);
+	} 
 
 }

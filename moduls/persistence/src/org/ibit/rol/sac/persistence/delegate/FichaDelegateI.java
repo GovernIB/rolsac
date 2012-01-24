@@ -41,7 +41,7 @@ public interface FichaDelegateI {
 	public abstract List listarFichasThin() throws DelegateException;
 
 	public abstract Ficha obtenerFicha(Long id) throws DelegateException;
-
+	
 	public abstract List buscarFichasMateria(Long id) throws DelegateException;
 
 	public abstract List buscarFichasHuerfanas() throws DelegateException;
@@ -153,5 +153,6 @@ public interface FichaDelegateI {
 	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	   
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
-
+	
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException;
 }

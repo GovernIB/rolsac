@@ -25,6 +25,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
@@ -42,6 +43,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
+import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
@@ -59,6 +61,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.DateUtils;
 
 @Controller
 @RequestMapping("/unitatadm/")
@@ -368,7 +371,6 @@ public class UnitatAdmBackController {
                 resultats.put("materies", null);
             }            
             
-            
             //Edificios
             
             if (uni.getEdificios() != null) {             
@@ -398,7 +400,6 @@ public class UnitatAdmBackController {
         
 	    return resultats;
     }
-	
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
@@ -633,14 +634,14 @@ public class UnitatAdmBackController {
 			if (id != null) {
 				EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
 				
-				//Recoger los edificios actuales de la UA
+				//Recollir els edificis actuals de la UA
 				Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
 				
-				//Borrar los edificios actuales
+				// Esborrar els edificis actuals
 				for (Edificio edificio : edificiosActuales)
 					edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
 				
-				//Crear una lista con los edificios asignados de la unidad
+				//Crear una llista amb els edificis assignats de la unitat
 				String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
 				
 				//Grabar en la unidad cada edificio de la lista (parámetro "listaEdificios")			
@@ -648,7 +649,11 @@ public class UnitatAdmBackController {
 					for (int i = 0; i < listaEdificios.length; i++) 
 						edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
 				}
-			} 
+			} 			
+			
+			//Secciones-Fichas											
+			String llistaSeccions = valoresForm.get("llistaSeccions");						
+			DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions.split("[,]"));				
 			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
 			
@@ -656,8 +661,7 @@ public class UnitatAdmBackController {
 			session.setAttribute("unidadAdministrativa", unitatAdministrativa);
 			
             String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
-            result = new IdNomDTO(unitatAdministrativa.getId(), ok);
-            
+            result = new IdNomDTO(unitatAdministrativa.getId(), ok);            
 
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
@@ -761,6 +765,83 @@ public class UnitatAdmBackController {
 	    request.getSession().setAttribute("unidadAdministrativa", null);	    
 	    return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.correcte", null, request.getLocale()) );	    
 	}
+
+	@RequestMapping(value = "/llistatFitxesUA.do", method = POST)
+	public @ResponseBody Map<String, Object> llistaFitxes(HttpServletRequest request) {
+		
+		List<Ficha> llistaFitxes = new ArrayList<Ficha>();
+		List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, Object> tradMap = new HashMap<String, Object>();
+		
+		String lang = request.getLocale().getLanguage();
+				
+		//Per defecte només carregarem les fitxes de la UA actual i de les seves UAs filles
+		boolean uaMeves = false;
+		boolean uaFilles = false;
+		
+		UnidadAdministrativa ua = new UnidadAdministrativa();
+		
+        if ( request.getSession().getAttribute("unidadAdministrativa") == null) {
+        	
+        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put("id", -2);
+        	
+        	log.error("Error de sessión: Sessión expirada o no inciada");
+        	
+            return resultats; // Si no hay unidad administrativa se devuelve vacio
+            
+        } 
+        
+        ua = (UnidadAdministrativa) request.getSession().getAttribute("unidadAdministrativa");		
+		
+		try {			
+			Long codiFitxa = ParseUtil.parseLong(request.getParameter("codiFitxa"));
+			paramMap.put("id", codiFitxa);
+		} catch (NumberFormatException e) {			
+		}
+		
+		String textes = request.getParameter("texteFitxa");
+		
+		if ( textes != null && !"".equals(textes) ) {
+			
+			textes = textes.toUpperCase();
+			tradMap.put("titulo", textes);
+			
+		} else {
+			tradMap.put("idioma", lang);
+		}
+		
+        try {
+            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves);           
+            
+            for (Ficha fitxa : llistaFitxes) {
+                TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
+                llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
+                                                             tfi == null ? null : tfi.getTitulo(), 
+                                                             DateUtils.formatDate(fitxa.getFechaPublicacion()), 
+                                                             DateUtils.formatDate(fitxa.getFechaCaducidad()),
+                                                             fitxa.isVisible()));
+            }
+
+        } catch (DelegateException dEx) {
+            if (dEx.isSecurityException()) {
+                // model.put("error", "permisos");
+            	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+            } else {
+                // model.put("error", "altres");
+            	log.error(ExceptionUtils.getStackTrace(dEx));
+            }
+        }
+        
+        resultats.put("total", llistaFitxesDTO.size());
+        resultats.put("nodes", llistaFitxesDTO);
+
+        return resultats;
+		
+	}
 	
 	@RequestMapping(value = "/llistatSeccions.do", method = POST)	
 	public @ResponseBody Map<String, Object> llistaSeccions(HttpServletRequest request) {
@@ -780,7 +861,7 @@ public class UnitatAdmBackController {
 				SeccionDTO seccionDTO = new SeccionDTO();				
 				Seccion seccion = (Seccion) iterator.next();
 				
-				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion( request.getLocale().getLanguage()) ).getNombre();
+				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion( request.getLocale().getLanguage()) ).getNombre().replaceAll("\\<.*?>", "");
 				
 				if ( toFormatComparacio( nomSeccio ).contains( toFormatComparacio(filtreNom) ) || "".equals(filtreNom) ) { 
 					seccionDTO.setId( seccion.getId() );
@@ -979,8 +1060,8 @@ public class UnitatAdmBackController {
 	  }	 
 	
 	/**
-	 * Retorna una cadena que canvia les vocals amb accent 
-	 * per vocals sense ell (emprat per cercar registres coincidents 
+	 * Retorna una cadena que canvia les vocals amb accent o dièresi 
+	 * per vocals sense aquestes (emprat per cercar registres coincidents 
 	 * de seccions).
 	 * 
 	 * @param cadena

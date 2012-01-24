@@ -92,3 +92,61 @@ div.escriptori_items_seleccionats .interior h3 {
     font: bold 11px Verdana, Helvetica, Sans-serif;
     text-transform: uppercase;
 }
+
+
+/* resultats */
+#resultatsSeccions { 
+    clear:both;
+    border: 1px solid #D3D3D3;
+    /*border-top: none;*/
+    border-radius: 0 10px 10px 10px;
+    background-color: White;
+}
+#resultatsSeccions div.resultats { display:none; }
+#resultatsSeccions div.actiu { display:block !important; }
+
+#resultatsSeccions p.executant { 
+    font-size:1.3em; 
+    font-style:italic; 
+    padding:1em 0 1em 1.6em; 
+    margin-left: 1em;
+    background:#fff url(../img/executant.gif) no-repeat 0 1.1em;
+}
+
+#resultatsSeccions p.info { 
+    padding: 10px 21px 0 21px;
+    font: 13px Arial, Helvetica, Sans-serif;
+    color: #333333;
+}
+#resultatsSeccions p.info strong { text-transform:lowercase; }
+
+#resultatsSeccions p.noItems { 
+    font-size:1.3em; 
+    padding: 1em 0 1em 2em !important; 
+    margin-left: 1em;
+    background:#fff url(../img/missatge/alerta.gif) no-repeat 0 50%;
+}
+
+/* Navegador multipágina */
+
+#resultatsSeccions p.paginacio {
+    font: 15px Arial, Helvetica, Sans-serif;
+    color: #333333;
+    text-align:left; 
+    padding: 13px 20px 10px 20px;
+}
+#resultatsSeccions p.paginacio a{
+    color: #333333;
+    text-decoration: underline;
+}
+#resultatsSeccions p.paginacio a:hover{
+    color: #F47900;
+}
+#resultatsSeccions p.paginacio strong{
+    font-size: 25px;    
+    color: #F47900;
+}
+#resultatsSeccions p.paginacio a,
+#resultatsSeccions p.paginacio strong{
+    margin: 0 5px;
+}

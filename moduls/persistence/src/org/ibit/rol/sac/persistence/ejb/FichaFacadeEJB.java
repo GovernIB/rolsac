@@ -1,11 +1,43 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocCollector;
+import org.apache.lucene.search.TopDocs;
 import org.ibit.lucene.analysis.AlemanAnalyzer;
 import org.ibit.lucene.analysis.CastellanoAnalyzer;
 import org.ibit.lucene.analysis.CatalanAnalyzer;
@@ -13,7 +45,30 @@ import org.ibit.lucene.analysis.InglesAnalyzer;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Enlace;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaCrawler;
+import org.ibit.rol.sac.model.FichaRemota;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HistoricoFicha;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Remoto;
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionSeccion;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.ws.FichaUATransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -22,15 +77,6 @@ import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
 
 /**
  * SessionBean para mantener y consultar Fichas (PORMAD)
@@ -237,6 +283,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         return ficha;
         
     }
+    
     
     class DocsFichaComparator implements Comparator {
 		public int compare(Object o1, Object o2) {
@@ -2246,5 +2293,61 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			
 		return resultado;
 	}
+	
+	 /**
+     * Crea las relaciones sección-ficha de una unidad administrativa 
+     * 
+     * @param idUA ID de la unidad administrativa a actualizar  
+     * @param listaSeccionesFicha Estructura que contiene las nuevas "secciones-fichas"  
+     * @return numero de Fichas caducadas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) {
+				
+		Set<FichaUA> listaFUA = ua.getTodasfichas();
+		
+		//Borramos la lista actual
+		if (listaFUA.size() > 0) {
+			
+			List<Long> listaIdFua = new ArrayList<Long>();
+			
+			for (Iterator iterator = listaFUA.iterator(); iterator.hasNext();) {
+				FichaUA fichaUA = (FichaUA) iterator.next();					
+				listaIdFua.add( fichaUA.getId() );								
+			}
 
+			//Lo hacemos en dos bucles para evitar errores de concurrencia al borrar
+			//las fichas de la iteración.			
+			for (Iterator iterator = listaIdFua.iterator(); iterator.hasNext();) {
+				Long idFUA = (Long) iterator.next();					
+				borrarFichaUA( idFUA );					
+			}				
+		}		
+	
+		// La lista de secciones-fichas nuevas está expresada en el formato:			
+		// S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
+		// (S = Secció, F = Fitxa)
+		int i = 0;
+		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
+
+			String seccionesFichaActual = listaSeccionesFicha[i];				
+			String[] dadesSeccioFitxes = seccionesFichaActual.split("[#]");				
+			
+			//Seccion seccio = DelegateUtil.getSeccionDelegate().obtenerSeccion(new Long(dadesSeccioFitxes[0]));
+							
+			String[] llistaFitxesSeccio = new String[]{};
+			
+			if (dadesSeccioFitxes.length > 1) 
+				llistaFitxesSeccio =  dadesSeccioFitxes[1].split("[|]");
+			
+			for (int j = 0; j < llistaFitxesSeccio.length; j++ ) {
+				//Ficha ficha = obtenerFicha( new Long(llistaFitxesSeccio[j]));						
+				crearFichaUA(ua.getId(), new Long(dadesSeccioFitxes[0]), new Long(llistaFitxesSeccio[j]) );												
+			}
+			
+			i++;
+		}
+			
+	}	
 }
