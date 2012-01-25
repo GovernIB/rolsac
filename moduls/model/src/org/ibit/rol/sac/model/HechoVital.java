@@ -76,7 +76,9 @@ public class HechoVital extends Traducible {
         hechosVitalesProcedimientos.remove(ind);
         for (int i = ind; i < hechosVitalesProcedimientos.size(); i++) {
             HechoVitalProcedimiento hvp = (HechoVitalProcedimiento) hechosVitalesProcedimientos.get(i);
-            hvp.setOrden(i);
+            if (hvp != null) {
+            	hvp.setOrden(i);
+            }
         }
     }
 

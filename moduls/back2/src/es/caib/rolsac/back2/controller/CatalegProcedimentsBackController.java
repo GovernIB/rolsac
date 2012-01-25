@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.HtmlUtils;
+import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.utils.DateUtils;
 
@@ -101,11 +102,9 @@ public class CatalegProcedimentsBackController {
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
 
 		try {
-			model.put("llistaMateries", llistarMaterias(lang));
-			model.put("families", llistarFamilias(lang));
-			model.put("iniciacions", llistarIniciacions(lang));
-
-
+			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
+			model.put("families", LlistatUtil.llistarFamilias(lang));
+			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
@@ -129,40 +128,6 @@ public class CatalegProcedimentsBackController {
 
 	private UnidadAdministrativa getUAFromSession(HttpSession session) {
 		return (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
-	}
-
-	private List<IdNomDTO> llistarIniciacions(String lang) throws DelegateException {
-		IniciacionDelegate id = DelegateUtil.getIniciacionDelegate();
-		List<IdNomDTO> iniciacionDTOList = new LinkedList<IdNomDTO>();
-		List<Iniciacion> iniciaciones = id.listarIniciacion();
-		TraduccionIniciacion ti;
-		for (Iniciacion i : iniciaciones) {
-			ti = (TraduccionIniciacion) i.getTraduccion(lang);
-			iniciacionDTOList.add(new IdNomDTO(i.getId(), ti.getNombre()));
-		}
-		return iniciacionDTOList;
-	}
-
-	private List<IdNomDTO> llistarFamilias(String lang) throws DelegateException {
-		FamiliaDelegate fd = DelegateUtil.getFamiliaDelegate();
-		List<IdNomDTO> familiasDTOList = new LinkedList<IdNomDTO>();
-		List<Familia> familias = fd.listarFamilias();
-		TraduccionFamilia tf;
-		for (Familia f : familias) {
-			tf = (TraduccionFamilia) f.getTraduccion(lang);
-			familiasDTOList.add(new IdNomDTO(f.getId(), tf.getNombre()));
-		}
-		return familiasDTOList;
-	}
-
-	private List<IdNomDTO> llistarMaterias(String lang) throws DelegateException {
-		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-		List<IdNomDTO> materiesDTOList = new ArrayList<IdNomDTO>();
-		List<Materia> llistaMateries = materiaDelegate.listarMaterias();
-		for (Materia materia : llistaMateries) {
-			materiesDTOList.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
-		}
-		return materiesDTOList;
 	}
 
 	
@@ -357,10 +322,12 @@ public class CatalegProcedimentsBackController {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
 				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
 								 pl.getId(), 
+								 null,
 								 tpl == null ? "" : tpl.getNombre(), 
 								 DateUtils.formatDate(pl.getFechaPublicacion()),
 								 DateUtils.formatDate(pl.getFechaCaducidad()),
-								 pl.isVisible()));
+								 pl.isVisible(),
+								 null));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {

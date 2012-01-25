@@ -1,12 +1,17 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -17,11 +22,15 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -32,6 +41,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
@@ -56,7 +66,19 @@ public class TMFetsVitalsController {
         
         RolUtil rolUtil= new RolUtil(request);
         if (rolUtil.userIsAdmin()) {
+        	String lang = request.getLocale().getLanguage();
         	model.put("escriptori", "pantalles/taulesMestres/tmFetsVitals.jsp");
+        	try {
+				model.put("families", LlistatUtil.llistarFamilias(lang));
+				model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
+        	} catch (DelegateException dEx) {
+    			if (dEx.isSecurityException()) {
+    				model.put("error", "permisos");
+    			} else {
+    				model.put("error", "altres");
+    				logException(log, dEx);
+    			}
+    		}
         } else {
         	model.put("error", "permisos");
         }
@@ -98,6 +120,8 @@ public class TMFetsVitalsController {
     
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+    	String lang = request.getLocale().getLanguage();
+    	
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    try {
 	        Long id = new Long(request.getParameter("id"));
@@ -136,7 +160,24 @@ public class TMFetsVitalsController {
             }  
 	      
 			omplirCampsTraduibles(resultats, fetsVitals);
-	       
+
+			//Procedimientos
+			List<ProcedimientoLocalDTO> procedimientos = new LinkedList<ProcedimientoLocalDTO>();
+	        List<HechoVitalProcedimiento> listaProcedimientos = fetsVitals.getHechosVitalesProcedimientos();
+	        Collections.sort(listaProcedimientos);
+	        for (HechoVitalProcedimiento hvProc : listaProcedimientos) {
+	        	if (hvProc != null) {
+		        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)hvProc.getProcedimiento().getTraduccion(lang); 
+		        	procedimientos.add(new ProcedimientoLocalDTO(
+		        			hvProc.getId(),
+		        			hvProc.getProcedimiento().getId(),
+		        			traProc != null ? traProc.getNombre() : "", 
+	    					null, null, null,
+	    					hvProc.getOrden()
+					));
+	        	}
+	        }
+	        resultats.put("procediments", procedimientos);
 	        
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -189,7 +230,7 @@ public class TMFetsVitalsController {
                 
                 resultats.put(lang, traduccionFetsVitalsDTO);
             } else {
-                resultats.put(lang, null);
+                resultats.put(lang, new HashMap<String, String>());
             }
         }
     }
@@ -315,7 +356,52 @@ public class TMFetsVitalsController {
                 fetVital.setIconoGrande(null);
             }
 
+            
+            // Guardamos el hecho vital antes de modificar sus procedimientos relacionados.
             fetsVitalsDelegate.grabarHechoVital(fetVital);
+            
+            
+            // Procediments relacionats
+            if (edicion) {
+            	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+            	List<Long> hvProcIds = new LinkedList<Long>();
+            	
+            	// Guardar los que recibimos
+	            for (String key: valoresForm.keySet()) {
+	            	if (key.startsWith("procediment_id_")) {
+	            		long procHvId = Long.parseLong(valoresForm.get(key));
+	            		HechoVitalProcedimiento hvp;
+	            		if (procHvId < 0) {
+	            			hvp = new HechoVitalProcedimiento();
+	            		} else {
+	            			hvp = hvpDelegate.obtenerHechoVitalProcedimiento(procHvId);
+	            		}
+	            		int orden = Integer.parseInt(valoresForm.get("procediment_orden_" + procHvId));
+            			hvp.setOrden(orden);
+            			long procedimientoId = Long.parseLong(valoresForm.get("procediment_idProcedimiento_" + procHvId));
+	            		hvpDelegate.grabarHechoVitalProcedimiento(hvp, fetVital.getId(), procedimientoId);
+	            		hvProcIds.add(hvp.getId());
+	            	}
+	            }
+	            
+	            // Eliminar los que ya no estan
+	            Set<Long> hvpsABorrar = new HashSet<Long>();
+	            Boolean hvpTrobat;
+	            for (HechoVitalProcedimiento hvProc: (List<HechoVitalProcedimiento>) fetVitalOld.getHechosVitalesProcedimientos()) {
+	            	hvpTrobat = Boolean.FALSE;
+	            	for (Long hvProcId: hvProcIds) {
+	            		if (hvProc != null && hvProc.getId().equals(hvProcId)) {
+	            			hvpTrobat = Boolean.TRUE;
+	            			break;
+	            		}
+	            	}
+	            	if (hvProc != null && !hvpTrobat) {
+	            		hvpsABorrar.add(hvProc.getId());
+	            	}
+	            }
+	            hvpDelegate.borrarHechoVitalProcedimientos(hvpsABorrar);
+            }
+
             result = new IdNomDTO(fetVital.getId(), messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale()) );
             
         } catch (DelegateException dEx) {
@@ -331,10 +417,14 @@ public class TMFetsVitalsController {
 			String error = messageSource.getMessage("error.altres", null, request.getLocale());
 			result = new IdNomDTO(-2l, error);
 			log.error(ExceptionUtils.getStackTrace(e));
+        } catch (NumberFormatException e) {
+        	String error = messageSource.getMessage("error.altres", null, request.getLocale());
+			result = new IdNomDTO(-2l, error);
+			log.error(ExceptionUtils.getStackTrace(e));
         } catch (FileUploadException e) {
 			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
 			result = new IdNomDTO(-3l, error);
-			log.error(ExceptionUtils.getStackTrace(e));;
+			log.error(ExceptionUtils.getStackTrace(e));
         }
         
         return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);

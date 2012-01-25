@@ -904,7 +904,7 @@
             <div class="modul" id="modul_icones">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='iconaPerfil.icones_perfil'/></legend>                               
+                    <legend><spring:message code='materia.icones_perfil'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulIcones -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>

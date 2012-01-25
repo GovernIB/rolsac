@@ -1,7 +1,5 @@
 package org.ibit.rol.sac.model.dto;
 
-import java.util.Date;
-
 import org.ibit.rol.sac.model.ValueObject;
 
 public class ProcedimientoLocalDTO implements ValueObject {
@@ -9,18 +7,22 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	private static final long serialVersionUID = 3258125847574821172L;
 
 	private long id;
+	private Long idProcedimiento;
 	private String nombre;
 	private String publicacio;
 	private String caducitat;
 	private Boolean caducat;
+	private Integer orden;
 	
-	public ProcedimientoLocalDTO(long id, String nombre, String publicacio, String caducitat, Boolean caducat) {
+	public ProcedimientoLocalDTO(long id, Long idProcedimiento, String nombre, String publicacio, String caducitat, Boolean caducat, Integer orden) {
 		super();
 		this.id = id;
+		this.idProcedimiento = idProcedimiento;
 		this.nombre = nombre;
 		this.publicacio = publicacio;
 		this.caducitat = caducitat;
 		this.caducat = caducat;
+		this.orden = orden;
 	}
 
 	public long getId() {
@@ -29,6 +31,15 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	public void setId(long id) {
 		this.id = id;
 	}
+	
+	public Long getIdProcedimiento() {
+		return idProcedimiento;
+	}
+
+	public void setIdProcedimiento(Long idProcedimiento) {
+		this.idProcedimiento = idProcedimiento;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -54,6 +65,14 @@ public class ProcedimientoLocalDTO implements ValueObject {
 
 	public Boolean getCaducat() {
 		return caducat;
+	}
+
+	public Integer getOrden() {
+		return orden;
+	}
+
+	public void setOrden(Integer orden) {
+		this.orden = orden;
 	}
 	
 }

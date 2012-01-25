@@ -2,9 +2,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <link href='<c:url value="/css/tm_fets_vitals.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
 
-<script type="text/javascript" src="<c:url value='/js/tm_fets_vitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/tm_fets_vitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_procediments.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/fetsVitals/llistat.do" />';
@@ -12,6 +16,8 @@
     var pagGuardar = '<c:url value="/fetsVitals/guardar.do" />';
     var pagEsborrar = '<c:url value="/fetsVitals/esborrarFetsVitals.do" />';
     var pagPujar  = '<c:url value="/fetsVitals/pujarFetsVitals.do" />';
+    var pagDetallProcediment = '<c:url value="/catalegProcediments/catalegProcediments.do" />';
+    var pagLlistatProcediments = '<c:url value="/catalegProcediments/llistat.do" />';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -28,6 +34,7 @@
     var txtLlistaItems = "<spring:message code='txt.fets_vitals'/>";
     var txtMostrem = "<spring:message code='txt.mostrem'/>";
     var txtMostremAl = " <spring:message code='txt.a_la'/> ";
+    var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaItems = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtCarregantItems = txtCarregant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
@@ -37,6 +44,8 @@
     var txtDescendentment = "<spring:message code='txt.descendentment'/>";
     var txtPer = "<spring:message code='txt.per'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
+    var txtFamilia = "<spring:message code='txt.familia'/>";
+    var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
 
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
@@ -75,6 +84,14 @@
     var txtPlega = "<spring:message code='txt.plega'/>";
 
     var txtElimina = "<spring:message code='txt.elimina'/>";
+    
+    // modul procediments
+    var txtProcediment = "<spring:message code='txt.procediment'/>";
+    var txtProcediments = "<spring:message code='txt.procediments'/>";
+    var txtNoHiHaProcediments = txtNoHiHa + " " + txtProcediments.toLowerCase();
+    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+    var txtNoHiHaProcedimentsSeleccionats = txtNoHiHa + " " + txtProcediments.toLowerCase() + " " + txtSeleccionats.toLowerCase();
 
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
@@ -168,6 +185,8 @@
         --%>      
     </div>
 </div>
+
+
 
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="" method="post">
@@ -826,7 +845,251 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- /modul -->
+            <div class="modul" id="modul_procediments">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.procediments_relacionats'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- modulProcediments -->
+                        <div class="modulProcediments">
+                            <div class="seleccionats">
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.no_procediments'/></p>
+                                    <div class="listaOrdenable"></div> 
+                                </div>
+                            </div>
+                            <p class="btnGenerico">
+                                <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_procediments'/></span></span></a>
+                            </p>
+                        </div>
+                        <!-- /modulProcediments -->
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
         </div>
         <!-- /modulLateral -->
     </form>
 </div>
+    
+
+    
+<!-- escriptori_procediments -->
+<div id="escriptori_procediments">
+    <ul id="opcions_procediment" class="opcions">
+        <li class="opcio C actiu"><spring:message code='txt.gestiona'/></li>                                 
+    </ul>
+    
+    <div id="resultats_procediments" class="escriptori_items_llistat">            
+        <div class="resultats C actiu" style="display: block;">
+            <div id="cercador_procediments" class="escriptori_items_cercador"> 
+                <div id="cercador_procediments_contingut">
+                    <div class="fila">
+                            <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_textes"><spring:message code='camp.textes'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_textes" name="cerca_textes" type="text"/>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_codi"><spring:message code='txt.codi'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_codi" name="cerca_codi" type="text" />
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_estat"><spring:message code='camp.estat'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_estat" name="cerca_estat" class="t8">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                    <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_familia"><spring:message code='camp.familia'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_familia" name="cerca_familia">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <c:forEach items="${families}" var="familia">
+                                        <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_iniciacio"><spring:message code='camp.iniciacio'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_iniciacio" name="cerca_iniciacio">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <c:forEach items="${iniciacions}" var="iniciacio">
+                                        <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_tramit"><spring:message code='camp.identificadorTramit'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_tramit" name="cerca_tramit" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_versio"><spring:message code='camp.versioTramit'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_versio" name="cerca_versio" type="text"/>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_url"><spring:message code='camp.urlTramitExtern'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_url" name="cerca_url" type="text"/>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_indicador"><spring:message code='camp.fiViaAdministrativa'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_indicador" name="cerca_indicador" class="t8">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <option value="0">No</option>
+                                    <option value="1">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fila">  
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_finestreta"><spring:message code='camp.finestraUnica'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <option value="0">No</option>
+                                    <option value="1">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_taxa"><spring:message code='camp.taxa'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_taxa" name="cerca_taxa" class="t8">
+                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                    <option value="0">No</option>
+                                    <option value="1">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_responsable" name="cerca_responsable" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_fechaCaducidad"><spring:message code='camp.dataCaducitat'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_fechaPublicacion"><spring:message code='camp.dataPublicacio'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
+                            </div>
+                        </div>
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_fechaActualizacion"><spring:message code='camp.dataActualitzacio'/></label>
+                            </div>
+                            <div class="control">
+                                <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fila">
+                        <div class="element t15">
+                            <div class="etiqueta">
+                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>
+                            </div>
+                            <div class="control">
+                                <select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
+                                    <option value="0" selected="selected"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="element t30">
+                            <div class="control">
+                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/> <label for="cerca_uaMeves" class="etiqueta"><spring:message code='camp.cerca_totes_unitats'/></label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="botonera">
+                        <div class="boton btnGenerico"><a id="btnLimpiarForm_procediment" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnBuscarForm_procediment" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>
+                        <div class="boton btnGenerico"><a id="btnVolverDetalle_procediment" class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a></div>
+                    </div>
+                </div>
+            </div>   
+            <div class="dades"></div>                       
+            <input type="hidden" value="0" class="pagPagina" />
+            <input type="hidden" value="DESC" class="ordreTipus" />
+            <input type="hidden" value="titol" class="ordreCamp" />             
+        </div>
+    </div>        
+    
+    <div class="modulLateral escriptori_items_seleccionats">
+        <div class="modul">
+            <div class="interior">
+                <div class="seleccionats">
+                    <div class="seleccionat">
+                        <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+                        <div class="listaOrdenable"></div>
+                    </div>
+                    <p class="botonera btnGenerico">
+                        <a id="btnFinalizar_procediment" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                    </p>                                    
+                </div>                                  
+            </div>
+        </div>
+    </div>
+    <!-- seleccionats -->
+</div>
+<!-- /escriptori_procediments -->

@@ -643,7 +643,7 @@ function CDetall(){
 				escriptori_detall_elm.find("div.modulProcediments p.info").html(txtHiHa + " <strong>" + pro_nodes_size + " " + txt_procediments + "</strong>.");
 				pro_seleccionats_elm.html(codi_pro);
 				if (pro_nodes_size > 1) {
-					//pro_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+					//pro_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(../img/cursor/grab.cur), move");
 				}
 			}
 		

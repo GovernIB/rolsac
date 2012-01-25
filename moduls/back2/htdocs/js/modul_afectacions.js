@@ -575,7 +575,7 @@ function CEscriptoriAfectacions() {
 		} else {
 			
 			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtAfectacions.toLowerCase() + "</strong>.");
-			//afectacions_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).find("li").css("cursor","url(imgs/cursor/grab.cur), move");
+			//afectacions_seleccionats_elm.find("ul").sortable({ axis: 'y', cursor: 'url(..img/cursor/grabbing.cur), move' }).find("li").css("cursor","url(..img/cursor/grab.cur), move");
 			
 		}
 		

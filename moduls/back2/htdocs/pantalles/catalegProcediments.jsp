@@ -63,8 +63,8 @@
     var txtAmaga = "<spring:message code='txt.amaga'/>";
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
-    var txtFamilia = "Familia";
-    var txtFechaActualizacion = "Data d\'actualització";
+    var txtFamilia = "<spring:message code='txt.familia'/>";
+    var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
     
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
@@ -82,7 +82,8 @@
     var txtMateria = "<spring:message code='txt.materia'/>";
     var txtMateries = "<spring:message code='txt.materies'/>";
     var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
-    var txtNoHiHaMateriesSeleccionades = "No hi ha materies seleccionades";
+    var txtNoHiHaMateriaSeleccionada = txtNoHiHa + " " + txtMateria.toLowerCase() + " " + txtSeleccionada.toLowerCase();
+    var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries.toLowerCase() + " " + txtSeleccionades.toLowerCase();
     
     var txtTramit = "Tramit";
     var txtTramits = "Tramits";

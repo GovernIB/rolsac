@@ -1508,6 +1508,7 @@
         var txtMateria = "matèria";
         var txtMateries = "matèries";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+        var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries + " " + txtSeleccionades.toLowerCase();
         
         // modul seccions
         var txtSeccio = "secció";
@@ -1520,8 +1521,8 @@
         var txtCaducitat = "caducitat";
         var txtOrdre = "ordre";
         var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona' />";
-        var txtNoHiHaSeccionsSeleccionades = "No hi ha " + txtSeccions + " " + txtSeleccionats.toLowerCase();
-        var txtNoHiHaFitxesSeleccionades = "No hi ha " + txtFitxes + " " + txtSeleccionats.toLowerCase();
+        var txtNoHiHaSeccionsSeleccionades = "No hi ha " + txtSeccions + " " + txtSeleccionades.toLowerCase();
+        var txtNoHiHaFitxesSeleccionades = "No hi ha " + txtFitxes + " " + txtSeleccionades.toLowerCase();
         var txtErrorSeccionsBuides = "Les seccions a guardar han de contenir calque fitxa. Esborri les seccions sense fitxes o assigni-les al menys una";
         
         // modul edificis

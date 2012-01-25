@@ -316,7 +316,7 @@ function CEscriptoriEdifici(){
 		modul_edificis_elm.find("p.info").html(codi_info);		
 		
 		if (nombre_llistat > 1) {			
-			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(imgs/cursor/grabbing.cur), move' }).css({cursor:"move"});
+			//modul_edificis_elm.find("ul").sortable({ axis: 'y', cursor: 'url(../img/cursor/grabbing.cur), move' }).css({cursor:"move"});
 			modul_edificis_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
 				update: function(event,ui){

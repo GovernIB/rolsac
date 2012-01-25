@@ -19,7 +19,7 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Replica la ordenaci√≥n de la lista actual al resto de listas (solo en modo multi-idioma).
+	 * Replica la ordenaciÛn de la lista actual al resto de listas (solo en modo multi-idioma).
 	 */
 	var actualizaOrden = function( claves, tipo ){		
 		var id;		
@@ -117,17 +117,24 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Establece los par√°metros de configuraci√≥n.
+	 * Establece los par·metros de configuraciÛn.
 	 * _params = {
 	 *		nombre: "etiqueta",
      *		nodoOrigen: modul_edificis_elm.find(".listaOrdenable"), hace referencia a la lista "final" en la que se graban los datos definitivos para guardar.
 	 *		nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"), hace referencia a la lista "intermedia" que el usuario modifica.
-	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deber√≠an aparecer siempre.
+	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deberÌan aparecer siempre.
 	 *	    multilang: true | false // Especifica si la lista es multiidioma.
 	 * }
  	 */
 	this.configurar = function( _params ){
 		params = _params;
+	}
+	
+	/**
+	 * Devuelve los parametros de configuracion.
+	 */
+	this.getConfiguracion = function() {
+		return params;
 	}
 	
 	/**
@@ -227,14 +234,14 @@ function ListaOrdenable(){
 	/**
 	 * Carga un array de items en la lista.
 	 */
-	this.agregaItems = function( lista, btnElimiar ){
+	this.agregaItems = function( lista, btnEliminar ){
         var _this = this;
         
 		var item, idioma;		
 		
 		var eliminar;
-		if (typeof btnElimiar != "undefined") {
-			eliminar = Boolean(btnElimiar);
+		if (typeof btnEliminar != "undefined") {
+			eliminar = Boolean(btnEliminar);
 		} else {
 			eliminar = false;
 		}
@@ -344,14 +351,17 @@ function ListaOrdenable(){
 	
 	/**
 	 * Copia los datos de la lista destino a la de origen.
+	 * btnEliminar es un booleano para indicar si ha de ponerse un boton para eliminar (cruz roja). Es optativo.
 	 */
-	this.copiaFinal = function(){
+	this.copiaFinal = function(btnEliminar){
+		var _this = this;
+		
 		var numItems;
 		var idioma;
 		var i;
 		var html;
 		
-		var _this = this;
+		var eliminar = typeof btnEliminar != 'undefined' && new Boolean(btnEliminar); 
 		
 		if( params.multilang ){
 		
@@ -382,7 +392,7 @@ function ListaOrdenable(){
 						}
 					}			
 					
-					html += _this.getHtmlItem( item, false, idioma );
+					html += _this.getHtmlItem(item, eliminar, idioma);
 					
 					numItems++;
 				});
@@ -414,7 +424,7 @@ function ListaOrdenable(){
 					item[atributo] = li_elm.find( "input." + params.nombre + "_" + atributo ).val();
 				}			
 				
-				html += _this.getHtmlItem( item, false );
+				html += _this.getHtmlItem(item, eliminar);
 				
 				numItems++;
 			});
@@ -428,7 +438,14 @@ function ListaOrdenable(){
 		return numItems;
 	}
 	
-	this.finalizar = function(){		
-		return this.copiaFinal();		
+	/**
+	 * btnEliminar es un booleano para indicar si ha de ponerse un boton para eliminar (cruz roja). Es optativo.
+	 */
+	this.finalizar = function(btnEliminar){
+		if (typeof btnEliminar != 'undefined') {
+			return this.copiaFinal(btnEliminar);
+		} else {
+			return this.copiaFinal();
+		}
 	}
 }
