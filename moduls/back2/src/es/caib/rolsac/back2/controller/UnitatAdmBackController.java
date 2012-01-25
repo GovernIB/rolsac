@@ -653,7 +653,7 @@ public class UnitatAdmBackController {
 			
 			//Secciones-Fichas											
 			String llistaSeccions = valoresForm.get("llistaSeccions");						
-			DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions.split("[,]"));				
+			DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions.split("[,]"));
 			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
 			

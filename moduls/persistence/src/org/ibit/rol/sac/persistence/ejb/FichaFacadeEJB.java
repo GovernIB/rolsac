@@ -2293,61 +2293,91 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			
 		return resultado;
 	}
-	
+		
 	 /**
      * Crea las relaciones sección-ficha de una unidad administrativa 
      * 
-     * @param idUA ID de la unidad administrativa a actualizar  
+     * @param ua Unidad administrativa a actualizar  
      * @param listaSeccionesFicha Estructura que contiene las nuevas "secciones-fichas"  
-     * @return numero de Fichas caducadas
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
-     */
-	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) {
-				
-		Set<FichaUA> listaFUA = ua.getTodasfichas();
+     */	
+	public void crearSeccionesFichas(UnidadAdministrativa ua, String[] listaSeccionesFicha ) {
 		
-		//Borramos la lista actual
-		if (listaFUA.size() > 0) {
-			
-			List<Long> listaIdFua = new ArrayList<Long>();
-			
-			for (Iterator iterator = listaFUA.iterator(); iterator.hasNext();) {
-				FichaUA fichaUA = (FichaUA) iterator.next();					
-				listaIdFua.add( fichaUA.getId() );								
-			}
-
-			//Lo hacemos en dos bucles para evitar errores de concurrencia al borrar
-			//las fichas de la iteración.			
-			for (Iterator iterator = listaIdFua.iterator(); iterator.hasNext();) {
-				Long idFUA = (Long) iterator.next();					
-				borrarFichaUA( idFUA );					
-			}				
-		}		
-	
-		// La lista de secciones-fichas nuevas está expresada en el formato:			
-		// S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
-		// (S = Secció, F = Fitxa)
+		Set<FichaUA> listaFUAOrigen = ua.getTodasfichas();		
+		
+		List<Long> listaFUABorrar = new ArrayList<Long>();		
+		List<SimpleFichaUA> listaSimpleFichaUA = new ArrayList<SimpleFichaUA>();
+		List<SimpleFichaUA> listaSimpleFichaUAIgnorar = new ArrayList<SimpleFichaUA>();
+		
+		// Crea una lista seccionID + fichaID a partir del request
 		int i = 0;
 		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
-
+			
 			String seccionesFichaActual = listaSeccionesFicha[i];				
 			String[] dadesSeccioFitxes = seccionesFichaActual.split("[#]");				
-			
-			//Seccion seccio = DelegateUtil.getSeccionDelegate().obtenerSeccion(new Long(dadesSeccioFitxes[0]));
-							
 			String[] llistaFitxesSeccio = new String[]{};
 			
-			if (dadesSeccioFitxes.length > 1) 
-				llistaFitxesSeccio =  dadesSeccioFitxes[1].split("[|]");
-			
+			if (dadesSeccioFitxes.length > 1)  
+				llistaFitxesSeccio =  dadesSeccioFitxes[1].split("[|]");			
+				
 			for (int j = 0; j < llistaFitxesSeccio.length; j++ ) {
-				//Ficha ficha = obtenerFicha( new Long(llistaFitxesSeccio[j]));						
-				crearFichaUA(ua.getId(), new Long(dadesSeccioFitxes[0]), new Long(llistaFitxesSeccio[j]) );												
-			}
-			
-			i++;
+				listaSimpleFichaUA.add( new SimpleFichaUA(new Long(dadesSeccioFitxes[0]), 
+														new Long(llistaFitxesSeccio[j]) ) );
+			}			
+			i++;			
 		}
+		
+		// Detectar las fichas ua a borrar
+		for (FichaUA fUA : listaFUAOrigen ) {
+						
+			boolean encontrada = false;
 			
+			for (SimpleFichaUA simpleFichaUA : listaSimpleFichaUA ) {				
+					
+				if ( fUA.getSeccion().getId().equals( simpleFichaUA.getIdSeccion() ) && 
+					 fUA.getFicha().getId().equals( simpleFichaUA.getIdFicha() ) && 
+					 fUA.getUnidadAdministrativa().getId().equals( ua.getId() ) ) {
+
+					listaSimpleFichaUAIgnorar.add( new SimpleFichaUA( simpleFichaUA.getIdSeccion(), 
+																	  simpleFichaUA.getIdFicha()) );
+					encontrada = true;						
+					break;						 					
+				}				
+			}	
+			
+			if (!encontrada) 
+				listaFUABorrar.add( fUA.getId() );
+		}	
+		
+		for ( Long idFUA : listaFUABorrar ) 
+			borrarFichaUA( idFUA );
+	
+		//Crear sólo las que no existían antes
+		for ( SimpleFichaUA fichaUA : listaSimpleFichaUA ) {			
+			if ( !listaSimpleFichaUAIgnorar.contains( fichaUA) )				
+				crearFichaUA(ua.getId(), fichaUA.getIdSeccion(), fichaUA.getIdFicha() );														
+		}		
 	}	
+	
+	// Clase de apoyo para uso en "crear secciones fichas"
+	public class SimpleFichaUA {
+		
+		public SimpleFichaUA(Long idSeccion, Long idFicha) {
+			this.idSeccion = idSeccion;
+			this.idFicha = idFicha;
+		}
+		
+		private Long idSeccion;
+		private Long idFicha;
+		
+		public Long getIdSeccion() { return idSeccion; }
+		public Long getIdFicha() { return idFicha; }
+		
+		public boolean equals( Object o ) {
+			if ( !( o instanceof SimpleFichaUA) ) return false;
+			return getIdSeccion().equals( ((SimpleFichaUA) o).getIdSeccion() ) && 
+				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
+		}
+	} 
 }
