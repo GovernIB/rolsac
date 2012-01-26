@@ -1477,6 +1477,12 @@ div.modulLateral div.seleccionat ul {
   	top: 15%;
 }
 
+#popET {
+    left: 30%;
+    position: fixed;
+    top: 15%;
+}
+
 #popCoordenades {
     position: fixed;
     left: 30%;

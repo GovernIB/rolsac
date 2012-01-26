@@ -40,7 +40,7 @@
 		    </c:otherwise>
 		</c:choose>
 		<c:if test="${not empty collFill}" >
-			<c:import url = "/pantalles/popFillsUA.jsp">
+			<c:import url = "/pantalles/popFillsET.jsp">
 				<c:param name = "padreActual" value = "${actual}" />
 				<c:param name = "nivel" value = "${param.nivel + 1}" />
 				<c:param name = "inicial" value = "${param.inicial}" />

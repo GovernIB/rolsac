@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+#modul_espais_relacionats li {
+    cursor: pointer;
+}
+
+/* llistats table */
+
+div.llistat div.nom { 
+    width: 25%;
+    padding-left: 21px;
+}
+div.llistat div.tbody div.nom {
+    width: 25%;
+}

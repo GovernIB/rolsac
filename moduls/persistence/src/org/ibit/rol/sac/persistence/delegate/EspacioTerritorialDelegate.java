@@ -36,10 +36,9 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
 	}
 
-	public void actualizarEspacioTerritorial(EspacioTerritorial espTerr,
-			Long padre_id) throws DelegateException {
+	public void actualizarEspacioTerritorial(EspacioTerritorial espTerr, Long padre_id) throws DelegateException {
 		try {
-            getFacade().actualizarEspacioTerritorial(espTerr,padre_id);
+            getFacade().actualizarEspacioTerritorial(espTerr, padre_id);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -149,7 +148,18 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
-
+    
+    public void grabarEspacioTerritorial(EspacioTerritorial espai, Long idPadre) throws DelegateException {
+    	try {
+    		
+    		if (espai.getId() != null) getFacade().actualizarEspacioTerritorial(espai, idPadre);
+    		else getFacade().crearEspacioTerritorial(espai, idPadre);
+    		
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

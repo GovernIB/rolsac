@@ -1050,7 +1050,6 @@ function EliminaArbreUA(id_input, id_hidden){
 	$("#" + id_hidden).change();
 }
 
-
 //Limpiar un input de un formulario excepto los campos hidden, readonly y disabled.
 //Se usa como callback de un .each: $('selector').each(limpiarCampo).
 function limpiarCampo(index, input){
@@ -1100,6 +1099,17 @@ function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 	}
 }
 
+function carregarArbreET(url, idDiv, item_id, id_et, id_et_texte, llocOnPintar) {
+	var id = $("#" + item_id).val();
+	// Aseguram que no estigui creat
+	if ($('#' + idDiv).length == 0 ) {
+		if (typeof llocOnPintar == 'undefined') {
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idET=' + id + '&idInput='+ id_et_texte + '&idHidden=' + id_et +'" style="width:550px; height:450px;" /></div>');
+		} else {
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idET=' + id + '&idInput='+ id_et_texte + '&idHidden=' + id_et +'"  /></div>');
+		}
+	}
+}
 
 
 function borrarPopUp(idDiv){

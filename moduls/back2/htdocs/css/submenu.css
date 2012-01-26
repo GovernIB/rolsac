@@ -6,6 +6,9 @@
     height: 44px;
     padding-top: 10px;
 }
+#submenu.breadcrumb{
+    height: 64px;
+}
 #submenu_contingut {    
     width:77em; 
     margin: 0 auto;     
@@ -43,4 +46,8 @@
     position:absolute;
     bottom: -23px;  
     background: url(../img/submenu/flecha_item_actual.gif) 50% 100% no-repeat;
+}
+#submenu_contingut ul li.seleccionat .breadItems {
+	display:block;
+	font-size: 14px;
 }
