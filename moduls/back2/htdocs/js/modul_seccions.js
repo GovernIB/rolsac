@@ -233,7 +233,7 @@ function CModulSeccio() {
 		if (lis_size > 0) {
 			
 			this.copiaInicialFitxes();
-			EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
+			//EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
 			
 		} else {
 			
@@ -241,6 +241,8 @@ function CModulSeccio() {
 			fitxes_seleccionats_elm.find(".listaOrdenable").html("");
 			
 		}
+		
+		EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
 		
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			

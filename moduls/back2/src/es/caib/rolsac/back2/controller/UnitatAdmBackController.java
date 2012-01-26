@@ -317,6 +317,8 @@ public class UnitatAdmBackController {
 	        
             //Secciones-Fichas           
             TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
+            //TreeMap arbolSecciones = uni.getMapSeccionFichasUAConOrden();            
+            
             List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
             
         	//Obtenemos el id y el nombre de la sección

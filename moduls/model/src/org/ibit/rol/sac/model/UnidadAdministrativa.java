@@ -307,8 +307,11 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 
     public void removeFichaUA(FichaUA ficha) {
         int ind = fichasUA.indexOf(ficha);
+        
+        if ( !(ficha == null) ) ficha.setUnidadAdministrativa(null);
+        
         if (ind > -1) {
-            ficha.setUnidadAdministrativa(null);
+            //ficha.setUnidadAdministrativa(null);
             fichasUA.remove(ind);
             for (int i = ind; i < fichasUA.size(); i++) {
                 FichaUA f = (FichaUA) fichasUA.get(i);
@@ -340,6 +343,29 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         }
         return result;
 
+    }
+    
+    //Añadido para mostrar según el campo orden
+    public Map getMapSeccionFichasUAConOrden() {
+    	
+        Map result = new TreeMap();
+        Iterator todas= todasfichas.iterator();
+        
+        while(todas.hasNext()) {
+        	
+        	FichaUA fichaUA = (FichaUA)todas.next();
+        	String newIdseccion = fichaUA.getSeccion().getId().longValue() + 
+        							"#" + 
+        							((TraduccionSeccion)fichaUA.getSeccion().getTraduccion("ca")).getNombre();
+            List fichasSeccion = (List) result.get(newIdseccion);
+            if (fichasSeccion == null) {
+                fichasSeccion = new ArrayList();
+                result.put(newIdseccion, fichasSeccion);
+            }
+            fichasSeccion.add(fichaUA);  
+
+        }
+        return result;
     }
 
     public void addPersonal(Personal persona) {

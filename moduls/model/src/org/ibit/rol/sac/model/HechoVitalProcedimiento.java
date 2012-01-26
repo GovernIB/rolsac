@@ -37,7 +37,6 @@ public class HechoVitalProcedimiento implements ValueObject, Comparable<HechoVit
     }
     
 
-    @Override
 	public int compareTo(HechoVitalProcedimiento hvp) {
     	if (hvp == null || this.orden > hvp.getOrden()){
     		return 1;
