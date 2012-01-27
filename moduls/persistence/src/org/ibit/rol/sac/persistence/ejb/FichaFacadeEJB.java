@@ -2423,7 +2423,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 if(borrar) log.debug("Entro en borrar remoto ficha UA");	                	
 			} 
 			
-			if (session != null) session.flush();
+			//if (session != null) session.flush();
 			
 			// Crear nuevas FichasUA
 			for (SimpleFichaUA simpleFichaUA : listaNuevas ) {
@@ -2467,11 +2467,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            indexInsertaFicha(fichasend,null);				
 			}
 			
-			if (session != null) session.flush();	
+			if (session != null) { 
+				session.flush();
+				session.refresh(ua);
+			}
 			
 		} catch (HibernateException he) {
             throw new EJBException(he);			
-		} finally {			
+		} finally {            
 			close(session);			
 		}		
 	}

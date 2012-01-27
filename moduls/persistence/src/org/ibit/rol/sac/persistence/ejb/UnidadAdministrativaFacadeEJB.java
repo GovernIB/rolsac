@@ -561,6 +561,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         Session session = getSession();
         
         try {
+        	
             UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
             
             if (visible(ua)) {
