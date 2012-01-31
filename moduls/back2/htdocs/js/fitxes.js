@@ -320,11 +320,11 @@ function CDetall(){
 		if (llistaSeccions.length < 1 ) {
             Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtCampObligatori, text: "<p>" + txtSeccUa + "</p>"});	
 		} else {		
+			var llista_materies = ModulMateries.listaMaterias();
+			llista_materies = llista_materies.slice(9);
             $("#llistaSeccions").val(llistaSeccions);
 			$("#llistaMateries").val(llista_materies);
 			$("#llistaFetsVitals").val(ModulFetsVitals.listaHechosVitales());	
-            var llista_materies = ModulMateries.listaMaterias();
-			llista_materies = llista_materies.slice(9);
 			
 			// Validamos el formulario
 			if(!that.formulariValid()){

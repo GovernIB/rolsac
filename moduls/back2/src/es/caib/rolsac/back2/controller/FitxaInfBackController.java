@@ -659,7 +659,7 @@ public class FitxaInfBackController {
 
             
             //Materies
-                                
+            
             //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
             //probable que se repitan la mayoria de materias.
             if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))){
@@ -668,8 +668,8 @@ public class FitxaInfBackController {
                 String[] codisMateriaNous = valoresForm.get("materies").split(",");
                 
                 if (edicion){
-                    for (int i = 0; i<codisMateriaNous.length; i++){
-                        for (Materia materia: fitxaOld.getMaterias()){
+                    for (int i = 0; i < codisMateriaNous.length; i++) {
+                        for (Materia materia : fitxaOld.getMaterias()) {
                             if(materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))){//materia ya existente
                                 materiesNoves.add(materia);
                                 codisMateriaNous[i] = null;
