@@ -143,10 +143,11 @@ function CDetall(soloFicha){
 		
 		// Obtener todos los inputs que empiezan por seccio_id_
 		$(".modulSeccions input[name^='seccio_id_']").each( function() {
+			
 			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + $(this).attr("value") + "#");
 
 			// Añadir las fichas del edificio actual
-			idSeccio = $(this).val();			
+			idSeccio = $(this).val();
 			
 			// Aquí tendremos añadir una validación extra y comprobar que todas las secciones contienen fichas, 
 			// en caso contrario deberá mostrarse un error y devolver "false"

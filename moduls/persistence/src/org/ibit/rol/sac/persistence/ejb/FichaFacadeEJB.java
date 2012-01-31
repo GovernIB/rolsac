@@ -69,7 +69,6 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.ws.FichaUATransferible;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
@@ -2311,30 +2310,39 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 		Set<FichaUA> listaFUAOrigen = ua.getTodasfichas();				
 		
+		// Construir una lista con la información de las distintas secciones		
+		Set<SimpleSeccion> listaSimpleSeccion = new HashSet<SimpleSeccion>();
+		
+		for ( FichaUA fichaUA : listaFUAOrigen )
+			listaSimpleSeccion.add( new SimpleSeccion(fichaUA.getSeccion().getId(), 
+								new Long(fichaUA.getOrdenseccion()) ) );		
+		
 		List<Long> listaFUABorrar = new ArrayList<Long>();		
 		List<SimpleFichaUA> listaSimpleFichaUA = new ArrayList<SimpleFichaUA>();
 		List<SimpleFichaUA> listaSimpleFichaUAIgnorar = new ArrayList<SimpleFichaUA>();
-		
-		// Crea una lista seccionID + fichaID
+				
+		// Crea una lista seccionID + fichaID + orden sección. El orden
+		// será el mismo en el cual vienen los datos
 		int i = 0;
 		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
 			
 			String seccionesFichaActual = listaSeccionesFicha[i];				
-			String[] dadesSeccioFitxes = seccionesFichaActual.split("[#]");				
-			String[] llistaFitxesSeccio = new String[]{};
+			String[] datosSeccionFichas = seccionesFichaActual.split("[#]");				
+			String[] listaFichasSeccion = new String[]{};
 			
-			if (dadesSeccioFitxes.length > 1)  
-				llistaFitxesSeccio =  dadesSeccioFitxes[1].split("[|]");			
+			if (datosSeccionFichas.length > 1)  
+				listaFichasSeccion =  datosSeccionFichas[1].split("[|]");			
 				
-			for (int j = 0; j < llistaFitxesSeccio.length; j++ ) {
-				listaSimpleFichaUA.add( new SimpleFichaUA(new Long(dadesSeccioFitxes[0]), 
-														  new Long(llistaFitxesSeccio[j]) ) );
+			for (int j = 0; j < listaFichasSeccion.length; j++ ) {
+				listaSimpleFichaUA.add( new SimpleFichaUA(new Long(datosSeccionFichas[0]), 
+														  new Long(listaFichasSeccion[j]),
+														  new Long(i) ) );
 			}
 			
 			i++;			
 		}
 		
-		// Detectar las fichas ua a borrar
+		// Detectar las fichas ua a borrar (el orden también se tiene en cuenta)
 		for (FichaUA fUA : listaFUAOrigen ) {
 						
 			boolean encontrada = false;
@@ -2343,10 +2351,12 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				
 				if ( fUA.getSeccion().getId().equals( simpleFichaUA.getIdSeccion() ) && 
 					 fUA.getFicha().getId().equals( simpleFichaUA.getIdFicha() ) && 
-					 fUA.getUnidadAdministrativa().getId().equals( ua.getId() ) ) {
+					 fUA.getUnidadAdministrativa().getId().equals( ua.getId() ) && 
+					 fUA.getOrdenseccion() == simpleFichaUA.getOrdenSeccion() ) {
 
 					listaSimpleFichaUAIgnorar.add( new SimpleFichaUA( simpleFichaUA.getIdSeccion(), 
-																	  simpleFichaUA.getIdFicha()) );
+																	  simpleFichaUA.getIdFicha(), 
+																	  simpleFichaUA.getOrdenSeccion()) );
 					encontrada = true;						
 					break;						 					
 				}				
@@ -2358,39 +2368,19 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 		//Crear sólo las que no existían antes
 		List<SimpleFichaUA> listaNuevas = new ArrayList<SimpleFichaUA>();
-		for ( SimpleFichaUA fichaUA : listaSimpleFichaUA ) {			
-			if ( !listaSimpleFichaUAIgnorar.contains( fichaUA) )
+		for ( SimpleFichaUA fichaUA : listaSimpleFichaUA ) {
+			
+			if ( !listaSimpleFichaUAIgnorar.contains( fichaUA) || fichaUA.isCambioOrden(listaSimpleSeccion) )
 				listaNuevas.add( fichaUA );
 		}		
 		
 		actualizaSeccionesFichaUA( ua, listaFUABorrar, listaNuevas);		
 		
 	}	
-	
-	// Clase de apoyo para uso en "crear secciones fichas"
-	private class SimpleFichaUA {
-		
-		public SimpleFichaUA(Long idSeccion, Long idFicha) {
-			this.idSeccion = idSeccion;
-			this.idFicha = idFicha;
-		}
-		
-		private Long idSeccion;
-		private Long idFicha;
-		
-		public Long getIdSeccion() { return idSeccion; }
-		public Long getIdFicha() { return idFicha; }
-		
-		public boolean equals( Object o ) {
-			if ( !( o instanceof SimpleFichaUA) ) return false;
-			return getIdSeccion().equals( ((SimpleFichaUA) o).getIdSeccion() ) && 
-				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
-		}
-	} 
-	
+			
 	private void actualizaSeccionesFichaUA( UnidadAdministrativa ua, List<Long> listaBorrar, List<SimpleFichaUA> listaNuevas ) {
 		
-		Session session = getSession();
+		Session session = null;
 		
 		try {
 			
@@ -2404,7 +2394,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	                throw new SecurityException("No tiene acceso a la relación");
 				
                 FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idBorrar);
-                final Long idFicha = fichaUA.getFicha().getId();
+                //final Long idFicha = fichaUA.getFicha().getId();
                 
                 boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
                 
@@ -2414,16 +2404,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 if (ua != null) 
                     ua.removeFichaUA(fichaUA);                
                 
-                Ficha ficha = obtenerFicha(idFicha);
-                indexBorraFicha(ficha.getId());
-                indexInsertaFicha(ficha,null);
+                //Ficha ficha = obtenerFicha(idFicha);
+                //indexBorraFicha(ficha.getId());
+                //indexInsertaFicha(ficha,null);
                 
                 session.delete(fichaUA);                
 
                 if(borrar) log.debug("Entro en borrar remoto ficha UA");	                	
 			} 
-			
-			//if (session != null) session.flush();
 			
 			// Crear nuevas FichasUA
 			for (SimpleFichaUA simpleFichaUA : listaNuevas ) {
@@ -2439,9 +2427,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	                if (!getAccesoManager().tieneAccesoUnidad(ua.getId(), false)) {
 	                    throw new SecurityException("No tiene acceso a la ficha");
 	                }
-	                
-	                // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
-	                fichaUA.setOrden(1);
+	                	                
+	                fichaUA.setOrdenseccion(simpleFichaUA.getOrdenSeccion().intValue());	                
 	                ua.addFichaUA(fichaUA);
 	                
 	            } else {
@@ -2455,7 +2442,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	                throw new SecurityException("No tiene acceso a la sección");
 	            
 	            // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
-	            fichaUA.setOrdenseccion(1);
+	            fichaUA.setSeccion(seccion);	            
 	            seccion.addFichaUA(fichaUA);
 
 	            Ficha ficha = (Ficha) session.load(Ficha.class, simpleFichaUA.getIdFicha());
@@ -2463,8 +2450,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 	            Ficha fichasend = obtenerFicha( simpleFichaUA.getIdFicha() );
 	            Actualizador.actualizar(fichasend);
-	            indexBorraFicha(ficha.getId());
-	            indexInsertaFicha(fichasend,null);				
+	            
+	            //indexBorraFicha(ficha.getId());
+	            //indexInsertaFicha(fichasend,null);				
 			}
 			
 			if (session != null) { 
@@ -2478,4 +2466,62 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			close(session);			
 		}		
 	}
+	
+	// Clase de apoyo para uso en "crearSeccionesFichas"
+	private class SimpleSeccion {
+		private Long idSeccion;
+		private Long ordenSeccion; 
+		
+		public SimpleSeccion( Long idSeccion, Long ordenSeccion ) {
+			this.idSeccion = idSeccion;
+			this.ordenSeccion = ordenSeccion;
+		}
+		
+		public Long getIdSeccion() { return idSeccion; }
+		public Long getOrdenSeccion() { return ordenSeccion; }
+				
+	}
+	
+	// Clase de apoyo para uso en "crearSeccionesFichas"
+	private class SimpleFichaUA {
+		
+		public SimpleFichaUA(Long idSeccion, Long idFicha, Long ordenSeccion) {
+			this.idSeccion = idSeccion;
+			this.idFicha = idFicha;
+			this.ordenSeccion = ordenSeccion;
+		}
+		
+		private Long idSeccion;
+		private Long idFicha;
+		private Long ordenSeccion;
+		
+		public Long getIdSeccion() { return idSeccion; }
+		public Long getIdFicha() { return idFicha; }
+		public Long getOrdenSeccion() { return ordenSeccion; }
+		
+		public boolean equals( Object o ) {
+			if ( !( o instanceof SimpleFichaUA) ) return false;
+			return getIdSeccion().equals( ((SimpleFichaUA) o).getIdSeccion() ) && 
+				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
+		}
+		
+		// Busca la sección en la lista pasada por parámetro y devuelve true o false 
+		// en función de si ha cambiado el orden o no.
+		public boolean isCambioOrden( Set<SimpleSeccion> listaSecciones ) {
+			
+			boolean esCambioOrden = false;
+			for (SimpleSeccion simpleSeccion : listaSecciones ) {
+				
+				if ( getIdSeccion().equals(simpleSeccion.getIdSeccion()) && 
+					 !getOrdenSeccion().equals( simpleSeccion.getOrdenSeccion()) ) {
+					
+					esCambioOrden = true;
+					break;
+				}
+			}
+			
+			return esCambioOrden;
+		}
+	} 
+	
 }

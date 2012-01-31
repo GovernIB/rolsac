@@ -1012,7 +1012,6 @@
                         <div class="modulSeccions">                                     
                             <div class="seleccionats">                                          
                                 <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
-                                <!--   <div class="listaOrdenable"></div> -->
                                 <div class="listaOrdenable"></div>
                                 <div class="btnGenerico">
                                     <a class="btn gestionaSeccions" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.seccions.gestiona'/></span></span></a>                 

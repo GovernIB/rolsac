@@ -76,15 +76,15 @@ public class UnitatAdmBackController {
         this.messageSource = messageSource;
     }
     
-	private static class TreeSeccionComparator implements Comparator {
+	private static class TreeOrdenSeccionComparator implements Comparator {
 		public int compare(Object element1, Object element2) {
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
 			
-			lower1 = lower1.substring(lower1.indexOf("#")+1,lower1.length());
-			lower2 = lower2.substring(lower2.indexOf("#")+1,lower2.length());
+			lower1 = lower1.substring(0, lower1.indexOf("#"));
+			lower2 = lower2.substring(0, lower2.indexOf("#"));
 			
-			return lower1.compareTo(lower2);
+			return new Long(lower1).compareTo(new Long(lower2));
 		}
 	}       
     
@@ -317,7 +317,6 @@ public class UnitatAdmBackController {
 	        
             //Secciones-Fichas           
             TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
-            //TreeMap arbolSecciones = uni.getMapSeccionFichasUAConOrden();            
             
             List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
             
@@ -330,8 +329,8 @@ public class UnitatAdmBackController {
         		String claveSeccion = (String) iterator.next();
 				String datosSeccion[] = claveSeccion.split("#");
 				
-				seccionFichaDTO.setId( new Long(datosSeccion[0]) );
-				seccionFichaDTO.setNom( datosSeccion[1]);
+				seccionFichaDTO.setId( new Long(datosSeccion[1]) );
+				seccionFichaDTO.setNom( datosSeccion[2]);
 				
 				List<FichaUA> listaFichasUA = (ArrayList<FichaUA>) arbolSecciones.get(claveSeccion);
 				List<FichaDTO> listaFichasDTO = new ArrayList<FichaDTO>();
@@ -1046,20 +1045,23 @@ public class UnitatAdmBackController {
 	 */
 	private TreeMap ordenarArbolSecciones(TreeMap arbolSecciones) {
 	
-		TreeMap newtreesecciones = new TreeMap( new TreeSeccionComparator() );
-		 
+		TreeMap newtreesecciones = new TreeMap( new TreeOrdenSeccionComparator() );
 		for( Iterator it = arbolSecciones.keySet().iterator(); it.hasNext(); ) {
 	    	String key = (String)it.next();
 	    	
 	    	//Eliminamos el código html que pueda haber en el nombre de la sección.
 	    	key = key.split("#")[0] + "#" + (key.split("#")[1]).replaceAll("\\<.*?>", "");
+	    	 
+	    	//Obtenemos el orden de la sección de cualquier FichaUA de la sección actual
+	    	//para reordenar el TreeMap original
+	    	int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();
+	    	newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));
 	    	
-	    	newtreesecciones.put(key, arbolSecciones.get(key));
 	    }
 		    
 	    return newtreesecciones;
 		  	
-	  }	 
+	}	
 	
 	/**
 	 * Retorna una cadena que canvia les vocals amb accent o dièresi 
