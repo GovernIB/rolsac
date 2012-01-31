@@ -160,10 +160,10 @@ function CLlistat(){
 				
 				caducat_class = (dada_node.caducat) ? " caducat" : "";
 				//codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.publicacio) + "</div>";
-                codi_taula += '<div class="td familia">[dinamizar]</div>';
+				codi_taula += '<div class="td familia">' + printStringFromNull(dada_node.familia, txtSinValor) + '</div>';
                 
 				//codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.caducitat) + "</div>";
-                codi_taula += "<div class=\"td fechaActualizacion" + caducat_class + "\" role=\"gridcell\">[dinamizar]</div>";
+				codi_taula += "<div class=\"td fechaActualizacion" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaActualizacion, txtSinValor) + "</div>";
 				
 				codi_taula += "</div>";                
 			});

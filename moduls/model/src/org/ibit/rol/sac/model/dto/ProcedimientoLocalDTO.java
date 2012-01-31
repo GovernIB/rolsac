@@ -13,6 +13,8 @@ public class ProcedimientoLocalDTO implements ValueObject {
 	private String caducitat;
 	private Boolean caducat;
 	private Integer orden;
+	private String fechaActualizacion;
+	private String familia;
 	
 	public ProcedimientoLocalDTO(long id, Long idProcedimiento, String nombre, String publicacio, String caducitat, Boolean caducat, Integer orden) {
 		super();
@@ -25,6 +27,15 @@ public class ProcedimientoLocalDTO implements ValueObject {
 		this.orden = orden;
 	}
 
+	public ProcedimientoLocalDTO(long id, String nombre, Boolean caducat, String fechaActualizacion, String familia) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.caducat = caducat;
+		this.fechaActualizacion = fechaActualizacion;
+		this.familia = familia;
+	}
+	
 	public long getId() {
 		return id;
 	}
@@ -73,6 +84,22 @@ public class ProcedimientoLocalDTO implements ValueObject {
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+
+	public String getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(String fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getFamilia() {
+		return familia;
+	}
+	
+	public void setFamilia(String familia) {
+		this.familia = familia;
 	}
 	
 }

@@ -320,14 +320,22 @@ public class CatalegProcedimentsBackController {
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
+				TraduccionFamilia tfa = null;
+				if (pl.getFamilia() != null) tfa = (TraduccionFamilia) pl.getFamilia().getTraduccion(lang);
 				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
 								 pl.getId(), 
-								 null,
 								 tpl == null ? "" : tpl.getNombre(), 
-								 DateUtils.formatDate(pl.getFechaPublicacion()),
-								 DateUtils.formatDate(pl.getFechaCaducidad()),
 								 pl.isVisible(),
-								 null));
+								 DateUtils.formatDate(pl.getFechaActualizacion()),
+								 tfa == null ? null : tfa.getNombre()));
+//				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
+//						pl.getId(), 
+//						null,
+//						tpl == null ? "" : tpl.getNombre(), 
+//								DateUtils.formatDate(pl.getFechaPublicacion()),
+//								DateUtils.formatDate(pl.getFechaCaducidad()),
+//								pl.isVisible(),
+//								null));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
