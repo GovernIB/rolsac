@@ -24,6 +24,7 @@ import net.sf.hibernate.expression.Expression;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
@@ -97,20 +98,23 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             session.update(seccion);
-            Seccion padreOld = seccion.getPadre();
-            Long padreOld_id = (padreOld != null ? padreOld.getId() : null);
+            Long padreOld_id = (seccion.getPadre() != null ? seccion.getPadre().getId() : null);
+            Seccion padreOld = null;
+            if (padreOld_id != null) padreOld = this.obtenerSeccion(padreOld_id);
 
             if (padre_id != padreOld_id) {
                 if (padre_id == null) { // Quitamos de jerarquia i metemos en raiz.
-                    padreOld.removeHijo(seccion);
+                    if (padreOld != null) padreOld.removeHijo(seccion);
                     seccion.setOrden(numSeccionesRaiz(session));
                     seccion.setPadre(null);
-                } else { // Passamos a otra jerarquia
-                    Seccion padreNew = (Seccion) session.load(Seccion.class, padre_id);
-                    padreNew.addHijo(seccion);
-                    if (padreOld == null) {
-                        actualizarListaRaiz(session);
-                    }
+                } else { // Pasamos a otra jerarquia
+                    Seccion padreNew = this.obtenerSeccion(padre_id);
+                    if (padreOld != null) padreOld.removeHijo(seccion);
+                    seccion.setPadre(padreNew);
+                    int orden = 0;
+                    if (padreNew.getHijos() != null) orden = padreNew.getHijos().size();
+                    seccion.setOrden(orden);
+                    actualizarListaRaiz(session);
                 }
             }
 
@@ -250,6 +254,9 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
+            session.refresh(seccion);
+            Hibernate.initialize(seccion.getHijos());
+            Hibernate.initialize(seccion.getPadre());
             Hibernate.initialize(seccion.getFichasUA());
             return seccion;
         } catch (HibernateException he) {

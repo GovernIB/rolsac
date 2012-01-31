@@ -336,7 +336,7 @@ public class TMAgrupacioMateriesController {
 	    				}
 	    				map = new HashMap<String, String>(2);
 	    				map.put("id", materiaAgrupacioM.getMateria().getId().toString());
-	    				map.put("nombre", nombre);
+	    				map.put("nom", nombre);
 	    				map.put("orden", Integer.toString(materiaAgrupacioM.getOrden()));
 	                    llistaMateriesAgrupacio.add(map);
 					}

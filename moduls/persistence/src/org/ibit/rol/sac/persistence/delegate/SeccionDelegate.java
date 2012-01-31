@@ -11,6 +11,7 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.webcaib.LinkModel;
 import org.ibit.rol.sac.persistence.intf.SeccionFacade;
@@ -292,6 +293,16 @@ public class SeccionDelegate implements StatelessDelegate {
         }    	
     }     
     
+    public void grabarSeccion(Seccion seccio, Long idPadre) throws DelegateException {
+    	try {
+    		
+    		if (seccio.getId() != null) getFacade().actualizarSeccion(seccio, idPadre);
+    		else getFacade().crearSeccion(seccio, idPadre);
+    		
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

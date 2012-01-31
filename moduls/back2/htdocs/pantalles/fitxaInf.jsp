@@ -66,7 +66,7 @@
    var txtPare = "<spring:message code='txt.pare'/>";
    var txtCercant = "<spring:message code='txt.cercant'/>";
    var txtCercantLlistat = txtCercant + " " + txtLlistaItems.toLowerCase() + ". " + txtEspere;
-   var txtFechaModificacion = 'Data d\'Actualització';
+   var txtFechaModificacion = "<spring:message code='camp.dataActualitzacio'/>";
    // paginacio
    
    var txtTrobat = "<spring:message code='txt.sha_trobat'/>";

@@ -22,7 +22,7 @@ function CModulEspais(){
 			nombre: "espai",
 			nodoOrigen: modul_espais_elm.find(".listaOrdenable"),
 			nodoDestino: modul_espais_elm.find(".listaOrdenable"),
-			atributos: ["id", "nombre"],	// Campos que queremos que aparezcan en las listas.
+			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
 			multilang: false
 		});
 	}

@@ -96,7 +96,7 @@
 						<span class="titol"><spring:message code="menu.fitxes_informatives" /></span>
 						<ul>
 							<li>
-								<a href="<c:url value="/seccions/llistat.do"/>"><spring:message code="menu.seccions" /></a>
+								<a href="<c:url value="/seccions/seccio.do"/>"><spring:message code="menu.seccions" /></a>
 							</li>
 						</ul>
 					</li>

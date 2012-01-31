@@ -3,9 +3,18 @@ $(document).ready(function() {
 		
 	// elements
 	modul_seccions_elm = $("div.modulSeccions");
+	modul_fitxes_elm = $("div.modulFitxes");
 	escriptori_seccions_elm = $("#escriptori_seccions");
 	escriptori_fitxes_elm = $("#escriptori_fitxes");
 
+	ModulSeccions = new CModulSeccio();
+	ModulFitxes = new CModulSeccio();
+	
+	if (modul_seccions_elm.size() == 1) {
+		ModulSeccions.iniciarSeccion();
+		ModulFitxes.iniciarFichas();
+	}
+	
 	EscriptoriSeccio = new CEscriptoriSeccio();
 	EscriptoriSeccioFitxes = new CEscriptoriSeccioFitxes();
 	
@@ -53,8 +62,42 @@ function CModulSeccio() {
 			divFichas.fadeIn(200);
 		
 		return false;
-	},
+	}
 
+	this.iniciarFichas = function()  {
+		// Configuramos la lista ordenable.
+		this.configurar({
+			nombre: "fitxa",
+			nodoOrigen: modul_fitxes_elm.find(".listaOrdenable"),
+			nodoDestino: modul_fitxes_elm.find(".listaOrdenable"),
+			atributos: ["id", "nombre", "orden", "caducado", "idUA", "nomUA"],	// Campos que queremos que aparezcan en las listas.
+			multilang: false
+		});
+	}
+	
+	this.iniciarSeccion = function()  {
+		
+		// Configuramos la lista ordenable.
+		this.configurar({
+			nombre: "seccio",
+			nodoOrigen: modul_seccions_elm.find(".listaOrdenable"),
+			nodoDestino: modul_seccions_elm.find(".listaOrdenable"),
+			atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+			multilang: false
+		});
+	}
+	
+	if ( modul_seccions_elm.size() == 1 ) {
+
+		modul_seccions_elm.find("a.gestiona").bind("click", function(){	
+			that.gestionaSeccio();
+		});
+		
+		seccions_seleccionats_elm = modul_seccions_elm.find("div.seleccionats:first");
+		seccions_llistat_elm = modul_seccions_elm.find("div.llistat:first");				
+		
+	}
+	
 	this.iniciar = function(dades) {
 		
 		seccions_nodes = dades;		
@@ -183,8 +226,12 @@ function CModulSeccio() {
 		
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );		
-	},
-			
+	}
+	
+	this.gestionaSeccio = function() {
+		Detall.nou($("#item_id").val(), $("#item_nom_ca").val());
+	}
+	
 	this.gestiona = function() {
 		
 		// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
@@ -476,6 +523,202 @@ function CModulSeccio() {
 		});									
 	}
 	
+	////////////***********//////////
+	this.contaFitxesSeleccionades = function() {
+		seleccionats_val = modul_fitxes_elm.find(".seleccionats").find("li").size();
+		info_elm = modul_fitxes_elm.find("p.info:first");
+		
+		if (seleccionats_val == 0) {
+			modul_fitxes_elm.find("ul").remove();
+			info_elm.text(txtNoHiHaFitxes + ".");
+		} else if (seleccionats_val == 1) {
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
+		} else {
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");
+			modul_fitxes_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				cursor: 'url(../img/cursor/grabbing.cur), move',
+				update: function(event, ui) {
+					ModulFitxes.calculaOrden(ui, "origen");
+					that.contaFitxesSeleccionades();
+					Detall.modificado();
+				}
+			}).css({cursor:"url(../img/cursor/grab.cur), move"});
+		}
+		
+	}
+	
+	this.contaSeleccionats = function() {
+		seleccionats_val = modul_seccions_elm.find(".seleccionats").find("li").size();
+		info_elm = modul_seccions_elm.find("p.info:first");
+		
+		if (seleccionats_val == 0) {
+			modul_seccions_elm.find("ul").remove();
+			info_elm.text(txtNoHiHaSeccionsSeleccionades + ".");
+		} else if (seleccionats_val == 1) {
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
+		} else {
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");
+			modul_seccions_elm.find(".listaOrdenable ul").sortable({ 
+				axis: 'y', 
+				cursor: 'url(../img/cursor/grabbing.cur), move',
+				update: function(event,ui){
+					ModulSeccions.calculaOrden(ui, "origen");
+					that.contaSeleccionats();
+					Detall.modificado();
+				}
+			}).css({cursor:"url(../img/cursor/grab.cur), move"});
+		}
+		
+	}
+	
+	//Actualiza la lista de fichas cuando se carga la ficha de la sección
+	this.inicializarFichas = function(listaFichas){
+		modul_fitxes_elm.find(".listaOrdenable").empty();
+		if (typeof listaFichas != 'undefined' && listaFichas != null && listaFichas.length > 0) {
+			this.agregaItems(listaFichas, false);
+		}
+		
+		modul_fitxes_elm.find('div.fitxa').each(function() {
+			// Añadimos imagen de OK o CADUCADO.
+			var caducado = $(this).find("input.fitxa_caducado").val() == "N";
+			var caducat_titol_class = caducado ? " fitxaCaducat" : " fitxaNoCaducat";
+			
+			$(this).addClass(caducat_titol_class);
+			
+			var idUA = $(this).find("input.fitxa_idUA").val();
+			var nomUA = $(this).find("input.fitxa_nomUA").val();
+			
+			// Enlace Unidad Administrativa
+			var urlUA = pagUADetall  + "?itemId=" + idUA;
+			$(this).append(" [<a id=\""+idUA+"\" href=\"javascript:;\" class=\"fitxa_inf\">" + printStringFromNull(nomUA, txtSinValor) + "</a>]");
+			
+			// Evento click Ficha informativa
+            $(this).unbind("click").bind("click", function() {
+                var fitxaId = $(this).find("input.fitxa_id").val();
+                
+                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantFitxa});
+                $.ajax({
+                    type: "POST",
+                    url: pagFitxa,
+                    data: "id=" + fitxaId,
+                    dataType: "json",
+                    error: function() {
+                        // Missatge.cancelar();
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                        Error.llansar();
+                    },
+                    success: function(data) {
+                        Missatge.cancelar();
+                        if (data.item_id > 0) {
+                        	location = pagFitxaDetall + "?itemId=" + data.item_id;
+                        } else if (data.item_id == -1){
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                        } else if (data.item_id < -1){
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                        }
+                    }
+                });
+            });
+        });
+		
+		modul_fitxes_elm.find('a.fitxa_inf').each(function() {
+			var urlUA = pagUADetall  + "?itemId=" + $(this).attr("id");
+			
+			$(this).unbind("click").bind("click", function(event) {
+				event.stopPropagation();
+                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantUA});
+				location = urlUA;
+			});
+		});
+		
+		that.contaFitxesSeleccionades();
+	}
+	
+	//Actualiza la lista de secciones seleccionadas cuando se carga una ficha
+	this.inicializarSecciones = function(listaSeccions){
+		modul_seccions_elm.find(".listaOrdenable").empty();
+		if (typeof listaSeccions != 'undefined' && listaSeccions != null && listaSeccions.length > 0) {
+			that.agregaItems(listaSeccions, false);
+		}
+		
+		modul_seccions_elm.find('div.seccio').each(function() {
+            $(this).unbind("click").bind("click", function() {
+                var seccioId = $(this).find("input.seccio_id").val();
+                Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantDetall});
+                $.ajax({
+                    type: "GET",
+                    url: pagDetall,
+                    data: "id=" + seccioId,
+                    dataType: "json",
+                    error: function() {
+                        // Missatge.cancelar();
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                        Error.llansar();
+                    },
+                    success: function(data) {
+                        Missatge.cancelar();
+                        if (data.item_id > 0) {
+                            Detall.pintar(data);
+                        } else if (data.item_id == -1){
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                        } else if (data.item_id < -1){
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                        }
+                    }
+                });
+            });
+        });
+		
+		that.contaSeleccionats();
+		
+		modul_seccions_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+			var itemLista = jQuery(this).parents("li:first");
+			that.eliminaItem(itemLista);
+			that.contaSeleccionats();
+			Detall.modificado();
+		});
+		
+	}
+	
+	//devuelve un string con el formato seccions=n1,n2,...,nm donde nx son codigos de secciones
+	this.listaSecciones = function (){
+		var listaSecciones = "seccions=";
+		
+		$("div.modulSeccions div.seleccionats div.listaOrdenable input").each(function() {
+			listaSecciones += $(this).val() + ",";										
+		});
+
+		if (listaSecciones[listaSecciones.length-1] == ","){
+			listaSecciones = listaSecciones.slice(0, -1);
+		}
+		
+		return listaSecciones;
+	}
+	
+	this.torna = function() {
+		escriptori_detall_elm.fadeOut(300, function() {
+			escriptori_contingut_elm.fadeIn(300);
+		});
+	}
+	
+	/* Al acceder al formulario de creacion, limpia las listas de secciones, desmarca los checkboxes,
+	 * marca las secciones por defecto, econder el listado y mostrar los seleccionados.
+	 */
+	this.nuevo = function() {
+		
+		seccions_seleccionades_elm = escriptori_detall_elm.find("div.modulSeccions div.seleccionats");
+		seccions_seleccionades_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccions + ".");
+		$("div.modulSeccions div.llistat input[type=checkbox]").attr('checked', false).removeClass(seccioDefaultClass);
+
+		that.mostrarSeccionesSeleccionadas();
+	}
+
+	// Econder el listado y mostrar los seleccionados.
+	this.mostrarSeccionesSeleccionadas = function () {
+		escriptori_detall_elm.find("div.modulSeccions div.llistat").hide();
+		escriptori_detall_elm.find("div.modulSeccions div.seleccionats").show();
+	}
 };
 
 function CEscriptoriSeccio() {
@@ -775,8 +1018,8 @@ function CEscriptoriSeccioFitxes() {
 			info_elm.html( info_elm.text() + txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");						
 			fitxes_seleccionats_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
-				update: function(event,ui){
-					ModulSeccions.calculaOrden(ui,"origen");
+				update: function(event, ui) {
+					ModulSeccions.calculaOrden(ui, "origen");
 					EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
 				}
 			}).css({cursor:"move"});
@@ -988,5 +1231,4 @@ function CEscriptoriSeccioFitxes() {
 			
 		});
 	}
-	
 };

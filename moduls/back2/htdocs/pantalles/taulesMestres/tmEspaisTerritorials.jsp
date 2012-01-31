@@ -53,6 +53,7 @@
     var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
     var txtNoHiHaEspaisSeleccionats= txtNoHiHaEspais + " " + txtSeleccionades.toLowerCase();
     var txtEspaiArrel = "<spring:message code='espai.arrel'/>";
+    var txtArrel = "<spring:message code='txt.arrel'/>";
     
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();

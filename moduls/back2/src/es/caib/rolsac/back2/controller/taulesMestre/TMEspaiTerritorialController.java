@@ -286,19 +286,6 @@ public class TMEspaiTerritorialController {
 		}
 	}
     
-
-    // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
-//    private List<IdNomDTO> getJSONUnidadesAdministrativas(Materia materia) {
-//    	List<IdNomDTO> uaList = new LinkedList<IdNomDTO>(); 
-//    	for (UnidadMateria uam: (Set<UnidadMateria>) materia.getUnidadesmaterias()) {
-//    		String nombre = uam.getUnidad().getTraduccion() != null ? ((TraduccionUA)uam.getUnidad().getTraduccion()).getNombre() : "";
-//    		Long id = uam.getId();
-//    		uaList.add(new IdNomDTO(id, nombre));
-//    	}
-//    	return uaList;
-//    }
-
-    
     @RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		/**
@@ -366,46 +353,6 @@ public class TMEspaiTerritorialController {
         		
         	}
         	
-        	
-        	// Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
-//			if (edicion) {
-//				IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
-//				List<Long> codisIcones = new LinkedList<Long>();
-//	
-//				// obtenim  els ids de les icones
-//				for (String nomParametre: valoresForm.keySet()) {
-//	                String[] elements = nomParametre.split("_");
-//	                if ("icones".equals(elements[0]) && "id".equals(elements[1])) {
-//	                    // En aquest cas, elements[2] es igual al id de la icona
-//	                	Long id = ParseUtil.parseLong(valoresForm.get(nomParametre));
-//	                	if (id != null) {
-//	                    	codisIcones.add(id);
-//	                	} else {
-//	                		log.warn("S'ha rebut un id de icona no numéric: " + id);
-//	                	}
-//	                }
-//	            }
-//	            
-//	            // eliminar
-//	            Set<Long> iconesABorrar = new HashSet<Long>();
-//	            Boolean iconaTrobada;
-//	            for (IconoMateria icona: (Set<IconoMateria>) materiaOld.getIconos()) {
-//                	iconaTrobada = Boolean.FALSE;
-//	                for (Long iconaId: codisIcones) {
-//	                	if (icona.getId().equals(iconaId)) {
-//	                		iconaTrobada = Boolean.TRUE;
-//	                		break;
-//	                	}
-//	                }
-//	                if (!iconaTrobada) {
-//	                	iconesABorrar.add(icona.getId());
-//	                }
-//                }
-//	            iconaMateriaDelegate.borrarIconosMateria(iconesABorrar);
-//			}
-            // fin Iconos
-
-			
         	//Obtener los demás campos
         	Long idEspaiPare = null;
         	if (valoresForm.get("item_codi_pare") != null && !"".equals(valoresForm.get("item_codi_pare"))) {
@@ -495,7 +442,7 @@ public class TMEspaiTerritorialController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de espai territorial no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de espai territorial no numèric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

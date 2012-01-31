@@ -1471,13 +1471,9 @@ div.modulLateral div.seleccionat ul {
 
 #ajuda iframe { width:15em; height:18em; }
 
-#popUA {
-	position: fixed;
-  	left: 30%;
-  	top: 15%;
-}
-
-#popET {
+#popUA,
+#popET,
+#popS {
     left: 30%;
     position: fixed;
     top: 15%;

@@ -1111,6 +1111,17 @@ function carregarArbreET(url, idDiv, item_id, id_et, id_et_texte, llocOnPintar) 
 	}
 }
 
+function carregarArbreS(url, idDiv, item_id, id_sec, id_sec_texte, llocOnPintar) {
+	var id = $("#" + item_id).val();
+	// Aseguram que no estigui creat
+	if ($('#' + idDiv).length == 0 ) {
+		if (typeof llocOnPintar == 'undefined') {
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idSec=' + id + '&idInput='+ id_sec_texte + '&idHidden=' + id_sec +'" style="width:550px; height:450px;" /></div>');
+		} else {
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idSec=' + id + '&idInput='+ id_sec_texte + '&idHidden=' + id_sec +'"  /></div>');
+		}
+	}
+}
 
 function borrarPopUp(idDiv){
 	$('#' + idDiv, window.top.document).remove();
@@ -1215,4 +1226,41 @@ function limpiarArchivoMultiidioma(campo, idioma) {
 	$("#grup_" + campo + "_" + idioma + " input").hide();
 	$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
 	$("#grup_" + campo + "_" + idioma + " a").hide();	
+}
+
+function montarBreadcrumb() {
+	item_ID = $("#item_id").val();
+	dataVars = "id=" + item_ID;
+	$.ajax({
+		type: "POST",
+		url: pagBreadcrumb,
+		data: dataVars,
+		dataType: "json",
+		success: function(data) {
+			if ($(".breadItems").length) {
+				$(".breadItems").remove();
+				$("#submenu").removeClass("breadcrumb");
+			}
+			$("#submenu .actual").before("<span class='breadItems'>");
+			$(".breadItems").append($("<a>").text(txtArrel).click(function() {
+				Detall.torna();
+				if ($(".breadItems").length) {
+					$(".breadItems").remove();
+					$("#submenu").removeClass("breadcrumb");
+				}
+			}));
+			
+			for (var i in data.breadcrumb) {
+				var espai = data.breadcrumb[i];
+				$(".breadItems").append("&raquo;");
+				$(".breadItems").append(
+					$(document.createElement('a')).text(espai.nom).attr('id', espai.id).click(function() {
+						var espaiId = $(this).attr('id');
+						Detall.recarregar(espaiId);
+					})
+				);
+			}
+			$("#submenu").addClass("breadcrumb");
+		}
+	});
 }

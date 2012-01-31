@@ -60,17 +60,17 @@ public class SeccionDTO implements Comparable<Object>, Serializable  {
     	String primerNom;
     	String segonNom;
 		
-    	primerNom = getNom().toLowerCase().replaceAll("[áàä]", "a")
-			 							  .replaceAll("[éèë]", "e")
-			 							  .replaceAll("[íìï]", "i")
-			 							  .replaceAll("[óòö]", "o")
-			 							  .replaceAll("[úùü]", "u");
+    	primerNom = getNom().toLowerCase().replaceAll("[Ã¡Ã Ã¤]", "a")
+			 							  .replaceAll("[Ã©Ã¨Ã«]", "e")
+			 							  .replaceAll("[Ã­Ã¬Ã¯]", "i")
+			 							  .replaceAll("[Ã³Ã²Ã¶]", "o")
+			 							  .replaceAll("[ÃºÃ¹Ã¼]", "u");
 		
-    	segonNom = ((SeccionDTO)o).getNom().toLowerCase().replaceAll("[áàä]", "a")
-											 		     .replaceAll("[éèë]", "e")
-											 		     .replaceAll("[íìï]", "i")
-											 		     .replaceAll("[óòö]", "o")
-											 		     .replaceAll("[úùü]", "u");
+    	segonNom = ((SeccionDTO)o).getNom().toLowerCase().replaceAll("[Ã¡Ã Ã¤]", "a")
+											 		     .replaceAll("[Ã©Ã¨Ã«]", "e")
+											 		     .replaceAll("[Ã­Ã¬Ã¯]", "i")
+											 		     .replaceAll("[Ã³Ã²Ã¶]", "o")
+											 		     .replaceAll("[ÃºÃ¹Ã¼]", "u");
     	
     	return primerNom.compareTo( segonNom );
     }

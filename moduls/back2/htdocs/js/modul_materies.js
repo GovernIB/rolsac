@@ -103,7 +103,7 @@ function CModulMateries(){
 		
 	}
 	
-	this.contaSeleccionats = function() {		
+	this.contaSeleccionats = function() {
 		seleccionats_val = modul_materies_elm.find(".seleccionats").find("li").size();
 		info_elm = modul_materies_elm.find("p.info:first");
 	        
@@ -127,10 +127,10 @@ function CModulMateries(){
 	}
 	
 	//Actualiza la lista de materias seleccionadas y marca los checkboxes cuando se carga una ficha
-	this.inicializarMaterias = function(listaMateries){
+	this.inicializarMaterias = function(listaMateries, btnEliminar){
 		modul_materies_elm.find(".listaOrdenable").empty();
 		if (typeof listaMateries != 'undefined' && listaMateries != null && listaMateries.length > 0) {
-			that.agregaItems(listaMateries, false);
+			that.agregaItems(listaMateries, btnEliminar);
 		}
 		that.contaSeleccionats();
 		
@@ -140,47 +140,49 @@ function CModulMateries(){
 			that.contaSeleccionats();
 			Detall.modificado();
 		});
-				
+		
 		modul_materies_elm.find(".listaOrdenable a.edita").unbind("click").bind("click", function(){
 			var itemID = jQuery(this).parents(".materia_id").val();
 			// Mostrar datos de materia
 			Detall.carregar(itemID);
 		});
-				
-		mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
-		mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
-		materies_nodes = listaMateries;
-		materies_nodes_size = materies_nodes.length;
+		
+		if (!btnEliminar) {
+			mat_seleccionats_elm = escriptori_detall_elm.find("div.modulMateries div.seleccionats");
+			mat_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
+			materies_nodes = listaMateries;
+			materies_nodes_size = materies_nodes.length;
 
-		mat_llistat_elm.find("input").removeAttr("checked");
+			mat_llistat_elm.find("input").removeAttr("checked");
 		
-		//A√±adimos o eliminamos el atributo "checked" en funci√≥n de si est√° o no marcado.
-		mat_llistat_elm.find("input").each(
-			function() {
-				$( this ).bind( "click", function() {
-					if ( !this.checked )
-						$(this).removeAttr("checked");
-					else
-						$(this).attr("checked", "checked");
-			});									
-		});
-		
-		if (materies_nodes_size == 0) {
-			mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
-		} else {
-			codi_materies = "<ul>";
-			$(materies_nodes).each(function() {
-				materia_node = this;
-				codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
-				mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked", "checked").addClass(materiaDefaultClass);
+			//AÒadimos o eliminamos el atributo "checked" en funciÛn de si est· o no marcado.
+			mat_llistat_elm.find("input").each(
+				function() {
+					$( this ).bind( "click", function() {
+						if ( !this.checked )
+							$(this).removeAttr("checked");
+						else
+							$(this).attr("checked", "checked");
+				});									
 			});
-			codi_materies += "<ul>";
-			txt_materies = (materies_nodes_size == 1) ? txtMateria : txtMateries;			
-			mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materies_nodes_size + " " + txt_materies + "</strong>.");
-			mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+			
+			if (materies_nodes_size == 0) {
+				mat_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaMateries + ".");
+			} else {
+				codi_materies = "<ul>";
+				$(materies_nodes).each(function() {
+					materia_node = this;
+					codi_materies += "<li><input type=\"hidden\" value=\"" + materia_node.id + "\" />" + materia_node.nom + "</li>";
+					mat_llistat_elm.find("input[value=" + materia_node.id + "]").attr("checked", "checked").addClass(materiaDefaultClass);
+				});
+				codi_materies += "<ul>";
+				txt_materies = (materies_nodes_size == 1) ? txtMateria : txtMateries;			
+				mat_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + materies_nodes_size + " " + txt_materies + "</strong>.");
+				mat_seleccionats_elm.find(".listaOrdenable").html(codi_materies);
+			}
+			
+			that.mostrarMateriasSeleccionadas();
 		}
-		
-		that.mostrarMateriasSeleccionadas();
 	}
 	
 	//devuelve un string con el formato materies=n1,n2,...,nm donde nx son codigos de materias

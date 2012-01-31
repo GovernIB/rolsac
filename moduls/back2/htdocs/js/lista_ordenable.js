@@ -105,11 +105,7 @@ function ListaOrdenable(){
 			if( btnEliminar ){
 				html += "<a href=\"javascript:;\" class=\"btn elimina\"><span><span>" + txtElimina + "</span></span></a>";
 			}
-			/*
-			if( btnVer ){
-				html += "<a href=\"javascript:;\" class=\"btn edita\"><span><span>" + txtEdita + "</span></span></a>";
-			}
-			*/
+			
 			html += "</div>";
 		html += "</li>";
 		
