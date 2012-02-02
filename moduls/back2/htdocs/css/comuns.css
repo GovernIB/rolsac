@@ -902,6 +902,10 @@ div.table div.tbody div.td a:hover{
     margin-right: 9px;
     overflow:hidden;
 }
+.thumbnail img{
+	max-height: 50px;
+	max-width: 50px;
+}
 .escriptori_detall .grupoModulosFormulario .archivo .archivoActual{
     padding-top: 10px;
 }

@@ -324,136 +324,31 @@ function CDetall(soloFicha){
 			//$("#item_responsable_sexe").val(dada_node.item_responsable_sexe);
 			
 			//FotoPetita
-			$("#item_responsable_foto_petita").val("");
-			$("#grup_item_responsable_foto_petita input").removeAttr("checked");
 			
-			//if (dada_node["enllas_arxiu"]) {
-			if (dada_node["item_responsable_foto_petita_enllas_arxiu"]) {
-				$("#grup_item_responsable_foto_petita a").show();					
-				
-				$("#grup_item_responsable_foto_petita a").attr("href", pagArrel + dada_node["item_responsable_foto_petita_enllas_arxiu"]);				
-				$("#grup_item_responsable_foto_petita a").text(dada_node["item_responsable_foto_petita"]);
-				
-				$("#grup_item_responsable_foto_petita span").hide();
-				$("#grup_item_responsable_foto_petita input").show();
-				$("#grup_item_responsable_foto_petita label.eliminar").show();
-							
-			} else {
-				$("#grup_item_responsable_foto_petita span").show();
-				$("#grup_item_responsable_foto_petita input").hide();
-				$("#grup_item_responsable_foto_petita label.eliminar").hide();
-				$("#grup_item_responsable_foto_petita a").hide();			
-			}	
-			
+			pintarArchivo("item_responsable_foto_petita", dada_node);
+
 			//FotoGran
-			$("#item_responsable_foto_gran").val("");
-			$("#grup_item_responsable_foto_gran input").removeAttr("checked");
 			
-			if (dada_node["item_responsable_foto_gran_enllas_arxiu"]) {
-				$("#grup_item_responsable_foto_gran a").show();					
-				
-				$("#grup_item_responsable_foto_gran a").attr("href", pagArrel + dada_node["item_responsable_foto_gran_enllas_arxiu"]);
-				$("#grup_item_responsable_foto_gran a").text(dada_node["item_responsable_foto_gran"]);
-				
-				$("#grup_item_responsable_foto_gran span").hide();
-				$("#grup_item_responsable_foto_gran input").show();
-				$("#grup_item_responsable_foto_gran label.eliminar").show();
-							
-			} else {
-				$("#grup_item_responsable_foto_gran span").show();
-				$("#grup_item_responsable_foto_gran input").hide();
-				$("#grup_item_responsable_foto_gran label.eliminar").hide();
-				$("#grup_item_responsable_foto_gran a").hide();			
-			}
-			
+			pintarArchivo("item_responsable_foto_gran", dada_node);
+
 			$("#item_tractament").val(dada_node.item_tractament).attr('selected',true);			
 			
 			//Logotipos
 			//LogoHoritzontal
-			$("#item_logo_horizontal").val("");
-			$("#grup_item_logo_horizontal input").removeAttr("checked");
-			if (dada_node["item_logo_horizontal_enllas_arxiu"]) {
-				
-				$("#grup_item_logo_horizontal a").show();					
-				
-				$("#grup_item_logo_horizontal a").attr("href", pagArrel + dada_node["item_logo_horizontal_enllas_arxiu"]);
-				$("#grup_item_logo_horizontal a").text(dada_node["item_logo_horizontal"]);
-				
-				$("#grup_item_logo_horizontal span").hide();
-				$("#grup_item_logo_horizontal input").show();
-				$("#grup_item_logo_horizontal label.eliminar").show();
-							
-			} else {
-				$("#grup_item_logo_horizontal span").show();
-				$("#grup_item_logo_horizontal input").hide();
-				$("#grup_item_logo_horizontal label.eliminar").hide();
-				$("#grup_item_logo_horizontal a").hide();			
-			}
+			
+			pintarArchivo("item_logo_horizontal", dada_node);
 			
 			//LogoVertical
-			$("#item_logo_vertical").val("");
-			$("#grup_item_logo_vertical input").removeAttr("checked");
-			if (dada_node["item_logo_vertical_enllas_arxiu"]) {
-				
-				$("#grup_item_logo_vertical a").show();
-				
-				$("#grup_item_logo_vertical a").attr("href", pagArrel + dada_node["item_logo_vertical_enllas_arxiu"]);
-				$("#grup_item_logo_vertical a").text(dada_node["item_logo_vertical"]);
-				
-				$("#grup_item_logo_vertical span").hide();
-				$("#grup_item_logo_vertical input").show();
-				$("#grup_item_logo_vertical label.eliminar").show();
-							
-			} else {
-				$("#grup_item_logo_vertical span").show();
-				$("#grup_item_logo_vertical input").hide();
-				$("#grup_item_logo_vertical label.eliminar").hide();
-				$("#grup_item_logo_vertical a").hide();			
-			}
 			
+			pintarArchivo("item_logo_vertical", dada_node);
+					
 			//LogoSalutacioHoritzontal
-			$("#item_logo_salutacio_horizontal").val("");
-			$("#grup_item_logo_salutacio_horizontal input").removeAttr("checked");
 			
-			if (dada_node["item_logo_salutacio_horizontal_enllas_arxiu"]) {
-				
-				$("#grup_item_logo_salutacio_horizontal a").show();					
-				
-				$("#grup_item_logo_salutacio_horizontal a").attr("href", pagArrel + dada_node["item_logo_salutacio_horizontal_enllas_arxiu"]);
-				$("#grup_item_logo_salutacio_horizontal a").text(dada_node["item_logo_salutacio_horizontal"]);
-				
-				$("#grup_item_logo_salutacio_horizontal span").hide();
-				$("#grup_item_logo_salutacio_horizontal input").show();
-				$("#grup_item_logo_salutacio_horizontal label.eliminar").show();
-							
-			} else {
-				$("#grup_item_logo_salutacio_horizontal span").show();
-				$("#grup_item_logo_salutacio_horizontal input").hide();
-				$("#grup_item_logo_salutacio_horizontal label.eliminar").hide();
-				$("#grup_item_logo_salutacio_horizontal a").hide();			
-			}
+			pintarArchivo("item_logo_salutacio_horizontal", dada_node);
 			
 			//LogoSalutacioVertical
-			$("#item_logo_salutacio_vertical").val("");
-			$("#grup_item_logo_salutacio_vertical input").removeAttr("checked");
 			
-			if (dada_node["item_logo_salutacio_vertical_enllas_arxiu"]) {
-				$("#grup_item_logo_salutacio_vertical a").show();					
-				
-				$("#grup_item_logo_salutacio_vertical a").attr("href", pagArrel + dada_node["item_logo_salutacio_vertical_enllas_arxiu"]);
-				$("#grup_item_logo_salutacio_vertical a").text(dada_node["item_logo_salutacio_vertical"]);
-				
-				$("#grup_item_logo_salutacio_vertical span").hide();
-				$("#grup_item_logo_salutacio_vertical input").show();
-				$("#grup_item_logo_salutacio_vertical label.eliminar").show();
-							
-			} else {
-				$("#grup_item_logo_salutacio_vertical span").show();
-				$("#grup_item_logo_salutacio_vertical input").hide();
-				$("#grup_item_logo_salutacio_vertical label.eliminar").hide();
-				$("#grup_item_logo_salutacio_vertical a").hide();			
-			}
-			
+			pintarArchivo("item_logo_salutacio_vertical", dada_node);					
 			
 			//Fitxes de la portada web
 			$("#item_nivell_1").val(dada_node.item_nivell_1);

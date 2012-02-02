@@ -718,7 +718,7 @@
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
 	                            <div class="etiqueta"><label for="item_icona"><spring:message code='fitxes.formulari.icona'/></label></div>
 	                            <div class="control archivo">   
 	                            	<div id="grup_item_icona" class="file">
@@ -741,7 +741,7 @@
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
 	                            <div class="etiqueta">
                                     <label for="item_banner"><spring:message code='fitxes.formulari.banner'/></label>
                                 </div>
@@ -767,7 +767,7 @@
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
 	                            <div class="etiqueta"><label for="item_imatge"><spring:message code='fitxes.formulari.imatge'/></label></div>
 	                            <div class="control archivo">   
 	                            	<div id="grup_item_imatge" class="file">

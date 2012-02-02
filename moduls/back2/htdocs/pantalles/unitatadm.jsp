@@ -535,7 +535,7 @@
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">	                                     
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
                                 <div class="control archivo">                                                                           
                                     <div id="grup_item_responsable_foto_petita" class="file">                                        
@@ -557,7 +557,7 @@
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
 	                            <div class="etiqueta"><label for="item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
 	                            <div class="control archivo">   
 	                            	<div id="grup_item_responsable_foto_gran" class="file">
@@ -736,7 +736,7 @@
                     	<!-- fila -->
                     	<div class="fila">
                             <div class="element t50p campoImagen">	                                     
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>                            
+                                <div class="thumbnail"></div>                            
                                 <div class="etiqueta"><label for="item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
                                 <div class="control archivo">   
                                 	<div id="grup_item_logo_horizontal" class="file">
@@ -759,7 +759,7 @@
                      	<!-- fila -->
                      	<div class="fila">
                             <div class="element t50p campoImagen">	                                     
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="item_logo_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical'/></label></div>
                                 <div class="control archivo">   
                                 	<div id="grup_item_logo_vertical" class="file">
@@ -782,7 +782,7 @@
                         <!-- fila -->
                      	<div class="fila">
                             <div class="element t50p campoImagen">	                                     
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
                                 <div class="control archivo">   
                                 	<div id="grup_item_logo_salutacio_horizontal" class="file">
@@ -805,7 +805,7 @@
                         <!-- fila -->
                      	<div class="fila">
                             <div class="element t50p campoImagen">	                                     
-                                <div class="thumbnail"><img src="" width="50" height="50"/></div>
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="item_logo_salutacio_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical.salutacio'/></label></div>
                                 <div class="control archivo">   
                                 	<div id="grup_item_logo_salutacio_vertical" class="file">

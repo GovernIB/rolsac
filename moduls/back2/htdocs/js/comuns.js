@@ -1187,12 +1187,18 @@ function pintarArchivo(campo, datos) {
 		$("#grup_" + campo + " span").hide();
 		$("#grup_" + campo + " input").show();
 		$("#grup_" + campo + " label.eliminar").show();
+		
+		// Añadimos thumbnail
+		$("#" + campo).closest(".fila").find(".thumbnail").append("<img width='50px' height='50px' src='" + pagArrel + datos[campo + "_enllas_arxiu"] + "' />");		
 	} else {
 		$("#grup_" + campo + " span").show();
 		$("#grup_" + campo + " input").hide();
 		$("#grup_" + campo + " label.eliminar").hide();
-		$("#grup_" + campo + " a").hide();			
+		$("#grup_" + campo + " a").hide();
+		
+		$("#" + campo).closest(".fila").find(".thumbnail").children().remove();
 	}
+	
 }
 
 function pintarArchivoMultiidioma(campo, idioma, datos) {
@@ -1206,11 +1212,16 @@ function pintarArchivoMultiidioma(campo, idioma, datos) {
 		$("#grup_" + campo + "_" + idioma + " span").hide();
 		$("#grup_" + campo + "_" + idioma + " input").show();
 		$("#grup_" + campo + "_" + idioma + " label.eliminar").show();
+		
+		// Añadimos thumbnail
+		$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").append("<img src='" + pagArrel + datos[idioma][campo + "_enllas_arxiu"] + "' />");
 	} else {
 		$("#grup_" + campo + "_" + idioma + " span").show();
 		$("#grup_" + campo + "_" + idioma + " input").hide();
 		$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
-		$("#grup_" + campo + "_" + idioma + " a").hide();			
+		$("#grup_" + campo + "_" + idioma + " a").hide();
+		
+		$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").children().remove();
 	}
 }
 
@@ -1218,7 +1229,8 @@ function limpiarArchivo(campo) {
 	$("#grup_" + campo + " span").show();
 	$("#grup_" + campo + " input").hide();
 	$("#grup_" + campo + " label.eliminar").hide();
-	$("#grup_" + campo + " a").hide();	
+	$("#grup_" + campo + " a").hide();
+	$("#" + campo).closest(".fila").find(".thumbnail").children().remove();
 }
 
 function limpiarArchivoMultiidioma(campo, idioma) {
@@ -1226,6 +1238,7 @@ function limpiarArchivoMultiidioma(campo, idioma) {
 	$("#grup_" + campo + "_" + idioma + " input").hide();
 	$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
 	$("#grup_" + campo + "_" + idioma + " a").hide();	
+	$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").children().remove();
 }
 
 function montarBreadcrumb() {

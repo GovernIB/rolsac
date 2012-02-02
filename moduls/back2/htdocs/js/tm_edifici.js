@@ -419,69 +419,15 @@ function CDetall(){
 		
 		//Fotos
 		//FotoPetita
-		$("#item_foto_petita").val("");
-		$("#grup_item_foto_petita input").removeAttr("checked");
-		if (dada_node["item_foto_petita_enllas_arxiu"]) {
-			
-			$("#grup_item_foto_petita a").show();					
-			
-			$("#grup_item_foto_petita a").attr("href", pagArrel + dada_node["item_foto_petita_enllas_arxiu"]);
-			$("#grup_item_foto_petita a").text(dada_node["item_foto_petita"]);
-			
-			$("#grup_item_foto_petita span").hide();
-			$("#grup_item_foto_petita input").show();
-			$("#grup_item_foto_petita label.eliminar").show();
-						
-		} else {
-			$("#grup_item_foto_petita span").show();
-			$("#grup_item_foto_petita input").hide();
-			$("#grup_item_foto_petita label.eliminar").hide();
-			$("#grup_item_foto_petita a").hide();			
-		}
-		
+        
+        pintarArchivo("item_foto_petita", dada_node);
 		
 		//FotoGran
-		$("#item_foto_gran").val("");
-		$("#grup_item_foto_gran input").removeAttr("checked");
-		if (dada_node["item_foto_gran_enllas_arxiu"]) {
-			
-			$("#grup_item_foto_gran a").show();
-			
-			$("#grup_item_foto_gran a").attr("href", pagArrel + dada_node["item_foto_gran_enllas_arxiu"]);
-			$("#grup_item_foto_gran a").text(dada_node["item_foto_gran"]);
-			
-			$("#grup_item_foto_gran span").hide();
-			$("#grup_item_foto_gran input").show();
-			$("#grup_item_foto_gran label.eliminar").show();
-						
-		} else {
-			$("#grup_item_foto_gran span").show();
-			$("#grup_item_foto_gran input").hide();
-			$("#grup_item_foto_gran label.eliminar").hide();
-			$("#grup_item_foto_gran a").hide();			
-		}
+        pintarArchivo("item_foto_gran", dada_node);
 		
 		//Planol
-		$("#item_planol").val("");
-		$("#grup_item_planol input").removeAttr("checked");
-		if (dada_node["item_planol_enllas_arxiu"]) {
-			
-			$("#grup_item_planol a").show();					
-			
-			$("#grup_item_planol a").attr("href", pagArrel + dada_node["item_planol_enllas_arxiu"]);
-			$("#grup_item_planol a").text(dada_node["item_planol"]);
-			
-			$("#grup_item_planol span").hide();
-			$("#grup_item_planol input").show();
-			$("#grup_item_planol label.eliminar").show();
-						
-		} else {
-			$("#grup_item_planol span").show();
-			$("#grup_item_planol input").hide();
-			$("#grup_item_planol label.eliminar").hide();
-			$("#grup_item_planol a").hide();			
-		}
-		
+        pintarArchivo("item_planol", dada_node);
+    
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {
 			var idioma = idiomas[i];

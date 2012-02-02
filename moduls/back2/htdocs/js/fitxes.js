@@ -489,69 +489,17 @@ function CDetall(){
 		
 		
 		// Icona
-		$("#item_icona").val("");
-		$("#grup_item_icona input").removeAttr("checked");
-		
-		//if (dada_node["enllas_arxiu"]) {
-		if (dada_node["item_icona_enllas_arxiu"]) {
-			$("#grup_item_icona a").show();					
 			
-			$("#grup_item_icona a").attr("href", pagArrel + dada_node["item_icona_enllas_arxiu"]);				
-			$("#grup_item_icona a").text(dada_node["item_icona"]);
-			
-			$("#grup_item_icona span").hide();
-			$("#grup_item_icona input").show();
-			$("#grup_item_icona label.eliminar").show();
-						
-		} else {
-			$("#grup_item_icona span").show();
-			$("#grup_item_icona input").hide();
-			$("#grup_item_icona label.eliminar").hide();
-			$("#grup_item_icona a").hide();			
-		}
-		
+		pintarArchivo("item_icona", dada_node);
+
 		// Banner
-		$("#item_banner").val("");
-		$("#grup_item_banner input").removeAttr("checked");
 		
-		if (dada_node["item_banner_enllas_arxiu"]) {
-			$("#grup_item_banner a").show();					
-			
-			$("#grup_item_banner a").attr("href", pagArrel + dada_node["item_banner_enllas_arxiu"]);
-			$("#grup_item_banner a").text(dada_node["item_banner"]);
-			
-			$("#grup_item_banner span").hide();
-			$("#grup_item_banner input").show();
-			$("#grup_item_banner label.eliminar").show();
-						
-		} else {
-			$("#grup_item_banner span").show();
-			$("#grup_item_banner input").hide();
-			$("#grup_item_banner label.eliminar").hide();
-			$("#grup_item_banner a").hide();			
-		}
+		pintarArchivo("item_banner", dada_node);	
 		
 		// Imatge
-		$("#item_imatge").val("");
-		$("#grup_item_imatge input").removeAttr("checked");
-		if (dada_node["item_imatge_enllas_arxiu"]) {
-			
-			$("#grup_item_imatge a").show();					
-			
-			$("#grup_item_imatge a").attr("href", pagArrel + dada_node["item_imatge_enllas_arxiu"]);
-			$("#grup_item_imatge a").text(dada_node["item_imatge"]);
-			
-			$("#grup_item_imatge span").hide();
-			$("#grup_item_imatge input").show();
-			$("#grup_item_imatge label.eliminar").show();
-						
-		} else {
-			$("#grup_item_imatge span").show();
-			$("#grup_item_imatge input").hide();
-			$("#grup_item_imatge label.eliminar").hide();
-			$("#grup_item_imatge a").hide();			
-		}
-				
+		
+		pintarArchivo("item_imatge", dada_node);
+
 		$("#item_notes").val(dada_node.item_notes);
 		$("#item_youtube").val(dada_node.item_youtube);
 		$("#item_forum").val(dada_node.item_forum);				

@@ -431,68 +431,16 @@ function CDetall(){
 		
 		//Fotos
 		//Foto
-		$("#item_foto").val("");
-		$("#grup_item_foto input").removeAttr("checked");
-		if (dada_node["item_foto_enllas_arxiu"]) {
-			
-			$("#grup_item_foto a").show();					
-			
-			$("#grup_item_foto a").attr("href", pagArrel + dada_node["item_foto_enllas_arxiu"]);
-			$("#grup_item_foto a").text(dada_node["item_foto"]);
-			
-			$("#grup_item_foto span").hide();
-			$("#grup_item_foto input").show();
-			$("#grup_item_foto label.eliminar").show();
-						
-		} else {
-			$("#grup_item_foto span").show();
-			$("#grup_item_foto input").hide();
-			$("#grup_item_foto label.eliminar").hide();
-			$("#grup_item_foto a").hide();			
-		}
+		
+		pintarArchivo("item_foto", dada_node);							
 		
 		//Icona
-		$("#item_icona").val("");
-		$("#grup_item_icona input").removeAttr("checked");
-		if (dada_node["item_icona_enllas_arxiu"]) {
-			
-			$("#grup_item_icona a").show();					
-			
-			$("#grup_item_icona a").attr("href", pagArrel + dada_node["item_icona_enllas_arxiu"]);
-			$("#grup_item_icona a").text(dada_node["item_icona"]);
-			
-			$("#grup_item_icona span").hide();
-			$("#grup_item_icona input").show();
-			$("#grup_item_icona label.eliminar").show();
-						
-		} else {
-			$("#grup_item_icona span").show();
-			$("#grup_item_icona input").hide();
-			$("#grup_item_icona label.eliminar").hide();
-			$("#grup_item_icona a").hide();			
-		}
+		
+		pintarArchivo("item_icona", dada_node);	
 		
 		//FotoGran
-		$("#item_icona_gran").val("");
-		$("#grup_item_icona_gran input").removeAttr("checked");
-		if (dada_node["item_icona_gran_enllas_arxiu"]) {
-			
-			$("#grup_item_icona_gran a").show();
-			
-			$("#grup_item_icona_gran a").attr("href", pagArrel + dada_node["item_icona_gran_enllas_arxiu"]);
-			$("#grup_item_icona_gran a").text(dada_node["item_icona_gran"]);
-			
-			$("#grup_item_icona_gran span").hide();
-			$("#grup_item_icona_gran input").show();
-			$("#grup_item_icona_gran label.eliminar").show();
-						
-		} else {
-			$("#grup_item_icona_gran span").show();
-			$("#grup_item_icona_gran input").hide();
-			$("#grup_item_icona_gran label.eliminar").hide();
-			$("#grup_item_icona_gran a").hide();			
-		}
 		
+		pintarArchivo("item_icona_gran", dada_node);
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {
