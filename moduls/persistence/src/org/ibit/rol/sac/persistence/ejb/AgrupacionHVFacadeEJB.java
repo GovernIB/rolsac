@@ -61,9 +61,11 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
         	
-        	for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : llistaFetsVitalsOld) {
-				session.delete(hechoVitalAgrupacionHV);
-			}
+            for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : llistaFetsVitalsOld) {
+                if (hechoVitalAgrupacionHV != null){
+                    session.delete(hechoVitalAgrupacionHV);   
+                }                    
+            }                   
         	
         	List<HechoVitalAgrupacionHV> listaHechoVitalAgrupacionHV = hechov.getHechosVitalesAgrupacionHV();
         	

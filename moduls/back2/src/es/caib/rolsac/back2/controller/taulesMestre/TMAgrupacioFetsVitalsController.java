@@ -290,6 +290,10 @@ public class TMAgrupacioFetsVitalsController {
 			
 			List<HechoVitalAgrupacionHV> fetsVitalsOld = agrupacioFetVital.getHechosVitalesAgrupacionHV();
 			
+			if (fetsVitalsOld == null) { // Si la lista es null saltara una excepcion en el EJB
+			    fetsVitalsOld = new ArrayList<HechoVitalAgrupacionHV>();
+			}
+			
 			if (agrupacioFetVital.getHechosVitalesAgrupacionHV() != null || fetVitalsForm.size()>0 ) {
 				// Recorrem el formulari
 				for (Iterator<String> iterator = fetVitalsForm.iterator(); iterator.hasNext();) {
