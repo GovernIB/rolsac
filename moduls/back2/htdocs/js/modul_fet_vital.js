@@ -78,9 +78,9 @@ function CModulFetVital(){
 	}
 	
 	
-	this.inicializarFetsVitals = function(listaFetsVitals) {
-		modul_fetVital_elm.find(".listaOrdenable").empty();
+	this.inicializarFetsVitals = function(listaFetsVitals) {		
 		if (typeof listaFetsVitals != 'undefined' && listaFetsVitals != null && listaFetsVitals.length > 0) {
+			modul_fetVital_elm.find(".listaOrdenable").empty();
 			that.agregaItems(listaFetsVitals, true);
 		}
 		that.contaSeleccionats();
