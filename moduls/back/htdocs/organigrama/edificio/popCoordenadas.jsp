@@ -108,8 +108,6 @@
         function aceptar(){
         	lat = $('#lat').val();
             lng = $('#lng').val();
-            console.log('lat',lat);
-            console.log('lng',lng);
 
             $("#" + "<c:out value='${latitud}'/>", window.top.document).val(lat);
             $("#" + "<c:out value='${longitud}'/>", window.top.document).val(lng);            

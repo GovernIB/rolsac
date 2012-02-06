@@ -23,6 +23,8 @@ $(document).ready(function() {
 	ordreCamp_cercador_elm = resultats_cercador_elm.find("input.ordreCamp");
 	
 	escriptori_detall_elm = $("#escriptori_detall");
+	
+	modul_materies_elm = jQuery("div.modul_materies:first");
 
 	// INICIEM
 	Llistat = new CLlistat();
@@ -307,16 +309,23 @@ function CDetall(){
 	    		
 	    		var vfItem = new Object();
 		    	vfItem['id'] = jQuery('#item_materia_relacionada').val();
-		    	vfItem['nombre'] = jQuery('#item_materia_relacionada option:selected').text()
+		    	vfItem['nom'] = jQuery('#item_materia_relacionada option:selected').text()
 		    	
 		    	var ordenItem = jQuery('#modul_materies ul li:last input.materia_orden').val();
 		    	if (typeof ordenItem == 'undefined') {
 		    		vfItem['orden'] = 0;
 		    	} else {
 		    		vfItem['orden'] = parseInt(ordenItem) + 1;
-		    	}
+		    	}	    	
 		    	ModulMateries.agregaItem(vfItem);
-		    	ModulMateries.inicializarMaterias();
+		    	ModulMateries.contaSeleccionats();
+				
+				modul_materies_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){
+					var itemLista = jQuery(this).parents("li:first");
+					ModulMateries.eliminaItem(itemLista);
+					ModulMateries.contaSeleccionats();
+					Detall.modificado();
+				});
 		    			    	
 		    	jQuery('#item_materia_relacionada').each(limpiarCampo);
 	    	} else {
