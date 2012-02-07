@@ -1194,9 +1194,13 @@ function pintarArchivo(campo, datos) {
 		$("#grup_" + campo + " span").show();
 		$("#grup_" + campo + " input").hide();
 		$("#grup_" + campo + " label.eliminar").hide();
-		$("#grup_" + campo + " a").hide();
+		$("#grup_" + campo + " a").hide().attr("href","").empty();
 		
-		$("#" + campo).closest(".fila").find(".thumbnail").children().remove();
+		var thumbnail = $("#" + campo).closest(".fila").find(".thumbnail");
+		
+		if (thumbnail.size() > 0) { 
+			thumbnail.children().remove();
+		}
 	}
 	
 }
@@ -1219,9 +1223,13 @@ function pintarArchivoMultiidioma(campo, idioma, datos) {
 		$("#grup_" + campo + "_" + idioma + " span").show();
 		$("#grup_" + campo + "_" + idioma + " input").hide();
 		$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
-		$("#grup_" + campo + "_" + idioma + " a").hide();
+		$("#grup_" + campo + "_" + idioma + " a").hide().attr("href","").empty();
 		
-		$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").children().remove();
+		var thumbnail = $("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail");
+		
+		if (thumbnail.size() > 0) { 
+			thumbnail.children().remove();
+		}
 	}
 }
 
@@ -1229,16 +1237,27 @@ function limpiarArchivo(campo) {
 	$("#grup_" + campo + " span").show();
 	$("#grup_" + campo + " input").hide();
 	$("#grup_" + campo + " label.eliminar").hide();
-	$("#grup_" + campo + " a").hide();
-	$("#" + campo).closest(".fila").find(".thumbnail").children().remove();
+	$("#grup_" + campo + " a").hide().attr("href","").empty();	
+	
+	var thumbnail = $("#" + campo).closest(".fila").find(".thumbnail");
+	
+	if (thumbnail.size() > 0) { 
+		thumbnail.children().remove();
+	}
 }
 
 function limpiarArchivoMultiidioma(campo, idioma) {
 	$("#grup_" + campo + "_" + idioma + " span").show();
 	$("#grup_" + campo + "_" + idioma + " input").hide();
 	$("#grup_" + campo + "_" + idioma + " label.eliminar").hide();
-	$("#grup_" + campo + "_" + idioma + " a").hide();	
-	$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").children().remove();
+	$("#grup_" + campo + "_" + idioma + " a").hide().attr("href","").empty();
+
+	var thumbnail = $("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail");
+	
+	if (thumbnail.size() > 0) { 
+		thumbnail.children().remove();
+	}
+		
 }
 
 function montarBreadcrumb() {

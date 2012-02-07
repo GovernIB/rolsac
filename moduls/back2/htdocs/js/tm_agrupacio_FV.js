@@ -388,23 +388,11 @@ function CDetall(){
 		
 		$("#modulPrincipal select").each(limpiarCampo);
 		
-		//Resetear upload de archivos			
-		$("#grup_item_foto span").show();
-		$("#grup_item_foto input").hide();
-		$("#grup_item_foto label.eliminar").hide();
-		$("#grup_item_foto a").hide();
+		//Resetear upload de archivos
 		
-		$("#grup_item_icona span").show();
-		$("#grup_item_icona input").hide();
-		$("#grup_item_icona label.eliminar").hide();
-		$("#grup_item_icona a").hide();
-		
-		$("#grup_item_icona_gran span").show();
-		$("#grup_item_icona_gran input").hide();
-		$("#grup_item_icona_gran label.eliminar").hide();
-		$("#grup_item_icona_gran a").hide();
-		
-		
+		limpiarArchivo("item_foto");
+		limpiarArchivo("item_icona");
+		limpiarArchivo("item_icona_gran");
 		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {

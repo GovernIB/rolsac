@@ -403,6 +403,9 @@ function CDetall(){
 			
 	this.nou = function() {
 		//Ocultar paneles
+		
+		$("#item_id").val("");
+		
 		jQuery("#modul_documents").hide();
 		
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").hide();
@@ -411,6 +414,10 @@ function CDetall(){
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
 		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");
 
+		limpiarArchivo("item_icona");
+		limpiarArchivo("item_banner");	
+		limpiarArchivo("item_imatge");	
+		
 		ModulMateries.nuevo();
 	
 		ModulFetsVitals.nuevo();

@@ -251,12 +251,11 @@ function CModulDocuments(){
 		if (!edicion) {
             jQuery("#docId").val("");
             for (var i in idiomas) {
-                var idioma = idiomas[i];
-                jQuery("#doc_descripcio_" + idioma, "#doc_titol_" + idioma, "#doc_arxiu_" + idioma).each(limpiarCampo);
-                jQuery("#grup_arxiu_actual_doc_" + idioma + " span").show();
-				jQuery("#grup_arxiu_actual_doc_" + idioma + " input").hide();
-				jQuery("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").hide();
-                jQuery("#grup_arxiu_actual_doc_" + idioma + " a").hide();
+                var idioma = idiomas[i];                
+                jQuery("#doc_descripcio_" + idioma + ", #doc_titol_" + idioma + ", #doc_arxiu_" + idioma).each(limpiarCampo);
+                
+                limpiarArchivoMultiidioma("arxiu_actual_doc", idiomas[i]);
+
             }
 		}
 		

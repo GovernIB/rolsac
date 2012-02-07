@@ -525,9 +525,9 @@ function CModulSeccio() {
 			modul_fitxes_elm.find("ul").remove();
 			info_elm.text(txtNoHiHaFitxes + ".");
 		} else if (seleccionats_val == 1) {
-			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtSeccio.toLowerCase() + "</strong>.");
+			info_elm.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");
 		} else {
-			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtSeccions.toLowerCase() + "</strong>.");
+			info_elm.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
 			modul_fitxes_elm.find(".listaOrdenable ul").sortable({ 
 				axis: 'y', 
 				cursor: 'url(../img/cursor/grabbing.cur), move',

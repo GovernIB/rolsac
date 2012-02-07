@@ -340,12 +340,17 @@ public class UnitatAdmBackController {
 					for ( Iterator iterator2 = listaFichasUA.iterator(); iterator2.hasNext(); ) {
 						
 						FichaUA fichaUA = (FichaUA) iterator2.next();
-						FichaDTO fichaDTO = new FichaDTO();
 						
-						fichaDTO.setId( fichaUA.getFicha().getId() );
-						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
+						if (fichaUA.getFicha() != null) {
 						
-						listaFichasDTO.add( fichaDTO );
+    						FichaDTO fichaDTO = new FichaDTO();
+    						
+    						fichaDTO.setId( fichaUA.getFicha().getId() );
+    						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
+    						
+    						listaFichasDTO.add( fichaDTO );
+						
+						}
 						
 					}
 					
@@ -1054,9 +1059,10 @@ public class UnitatAdmBackController {
 	    	 
 	    	//Obtenemos el orden de la sección de cualquier FichaUA de la sección actual
 	    	//para reordenar el TreeMap original
-	    	int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();
-	    	newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));
-	    	
+	    	if (arbolSecciones.get(key) != null){
+	            int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();
+	            newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));   
+	    	}	    	
 	    }
 		    
 	    return newtreesecciones;

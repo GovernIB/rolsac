@@ -381,44 +381,17 @@ function CDetall(){
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
 		//Resetear upload de archivos
-		$("#grup_item_foto span, #grup_item_icona span, #grup_item_icona_gran span").show();
-		$("#grup_item_foto input, #grup_item_icona input, #grup_item_icona_gran input, " +
-		  "#grup_item_foto label.eliminar, #grup_item_icona label.eliminar, #grup_item_icona_gran label.eliminar, " +
-		  "#grup_item_foto a, #grup_item_icona a, #grup_item_icona_gran a").hide();
-		
-		/*$("#grup_item_foto span").show();
-		$("#grup_item_foto input").hide();
-		$("#grup_item_foto label.eliminar").hide();
-		$("#grup_item_foto a").hide();
-		
-		$("#grup_item_icona span").show();
-		$("#grup_item_icona input").hide();
-		$("#grup_item_icona label.eliminar").hide();
-		$("#grup_item_icona a").hide();
-		
-		$("#grup_item_icona_gran span").show();
-		$("#grup_item_icona_gran input").hide();
-		$("#grup_item_icona_gran label.eliminar").hide();
-		$("#grup_item_icona_gran a").hide();*/
+				
+		limpiarArchivo("item_foto");
+		limpiarArchivo("item_icona");
+		limpiarArchivo("item_icona_gran");
 		
 		// Resetear upload de achivos multidioma
 		
 		for (var i in idiomas) {
-			var idioma = idiomas[i];
-			$("#grup_item_distribucio_" + idioma + " span").show();
-			$("#grup_item_distribucio_" + idioma + " input").hide();
-			$("#grup_item_distribucio_" + idioma + " label.eliminar").hide();
-			$("#grup_item_distribucio_" + idioma + " a").hide();
-			
-			$("#grup_item_normativa_" + idioma + " span").show();
-			$("#grup_item_normativa_" + idioma + " input").hide();
-			$("#grup_item_normativa_" + idioma + " label.eliminar").hide();
-			$("#grup_item_normativa_" + idioma + " a").hide();
-			
-			$("#grup_item_contingut_" + idioma + " span").show();
-			$("#grup_item_contingut_" + idioma + " input").hide();
-			$("#grup_item_contingut_" + idioma + " label.eliminar").hide();
-			$("#grup_item_contingut_" + idioma + " a").hide();
+			limpiarArchivoMultiidioma("item_distribucio", idiomas[i]);
+			limpiarArchivoMultiidioma("item_normativa", idiomas[i]);
+			limpiarArchivoMultiidioma("item_contingut", idiomas[i]);
 		}
 		
 		

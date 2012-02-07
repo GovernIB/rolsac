@@ -363,6 +363,8 @@ function CDetall(){
 		escriptori_detall_elm.find("#modulPrincipal div#cercador").hide();
 		//escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
+		ModulFitxes.inicializarFichas();
+		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar

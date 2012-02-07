@@ -489,7 +489,7 @@
                     <!-- fila -->
                     <div class="fila">
                         <div class="element t50p">                                      
-                           <input id="item_ua_id" name="item_ua_id" type="hidden" class="nou" value='<c:out value="${idUA}"/>'/>                                       
+                           <input id="item_ua_id" name="item_ua_id" type="hidden" value='<c:out value="${idUA}"/>'/>                                       
                            <div class="etiqueta"><label for="item_ua"><spring:message code='camp.unitat_administrativa_competent'/></label></div>
                            <div class="control">                           
                                <input id="item_ua" name="item_ua" type="text" readonly="readonly" value='<c:out value="${nomUA}"/>' />
