@@ -1206,7 +1206,7 @@ function pintarArchivo(campo, datos) {
 }
 
 function pintarArchivoMultiidioma(campo, idioma, datos) {
-	$("#" + campo + "_idioma").val("");
+	$("#" + campo + "_" + idioma).val("");
 	$("#grup_" + campo + "_" + idioma + " input").removeAttr("checked");
 	if (datos[idioma][campo + "_enllas_arxiu"]) {
 		$("#grup_" + campo + "_" + idioma + " a")
