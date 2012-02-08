@@ -335,7 +335,7 @@ function CDetall(){
 		
         $("#item_id").val("");
         $("#item_perfil").val("");
-        $('#formGuardar input').each(limpiarCampo);
+        $('#formGuardar input, #formGuardar textarea').each(limpiarCampo);
         
         if (typeof idPare != 'undefined' && idPare != null && idPare != '') {
         	$("#item_codi_pare").val(idPare);
