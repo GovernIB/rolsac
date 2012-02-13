@@ -241,6 +241,7 @@ public class FitxaInfBackController {
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtils.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtils.formatDate(fitxa.getFechaCaducidad()),
+                                                             DateUtils.formatDate(fitxa.getFechaActualizacion()),
                                                              fitxa.isVisible()));
             }
 
@@ -396,6 +397,8 @@ public class FitxaInfBackController {
             
             resultats.put("item_forum", fitxa.getUrlForo());           
 
+            resultats.put("item_responsable", fitxa.getResponsable());
+            
             resultats.put("item_notes", fitxa.getInfo());
             
             //Materias asociadas
@@ -654,6 +657,8 @@ public class FitxaInfBackController {
             fitxa.setUrlForo(valoresForm.get("item_forum"));
             
             fitxa.setUrlVideo(valoresForm.get("item_youtube"));
+            
+            fitxa.setResponsable(valoresForm.get("item_responsable"));
             
             fitxa.setInfo(valoresForm.get("item_notes"));
 

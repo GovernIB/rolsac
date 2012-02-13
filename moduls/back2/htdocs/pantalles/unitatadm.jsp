@@ -72,12 +72,12 @@
                                                 <input id="item_nom_ca" name="item_nom_ca" type="text" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria" class="element t25p">
                                             <div class="etiqueta">
-                                                <label for="item_clave_primaria">Clave primaria</label>                                                
+                                                <label for="item_clave_primaria"><spring:message code='camp.clau_primaria'/></label>                                                
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" />
+                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" readonly="readonly"/>
                                             </div>
                                         </div>
                                     </div>
@@ -161,12 +161,12 @@
                                                 <input id="item_nom_es" name="item_nom_es" type="text" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_es" class="element t25p">
                                             <div class="etiqueta">
-                                                <label for="item_clave_primaria_es">Clave primaria</label>                                                
+                                                <label for="item_clave_primaria_es"><spring:message code='camp.clau_primaria'/></label>                                                
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" />
+                                                <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" readonly="readonly" />
                                             </div>
                                         </div>
                                     </div>
@@ -251,12 +251,12 @@
                                                 <input id="item_nom_en" name="item_nom_en" type="text" />
                                             </div>                                            
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_en" class="element t25p">
                                             <div class="etiqueta">
-                                                <label for="item_clave_primaria_en">Clave primaria</label>                                                
+                                                <label for="item_clave_primaria_en"><spring:message code='camp.clau_primaria'/></label>                                                
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" />
+                                                <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" readonly="readonly"/>
                                             </div>
                                         </div>
                                     </div>
@@ -338,12 +338,12 @@
                                                 <input id="item_nom_de" name="item_nom_de" type="text" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_de" class="element t25p">
                                             <div class="etiqueta">
-                                                <label for="item_clave_primaria_de">Clave primaria</label>                                                
+                                                <label for="item_clave_primaria_de"><spring:message code='camp.clau_primaria'/></label>                                                
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" />
+                                                <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" readonly="readonly"/>
                                             </div>
                                         </div>
                                     </div>
@@ -425,12 +425,12 @@
                                                 <input id="item_nom_fr" name="item_nom_fr" type="text" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_fr" class="element t25p">
                                             <div class="etiqueta">
-                                                <label for="item_clave_primaria_fr">Clave primaria</label>                                                
+                                                <label for="item_clave_primaria_fr"><spring:message code='camp.clau_primaria'/></label>                                                
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" />
+                                                <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" readonly="readonly"/>
                                             </div>
                                         </div>
                                     </div>

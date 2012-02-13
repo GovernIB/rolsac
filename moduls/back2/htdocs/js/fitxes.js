@@ -158,7 +158,7 @@ function CLlistat(){
 				caducat_class = (dada_node.caducat) ? " caducat" : "";
 				codi_taula += "<div class=\"td publicacio\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaPublicacion, txtSinValor) + "</div>";
 				codi_taula += "<div class=\"td caducitat" + caducat_class + "\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaCaducidad, txtSinValor) + "</div>";
-                codi_taula += "<div class=\"td modificacio\" role=\"gridcell\">[dinamizar]</div>";
+                codi_taula += "<div class=\"td modificacio\" role=\"gridcell\">" + printStringFromNull(dada_node.fechaActualizacion, txtSinValor) + "</div>";
 				
 				codi_taula += "</div>";
 			});
@@ -408,6 +408,8 @@ function CDetall(){
 		
 		jQuery("#modul_documents").hide();
 		
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+		
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
@@ -448,6 +450,8 @@ function CDetall(){
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
 		
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
+		
 		escriptori_detall_elm.find("h2:first").text(txtDetallTitol);
 		escriptori_detall_elm.find(".btnPrevisualizar,.btnEliminar").show();
 		
@@ -458,6 +462,9 @@ function CDetall(){
 		$("#item_estat").val(dada_node.item_estat);
 		marcarOpcionSelect("item_estat",dada_node.item_estat);
 
+		$("#item_clave_primaria").val(dada_node.item_id);
+		$("#item_clave_primaria").change();
+		
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
 		$("#item_data_caducitat").val(dada_node.item_data_caducitat);
 		/*
@@ -507,6 +514,7 @@ function CDetall(){
 		
 		pintarArchivo("item_imatge", dada_node);
 
+		$("#item_responsable").val(dada_node.item_responsable);
 		$("#item_notes").val(dada_node.item_notes);
 		$("#item_youtube").val(dada_node.item_youtube);
 		$("#item_forum").val(dada_node.item_forum);				

@@ -174,6 +174,9 @@ public class NormativaBackController {
 		try {
 			//Obtener parámetros de búsqueda
 		
+		    if (request.getParameter("id") != null && !"".equals(request.getParameter("id")) )
+                paramMap.put("id", ParseUtil.parseLong(request.getParameter("id")));
+		    
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));
@@ -294,8 +297,9 @@ public class NormativaBackController {
         		TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
         		
     	        normativaDetall.put("idioma_" + idioma + "_titol", traNorm != null ? traNorm.getTitulo() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
+    	        //En Back2 los campos idioma_*_enllac no existe y idioma_*_apartat no existen, item_apartat no es multiidioma
+    	        //normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
+    	        //normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
     	        normativaDetall.put("idioma_" + idioma + "_pagini", traNorm != null ? traNorm.getPaginaInicial() : "");
     	        normativaDetall.put("idioma_" + idioma + "_pagfin", traNorm != null ? traNorm.getPaginaFinal() : "");
     	        if (normativaLocal)
@@ -484,21 +488,25 @@ public class NormativaBackController {
         		}
 
         		traNorm.setTitulo(valoresForm.get("item_titol_" + idioma));
-        		traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
-        		traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
+        		//Campos inexistentes en el Back2
+        		//traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
+        		//traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
         		if (valoresForm.get("item_pagina_inicial_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_inicial_" + idioma)))
         			traNorm.setPaginaInicial(ParseUtil.parseInt(valoresForm.get("item_pagina_inicial_" + idioma)));
 
         		if (valoresForm.get("item_pagina_final_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_final_" + idioma)))
         			traNorm.setPaginaFinal(ParseUtil.parseInt(valoresForm.get("item_pagina_final_" + idioma)));        			
 
-        		traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
+        		//Campo comentado en Back2
+        		//traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
 
         		//Responsable sólo en normativa externa
+        		//Campo comentado en Back2
+        		/*
         		if (!normativaLocal) {        				
         			((TraduccionNormativaExterna)traNorm).setResponsable(valoresForm.get("item_responsable_" + idioma));
         		}
-        		
+        		*/
         		//Archivo
         		FileItem fileItem = ficherosForm.get("item_arxiu_" + idioma);
         		if ( fileItem.getSize() > 0 ) {

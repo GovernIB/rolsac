@@ -400,7 +400,7 @@ function CDetall(){
         //Ocultar paneles
 		jQuery("#modul_documents").hide();
         jQuery("#modul_tramits").hide();
-        jQuery("#caja_item_clave_primaria").hide();
+        jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		
 		ModulMateries.nuevo();
 		ModulNormativa.nuevo();
@@ -438,8 +438,8 @@ function CDetall(){
 	this.pintar = function(dades) {
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
-        jQuery("#modul_tramits").show();       
-        jQuery("#caja_item_clave_primaria").show();
+        jQuery("#modul_tramits").show();
+        jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();        
         
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
@@ -464,13 +464,21 @@ function CDetall(){
 		
 		marcarOpcionSelect("item_estat", dada_node.item_estat);
 		
+		if (dada_node.item_codigo_pro != undefined) {
+			jQuery("#item_codigo_pro").val(dada_node.item_codigo_pro);
+            jQuery("#item_codigo_pro").change();
+		}
+		
+		$("#item_clave_primaria").val(dada_node.item_id);
+		$("#item_clave_primaria").change();
+		
 		$("#item_data_actualitzacio").val(dada_node.item_data_actualitzacio);
 		
 		$("#item_data_publicacio").val(dada_node.item_data_publicacio);
 
 		$("#item_data_caducitat").val(dada_node.item_data_caducitat);
 		
-		$("#item_codi").val(dada_node.item_codi);
+		//$("#item_codi").val(dada_node.item_codi);
 		
 		if (dada_node.item_iniciacio != undefined) {
 			jQuery("#item_iniciacio").val(dada_node.item_iniciacio);
@@ -480,6 +488,7 @@ function CDetall(){
 		if (dada_node.item_organ_id != undefined) {
 			$("#item_organ_id").val(dada_node.item_organ_id);
 			$("#item_organ").val(dada_node.item_organ_nom);
+			$("#item_organ").change();
 		}
 		
 		if (dada_node.item_familia != undefined) {
@@ -502,15 +511,17 @@ function CDetall(){
 			jQuery('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);                        
             jQuery("#item_fi_vida_administrativa").change();
 		}
-		
+		/*
 		if (dada_node.item_finestreta_unica != undefined) {
 			$('#item_finestreta_unica').attr('checked', dada_node.item_finestreta_unica);
 		}
-		
+		*/
 		if (dada_node.item_taxa != undefined) {
 			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);                        
             jQuery("#item_taxa").change();
 		}
+		
+		$("#item_responsable").val(dada_node.item_responsable);
 		
 		$("#item_notes").val(dada_node.item_notes);
 

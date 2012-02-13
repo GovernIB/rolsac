@@ -13,6 +13,7 @@ public class FichaDTO implements ValueObject {
 	private String titulo;
 	private String fechaPublicacion;
 	private String fechaCaducidad;
+	private String fechaActualizacion;
 	private Boolean caducat;
 	private Long ordre;
 		
@@ -28,7 +29,7 @@ public class FichaDTO implements ValueObject {
 		super();
 	}
 	
-	public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, Boolean caducat){
+	public FichaDTO(long id, String titulo, String fechaPublicacion, String fechaCaducidad, String fechaActualizacion, Boolean caducat){
 		
 		super();
 		
@@ -36,6 +37,7 @@ public class FichaDTO implements ValueObject {
 		this.titulo = titulo;
 		this.fechaPublicacion = fechaPublicacion;
 		this.fechaCaducidad = fechaCaducidad;
+		this.fechaActualizacion = fechaActualizacion;
 		this.caducat = caducat;
 	}
 	
@@ -71,7 +73,15 @@ public class FichaDTO implements ValueObject {
         this.fechaCaducidad = fechaCaducidad;
     }
 
-	public void setCaducat(Boolean caducat) {
+	public String getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(String fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
+
+    public void setCaducat(Boolean caducat) {
 		this.caducat = caducat;
 	}
 

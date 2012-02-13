@@ -365,8 +365,10 @@ public class CatalegProcedimentsBackController {
 
 			resultats.put("item_id", proc.getId());
 
-			resultats.put("item_estat", proc.getValidacion());
-
+            resultats.put("item_codigo_pro", proc.getSignatura());
+			
+			resultats.put("item_estat", proc.getValidacion());			
+			
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			
 			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
@@ -485,10 +487,7 @@ public class CatalegProcedimentsBackController {
             } else {
                 resultats.put("normatives", null);
             } 
-            // Fin normativas asociadas
-
-            
-			resultats.put("item_codi", proc.getSignatura());
+            // Fin normativas asociadas            
 
 			if (proc.getIniciacion() != null) {
 				Iniciacion iniciacion = proc.getIniciacion();
@@ -768,6 +767,7 @@ public class CatalegProcedimentsBackController {
 					throw new NumberFormatException();
 				}
 
+				procediment.setSignatura(request.getParameter("item_codigo_pro"));
 				
 				Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
 				if (data_publicacio != null) {
@@ -837,9 +837,7 @@ public class CatalegProcedimentsBackController {
 				procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
 				procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");
-				
-				
-				procediment.setSignatura(request.getParameter("item_codi"));
+							
 				procediment.setInfo(request.getParameter("item_notes"));
 
 				

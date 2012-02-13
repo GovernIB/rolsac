@@ -236,7 +236,7 @@ public class TMMateriesController {
 		    	
 		    	if (tm.getContenido() != null) {
 					traduccionMateriaDTO.put("item_contenido_enllas_arxiu", "materies/archivo.do?id=" + materia.getId() + "&lang=" + lang + "&tipus=6");
-		    		traduccionMateriaDTO.put("contenido", tm.getContenido().getNombre());
+		    		traduccionMateriaDTO.put("item_contenido", tm.getContenido().getNombre());
 		    	} else {
 		    		traduccionMateriaDTO.put("item_contenido_enllas_arxiu", "");
 		    		traduccionMateriaDTO.put("item_contenido", "");

@@ -224,8 +224,9 @@ public class UnitatAdmBackController {
             
             //Configuración/gestion
             
-            resultats.put("item_clau_hita", uni.getClaveHita());
+            //resultats.put("item_clau_hita", uni.getClaveHita());
             resultats.put("item_codi_estandar", uni.getCodigoEstandar());
+            resultats.put("item_clave_primaria", idUA);
             resultats.put("item_domini", uni.getDominio());
             resultats.put("item_validacio", uni.getValidacion());
             resultats.put("item_telefon", uni.getTelefono());
@@ -479,7 +480,7 @@ public class UnitatAdmBackController {
 
 			
             //Condifuracion/gestion
-            unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
+            //unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
             unitatAdministrativa.setCodigoEstandar(valoresForm.get("item_codi_estandar"));
             unitatAdministrativa.setDominio(valoresForm.get("item_domini"));
             unitatAdministrativa.setValidacion(Integer.parseInt(valoresForm.get("item_validacio")));
@@ -829,6 +830,7 @@ public class UnitatAdmBackController {
                                                              tfi == null ? null : tfi.getTitulo(), 
                                                              DateUtils.formatDate(fitxa.getFechaPublicacion()), 
                                                              DateUtils.formatDate(fitxa.getFechaCaducidad()),
+                                                             DateUtils.formatDate(fitxa.getFechaActualizacion()),
                                                              fitxa.isVisible()));
             }
 

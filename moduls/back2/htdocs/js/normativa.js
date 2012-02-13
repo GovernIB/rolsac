@@ -249,12 +249,12 @@ function CLlistat(){
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador
-			dataVars_cercador = "";
+			dataVars_cercador = "&id=" + $("#cerca_codi").val();
 			dataVars_cercador += "&numero=" + $("#cerca_numero").val();
 			dataVars_cercador += "&tipus=" + $("#cerca_tipus_normativa").val();
 			dataVars_cercador += "&butlleti=" + $("#cerca_butlleti").val();
 			dataVars_cercador += "&registre=" + $("#cerca_registre").val();
-			dataVars_cercador += "&llei=" + $("#cerca_llei").val();
+			//dataVars_cercador += "&llei=" + $("#cerca_llei").val();
 			dataVars_cercador += "&data=" + $("#cerca_data").val();			
 			dataVars_cercador += "&text=" + $("#cerca_text").val();
 			dataVars_cercador += "&data_butlleti=" + $("#cerca_data_butlleti").val();			
@@ -487,6 +487,9 @@ function CDetall(){
 		//Ocultar botones
 		$("#modulLateral li.btnEliminar").hide();
 		
+		//Ocultar campos clave primaria		
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+		
 		//Mostrar botones cambio de UA / borrar UA.
 		$("#botoneraCambioUA").show();
 		$("#botonBorrarUA a").show();		
@@ -550,6 +553,8 @@ function CDetall(){
 		
 		$("#modul_procediments, #modul_afectacions").show();
 		
+		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
+		
 		$("#modulLateral li.btnEliminar").show();
 		$("#modulLateral li.btnEliminar").css("visibility", "visible");
 		
@@ -566,12 +571,14 @@ function CDetall(){
 			var idioma = idiomas[i];
 			
 			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
-			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
-			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
+			//Campos inexistentes en el Back2
+			//$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			//$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
 			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
 			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
-			$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
-			$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
+			//Campos comentados en Back2
+			//$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
+			//$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
 			
 			$("#item_arxiu_" + idioma).val("");
 			$("#grup_arxiu_actual_" + idioma + " input").removeAttr("checked");
@@ -591,6 +598,9 @@ function CDetall(){
 			}						
 		}
 		
+		jQuery("#item_clave_primaria").val(nn(dada_node.id));
+        jQuery("#item_clave_primaria").change();
+		
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
 		$("#item_butlleti").val(nn(dada_node.butlleti));
@@ -603,6 +613,12 @@ function CDetall(){
 		jQuery("#item_tipus").val(nn(dada_node.tipus));
         jQuery("#item_tipus").change();
 		
+        jQuery("#item_num_norma").val(nn(dada_node.tipus));
+        jQuery("#item_num_norma").change();
+        
+        jQuery("#item_data_norma").val(nn(dada_node.tipus));
+        jQuery("#item_data_norma").change();
+        
 		$("#item_ua_id").val(nn(dada_node.idUA));
 		$("#item_ua_nom").val(nn(dada_node.nomUA));
 		

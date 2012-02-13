@@ -279,6 +279,9 @@ function CDetall(soloFicha){
 								
 			$("#item_id").val(dada_node.id);
 			
+			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
+			
+			
 			//Bloque de pestanyas de idiomas
 			
 			$("#item_nom_ca").val(printStringFromNull(dada_node.ca.nombre));
@@ -304,8 +307,11 @@ function CDetall(soloFicha){
 			
 			//Configuracion / gestion
 			
-			$("#item_clau_hita").val(dada_node.item_clau_hita);
+			//$("#item_clau_hita").val(dada_node.item_clau_hita);
 			$("#item_codi_estandar").val(dada_node.item_codi_estandar);
+			jQuery("#item_codi_estandar").change();
+			$("#item_clave_primaria").val(dada_node.id);
+			$("#item_clave_primaria").change();
 			$("#item_domini").val(dada_node.item_domini);
 			marcarOpcionSelect("item_validacio",dada_node.item_validacio);
 			//$("#item_validacio").val(dada_node.item_validacio);
@@ -415,6 +421,7 @@ function CDetall(soloFicha){
 			//Deshabilitar botón eliminar
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");
+			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		}
 
 		$("#carregantDetall").fadeOut(300, function() {
