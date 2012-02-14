@@ -93,7 +93,7 @@ function DetallBase(soloFicha, reglasFormulario){
 		if (typeof dataVars != 'undefined' && dataVars.length > 0) {
 			dataForm += "&" + dataVars;
 		}
-
+     
 		// ajax
 		$.ajax({
 			type: "POST",
@@ -272,8 +272,8 @@ function DetallBase(soloFicha, reglasFormulario){
                 cambiarModulosLaterales = true;
             }
         
-            
 			var ul_idiomes_elm = elm.parent().parent();
+                                    
             ul_idiomes_elm.unbind("click");
 
             var div_idiomes_elm = ul_idiomes_elm.next();
@@ -299,6 +299,10 @@ function DetallBase(soloFicha, reglasFormulario){
 					});
 
 				});
+                
+                // Actualizamos los campos multi-idioma independientes.
+                escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
+                escriptori_detall_elm.find(".element.multilang ."+a_clicat_class).show();
 
                 if (cambiarModulosLaterales) {
                     var modulos = jQuery(".modulLateral .modul .multilang");

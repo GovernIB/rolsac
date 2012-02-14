@@ -1488,3 +1488,21 @@ div.modulLateral div.seleccionat ul {
     left: 30%;
     top: 15%;
 }
+
+
+/* Módulo lateral documentos relacionados */
+
+#modulDocumentNormativa  .element{
+    padding-bottom: 10px;
+}
+#modulDocumentNormativa  .enlace label{
+    display: block;
+    padding-bottom: 4px;    
+}
+#modulDocumentNormativa  .element input.nou{
+    width: 100%;
+    height: 20px;
+}
+#modulDocumentNormativa a{
+    color: #0099CC;    
+}

@@ -1410,22 +1410,90 @@
                     <legend>CANALS DE PRESENTACIÓ</legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_presentacio">Presentació</label>
+                            <div class="element t99p multilang">
+                                <div class="campoIdioma ca">
+                                    <div class="etiqueta">
+                                        <label for="item_presentacio_ca">Presentació (CA)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_presentacio_ca" name="item_presentacio" type="text" class="nou" />
+                                    </div>
                                 </div>
-                                <div class="control">
-                                    <input id="item_presentacio" name="item_presentacio" type="text" class="nou" />
+                                <div class="campoIdioma es">
+                                    <div class="etiqueta">
+                                        <label for="item_presentacio_es">Presentació (ES)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_presentacio_es" name="item_presentacio_es" type="text" class="nou" />
+                                    </div>
                                 </div>
-                            </div>                            
+                                <div class="campoIdioma en">
+                                    <div class="etiqueta">
+                                        <label for="item_presentacio_en">Presentació (EN)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_presentacio_en" name="item_presentacio_en" type="text" class="nou" />
+                                    </div>
+                                </div>
+                                <div class="campoIdioma fr">
+                                    <div class="etiqueta">
+                                        <label for="item_presentacio_fr">Presentació (FR)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_presentacio_fr" name="item_presentacio_fr" type="text" class="nou" />
+                                    </div>
+                                </div>
+                                <div class="campoIdioma de">
+                                    <div class="etiqueta">
+                                        <label for="item_presentacio_de">Presentació (DE)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_presentacio_de" name="item_presentacio_de" type="text" class="nou" />
+                                    </div>
+                                </div>
+                            </div>                                                        
                         </div>
                         <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_lloc">Lloc</label>
+                            <div class="element t50p multilang">
+                                <div class="campoIdioma ca">
+                                    <div class="etiqueta">
+                                        <label for="item_lloc_ca">Lloc (CA)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_lloc_ca" name="item_lloc_ca" type="text" class="nou" />
+                                    </div>
                                 </div>
-                                <div class="control">
-                                    <input id="item_lloc" name="item_lloc" type="text" class="nou" />
+                                <div class="campoIdioma es">
+                                    <div class="etiqueta">
+                                        <label for="item_lloc_es">Lloc (ES)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_lloc_es" name="item_lloc_es" type="text" class="nou" />
+                                    </div>
+                                </div>
+                                <div class="campoIdioma en">
+                                    <div class="etiqueta">
+                                        <label for="item_lloc_en">Lloc (EN)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_lloc_en" name="item_lloc_en" type="text" class="nou" />
+                                    </div>
+                                </div>
+                                <div class="campoIdioma fr">
+                                    <div class="etiqueta">
+                                        <label for="item_lloc_fr">Lloc (FR)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_lloc_fr" name="item_lloc_fr" type="text" class="nou" />
+                                    </div>
+                                </div>
+                                <div class="campoIdioma de">
+                                    <div class="etiqueta">
+                                        <label for="item_lloc_de">Lloc (DE)</label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_lloc_de" name="item_lloc_de" type="text" class="nou" />
+                                    </div>
                                 </div>
                             </div>                            
                             <div class="element t50p">

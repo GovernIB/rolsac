@@ -360,6 +360,10 @@ function CDetall(){
 			var div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
+            
+            // Solo mostramos los idiomas activos para los campos multi-idioma.
+            escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();            
+            escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");            
 		}
 		
 		// moduls
@@ -436,6 +440,7 @@ function CDetall(){
 	}		
 	
 	this.pintar = function(dades) {
+        
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
         jQuery("#modul_tramits").show();
@@ -458,9 +463,10 @@ function CDetall(){
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
+            
+            jQuery("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
 		}
 		// Fin bloque de pestanyas de idiomas
-		
 		
 		marcarOpcionSelect("item_estat", dada_node.item_estat);
 		
