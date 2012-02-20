@@ -403,6 +403,7 @@ function CDetall(){
 			
 	this.nou = function() {
 		//Ocultar paneles
+        jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		
 		$("#item_id").val("");
 		
@@ -448,8 +449,7 @@ function CDetall(){
 			
 	this.pintar = function(dades) {
 		// Mostrar paneles
-		jQuery("#modul_documents").show();
-		
+		jQuery("#modul_documents").show();        
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").show();
 		
 		escriptori_detall_elm.find("h2:first").text(txtDetallTitol);

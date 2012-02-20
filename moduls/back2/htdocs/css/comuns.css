@@ -1506,3 +1506,19 @@ div.modulLateral div.seleccionat ul {
 #modulDocumentNormativa a{
     color: #0099CC;    
 }
+
+
+/* Módulo lateral Relació Orgànica */
+
+#modulRelacioOrganica input#item_pare,
+#modulRelacioOrganica input#item_ua_nom{
+    height: 23px;
+    width: 100%;
+}
+#modulRelacioOrganica .borrar{
+    float:right;
+}
+#modulRelacioOrganica  .botonera .btn.borrar > span > span{
+    background: url(../img/botons/iconos/borrar.png) 15px 50% no-repeat;
+    padding-left : 35px;
+}

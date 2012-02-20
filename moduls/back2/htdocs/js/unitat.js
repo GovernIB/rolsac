@@ -37,7 +37,7 @@ function CDetall(soloFicha){
 		
 		ModulSeccions = new CModulSeccio();
 		
-		//Sobreescribimos la función del botón finalizar para añadir a los parámetros enviados
+		//Sobreescribimos la funciÃ³n del botÃ³n finalizar para aÃ±adir a los parÃ¡metros enviados
 		//las materias seleccionadas por el usuario
 		ModulMateries.extend = CModulMateries;
 		ModulMateries._finaliza = ModulMateries.finaliza;		
@@ -45,7 +45,7 @@ function CDetall(soloFicha){
 						
 			ModulMateries._finaliza();
 			
-			// Añadir las materias a la información a enviar una vez actualizada la selección		
+			// AÃ±adir las materias a la informaciÃ³n a enviar una vez actualizada la selecciÃ³n		
 			d = ModulMateries.listaMaterias();
 			
 			if ( $("#materies").val() == undefined ) {
@@ -57,7 +57,7 @@ function CDetall(soloFicha){
 			
 		}
 		
-		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
+		//redigirimos el mÃ©todo que guarda porque en este caso tambiÃ©n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 				
 		// idioma
@@ -96,20 +96,16 @@ function CDetall(soloFicha){
         jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").change(function(){
             jQuery("#item_espai_territorial,#item_espai_territorial_es,#item_espai_territorial_en,#item_espai_territorial_de,#item_espai_territorial_fr").val( jQuery(this).val() );
         });
-        
-        jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").change(function(){
-            jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
-        });
-				
+                
 		// carregar
 		Detall.carregar();
 		
 	}
 	
-	// Sobreescribe el m�todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
-		// Esta variable nos servir� para detectar si alguna de las secciones a guardar
+		// Esta variable nos servirá para detectar si alguna de las secciones a guardar
 		// no tiene fichas asignadas
 		var errorSeccionSinFichas = false;
 		
@@ -133,7 +129,7 @@ function CDetall(soloFicha){
 		
 		// Preparamos la lista de secciones-ficha
 		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
-		// (S = Secci�n, F = Ficha)
+		// (S = Sección, F = Ficha)
 		if ( !$("#llistaSeccions").length ) {
 			htmlSecciones = '<input type="hidden" id="llistaSeccions" name="llistaSeccions" value="">';
 			$("#formGuardar").append(htmlSecciones);
@@ -146,11 +142,11 @@ function CDetall(soloFicha){
 			
 			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + $(this).attr("value") + "#");
 
-			// A�adir las fichas del edificio actual
+			// Añadir las fichas del edificio actual
 			idSeccio = $(this).val();
 			
-			// Aqu� tendremos a�adir una validaci�n extra y comprobar que todas las secciones contienen fichas, 
-			// en caso contrario deber� mostrarse un error y devolver "false"
+			// Aquí tendremos añadir una validación extra y comprobar que todas las secciones contienen fichas, 
+			// en caso contrario deberá mostrarse un error y devolver "false"
 			if ( !errorSeccionSinFichas && $("#seccio_id_" + idSeccio).parent().find("li").size() == 0 )				
 				errorSeccionSinFichas = true;			
 			
@@ -167,7 +163,7 @@ function CDetall(soloFicha){
 			return false;
 		}
 		
-		// Enviamos el formulario mediante el m�todo ajaxSubmit del plugin jquery.form
+		// Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
@@ -200,7 +196,7 @@ function CDetall(soloFicha){
 		
 	}
 	
-	// Método sobreescrito
+	// MÃ©todo sobreescrito
 	this.busca = function(){
 			
 		edificis_cercador_elm.find("input, select").attr("disabled", "disabled");
@@ -212,14 +208,14 @@ function CDetall(soloFicha){
 			edificis_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_edifici_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
+				pagPagina_edifici_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera pÃ¡gina.
 				EscriptoriEdifici.carregar({});
 				
 			});
 		});
 	}
 			
-	// M�todo sobreescrito.
+	// Método sobreescrito.
 	this.carregar = function(itemID) {
 			
 		if (itemID == undefined){
@@ -323,7 +319,7 @@ function CDetall(soloFicha){
             jQuery("#item_pare_id").val(dada_node.pareId);
 			jQuery("#item_pare").val(dada_node.pareNom);
             jQuery("#item_pare").change();
-			
+                        			
 			//Responsable			
 			$("#item_responsable").val(dada_node.item_responsable);	
 			marcarOpcionSelect("item_responsable_sexe",dada_node.item_responsable_sexe);
@@ -413,12 +409,12 @@ function CDetall(soloFicha){
 			$("#modul_edificis").show();			
 			
 		} else {
-			//No hay datos que pintar -> estamos en creación de UA
-			//Esconder módulos laterales
+			//No hay datos que pintar -> estamos en creaciÃ³n de UA
+			//Esconder mÃ³dulos laterales
 			$("#modul_materies").hide();
 			$("#modul_seccions").hide();
 			$("#modul_edificis").hide();
-			//Deshabilitar botón eliminar
+			//Deshabilitar botÃ³n eliminar
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();

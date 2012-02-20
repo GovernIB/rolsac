@@ -444,7 +444,7 @@
                                                     class="nou" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
@@ -498,7 +498,7 @@
                                                     class="nou" />
                                             </div>
                                         </div>                                    
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_es" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria_es"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
@@ -552,7 +552,7 @@
                                                     class="nou" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_en" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria_en"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
@@ -606,7 +606,7 @@
                                                     class="nou" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_de" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria_de"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
@@ -660,7 +660,7 @@
                                                     class="nou" />
                                             </div>
                                         </div>
-                                        <div class="element t25p">
+                                        <div id="caja_item_clave_primaria_fr" class="element t25p">
                                             <div class="etiqueta">
                                                 <label for="item_clave_primaria_fr"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
@@ -966,6 +966,101 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+            	<input type="hidden" id="llistaMateries" name="materies" value=""/>
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.materies_relacionades'/></legend>
+                    <div class="modul_continguts mostrat">                    
+                        <!-- modulMateries -->
+                        <div class="modulMateries selectorChecks">
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_materies'/></p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_materies'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+                                    <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${materia.nom}" /></span><input type="checkbox" value="<c:out value='${materia.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulMateries -->                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+                                    
+            <!-- modul -->
+            <div class="modul">
+            	<input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.fets_vitals'/></legend>
+                    <div class="modul_continguts mostrat">                    
+                        <!-- modulFetsVitals -->
+                        <div class="modulFetsVitals selectorChecks">
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+									<c:forEach items="${llistaFetsVitals}" var="fetVital" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${fetVital.nom}" /></span><input type="checkbox" value="<c:out value='${fetVital.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulFetsVitals -->                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
             <!-- modul -->
             <div class="modul" id="modul_documents">
                 <fieldset>
@@ -1016,98 +1111,7 @@
                 </fieldset>
             </div>
             <!-- /modul -->
-            <!-- modul -->
-            <div class="modul">
-            	<input type="hidden" id="llistaMateries" name="materies" value=""/>
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='fitxes.materies_relacionades'/></legend>
-                    <div class="modul_continguts mostrat">                    
-                        <!-- modulMateries -->
-                        <div class="modulMateries selectorChecks">
-                            <div class="seleccionats">
-                                <p class="info"><spring:message code='fitxes.no_hi_ha_materies'/></p>
-                                <div class="listaOrdenable"></div>
-                                <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_materies'/></span></span></a>
-                                </div>
-                            </div>
-                            <div class="llistat">
-                                <ul>
-                                    <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
-                                        <c:choose>
-                                            <c:when test="${(i.count) % 2 == 0}">
-                                                <li class="par">
-                                            </c:when>
-                                            <c:otherwise>
-                                               <li class="impar">
-                                            </c:otherwise>
-                                        </c:choose>                                     
-                                          <label><span><c:out value="${materia.nom}" /></span><input type="checkbox" value="<c:out value='${materia.id}' />" /></label>
-                                        </li>                                                                                                               
-                                    </c:forEach>
-                                </ul>
-                                <div class="botonera">
-                                    <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                                    </div>
-                                    <div class="btnGenerico">
-                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /modulMateries -->                        
-                    </div>
-                </fieldset>
-            </div>
-            <!-- /modul -->
-            <!-- modul -->
-            <div class="modul">
-            	<input type="hidden" id="llistaFetsVitals" name="fetsVitals" value=""/>
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='fitxes.fets_vitals'/></legend>
-                    <div class="modul_continguts mostrat">                    
-                        <!-- modulFetsVitals -->
-                        <div class="modulFetsVitals selectorChecks">
-                            <div class="seleccionats">
-                                <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
-                                <div class="listaOrdenable"></div>
-                                <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
-                                </div>
-                            </div>
-                            <div class="llistat">
-                                <ul>
-									<c:forEach items="${llistaFetsVitals}" var="fetVital" varStatus="i">
-                                        <c:choose>
-                                            <c:when test="${(i.count) % 2 == 0}">
-                                                <li class="par">
-                                            </c:when>
-                                            <c:otherwise>
-                                               <li class="impar">
-                                            </c:otherwise>
-                                        </c:choose>                                     
-                                          <label><span><c:out value="${fetVital.nom}" /></span><input type="checkbox" value="<c:out value='${fetVital.id}' />" /></label>
-                                        </li>                                                                                                               
-                                    </c:forEach>
-                                </ul>
-                                <div class="botonera">
-                                    <div class="btnGenerico">
-                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
-                                    </div>
-                                    <div class="btnGenerico">
-                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /modulFetsVitals -->                        
-                    </div>
-                </fieldset>
-            </div>
-            <!-- /modul -->
+            
             <!-- modul -->
             <div class="modul">
             	<input type="hidden" id="llistaSeccions" name="seccUA" value=""/>

@@ -116,32 +116,6 @@
                                             </div>
                                         </div>                                          
                                     </div>      
-                                    <div class="fila">
-                                        <div class="element t50p">                                          
-                                            <div class="etiqueta"><label for="item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
-                                            <div class="control">
-                                                <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
-                                                <input id="item_pare_id" name="item_pare_id" type="hidden" />
-                                            </div>                                          
-                                        </div>            
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">
-                                                <a href="javascript:EliminaArbreUA('item_pare','item_pare_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
-                                    
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
@@ -204,31 +178,7 @@
                                                 </select>
                                             </div>
                                         </div>  
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                          
-                                            <div class="etiqueta"><label for="item_pare_es"><spring:message code='unitatadm.formulari.pare'/></label></div>
-                                            <div class="control">
-                                                <input id="item_pare_es" name="item_pare_es" type="text" readonly="readonly" />                                                
-                                            </div>                                          
-                                        </div>            
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare_es');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">
-                                                <a href="javascript:EliminaArbreUA('item_pare_es','item_pare_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
+                                    </div>                                    
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
@@ -295,30 +245,6 @@
                                             </div>
                                         </div>  
                                     </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                          
-                                            <div class="etiqueta"><label for="item_pare_en"><spring:message code='unitatadm.formulari.pare'/></label></div>
-                                            <div class="control">
-                                                <input id="item_pare_en" name="item_pare_en" type="text" readonly="readonly" />                                                
-                                            </div>                                          
-                                        </div>            
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare_en');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">
-                                                <a href="javascript:EliminaArbreUA('item_pare_en','item_pare_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
@@ -381,31 +307,7 @@
                                                 </select>
                                             </div>
                                         </div>  
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                          
-                                            <div class="etiqueta"><label for="item_pare_de"><spring:message code='unitatadm.formulari.pare'/></label></div>
-                                            <div class="control">
-                                                <input id="item_pare_de" name="item_pare_de" type="text" readonly="readonly" />                                                
-                                            </div>                                          
-                                        </div>            
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare_de');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">
-                                                <a href="javascript:EliminaArbreUA('item_pare_de','item_pare_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
+                                    </div>                                    
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
@@ -468,31 +370,7 @@
                                                 </select>
                                             </div>
                                         </div>  
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                          
-                                            <div class="etiqueta"><label for="item_pare_fr"><spring:message code='unitatadm.formulari.pare'/></label></div>
-                                            <div class="control">
-                                                <input id="item_pare_fr" name="item_pare_fr" type="text" readonly="readonly" />                                                
-                                            </div>                                          
-                                        </div>            
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare_fr');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">
-                                                <a href="javascript:EliminaArbreUA('item_pare_fr','item_pare_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
+                                    </div>                                    
                                 </div>
                                 <!-- /fr -->        
                             </div>
@@ -955,6 +833,42 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul" id="modulRelacioOrganica">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>RELACIÓ ORGÀNICA</legend>
+                    <div class="modul_continguts mostrat">
+                    
+                        <div class="fila">
+                            <div class="element t50p">
+                                <div class="etiqueta"><label for="item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
+                                <div class="control">
+                                    <input id="item_pare" name="item_pare" type="text" readonly="readonly" />                                                
+                                </div>                                          
+                            </div>            
+                        </div>
+                        <!-- Botonera -->                        
+                        <div class="botonera">
+                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare');" class="btn consulta">
+                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
+                                </a>
+                            </div>
+                            <div class="boton btnGenerico borrar">
+                                <a href="javascript:EliminaArbreUA('item_pare','item_pare_id');" class="btn borrar">
+                                    <span><span><spring:message code='boto.borrar'/></span></span>
+                                </a>
+                            </div>
+                        </div>                        
+                        <!-- /Botonera -->
+                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
             <!-- modul -->
             <div class="modul" id="modul_materies">
                 <fieldset>

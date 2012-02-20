@@ -1224,6 +1224,7 @@
                     </div>
                     <!-- /fila -->
                     
+                    <%--
                     <!-- fila -->
                     <div class="fila">
                         <div class="element t50p">                          
@@ -1234,14 +1235,14 @@
                             </div>
                         </div>
                         
-                        <%--
+                        <!--
                         <div class="element t50p">
                             <div class="etiqueta"><label for="item_llei"><spring:message code='camp.llei'/></label></div>
                             <div class="control">
                                 <input id="item_llei" name="item_llei" type="text" class="nou" />
                             </div>
                         </div>                  
-                        --%>
+                        -->
                         
                     </div>
                     <!-- /fila -->
@@ -1251,7 +1252,7 @@
                         <div class="botonera" style="margin-top: 0px; float:left;">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
                             	<a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">
-                                <%-- <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta"> --%>
+                                <!-- <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta"> -->
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
                             </div>
@@ -1263,6 +1264,7 @@
                         </div>
                     </div>
                     <!-- /Botonera -->    
+                    --%>
                                       
                 </div>
             </fieldset>
@@ -1599,6 +1601,46 @@
         </div>
         <!-- /modul -->
         
+        <!-- modul -->
+        <div class="modul" id="modulRelacioOrganica">
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>RELACIÓ ORGÀNICA</legend>
+                <div class="modul_continguts mostrat">
+                    
+                    <!-- fila -->
+                    <div class="fila">
+                        <div class="element t50p">                          
+                            <div class="etiqueta"><label for="item_ua_nom"><spring:message code='camp.unitat_administrativa'/></label></div>
+                            <div class="control">
+                                <input id="item_ua_id" name="item_ua_id" type="hidden" />
+                                <input id="item_ua_nom" name="item_ua_nom" type="text" readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /fila -->
+                    
+                    <!-- Botonera -->
+                    <div id="botoneraCambioUA">
+                        <div class="botonera">
+                            <div class="boton btnGenerico">
+                            	<a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">                                
+                                <span><span><spring:message code='boto.canviarUA'/></span></span>
+                                </a>
+                            </div>
+                            <div id="botonBorrarUA" class="boton btnGenerico">
+                                <a href="javascript:EliminaArbreUA('item_ua_nom', 'item_ua_id');" class="btn borrar">
+                                <span><span><spring:message code='boto.borrar'/></span></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Botonera -->    
+                    
+                </div>
+            </fieldset>
+        </div>
+        <!-- /modul -->
 
         <!-- modul -->      
         <input type="hidden" id="item_tipologia" name="item_tipologia" />
@@ -1823,6 +1865,7 @@
     <!-- seleccionats -->
 </div>
 <!-- /escriptori_afectacions -->
+
 <!-- escriptori_procediments -->
 <%--
 <div id="escriptori_procediments">
