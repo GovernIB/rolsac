@@ -65,6 +65,7 @@
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
         	<include name="boib.jar"/>
+			<include name="jena-2.6.4.jar"/>
         </fileset>
         <fileset dir="${web.product}">
             <include name="model.jar"/>
@@ -72,6 +73,13 @@
             <include name="${prefix.modul}-persistence-client.jar"/>
         </fileset>
        <!-- <pathelement location="${output.dir}/back/classes"/>-->
+	
+	    <!-- agarcia: temporal mientras se soluciona el affaire con 00librerias -->
+		<fileset dir="${lib.dir}/00librerias">
+				<include name="**/*.jar" />
+		</fileset>
+	
+	
     </path>
 
     <path id="doclet.class.path">
@@ -205,6 +213,9 @@
 
         	<lib dir="${lib.dir}">
 	         <include name="struts.jar"/>
+    		 <include name="jena-2.6.4.jar"/>
+			 <include name="icu4j-3.4.4.jar"/>
+	 		 <include name="iri-0.8.jar"/>
     		</lib>
 
             <webinf dir="${web.etc}" includes="*.xml" excludes="struts-config.xml,jboss-web.xml"/>

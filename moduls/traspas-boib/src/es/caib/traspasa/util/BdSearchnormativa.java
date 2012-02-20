@@ -5,7 +5,6 @@ import es.caib.boib.article.model.ApartatModel;
 import es.caib.boib.article.model.ArticleModel;
 import es.caib.boib.article.model.RegistreModel;
 import es.caib.boib.article.model.SubapartatModel;
-import es.caib.boib.bocaib.ejb.BoibSession;
 import es.caib.boib.bocaib.ejb.BoibSessionHome;
 import es.caib.boib.article.ejb.Article;
 import es.caib.boib.article.ejb.ArticleHome;
@@ -14,26 +13,15 @@ import es.caib.boib.tipus_norma.ejb.TipusNorma;
 import es.caib.boib.tipus_norma.ejb.TipusNormaHome;
 import es.caib.traspasa.actionsforms.SearchnormativaActionForm;
 import es.caib.traspasa.bean.TrNormativaLocalBean;
-import es.caib.traspasa.bean.TrMensaAvisoBean;
-import es.caib.traspasa.bean.TrListadoNormativaLocalBean;
 
-import java.util.ArrayList;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
-
-
-
-public class BdSearchnormativa 
+public class BdSearchnormativa extends SearchNormativaBase implements SearchNormativa
 {
 
 /**
@@ -44,12 +32,9 @@ public class BdSearchnormativa
  */
  
  private int numeroregistros=-1;
- private SearchnormativaActionForm fsearch;
- 
  
  
  private Object boibs[] = null;
- private BoibSession boibBean = null;
  private Article boibArticleBean = null;
  private TipusNorma tipusNorma =null;
  
@@ -58,24 +43,17 @@ public class BdSearchnormativa
  private static Hashtable hashtableregistros_c = new Hashtable(); //hash temporal en castellano
  
 
- private ArrayList listadonormativas = new ArrayList(); //contiene el listado de normativas en caso de más de una encontrada
  
- //beans
- private TrNormativaLocalBean normativabean = new TrNormativaLocalBean();
- private TrMensaAvisoBean mensajeavisobean = new TrMensaAvisoBean();
-
-  
-
-
-  /** Constructor. Se le pasa el formulario de busqueda */
+   /** Constructor. Se le pasa el formulario de busqueda */
   public BdSearchnormativa(SearchnormativaActionForm f) {
+      super(f);
   
   //recoger el ejb-boib
         try {
          Context ic = new InitialContext();
          Object object = ic.lookup("es.caib.boib.BocaibSessionBean");
          BoibSessionHome home = (BoibSessionHome) PortableRemoteObject.narrow(object, BoibSessionHome.class);
-         boibBean = home.create();
+         home.create();
          } catch (Exception ex) {
           ex.printStackTrace();
          }
@@ -100,8 +78,6 @@ public class BdSearchnormativa
          ex.printStackTrace();
        }       
 
-    fsearch = f;
-    
     traza("LONGITUD DEL HASH TEMPORAL " + hashtableregistros_v.size()); 
     
 //    makeSearch();
@@ -336,7 +312,7 @@ private int obtenerIdRegistroBoib(int numboib, int numregboib, int idioma)
 
               for (int j=0;j<vapartados.length;j++) {
                       traza("Apartado " + (String)vapartados[j].toString());
-                              
+
                       ApartatModel apartado = (ApartatModel)vapartados[j];
                       Collection colecionsubapartados = apartado.getList();
                       Object vsubapartados[] = null;
@@ -525,82 +501,6 @@ private int obtenerIdRegistroBoib(int numboib, int numregboib, int idioma)
     return retorno;
   }
 
-//metodos para manejar la lista de normativas
-
-  private void meterListaNormativa(TrNormativaLocalBean normativabean) 
-  {
-    TrListadoNormativaLocalBean tmpbean = new TrListadoNormativaLocalBean();
-    tmpbean.setBoib(normativabean.getNumeroboib());
-    tmpbean.setRegistro(normativabean.getValorRegistro());
-    tmpbean.setTitulo(normativabean.getTra_titulo_v());
-    tmpbean.setTrcodificacion(tmpbean.getBoib()+"X"+tmpbean.getRegistro());
-    listadonormativas.add(tmpbean);
-  }
-
-
-
-//funciones para manejar informacion del SAC
-
-  private boolean isInsertSAC(int s_numeroboib, int s_numeroregistro) 
-  {
-    boolean retorno=false;
-    
-    Map paramMap = new HashMap();
-    Map tradMap = new HashMap();
-    String TIPO_NORM = "local";
-    
-    // Parámetros generales
-    paramMap.put("numero", "" + s_numeroboib);
-    paramMap.put("registro", "" + s_numeroregistro);
-    
-    try {
-      NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-      int numnormativas = normativaDelegate.buscarNormativas(paramMap, tradMap, TIPO_NORM).size();
-      retorno = (numnormativas>=1);     
-      
-    } catch(Exception e) {
-      retorno=false;
-    }
-    traza("EL RESULTADO DE LA BUSQUEDA EN SAC HA SIDO " + retorno);
-    return retorno;
-  }
-  
-  //seters y geters
-
-  public void setNormativabean(TrNormativaLocalBean normativabean)
-  {
-    this.normativabean = normativabean;
-  }
-
-
-  public TrNormativaLocalBean getNormativabean()
-  {
-    return normativabean;
-  }
-
-
-  public void setMensajeavisobean(TrMensaAvisoBean mensajeavisobean)
-  {
-    this.mensajeavisobean = mensajeavisobean;
-  }
-
-
-  public TrMensaAvisoBean getMensajeavisobean()
-  {
-    return mensajeavisobean;
-  }
-  
-    public void setListadonormativas(ArrayList listadonormativas)
-  {
-    this.listadonormativas = listadonormativas;
-  }
-
-
-  public ArrayList getListadonormativas()
-  {
-    return listadonormativas;
-  }
-
   private java.util.Date getFecha(String txfecha) 
   {
     
@@ -617,12 +517,6 @@ private int obtenerIdRegistroBoib(int numboib, int numregboib, int idioma)
   }
   
   
-
-//trazaaaaaaaaaaa ----------------------------------------------------
- private void traza(String txt) 
- {
-  // System.out.println("VRS: " + txt);
- }
 
 
 
