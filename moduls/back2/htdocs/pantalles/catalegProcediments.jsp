@@ -29,8 +29,11 @@
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
     var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
+    var pagDetallTramit = '<c:url value="/tramit/carregarTramit.do" />';
+    var pagGuardarTramit = '<c:url value="/tramit/guardarTramit.do" />';
+    var pagEsborrarTramit = '<c:url value="/tramit/esborrarTramit.do" />';
     var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
-    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
+    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';    
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -76,18 +79,20 @@
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
-    //var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
-    var txtNoHiHaTramitsSeleccionats = "No hay tramites seleccionados";
+    
+    var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
+    
+    var txtTramit = "Tramit";
+    var txtTramits = "Tramits";
+    
+    var txtNoHiHaTramitsSeleccionats = txtNoHiHa + " " + txtTramits.toLowerCase() + " " + txtSeleccionats.toLowerCase();
     
     var txtMateria = "<spring:message code='txt.materia'/>";
     var txtMateries = "<spring:message code='txt.materies'/>";
     var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
     var txtNoHiHaMateriaSeleccionada = txtNoHiHa + " " + txtMateria.toLowerCase() + " " + txtSeleccionada.toLowerCase();
     var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries.toLowerCase() + " " + txtSeleccionades.toLowerCase();
-    
-    var txtTramit = "Tramit";
-    var txtTramits = "Tramits";
-    
+        
     var txtNormativa = "<spring:message code='quadreControl.normativa'/>";
     var txtNormatives = "<spring:message code='quadreControl.normatives'/>";
     var txtNoHiHaNormativa = txtNoHiHa + " " + txtNormativa.toLowerCase();
@@ -125,6 +130,7 @@
     var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
     var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";    
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
+    var txtOrganoObligatorio = "<spring:message code='personal.formulari.organ.obligatori'/>";
 
     // dades formularios
     var FormulariDades = [
@@ -245,9 +251,59 @@
         }
     ];
     
-    var FormulariTramits = [
-		{		    
-		}   
+    var FormulariTramits = [                            
+		{	
+			// Nom del tràmit 
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_nom_tramit_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtNombreObligatorio,
+                    "tipus": txtNombreNoSoloNumeros
+                }			
+		},
+						
+        // Identificador tràmit telemàtic
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_version_tramit",
+            "obligatori": "no",
+            "tipus": "numeric",         
+            "error":
+                {
+                    "tipus": "<spring:message code='tram.formulari.error.versio.nomes_numeros'/>"
+                }
+        },
+                
+		{	
+			// Organ competent per resoldre 
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_organ_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtOrganoObligatorio,
+                }			
+		}
+        
     ];
 -->
 </script>
@@ -295,7 +351,7 @@
                                 <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
                             </div>
                         </div>
-                        <div class="element>                        
+                        <div class="element">                        
                             <label for="visibilitat">Visibilitat</label>                            
                             <select id="visibilitat" name="visibilitat">
                                 <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
@@ -501,7 +557,7 @@
                         </div>
                     </div>                    
                 </div>
-            </div>
+            </div>            
             <!-- /cercador -->
             <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" />
@@ -634,7 +690,7 @@
                                             <div class="control">
                                                 <input id="item_organ_id" name="item_organ_id" type="hidden" />
                                                 <div class="campo">
-                                                    <input id="item_organ" name="item_organ" type="text" class="nou" readonly="true" />                                                
+                                                    <input id="item_organ" name="item_organ" type="text" class="nou" readonly="readonly" />                                                
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
@@ -806,7 +862,7 @@
                                             </div>
                                             <div class="control">                                                
                                                 <div class="campo">
-                                                    <input id="item_organ_es" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                    <input id="item_organ_es" name="item_organ_es" type="text" class="nou" readonly="readonly" />                                                
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
@@ -1825,7 +1881,7 @@
                         <div class="botonera dalt">
                           <ul>
                               <li class="btnVolver impar">
-                                  <a id="btnVolver" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                                  <a id="btnVolver" href="javascript:;" class="btn torna btnVolver"><span><span><spring:message code='boto.torna'/></span></span></a>
                               </li>
                               <li class="btnGuardar par">
                                   <a id="btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
@@ -1854,7 +1910,7 @@
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                         <legend>TRÀMITS</legend>                               
                         <div class="modul_continguts mostrat">                                  
-                            <!-- modulNormatives -->
+                            <!-- modulTramits -->
                             <div class="modulTramits">
                                 <div class="seleccionats">                                
                                     <div class="seleccionat">
@@ -1866,7 +1922,7 @@
                                     </div>
                                 </div>                                  
                             </div>
-                            <!-- /modulNormatives -->                                 
+                            <!-- /modulTramits -->                                 
                         </div>                              
                     </fieldset>                     
                 </div>
@@ -1899,8 +1955,7 @@
                         <!-- modulDocuments -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulDocuments multilang">                            
-                            <ul class="idiomes">
-                                <li class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</li>
+                            <ul class="idiomes">                                
                                 <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
                                 <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
                                 <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
@@ -2341,7 +2396,6 @@
 </div>
 <!-- escriptori_documents -->
 
-
 <!-- escriptori_normatives -->
 <div id="escriptori_normatives">
    <ul id="opcions_normativa" class="opcions">
@@ -2409,686 +2463,658 @@
 
 <!-- escriptori_tramits -->
 <div id="escriptori_tramits">   
-    <h2><spring:message code='txt.detallProcediment'/></h2>
+    <h2><spring:message code='txt.detallTramit'/></h2>
     <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
-    <form id="formTramits" class="grupoModulosFormulario modulPrincipal">
-    	<input id="id_tramit_actual" type="hidden"/>        
-	    <div class="modul">
-	        <fieldset>
-		        <!-- fila -->
-		        <div class="fila">
-		            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
-		            <ul class="idiomes">
-		                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-		                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-		                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-		                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-		                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>                                
-		            </ul>
-		            <div class="idiomes">
-		                <!-- ca -->
-		                <div class="idioma ca">
-                            <div class="fila">
-                                <div class="element organoCompetente">
-                                    <div class="etiqueta">
-                                        <label for="tramits_item_organ"><spring:message code='camp.organCompetent'/></label>
-                                    </div>
-                                    <div class="control">
-                                        <input id="tramits_item_organ_id" name="tramits_item_organ_id" type="hidden" />
-                                        <div class="campo">                                           
-                                            <input id="tramits_item_organ" name="tramits_item_organ" type="text" class="nou" readonly="true" />
-                                        </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">                                    
-                                                <a href="javascript:EliminaArbreUA('tramits_item_organ', 'tramits_item_organ_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>                                
-                            </div>
-                            
-                            <div class="fila">
-		                        <div class="element t50p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_moment">Moment</label>
+    <form id="formTramits">
+		<div class="escriptori_detall" id="escriptori_detall" style="display: block;">
+			<div class="grupoModulosFormulario modulPrincipal" id="modulPrincipal">    	
+		    	<input id="id_tramit_actual" name="id_tramit_actual" type="hidden"/>        
+		    	<input id="id_procediment_tramit" name="id_procediment_tramit" type="hidden"/>
+			    <div class="modul">
+			        <fieldset>
+						<legend><spring:message code='txt.dades'/></legend>			
+				        <!-- fila -->
+				        <div class="fila">		            
+				            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+				            <ul class="idiomes">
+				                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+				                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+				                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+				                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+				                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>                                
+				            </ul>
+		
+				            <div class="idiomes">
+				                <!-- ca -->						
+				                <div class="idioma ca">		
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_nom_tramit_ca"><spring:message code='camp.nomTramit'/></label>
+											</div>
+											<div class="control">
+												<input id="item_nom_tramit_ca" name="item_nom_tramit_ca" type="text" class="nou" />
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_descripcio_tramit_ca"><spring:message code='camp.descripcio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_descripcio_tramit_ca" name="item_descripcio_tramit_ca"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_requisits_tramit_ca"><spring:message code='camp.requisits'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_requisits_tramit_ca" name="item_requisits_tramit_ca"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>							
+											
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_documentacio_tramit_ca"><spring:message code='camp.documentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_documentacio_tramit_ca" name="item_documentacio_tramit_ca"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_termini_tramit_ca"><spring:message code='camp.terminiMaximPresentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_termini_tramit_ca" name="item_termini_tramit_ca"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>	
+		
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_lloc_tramit_ca"><spring:message code='camp.lloc'/></label>
+											</div>
+		                                        <div class="campo">                                           
+		                                            <input id="item_lloc_tramit_ca" name="item_lloc_tramit_ca" type="text" class="nou" />
+		                                        </div>
+										</div>
+									</div>																	
+									
+		                            <div class="fila">
+		                                <div class="element organoCompetente">
+		                                    <div class="etiqueta">
+		                                        <label for="tramits_item_organ"><spring:message code='camp.organCompetentTramit'/></label>
+		                                    </div>
+		                                    <div class="control">
+		                                        <input id="tramits_item_organ_id" name="tramits_item_organ_id" type="hidden" />
+		                                        <div class="campo">                                           
+		                                            <input id="tramits_item_organ" name="tramits_item_organ" type="text" class="nou" readonly="readonly" />
+		                                        </div>
+		                                        <div class="botones">
+		                                            <div class="btnCambiar boton btnGenerico">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ');" class="btn consulta">
+		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                            <div class="boton btnGenerico">                                    
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ', 'tramits_item_organ_id');" class="btn borrar">
+		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>                                
 		                            </div>
-		                            <div class="moment control select">
-		                                <select id="tramit_moment" name="tramit_item_moment" type="text" class="nou">
-                                            <option value="0">[Dinamizar]</option>
-                                        </select>
-		                            </div>
+		                            
+				                </div>
+				                <!-- /ca -->
+				                <!-- es -->
+				                <div class="idioma es">
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_nom_tramit_es"><spring:message code='camp.nomTramit'/></label>
+											</div>
+											<div class="control">
+												<input id="item_nom_tramit_es" name="item_nom_tramit_es" type="text" class="nou" />
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_descripcio_tramit_es"><spring:message code='camp.descripcio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_descripcio_tramit_es" name="item_descripcio_tramit_es"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_requisits_tramit_es"><spring:message code='camp.requisits'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_requisits_tramit_es" name="item_requisits_tramit_es"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_documentacio_tramit_es"><spring:message code='camp.documentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_documentacio_tramit_es" name="item_documentacio_tramit_es"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+		
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_termini_tramit_es"><spring:message code='camp.terminiMaximPresentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_termini_tramit_es" name="item_termini_tramit_es"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_lloc_tramit_es"><spring:message code='camp.lloc'/></label>
+											</div>
+		                                        <div class="campo">                                           
+		                                            <input id="item_lloc_tramit_es" name="item_lloc_tramit_es" type="text" class="nou" />
+		                                        </div>
+										</div>
+									</div>																	
+									
+				                    <div class="fila">
+				                        <div class="element organoCompetente">
+		                                    <div class="etiqueta">
+		                                        <label for="tramits_item_organ"><spring:message code='camp.organCompetent'/></label>
+		                                    </div>
+		                                    <div class="control">                                        
+		                                        <div class="campo">                                           
+		                                            <input id="tramits_item_organ_es" name="tramits_item_organ_es" type="text" class="nou" readonly="true" />
+		                                        </div>
+		                                        <div class="botones">
+		                                            <div class="btnCambiar boton btnGenerico">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_es');" class="btn consulta">
+		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                            <div class="boton btnGenerico">                                    
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_es', 'tramits_item_organ_id');" class="btn borrar">
+		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+				                    </div>                            
 		                        </div>
-		                    </div>
-                            
+				                <!-- /es -->
+				                <!-- en -->
+				                <div class="idioma en">
+														
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_nom_tramit_en"><spring:message code='camp.nomTramit'/></label>
+											</div>
+											<div class="control">
+												<input id="item_nom_tramit_en" name="item_nom_tramit_en" type="text" class="nou" />
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_descripcio_tramit_en"><spring:message code='camp.descripcio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_descripcio_tramit_en" name="item_descripcio_tramit_en"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_requisits_tramit_en"><spring:message code='camp.requisits'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_requisits_tramit_es" name="item_requisits_tramit_en"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>						
+		
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_documentacio_tramit_en"><spring:message code='camp.documentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_documentacio_tramit_en" name="item_documentacio_tramit_en"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>							
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_termini_tramit_en"><spring:message code='camp.terminiMaximPresentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_termini_tramit_en" name="item_termini_tramit_en"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_lloc_tramit_en"><spring:message code='camp.lloc'/></label>
+											</div>
+		                                        <div class="campo">                                           
+		                                            <input id="item_lloc_tramit_en" name="item_lloc_tramit_en" type="text" class="nou" />
+		                                        </div>
+										</div>
+									</div>																	
+									
+				                    <div class="fila">
+				                        <div class="element organoCompetente">
+		                                    <div class="etiqueta">
+		                                        <label for="tramits_item_organ_en"><spring:message code='camp.organCompetent'/></label>
+		                                    </div>
+		                                    <div class="control">                                        
+		                                        <div class="campo">                                           
+		                                            <input id="tramits_item_organ_en" name="tramits_item_organ_en" type="text" class="nou" readonly="true" />
+		                                        </div>
+		                                        <div class="botones">
+		                                            <div class="btnCambiar boton btnGenerico">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_en');" class="btn consulta">
+		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                            <div class="boton btnGenerico">                                    
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_en', 'tramits_item_organ_id');" class="btn borrar">
+		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>        
+				                    </div>  
+				                </div>                          
+				                <!-- /en -->
+								
+				                <!-- de -->
+				                <div class="idioma de">
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_nom_tramit_de"><spring:message code='camp.nomTramit'/></label>
+											</div>
+											<div class="control">
+												<input id="item_nom_tramit_de" name="item_nom_tramit_de" type="text" class="nou" />
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_descripcio_tramit_de"><spring:message code='camp.descripcio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_descripcio_tramit_de" name="item_descripcio_tramit_de"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_requisits_tramit_de"><spring:message code='camp.requisits'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_requisits_tramit_de" name="item_requisits_tramit_de"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>											
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_documentacio_tramit_de"><spring:message code='camp.documentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_documentacio_tramit_de" name="item_documentacio_tramit_de"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>													
+									
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_termini_tramit_de"><spring:message code='camp.terminiMaximPresentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_termini_tramit_de" name="item_termini_tramit_de"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+									
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_lloc_tramit_de"><spring:message code='camp.lloc'/></label>
+											</div>
+		                                        <div class="campo">                                           
+		                                            <input id="item_lloc_tramit_de" name="item_lloc_tramit_de" type="text" class="nou" />
+		                                        </div>
+										</div>
+									</div>																	
+												
+				                    <div class="fila">
+				                        <div class="element organoCompetente">
+		                                    <div class="etiqueta">
+		                                        <label for="tramits_item_organ_de"><spring:message code='camp.organCompetent'/></label>
+		                                    </div>
+		                                    <div class="control">                                        
+		                                        <div class="campo">                                           
+		                                            <input id="tramits_item_organ_de" name="tramits_item_organ_de" type="text" class="nou" readonly="true" />
+		                                        </div>
+		                                        <div class="botones">
+		                                            <div class="btnCambiar boton btnGenerico">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_de');" class="btn consulta">
+		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                            <div class="boton btnGenerico">                                    
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_de', 'tramits_item_organ_id');" class="btn borrar">
+		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+				                    </div>     
+		
+				                </div>
+				                <!-- /de -->
+				                <!-- fr -->
+				                <div class="idioma fr">
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_nom_tramit_fr"><spring:message code='camp.nomTramit'/></label>
+											</div>
+											<div class="control">
+												<input id="item_nom_tramit_fr" name="item_nom_tramit_fr" type="text" class="nou" />
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_descripcio_tramit_fr"><spring:message code='camp.descripcio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_descripcio_tramit_fr" name="item_descripcio_tramit_fr"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_requisits_tramit_fr"><spring:message code='camp.requisits'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_requisits_tramit_fr" name="item_requisits_tramit_fr"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>											
+								
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_documentacio_tramit_fr"><spring:message code='camp.documentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_documentacio_tramit_fr" name="item_documentacio_tramit_fr"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>													
+									
+									<div class="fila">
+										<div class="element t99p">
+											<div class="etiqueta">
+												<label for="item_termini_tramit_fr"><spring:message code='camp.terminiMaximPresentacio'/></label>
+											</div>
+											<div class="control">
+												<textarea id="item_termini_tramit_fr" name="item_termini_tramit_fr"
+													cols="50" rows="2" class="nou"></textarea>
+											</div>
+										</div>
+									</div>						
+								
+									<div class="fila">
+										<div class="element t75p">
+											<div class="etiqueta">
+												<label for="item_lloc_tramit_fr"><spring:message code='camp.lloc'/></label>
+											</div>
+		                                        <div class="campo">                                           
+		                                            <input id="item_lloc_tramit_fr" name="item_lloc_tramit_fr" type="text" class="nou" />
+		                                        </div>
+										</div>
+									</div>																	
+		
+				                    <div class="fila">
+				                        <div class="element organoCompetente">
+		                                    <div class="etiqueta">
+		                                        <label for="tramits_item_organ_fr"><spring:message code='camp.organCompetent'/></label>
+		                                    </div>
+		                                    <div class="control">                                        
+		                                        <div class="campo">                                           
+		                                            <input id="tramits_item_organ_fr" name="tramits_item_organ_fr" type="text" class="nou" readonly="readonly" />
+		                                        </div>
+		                                        <div class="botones">
+		                                            <div class="btnCambiar boton btnGenerico">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_fr');" class="btn consulta">
+		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                            <div class="boton btnGenerico">                                    
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_fr', 'tramits_item_organ_id');" class="btn borrar">
+		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
+		                                                </a>
+		                                            </div>
+		                                        </div>
+		                                    </div>
+		                                </div>
+				                    </div>                
+				                </div>
+				                <!-- /fr -->
+				        	</div>	
+				        </div>	        
+				        <!-- /fila -->
+					</fieldset>
+				</div>
+		
+		        <!-- modul -->
+		        <div class="modul">
+		            <fieldset>
+		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+		                <legend><spring:message code='camp.canalsPresentacio'/></legend>
+		                <div class="modul_continguts mostrat">
 		                    <div class="fila">
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="tramit_nom_ca">Nom</label>
+		                                <label for="item_presentacio"><spring:message code='camp.presentacio'/></label>
 		                            </div>
 		                            <div class="control">
-		                                <input id="tramit_nom_ca" name="tramit_item_nom_ca" type="text" class="nou" />
+		                                <input id="item_presentacio" name="item_presentacio" type="text" class="nou" />
 		                            </div>
-		                        </div>
+		                        </div>                            
 		                    </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_descripcio_ca">Descripció</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_descripcio_ca" name="tramit_item_descripcio_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_documentacio_ca">Documentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_documentacio_ca" name="tramit_item_documentacio_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_requisits_ca">Requisits</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_requisits_ca" name="tramit_item_requisits_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_termini_ca">Termini màxim per a la presentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_termini_ca" name="tramit_item_termini_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_lugar_ca">Lugar</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_lugar_ca" name="tramit_item_lugar_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-		                </div>
-		                <!-- /ca -->
-		                <!-- es -->
-		                <div class="idioma es">
-		                    <div class="fila">
-		                        <div class="element organoCompetente">
-                                    <div class="etiqueta">
-                                        <label for="tramits_item_organ"><spring:message code='camp.organCompetent'/></label>
-                                    </div>
-                                    <div class="control">                                        
-                                        <div class="campo">                                           
-                                            <input id="tramits_item_organ_es" name="tramits_item_organ_es" type="text" class="nou" readonly="true" />
-                                        </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_es');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">                                    
-                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_es', 'tramits_item_organ_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-		                    </div>        
-                            
-                            <div class="fila">
-		                        <div class="element t50p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_moment_es">Moment</label>
-		                            </div>
-		                            <div class="moment control select">
-		                                <select id="tramit_moment_es" name="tramit_item_moment_es" type="text" class="nou">
-                                            <option value="0">[Dinamizar]</option>
-                                        </select>
-		                            </div>
-		                        </div>
-		                    </div>
-                            
-		                    <div class="fila">
+							<div class="fila">		                    
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
-		                                <label for="tramit_nom_es">Nom</label>
+		                                <label for="item_url_tramit"><spring:message code='camp.urlTramitExtern'/></label>
 		                            </div>
 		                            <div class="control">
-		                                <input id="tramit_nom_es" name="tramit_item_nom_es" type="text" class="nou" />
+		                                <input id="item_url_tramit" name="item_url_tramit" type="text" class="nou" />
 		                            </div>
 		                        </div>
 		                    </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_descripcio_es">Descripció</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_descripcio_es" name="tramit_item_descripcio_es" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_documentacio_es">Documentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_documentacio_es" name="tramit_item_documentacio_es" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_requisits_es">Requisits</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_requisits_es" name="tramit_item_requisits_es" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_termini_es">Termini màxim per a la presentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_termini_es" name="tramit_item_termini_es" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_lugar_es">Lugar</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_lugar_es" name="tramit_item_lugar_es" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-		                </div>
-		                <!-- /es -->
-		                <!-- en -->
-		                <div class="idioma en">
+		                    
 		                    <div class="fila">
-		                        <div class="element organoCompetente">
-                                    <div class="etiqueta">
-                                        <label for="tramits_item_organ_en"><spring:message code='camp.organCompetent'/></label>
-                                    </div>
-                                    <div class="control">                                        
-                                        <div class="campo">                                           
-                                            <input id="tramits_item_organ_en" name="tramits_item_organ_en" type="text" class="nou" readonly="true" />
-                                        </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_en');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">                                    
-                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_en', 'tramits_item_organ_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>        
-		                    </div>        
-
-                            <div class="fila">
 		                        <div class="element t50p">
 		                            <div class="etiqueta">
-		                                <label for="tramit_moment_en">Moment</label>
-		                            </div>
-		                            <div class="moment control select">
-		                                <select id="tramit_moment_en" name="tramit_item_moment_en" type="text" class="nou">
-                                            <option value="0">[Dinamizar]</option>
-                                        </select>
-		                            </div>
-		                        </div>
-		                    </div>
-                            
-		                    <div class="fila">
-		                        <div class="element t99p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_nom_en">Nom</label>
+		                                <label for="item_tramite_tramit"><spring:message code='camp.idTramit'/></label>
 		                            </div>
 		                            <div class="control">
-		                                <input id="tramit_nom_en" name="tramit_item_nom_en" type="text" class="nou" />
+		                                <input id="item_tramite_tramit" name="item_tramite_tramit" type="text" class="nou" />
 		                            </div>
 		                        </div>
-		                    </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_descripcio_en">Descripció</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_descripcio_en" name="tramit_item_descripcio_en" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_documentacio_en">Documentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_documentacio_en" name="tramit_item_documentacio_en" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_requisits_en">Requisits</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_requisits_en" name="tramit_item_requisits_en" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_termini_en">Termini màxim per a la presentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_termini_en" name="tramit_item_termini_en" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_lugar_en">Lugar</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_lugar_en" name="tramit_item_lugar_en" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-		                </div>
-		                <!-- /en -->
-		                <!-- de -->
-		                <div class="idioma de">
-		                    <div class="fila">
-		                        <div class="element organoCompetente">
-                                    <div class="etiqueta">
-                                        <label for="tramits_item_organ_de"><spring:message code='camp.organCompetent'/></label>
-                                    </div>
-                                    <div class="control">                                        
-                                        <div class="campo">                                           
-                                            <input id="tramits_item_organ_de" name="tramits_item_organ_de" type="text" class="nou" readonly="true" />
-                                        </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_de');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">                                    
-                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_de', 'tramits_item_organ_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-		                    </div>     
-
-                            <div class="fila">
+		                        
 		                        <div class="element t50p">
 		                            <div class="etiqueta">
-		                                <label for="tramit_moment_de">Moment</label>
-		                            </div>
-		                            <div class="moment control select">
-		                                <select id="tramit_moment_de" name="tramit_item_moment_de" type="text" class="nou">
-                                            <option value="0">[Dinamizar]</option>
-                                        </select>
-		                            </div>
-		                        </div>
-		                    </div>
-                            
-		                    <div class="fila">
-		                        <div class="element t99p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_nom_de">Nom</label>
+		                                <label for="item_version_tramit"><spring:message code='camp.versioTramit'/></label>
 		                            </div>
 		                            <div class="control">
-		                                <input id="tramit_nom_de" name="tramit_item_nom_de" type="text" class="nou" />
+		                                <input id="item_version_tramit" name="item_version_tramit" type="text" class="nou" />
 		                            </div>
 		                        </div>
-		                    </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_descripcio_de">Descripció</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_descripcio_de" name="tramit_item_descripcio_de" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_documentacio_de">Documentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_documentacio_de" name="tramit_item_documentacio_de" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_requisits_de">Requisits</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_requisits_de" name="tramit_item_requisits_ca" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_termini_de">Termini màxim per a la presentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_termini_de" name="tramit_item_termini_de" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_lugar_de">Lugar</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_lugar_de" name="tramit_item_lugar_de" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
+		                    </div>		                    
 		                </div>
-		                <!-- /de -->
-		                <!-- fr -->
-		                <div class="idioma fr">
+		            </fieldset>
+		        </div>
+		        <!-- /modul -->        
+	    	</div>
+		    <!-- Menú de publicación -->
+		    <div class="modulLateral menuPublicacion">
+		        <div class="modul publicacio">
+		            <fieldset>
+		                <a class="modul mostrat">Amaga</a>
+		                <legend>Publicació</legend>
+		                <div class="modul_continguts mostrat">
+		                    <!-- fila -->
 		                    <div class="fila">
-		                        <div class="element organoCompetente">
-                                    <div class="etiqueta">
-                                        <label for="tramits_item_organ_fr"><spring:message code='camp.organCompetent'/></label>
-                                    </div>
-                                    <div class="control">                                        
-                                        <div class="campo">                                           
-                                            <input id="tramits_item_organ_fr" name="tramits_item_organ_fr" type="text" class="nou" readonly="true" />
-                                        </div>
-                                        <div class="botones">
-                                            <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_fr');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                                </a>
-                                            </div>
-                                            <div class="boton btnGenerico">                                    
-                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_fr', 'tramits_item_organ_id');" class="btn borrar">
-                                                    <span><span><spring:message code='boto.borrar'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-		                    </div>                
-
-                            <div class="fila">
-		                        <div class="element t50p">
+		                        <div class="element left">
 		                            <div class="etiqueta">
-		                                <label for="tramit_moment_fr">Moment</label>
-		                            </div>
-		                            <div class="moment control select">
-		                                <select id="tramit_moment_fr" name="tramit_item_moment_fr" type="text" class="nou">
-                                            <option value="0">[Dinamizar]</option>
-                                        </select>
-		                            </div>
-		                        </div>
-		                    </div>
-                            
-		                    <div class="fila">
-		                        <div class="element t99p">
-		                            <div class="etiqueta">
-		                                <label for="tramit_nom_fr">Nom</label>
+		                                <label for="item_estat">Estat</label>
 		                            </div>
 		                            <div class="control">
-		                                <input id="tramit_nom_fr" name="tramit_item_nom_fr" type="text" class="nou" />
+		                                <select name="item_estat" id="item_estat">                                                                
+		                                   <option selected="selected" value="">Tria una opció</option>
+		                                   <option selected="selected" value="1">Pública</option>
+		                                   <option value="2">Interna</option>
+		                                   <option value="3">Reserva</option>                               
+		                                </select>
+		                            </div>
+		                        </div>
+		                        <div class="element right">
+		                            <div class="etiqueta">
+		                                <label for="tramit_item_data_actualitzacio">Data actualització</label>
+		                            </div>
+		                            <div class="control">
+		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_actualitzacio" id="tramit_item_data_actualitzacio">
 		                            </div>
 		                        </div>
 		                    </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_descripcio_fr">Descripció</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_descripcio_fr" name="tramit_item_descripcio_fr" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_documentacio_fr">Documentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_documentacio_fr" name="tramit_item_documentacio_fr" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_requisits_fr">Requisits</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_requisits_fr" name="tramit_item_requisits_fr" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_termini_fr">Termini màxim per a la presentació</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_termini_fr" name="tramit_item_termini_fr" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="fila">
-                                <div class="element t99p">
-                                    <div class="etiqueta">
-                                        <label for="tramit_item_lugar_fr">Lugar</label>
-                                    </div>
-                                    <div class="control">
-                                        <textarea id="tramit_item_lugar_fr" name="tramit_item_lugar_fr" cols="50" rows="2" class="nou"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            
+		                    <!-- /fila -->
+		                    <!-- fila -->
+		                    <div class="fila">
+		                        <div class="element left">
+		                            <div class="etiqueta">
+		                                <label for="tramit_item_data_publicacio">Data publicació</label>
+		                            </div>
+		                            <div class="control">
+		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
+		                            </div>
+		                        </div>
+		                        <div class="element right">
+		                            <div class="etiqueta">
+		                                <label for="tramit_item_data_caducitat">Data caducitat</label>
+		                            </div>
+		                            <div class="control">
+		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
+		                            </div>
+		                        </div>
+		                    </div>                        
+		                    <!-- /fila -->
+		                    <!-- botonera dalt -->
+		                    <div class="botonera dalt">
+		                      <ul>
+		                          <li class="btnVolver impar">
+		                              <a href="javascript:;"><span><span>Torna</span></span></a>
+		                          </li>
+		                          <li class="btnGuardar par">
+		                              <a class="btnGuardar" href="javascript:;"><span><span>Guarda</span></span></a>
+		                          </li>
+		                          <li style="" class="btnEliminar impar">
+		                              <a class="btnEliminar" href="javascript:;"><span><span>Elimina</span></span></a>
+		                          </li>                          
+		                      </ul>
+		                    </div>
+		                    <!-- /botonera dalt -->
 		                </div>
-		                <!-- /fr -->
-		            </div>
-		        </div>		        
-		        <!-- /fila -->
-			</fieldset>
-		</div>
-        
-        <!-- modul -->
-        <div class="modul">
-            <fieldset>
-                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend><spring:message code='txt.gestio'/></legend>
-                <div class="modul_continguts mostrat">
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element codigoTramite">
-                            <div class="etiqueta"><label for="tramit_item_codi">Codi tramit</label></div>
-                            <div class="control">
-                                <input id="tramit_item_codi" name="tramit_item_codi" type="text" class="nou" />
-                            </div>
-                        </div>                        
-                    </div>                    
-                    <!-- /fila -->                    
-                    
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta"><label for="tramit_item_versio">Versió tràmit</label></div>
-                            <div class="control">
-                                <input id="tramit_item_versio" name="tramit_item_versio" type="text" class="data nou" />
-                            </div>
-                        </div>                          
-                    </div>
-                    <!-- /fila -->
-                    
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta"><label for="tramit_item_url_externa">URL Externa</label></div>
-                            <div class="control">
-                                <input id="tramit_item_url_externa" name="tramit_item_url_externa" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /fila -->
-                                      
-                </div>
-            </fieldset>
-        </div>
-        <!-- /modul -->
-	</form>
-    
-    <!-- Menú de publicación -->
-    <div class="menuPublicacion">
-        <div class="modul publicacio">
-            <fieldset>
-                <a class="modul mostrat">Amaga</a>
-                <legend>Publicació</legend>
-                <div class="modul_continguts mostrat">
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element left">
-                            <div class="etiqueta">
-                                <label for="item_estat">Estat</label>
-                            </div>
-                            <div class="control">
-                                <select name="item_estat" id="item_estat">                                                                
-                                   <option selected="selected" value="">Tria una opció</option>
-                                   <option selected="selected" value="1">Pública</option>
-                                   <option value="2">Interna</option>
-                                   <option value="3">Reserva</option>                               
-                                </select>
-                            </div>
-                        </div>
-                        <div class="element right">
-                            <div class="etiqueta">
-                                <label for="tramit_item_data_actualitzacio">Data actualització</label>
-                            </div>
-                            <div class="control">
-                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_actualitzacio" id="tramit_item_data_actualitzacio">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /fila -->
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element left">
-                            <div class="etiqueta">
-                                <label for="tramit_item_data_publicacio">Data publicació</label>
-                            </div>
-                            <div class="control">
-                                <input type="text" readonly="readonly" class="nou hasDatepicker" name="campo_tramit_item_data_publicacio" id="tramit_item_data_publicacio">
-                            </div>
-                        </div>
-                        <div class="element right">
-                            <div class="etiqueta">
-                                <label for="tramit_item_data_caducitat">Data caducitat</label>
-                            </div>
-                            <div class="control">
-                                <input type="text" readonly="readonly" class="nou hasDatepicker" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
-                            </div>
-                        </div>
-                    </div>                        
-                    <!-- /fila -->
-                    <!-- botonera dalt -->
-                    <div class="botonera dalt">
-                      <ul>
-                          <li class="btnVolver impar">
-                              <a href="javascript:;"><span><span>Torna</span></span></a>
-                          </li>
-                          <li class="btnGuardar par">
-                              <a class="btnGuardar" href="javascript:;"><span><span>Guarda</span></span></a>
-                          </li>
-                          <li style="" class="btnEliminar impar">
-                              <a class="btnEliminar" href="javascript:;"><span><span>Elimina</span></span></a>
-                          </li>                          
-                      </ul>
-                    </div>
-                    <!-- /botonera dalt -->
-                </div>
-            </fieldset>
-        </div>
-    </div>
-    <!-- /Menú de publicación -->    
-    
+		            </fieldset>
+		        </div>
+		    </div>
+		    <!-- /Menú de publicación -->
+	</div>    
+	</form>    
 </div>                           
 
 <!-- /escriptori_tramits -->

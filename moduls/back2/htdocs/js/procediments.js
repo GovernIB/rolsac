@@ -531,7 +531,7 @@ function CDetall(){
 		
 		$("#item_notes").val(dada_node.item_notes);
 
-        ModulTramit.inicializarTramites(dada_node.tramits);
+        ModulTramit.inicializarTramites(dada_node.tramites);
         /*
         // debug
         ModulTramit.inicializarTramites(

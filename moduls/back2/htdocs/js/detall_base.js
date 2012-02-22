@@ -72,7 +72,6 @@ function DetallBase(soloFicha, reglasFormulario){
 		});
 	}
 
-
 	this.formulariValid = function () {
 		formulariComprovar.llansar();
 		return formulariComprovar.formComprovacio;

@@ -29,6 +29,8 @@ import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
@@ -89,11 +91,9 @@ public class CatalegProcedimentsBackController {
 		return "index";
 	}
 
-
 	private boolean estemEnUnitatAdministrativa(HttpSession session) {
 		return null!= getUAFromSession(session);
 	}
-
 
 	private void crearModelComplert_pantalla() {
 		crearModelSencill_pantalla();
@@ -364,15 +364,10 @@ public class CatalegProcedimentsBackController {
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimiento(id);
 
 			resultats.put("item_id", proc.getId());
-
-            resultats.put("item_codigo_pro", proc.getSignatura());
-			
-			resultats.put("item_estat", proc.getValidacion());			
-			
+            resultats.put("item_codigo_pro", proc.getSignatura());			
+			resultats.put("item_estat", proc.getValidacion());						
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
-			
 			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
-
 			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
 
 			// Idiomas
@@ -406,7 +401,6 @@ public class CatalegProcedimentsBackController {
 				resultats.put("fr", new TraduccionProcedimientoLocal());
 			}
 			// Fin idiomas
-			
 			
 			// Documentos relacionados
 			if (proc.getDocumentos() != null) {
@@ -448,8 +442,23 @@ public class CatalegProcedimentsBackController {
 	            resultats.put("documents", null);
 	        } 
             // Fin documentos relacionados
-            
-            
+           			
+			// Trámites relacionados
+			List<IdNomDTO> listaTramitesDTO = null;
+			
+			if ( proc.getTramites() != null ) {
+				
+				listaTramitesDTO = new ArrayList<IdNomDTO>();
+				
+				for( Tramite tramite : proc.getTramites() ) {					
+					String nombreTramite = ((TraduccionTramite) tramite.getTraduccion( request.getLocale().getLanguage())).getNombre();
+					listaTramitesDTO.add( new IdNomDTO( tramite.getId(), nombreTramite ) );					
+				}								
+			} 	
+			
+			resultats.put("tramites", listaTramitesDTO);
+			//Fin trámites relacionados
+			
 			// Materias asociadas
             if (proc.getMaterias() != null) {             
                 List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
@@ -487,6 +496,9 @@ public class CatalegProcedimentsBackController {
             } else {
                 resultats.put("normatives", null);
             } 
+            // Fin normativas asociadas
+            
+			resultats.put("item_codi", proc.getSignatura());
             // Fin normativas asociadas            
 
 			if (proc.getIniciacion() != null) {
@@ -529,8 +541,8 @@ public class CatalegProcedimentsBackController {
 				resultats.put("item_taxa", true);
 			}
 
-			resultats.put("item_notes", proc.getInfo());
-
+			resultats.put("item_notes", proc.getInfo());			
+			
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {
