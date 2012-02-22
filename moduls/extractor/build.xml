@@ -30,15 +30,17 @@
 
 	
     <path id="jar.class.path">
-        <fileset dir="${lib.dir}">
-            <include name="poi.jar"/>
-            <include name="pdfbox.jar"/>
-        	<include name="jericho-html-2.5.jar"/>
-        	<include name="aclibico.jar"/>
-        	<include name="img.jar"/>
-        	<include name="lax.jar"/>
-        	<include name="htmlparser.jar"/>
-        </fileset>
+		<!-- agarcia: librerias comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="aclibico.jar"/>
+			<include name="htmlparser.jar"/>
+			<include name="img.jar"/>
+			<include name="jericho-html-2.5.jar"/>
+			<include name="lax.jar"/>
+		    <include name="pdfbox.jar"/>
+		    <include name="poi.jar"/>
+		</fileset>
+
     </path>
 
     <target name="prepare">

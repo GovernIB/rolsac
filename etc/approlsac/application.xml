@@ -20,7 +20,10 @@
     		<module><ejb>@prefix.modul@-persistence.jar</ejb></module>
     		<module><ejb>@prefix.modul@-utils.jar</ejb></module>
     		<module><java>hibernate2.jar</java></module>
+
+		    <!-- agarcia: ehcache ya esta en 00librerias.ear
     		<module><java>ehcache.jar</java></module>
+		    -->
 
 			<module>
         		<web>

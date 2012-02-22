@@ -6,56 +6,28 @@
 	<classpathentry kind="src" path="moduls/integracion/src"/>
 	<classpathentry kind="src" path="moduls/model/src"/>
 	<classpathentry kind="src" path="moduls/persistence/src"/>
-	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
 	<classpathentry kind="src" path="moduls/traspas-boib/src"/>
 	<classpathentry kind="src" path="moduls/ws/src"/>
-	<classpathentry kind="src" path="moduls/utils/src"/>
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
-	<classpathentry kind="src" path="test/persistence/unitario/java"/>
-	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
-	<classpathentry kind="src" path="test/back/unitario/java"/>
-	<classpathentry kind="src" path="test/back/unitario/resources"/>
-	<classpathentry kind="src" path="test/integracion/unitario/java"/>
-	<classpathentry excluding="org/ibit/rol/sac/persistence/ejb/FichaFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/ProcedimientoFacadeEJB_SpringTest.java|org/ibit/rol/sac/persistence/ejb/TramiteFacadeEJB_SpringTest.java" kind="src" path="test/persistence/integracion/java"/>
-	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
-	<classpathentry kind="src" path="test/back2/unitario/java"/>
-	<classpathentry kind="src" path="test/back2/unitario/resources"/>
+	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
+	<classpathentry kind="src" path="moduls/utils/src"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
-	<classpathentry kind="lib" path="lib/aclibico.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
-	<classpathentry kind="lib" path="lib/chartbuilder.jar"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="lib/dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/ejb-2_0.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate2.jar"/>
-	<classpathentry kind="lib" path="lib/htmlparser.jar"/>
-	<classpathentry kind="lib" path="lib/img.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
-	<classpathentry kind="lib" path="lib/jericho-html-2.5.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="lib/juddi-proxy.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-caib.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-2.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-spellchecker-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/mail.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
-	<classpathentry kind="lib" path="lib/pdfbox.jar"/>
-	<classpathentry kind="lib" path="lib/poi.jar"/>
-	<classpathentry kind="lib" path="lib/quartz.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/seyconsession-common.jar"/>
 	<classpathentry kind="lib" path="lib/struts.jar"/>
-	<classpathentry kind="lib" path="lib/json.jar"/>
 	<classpathentry kind="lib" path="lib/micromodel.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer.jar"/>
 	<classpathentry kind="lib" path="lib/jms.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/sac-micropersistence.jar"/>
-	<classpathentry kind="lib" path="test/lib/commons-discovery.jar"/>
-	<classpathentry kind="lib" path="test/lib/test_utils.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axiom-api-1.2.8.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axiom-impl-1.2.8.jar"/>
@@ -67,42 +39,46 @@
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-mtompolicy-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-transport-http-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/axis2-transport-local-1.5.jar"/>
-	<classpathentry kind="lib" path="lib/axis2-1.5/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/httpcore-4.0.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/neethi-2.0.4.jar"/>
-	<classpathentry kind="lib" path="lib/axis2-1.5/wsdl4j-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/wstx-asl-3.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/xercesImpl-2.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/axis2-1.5/XmlSchema-1.4.3.jar"/>
-	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/jcommon-1.0.17.jar"/>
-	<classpathentry kind="lib" path="lib/jfreechart-1.0.13.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-easymock/cglib-nodep-2.2.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-easymock/easymock-3.0.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-easymock/javassist-3.15.0-GA.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-easymock/powermock-easymock-1.4.10-full.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-mockito/mockito-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-mockito/objenesis-1.2.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-mockito/powermock-mockito-1.4.10-full.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-rule-agent/powermock-module-javaagent-1.4.10.jar"/>
-	<classpathentry kind="lib" path="test/lib/powermock-rule-agent/powermock-module-junit4-rule-agent-1.4.10.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/org.springframework.transaction-3.0.0.RELEASE.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/spring-hibernate-1.2.6.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/spring-jdbc-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/spring-orm-3.0.2.RELEASE.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/spring-test-3.0.6.RELEASE.jar"/>
-	<classpathentry kind="lib" path="test/lib/spring/spring-webmvc-struts.jar"/>
-	<classpathentry kind="lib" path="test/lib/struts/strutstest-2.0.0.jar"/>
-	<classpathentry kind="lib" path="test/lib/commons-digester-1.8.jar"/>
-	<classpathentry kind="lib" path="test/lib/junit-4.8.2.jar"/>
-	<classpathentry kind="lib" path="test/lib/log4j.jar"/>
-	<classpathentry kind="lib" path="test/lib/p6spy.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/htmlparser.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/lucene-core-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/jfreechart-1.0.14.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/quartz-1.8.5.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-beanutils-1.8.3.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/chartbuilder.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/jcommon-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/lucene-caib.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.aop-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.asm-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.beans-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.context-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.context.support-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.core-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.expression-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.transaction-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.web-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/pdfbox.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/jdom.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/jericho-html-2.5.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/json.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/juddi-proxy.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/poi.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/lucene-spellchecker-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/rome-1.0RC2.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/caib-utilities.jar"/>
-	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
-	<classpathentry kind="lib" path="lib/axis-1.4/saaj.jar"/>
-	<classpathentry kind="lib" path="lib/axis-1.4/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/commons-el.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/jasper-compiler.jar"/>
@@ -112,7 +88,6 @@
 	<classpathentry kind="lib" path="lib/jasper/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
-	<classpathentry kind="lib" path="lib/jboss/odmg-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-apache-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-ejb-module-1.2.3.jar"/>
@@ -120,20 +95,10 @@
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-jmx-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-web-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xjavadoc-1.5-snapshot050611.jar"/>
-	<classpathentry kind="lib" path="lib/commons-validator.jar"/>
-	<classpathentry kind="lib" path="lib/odmg-3.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jstl/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/jstl/standard.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.aop-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.asm-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.beans-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.context-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.context.support-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.core-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.expression-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.web-3.0.5.RELEASE.jar"/>
-	<classpathentry kind="lib" path="lib/org.springframework.web.servlet-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/axis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
