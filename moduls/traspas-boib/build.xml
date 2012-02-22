@@ -67,12 +67,6 @@
        <!-- <pathelement location="${output.dir}/back/classes"/>-->
 	
 		<!-- agarcia: librerias comunes en 00librerias -->
-	
-	<!-- agarcia: temporal hasta que se haga commit de lib/webcaib -->
-		<fileset dir="${lib.dir}">
-			<include name="*.jar"/>
-		</fileset>
-	<!--
 		<fileset dir="${lib.dir}/webcaib">
 			<include name="axis.jar"/>
 		    <include name="chartbuilder.jar"/>
@@ -85,7 +79,6 @@
 			<include name="rome-1.0RC2.jar"/>
 		    <include name="struts.jar"/>
 		</fileset>
-	-->
     	
     </path>
 
@@ -224,16 +217,10 @@
 	 		 <include name="iri-0.8.jar"/>
     		</lib>
 
-        	<!-- agarcia: temporal hasta que se haga commit de lib/webcaib -->
-        	<lib dir="${lib.dir}">
-	        	<include name="struts.jar"/>
-    		</lib>
-
-        	<!-- agarcia: librerias comunes en 00librerias 
+        	<!-- agarcia: librerias comunes en 00librerias --> 
         	<lib dir="${lib.dir}/webcaib">
 	        	<include name="struts.jar"/>
     		</lib>
-    		-->
 
             <webinf dir="${web.etc}" includes="*.xml" excludes="struts-config.xml,jboss-web.xml"/>
         	<webinf dir="${web.etc}" includes="*.tld"/>
