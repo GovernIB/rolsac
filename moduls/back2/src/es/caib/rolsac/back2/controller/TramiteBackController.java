@@ -164,6 +164,8 @@ public class TramiteBackController {
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> langs = idiomaDelegate.listarLenguajes();
 
+			Map traducciones = new HashMap(langs.size());			
+			
 			for (String lang: langs) {
 				
 				traduccionTramite = (TraduccionTramite) tramite.getTraduccion(lang);
@@ -178,10 +180,13 @@ public class TramiteBackController {
 				traduccionTramite.setPlazos( request.getParameter("item_termini_tramit_" + lang));
 				//Este campo no existe en la tabla pero se deja por si se añade en futuras implementaciones)
 				//traduccionTramite.setObservaciones( request.getParameter("item_observacions_tramit_" + lang) );
-				traduccionTramite.setLugar( request.getParameter("item_lloc_tramit_" + lang));				
-				tramite.setTraduccion(lang, traduccionTramite);
+				traduccionTramite.setLugar( request.getParameter("item_lloc_tramit_" + lang));
 				
+				//tramite.setTraduccion(lang, traduccionTramite);
+				traducciones.put(lang, traduccionTramite);				
 			}
+			
+			tramite.setTraduccionMap(traducciones);
 			// Fin idiomas
 			
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");

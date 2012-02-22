@@ -92,13 +92,16 @@ function CModulTramit(){
 		$("#item_data_caducitat").attr("value", "");
 		
 		$("#id_procediment_tramit").attr("value",  $("#item_id").val() );
-		
-		//Ocultar el botón "eliminar" en la creación
-		escriptori_tramits_elm.find(".btnEliminar").hide();			
-	
+				
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
-			escriptori_tramits_elm.fadeIn(300);			
+			escriptori_tramits_elm.fadeIn(300, function() {
+				//Ocultar el botón "eliminar" en la creación
+				// y los módulos de documentos y formularios
+				escriptori_tramits_elm.find(".btnEliminar").hide();			
+				escriptori_tramits_elm.find("div#modul_documents").hide();
+				escriptori_tramits_elm.find("div#modul_formularis").hide();				
+			});			
 		});
 	}
     
@@ -348,7 +351,9 @@ function CEscriptoriTramit(){
                         escriptori_tramits_elm.fadeIn(300, function() { 
                         									EscriptoriTramit.pintar(data);
                         					            	// Mostrar el botón "eliminar" en la edición
-                        					                escriptori_tramits_elm.find(".btnEliminar").show();                                									
+                        					                escriptori_tramits_elm.find(".btnEliminar").show();
+                        					        		escriptori_tramits_elm.find("div#modul_documents").show();
+                        					        		escriptori_tramits_elm.find("div#modul_formularis").show();                        					                
                         								});
                     });                            
                 } else if (data.id == -1){

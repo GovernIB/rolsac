@@ -283,26 +283,26 @@
                 {
                     "tipus": "<spring:message code='tram.formulari.error.versio.nomes_numeros'/>"
                 }
-        },
+        }
                 
-		{	
+//		{	
 			// Organ competent per resoldre 
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_organ_id",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 250,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": txtOrganoObligatorio,
-                }			
-		}
+//            "modo": "individual",
+//            "etiqueta": "id",
+//            "etiquetaValor": "item_organ_id",
+//            "obligatori": "si",
+//            "tipus": "alfanumeric",
+//            "caracters":
+//                {
+//                    "maxim": 250,
+//                    "mostrar": "no",
+//                    "abreviat": "no"
+//                },
+//            "error":
+//                {
+//                    "obligatori": txtOrganoObligatorio,
+//                }			
+//		}
         
     ];
 -->
@@ -1996,6 +1996,7 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
             <!-- modul -->
             <div class="modul">
                 <fieldset>
@@ -3039,7 +3040,7 @@
 		                </div>
 		            </fieldset>
 		        </div>
-		        <!-- /modul -->        
+		        <!-- /modul -->		        		               
 	    	</div>
 		    <!-- Menú de publicación -->
 		    <div class="modulLateral menuPublicacion">
@@ -3111,8 +3112,112 @@
 		                </div>
 		            </fieldset>
 		        </div>
+		        
+	            <!-- Documentos -->
+	            <div class="modul" id="modul_documents">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='document.documentsRelacionats'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulDocuments -->
+	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+	                        <div class="modulDocuments multilang">                            
+	                            <ul class="idiomes">                                
+	                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
+	                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+	                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+	                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+	                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
+	                            </ul>
+	                            
+	                            <div class="seleccionats">
+	                                <%-- dsanchez: multiidioma --%>
+	                                <div class="seleccionat cajaIdioma ca">
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="es cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="en cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="de cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="fr cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
+	                                </div>
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulDocuments -->                                 
+	                    </div>    
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->      
+
+	            <!-- Formularios -->
+	            <div class="modul" id="modul_formularis">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='document.formularisRelacionats'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulDocuments -->
+	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+	                        <div class="modulDocuments multilang">                            
+	                            <ul class="idiomes">                                
+	                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
+	                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+	                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+	                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+	                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
+	                            </ul>
+	                            
+	                            <div class="seleccionats">
+	                                <%-- dsanchez: multiidioma --%>
+	                                <div class="seleccionat cajaIdioma ca">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="es cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="en cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="de cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="fr cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
+	                                </div>
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulFormularis -->                                 
+	                    </div>    
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->     
+		        
 		    </div>
 		    <!-- /Menú de publicación -->
+		                    
 	</div>    
 	</form>    
 </div>                           
