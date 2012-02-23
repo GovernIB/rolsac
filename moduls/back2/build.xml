@@ -35,6 +35,9 @@
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
 		</fileset>
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-collections-3.2.1.jar"/>
+		</fileset>		
 	</path>
 	
     <path id="web.class.path">

@@ -75,15 +75,15 @@
 			<include name="jericho-html-2.5.jar"/>        	
 			<include name="lucene-caib.jar"/>
 			<include name="lucene-core-2.2.0.jar"/>
-			<include name="lucene-spellchecker-2.2.0.jar"/>	
+			<include name="lucene-spellchecker-2.2.0.jar"/>							
 		</fileset>
 
     </path>
 
     <path id="doclet.class.path">
         <path refid="ejb.class.path"/>
-        <fileset dir="${lib.dir}">
-            <include name="commons-collections.jar"/>
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-collections-3.2.1.jar"/>
         </fileset>
         <fileset dir="${xdoclet.dir}">
             <include name="*.jar"/>
@@ -125,7 +125,7 @@
     </target>
 
     <target name="ejb.gen.all" depends="prepare,init">
-
+		<echo>1</echo>
     	<!-- http://xdoclet.sourceforge.net/xdoclet/ant/xdoclet/modules/ejb/EjbDocletTask.html -->
         <ejbdoclet
             destdir="${ejb.gen.src}"
@@ -134,12 +134,11 @@
             force="false"
             verbose="true"
             >
-
+			
             <fileset dir="${ejb.src}">
                 <include name="**/*EJB.java"/>
                 <include name="**/*MDB.java"/>
-            </fileset>
-
+            </fileset>			
             <packageSubstitution packages="ejb" substituteWith="intf"/>
             <localinterface pattern="{0}Local"/>
             <localhomeinterface pattern="{0}LocalHome"/>
@@ -168,8 +167,7 @@
                 unauthenticatedPrincipal="${persistence.auth.principal}"
                 />
 
-        </ejbdoclet>
-		
+        </ejbdoclet>		
         <copy file="${ejb.etc}/hibernate-rolsac.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
     	<copy file="${ejb.etc}/email.properties" todir="${ejb.gen.etc}" overwrite="true"/>
     	

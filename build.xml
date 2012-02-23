@@ -301,14 +301,23 @@
   <!-- ================================================================== -->
 
 	  <target name="propagate01ROLSAC">
+	  	<echo>UTILS</echo>
 		<ant dir="moduls/utils" target="${task}" inheritall="false"/>
+	  	<echo>EXTRACTOR</echo>
 		<ant dir="moduls/extractor" target="${task}" inheritall="false"/>
+	  	<echo>MODEL</echo>
 		<ant dir="moduls/model" target="${task}" inheritall="false"/>
+	  	<echo>PERSISTENCE</echo>
 	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
+	  	<echo>INTEGRACION</echo>
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
+	  	<echo>WS</echo>
 		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
+	  	<echo>BACK</echo>
 		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+	  	<echo>BACK2</echo>
 		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
+	  	<echo>TRASPAS-BOIB</echo>
 		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
 	  </target>	
  	
