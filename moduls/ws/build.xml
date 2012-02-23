@@ -43,7 +43,6 @@
             <include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
             <include name="commons-logging.jar"/>
-            <include name="commons-collections.jar"/>
         </fileset>
     	
     	<fileset dir="${lib.dir}/webcaib">

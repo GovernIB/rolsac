@@ -102,8 +102,8 @@
         	   <exclude name="commons-logging-1.1.1.jar"/>
 			</lib>
 
-        	<lib dir="${lib.dir}">
-            	<include name="commons-collections.jar"/>
+        	<lib dir="${lib.dir}/webcaib">
+				<include name="commons-collections-3.2.1.jar"/>
         	</lib>
 
         	<lib dir="${lib.dir}/jboss">

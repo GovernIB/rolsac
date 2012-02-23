@@ -44,10 +44,6 @@
             <include name="cglib2.jar"/>
             <include name="ejb-2_0.jar"/>
             <include name="jms.jar"/>
-<!--
-        	<include name="lucene.jar"/>
-            <include name="lucene-ibit.jar"/>
--->
             <include name="commons-logging.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="mail.jar"/>
@@ -261,13 +257,16 @@
 	        <fileset dir="${lib.dir}">
 	            <include name="hibernate2.jar"/>
 	        	<include name="ojdbc14.jar"/>
-	            <include name="dom4j.jar"/>
 	            <include name="commons-logging.jar"/>
-	            <include name="commons-collections.jar"/>
-	        	<include name="odmg-3.0.jar"/>
-	   			<include name="lucene-caib.jar"/>
 	        	<include name="cglib2.jar"/>
 	        </fileset>
+			<fileset dir="${lib.dir}/webcaib">
+				<include name="commons-collections-3.2.1.jar"/>
+	            <include name="dom4j.jar"/>
+	   			<include name="lucene-caib.jar"/>
+	        	<include name="odmg.jar"/>
+	        </fileset>
+
 			<fileset dir="${output.dir}/moduls">
 				<include name="model.jar"/>
 			</fileset>
