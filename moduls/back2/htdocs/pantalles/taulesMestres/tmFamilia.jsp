@@ -431,7 +431,8 @@
                             </div>
                         </div>
                         <div class="fila">
-                            <div class="element t50p">
+                            <div class="element t50p campoImagen">
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="icona_arxiu"><spring:message code='camp.arxiu'/></label></div>
                                 <div class="control archivo">   
                                     <div id="grup_arxiu_actual_icona" class="grup_arxiu_actual">

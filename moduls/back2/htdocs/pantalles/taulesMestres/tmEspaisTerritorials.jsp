@@ -323,7 +323,8 @@
                     </div>
                     <!-- fila -->
                     <div class="fila">
-                        <div class="element t50p">
+                        <div class="element t50p campoImagen">
+                            <div class="thumbnail"></div>
                             <div class="etiqueta"><label for="item_mapa"><spring:message code='camp.mapa'/></label></div>
                             <div class="control archivo">
                                 <div id="grup_item_mapa" class="grup_arxiu_actual">
@@ -344,7 +345,8 @@
                     <!-- /fila -->
                     <!-- fila -->
                     <div class="fila">
-                        <div class="element t50p">
+                        <div class="element t50p campoImagen">
+                            <div class="thumbnail"></div>
                             <div class="etiqueta"><label for="item_logo"><spring:message code='camp.logo'/></label></div>
                             <div class="control archivo">
                                 <div id="grup_item_logo" class="grup_arxiu_actual">

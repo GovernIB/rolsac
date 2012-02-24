@@ -250,7 +250,8 @@
                         </div>
                         <!-- fila -->
 	                    <div class="fila">
-	                        <div class="element t50p">
+	                        <div class="element t50p campoImagen">
+                                <div class="thumbnail"></div>
 	                            <div class="etiqueta"><label for="item_logo_petit"><spring:message code='administracioRemota.formulari.logo_petit'/></label></div>
 	                            <div class="control archivo">   
 	                                <div id="grup_item_logo_petit" class="file grup_arxiu_actual">
@@ -273,7 +274,8 @@
                         <!-- /fila -->
                         <!-- fila -->
                         <div class="fila">
-                            <div class="element t50p">
+                            <div class="element t50p campoImagen">
+                                <div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="item_logo_gran"><spring:message code='administracioRemota.formulari.logo_gran'/></label></div>
                                 <div class="control archivo">   
                                     <div id="grup_item_logo_gran" class="file grup_arxiu_actual">
