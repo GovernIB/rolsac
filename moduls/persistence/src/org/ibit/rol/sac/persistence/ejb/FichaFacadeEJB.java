@@ -2309,6 +2309,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	public void crearSeccionesFichas(UnidadAdministrativa ua, String[] listaSeccionesFicha ) {
 		
 		Set<FichaUA> listaFUAOrigen = ua.getTodasfichas();				
+		if (listaFUAOrigen == null) {
+			listaFUAOrigen = new HashSet<FichaUA>();
+		}
 		
 		// Construir una lista con la información de las distintas secciones		
 		Set<SimpleSeccion> listaSimpleSeccion = new HashSet<SimpleSeccion>();
