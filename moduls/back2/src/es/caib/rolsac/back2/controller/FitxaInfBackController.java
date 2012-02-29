@@ -85,48 +85,48 @@ public class FitxaInfBackController {
         model.put("submenu_seleccionado", 3);
         model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
         model.put("escriptori", "pantalles/fitxaInf.jsp");
+        String lang = request.getLocale().getLanguage();
         if (session.getAttribute("unidadAdministrativa") != null) {
-            String lang = request.getLocale().getLanguage();
             model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
             model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
 
-            try {
-                
-                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                List<Materia> llistaMateries = new ArrayList<Materia>();
-                List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-                
-                llistaMateries = materiaDelegate.listarMaterias();
-    
-                for (Materia materia : llistaMateries) {
-                    llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));                }
-    
-                model.put("llistaMateries", llistaMateriesDTO);
-                
-                HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();  
-                List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();                
-                List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
-                
-                llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
-                
-                for (HechoVital fetVital : llistaFetsVitals) {
-                    TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-                    llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
-                                                                     thv == null ? null : thv.getNombre()));
-                }
-                
-                model.put("llistaFetsVitals", llistaFetsVitalsDTO);
-    
-            } catch (DelegateException dEx) {
-                if (dEx.isSecurityException()) {
-                    // model.put("error", "permisos");//TODO:mensajes de error
-                	log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
-                } else {
-                    // model.put("error", "altres");
-                	log.error(ExceptionUtils.getStackTrace(dEx));
-                }
-            }            
         }
+        try {
+        	
+        	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+        	List<Materia> llistaMateries = new ArrayList<Materia>();
+        	List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+        	
+        	llistaMateries = materiaDelegate.listarMaterias();
+        	
+        	for (Materia materia : llistaMateries) {
+        		llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));                }
+        	
+        	model.put("llistaMateries", llistaMateriesDTO);
+        	
+        	HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();  
+        	List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();                
+        	List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+        	
+        	llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
+        	
+        	for (HechoVital fetVital : llistaFetsVitals) {
+        		TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+        		llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
+        				thv == null ? null : thv.getNombre()));
+        	}
+        	
+        	model.put("llistaFetsVitals", llistaFetsVitalsDTO);
+        	
+        } catch (DelegateException dEx) {
+        	if (dEx.isSecurityException()) {
+        		// model.put("error", "permisos");//TODO:mensajes de error
+        		log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
+        	} else {
+        		// model.put("error", "altres");
+        		log.error(ExceptionUtils.getStackTrace(dEx));
+        	}
+        }            
         return "index";
     }
 
@@ -141,15 +141,22 @@ public class FitxaInfBackController {
 
         String lang = request.getLocale().getLanguage();
         
+		//Obtenemos la ordenación por parámetro
+		String campoOrdenacion = request.getParameter("ordreCamp");
+		String orden = request.getParameter("ordreTipus");
+		
         UnidadAdministrativa ua = null;
         Long fetVital = null;
         Long materia = null;
         
         
-        if (session.getAttribute("unidadAdministrativa") == null) {
-            return resultats; // Si no hay unidad administrativa se devuelve vacio
-        } else {
-            ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+//        if (session.getAttribute("unidadAdministrativa") == null) {
+//            return resultats; // Si no hay unidad administrativa se devuelve vacio
+//        } else {
+//            ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+//        }
+        if (session.getAttribute("unidadAdministrativa") != null) {
+        	ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
         }
           
         try {
@@ -233,7 +240,7 @@ public class FitxaInfBackController {
         
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves);           
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves, campoOrdenacion, orden);           
                         
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());

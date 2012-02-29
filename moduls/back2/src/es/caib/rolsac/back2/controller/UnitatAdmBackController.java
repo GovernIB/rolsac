@@ -825,7 +825,7 @@ public class UnitatAdmBackController {
 		
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves);           
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves, null, null);           
             
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());

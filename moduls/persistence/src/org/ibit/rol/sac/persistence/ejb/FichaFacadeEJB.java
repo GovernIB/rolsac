@@ -401,7 +401,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves) {        
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {        
         Session session = getSession();
         
         try {           
@@ -425,12 +425,16 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
             }
             
+            String orderBy = "";
+            if (campoOrdenacion != null && orden != null) orderBy = " order by ficha." + campoOrdenacion + " " + orden;
             
-            ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
             Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
             Set<Long> uasIds = new HashSet<Long>();
             
-            uas.add(ua);
+            if (ua != null) {
+	            ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+	            uas.add(ua);
+            }
             
             if (uaMeves) {
             	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
@@ -475,7 +479,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
               params.add(idMateria);
             }
                        
-            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery);
+            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + orderBy);
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
                 query.setParameter(i, o);

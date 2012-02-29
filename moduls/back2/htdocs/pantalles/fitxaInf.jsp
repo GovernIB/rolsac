@@ -240,7 +240,7 @@
             </div>
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="publicacio" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
         <div class="resultats C">
             <!-- cercador -->
@@ -265,10 +265,13 @@
                             </div>
                         </div>
                         <div class="element>                        
-                            <label for="visibilitat">Visibilitat</label>                            
-                            <select id="visibilitat" name="visibilitat">
-                                <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
-                            </select>
+                            <label for="cerca_estat">Visibilitat</label>                            
+	                           <select id="cerca_estat" name="cerca_estat" class="t8">
+	                               <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+	                               <option value="1"><spring:message code='txt.validacio.publica'/></option>
+	                               <option value="2"><spring:message code='txt.validacio.interna'/></option>
+	                               <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+	                           </select>
                         </div>                        
                     </div>
                     <div class="busquedaBasica">
@@ -295,6 +298,7 @@
                     <div class="busquedaAvanzada">
                         <h2>CERCADOR AVANÇAT</h2>                        
                         <div class="fila">
+                        <%--
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_estat"><spring:message code='fitxes.llistat.estat'/></label>
@@ -308,6 +312,7 @@
                                     </select>
                                 </div>
                             </div>
+                         --%>
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_materia"><spring:message code='fitxes.llistat.materia'/></label>
@@ -398,7 +403,7 @@
             <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" /> 
             <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="publicacio" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
     </div>
 </div>
@@ -449,7 +454,7 @@
                                                 <label for="item_clave_primaria"><spring:message code='camp.clau_primaria'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" class="nou" />
+                                                <input id="item_clave_primaria" name="item_clave_primaria" type="text" readonly="readonly"/>
                                             </div>                                            
                                         </div>
                                     </div>

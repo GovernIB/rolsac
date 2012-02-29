@@ -96,9 +96,10 @@ function CLlistat(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "titulo") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "fechaPublicacion") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "fechaCaducidad") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "fechaActualizacion") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -106,12 +107,14 @@ function CLlistat(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "titulo") {
+				if (ordre_C == "id") {
 					txt_per = txtLlistaItem;
 				} else if (ordre_C == "fechaPublicacion") {
 					txt_per = txtPublicacio;
-				} else {
+				} else if (ordre_C == "fechaCaducidad") {
 					txt_per = txtCaducitat;
+				} else {
+					txt_per = txtFechaModificacion;
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
@@ -125,10 +128,10 @@ function CLlistat(){
 			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtPublicacio + "</a></div>";
 			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtCaducitat + "</a></div>";
 			*/
-			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titulo\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th publicacio" + ordre_c2 + "\" role=\"columnheader\"><a class=\"fechaPublicacion\" href=\"javascript:void(0)\">" + txtPublicacio + "</a></div>";
 			codi_cap3 = "<div class=\"th caducitat" + ordre_c3 + "\" role=\"columnheader\"><a class=\"fechaCaducidad\" href=\"javascript:void(0)\">" + txtCaducitat + "</a></div>";
-            codi_cap4 = "<div class=\"th modificacio" + ordre_c3 + "\" role=\"columnheader\"><a class=\"fechaModificacion\" href=\"javascript:void(0)\">" + txtFechaModificacion + "</a></div>";
+            codi_cap4 = "<div class=\"th modificacio" + ordre_c4 + "\" role=\"columnheader\"><a class=\"fechaActualizacion\" href=\"javascript:void(0)\">" + txtFechaModificacion + "</a></div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -232,11 +235,11 @@ function CLlistat(){
 			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();
-			dataVars_cercador += "&url=" + $("#cerca_url").val();
-			dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
-			dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
-			dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
-			dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
+			//dataVars_cercador += "&url=" + $("#cerca_url").val();
+			//dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
+			//dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
+			//dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
+			//dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
 			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").val();			
 			var uaMevesVal = $("#cerca_uaMeves").attr('checked') ? 1 : 0;
 			dataVars_cercador += "&uaMeves=" + uaMevesVal;
