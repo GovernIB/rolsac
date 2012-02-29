@@ -20,12 +20,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
@@ -39,6 +42,8 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -101,8 +106,19 @@ public class CatalegProcedimentsBackController {
 		String lang = getRequestLanguage(request);
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
 
+	}
+
+	private void crearModelSencill_pantalla() {
+		model.put("menu", 0);
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
+		model.put("submenu_seleccionado", 1);
+		model.put("escriptori", "pantalles/catalegProcediments.jsp");
+		
+		String lang = getRequestLanguage(request);
 		try {
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
+			model.put("llistaFetsVitals", LlistatUtil.llistarHechosVitales(lang));
+			model.put("llistaPublicObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 		} catch (DelegateException dEx) {
@@ -113,13 +129,6 @@ public class CatalegProcedimentsBackController {
 				logException(log, dEx);
 			}
 		}
-	}
-
-	private void crearModelSencill_pantalla() {
-		model.put("menu", 0);
-		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-		model.put("submenu_seleccionado", 1);
-		model.put("escriptori", "pantalles/catalegProcediments.jsp");
 	}
 
 	private String getRequestLanguage(HttpServletRequest request) {
@@ -145,9 +154,12 @@ public class CatalegProcedimentsBackController {
 
 		
 		UnidadAdministrativa ua = null;
-		if (getUAFromSession(session) == null) {
-			return resultats; // Si no hay unidad administrativa se devuelve vacio
-		} else {
+//		if (getUAFromSession(session) == null) {
+//			return resultats; // Si no hay unidad administrativa se devuelve vacio
+//		} else {
+//			ua = (UnidadAdministrativa) getUAFromSession(session);
+//		}
+		if (getUAFromSession(session) != null) {
 			ua = (UnidadAdministrativa) getUAFromSession(session);
 		}
 		// paramMap.put("unidadAdministrativa.id", ua.getId());
@@ -291,6 +303,17 @@ public class CatalegProcedimentsBackController {
 			}
 		}
 
+		// Paràmetres ordenació
+		String ordreCamp = request.getParameter("ordreCamp");
+		if (ordreCamp != null && !"".equals(ordreCamp)) {
+			paramMap.put("ordreCamp", ordreCamp);
+		}
+		String ordreTipus = request.getParameter("ordreTipus");
+		if (ordreTipus != null && !"".equals(ordreTipus)) {
+			paramMap.put("ordreTipus", ordreTipus);
+		}
+
+		
 		// Textes (en todos los campos todos los idiomas)
 		String textes = request.getParameter("textes");
 		if (textes != null && !"".equals(textes)) {
@@ -369,7 +392,9 @@ public class CatalegProcedimentsBackController {
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
 			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
-
+			// TODO: Implementar getPublic()
+//			resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
+			
 			// Idiomas
 			if (proc.getTraduccion("ca") != null) {
 				resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion("ca"));
@@ -471,6 +496,18 @@ public class CatalegProcedimentsBackController {
             } 
             // Fin Materias asociadas
             
+			// Hechos vitales asociados
+            if (proc.getHechosVitalesProcedimientos() != null) {             
+                List<IdNomDTO> llistaFetsDTO = new ArrayList<IdNomDTO>();
+                for(HechoVitalProcedimiento hechoVital : proc.getHechosVitalesProcedimientos()){
+                	TraduccionHechoVital thv = (TraduccionHechoVital) hechoVital.getHechoVital().getTraduccion(lang);
+                    llistaFetsDTO.add(new IdNomDTO(hechoVital.getHechoVital().getId(), thv.getNombre()));                
+                }
+                resultats.put("fetsVitals", llistaFetsDTO);
+            } else {
+                resultats.put("fetsVitals", null);
+            } 
+            // Fin Hechos vitales asociados
             
             // Normativas asociadas
             if (proc.getNormativas() != null) {             
@@ -652,6 +689,40 @@ public class CatalegProcedimentsBackController {
                 }
                 // Fin Materias
                 
+                // Hechos vitales
+                /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
+                 * En el primer caso es bastante probable que se repitan la mayoria de materias.
+                 */
+                if (request.getParameter("fetsVitals") != null && !"".equals(request.getParameter("fetsVitals"))){
+                    HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+                    Set<HechoVitalProcedimiento> fetsVitalsNous = new HashSet<HechoVitalProcedimiento>();
+                    String[] codisFetsVitalsNous = request.getParameter("fetsVitals").split(",");
+                    
+                    if (edicion) {
+                        for (int i = 0; i < codisFetsVitalsNous.length; i++){
+                            for (HechoVitalProcedimiento fetVitalProc : procedimentOld.getHechosVitalesProcedimientos()){
+                                if(fetVitalProc.getHechoVital().getId().equals(Long.valueOf(codisFetsVitalsNous[i]))) {//materia ya existente
+                                	fetsVitalsNous.add(fetVitalProc);
+                                	codisFetsVitalsNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiFetVital : codisFetsVitalsNous) {
+                        if (codiFetVital != null) {
+                        	for (HechoVitalProcedimiento hvp : (List<HechoVitalProcedimiento>) hechoVitalDelegate.obtenerHechoVital(Long.valueOf(codiFetVital)).getHechosVitalesProcedimientos()) {
+                        		if (!fetsVitalsNous.contains(hvp)) {
+                        			fetsVitalsNous.add(hvp);
+                        		}
+                        	}
+                        }                        
+                    }
+                    
+                    procediment.setHechosVitalesProcedimientos(fetsVitalsNous);                                   
+                }
+                // Fin Hechos vitales
                 
                 // Normativas
                 /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
@@ -761,6 +832,8 @@ public class CatalegProcedimentsBackController {
 					tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
 					tpl.setSilencio(request.getParameter("item_silenci_" + lang));
 					tpl.setObservaciones(request.getParameter("item_observacions_" + lang));
+					tpl.setPlazos(request.getParameter("item_presentacio_" + lang));
+					tpl.setLugar(request.getParameter("item_lloc_" + lang));
 					
 					procediment.setTraduccion(lang, tpl);
 				}
@@ -821,6 +894,9 @@ public class CatalegProcedimentsBackController {
 				procediment.setResponsable(request.getParameter("item_responsable"));
 				procediment.setTramite(request.getParameter("item_tramite"));
 				procediment.setUrl(request.getParameter("item_url"));
+				// TODO: Implementar setPublico()
+//				procediment.setPublico(request.getParameter("item_public_objectiu"));
+				
 				try {
 					String versionStr = request.getParameter("item_version");
 					if (versionStr != null && !"".equals(versionStr)) {
@@ -924,7 +1000,7 @@ public class CatalegProcedimentsBackController {
 			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", ua.getId(), false, campoOrdenacion, orden);
+			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", ua.getId(), false, false, campoOrdenacion, orden);
 			
 			for (Normativa normativa : llistaNormatives) {
 				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);

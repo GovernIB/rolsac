@@ -5,16 +5,22 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionIniciacion;
+import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 
 public class LlistatUtil {
 
@@ -52,4 +58,27 @@ public class LlistatUtil {
 		return materiesDTOList;
 	}
 	
+	public static List<IdNomDTO> llistarHechosVitales(String lang) throws DelegateException {
+		HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+		List<IdNomDTO> fetsDTOList = new ArrayList<IdNomDTO>();
+		List<HechoVital> llistaFetsVitals = hechoVitalDelegate.listarHechosVitales();
+		TraduccionHechoVital tfv;
+		for (HechoVital fetVital : llistaFetsVitals) {
+			tfv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+			fetsDTOList.add(new IdNomDTO(fetVital.getId(), tfv.getNombre()));
+		}
+		return fetsDTOList;
+	}
+	
+	public static List<IdNomDTO> llistarPublicObjectius(String lang) throws DelegateException {
+		PublicoObjetivoDelegate publicoObjetivoDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+		List<IdNomDTO> publicObjDTOList = new ArrayList<IdNomDTO>();
+		List<PublicoObjetivo> llistaPublicObjetius = publicoObjetivoDelegate.listarPublicoObjetivo();
+		TraduccionPublicoObjetivo tpo;
+		for (PublicoObjetivo publicoObjetivo : llistaPublicObjetius) {
+			tpo = (TraduccionPublicoObjetivo) publicoObjetivo.getTraduccion(lang);
+			publicObjDTOList.add(new IdNomDTO(publicoObjetivo.getId(), tpo.getTitulo()));
+		}
+		return publicObjDTOList;
+	}
 }

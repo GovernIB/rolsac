@@ -236,9 +236,9 @@ function CEscriptoriProcediment(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "nom") ? " " + ordre_T : "";            
-            ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";            
+            ordre_c2 = (ordre_C == "familia.id") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "fechaActualizacion") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -246,9 +246,9 @@ function CEscriptoriProcediment(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "nom") {
+				if (ordre_C == "id") {
 					txt_per = txtProcediment;
-				} else if (ordre_C == "familia") {					
+				} else if (ordre_C == "familia.id") {					
                     txt_per = txtFamilia;
 				} else {
 					txt_per = txtFechaActualizacion;
@@ -263,8 +263,8 @@ function CEscriptoriProcediment(){
 //			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtTitol + "</a></div>";
 //			codi_cap2 = "<div class=\"th data" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
 //			codi_cap3 = "<div class=\"th dataButlleti" + ordre_c3 + "\" role=\"columnheader\">" + txtDataButlleti + "</a></div>";
-			codi_cap1 = "<div class=\"th procediment "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"nom\">" + txtProcediment + "</a></div>";
-            codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia\">" + txtFamilia + "</a></div>";
+			codi_cap1 = "<div class=\"th procediment "+ ordre_c1 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"id\">" + txtProcediment + "</a></div>";
+            codi_cap2 = "<div class=\"th familia "+ ordre_c2 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"familia.id\">" + txtFamilia + "</a></div>";
 			codi_cap3 = "<div class=\"th fechaActualizacion "+ ordre_c3 +"\" role=\"columnheader\"><a href=\"javascript:void(0)\" class=\"fechaActualizacion\">" + txtFechaActualizacion + "</a></div>";
 			
 			// codi taula

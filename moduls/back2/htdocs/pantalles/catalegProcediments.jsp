@@ -248,7 +248,27 @@
                 	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
                     "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
                 }
-        }
+        },
+        
+		// Organ competent per resoldre 
+		{	
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_organ_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtOrganoObligatorio,
+                }			
+		}
+        
     ];
     
     var FormulariTramits = [                            
@@ -285,25 +305,6 @@
                 }
         }
                 
-//		{	
-			// Organ competent per resoldre 
-//            "modo": "individual",
-//            "etiqueta": "id",
-//            "etiquetaValor": "item_organ_id",
-//            "obligatori": "si",
-//            "tipus": "alfanumeric",
-//            "caracters":
-//                {
-//                    "maxim": 250,
-//                    "mostrar": "no",
-//                    "abreviat": "no"
-//                },
-//            "error":
-//                {
-//                    "obligatori": txtOrganoObligatorio,
-//                }			
-//		}
-        
     ];
 -->
 </script>
@@ -327,7 +328,7 @@
             </div>
             <input type="hidden" value="0" class="pagPagina" /> <input
                 type="hidden" value="DESC" class="ordreTipus" /> <input
-                type="hidden" value="nom" class="ordreCamp" />
+                type="hidden" value="id" class="ordreCamp" />
         </div>
         <div class="resultats C">
             <!-- cercador -->
@@ -352,9 +353,12 @@
                             </div>
                         </div>
                         <div class="element">                        
-                            <label for="visibilitat">Visibilitat</label>                            
-                            <select id="visibilitat" name="visibilitat">
-                                <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
+                            <label for="cerca_estat">Visibilitat</label>                            
+                            <select id="cerca_estat" name="cerca_estat" class="t8">
+                                <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                <option value="3"><spring:message code='txt.validacio.reserva'/></option>
                             </select>
                         </div>                        
                     </div>
@@ -390,6 +394,7 @@
                                     <input id="cerca_tramit" name="cerca_tramit" type="text"/>
                                 </div>
                             </div>
+                            <%--
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_estat"><spring:message code='camp.estat'/></label>
@@ -403,6 +408,7 @@
                                     </select>
                                 </div>
                             </div>
+                             --%>
                         </div>
                         <div class="fila">
                             <div class="element t25">
@@ -412,6 +418,9 @@
                                 <div class="control">
                                     <select id="cerca_materia" name="cerca_materia" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
+                                        <c:forEach items="${llistaMateries}" var="materia">
+                                            <option value="<c:out value="${materia.id}"/>"><c:out value="${materia.nom}"/></option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -422,6 +431,9 @@
                                 <div class="control">
                                     <select id="cerca_fet_vital" name="cerca_fet_vital" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                        
+                                        <c:forEach items="${llistaFetsVitals}" var="fetVital">
+                                            <option value="<c:out value="${fetVital.id}"/>"><c:out value="${fetVital.nom}"/></option>
+                                        </c:forEach>
                                     </select>
                                 </div>
                             </div>
@@ -562,7 +574,7 @@
             <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="publicacio" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
     </div>
 </div>
@@ -1472,7 +1484,7 @@
                                         <label for="item_presentacio_ca">Presentació (CA)</label>
                                     </div>
                                     <div class="control">
-                                        <input id="item_presentacio_ca" name="item_presentacio" type="text" class="nou" />
+                                        <input id="item_presentacio_ca" name="item_presentacio_ca" type="text" class="nou" />
                                     </div>
                                 </div>
                                 <div class="campoIdioma es">
@@ -1933,7 +1945,10 @@
             <div class="modul">
                 <fieldset>                    
                     <legend><spring:message code='camp.familia'/></legend>                               
-                    <div class="element">                        
+                    <div class="element">     
+                    	<div class="etiqueta">
+                            <label for="item_familia"><spring:message code='camp.familia'/></label>
+                        </div>                   
                         <div class="control select">
                             <select id="item_familia" name="item_familia" class="nou">
                                 <option value="" selected="selected"><spring:message code='camp.cap'/></option>
@@ -2067,6 +2082,9 @@
                 </fieldset>                     
             </div>
             <!-- /modul -->  
+            
+            
+            
         </div>
         <!-- /modulLateral -->
     </div>

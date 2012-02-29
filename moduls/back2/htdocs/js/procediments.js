@@ -98,9 +98,9 @@ function CLlistat(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "nom") ? " " + ordre_T : "";            
-            ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
+            ordre_c2 = (ordre_C == "familia.id") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "fechaActualizacion") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -108,9 +108,9 @@ function CLlistat(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "nom") {
+				if (ordre_C == "id") {
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "familia") {					
+				} else if (ordre_C == "familia.id") {					
                     txt_per = txtFamilia;
 				} else {
 					txt_per = txtFechaActualizacion;
@@ -240,15 +240,15 @@ function CLlistat(){
 			dataVars_cercador += "&familia=" + $("#cerca_familia").val();
 			dataVars_cercador += "&iniciacio=" + $("#cerca_iniciacio").val();
 			dataVars_cercador += "&tramit=" + $("#cerca_tramit").val();
-			dataVars_cercador += "&versio=" + $("#cerca_versio").val();
-			dataVars_cercador += "&url=" + $("#cerca_url").val();
+			//dataVars_cercador += "&versio=" + $("#cerca_versio").val();
+			//dataVars_cercador += "&url=" + $("#cerca_url").val();
 			dataVars_cercador += "&indicador=" + $("#cerca_indicador").val();
 			dataVars_cercador += "&finestreta=" + $("#cerca_finestreta").val();
-			dataVars_cercador += "&taxa=" + $("#cerca_taxa").val();
-			dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
-			dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
-			dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
-			dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
+			//dataVars_cercador += "&taxa=" + $("#cerca_taxa").val();
+			//dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
+			//dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
+			//dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
+			//dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
 			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			var uaMevesVal = $("#cerca_uaMeves").attr('checked') ? 1 : 0;
@@ -407,6 +407,7 @@ function CDetall(){
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		
 		ModulMateries.nuevo();
+		ModulFetsVitals.nuevo();
 		ModulNormativa.nuevo();
         EscriptoriNormativa.nuevo();
 
@@ -464,7 +465,8 @@ function CDetall(){
 			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
             
-            jQuery("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
+            $("#item_presentacio_" + idioma).val(printStringFromNull(dada_node[idioma]["plazos"]));
+            $("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
 		}
 		// Fin bloque de pestanyas de idiomas
 		
@@ -544,6 +546,8 @@ function CDetall(){
 		ModulDocuments.inicializarDocuments(dada_node.documents);
         
 		ModulMateries.inicializarMaterias(dada_node.materies);
+		
+		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
 		
 		ModulNormativa.inicializarNormativas(dada_node.normatives);
 		

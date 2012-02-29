@@ -672,11 +672,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
 			}
 
-			ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
 			Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
 			Set<Long> uasIds = new HashSet<Long>();
 
-			uas.add(ua);
+			if (ua != null) {
+				ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+				uas.add(ua);
+			}
 
 			if (uaMeves) {
 				uas.addAll(getUsuario(session).getUnidadesAdministrativas());
@@ -708,8 +710,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				uaQuery = " ";
 			}
 
-			Query query = session.createQuery("select distinct procedimiento from ProcedimientoLocal as procedimiento "
-			        + ", procedimiento.traducciones as trad " + i18nQuery + uaQuery);
+			String queryStr = "select distinct procedimiento from ProcedimientoLocal as procedimiento "
+		        + ", procedimiento.traducciones as trad " + i18nQuery + uaQuery
+		        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			
+			Query query = session.createQuery(queryStr);
+			
 			for (int i = 0; i < params.size(); i++) {
 				String o = (String) params.get(i);
 				query.setString(i, o);
@@ -1492,7 +1498,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
-            if (value != null) {
+            if (!key.startsWith("ordre") && value != null) {
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
