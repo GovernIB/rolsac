@@ -324,6 +324,30 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_ua_principal"><spring:message code='camp.uaPrincipal'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_ua_principal" name="item_ua_principal" class="nou">
+                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_destacada"><spring:message code='camp.destacada'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_destacada" name="item_destacada" type="checkbox" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
+                                    
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
@@ -430,6 +454,29 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_ua_principal_es"><spring:message code='camp.uaPrincipal'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_ua_principal_es" name="item_ua_principal_es" class="nou">
+                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_destacada_es"><spring:message code='camp.destacada'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_destacada_es" name="item_destacada_es" type="checkbox" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
@@ -534,6 +581,29 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_ua_principal_en"><spring:message code='camp.uaPrincipal'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_ua_principal_en" name="item_ua_principal_en" class="nou">
+                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_destacada_en"><spring:message code='camp.destacada'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_destacada_en" name="item_destacada_en" type="checkbox" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
@@ -638,6 +708,28 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_ua_principal_de"><spring:message code='camp.uaPrincipal'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_ua_principal_de" name="item_ua_principal_de" class="nou">
+                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_destacada_de"><spring:message code='camp.destacada'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_destacada_de" name="item_destacada_de" type="checkbox" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
@@ -742,6 +834,29 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_ua_principal_fr"><spring:message code='camp.uaPrincipal'/></label>
+                                            </div>
+                                            <div class="control select">
+                                                <select id="item_ua_principal_fr" name="item_ua_principal_fr" class="nou">
+                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="element t50p">
+                                            <div class="etiqueta">
+                                                <label for="item_destacada_fr"><spring:message code='camp.destacada'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_destacada_fr" name="item_destacada_fr" type="checkbox" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /fr -->
                             </div>
@@ -753,12 +868,11 @@
             <!-- /modul -->
         
             <!-- modul -->
-            <div class="modul">
+            <%--<div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='txt.dades'/></legend>
-                    <div class="modul_continguts mostrat">
-                        <%--
+                    <div class="modul_continguts mostrat">                        
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
@@ -768,8 +882,7 @@
                                     <input id="item_codi_hita" name="item_codi_hita" type="text" class="nou" />
                                 </div>
                             </div>
-                        </div>                    
-                        --%>                        
+                        </div>                                            
                         <!-- fila -->
                         <div class="fila">
                             <div class="element t50p">
@@ -794,7 +907,7 @@
                         <!-- /fila -->
                     </div>
                 </fieldset>
-            </div>
+            </div>--%>
             <!-- /modul -->
             
             <!-- modul -->

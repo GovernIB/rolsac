@@ -148,7 +148,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -164,7 +164,7 @@ function CLlistat(){
 		} else {
 			
 			// no hi ha items
-			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaItems + ".</p>";
 			
 		}
 		
@@ -292,11 +292,11 @@ function CDetall(){
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");	
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos				
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 	}
 	
-	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 				
 		// Validamos el formulario
@@ -304,7 +304,7 @@ function CDetall(){
 			return false;
 		}
 		
-		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',

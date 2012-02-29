@@ -147,7 +147,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -286,11 +286,19 @@ function CDetall(){
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
+        
+        // Sincronizar campos en zona multi-idioma.
+        jQuery("#item_coordenades,#item_coordenades_es,#item_coordenades_en,#item_coordenades_de,#item_coordenades_fr").change(function(){
+            jQuery("#item_coordenades,#item_coordenades_es,#item_coordenades_en,#item_coordenades_de,#item_coordenades_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").change(function(){
+            jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
+        });
 		
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
 
@@ -309,9 +317,9 @@ function CDetall(){
         	$("#item_codi_pare").val("");
         }
         if (typeof nomPare != 'undefined' && nomPare != null && nomPare != '') {
-        	$("#item_pare").val(nomPare);
+        	$("#item_pare").val(nomPare).change();
         } else {
-        	$("#item_pare").val(txtEspaiArrel);
+        	$("#item_pare").val(txtEspaiArrel).change();
         }
         if ((typeof idPare != 'undefined' && idPare != null && idPare != '') &&
         	(typeof nomPare != 'undefined' && nomPare != null && nomPare != '')) {
@@ -387,8 +395,8 @@ function CDetall(){
 		// Fin bloque de pestanyas de idiomas
 		
 		$("#item_codi_pare").val(printStringFromNull(dades.item_codi_pare));
-		$("#item_pare").val(printStringFromNull(dades.item_pare));
-		$("#item_coordenades").val(printStringFromNull(dades.item_coordenades));
+		$("#item_pare").val(printStringFromNull(dades.item_pare)).change();
+		$("#item_coordenades").val(printStringFromNull(dades.item_coordenades)).change();
 		
 		pintarArchivo("item_mapa", dades);
 		pintarArchivo("item_logo", dades);
@@ -444,10 +452,10 @@ function CDetall(){
 		montarBreadcrumb();
 	}
 	
-	// Sobreescribimos este mÈtodo para que nos salga el mensaje de "Cargando" correctamente.
+	// Sobreescribimos este m√©todo para que nos salga el mensaje de "Cargando" correctamente.
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el botÛn de guardar.
+		// Deshabilitamos inicialmente el bot√≥n de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();

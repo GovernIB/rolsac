@@ -149,7 +149,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -289,6 +289,14 @@ function CDetall(){
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
+        // Sincronizar campos sin idioma en zona multi-idioma.   
+        jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+            jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });        
+        jQuery("#item_seccio,#item_seccio_es,#item_seccio_en,#item_seccio_de,#item_seccio_fr").change(function(){
+            jQuery("#item_seccio,#item_seccio_es,#item_seccio_en,#item_seccio_de,#item_seccio_fr").val( jQuery(this).val() );
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
@@ -334,7 +342,7 @@ function CDetall(){
 	    	
 	    });
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
 
@@ -403,19 +411,22 @@ function CDetall(){
 		}
 		// Fin bloque de pestanyas de idiomas
 
-		$("#item_codi_estandard").val(dades.item_codi_estandard);
+		jQuery("#item_codi_estandard").val(dades.item_codi_estandard);
+        jQuery("#item_codi_estandard").change();        
 		
 		// Rellenar el select de seccions
-		var selected;
-		var $sec_select = $('#item_seccio');
+		var selected;		
+        var $sec_select = $('#item_seccio,#item_seccio_es,#item_seccio_en,#item_seccio_de,#item_seccio_fr');
 		$sec_select.find('option').remove();
 		$sec_select.append('<option value="0">' + txtTria + '</option>');
 		for (var i in dades.item_seccions) {
 			selected = dades.item_seccio == dades.item_seccions[i].id ? ' selected="selected"' : '';
 			$sec_select.append('<option value="' + dades.item_seccions[i].id + '"' + selected + '>' + dades.item_seccions[i].nom + '</option>');
 		}
-	    //$sec_select.val('whatever')
+	    //$sec_select.val('whatever')        
 		$sec_select.parent().parent().show();
+                
+        $sec_select.change();
 
 		ModulMateries.inicializarMaterias(dades.materies, true);
 		

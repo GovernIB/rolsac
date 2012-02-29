@@ -503,6 +503,7 @@ div.table {
     overflow:hidden;        
     font: 15px Arial, Helvetica, Sans-serif;
     margin-top: 20px;
+    padding-bottom: 20px;
 }
 div.table div.thead, 
 div.table div.thead div.tr { 

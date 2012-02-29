@@ -613,7 +613,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.dades'/></legend>
+                    <legend><spring:message code='personal.contacte'/></legend>
                     <div class="modul_continguts mostrat">                                                                        
                         <div class="fila">
                             <div class="element t50p">
@@ -760,7 +760,7 @@
             	<input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                    <legend><spring:message code='unitatAdministrativa.uaRelacionats'/></legend>                               
+                    <legend><spring:message code='unitatAdministrativa.uaRelacionatsAbr'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulUnitatAdministrativa -->
                         <div class="modulUnitatAdministratives">

@@ -211,6 +211,16 @@
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
+                                    <label for="item_codi_estandart"><spring:message code='administracioRemota.formulari.codi_estandart'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_codi_estandart" name="item_codi_estandart" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
                                     <label for="item_nom"><spring:message code='administracioRemota.formulari.nom'/></label>
                                 </div>
                                 <div class="control">
@@ -219,35 +229,40 @@
                             </div>
                         </div>
                         <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_endPoint"><spring:message code='administracioRemota.formulari.endPoint'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_endPoint" name="item_endPoint" type="text" class="nou" />
-                                </div>
-                            </div>
+	                        <div class="element t99p">                                      
+		                        <div class="etiqueta"><label for="item_espai_territorial"><spring:message code='administracioRemota.formulari.espai_territorial'/></label></div>
+		                        <div class="control select">
+		                            <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
+		                            <select id="item_espai_territorial" name="item_espai_territorial">
+		                                <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+		                                <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
+		                                    <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
+		                                </c:forEach>
+		                            </select>
+		                        </div>
+	                        </div>
                         </div>
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_profunditat"><spring:message code='administracioRemota.formulari.profunditat'/></label>
+                                    <label for="item_responsable"><spring:message code='administracioRemota.formulari.responsable'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_profunditat" name="item_profunditat" type="text" class="nou" />
+                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
                                 </div>
                             </div>
                         </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_codi_estandart"><spring:message code='administracioRemota.formulari.codi_estandart'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_codi_estandart" name="item_codi_estandart" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>Multimedia</legend>
+                    <div class="modul_continguts mostrat">                        
                         <!-- fila -->
 	                    <div class="fila">
 	                        <div class="element t50p campoImagen">
@@ -261,9 +276,7 @@
 	                                    <label for="item_logo_petit_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
 	                                </div>
 	                            </div>
-	                        </div>    
-	                        
-	                        
+	                        </div>    	                        	                        
 	                        <div class="element t50p">
 	                            <div class="etiqueta"><label for="item_logo_petit"><spring:message code='administracioRemota.formulari.logo_petit'/></label></div>
 	                            <div class="control">
@@ -286,8 +299,6 @@
                                     </div>
                                 </div>
                             </div>    
-                            
-                            
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_logo_gran"><spring:message code='administracioRemota.formulari.logo_gran'/></label></div>
                                 <div class="control">
@@ -295,21 +306,18 @@
                                 </div>
                             </div>                                                                                      
                         </div>
-                        <!-- /fila -->
-                        <div class="fila">
-	                        <div class="element t99p">                                      
-		                        <div class="etiqueta"><label for="item_espai_territorial"><spring:message code='administracioRemota.formulari.espai_territorial'/></label></div>
-		                        <div class="control select">
-		                            <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-		                            <select id="item_espai_territorial" name="item_espai_territorial">
-		                                <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-		                                <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
-		                                    <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
-		                                </c:forEach>
-		                            </select>
-		                        </div>
-	                        </div>
-                        </div>
+                        <!-- /fila -->                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+            
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.connexio'/></legend>
+                    <div class="modul_continguts mostrat">                        
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
@@ -319,14 +327,24 @@
                                     <input id="item_idRemot" name="item_idRemot" type="text" class="nou" />
                                 </div>
                             </div>
-                        </div>
+                        </div>             
                         <div class="fila">
                             <div class="element t99p">
                                 <div class="etiqueta">
-                                    <label for="item_responsable"><spring:message code='administracioRemota.formulari.responsable'/></label>
+                                    <label for="item_profunditat"><spring:message code='administracioRemota.formulari.profunditat'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
+                                    <input id="item_profunditat" name="item_profunditat" type="text" class="nou" />
+                                </div>
+                            </div>
+                        </div>                                    
+                        <div class="fila">
+                            <div class="element t99p">
+                                <div class="etiqueta">
+                                    <label for="item_endPoint"><spring:message code='administracioRemota.formulari.endPoint'/></label>
+                                </div>
+                                <div class="control">
+                                    <input id="item_endPoint" name="item_endPoint" type="text" class="nou" />
                                 </div>
                             </div>
                         </div>

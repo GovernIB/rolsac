@@ -158,7 +158,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.
+			// Instanciamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -321,10 +321,21 @@ function CDetall(){
 			ul_idiomes_elm.bind("click", that.idioma);
 		}
 		
+        // Sincronizar campos sin multi-idioma en zona multi-idioma.
+        jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
+            jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").change(function(){
+            jQuery("#item_pare,#item_pare_es,#item_pare_en,#item_pare_de,#item_pare_fr").val( jQuery(this).val() );
+        });
+        jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").change(function(){
+            jQuery("#item_perfil,#item_perfil_es,#item_perfil_en,#item_perfil_de,#item_perfil_fr").val( jQuery(this).val() );
+        });
+        
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");
 		
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 	}
 
@@ -343,9 +354,9 @@ function CDetall(){
         	$("#item_codi_pare").val("");
         }
         if (typeof nomPare != 'undefined' && nomPare != null && nomPare != '') {
-        	$("#item_pare").val(nomPare);
+        	$("#item_pare").val(nomPare).change();
         } else {
-        	$("#item_pare").val(txtSeccioArrel);
+        	$("#item_pare").val(txtSeccioArrel).change();
         }
         if ((typeof idPare != 'undefined' && idPare != null && idPare != '') &&
         	(typeof nomPare != 'undefined' && nomPare != null && nomPare != '')) {
@@ -422,8 +433,8 @@ function CDetall(){
 		// Fin bloque de pestanyas de idiomas
 		
 		$("#item_codi_pare").val(printStringFromNull(dades.item_codi_pare));
-		$("#item_pare").val(printStringFromNull(dades.item_pare));
-		$("#item_codi_estandard").val(printStringFromNull(dades.item_codi_estandard));
+		$("#item_pare").val(printStringFromNull(dades.item_pare)).change();
+		$("#item_codi_estandard").val(printStringFromNull(dades.item_codi_estandard)).change();
 		
 		
 		// Rellenar el select de perfils
@@ -436,6 +447,7 @@ function CDetall(){
 			$per_select.append('<option value="' + dades.item_perfils[i].id + '"' + selected + '>' + dades.item_perfils[i].nom + '</option>');
 		}
 		$per_select.parent().parent().show();
+        $per_select.change();
 
 		ModulSeccions.inicializarSecciones(dades.seccionsRelacionades);
 		ModulFitxes.inicializarFichas(dades.fitxesInformatives);
@@ -474,10 +486,10 @@ function CDetall(){
 		montarBreadcrumb();
 	}
 	
-	// Sobreescribimos este mÈtodo para que nos salga el mensaje de "Cargando" correctamente.
+	// Sobreescribimos este m√©todo para que nos salga el mensaje de "Cargando" correctamente.
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el botÛn de guardar.
+		// Deshabilitamos inicialmente el bot√≥n de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();

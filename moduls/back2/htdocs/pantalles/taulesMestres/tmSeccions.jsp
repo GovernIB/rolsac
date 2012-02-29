@@ -219,6 +219,18 @@
                             <div class="idiomes">
                                 <!-- ca -->
                                 <div class="idioma ca">
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard"><spring:message code='camp.codiEstandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -239,10 +251,64 @@
                                             </div>
                                         </div>
                                     </div>
+                                                                        
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
+                                                <input id="item_codi_pare" name="item_codi_pare" type="hidden" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarSPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_perfil"><spring:message code='camp.perfil'/></label>
+                                            </div>
+                                            <div class="control select">                                                
+                                                <select id="item_perfil" name="item_perfil">
+                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+                                                    <c:forEach items="${llistaPerfil}" var="perfil">
+                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
+                                    
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
                                 <div class="idioma es">
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_es"><spring:message code='camp.codiEstandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_es" name="item_codi_estandard_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -263,10 +329,62 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_es"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_es" name="item_pare" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare_es');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarSPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_perfil_es"><spring:message code='camp.perfil'/></label>
+                                            </div>
+                                            <div class="control select">                                                
+                                                <select id="item_perfil_es" name="item_perfil_es">
+                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+                                                    <c:forEach items="${llistaPerfil}" var="perfil">
+                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
                                 <div class="idioma en">
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_en"><spring:message code='camp.codiEstandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_en" name="item_codi_estandard_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -287,10 +405,61 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_en" name="item_pare_en" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare_en');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarSPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_perfil_en"><spring:message code='camp.perfil'/></label>
+                                            </div>
+                                            <div class="control select">                                                
+                                                <select id="item_perfil_en" name="item_perfil_en">
+                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+                                                    <c:forEach items="${llistaPerfil}" var="perfil">
+                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
                                 <div class="idioma de">
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_de"><spring:message code='camp.codiEstandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_de" name="item_codi_estandard_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -311,10 +480,61 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_de"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_de" name="item_pare_de" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare_de');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarSPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_perfil_de"><spring:message code='camp.perfil'/></label>
+                                            </div>
+                                            <div class="control select">                                                
+                                                <select id="item_perfil_de" name="item_perfil_de">
+                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+                                                    <c:forEach items="${llistaPerfil}" var="perfil">
+                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
                                 <div class="idioma fr">
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_codi_estandard_fr"><spring:message code='camp.codiEstandard'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_codi_estandard_fr" name="item_codi_estandard_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -335,6 +555,45 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_fr" name="item_pare_fr" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare_fr');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarSPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_perfil_fr"><spring:message code='camp.perfil'/></label>
+                                            </div>
+                                            <div class="control select">                                                
+                                                <select id="item_perfil_fr" name="item_perfil_fr">
+                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+                                                    <c:forEach items="${llistaPerfil}" var="perfil">
+                                                        <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
+                                                    </c:forEach>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /fila -->
                                 </div>
                                 <!-- /fr -->
                             </div>
@@ -344,69 +603,7 @@
                 </fieldset>                 
             </div>
             <!-- /modul -->
-        <!-- modul -->
-        <div class="modul">
-            <fieldset>
-                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend><spring:message code='txt.dades'/></legend>
-                <div class="modul_continguts mostrat">
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta">
-                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
-                            </div>
-							<div class="control">
-                                <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
-                                <input id="item_codi_pare" name="item_codi_pare" type="hidden" />
-							</div>
-						</div>
-					</div>
-					<!-- Botonera -->
-					<div id="cercador" class="fila">
-						<div class="botonera" style="margin-top: 0px; float:left;">
-							<div class="boton btnGenerico" style="margin-left: 0px;">
-								<a href="javascript:carregarArbreS('<c:url value="/pantalles/popArbreS.do"/>', 'popS', 'item_id', 'item_codi_pare', 'item_pare');" class="btn consulta">
-									<span><span><spring:message code='boto.canviarSPare'/></span></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<!-- /Botonera -->
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta">
-                                <label for="item_perfil"><spring:message code='camp.perfil'/></label>
-                            </div>
-                                <div class="control select">
-                                    <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-                                    <select id="item_perfil" name="item_perfil">
-                                        <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                        <c:forEach items="${llistaPerfil}" var="perfil">
-                                            <option value='<c:out value="${perfil.id}" />'><c:out value="${perfil.nom}" /></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                        </div>
-                    </div>
-                    <!-- /fila -->
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta">
-                                <label for="item_codi_estandard"><spring:message code='camp.codiEstandard'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="item_codi_estandard" name="item_codi_estandard" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /fila -->
-                </div>
-            </fieldset>
-        </div>
-        <!-- /modul -->
+        
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->

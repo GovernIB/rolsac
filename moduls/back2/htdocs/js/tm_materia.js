@@ -290,6 +290,12 @@ function CDetall(){
         // Sincronizar campos sin idioma en zona multi-idioma.   
         jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").change(function(){
             jQuery("#item_codi_estandard,#item_codi_estandard_es,#item_codi_estandard_en,#item_codi_estandard_de,#item_codi_estandard_fr").val( jQuery(this).val() );
+        });        
+        jQuery('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr').change(function(){
+            jQuery('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr').val( jQuery(this).val() );
+        });
+        jQuery("#item_destacada,#item_destacada_es,#item_destacada_en,#item_destacada_de,#item_destacada_fr").change(function(){
+            jQuery("#item_destacada,#item_destacada_es,#item_destacada_en,#item_destacada_de,#item_destacada_fr").attr("checked", jQuery(this).is(":checked"));
         });
 		
 		// moduls
@@ -390,7 +396,7 @@ function CDetall(){
 		
 		// Rellenar el select de uas
 		var selected;
-		var $ua_select = $('#item_ua_principal');
+		var $ua_select = $('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr');
 		$ua_select.find('option').remove();
 		$ua_select.append('<option value="0">' + txtTria + '</option>');
 		for (var i in dades.item_uas_materia) {
@@ -399,8 +405,9 @@ function CDetall(){
 		}
 	    //$ua_select.val('whatever')
 		$ua_select.parent().parent().show();
+        $ua_select.change();
 
-		$('#item_destacada').attr('checked', dades.item_destacada);
+		$('#item_destacada').attr('checked', dades.item_destacada).change();        
 		
 		ModulIcones.inicializarIcones(dades.icones);
 		

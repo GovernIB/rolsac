@@ -216,6 +216,42 @@
                                             </div>
                                         </div>
                                     </div>
+                                                                        
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
+                                                <input id="item_codi_pare" name="item_codi_pare" type="hidden" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_coordenades"><spring:message code='camp.coordenades'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_coordenades" name="item_coordenades" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>                    
+                                    
                                 </div>
                                 <!-- /ca -->
                                 <!-- es -->
@@ -230,6 +266,41 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_es"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_es" name="item_pare" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_es');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_coordenades_es"><spring:message code='camp.coordenades'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_coordenades_es" name="item_coordenades_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>  
+                                    
                                 </div>
                                 <!-- /es -->
                                 <!-- en -->
@@ -244,6 +315,40 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_en"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_en" name="item_pare_en" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_en');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_coordenades_en"><spring:message code='camp.coordenades'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_coordenades_en" name="item_coordenades_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>  
                                 </div>
                                 <!-- /en -->
                                 <!-- de -->
@@ -258,6 +363,40 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_de"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_de" name="item_pare_de" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_de');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_coordenades_de"><spring:message code='camp.coordenades'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_coordenades_de" name="item_coordenades_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>  
                                 </div>
                                 <!-- /de -->
                                 <!-- fr -->
@@ -272,6 +411,40 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_pare_fr"><spring:message code='camp.codiPare'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_pare_fr" name="item_pare_fr" type="text" readonly="readonly" />                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Botonera -->
+                                    <div id="cercador" class="fila">
+                                        <div class="botonera" style="margin-top: 0px; float:left;">
+                                            <div class="boton btnGenerico" style="margin-left: 0px;">
+                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_fr');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /Botonera -->
+                                    <!-- fila -->
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="item_coordenades_fr"><spring:message code='camp.coordenades'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_coordenades_fr" name="item_coordenades" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>  
                                 </div>
                                 <!-- /fr -->
                             </div>
@@ -281,8 +454,9 @@
                 </fieldset>                 
             </div>
             <!-- /modul -->
+            
         <!-- modul -->
-        <div class="modul">
+        <%--<div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                 <legend><spring:message code='txt.dades'/></legend>
@@ -320,7 +494,18 @@
                                 <input id="item_coordenades" name="item_coordenades" type="text" class="nou" />
                             </div>
                         </div>
-                    </div>
+                    </div>                    
+                </div>
+            </fieldset>
+        </div>--%>
+        <!-- /modul -->
+        
+        <!-- modul -->
+        <div class="modul">
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>Multimedia</legend>
+                <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila">
                         <div class="element t50p campoImagen">
@@ -369,6 +554,7 @@
             </fieldset>
         </div>
         <!-- /modul -->
+        
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->
