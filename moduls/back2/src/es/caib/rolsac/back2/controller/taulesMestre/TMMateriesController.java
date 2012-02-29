@@ -251,11 +251,11 @@ public class TMMateriesController {
     
     // Dado un set devolvemos el id de la principal
     private Long getUAPrincipal(Set uas) {
-    	Iterator it=uas.iterator();
+    	Iterator it = uas.iterator();
     	
     	while (it.hasNext()) {
-    		UnidadMateria unimat= (UnidadMateria)it.next();
-    		if (unimat.getUnidadPrincipal()!=null && unimat.getUnidadPrincipal().equals("S"))
+    		UnidadMateria unimat = (UnidadMateria) it.next();
+    		if (unimat.getUnidadPrincipal() != null && unimat.getUnidadPrincipal().equals("S"))
     			return unimat.getId(); 
     	}
     	return null;
@@ -282,7 +282,7 @@ public class TMMateriesController {
     // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
     private List<IdNomDTO> getJSONUnidadesAdministrativas(Materia materia) {
     	List<IdNomDTO> uaList = new LinkedList<IdNomDTO>(); 
-    	for (UnidadMateria uam: (Set<UnidadMateria>) materia.getUnidadesmaterias()) {
+    	for (UnidadMateria uam : (Set<UnidadMateria>) materia.getUnidadesmaterias()) {
     		String nombre = uam.getUnidad().getTraduccion() != null ? ((TraduccionUA)uam.getUnidad().getTraduccion()).getNombre() : "";
     		Long id = uam.getId();
     		uaList.add(new IdNomDTO(id, nombre));

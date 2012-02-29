@@ -308,7 +308,7 @@ function CDetall(){
 	this.nou = function() {
 		//Ocultar paneles y campos
 		jQuery("#modul_icones").hide();
-        jQuery("#item_ua_principal").parent().parent().hide();
+        jQuery("#item_ua_principal").closest("div.modul").hide();
 		
         $("#item_id").val("");
         $('#formGuardar input').each(limpiarCampo);
@@ -404,7 +404,7 @@ function CDetall(){
 			$ua_select.append('<option value="' + dades.item_uas_materia[i].id + '"' + selected + '>' + dades.item_uas_materia[i].nom + '</option>');
 		}
 	    //$ua_select.val('whatever')
-		$ua_select.parent().parent().show();
+		$ua_select.closest("div.modul").show();
         $ua_select.change();
 
 		$('#item_destacada').attr('checked', dades.item_destacada).change();        
