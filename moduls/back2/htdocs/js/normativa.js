@@ -109,11 +109,11 @@ function CLlistat(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "titol") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "numero") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "tipus") ? " " + ordre_T : "";
-			ordre_c4 = (ordre_C == "tipologia") ? " " + ordre_T : "";
-			ordre_c5 = (ordre_C == "data") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "tipo") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "unidadAdministrativa.id") ? " " + ordre_T : "";
+			ordre_c5 = (ordre_C == "fecha") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -121,11 +121,11 @@ function CLlistat(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenades + " <em>" + txtAscendentment + "</em>" : txtOrdenades + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "titol") {
+				if (ordre_C == "id") {
 					txt_per = txtLlistaItem;
 				} else if (ordre_C == "numero") {
 					txt_per = txtNumero;
-				} else if (ordre_C == "tipus") {
+				} else if (ordre_C == "tipo") {
 					txt_per = txtTipus;
 				} else {
 					txt_per = txtData;
@@ -145,11 +145,11 @@ function CLlistat(){
 			codi_cap4 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtData + "</a></div>";
 			*/
             
-			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"titol\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
-            codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"tipologia\" href=\"javascript:void(0)\">" + txtTipologiaNorma + "</a></div>";
+			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+            codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"unidadAdministrativa.id\" href=\"javascript:void(0)\">" + txtTipologiaNorma + "</a></div>";
 			codi_cap3 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
-			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipus\" href=\"javascript:void(0)\">" + txtTipoBoletin + "</a></div>";			
-			codi_cap5 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a class=\"data\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
+			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtTipoBoletin + "</a></div>";			
+			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fecha\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
 			
 			
 			// codi taula
@@ -260,6 +260,7 @@ function CLlistat(){
 			dataVars_cercador += "&data_butlleti=" + $("#cerca_data_butlleti").val();			
 			dataVars_cercador += "&validacio=" + $("#cerca_validacio").val();			
 			dataVars_cercador += "&totesUnitats=" + $("#cerca_totes_unitats").is(':checked');
+			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").is(':checked');
 			dataVars_cercador += "&cercaExternes=" + $("#cerca_externes").is(':checked');			
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
 		

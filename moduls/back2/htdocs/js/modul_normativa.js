@@ -185,9 +185,9 @@ function CEscriptoriNormativa(){
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "adresa") ? " " + ordre_T : "";
-			ordre_c2 = (ordre_C == "cp") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "poblacio") ? " " + ordre_T : "";
+			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
+			ordre_c2 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "fechaBoletin") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -195,9 +195,9 @@ function CEscriptoriNormativa(){
 			
 				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "titol") {
+				if (ordre_C == "id") {
 					txt_per = txtTitol;
-				} else if (ordre_C == "data") {
+				} else if (ordre_C == "fecha") {
 					txt_per = txtData;
 				} else {
 					txt_per = txtDataButlleti;

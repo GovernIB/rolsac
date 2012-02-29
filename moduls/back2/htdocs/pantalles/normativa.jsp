@@ -347,8 +347,26 @@
                     "mostrar": "no",
                     "abreviat": "no"
                 },
-            }           
+            },           
 
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_validacio",
+                "obligatori": "si",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 10,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "obligatori": "<spring:message code='normativa.formulari.registre.estat'/>"
+                    }
+            }
+            
         ];
     -->
     </script>
@@ -376,7 +394,7 @@
             </div>
             <input type="hidden" value="0" class="pagPagina" /> 
             <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="data" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
         <div class="resultats C">
             <div id="cercador">
@@ -407,9 +425,20 @@
                         </div>
                         <div class="fila">
                             <div class="element">
-                                <label for="visibilitat">Visibilitat</label>                            
-                                <select id="visibilitat" name="visibilitat">
-                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
+                                <label for="cerca_validacio">Visibilitat</label>
+                                <select id="cerca_validacio" name="cerca_validacio">
+                                    <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+                                    <c:choose>
+                                        <c:when test="${rolSuper}" >
+		                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
+                                            <option value="1"><spring:message code='txt.validacio.publica'/></option>
+                                            <option value="2"><spring:message code='txt.validacio.interna'/></option>
+                                            <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+                                        </c:when>
+                                        <c:otherwise>
+                                            <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </select>
                             </div>                        
                         </div>
@@ -443,6 +472,7 @@
                         
                     <div class="busquedaAvanzada">
                         <div class="fila">
+                        	<%--
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
@@ -463,7 +493,8 @@
                                         </c:choose>
                                     </select>
                                 </div>
-                            </div>   
+                            </div>
+                             --%>   
 
                             <div class="element t25">
                                 <div class="etiqueta">
@@ -566,7 +597,7 @@
             <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" /> 
             <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="data" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
     </div>
 </div>
@@ -1777,7 +1808,7 @@
         <div class="dades"></div>
         <input type="hidden" value="0" class="pagPagina" /> <input
             type="hidden" value="DESC" class="ordreTipus" /> <input
-            type="hidden" value="data" class="ordreCamp" />
+            type="hidden" value="id" class="ordreCamp" />
     </div>
 
     <div class="botonera baix">
@@ -1843,7 +1874,7 @@
             <div class="dades"></div>
             <input type="hidden" value="0" class="pagPagina" /> 
             <input type="hidden" value="DESC" class="ordreTipus" /> 
-            <input type="hidden" value="data" class="ordreCamp" />
+            <input type="hidden" value="id" class="ordreCamp" />
         </div>
     </div>
 

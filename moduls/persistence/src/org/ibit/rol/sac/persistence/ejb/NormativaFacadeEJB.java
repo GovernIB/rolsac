@@ -285,7 +285,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, String campoOrdenacion, String orden) {
+    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String campoOrdenacion, String orden) {
         Session session = getSession();
         try {
         	
@@ -304,13 +304,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             	sQuery += "(" + populateQuery(traduccion, params) + ")";
             }            
 
-            String orderBy = " order by " + campoOrdenacion + " " + orden;
+            String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
             
             Query query;
             if ("local".equals(tipo)) {
             	//Si la búsqueda es por normativas locales filtramos por unidades administrativas
             	Set<Long> uas = new HashSet<Long>();
-        		uas.add(idUA);
+        		if (idUA != null) {
+        			uas.add(idUA);
+        		}
             	
             	//Si se ha indicado mostrar normativas de las unidades administrativas del usuario
                 if (uaMeves) {
@@ -321,6 +323,18 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 		// Lo siguiente se haria para buscar en las UAs hijas.
                 		// List<Long> listaDescendientes = uaDelegate.cargarArbolUnidadId(ua.getId());
                 		// uas.addAll(listaDescendientes);                		
+                	}
+                }
+                
+                if (uaFilles) {
+                	for (Long uaActual : uas) {
+                		uas.add(uaActual);
+                		List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual);
+                		uas.addAll(idsDescendientes);                		
+                	}
+                } else {
+                	for (Long uaActual : uas) {
+                		uas.add(uaActual);
                 	}
                 }
 
@@ -367,8 +381,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
             return normativasAcceso;
             
-//      } catch (DelegateException de) {
-//        	throw new EJBException(de);
+      } catch (DelegateException de) {
+        	throw new EJBException(de);
         } catch (HibernateException he) {
             throw new EJBException(he);        	
         } finally {
