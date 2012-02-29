@@ -636,6 +636,9 @@
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='agrupacioFV.formulari.public_objectiu'/></legend>
+                	<div class="etiqueta">
+                        <label for="item_public_objectiu"><spring:message code='agrupacioFV.formulari.public_objectiu'/></label>
+                    </div>
                     <div class="modul_continguts mostrat">
                                                 
                         <select id="item_public_objectiu" name="item_public_objectiu">
