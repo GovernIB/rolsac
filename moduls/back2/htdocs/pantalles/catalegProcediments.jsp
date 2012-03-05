@@ -22,6 +22,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
@@ -72,6 +73,7 @@
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
+    var txtNoHiHaFets = "<spring:message code='txt.noHiHaFetsVitals'/>";
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
     
     var txtDocument = "<spring:message code='txt.document'/>";
