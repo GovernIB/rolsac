@@ -81,13 +81,15 @@ public class TMAgrupacioMateriesController {
 			
 			try {
 				Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
-				llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
-				
-				for (Seccion seccio : llistaSeccio) {
-					TraduccionSeccion tpo = (TraduccionSeccion) seccio.getTraduccion(lang);
-					llistaSeccioDTO.add(new IdNomDTO(seccio.getId(),tpo == null ? null : tpo.getNombre()));
+				if (seccion != null) {
+					llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
+					for (Seccion seccio : llistaSeccio) {
+						TraduccionSeccion tpo = (TraduccionSeccion) seccio.getTraduccion(lang);
+						llistaSeccioDTO.add(new IdNomDTO(seccio.getId(),tpo == null ? null : tpo.getNombre()));
+					}
+				} else {
+					log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
 				}
-
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException()) {
 					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
@@ -368,13 +370,16 @@ public class TMAgrupacioMateriesController {
 		
 		try {
 			Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
-			llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
-			
-			for (Seccion seccio : llistaSeccio) {
-				TraduccionSeccion tpo = (TraduccionSeccion) seccio.getTraduccion(lang);
-				llistaSeccioDTO.add(new IdNomDTO(seccio.getId(), tpo == null ? null : tpo.getNombre()));
+			if (seccion != null) {
+				llistaSeccio = seccioDelegate.listarHijosSeccion(seccion.getId());
+				
+				for (Seccion seccio : llistaSeccio) {
+					TraduccionSeccion tpo = (TraduccionSeccion) seccio.getTraduccion(lang);
+					llistaSeccioDTO.add(new IdNomDTO(seccio.getId(), tpo == null ? null : tpo.getNombre()));
+				}
+			} else {
+				log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
 			}
-
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
