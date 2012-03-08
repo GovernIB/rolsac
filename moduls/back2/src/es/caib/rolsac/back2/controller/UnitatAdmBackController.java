@@ -908,20 +908,17 @@ public class UnitatAdmBackController {
      */
     private boolean hayMicrositesUA(Long idua){
     	boolean retorno=false;
-    	
     	try {
 	    	String value = System.getProperty("es.caib.rolsac.microsites");
-	    	
-	    	if ((value == null) || value.equals("N")) {
-	    		retorno=false;
+	    	if ("Y".equals(value)) {
+	    		retorno = tieneMicrosites(idua);
 	    	} else {
-	            retorno = tieneMicrosites(idua);
+	            retorno = false;
 	    	}    	
 		} catch (Exception e) {
-			retorno=true; //para evitar inconsistencias
+			log.error("Error al determinar si la ua " + idua + " tiene microsites: " + ExceptionUtils.getStackTrace(e));
+			retorno = true; //para evitar inconsistencias
 		}
-    	
-    	
     	return retorno;
     }
     
@@ -929,10 +926,8 @@ public class UnitatAdmBackController {
 		boolean retorno = false;
 		org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
 		List micros = micro.listarMicrosites();
-		           
 		Iterator iter = micros.iterator();
-		while (iter.hasNext()) 
-		{
+		while (iter.hasNext()) {
 			org.ibit.rol.sac.micromodel.Microsite mic = (org.ibit.rol.sac.micromodel.Microsite) iter.next();
 			if (mic.getUnidadAdministrativa()==idua.intValue()) {
 	        			retorno=true;

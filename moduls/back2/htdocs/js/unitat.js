@@ -444,23 +444,15 @@ function CDetall(soloFicha){
 			data: dataVars,
 			dataType: "json",
 			error: function() {
-				
-				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-				// error
 				Error.llansar();
-				
 			},
 			success: function(data) {
-				
-				//Missatge.cancelar();
-				
-				if (data.id > -1) {					
+				if (parseInt(data.Id) > 0) {					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarCorrecte, funcio: Detall.carregarInici });
 				} else {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});					
 				}
-				// array
 				Detall.array({id: dada_node.id, accio: "elimina"});				
 			}			
 		});
