@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-
+/**
+ *  Gestiona las UAs de la miga de pan.
+ */
 @Controller
 @RequestMapping("/unidadAdministrativa/")
 public class UnidadAdministrativaController {
@@ -32,7 +34,7 @@ public class UnidadAdministrativaController {
 	public @ResponseBody List<IdNomDTO> llistatHijos(HttpSession session, HttpServletRequest request) {
 		
 		List<IdNomDTO> uaHijosJSON = new ArrayList<IdNomDTO>();
-		List<UnidadAdministrativa> uaHijos = null;
+		List<UnidadAdministrativa> uaHijos;
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 
 		try {
@@ -91,4 +93,8 @@ public class UnidadAdministrativaController {
 		return "redirect:" + redirectTo;
 	}
 	
+	
+	public static void actualizarUAMigaPan(HttpSession session, UnidadAdministrativa ua) {
+		session.setAttribute("unidadAdministrativa", ua);		
+	}
 }

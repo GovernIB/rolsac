@@ -162,7 +162,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
         boolean change = (newIsNull ? !oldIsNull : !padre_id.equals(old_padre_id));
         
-        if (change) {
+        if (change && !oldIsNull && !newIsNull) {
         	if (!getAccesoManager().tieneAccesoMoverOrganigrama(old_padre_id, padre_id)) {
         		throw new SecurityException("No tiene acceso al nodo superior anterior o al actual.");
         	}

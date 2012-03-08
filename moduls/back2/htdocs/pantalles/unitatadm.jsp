@@ -845,7 +845,8 @@
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
                                 <div class="control">
-                                    <input id="item_pare" name="item_pare" type="text" readonly="readonly" />                                                
+                                    <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
+                                    <input id="item_pare_id" name="item_pare_id" type="hidden" />                                                
                                 </div>                                          
                             </div>            
                         </div>

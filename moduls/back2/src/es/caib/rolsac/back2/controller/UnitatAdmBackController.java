@@ -497,15 +497,6 @@ public class UnitatAdmBackController {
             	unitatAdministrativa.setEspacioTerrit(null);
             }
             
-            Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
-            if (unitatAdmPareId != null) {
-				UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
-				UnidadAdministrativa pare = unidadAdministrativaDelegate.obtenerUnidadAdministrativa(unitatAdmPareId);
-				unitatAdministrativa.setPadre(pare);                	
-            } else {
-            	unitatAdministrativa.setPadre(null); 
-            }
-			
 			//Responsable
 			unitatAdministrativa.setResponsable(valoresForm.get("item_responsable"));
 			unitatAdministrativa.setSexoResponsable(Integer.parseInt(valoresForm.get("item_responsable_sexe")));
@@ -665,10 +656,12 @@ public class UnitatAdmBackController {
 				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions.split("[,]"));
         	}
 			
-			crearOActualizarUnitatAdministrativa(unitatAdministrativaDelegate,	unitatAdministrativa);			
+			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
+            
+			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);		
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
-			session.setAttribute("unidadAdministrativa", unitatAdministrativa);
+			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
 			
             String ok = messageSource.getMessage("unitatadm.guardat.correcte", null, request.getLocale());
             result = new IdNomDTO(unitatAdministrativa.getId(), ok);            
@@ -696,30 +689,23 @@ public class UnitatAdmBackController {
     }
 
 	/**
-	 * @param unitatAdministrativaDelegate
 	 * @param unitatAdministrativa
+	 * @param unitatAdmPareId
 	 * @throws DelegateException
 	 */
-	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativaDelegate unitatAdministrativaDelegate, UnidadAdministrativa unitatAdministrativa) 
-		throws DelegateException 
-	{
-		
+	private void crearOActualizarUnitatAdministrativa(UnidadAdministrativa unitatAdministrativa, Long unitatAdmPareId) throws DelegateException	{
+		UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		if (unitatAdministrativa.getId() != null) {
-			if (unitatAdministrativa.getPadre() != null ) { 
-				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,unitatAdministrativa.getPadre().getId());
-			} else {
-				unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa,null);
-			}
+			unitatAdministrativaDelegate.actualizarUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
 		} else {
 			Long id  ;
-			if (unitatAdministrativa.getPadre() != null ) {
-				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdministrativa.getPadre().getId());
+			if (unitatAdmPareId != null ) {
+				id = unitatAdministrativaDelegate.crearUnidadAdministrativa(unitatAdministrativa, unitatAdmPareId);
 			} else {
 				id = unitatAdministrativaDelegate.crearUnidadAdministrativaRaiz(unitatAdministrativa);
 			}
 			unitatAdministrativa.setId(id);
 		}
-				
 	}
 	
 //    /**
@@ -743,7 +729,7 @@ public class UnitatAdmBackController {
 	    try {
 	    	UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
 	    		    		    	
-	    	if ( !hayMicrositesUA(id) ) {
+	    	if (!hayMicrositesUA(id)) {
 	    		UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
 	    	
 	    		// Validamos que se pueda eliminar la UA. Se podrá eliminar si no tiene elementos relacionados. A excepción de 
@@ -907,19 +893,20 @@ public class UnitatAdmBackController {
      * @return boolean
      */
     private boolean hayMicrositesUA(Long idua){
-    	boolean retorno=false;
-    	try {
-	    	String value = System.getProperty("es.caib.rolsac.microsites");
-	    	if ("Y".equals(value)) {
-	    		retorno = tieneMicrosites(idua);
-	    	} else {
-	            retorno = false;
-	    	}    	
-		} catch (Exception e) {
-			log.error("Error al determinar si la ua " + idua + " tiene microsites: " + ExceptionUtils.getStackTrace(e));
-			retorno = true; //para evitar inconsistencias
-		}
-    	return retorno;
+//    	boolean retorno=false;
+//    	try {
+//	    	String value = System.getProperty("es.caib.rolsac.microsites");
+//	    	if ("Y".equals(value)) {
+//	    		retorno = tieneMicrosites(idua);
+//	    	} else {
+//	            retorno = false;
+//	    	}    	
+//		} catch (Exception e) {
+//			log.error("Error al determinar si la ua " + idua + " tiene microsites: " + ExceptionUtils.getStackTrace(e));
+//			retorno = true; //para evitar inconsistencias
+//		}
+//    	return retorno;
+    	return false;
     }
     
     private boolean tieneMicrosites(Long idua) throws Exception {
