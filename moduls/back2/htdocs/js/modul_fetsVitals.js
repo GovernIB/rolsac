@@ -6,6 +6,7 @@ jQuery(document).ready(function() {
 
 function CModulFetsVitals(){
 	var that = this;
+	var fetVitalDefaultClass = "fetVitalDefault";
 	var modul_fets_elm = jQuery("div.modulFetsVitals");
 	var fets_seleccionats_elm;
 	var fets_llistat_elm;
@@ -28,6 +29,15 @@ function CModulFetsVitals(){
 	}
 	
 	this.cancela = function(){
+//		fets_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
+		fets_llistat_elm.find("input[type=checkbox]").each(function() {
+			$this = jQuery(this);
+			if ($this.hasClass(fetVitalDefaultClass)) {
+				$this.attr("checked", "checked");
+			} else {
+				$this.removeAttr("checked");
+			}
+		});
 		fets_seleccionats_elm.slideDown(300);
 		fets_llistat_elm.slideUp(300);
 	}
@@ -47,18 +57,20 @@ function CModulFetsVitals(){
 			li_elm = $(this);
 			input_elm = li_elm.find("input");
 			
-			if (input_elm.attr("checked")) {
+            if (input_elm.is(":checked")) {
 				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
 				nombre_llistat++;
+				input_elm.addClass(fetVitalDefaultClass);
+			} else {
+				input_elm.removeClass(fetVitalDefaultClass);
 			}
-			
 		});
 		
 		codi_llistat += "</ul>";
 		
 		codi_fet_txt = (nombre_llistat == 1) ? txtFet : txtFets;
 		codi_info = (nombre_llistat == 0) ? txtNoHiHaFets + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_fet_txt + "</strong>.";
-				
+                
 		fets_seleccionats_elm.find("p.info").html(codi_info);
 		fets_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		
 		
@@ -68,9 +80,7 @@ function CModulFetsVitals(){
 	}
 	
 	//Actualiza la lista de hechos vitales seleccionados y marca los checkboxes cuando se carga una ficha
-	
 	this.cargarHechosVitales = function(dades){
-	
 		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
 		fets_llistat_elm = escriptori_detall_elm.find("div.modulFetsVitals div.llistat");
 		fets_nodes = dades;
@@ -84,7 +94,7 @@ function CModulFetsVitals(){
 			$(fets_nodes).each(function() {
 				fet_node = this;
 				codi_fets += "<li><input type=\"hidden\" value=\"" + fet_node.id + "\" />" + fet_node.nom + "</li>";
-				fets_llistat_elm.find("input[value=" + fet_node.id + "]").attr("checked","checked");
+				fets_llistat_elm.find("input[value=" + fet_node.id + "]").attr("checked","checked").addClass(fetVitalDefaultClass);
 			});
 			codi_fets += "<ul>";
 			txt_fets = (fets_nodes_size == 1) ? txtFet : txtFets;
@@ -111,10 +121,8 @@ function CModulFetsVitals(){
 	
 	//Al acceder al formulario de creacion, limpia las listas de hechos vitales y desmarca los checkboxes	
 	this.nuevo = function() {
-		
 		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
 		fets_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaFets + ".");
-		$("div.modulFetsVitals div.llistat input[type=checkbox]").attr('checked', false);
-		
+		$("div.modulFetsVitals div.llistat input[type=checkbox]").removeAttr('checked').removeClass(fetVitalDefaultClass);;
 	}		
 }	
