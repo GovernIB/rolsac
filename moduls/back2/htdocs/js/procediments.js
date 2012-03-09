@@ -395,9 +395,9 @@ function CDetall(){
 	}
 	
 	this.dataPublicacio = function(e) {		
-		if ($(this).val() == "") {
-			$(this).val(txtImmediat);
-		}
+//		if ($(this).val() == "") {
+//			$(this).val(txtImmediat);
+//		}
 	}
 		
 	this.nou = function() {

@@ -1,14 +1,15 @@
 package es.caib.rolsac.back2.controller;
 
+import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
-import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
@@ -29,7 +29,6 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionIniciacion;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTramite;
@@ -43,7 +42,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
-import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -60,8 +58,6 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.utils.DateUtils;
-
-import static es.caib.rolsac.utils.LogUtils.*;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
@@ -854,17 +850,17 @@ public class CatalegProcedimentsBackController {
 
 				procediment.setSignatura(request.getParameter("item_codigo_pro"));
 				
-				Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
-				if (data_publicacio != null) {
+				if (request.getParameter("item_data_publicacio") != null && !request.getParameter("item_data_publicacio").isEmpty()) {
+					Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
+					if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
 					procediment.setFechaPublicacion(data_publicacio);
 				}
 				
-				
-				Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
-				if (data_caducitat != null) {
+				if (request.getParameter("item_data_caducitat") != null && !request.getParameter("item_data_caducitat").isEmpty()) {
+					Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
+					if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
 					procediment.setFechaCaducidad(data_caducitat);
 				}
-				
 				
 //				procediment.setFechaActualizacion(new Date()); // lo hace el facade automaticamente.
 				
@@ -947,6 +943,9 @@ public class CatalegProcedimentsBackController {
 			}
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
+		} catch (ParseException pe) {
+			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
+			result = new IdNomDTO(-4l, error);
 		}
 
 		return result;

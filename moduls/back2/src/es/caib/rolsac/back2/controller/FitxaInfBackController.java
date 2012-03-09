@@ -3,6 +3,8 @@ package es.caib.rolsac.back2.controller;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.text.ParseException;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -589,19 +591,20 @@ public class FitxaInfBackController {
                 fitxa.setForo_tema(fitxaOld.getForo_tema());                    
                 fitxa.setFichasua(fitxaOld.getFichasua());
                 fitxa.setDocumentos(fitxaOld.getDocumentos());
-                fitxa.setEnlaces(fitxaOld.getEnlaces());     
+                fitxa.setEnlaces(fitxaOld.getEnlaces());
 			} 
 			
-			                
-            Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
-            if (data_publicacio != null) {
-                fitxa.setFechaPublicacion(data_publicacio);
-            }
+			if (valoresForm.get("item_data_publicacio") != null && !valoresForm.get("item_data_publicacio").isEmpty()) {
+	            Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
+	            if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
+	            fitxa.setFechaPublicacion(data_publicacio);
+			}
             
-            Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
-            if (data_caducitat != null) {
-                fitxa.setFechaCaducidad(data_caducitat);
-            }
+			if (valoresForm.get("item_data_caducitat") != null && !valoresForm.get("item_data_caducitat").isEmpty()) {
+	            Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
+	            if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
+	            fitxa.setFechaCaducidad(data_caducitat);
+			}
             
             // Idiomas
             TraduccionFicha tfi;
@@ -922,6 +925,9 @@ public class FitxaInfBackController {
 			log.error(ExceptionUtils.getStackTrace(e));
 		} catch (NumberFormatException nfe) {
 			result = new IdNomDTO(-3l, error);
+		} catch (ParseException pe) {
+			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
+			result = new IdNomDTO(-4l, error);
 		}
 
         //return result;

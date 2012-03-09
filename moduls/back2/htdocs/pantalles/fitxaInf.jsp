@@ -936,7 +936,7 @@
                                     <label for="item_data_publicacio"><spring:message code='fitxes.formulari.data.publicacio'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" readonly="readonly" />
+                                    <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" />
                                 </div>
                             </div>
                             <div class="element right">
@@ -944,7 +944,7 @@
                                     <label for="item_data_caducitat"><spring:message code='fitxes.formulari.data.caducitat'/></label>
                                 </div>
                                 <div class="control">
-                                    <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" readonly="readonly" />
+                                    <input id="item_data_caducitat" name="item_data_caducitat" type="text" class="nou" />
                                 </div>
                             </div>
                         </div>
