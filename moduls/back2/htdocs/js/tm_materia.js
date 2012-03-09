@@ -308,7 +308,7 @@ function CDetall(){
 	this.nou = function() {
 		//Ocultar paneles y campos
 		jQuery("#modul_icones").hide();
-        jQuery("#item_ua_principal").closest("div.modul").hide();
+        jQuery("#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr").closest("div.fila").hide();
 		
         $("#item_id").val("");
         $('#formGuardar input').each(limpiarCampo);
@@ -394,20 +394,22 @@ function CDetall(){
 		pintarArchivo("item_icona", dades);
 		pintarArchivo("item_icona_gran", dades);
 		
-		// Rellenar el select de uas
-		var selected;
-		var $ua_select = $('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr');
-		$ua_select.find('option').remove();
-		$ua_select.append('<option value="0">' + txtTria + '</option>');
-		for (var i in dades.item_uas_materia) {
-			selected = dades.item_ua_principal == dades.item_uas_materia[i].id ? ' selected="selected"' : '';
-			$ua_select.append('<option value="' + dades.item_uas_materia[i].id + '"' + selected + '>' + dades.item_uas_materia[i].nom + '</option>');
-		}
-	    //$ua_select.val('whatever')
-		$ua_select.closest("div.modul").show();
-        $ua_select.change();
-
-		$('#item_destacada').attr('checked', dades.item_destacada).change();        
+		// Rellenar y mostrar el select de uas si hay uas
+		if (dades.item_uas_materia.length > 0) {
+			var selected;
+			var $ua_select = $('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr');
+			$ua_select.find('option').remove();
+			$ua_select.append('<option value="0">' + txtTria + '</option>');
+			for (var i in dades.item_uas_materia) {
+				selected = dades.item_ua_principal == dades.item_uas_materia[i].id ? ' selected="selected"' : '';
+				$ua_select.append('<option value="' + dades.item_uas_materia[i].id + '"' + selected + '>' + dades.item_uas_materia[i].nom + '</option>');
+			}
+			$ua_select.closest("div.fila").show();
+	        $ua_select.change();
+	        $('#item_destacada').attr('checked', dades.item_destacada).change();
+		} else {
+            jQuery("#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr").closest("div.fila").hide();
+        }
 		
 		ModulIcones.inicializarIcones(dades.icones);
 		
