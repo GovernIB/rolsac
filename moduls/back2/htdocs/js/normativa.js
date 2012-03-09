@@ -137,7 +137,7 @@ function CLlistat(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
-			//De momento no habr√° ordenaci√≥n
+			//De momento no habr· ordenaciÛn
 			/*
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNumero + "</a></div>";
@@ -191,7 +191,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip√°gina.					
+			// Instanciamos el navegador multip·gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -338,7 +338,7 @@ function CLlistat(){
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p√°gina.
+				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p·gina.
 				Llistat.carregar({cercador: "si"});
 				
 			});
@@ -357,7 +357,7 @@ function CDetall(){
 	var that = this;
 	
 	this.iniciar = function() {			
-		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
+		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
 		jQuery("#item_data").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -404,10 +404,18 @@ function CDetall(){
 		// altres moduls
 		modulAfectacions_pare_elm = $("#modulLateral div.modulAfectacions").parents("div.modul:first");
 		modulProcediments_pare_elm = $("#modulLateral div.modulProcediments").parents("div.modul:first");
+        
+        // esborrar arxiu (reemplasar <input type="file"> per un de nou perque a IE nomes es de lectura)
+        jQuery('a.esborraArxiu').click().unbind("click").click(function(event){
+            event.preventDefault();
+            var input = $(this).parent().prev().find('input[type=file]')
+            var inputId = input.attr('id');
+            input.replaceWith('<input id="' + inputId + '" name="' + inputId + '" type="file" class="nou" />');
+        });
 	},
 	
 
-	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
 	    // Validamos el formulario
@@ -436,7 +444,7 @@ function CDetall(){
 		$("#afectaciones").val( ModulAfectacions.jsonAfectacions() );
 		
 
-		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({			
 			url: pagGuardar,
 			dataType: 'json',
@@ -505,7 +513,7 @@ function CDetall(){
 		//Poner tipo Normativa local por defecto
 		$("#tipoNormativa").text(txtNormativaLocal);
 		
-		//Establecer Validaci√≥n por defecto si el usuario es operador
+		//Establecer ValidaciÛn por defecto si el usuario es operador
 		if ( $("#rolusuario").val() == "RSC_OPER" ) {
 			$("#item_validacio").val(2);
 		}

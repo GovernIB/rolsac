@@ -430,7 +430,7 @@
                                     <c:set var="rolSuper"><rol:userIsSuper/></c:set>
                                     <c:choose>
                                         <c:when test="${rolSuper}" >
-		                                    <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
+                                            <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>                                
                                             <option value="1"><spring:message code='txt.validacio.publica'/></option>
                                             <option value="2"><spring:message code='txt.validacio.interna'/></option>
                                             <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
@@ -472,7 +472,7 @@
                         
                     <div class="busquedaAvanzada">
                         <div class="fila">
-                        	<%--
+                            <%--
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_validacio"><spring:message code='camp.validacio'/></label>
@@ -1282,7 +1282,7 @@
                     <div id="botoneraCambioUA">
                         <div class="botonera" style="margin-top: 0px; float:left;">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
-                            	<a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">
+                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">
                                 <!-- <a href="javascript:ArbreUA('item_ua_nom', 'item_ua_id');" class="btn consulta"> -->
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
@@ -1512,6 +1512,7 @@
                                     <div class="control">                                           
                                         <input id="item_arxiu_ca" name="item_arxiu_ca" type="file" class="nou" />
                                     </div>
+                                    <div class="etiqueta"><a href="#" class="esborraArxiu"><spring:message code='txt.esborra_arxiu'/></a></div>
                                 </div>                                                                                                                                                      
                                 
                             </div>
@@ -1539,6 +1540,7 @@
                                     <div class="control">                                           
                                         <input id="item_arxiu_es" name="item_arxiu_es" type="file" class="nou" />
                                     </div>
+                                    <div class="etiqueta"><a href="#" class="esborraArxiu"><spring:message code='txt.esborra_arxiu'/></a></div>
                                 </div>
                                 
                             </div>
@@ -1566,6 +1568,7 @@
                                     <div class="control">                                           
                                         <input id="item_arxiu_en" name="item_arxiu_en" type="file" class="nou" />
                                     </div>
+                                    <div class="etiqueta"><a href="#" class="esborraArxiu"><spring:message code='txt.esborra_arxiu'/></a></div>
                                 </div>
                                 
                             </div>                                
@@ -1593,6 +1596,7 @@
                                     <div class="control">                                           
                                         <input id="item_arxiu_de" name="item_arxiu_de" type="file" class="nou" />
                                     </div>
+                                    <div class="etiqueta"><a href="#" class="esborraArxiu"><spring:message code='txt.esborra_arxiu'/></a></div>
                                 </div>
                                 
                             </div>                                
@@ -1620,6 +1624,7 @@
                                     <div class="control">                                           
                                         <input id="item_arxiu_fr" name="item_arxiu_fr" type="file" class="nou" />
                                     </div>
+                                    <div class="etiqueta"><a href="#" class="esborraArxiu"><spring:message code='txt.esborra_arxiu'/></a></div>
                                 </div>
                                 
                             </div>                                
@@ -1655,7 +1660,7 @@
                     <div id="botoneraCambioUA">
                         <div class="botonera">
                             <div class="boton btnGenerico">
-                            	<a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">                                
+                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">                                
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
                             </div>
