@@ -151,93 +151,93 @@ alter table RSC_ESPTER drop constraint RSC_ESPLOG_FK;
 alter table RSC_ESPTER drop constraint RSC_ESPMAP_FK;
 alter table RSC_ESPTER drop constraint RSC_ESPESP_FK;
 alter table RSC_TRAFAM drop constraint RSC_TFAFAM_FK;
-drop table RSC_INICI;
-drop table RSC_PROMAT;
-drop table RSC_SCRGRP;
-drop table RSC_TRAPOB;
-drop table RSC_TRANOE;
-drop table RSC_TIPAFE;
-drop table RSC_TRAPRO;
-drop table RSC_ADMREM;
-drop table RSC_UNAMAT;
-drop table RSC_TRAUNA;
-drop table RSC_HEVIPR;
-drop table RSC_TRATIA;
-drop table RSC_TRATIP;
-drop table RSC_HEVIAG;
-drop table RSC_PUBOBJ;
-drop table RSC_LUCFIL;
-drop table RSC_TRAPEC;
-drop table RSC_IDIOMA;
-drop table RSC_TAXA;
-drop table RSC_TRAAGM;
-drop table RSC_FICMAT;
-drop table RSC_UNAUSU;
-drop table RSC_TRAEDI;
-drop table RSC_NORMAT;
-drop table RSC_TRAENL;
-drop table RSC_AUDITO;
-drop table RSC_COMENT;
-drop table RSC_ARCHIV;
-drop table RSC_GRPGID;
-drop table RSC_DOCTRA;
-drop table RSC_SCRGID;
-drop table RSC_AGHEVI;
-drop table RSC_BOLETI;
-drop table RSC_ENLACE;
-drop table RSC_SCRKEY;
-drop table RSC_TRATRT;
-drop table RSC_SCRTEM;
-drop table RSC_TRADOC;
-drop table RSC_AGRMAT;
-drop table RSC_TRAESP;
-drop table RSC_DOCUME;
-drop table RSC_TRASEC;
-drop table RSC_ICOFAM;
-drop table RSC_ESTADI;
-drop table RSC_TRAAGH;
-drop table RSC_FICHUA;
-drop table RSC_TIPO;
-drop table RSC_FORMUL;
-drop table RSC_GRPGEN;
-drop table RSC_TRATRA;
-drop table RSC_SENSGR;
-drop table RSC_HISENV;
-drop table RSC_PRONOR;
-drop table RSC_HECVIT;
-drop table RSC_TRAINI;
-drop table RSC_FICHA;
-drop table RSC_SCRTIP;
-drop table RSC_EDIFIC;
-drop table RSC_TRATAM;
-drop table RSC_MATAGR;
-drop table RSC_DESTIN;
-drop table RSC_MATERI;
-drop table RSC_TRAMAT;
-drop table RSC_USUARI;
-drop table RSC_PERCIU;
-drop table RSC_TRAFIC;
-drop table RSC_TRANOL;
-drop table RSC_TRADOCTRA;
-drop table RSC_FAMILI;
-drop table RSC_TRAHEV;
-drop table RSC_TRAUNM;
-drop table RSC_PERSON;
-drop table RSC_ENVTEM;
-drop table RSC_SECCIO;
-drop table RSC_UNIADM;
-drop table RSC_TRAMIT;
-drop table RSC_HISTOR;
-drop table RSC_FICHEV;
-drop table RSC_ICMATE;
-drop table RSC_TRATAX;
-drop table RSC_PROCED;
-drop table RSC_SCRENV;
-drop table RSC_UNAEDI;
-drop table RSC_SCRIPC;
-drop table RSC_AFECTA;
-drop table RSC_ESPTER;
-drop table RSC_TRAFAM;
+drop table RSC_INICI cascade constraints;
+drop table RSC_PROMAT cascade constraints;
+drop table RSC_SCRGRP cascade constraints;
+drop table RSC_TRAPOB cascade constraints;
+drop table RSC_TRANOE cascade constraints;
+drop table RSC_TIPAFE cascade constraints;
+drop table RSC_TRAPRO cascade constraints;
+drop table RSC_ADMREM cascade constraints;
+drop table RSC_UNAMAT cascade constraints;
+drop table RSC_TRAUNA cascade constraints;
+drop table RSC_HEVIPR cascade constraints;
+drop table RSC_TRATIA cascade constraints;
+drop table RSC_TRATIP cascade constraints;
+drop table RSC_HEVIAG cascade constraints;
+drop table RSC_PUBOBJ cascade constraints;
+drop table RSC_LUCFIL cascade constraints;
+drop table RSC_TRAPEC cascade constraints;
+drop table RSC_IDIOMA cascade constraints;
+drop table RSC_TAXA cascade constraints;
+drop table RSC_TRAAGM cascade constraints;
+drop table RSC_FICMAT cascade constraints;
+drop table RSC_UNAUSU cascade constraints;
+drop table RSC_TRAEDI cascade constraints;
+drop table RSC_NORMAT cascade constraints;
+drop table RSC_TRAENL cascade constraints;
+drop table RSC_AUDITO cascade constraints;
+drop table RSC_COMENT cascade constraints;
+drop table RSC_ARCHIV cascade constraints;
+drop table RSC_GRPGID cascade constraints;
+drop table RSC_DOCTRA cascade constraints;
+drop table RSC_SCRGID cascade constraints;
+drop table RSC_AGHEVI cascade constraints;
+drop table RSC_BOLETI cascade constraints;
+drop table RSC_ENLACE cascade constraints;
+drop table RSC_SCRKEY cascade constraints;
+drop table RSC_TRATRT cascade constraints;
+drop table RSC_SCRTEM cascade constraints;
+drop table RSC_TRADOC cascade constraints;
+drop table RSC_AGRMAT cascade constraints;
+drop table RSC_TRAESP cascade constraints;
+drop table RSC_DOCUME cascade constraints;
+drop table RSC_TRASEC cascade constraints;
+drop table RSC_ICOFAM cascade constraints;
+drop table RSC_ESTADI cascade constraints;
+drop table RSC_TRAAGH cascade constraints;
+drop table RSC_FICHUA cascade constraints;
+drop table RSC_TIPO cascade constraints;
+drop table RSC_FORMUL cascade constraints;
+drop table RSC_GRPGEN cascade constraints;
+drop table RSC_TRATRA cascade constraints;
+drop table RSC_SENSGR cascade constraints;
+drop table RSC_HISENV cascade constraints;
+drop table RSC_PRONOR cascade constraints;
+drop table RSC_HECVIT cascade constraints;
+drop table RSC_TRAINI cascade constraints;
+drop table RSC_FICHA cascade constraints;
+drop table RSC_SCRTIP cascade constraints;
+drop table RSC_EDIFIC cascade constraints;
+drop table RSC_TRATAM cascade constraints;
+drop table RSC_MATAGR cascade constraints;
+drop table RSC_DESTIN cascade constraints;
+drop table RSC_MATERI cascade constraints;
+drop table RSC_TRAMAT cascade constraints;
+drop table RSC_USUARI cascade constraints;
+drop table RSC_PERCIU cascade constraints;
+drop table RSC_TRAFIC cascade constraints;
+drop table RSC_TRANOL cascade constraints;
+drop table RSC_TRADOCTRA cascade constraints;
+drop table RSC_FAMILI cascade constraints;
+drop table RSC_TRAHEV cascade constraints;
+drop table RSC_TRAUNM cascade constraints;
+drop table RSC_PERSON cascade constraints;
+drop table RSC_ENVTEM cascade constraints;
+drop table RSC_SECCIO cascade constraints;
+drop table RSC_UNIADM cascade constraints;
+drop table RSC_TRAMIT cascade constraints;
+drop table RSC_HISTOR cascade constraints;
+drop table RSC_FICHEV cascade constraints;
+drop table RSC_ICMATE cascade constraints;
+drop table RSC_TRATAX cascade constraints;
+drop table RSC_PROCED cascade constraints;
+drop table RSC_SCRENV cascade constraints;
+drop table RSC_UNAEDI cascade constraints;
+drop table RSC_SCRIPC cascade constraints;
+drop table RSC_AFECTA cascade constraints;
+drop table RSC_ESPTER cascade constraints;
+drop table RSC_TRAFAM cascade constraints;
 drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQ_ALL;
 drop sequence RSC_SEQSCK;
@@ -247,824 +247,825 @@ drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQHIS;
 create table RSC_INICI (
-   INI_CODI int8 not null,
-   INI_CODEST varchar(256),
+   INI_CODI number(19,0) not null,
+   INI_CODEST varchar2(256),
    primary key (INI_CODI)
 );
 create table RSC_PROMAT (
-   PRM_CODMAT int8 not null,
-   PRM_CODPRO int8 not null,
+   PRM_CODMAT number(19,0) not null,
+   PRM_CODPRO number(19,0) not null,
    primary key (PRM_CODPRO, PRM_CODMAT)
 );
 create table RSC_SCRGRP (
-   SGR_COD int8 not null,
-   SGR_IDENT varchar(255),
-   SGR_STPCOD int8 not null,
+   SGR_COD number(19,0) not null,
+   SGR_IDENT varchar2(255),
+   SGR_STPCOD number(19,0) not null,
    primary key (SGR_COD)
 );
 create table RSC_TRAPOB (
-   TRP_CODPOB int8 not null,
-   TRP_TITULO varchar(256),
-   TRP_DESCRI varchar(4000),
-   TRP_PALCLA varchar(4000),
-   TRP_CODIDI varchar(2) not null,
+   TRP_CODPOB number(19,0) not null,
+   TRP_TITULO varchar2(256),
+   TRP_DESCRI varchar2(4000),
+   TRP_PALCLA varchar2(4000),
+   TRP_CODIDI varchar2(2) not null,
    primary key (TRP_CODPOB, TRP_CODIDI)
 );
 create table RSC_TRANOE (
-   TNE_CODNOR int8 not null,
-   TNE_SECCIO varchar(256),
-   TNE_APARTA varchar(256),
-   TNE_PAGINI int4,
-   TNE_PAGFIN int4,
-   TNE_TITULO varchar(1024),
-   TNE_ENLACE varchar(512),
-   TNE_RESPON varchar(512),
-   TNE_CODARC int8,
-   TNE_OBSERV varchar(4000),
-   TNE_CODIDI varchar(2) not null,
+   TNE_CODNOR number(19,0) not null,
+   TNE_SECCIO varchar2(256),
+   TNE_APARTA varchar2(256),
+   TNE_PAGINI number(10,0),
+   TNE_PAGFIN number(10,0),
+   TNE_TITULO varchar2(1024),
+   TNE_ENLACE varchar2(512),
+   TNE_RESPON varchar2(512),
+   TNE_CODARC number(19,0),
+   TNE_OBSERV varchar2(4000),
+   TNE_CODIDI varchar2(2) not null,
    primary key (TNE_CODNOR, TNE_CODIDI)
 );
 create table RSC_TIPAFE (
-   TIA_CODI int8 not null,
+   TIA_CODI number(19,0) not null,
    primary key (TIA_CODI)
 );
 create table RSC_TRAPRO (
-   TPR_CODPRO int8 not null,
-   TPR_NOMBRE varchar(256),
-   TPR_RESOLUCION text,
-   TPR_NOTIFICACION text,
-   TPR_RESULT text,
-   TPR_RESUME text,
-   TPR_DESTIN text,
-   TPR_REQUIS text,
-   TPR_PLAZOS text,
-   TPR_SILEN text,
-   TPR_RECURS text,
-   TPR_OBSERV text,
-   TPR_LUGAR text,
-   TPR_CODIDI varchar(2) not null,
+   TPR_CODPRO number(19,0) not null,
+   TPR_NOMBRE varchar2(256),
+   TPR_RESOLUCION clob,
+   TPR_NOTIFICACION clob,
+   TPR_RESULT clob,
+   TPR_RESUME clob,
+   TPR_DESTIN clob,
+   TPR_REQUIS clob,
+   TPR_PLAZOS clob,
+   TPR_SILEN clob,
+   TPR_RECURS clob,
+   TPR_OBSERV clob,
+   TPR_LUGAR clob,
+   TPR_CODIDI varchar2(2) not null,
    primary key (TPR_CODPRO, TPR_CODIDI)
 );
 create table RSC_ADMREM (
-   ADM_CODI int8 not null,
-   ADM_ENDPOI varchar(512),
-   ADM_NOMBRE varchar(512),
-   ADM_NIVPRO int4,
-   ADM_CODSUA varchar(512),
-   ADM_IDREMO varchar(512) not null unique,
-   ADM_RESPON varchar(256),
-   ADM_VERSIO int8,
-   ADM_CODESP int8,
-   ADM_LOGOP int8,
-   ADM_LOGOG int8,
+   ADM_CODI number(19,0) not null,
+   ADM_ENDPOI varchar2(512),
+   ADM_NOMBRE varchar2(512),
+   ADM_NIVPRO number(10,0),
+   ADM_CODSUA varchar2(512),
+   ADM_IDREMO varchar2(512) not null unique,
+   ADM_RESPON varchar2(256),
+   ADM_VERSIO number(19,0),
+   ADM_CODESP number(19,0),
+   ADM_LOGOP number(19,0),
+   ADM_LOGOG number(19,0),
    primary key (ADM_CODI)
 );
 create table RSC_UNAMAT (
-   UNM_CODI int8 not null,
-   UNM_UNAPRN varchar(1),
-   UNM_CODMAT int8,
-   UNM_CODUNA int8,
+   UNM_CODI number(19,0) not null,
+   UNM_UNAPRN varchar2(1),
+   UNM_CODMAT number(19,0),
+   UNM_CODUNA number(19,0),
    primary key (UNM_CODI)
 );
 create table RSC_TRAUNA (
-   TUN_CODUNA int8 not null,
-   TUN_NOMBRE varchar(256),
-   TUN_PRESEN varchar(4000),
-   TUN_ABREVI varchar(64),
-   TUN_URL varchar(256),
-   TUN_CODIDI varchar(2) not null,
+   TUN_CODUNA number(19,0) not null,
+   TUN_NOMBRE varchar2(256),
+   TUN_PRESEN varchar2(4000),
+   TUN_ABREVI varchar2(64),
+   TUN_URL varchar2(256),
+   TUN_CODIDI varchar2(2) not null,
+   TUN_CVRESP CLOB,
    primary key (TUN_CODUNA, TUN_CODIDI)
 );
 create table RSC_HEVIPR (
-   HVP_CODI int8 not null,
-   HVP_CODHEV int8,
-   HVP_CODPRO int8,
-   HVP_ORDEN int4,
+   HVP_CODI number(19,0) not null,
+   HVP_CODHEV number(19,0),
+   HVP_CODPRO number(19,0),
+   HVP_ORDEN number(10,0),
    primary key (HVP_CODI)
 );
 create table RSC_TRATIA (
-   TTA_CODTIA int8 not null,
-   TTA_NOMBRE varchar(256),
-   TTA_CODIDI varchar(2) not null,
+   TTA_CODTIA number(19,0) not null,
+   TTA_NOMBRE varchar2(256),
+   TTA_CODIDI varchar2(2) not null,
    primary key (TTA_CODTIA, TTA_CODIDI)
 );
 create table RSC_TRATIP (
-   TTI_CODTIP int8 not null,
-   TTI_NOMBRE varchar(128),
-   TTI_CODIDI varchar(2) not null,
+   TTI_CODTIP number(19,0) not null,
+   TTI_NOMBRE varchar2(128),
+   TTI_CODIDI varchar2(2) not null,
    primary key (TTI_CODTIP, TTI_CODIDI)
 );
 create table RSC_HEVIAG (
-   HVA_CODI int8 not null,
-   HVA_CODHEV int8,
-   HVA_CODAGH int8,
-   HVA_ORDEN int4,
+   HVA_CODI number(19,0) not null,
+   HVA_CODHEV number(19,0),
+   HVA_CODAGH number(19,0),
+   HVA_ORDEN number(10,0),
    primary key (HVA_CODI)
 );
 create table RSC_PUBOBJ (
-   POB_CODI int8 not null,
-   POB_CODEST varchar(128),
-   POB_ORDEN int4,
+   POB_CODI number(19,0) not null,
+   POB_CODEST varchar2(128),
+   POB_ORDEN number(10,0),
    primary key (POB_CODI)
 );
 create table RSC_LUCFIL (
-   LUF_NAME varchar(255) not null,
-   LUF_MODIFI int8,
-   LUF_LENGTH int8,
-   LUF_DATA bytea,
+   LUF_NAME varchar2(255) not null,
+   LUF_MODIFI number(19,0),
+   LUF_LENGTH number(19,0),
+   LUF_DATA blob,
    primary key (LUF_NAME)
 );
 create table RSC_TRAPEC (
-   TPE_CODPEC int8 not null,
-   TPE_NOMBRE varchar(256),
-   TPE_DESCRI varchar(4000),
-   TPE_CODIDI varchar(2) not null,
+   TPE_CODPEC number(19,0) not null,
+   TPE_NOMBRE varchar2(256),
+   TPE_DESCRI varchar2(4000),
+   TPE_CODIDI varchar2(2) not null,
    primary key (TPE_CODPEC, TPE_CODIDI)
 );
 create table RSC_IDIOMA (
-   IDI_CODI varchar(2) not null,
-   IDI_ORDEN int4 not null,
-   IDI_CODEST varchar(128),
-   IDI_NOMBRE varchar(128),
-   IDI_TRADUCTOR varchar(128),
+   IDI_CODI varchar2(2) not null,
+   IDI_ORDEN number(10,0) not null,
+   IDI_CODEST varchar2(128),
+   IDI_NOMBRE varchar2(128),
+   IDI_TRADUCTOR varchar2(128),
    primary key (IDI_CODI)
 );
 create table RSC_TAXA (
-   TAX_CODI int8 not null,
-   TAX_CODTRA int8,
+   TAX_CODI number(19,0) not null,
+   TAX_CODTRA number(19,0),
    primary key (TAX_CODI)
 );
 create table RSC_TRAAGM (
-   TAM_CODAGM int8 not null,
-   TAM_NOMBRE varchar(256),
-   TAM_CODIDI varchar(2) not null,
+   TAM_CODAGM number(19,0) not null,
+   TAM_NOMBRE varchar2(256),
+   TAM_CODIDI varchar2(2) not null,
    primary key (TAM_CODAGM, TAM_CODIDI)
 );
 create table RSC_FICMAT (
-   FIM_CODFIC int8 not null,
-   FIM_CODMAT int8 not null,
+   FIM_CODFIC number(19,0) not null,
+   FIM_CODMAT number(19,0) not null,
    primary key (FIM_CODFIC, FIM_CODMAT)
 );
 create table RSC_UNAUSU (
-   UNU_CODUNA int8 not null,
-   UNU_CODUSU int8 not null,
+   UNU_CODUNA number(19,0) not null,
+   UNU_CODUSU number(19,0) not null,
    primary key (UNU_CODUSU, UNU_CODUNA)
 );
 create table RSC_TRAEDI (
-   TED_CODEDI int8 not null,
-   TED_DESCRI varchar(4000),
-   TED_CODIDI varchar(2) not null,
+   TED_CODEDI number(19,0) not null,
+   TED_DESCRI varchar2(4000),
+   TED_CODIDI varchar2(2) not null,
    primary key (TED_CODEDI, TED_CODIDI)
 );
 create table RSC_NORMAT (
-   NOR_CODI int8 not null,
-   NOR_TYPE varchar(64) not null,
-   NOR_NUMERO int8,
-   NOR_REGIST int8,
-   NOR_LEY varchar(256),
-   NOR_FECHA timestamp,
-   NOR_FECBOL timestamp,
-   NOR_VALIDA int4,
-   NOR_CODIVUDS varchar(255),
-   NOR_DESCCODIVUDS varchar(255),
-   NOR_CODBOL int8,
-   NOR_CODTIP int8,
-   NOR_CODUNA int8,
-   NER_IDEXTE int8,
-   NER_URLREM varchar(512),
-   NER_CODADM int8,
+   NOR_CODI number(19,0) not null,
+   NOR_TYPE varchar2(64) not null,
+   NOR_NUMERO number(19,0),
+   NOR_REGIST number(19,0),
+   NOR_LEY varchar2(256),
+   NOR_FECHA date,
+   NOR_FECBOL date,
+   NOR_VALIDA number(10,0),
+   NOR_CODIVUDS varchar2(255),
+   NOR_DESCCODIVUDS varchar2(255),
+   NOR_CODBOL number(19,0),
+   NOR_CODTIP number(19,0),
+   NOR_CODUNA number(19,0),
+   NER_IDEXTE number(19,0),
+   NER_URLREM varchar2(512),
+   NER_CODADM number(19,0),
    primary key (NOR_CODI)
 );
 create table RSC_TRAENL (
-   TEN_CODENL int8 not null,
-   TEN_TITULO varchar(256),
-   TEN_ENLACE varchar(512),
-   TEN_CODIDI varchar(2) not null,
+   TEN_CODENL number(19,0) not null,
+   TEN_TITULO varchar2(256),
+   TEN_ENLACE varchar2(512),
+   TEN_CODIDI varchar2(2) not null,
    primary key (TEN_CODENL, TEN_CODIDI)
 );
 create table RSC_AUDITO (
-   AUD_CODI int8 not null,
-   AUD_USUARI varchar(256),
-   AUD_FECHA timestamp,
-   AUD_CODHIS int8,
-   AUD_CODOPE int4,
+   AUD_CODI number(19,0) not null,
+   AUD_USUARI varchar2(256),
+   AUD_FECHA date,
+   AUD_CODHIS number(19,0),
+   AUD_CODOPE number(10,0),
    primary key (AUD_CODI)
 );
 create table RSC_COMENT (
-   COM_CODI int8 not null,
-   COM_TYPE varchar(64) not null,
-   COM_TITULO varchar(256),
-   COM_MOTIVO varchar(64) not null,
-   COM_FECHA timestamp,
-   COM_CONTEN varchar(4000),
-   COM_SUBSAN bool,
-   COM_AUTOR varchar(256),
-   COM_CODUSU int8,
-   COM_CODPRO int8,
-   COM_CODFIC int8,
+   COM_CODI number(19,0) not null,
+   COM_TYPE varchar2(64) not null,
+   COM_TITULO varchar2(256),
+   COM_MOTIVO varchar2(64) not null,
+   COM_FECHA date,
+   COM_CONTEN varchar2(4000),
+   COM_SUBSAN number(1,0),
+   COM_AUTOR varchar2(256),
+   COM_CODUSU number(19,0),
+   COM_CODPRO number(19,0),
+   COM_CODFIC number(19,0),
    primary key (COM_CODI)
 );
 create table RSC_ARCHIV (
-   ARC_CODI int8 not null,
-   ARC_NOMBRE varchar(128) not null,
-   ARC_MIME varchar(128) not null,
-   ARC_PESO int8 not null,
-   ARC_DATOS bytea,
+   ARC_CODI number(19,0) not null,
+   ARC_NOMBRE varchar2(128) not null,
+   ARC_MIME varchar2(128) not null,
+   ARC_PESO number(19,0) not null,
+   ARC_DATOS blob,
    primary key (ARC_CODI)
 );
 create table RSC_GRPGID (
-   SGR_GRPCOD int8 not null,
-   SGR_NOM varchar(100),
-   SGR_CODIDI varchar(2) not null,
+   SGR_GRPCOD number(19,0) not null,
+   SGR_NOM varchar2(100),
+   SGR_CODIDI varchar2(2) not null,
    primary key (SGR_GRPCOD, SGR_CODIDI)
 );
 create table RSC_DOCTRA (
-   DOC_CODI int8 not null,
-   CODITRA int8,
-   DOC_CODARC int8,
-   ORDEN int8,
-   TIPUS int4,
+   DOC_CODI number(19,0) not null,
+   CODITRA number(19,0),
+   DOC_CODARC number(19,0),
+   ORDEN number(19,0),
+   TIPUS number(10,0),
    primary key (DOC_CODI)
 );
 create table RSC_SCRGID (
-   SGI_SGRCOD int8 not null,
-   SGI_NOM varchar(100),
-   SGI_CODIDI varchar(2) not null,
+   SGI_SGRCOD number(19,0) not null,
+   SGI_NOM varchar2(100),
+   SGI_CODIDI varchar2(2) not null,
    primary key (SGI_SGRCOD, SGI_CODIDI)
 );
 create table RSC_AGHEVI (
-   AGH_CODI int8 not null,
-   AGH_CODEST varchar(128),
-   AGH_FOTO int8,
-   AGH_ICONO int8,
-   AGH_ICOGRA int8,
-   AGH_CODPOB int8,
+   AGH_CODI number(19,0) not null,
+   AGH_CODEST varchar2(128),
+   AGH_FOTO number(19,0),
+   AGH_ICONO number(19,0),
+   AGH_ICOGRA number(19,0),
+   AGH_CODPOB number(19,0),
    primary key (AGH_CODI)
 );
 create table RSC_BOLETI (
-   BOL_CODI int8 not null,
-   BOL_NOMBRE varchar(256),
-   BOL_ENLACE varchar(512),
+   BOL_CODI number(19,0) not null,
+   BOL_NOMBRE varchar2(256),
+   BOL_ENLACE varchar2(512),
    primary key (BOL_CODI)
 );
 create table RSC_ENLACE (
-   ENL_CODI int8 not null,
-   ENL_CODFIC int8,
-   ENL_CODPRO int8,
-   ENL_ORDEN int8,
+   ENL_CODI number(19,0) not null,
+   ENL_CODFIC number(19,0),
+   ENL_CODPRO number(19,0),
+   ENL_ORDEN number(19,0),
    primary key (ENL_CODI)
 );
 create table RSC_SCRKEY (
-   SCK_EMAIL varchar(255) not null,
-   SCK_IDIMG varchar(255),
-   SCK_IDACT varchar(255),
-   SCK_NUMENV int2,
-   SCK_FCENV timestamp,
-   SCK_STPCOD int8 not null,
-   SCK_COD int8 not null,
+   SCK_EMAIL varchar2(255) not null,
+   SCK_IDIMG varchar2(255),
+   SCK_IDACT varchar2(255),
+   SCK_NUMENV number(5,0),
+   SCK_FCENV date,
+   SCK_STPCOD number(19,0) not null,
+   SCK_COD number(19,0) not null,
    primary key (SCK_COD)
 );
 create table RSC_TRATRT (
-   TTT_CODTRT int8 not null,
-   TTT_TIPO varchar(256),
-   TTT_CARGOM varchar(256),
-   TTT_CARGOF varchar(256),
-   TTT_TRATAM varchar(256),
-   TTT_TRATAF varchar(256),
-   TTT_CODIDI varchar(2) not null,
+   TTT_CODTRT number(19,0) not null,
+   TTT_TIPO varchar2(256),
+   TTT_CARGOM varchar2(256),
+   TTT_CARGOF varchar2(256),
+   TTT_TRATAM varchar2(256),
+   TTT_TRATAF varchar2(256),
+   TTT_CODIDI varchar2(2) not null,
    primary key (TTT_CODTRT, TTT_CODIDI)
 );
 create table RSC_SCRTEM (
-   SCR_COD int8 not null,
-   MAT_CODI int8
+   SCR_COD number(19,0) not null,
+   MAT_CODI number(19,0)
 );
 create table RSC_TRADOC (
-   TDO_CODDOC int8 not null,
-   TDO_TITULO varchar(256),
-   TDO_DESCRI varchar(4000),
-   TDO_CODARC int8,
-   TDO_CODIDI varchar(2) not null,
+   TDO_CODDOC number(19,0) not null,
+   TDO_TITULO varchar2(256),
+   TDO_DESCRI varchar2(4000),
+   TDO_CODARC number(19,0),
+   TDO_CODIDI varchar2(2) not null,
    primary key (TDO_CODDOC, TDO_CODIDI)
 );
 create table RSC_AGRMAT (
-   AGM_CODI int8 not null,
-   AGM_CODEST varchar(256),
-   AGM_CODSEC int8,
+   AGM_CODI number(19,0) not null,
+   AGM_CODEST varchar2(256),
+   AGM_CODSEC number(19,0),
    primary key (AGM_CODI)
 );
 create table RSC_TRAESP (
-   TES_CODESP int8 not null,
-   TES_NOMBRE varchar(256),
-   TES_CODIDI varchar(2) not null,
+   TES_CODESP number(19,0) not null,
+   TES_NOMBRE varchar2(256),
+   TES_CODIDI varchar2(2) not null,
    primary key (TES_CODESP, TES_CODIDI)
 );
 create table RSC_DOCUME (
-   DOC_CODI int8 not null,
-   DOC_TYPE varchar(64) not null,
-   DOC_CODFIC int8,
-   DOC_CODPRO int8,
-   DOC_CODARC2 int8,
-   DOC_ORDEN int8,
-   DOR_IDEXTE int8,
-   DOR_URLREM varchar(512),
-   DOR_CODADM int8,
+   DOC_CODI number(19,0) not null,
+   DOC_TYPE varchar2(64) not null,
+   DOC_CODFIC number(19,0),
+   DOC_CODPRO number(19,0),
+   DOC_CODARC2 number(19,0),
+   DOC_ORDEN number(19,0),
+   DOR_IDEXTE number(19,0),
+   DOR_URLREM varchar2(512),
+   DOR_CODADM number(19,0),
    primary key (DOC_CODI)
 );
 create table RSC_TRASEC (
-   TSE_CODSEC int8 not null,
-   TSE_TITULO varchar(256),
-   TSE_DESCRI varchar(4000),
-   TSE_CODIDI varchar(2) not null,
+   TSE_CODSEC number(19,0) not null,
+   TSE_TITULO varchar2(256),
+   TSE_DESCRI varchar2(4000),
+   TSE_CODIDI varchar2(2) not null,
    primary key (TSE_CODSEC, TSE_CODIDI)
 );
 create table RSC_ICOFAM (
-   ICF_CODI int8 not null,
-   ICF_CODFAM int8,
-   ICF_CODPEC int8,
-   ICF_ICONO int8,
+   ICF_CODI number(19,0) not null,
+   ICF_CODFAM number(19,0),
+   ICF_CODPEC number(19,0),
+   ICF_ICONO number(19,0),
    primary key (ICF_CODI)
 );
 create table RSC_ESTADI (
-   EST_CODI int8 not null,
-   EST_FECHA timestamp,
-   EST_CONTAD int4,
-   EST_CODHIS int8,
+   EST_CODI number(19,0) not null,
+   EST_FECHA date,
+   EST_CONTAD number(10,0),
+   EST_CODHIS number(19,0),
    primary key (EST_CODI)
 );
 create table RSC_TRAAGH (
-   TRG_CODAGH int8 not null,
-   TRG_NOMBRE varchar(256),
-   TRG_DESCRI varchar(4000),
-   TRG_PALCLA varchar(4000),
-   TRG_CODIDI varchar(2) not null,
+   TRG_CODAGH number(19,0) not null,
+   TRG_NOMBRE varchar2(256),
+   TRG_DESCRI varchar2(4000),
+   TRG_PALCLA varchar2(4000),
+   TRG_CODIDI varchar2(2) not null,
    primary key (TRG_CODAGH, TRG_CODIDI)
 );
 create table RSC_FICHUA (
-   FUA_CODI int8 not null,
-   FUA_CODUNA int8,
-   FUA_CODFIC int8,
-   FUA_CODSEC int8,
-   FUA_ORDEN int4,
-   FUA_ORDSEC int4,
+   FUA_CODI number(19,0) not null,
+   FUA_CODUNA number(19,0),
+   FUA_CODFIC number(19,0),
+   FUA_CODSEC number(19,0),
+   FUA_ORDEN number(10,0),
+   FUA_ORDSEC number(10,0),
    primary key (FUA_CODI)
 );
 create table RSC_TIPO (
-   TIP_CODI int8 not null,
+   TIP_CODI number(19,0) not null,
    primary key (TIP_CODI)
 );
 create table RSC_FORMUL (
-   FOR_CODI int8 not null,
-   FOR_NOMBRE varchar(256),
-   FOR_URL varchar(512),
-   FOR_CODARC int8,
-   FOR_URLMAN varchar(512),
-   FOR_MANUAL int8,
-   FOR_CODTRA int8,
+   FOR_CODI number(19,0) not null,
+   FOR_NOMBRE varchar2(256),
+   FOR_URL varchar2(512),
+   FOR_CODARC number(19,0),
+   FOR_URLMAN varchar2(512),
+   FOR_MANUAL number(19,0),
+   FOR_CODTRA number(19,0),
    primary key (FOR_CODI)
 );
 create table RSC_GRPGEN (
-   GRP_COD int8 not null,
-   GRP_TIPO int4,
-   GRP_STPCOD int8 not null,
+   GRP_COD number(19,0) not null,
+   GRP_TIPO number(10,0),
+   GRP_STPCOD number(19,0) not null,
    primary key (GRP_COD)
 );
 create table RSC_TRATRA (
-   TTR_CODTTR int8 not null,
-   TTR_NOMBRE varchar(256),
-   TTR_DESCRI varchar(4000),
-   TTR_DOCUME varchar(4000),
-   TTR_REQUI varchar(4000),
-   TTR_PLAZOS varchar(512),
-   TTR_LUGAR varchar(512),
-   TTR_CODIDI varchar(2) not null,
+   TTR_CODTTR number(19,0) not null,
+   TTR_NOMBRE varchar2(256),
+   TTR_DESCRI varchar2(4000),
+   TTR_DOCUME varchar2(4000),
+   TTR_REQUI varchar2(4000),
+   TTR_PLAZOS varchar2(512),
+   TTR_LUGAR varchar2(512),
+   TTR_CODIDI varchar2(2) not null,
    primary key (TTR_CODTTR, TTR_CODIDI)
 );
 create table RSC_SENSGR (
-   SSC_CODSEN int8 not null,
-   SSC_CODSGR int8 not null,
+   SSC_CODSEN number(19,0) not null,
+   SSC_CODSGR number(19,0) not null,
    primary key (SSC_CODSEN, SSC_CODSGR)
 );
 create table RSC_HISENV (
-   HEN_COD int8 not null,
-   HEN_FENVIO timestamp,
-   HEN_STPCOD int8 not null,
+   HEN_COD number(19,0) not null,
+   HEN_FENVIO date,
+   HEN_STPCOD number(19,0) not null,
    primary key (HEN_COD)
 );
 create table RSC_PRONOR (
-   PRN_CODNOR int8 not null,
-   PRN_CODPRO int8 not null,
+   PRN_CODNOR number(19,0) not null,
+   PRN_CODPRO number(19,0) not null,
    primary key (PRN_CODPRO, PRN_CODNOR)
 );
 create table RSC_HECVIT (
-   HEV_CODI int8 not null,
-   HEV_ORDEN int4,
-   HEV_CODEST varchar(255),
-   HEV_ICONO int8,
-   HEV_FOTO int8,
-   HEV_ICOGRA int8,
+   HEV_CODI number(19,0) not null,
+   HEV_ORDEN number(10,0),
+   HEV_CODEST varchar2(255),
+   HEV_ICONO number(19,0),
+   HEV_FOTO number(19,0),
+   HEV_ICOGRA number(19,0),
    primary key (HEV_CODI)
 );
 create table RSC_TRAINI (
-   TIN_CODINI int8 not null,
-   TIN_NOMBRE varchar(256),
-   TIN_DESCRI varchar(4000),
-   TIN_CODIDI varchar(2) not null,
+   TIN_CODINI number(19,0) not null,
+   TIN_NOMBRE varchar2(256),
+   TIN_DESCRI varchar2(4000),
+   TIN_CODIDI varchar2(2) not null,
    primary key (TIN_CODINI, TIN_CODIDI)
 );
 create table RSC_FICHA (
-   FIC_CODI int8 not null,
-   FIC_TYPE varchar(64) not null,
-   FIC_FECPUB timestamp,
-   FIC_FECCAD timestamp,
-   FIC_FECACT timestamp,
-   FIC_ICONO int8,
-   FIC_IMAGEN int8,
-   FIC_BANER int8,
-   FIC_VALIDA int4,
-   FIC_INFO varchar(4000),
-   FIC_RESPON varchar(256),
-   FIC_URLVID varchar(255),
-   FIC_URLFOR varchar(255),
-   FIC_FORTEM varchar(1),
-   FIR_IDEXTE int8,
-   FIR_URLREM varchar(512),
-   FIR_CODADM int8,
+   FIC_CODI number(19,0) not null,
+   FIC_TYPE varchar2(64) not null,
+   FIC_FECPUB date,
+   FIC_FECCAD date,
+   FIC_FECACT date,
+   FIC_ICONO number(19,0),
+   FIC_IMAGEN number(19,0),
+   FIC_BANER number(19,0),
+   FIC_VALIDA number(10,0),
+   FIC_INFO varchar2(4000),
+   FIC_RESPON varchar2(256),
+   FIC_URLVID varchar2(255),
+   FIC_URLFOR varchar2(255),
+   FIC_FORTEM varchar2(1),
+   FIR_IDEXTE number(19,0),
+   FIR_URLREM varchar2(512),
+   FIR_CODADM number(19,0),
    primary key (FIC_CODI)
 );
 create table RSC_SCRTIP (
-   STP_COD int8 not null,
-   STP_CODUNI int8,
-   STP_IDENT varchar(10),
-   STP_URLCAB varchar(200),
-   STP_TITULO varchar(50),
-   STP_NOM varchar(200),
-   STP_MAIL varchar(50),
-   STP_PWD varchar(50),
-   STP_ESTADO int4,
-   STP_HORAJOB timestamp,
+   STP_COD number(19,0) not null,
+   STP_CODUNI number(19,0),
+   STP_IDENT varchar2(10),
+   STP_URLCAB varchar2(200),
+   STP_TITULO varchar2(50),
+   STP_NOM varchar2(200),
+   STP_MAIL varchar2(50),
+   STP_PWD varchar2(50),
+   STP_ESTADO number(10,0),
+   STP_HORAJOB date,
    primary key (STP_COD)
 );
 create table RSC_EDIFIC (
-   EDI_CODI int8 not null,
-   EDI_TYPE varchar(64) not null,
-   EDI_DIRECC varchar(256),
-   EDI_CODPOS varchar(64),
-   EDI_POBLAC varchar(64),
-   EDI_TELEFO varchar(64),
-   EDI_FAX varchar(64),
-   EDI_EMAIL varchar(256),
-   EDI_FOTOP int8,
-   EDI_FOTOG int8,
-   EDI_PLANO int8,
-   EDI_LAT varchar(15),
-   EDI_LNG varchar(15),
-   EDR_IDEXTE int8,
-   EDR_CODADM int8,
+   EDI_CODI number(19,0) not null,
+   EDI_TYPE varchar2(64) not null,
+   EDI_DIRECC varchar2(256),
+   EDI_CODPOS varchar2(64),
+   EDI_POBLAC varchar2(64),
+   EDI_TELEFO varchar2(64),
+   EDI_FAX varchar2(64),
+   EDI_EMAIL varchar2(256),
+   EDI_FOTOP number(19,0),
+   EDI_FOTOG number(19,0),
+   EDI_PLANO number(19,0),
+   EDI_LAT varchar2(15),
+   EDI_LNG varchar2(15),
+   EDR_IDEXTE number(19,0),
+   EDR_CODADM number(19,0),
    primary key (EDI_CODI)
 );
 create table RSC_TRATAM (
-   TRT_CODI int8 not null,
-   TRT_CODEST varchar(128),
+   TRT_CODI number(19,0) not null,
+   TRT_CODEST varchar2(128),
    primary key (TRT_CODI)
 );
 create table RSC_MATAGR (
-   MAG_CODI int8 not null,
-   MAG_CODMAT int8,
-   MAG_CODAGM int8,
-   MAG_ORDEN int4,
+   MAG_CODI number(19,0) not null,
+   MAG_CODMAT number(19,0),
+   MAG_CODAGM number(19,0),
+   MAG_ORDEN number(10,0),
    primary key (MAG_CODI)
 );
 create table RSC_DESTIN (
-   DES_CODI int8 not null,
-   DES_NOMBRE varchar(512),
-   DES_IDREMO varchar(512),
-   DES_ENDPOI varchar(512),
-   DES_EMAIL varchar(256),
+   DES_CODI number(19,0) not null,
+   DES_NOMBRE varchar2(512),
+   DES_IDREMO varchar2(512),
+   DES_ENDPOI varchar2(512),
+   DES_EMAIL varchar2(256),
    primary key (DES_CODI)
 );
 create table RSC_MATERI (
-   MAT_CODI int8 not null,
-   MAT_CODHIT varchar(128),
-   MAT_CODEST varchar(256),
-   MAT_DESTAC bool not null,
-   MAT_ICONO int8,
-   MAT_FOTO int8,
-   MAT_ICOGRA int8,
+   MAT_CODI number(19,0) not null,
+   MAT_CODHIT varchar2(128),
+   MAT_CODEST varchar2(256),
+   MAT_DESTAC number(1,0) not null,
+   MAT_ICONO number(19,0),
+   MAT_FOTO number(19,0),
+   MAT_ICOGRA number(19,0),
    primary key (MAT_CODI)
 );
 create table RSC_TRAMAT (
-   TMA_CODMAT int8 not null,
-   TMA_NOMBRE varchar(256),
-   TMA_DESCRI varchar(4000),
-   TMA_PALCLA varchar(4000),
-   TMA_CODDIS int8,
-   TMA_NORMAT int8,
-   TMA_CONTEN int8,
-   TMA_CODIDI varchar(2) not null,
+   TMA_CODMAT number(19,0) not null,
+   TMA_NOMBRE varchar2(256),
+   TMA_DESCRI varchar2(4000),
+   TMA_PALCLA varchar2(4000),
+   TMA_CODDIS number(19,0),
+   TMA_NORMAT number(19,0),
+   TMA_CONTEN number(19,0),
+   TMA_CODIDI varchar2(2) not null,
    primary key (TMA_CODMAT, TMA_CODIDI)
 );
 create table RSC_USUARI (
-   USU_CODI int8 not null,
-   USU_USERNA varchar(128) not null unique,
-   USU_PASSWO varchar(128),
-   USU_NOMBRE varchar(256),
-   USU_OBSERV varchar(4000),
-   USU_PERFIL varchar(64),
-   USU_EMAIL varchar(256),
+   USU_CODI number(19,0) not null,
+   USU_USERNA varchar2(128) not null unique,
+   USU_PASSWO varchar2(128),
+   USU_NOMBRE varchar2(256),
+   USU_OBSERV varchar2(4000),
+   USU_PERFIL varchar2(64),
+   USU_EMAIL varchar2(256),
    primary key (USU_CODI)
 );
 create table RSC_PERCIU (
-   PEC_CODI int8 not null,
-   PEC_CODEST varchar(10),
-   PEC_PATICO varchar(256),
+   PEC_CODI number(19,0) not null,
+   PEC_CODEST varchar2(10),
+   PEC_PATICO varchar2(256),
    primary key (PEC_CODI)
 );
 create table RSC_TRAFIC (
-   TFI_CODFIC int8 not null,
-   TFI_TITULO varchar(256),
-   TFI_URL varchar(512),
-   TFI_DESABR text,
-   TFI_DESCRI text,
-   TFI_CODIDI varchar(2) not null,
+   TFI_CODFIC number(19,0) not null,
+   TFI_TITULO varchar2(256),
+   TFI_URL varchar2(512),
+   TFI_DESABR clob,
+   TFI_DESCRI clob,
+   TFI_CODIDI varchar2(2) not null,
    primary key (TFI_CODFIC, TFI_CODIDI)
 );
 create table RSC_TRANOL (
-   TNL_CODNOR int8 not null,
-   TNL_SECCIO varchar(256),
-   TNL_APARTA varchar(256),
-   TNL_PAGINI int4,
-   TNL_PAGFIN int4,
-   TNL_TITULO varchar(512),
-   TNL_ENLACE varchar(512),
-   TNL_CODARC int8,
-   TNL_OBSERV varchar(4000),
-   TNL_CODIDI varchar(2) not null,
+   TNL_CODNOR number(19,0) not null,
+   TNL_SECCIO varchar2(256),
+   TNL_APARTA varchar2(256),
+   TNL_PAGINI number(10,0),
+   TNL_PAGFIN number(10,0),
+   TNL_TITULO varchar2(512),
+   TNL_ENLACE varchar2(512),
+   TNL_CODARC number(19,0),
+   TNL_OBSERV varchar2(4000),
+   TNL_CODIDI varchar2(2) not null,
    primary key (TNL_CODNOR, TNL_CODIDI)
 );
 create table RSC_TRADOCTRA (
-   TDO_CODTRA int8 not null,
-   TDO_TITULO varchar(256),
-   TDO_DESCRI varchar(4000),
-   TDO_CODARC int8,
-   TDO_CODIDI varchar(2) not null,
+   TDO_CODTRA number(19,0) not null,
+   TDO_TITULO varchar2(256),
+   TDO_DESCRI varchar2(4000),
+   TDO_CODARC number(19,0),
+   TDO_CODIDI varchar2(2) not null,
    primary key (TDO_CODTRA, TDO_CODIDI)
 );
 create table RSC_FAMILI (
-   FAM_CODI int8 not null,
+   FAM_CODI number(19,0) not null,
    primary key (FAM_CODI)
 );
 create table RSC_TRAHEV (
-   THE_CODHEV int8 not null,
-   THE_NOMBRE varchar(256),
-   THE_DESCRI varchar(4000),
-   THE_PALCLA varchar(4000),
-   THE_CODDIS int8,
-   THE_NORMAT int8,
-   THE_CONTEN int8,
-   THE_CODIDI varchar(2) not null,
+   THE_CODHEV number(19,0) not null,
+   THE_NOMBRE varchar2(256),
+   THE_DESCRI varchar2(4000),
+   THE_PALCLA varchar2(4000),
+   THE_CODDIS number(19,0),
+   THE_NORMAT number(19,0),
+   THE_CONTEN number(19,0),
+   THE_CODIDI varchar2(2) not null,
    primary key (THE_CODHEV, THE_CODIDI)
 );
 create table RSC_TRAUNM (
-   TRN_CODUNM int8 not null,
-   TRN_URLUM varchar(256),
-   TRN_CODIDI varchar(2) not null,
+   TRN_CODUNM number(19,0) not null,
+   TRN_URLUM varchar2(256),
+   TRN_CODIDI varchar2(2) not null,
    primary key (TRN_CODUNM, TRN_CODIDI)
 );
 create table RSC_PERSON (
-   PER_CODI int8 not null,
-   PER_USERNA varchar(128),
-   PER_NOMBRE varchar(256),
-   PER_FUNCIO varchar(256),
-   PER_CARGO varchar(256),
-   PER_EMAIL varchar(256),
-   PER_EXTPUB varchar(64),
-   PER_NUMPUB varchar(64),
-   PER_EXTPRI varchar(64),
-   PER_NUMPRI varchar(64),
-   PER_EXTMOV varchar(64),
-   PER_NUMMOV varchar(64),
-   PER_CODUNA int8,
+   PER_CODI number(19,0) not null,
+   PER_USERNA varchar2(128),
+   PER_NOMBRE varchar2(256),
+   PER_FUNCIO varchar2(256),
+   PER_CARGO varchar2(256),
+   PER_EMAIL varchar2(256),
+   PER_EXTPUB varchar2(64),
+   PER_NUMPUB varchar2(64),
+   PER_EXTPRI varchar2(64),
+   PER_NUMPRI varchar2(64),
+   PER_EXTMOV varchar2(64),
+   PER_NUMMOV varchar2(64),
+   PER_CODUNA number(19,0),
    primary key (PER_CODI)
 );
 create table RSC_ENVTEM (
-   HEN_COD int8 not null,
-   MAT_CODI int8,
-   HEN_HTML text,
-   HEN_ACTIVO int4
+   HEN_COD number(19,0) not null,
+   MAT_CODI number(19,0),
+   HEN_HTML clob,
+   HEN_ACTIVO number(10,0)
 );
 create table RSC_SECCIO (
-   SEC_CODI int8 not null,
-   SEC_CODEST varchar(20),
-   SEC_PERFIL varchar(128),
-   SEC_ORDEN int4,
-   SEC_CODSEC int8,
+   SEC_CODI number(19,0) not null,
+   SEC_CODEST varchar2(20),
+   SEC_PERFIL varchar2(128),
+   SEC_ORDEN number(10,0),
+   SEC_CODSEC number(19,0),
    primary key (SEC_CODI)
 );
 create table RSC_UNIADM (
-   UNA_CODI int8 not null,
-   UNA_TYPE varchar(64) not null,
-   UNA_BUSKEY varchar(41),
-   UNA_CLVHIT varchar(128),
-   UNA_DOMINI varchar(256),
-   UNA_ORDEN int8,
-   UNA_VALIDA int4,
-   UNA_RESPON varchar(256),
-   UNA_TELEFO varchar(64),
-   UNA_FAX varchar(64),
-   UNA_EMAIL varchar(256),
-   UNA_SEXRES int4,
-   UNA_CODEST varchar(256),
-   UNA_NFOTO1 int4,
-   UNA_NFOTO2 int4,
-   UNA_NFOTO3 int4,
-   UNA_NFOTO4 int4,
-   UNA_FOTOP int8,
-   UNA_FOTOG int8,
-   UNA_LOGOH int8,
-   UNA_LOGOV int8,
-   UNA_LOGOS int8,
-   UNA_LOGOT int8,
-   UNA_CODUNA int8,
-   UNA_CODESP int8,
-   UNA_CODTRT int8,
-   UNR_IDEXTE int8,
-   UNR_URLREM varchar(512),
-   UNR_CODADM int8,
+   UNA_CODI number(19,0) not null,
+   UNA_TYPE varchar2(64) not null,
+   UNA_BUSKEY varchar2(41),
+   UNA_CLVHIT varchar2(128),
+   UNA_DOMINI varchar2(256),
+   UNA_ORDEN number(19,0),
+   UNA_VALIDA number(10,0),
+   UNA_RESPON varchar2(256),
+   UNA_TELEFO varchar2(64),
+   UNA_FAX varchar2(64),
+   UNA_EMAIL varchar2(256),
+   UNA_SEXRES number(10,0),
+   UNA_CODEST varchar2(256),
+   UNA_NFOTO1 number(10,0),
+   UNA_NFOTO2 number(10,0),
+   UNA_NFOTO3 number(10,0),
+   UNA_NFOTO4 number(10,0),
+   UNA_FOTOP number(19,0),
+   UNA_FOTOG number(19,0),
+   UNA_LOGOH number(19,0),
+   UNA_LOGOV number(19,0),
+   UNA_LOGOS number(19,0),
+   UNA_LOGOT number(19,0),
+   UNA_CODUNA number(19,0),
+   UNA_CODESP number(19,0),
+   UNA_CODTRT number(19,0),
+   UNR_IDEXTE number(19,0),
+   UNR_URLREM varchar2(512),
+   UNR_CODADM number(19,0),
    primary key (UNA_CODI)
 );
 create table RSC_TRAMIT (
-   TRA_CODI int8 not null,
-   TRA_TYPE varchar(64) not null,
-   TRA_FASE int4,
-   TRA_ORDEN int8,
-   TRA_CODPRO int8,
-   TRA_CODIVUDS varchar(255),
-   TRA_DESCCODIVUDS varchar(255),
-   TRA_VALIDA int8,
-   TRA_DATCADU timestamp,
-   TRA_DATPUBL timestamp,
-   TRA_DATACTU timestamp,
-   TRA_IDTRAMTEL varchar(255),
-   TRA_VERSIO int4,
-   TRA_URLEXTE varchar(255),
-   TRA_DATACTUVUDS varchar(255),
-   TRA_ORGCOMP int8,
-   TRR_IDEXTE int8,
-   TRR_URLREM varchar(512),
-   TRR_CODADM int8,
+   TRA_CODI number(19,0) not null,
+   TRA_TYPE varchar2(64) not null,
+   TRA_FASE number(10,0),
+   TRA_ORDEN number(19,0),
+   TRA_CODPRO number(19,0),
+   TRA_CODIVUDS varchar2(255),
+   TRA_DESCCODIVUDS varchar2(255),
+   TRA_VALIDA number(19,0),
+   TRA_DATCADU date,
+   TRA_DATPUBL date,
+   TRA_DATACTU date,
+   TRA_IDTRAMTEL varchar2(255),
+   TRA_VERSIO number(10,0),
+   TRA_URLEXTE varchar2(255),
+   TRA_DATACTUVUDS varchar2(255),
+   TRA_ORGCOMP number(19,0),
+   TRR_IDEXTE number(19,0),
+   TRR_URLREM varchar2(512),
+   TRR_CODADM number(19,0),
    primary key (TRA_CODI)
 );
 create table RSC_HISTOR (
-   HIS_CODI int8 not null,
-   HIS_TYPE varchar(64) not null,
-   HIS_NOMBRE varchar(512),
-   HIS_CODUNA int8,
-   HIS_CODNOR int8,
-   HIS_CODPRO int8,
-   HIS_CODFIC int8,
-   HIS_CODMAT int8,
+   HIS_CODI number(19,0) not null,
+   HIS_TYPE varchar2(64) not null,
+   HIS_NOMBRE varchar2(512),
+   HIS_CODUNA number(19,0),
+   HIS_CODNOR number(19,0),
+   HIS_CODPRO number(19,0),
+   HIS_CODFIC number(19,0),
+   HIS_CODMAT number(19,0),
    primary key (HIS_CODI)
 );
 create table RSC_FICHEV (
-   FIH_CODFIC int8 not null,
-   FIH_CODHEV int8 not null,
+   FIH_CODFIC number(19,0) not null,
+   FIH_CODHEV number(19,0) not null,
    primary key (FIH_CODFIC, FIH_CODHEV)
 );
 create table RSC_ICMATE (
-   ICM_CODI int8 not null,
-   ICM_CODMAT int8,
-   ICM_CODPEC int8,
-   ICM_ICONO int8,
+   ICM_CODI number(19,0) not null,
+   ICM_CODMAT number(19,0),
+   ICM_CODPEC number(19,0),
+   ICM_ICONO number(19,0),
    primary key (ICM_CODI)
 );
 create table RSC_TRATAX (
-   TTAX_CODI int8 not null,
-   TAX_ID varchar(256),
-   DESCRI varchar(4000),
-   FORMPAG varchar(4000),
-   COD_IDI varchar(2) not null,
+   TTAX_CODI number(19,0) not null,
+   TAX_ID varchar2(256),
+   DESCRI varchar2(4000),
+   FORMPAG varchar2(4000),
+   COD_IDI varchar2(2) not null,
    primary key (TTAX_CODI, COD_IDI)
 );
 create table RSC_PROCED (
-   PRO_CODI int8 not null,
-   PRO_TYPE varchar(64) not null,
-   PRO_SIGNAT varchar(256),
-   PRO_FECCAD timestamp,
-   PRO_FECPUB timestamp,
-   PRO_FECACT timestamp,
-   PRO_VALIDA int4,
-   PRO_TRAMIT varchar(255),
-   PRO_VERSIO int8,
-   PRO_INFO varchar(4000),
-   PRO_URLEXT varchar(1024),
-   PRO_ORDCON int8,
-   PRO_ORDDIR int8,
-   PRO_ORDSER int8,
-   PRO_INDICA varchar(1024),
-   PRO_VENTANA varchar(1024),
-   PRO_RESPON varchar(256),
-   PRO_TAXA varchar(1024),
-   PRO_CODUNA_RESOL int8,
-   PRO_CODUNA int8,
-   PRO_CODFAM int8,
-   PRO_CODINI int8,
-   PRR_IDEXTE int8,
-   PRR_URLREM varchar(512),
-   PRR_CODADM int8,
+   PRO_CODI number(19,0) not null,
+   PRO_TYPE varchar2(64) not null,
+   PRO_SIGNAT varchar2(256),
+   PRO_FECCAD date,
+   PRO_FECPUB date,
+   PRO_FECACT date,
+   PRO_VALIDA number(10,0),
+   PRO_TRAMIT varchar2(255),
+   PRO_VERSIO number(19,0),
+   PRO_INFO varchar2(4000),
+   PRO_URLEXT varchar2(1024),
+   PRO_ORDCON number(19,0),
+   PRO_ORDDIR number(19,0),
+   PRO_ORDSER number(19,0),
+   PRO_INDICA varchar2(1024),
+   PRO_VENTANA varchar2(1024),
+   PRO_RESPON varchar2(256),
+   PRO_TAXA varchar2(1024),
+   PRO_CODUNA_RESOL number(19,0),
+   PRO_CODUNA number(19,0),
+   PRO_CODFAM number(19,0),
+   PRO_CODINI number(19,0),
+   PRR_IDEXTE number(19,0),
+   PRR_URLREM varchar2(512),
+   PRR_CODADM number(19,0),
    primary key (PRO_CODI)
 );
 create table RSC_SCRENV (
-   SEN_COD int8 not null,
-   SEN_FCENVIO timestamp,
-   SEN_CANAL varchar(1),
-   SEN_ASUNTO varchar(500),
-   SEN_TITULO varchar(100),
-   SEN_HTML text,
-   SEN_TIPO varchar(1),
-   SEN_IDSECC int8,
-   SEN_ESTADO varchar(1),
-   SEN_FCENV timestamp,
-   SEN_FCALTA timestamp,
-   SEN_UALTA int8,
-   SEN_FCMOD timestamp,
-   SEN_UMOD int8,
-   SEN_FCBAJA timestamp,
-   SEN_STPCOD int8 not null,
+   SEN_COD number(19,0) not null,
+   SEN_FCENVIO date,
+   SEN_CANAL varchar2(1),
+   SEN_ASUNTO varchar2(500),
+   SEN_TITULO varchar2(100),
+   SEN_HTML clob,
+   SEN_TIPO varchar2(1),
+   SEN_IDSECC number(19,0),
+   SEN_ESTADO varchar2(1),
+   SEN_FCENV date,
+   SEN_FCALTA date,
+   SEN_UALTA number(19,0),
+   SEN_FCMOD date,
+   SEN_UMOD number(19,0),
+   SEN_FCBAJA date,
+   SEN_STPCOD number(19,0) not null,
    primary key (SEN_COD)
 );
 create table RSC_UNAEDI (
-   UNE_CODEDI int8 not null,
-   UNE_CODUNA int8 not null,
+   UNE_CODEDI number(19,0) not null,
+   UNE_CODUNA number(19,0) not null,
    primary key (UNE_CODEDI, UNE_CODUNA)
 );
 create table RSC_SCRIPC (
-   SCR_COD int8 not null,
-   SCR_NOM varchar(100),
-   SCR_APE1 varchar(100),
-   SCR_APE2 varchar(100),
-   SCR_EMAIL varchar(100),
-   SCR_SMS varchar(100),
-   SCR_TELEFONO varchar(100),
-   SCR_TIPO varchar(1),
-   SCR_ENOM varchar(200),
-   SCR_EAREA varchar(200),
-   SCR_EDPTO varchar(200),
-   SCR_ECARGO varchar(200),
-   SCR_IDBOLE varchar(1),
-   SCR_IDALER varchar(1),
-   SCR_IDESTU varchar(1),
-   SCR_ESTADO varchar(1),
-   SCR_ORIGEN varchar(1),
-   SCR_REFTRA varchar(100),
-   SCR_UALTA int8,
-   SCR_FCALTA timestamp,
-   SCR_FCMOD timestamp,
-   SCR_FCBAJA timestamp,
-   SCR_SEXO varchar(255),
-   SCR_ANYONAC int4,
-   SCR_PAISNAC int4,
-   SCR_PROVNAC int4,
-   SCR_ISLANAC int4,
-   SCR_MUNINAC int4,
-   SCR_LNACOTROS varchar(255),
-   SCR_PAISRESID int4,
-   SCR_PROVRESID int4,
-   SCR_ISLARESID int4,
-   SCR_MUNIRESID int4,
-   SCR_IDIOMA varchar(255),
-   SCR_CIF varchar(255),
-   SCR_SEDESOCIAL varchar(255),
-   SCR_RAZONSOCIAL varchar(255),
-   SCR_CP varchar(255),
-   SCR_CONTACTO varchar(255),
-   SCR_GRNOM varchar(255),
-   SCR_RESUMENTEMAS varchar(255),
-   SCR_MOTIVOBAJA varchar(200),
-   SCR_ESTUDIOS int8,
-   SCR_PROFESION int8,
-   SCR_STPCOD int8 not null,
-   SCR_SGRCOD int8,
+   SCR_COD number(19,0) not null,
+   SCR_NOM varchar2(100),
+   SCR_APE1 varchar2(100),
+   SCR_APE2 varchar2(100),
+   SCR_EMAIL varchar2(100),
+   SCR_SMS varchar2(100),
+   SCR_TELEFONO varchar2(100),
+   SCR_TIPO varchar2(1),
+   SCR_ENOM varchar2(200),
+   SCR_EAREA varchar2(200),
+   SCR_EDPTO varchar2(200),
+   SCR_ECARGO varchar2(200),
+   SCR_IDBOLE varchar2(1),
+   SCR_IDALER varchar2(1),
+   SCR_IDESTU varchar2(1),
+   SCR_ESTADO varchar2(1),
+   SCR_ORIGEN varchar2(1),
+   SCR_REFTRA varchar2(100),
+   SCR_UALTA number(19,0),
+   SCR_FCALTA date,
+   SCR_FCMOD date,
+   SCR_FCBAJA date,
+   SCR_SEXO varchar2(255),
+   SCR_ANYONAC number(10,0),
+   SCR_PAISNAC number(10,0),
+   SCR_PROVNAC number(10,0),
+   SCR_ISLANAC number(10,0),
+   SCR_MUNINAC number(10,0),
+   SCR_LNACOTROS varchar2(255),
+   SCR_PAISRESID number(10,0),
+   SCR_PROVRESID number(10,0),
+   SCR_ISLARESID number(10,0),
+   SCR_MUNIRESID number(10,0),
+   SCR_IDIOMA varchar2(255),
+   SCR_CIF varchar2(255),
+   SCR_SEDESOCIAL varchar2(255),
+   SCR_RAZONSOCIAL varchar2(255),
+   SCR_CP varchar2(255),
+   SCR_CONTACTO varchar2(255),
+   SCR_GRNOM varchar2(255),
+   SCR_RESUMENTEMAS varchar2(255),
+   SCR_MOTIVOBAJA varchar2(200),
+   SCR_ESTUDIOS number(19,0),
+   SCR_PROFESION number(19,0),
+   SCR_STPCOD number(19,0) not null,
+   SCR_SGRCOD number(19,0),
    primary key (SCR_COD)
 );
 create table RSC_AFECTA (
-   AFE_CODNOR int8 not null,
-   AFE_CODNOA int8,
-   AFE_CODTIA int8
+   AFE_CODNOR number(19,0) not null,
+   AFE_CODNOA number(19,0),
+   AFE_CODTIA number(19,0)
 );
 create table RSC_ESPTER (
-   ESP_CODI int8 not null,
-   ESP_NIVEL int4 not null,
-   ESP_COORDE varchar(255),
-   ESP_MAPA int8,
-   ESP_LOGO int8,
-   ESP_CODESP int8,
+   ESP_CODI number(19,0) not null,
+   ESP_NIVEL number(10,0) not null,
+   ESP_COORDE varchar2(255),
+   ESP_MAPA number(19,0),
+   ESP_LOGO number(19,0),
+   ESP_CODESP number(19,0),
    primary key (ESP_CODI)
 );
 create table RSC_TRAFAM (
-   TFA_CODFAM int8 not null,
-   TFA_NOMBRE varchar(256),
-   TFA_DESCRI varchar(4000),
-   TFA_CODIDI varchar(2) not null,
+   TFA_CODFAM number(19,0) not null,
+   TFA_NOMBRE varchar2(256),
+   TFA_DESCRI varchar2(4000),
+   TFA_CODIDI varchar2(2) not null,
    primary key (TFA_CODFAM, TFA_CODIDI)
 );
 alter table RSC_PROMAT add constraint RSC_PRMMAT_FK foreign key (PRM_CODMAT) references RSC_MATERI;
@@ -1228,3 +1229,6 @@ create sequence RSC_SEQSEN;
 create sequence RSC_SEQSGR;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQHIS;
+
+
+

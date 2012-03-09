@@ -37,3 +37,5 @@ alter table RSC_TAXA add column TAX_CODTRA NUMBER(19,0);
 update RSC_TAXA set TAX_CODTRA = CODITRA;
 alter table RSC_TAXA drop column CODITRA;
 alter table RSC_TAXA add constraint RSC_TAXTRA_FK foreign key (TAX_CODTRA) references RSC_TRAMIT;
+
+alter table RSC_TRAUNA add TUN_CVRESP TEXT;
