@@ -9,12 +9,26 @@
 <script src="<html:rewrite page='/moduls/funcions.js'/>" type="text/javascript"></script>
 <script type="text/javascript">
 var context = '\<%=request.getContextPath()%>';
-<!--
-    function baja(){
-        return confirm("<bean:message key='alerta.baja' />");
-    }
 
-    function validar(form) {
+
+<logic:present name="alert">
+function handleAlert() {
+	 alert("<bean:message name='alert' />");
+}
+</logic:present>
+
+ function handleBaja() {
+	 alert("<bean:message key='alerta.baja' />");
+}
+
+ function baja(){
+	       	window.setTimeout("handleBaja()",1000)
+     //return confirm("<bean:message key='alerta.baja' />");
+ }
+
+
+<!--
+	    function validar(form) {
        return validateUsuarioForm(form);
     }
     
@@ -120,13 +134,15 @@ var context = '\<%=request.getContextPath()%>';
 />
 <% pageContext.setAttribute(Globals.XHTML_KEY, "true");%>
 
-<script type="text/javascript">
+
+<logic:present name="alert">
+    <script type="text/javascript">
 <!--
-	<logic:present name="alert">
-	alert("<bean:message name='alert' />");
-	</logic:present>
+	window.setTimeout("handleAlert()",1000)
 -->
-</script>
+	</script>
+ </logic:present>
+
 
 <bean:define id="etiquetaSelect"><bean:message key="boton.seleccionar" /></bean:define>
 <logic:present name="usuarioForm" property="id">
