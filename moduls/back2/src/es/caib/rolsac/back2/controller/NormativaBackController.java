@@ -292,7 +292,7 @@ public class NormativaBackController {
 	        }
 	        
 	        normativaDetall.put("id", normativa.getId());
-	        normativaDetall.put("data", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");	   	        
+	        normativaDetall.put("data_norma", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");	   	        
 	        
         	//Campos por idioma
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
@@ -535,9 +535,9 @@ public class NormativaBackController {
         		normativa.setFechaBoletin(dateFormat.parse(valoresForm.get("item_data_butlleti")));
         	}
 
-        	if (valoresForm.get("item_data") != null && !"".equals(valoresForm.get("item_data"))) {
+        	if (valoresForm.get("item_data_norma") != null && !"".equals(valoresForm.get("item_data_norma"))) {
         		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        		normativa.setFecha(dateFormat.parse(valoresForm.get("item_data")));
+        		normativa.setFecha(dateFormat.parse(valoresForm.get("item_data_norma")));
         	}       
 
         	if (valoresForm.get("item_tipus") != null && !"".equals(valoresForm.get("item_tipus"))) {

@@ -360,8 +360,7 @@ function CDetall(){
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
-		jQuery("#item_data").datepicker({ dateFormat: 'dd/mm/yy' });
-		jQuery("#item_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
+		jQuery("#item_data_norma, #item_data_norma_ca, #item_data_norma_es, #item_data_norma_en, #item_data_norma_de, #item_data_norma_fr, #item_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
 				
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -483,9 +482,9 @@ function CDetall(){
 	}
 	
 	this.dataPublicacio = function(e) {		
-		if ($(this).val() == "") {
-			$(this).val(txtImmediat);
-		}		
+//		if ($(this).val() == "") {
+//			$(this).val(txtImmediat);
+//		}		
 	}
 	
 	this.nou = function() {
@@ -607,8 +606,8 @@ function CDetall(){
 			}						
 		}
 		
-		jQuery("#item_clave_primaria").val(nn(dada_node.id));
-        jQuery("#item_clave_primaria").change();
+		$("#item_clave_primaria").val(nn(dada_node.id));
+        $("#item_clave_primaria").change();
 		
 		$("#item_numero").val(nn(dada_node.numero));
 		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
@@ -617,16 +616,15 @@ function CDetall(){
 		$("#item_llei").val(nn(dada_node.llei));
 		
 		$("#item_data_butlleti").val(nn(dada_node.data_butlleti));
-		$("#item_data").val(nn(dada_node.data));
 		
-		jQuery("#item_tipus").val(nn(dada_node.tipus));
-        jQuery("#item_tipus").change();
+		$("#item_data_norma").val(nn(dada_node.data_norma));
+		$("#item_data_norma").change();
 		
-        jQuery("#item_num_norma").val(nn(dada_node.tipus));
-        jQuery("#item_num_norma").change();
-        
-        jQuery("#item_data_norma").val(nn(dada_node.tipus));
-        jQuery("#item_data_norma").change();
+		$("#item_tipus").val(nn(dada_node.tipus));
+        $("#item_tipus").change();
+		
+        $("#item_num_norma").val(nn(dada_node.num_norma));
+        $("#item_num_norma").change();
         
 		$("#item_ua_id").val(nn(dada_node.idUA));
 		$("#item_ua_nom").val(nn(dada_node.nomUA));

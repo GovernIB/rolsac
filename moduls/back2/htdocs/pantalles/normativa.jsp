@@ -292,11 +292,11 @@
                         "tipus": "<spring:message code='normativa.formulari.numero.tipus'/>"
                     }
             },       
-            
+            /*
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_data",
+                "etiquetaValor": "item_data_norma",
                 "obligatori": "no",
                 "tipus": "data",
                 "error":
@@ -316,7 +316,7 @@
                         "tipus": "<spring:message code='normativa.formulari.data_butlleti.tipus'/>"
                     }
             },    
-            
+            */
             {
                 "modo": "individual",
                 "etiqueta": "id",
@@ -1190,9 +1190,9 @@
                             </div>       
                         </div>
                         <div class="element t25p">
-                            <div class="etiqueta"><label for="item_data"><spring:message code='camp.data'/></label></div>
+                            <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data'/></label></div>
                             <div class="control">
-                                <input id="item_data" name="item_data" type="text" class="data nou" readonly="readonly" />
+                                <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
                             </div>
                         </div>  
                         <div class="element t25p">
