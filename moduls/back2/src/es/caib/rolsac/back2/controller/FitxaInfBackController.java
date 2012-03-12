@@ -23,6 +23,8 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringUtils;
+
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -594,13 +596,13 @@ public class FitxaInfBackController {
                 fitxa.setEnlaces(fitxaOld.getEnlaces());
 			} 
 			
-			if (valoresForm.get("item_data_publicacio") != null && !valoresForm.get("item_data_publicacio").isEmpty()) {
+			if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
 	            Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
 	            if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
 	            fitxa.setFechaPublicacion(data_publicacio);
 			}
             
-			if (valoresForm.get("item_data_caducitat") != null && !valoresForm.get("item_data_caducitat").isEmpty()) {
+			if (!StringUtils.isEmpty(valoresForm.get("item_data_caducitat"))) {
 	            Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
 	            if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
 	            fitxa.setFechaCaducidad(data_caducitat);

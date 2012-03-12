@@ -19,6 +19,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang.StringUtils;
+
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -850,13 +852,13 @@ public class CatalegProcedimentsBackController {
 
 				procediment.setSignatura(request.getParameter("item_codigo_pro"));
 				
-				if (request.getParameter("item_data_publicacio") != null && !request.getParameter("item_data_publicacio").isEmpty()) {
+				if (!StringUtils.isEmpty(request.getParameter("item_data_publicacio"))) {
 					Date data_publicacio = DateUtils.parseDate(request.getParameter("item_data_publicacio"));
 					if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
 					procediment.setFechaPublicacion(data_publicacio);
 				}
 				
-				if (request.getParameter("item_data_caducitat") != null && !request.getParameter("item_data_caducitat").isEmpty()) {
+				if (!StringUtils.isEmpty(request.getParameter("item_data_caducitat"))) {
 					Date data_caducitat = DateUtils.parseDate(request.getParameter("item_data_caducitat"));
 					if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
 					procediment.setFechaCaducidad(data_caducitat);
