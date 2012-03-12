@@ -240,9 +240,9 @@ drop table RSC_ESPTER cascade constraints;
 drop table RSC_TRAFAM cascade constraints;
 drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQ_ALL;
-drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQSCR;
 drop sequence RSC_SEQSEN;
+drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQHIS;
@@ -332,8 +332,8 @@ create table RSC_TRAUNA (
    TUN_PRESEN varchar2(4000),
    TUN_ABREVI varchar2(64),
    TUN_URL varchar2(256),
+   TUN_CVRESP clob,
    TUN_CODIDI varchar2(2) not null,
-   TUN_CVRESP CLOB,
    primary key (TUN_CODUNA, TUN_CODIDI)
 );
 create table RSC_HEVIPR (
@@ -1223,12 +1223,9 @@ alter table RSC_ESPTER add constraint RSC_ESPESP_FK foreign key (ESP_CODESP) ref
 alter table RSC_TRAFAM add constraint RSC_TFAFAM_FK foreign key (TFA_CODFAM) references RSC_FAMILI;
 create sequence RSC_SEQ_COM;
 create sequence RSC_SEQ_ALL;
-create sequence RSC_SEQSCK;
 create sequence RSC_SEQSCR;
 create sequence RSC_SEQSEN;
+create sequence RSC_SEQSCK;
 create sequence RSC_SEQSGR;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQHIS;
-
-
-
