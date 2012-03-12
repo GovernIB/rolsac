@@ -213,22 +213,10 @@ public class FitxaInfBackController {
             paramMap.put("fechaActualizacion", fechaActualizacion);
         }
         
-        boolean uaFilles;
-        if ("1".equals(request.getParameter("uaFilles"))) {
-            uaFilles = true;
-        } else {
-            uaFilles = false;
-        }
+        boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
         
-        boolean uaMeves;
-        if ("1".equals(request.getParameter("uaMeves"))) {
-            uaMeves = true;
-        } else {
-            uaMeves = false;
-        }
-
-    
-     // Textes (en todos los campos todos los idiomas)
+        // Textes (en todos los campos todos los idiomas)
         String textes = request.getParameter("textes");
         if (textes != null && !"".equals(textes)) {
             textes = textes.toUpperCase();

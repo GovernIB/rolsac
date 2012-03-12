@@ -230,19 +230,15 @@ function CLlistat(){
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador		
+			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
+			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();
-			//dataVars_cercador += "&url=" + $("#cerca_url").val();
-			//dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
-			//dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
-			//dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
-			//dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
-			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").val();			
-			var uaMevesVal = $("#cerca_uaMeves").attr('checked') ? 1 : 0;
 			dataVars_cercador += "&uaMeves=" + uaMevesVal;
+			dataVars_cercador += "&uaFilles=" + uaFillesVal;
 						
 		} else {
 			
