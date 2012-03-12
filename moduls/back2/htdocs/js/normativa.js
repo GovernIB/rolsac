@@ -179,7 +179,7 @@ function CLlistat(){
                 codi_taula += "<div class=\"td tipologia\" role=\"gridcell\">" + dada_node.tipologia + "</div>";
 				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.numero + "</div>";
 				codi_taula += "<div class=\"td tipus\" role=\"gridcell\">" + dada_node.tipo + "</div>";				
-				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha_boletin + "</div>";
 				
 				codi_taula += "</div>";
 			});

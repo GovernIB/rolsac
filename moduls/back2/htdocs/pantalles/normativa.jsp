@@ -471,6 +471,8 @@
                     </div>
                         
                     <div class="busquedaAvanzada">
+                        <h2><spring:message code='txt.cercador.avansat'/></h2>
+                        
                         <div class="fila">
                             <%--
                             <div class="element t25">

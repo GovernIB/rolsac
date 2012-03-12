@@ -756,10 +756,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
             if (value != null) {
-                if (aux.length() > 0) aux = aux + " and ";
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
+                    	if (aux.length() > 0) aux = aux + " and ";
                         if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
                             sValue = sValue.substring(1, (sValue.length() - 1));
                             aux = aux + " upper( normativa." + key + " )  like ? ";
@@ -770,8 +770,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                         }
                     }
                 } else if (value instanceof Date) {
+                	if (aux.length() > 0) aux = aux + " and ";
                     aux = aux + "normativa." + key + " = '" + org.ibit.rol.sac.persistence.util.DateUtils.formatearddMMyyyy((Date)value) + "'";
                 } else {
+                	if (aux.length() > 0) aux = aux + " and ";
                     aux = aux + "normativa." + key + " = " + value;
                 }
             }
