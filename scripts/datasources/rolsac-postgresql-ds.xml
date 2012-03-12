@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>es.caib.rolsac.db</jndi-name>
+    <connection-url>jdbc:postgresql://localhost:5432/rolsac</connection-url>
+    <driver-class>org.postgresql.Driver</driver-class>
+    <user-name>rolsac</user-name>
+    <password>rolsac</password>
+    <min-pool-size>1</min-pool-size>
+    <max-pool-size>50</max-pool-size>
+  </local-tx-datasource>
+</datasources>

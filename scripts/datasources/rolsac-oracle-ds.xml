@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>es.caib.rolsac.db</jndi-name>
+    <connection-url>jdbc:oracle:thin:@localhost:1521:rolsac</connection-url>
+    <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+    <user-name>rolsac</user-name>
+    <password>rolsac</password>
+    <min-pool-size>0</min-pool-size>
+    <max-pool-size>30</max-pool-size>
+    <blocking-timeout-millis>300000</blocking-timeout-millis>
+    <idle-timeout-minutes>60</idle-timeout-minutes>
+  </local-tx-datasource>
+</datasources>
