@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +30,6 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
 
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
@@ -39,7 +39,6 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.Estadistica;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -650,7 +649,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves) {
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital) {
 		Session session = getSession();
 
 		try {
@@ -722,6 +721,34 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			List<ProcedimientoLocal> procedimientos = query.list();
+			
+			// Filtrar poc materias y hechos vitales.
+			List<ProcedimientoLocal> procTempList;
+			
+			if (materia != null) {
+				procTempList = new LinkedList<ProcedimientoLocal>();
+				List<ProcedimientoLocal> procsMateries = (List<ProcedimientoLocal>) this.buscarProcedimientosMateria(materia);
+				for (ProcedimientoLocal procMateria: procsMateries) {
+					if (procedimientos.contains(procMateria)) {
+						procTempList.add(procMateria);
+					}
+				}
+				procedimientos = procTempList;
+			}
+			
+			if (fetVital != null) {
+				procTempList = new LinkedList<ProcedimientoLocal>();
+				List<ProcedimientoLocal> procsFetVital = (List<ProcedimientoLocal>) this.listarProcedimientosHechoVital(fetVital);
+				for (ProcedimientoLocal procFetVital: procsFetVital) {
+					if (procedimientos.contains(procFetVital)) {
+						procTempList.add(procFetVital);
+					}
+				}
+				procedimientos = procTempList;
+			}
+
+			
+			// Filtrar si no se tiene acceso
 			if (!userIsOper()) {
 				return procedimientos;
 			} else {

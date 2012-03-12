@@ -77,9 +77,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscadorProcedimientos(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
 	 */
-    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves) throws DelegateException {
+    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital) throws DelegateException {
         try {
-            return getFacade().buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves);
+            return getFacade().buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

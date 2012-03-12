@@ -88,9 +88,9 @@ public class ProcedimientoDelegate {
 		return impl.buscarProcedimientos(param, trad);
 	}
 	
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves)
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital)
 			throws DelegateException {
-		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves);
+		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital);
 	}
 
 	public List buscarProcedimientosFamilia(Long id) throws DelegateException {

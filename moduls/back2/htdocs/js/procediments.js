@@ -233,27 +233,21 @@ function CLlistat(){
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador
-			//dataVars_cercador = "&nom=" + $("#cerca_nom").val();
-			//dataVars_cercador += "&codi=" + $("#cerca_codi").val();
-			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
+			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
+			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
+			
+			dataVars_cercador = "&uaMeves=" + uaMevesVal;
+			dataVars_cercador += "&uaFilles=" + uaFillesVal;
+			dataVars_cercador += "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&familia=" + $("#cerca_familia").val();
 			dataVars_cercador += "&iniciacio=" + $("#cerca_iniciacio").val();
 			dataVars_cercador += "&tramit=" + $("#cerca_tramit").val();
-			//dataVars_cercador += "&versio=" + $("#cerca_versio").val();
-			//dataVars_cercador += "&url=" + $("#cerca_url").val();
 			dataVars_cercador += "&indicador=" + $("#cerca_indicador").val();
 			dataVars_cercador += "&finestreta=" + $("#cerca_finestreta").val();
-			//dataVars_cercador += "&taxa=" + $("#cerca_taxa").val();
-			//dataVars_cercador += "&responsable=" + $("#cerca_responsable").val();
-			//dataVars_cercador += "&fechaCaducidad=" + $("#cerca_fechaCaducidad").val();
-			//dataVars_cercador += "&fechaPublicacion=" + $("#cerca_fechaPublicacion").val();
-			//dataVars_cercador += "&fechaActualizacion=" + $("#cerca_fechaActualizacion").val();
-			dataVars_cercador += "&uaFilles=" + $("#cerca_uaFilles").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
-			var uaMevesVal = $("#cerca_uaMeves").attr('checked') ? 1 : 0;
-			dataVars_cercador += "&uaMeves=" + uaMevesVal;
-
+			dataVars_cercador += "&fetVital=" + $("#cerca_fet_vital").val();
+			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 		} else {
 
 			pagPagina_elm = pagPagina_llistat_elm;

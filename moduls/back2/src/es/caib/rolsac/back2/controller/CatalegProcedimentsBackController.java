@@ -12,15 +12,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.StringUtils;
-
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -152,32 +152,31 @@ public class CatalegProcedimentsBackController {
 
 		
 		UnidadAdministrativa ua = null;
-//		if (getUAFromSession(session) == null) {
-//			return resultats; // Si no hay unidad administrativa se devuelve vacio
-//		} else {
-//			ua = (UnidadAdministrativa) getUAFromSession(session);
-//		}
 		if (getUAFromSession(session) != null) {
 			ua = (UnidadAdministrativa) getUAFromSession(session);
 		}
-		// paramMap.put("unidadAdministrativa.id", ua.getId());
-
 		
-		boolean uaFilles;
-		if ("1".equals(request.getParameter("uaFilles"))) {
-			uaFilles = true;
-		} else {
-			uaFilles = false;
-		}
-
+		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
 		
-		boolean uaMeves;
-		if ("1".equals(request.getParameter("uaMeves"))) {
-			uaMeves = true;
-		} else {
-			uaMeves = false;
+		
+		Long materia = null;
+		String materiaString = request.getParameter("materia");
+		if (materiaString != null) {
+			Scanner scanner = new Scanner(materiaString);
+	        if (scanner.hasNextLong()) {
+	        	materia = scanner.nextLong();
+			}
 		}
-
+		
+        Long fetVital = null;
+        String fetVitalString = request.getParameter("fetVital");
+        if (fetVitalString != null) {
+			Scanner scanner = new Scanner(fetVitalString);
+	        if (scanner.hasNextLong()) {
+	        	fetVital = scanner.nextLong();
+			}
+        }
 		
 		try {
             Long codi = ParseUtil.parseLong(request.getParameter("codi"));
@@ -185,12 +184,6 @@ public class CatalegProcedimentsBackController {
         } catch (NumberFormatException e){
         }
         
-        
-//      String codi = request.getParameter("codi");
-//		if (codi != null && !"".equals(codi)) {
-//			paramMap.put("signatura", codi.toUpperCase());
-//		}
-
 		
 		Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
 		if (fechaCaducidad != null) {
@@ -227,7 +220,7 @@ public class CatalegProcedimentsBackController {
 		String indicador = request.getParameter("indicador");
 		if ("1".equals(indicador)) {
 			paramMap.put("indicador", 1);
-		} else if ("0".equals(taxa)) {
+		} else if ("0".equals(indicador)) {
 			paramMap.put("indicador", 0);
 		}
 
@@ -336,8 +329,7 @@ public class CatalegProcedimentsBackController {
 
 		try {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
-			// llistaProcedimientos = procedimientosDelegate.buscarProcedimientos(paramMap, tradMap);
-			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves);
+			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital);
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
@@ -349,14 +341,6 @@ public class CatalegProcedimentsBackController {
 								 pl.isVisible(),
 								 DateUtils.formatDate(pl.getFechaActualizacion()),
 								 tfa == null ? null : tfa.getNombre()));
-//				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
-//						pl.getId(), 
-//						null,
-//						tpl == null ? "" : tpl.getNombre(), 
-//								DateUtils.formatDate(pl.getFechaPublicacion()),
-//								DateUtils.formatDate(pl.getFechaCaducidad()),
-//								pl.isVisible(),
-//								null));
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {

@@ -69,6 +69,11 @@
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
     var txtFamilia = "<spring:message code='txt.familia'/>";
     var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
+
+    // modul fets vitals
+    var txtFet = "<spring:message code='txt.fet_vital'/>";
+    var txtFets = "<spring:message code='txt.fets_vitals'/>";
+    var txtNoHiHaFets = txtNoHiHa + " " + txtFets;;
     
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
