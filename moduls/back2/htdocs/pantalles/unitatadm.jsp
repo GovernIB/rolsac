@@ -27,7 +27,7 @@
             <div class="modul">     
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>Dades</legend>
+                    <legend><spring:message code='txt.llegenda_dades'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">
@@ -501,7 +501,7 @@
             <div class="modul">                         
                 <fieldset>                                  
                     <a class="modul amagat"><spring:message code='txt.mostra'/></a>                             
-                    <legend>CONTACTO</legend>                              
+                    <legend><spring:message code='txt.llegenda_contacte'/></legend>                              
                     <div class="modul_continguts" style="display:block;">                               
                     
                         <!-- fila -->

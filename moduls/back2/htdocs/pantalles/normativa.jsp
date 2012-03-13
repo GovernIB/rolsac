@@ -1344,25 +1344,25 @@
             <div class="modul_continguts mostrat">
                 <table>
                     <thead>
-                        <th class="usuario"><div>USUARIO</div></th>
-                        <th class="fecha"><div>FECHA</div></th>
-                        <th class="operacion"><div>OPERACION</div></th>
+                        <th class="usuario"><div>USUARI</div></th>
+                            <th class="fecha"><div>DATA</div></th>
+                            <th class="operacion"><div>OPERACIÓ</div></th>
                     </thead>                    
                     <tbody>
                         <tr>
                             <td class="usuario"><div>rsanz</div></td>
                             <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Modificat</div></td>
+                            <td class="operacion"><div>Modificació</div></td>
                         </tr>
                         <tr>
                             <td class="usuario"><div>jfernandez</div></td>
                             <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Modificat</div></td>
+                            <td class="operacion"><div>Modificació</div></td>
                         </tr>
                         <tr>
                             <td class="usuario"><div>flopez</div></td>
                             <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Insertat</div></td>
+                            <td class="operacion"><div>Alta</div></td>
                         </tr>
                     </tbody>
                 </table>
