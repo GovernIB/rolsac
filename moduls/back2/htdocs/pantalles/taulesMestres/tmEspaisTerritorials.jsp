@@ -78,6 +78,7 @@
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
     var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
     var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
+    var txtEliminarCascada = "<spring:message code='txt.eliminar_espais_cascada'/>";
     var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
     var txtMostra = "<spring:message code='txt.mostra'/>";
     var txtAmaga = "<spring:message code='txt.amaga'/>";

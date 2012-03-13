@@ -492,6 +492,13 @@ function CDetall(){
 		this.actualizaEventos();
 	}
 	
+	// Es sobreescriuu per mostrar un missatge d'error amb advertencia d'eliminacio en cascada.
+	this.eliminar = function() {
+		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, text: txtEliminarCascada, funcio: function() {
+			that.elimina();
+		}});
+	}
+	
 	this.elimina = function() {
 		
 		// missatge
