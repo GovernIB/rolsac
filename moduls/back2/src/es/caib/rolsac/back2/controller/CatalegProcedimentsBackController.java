@@ -737,7 +737,7 @@ public class CatalegProcedimentsBackController {
                 	DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);                	
                 	procediment.setTramites(tramitesNuevos);
                 	
-                } else {
+                } else if (edicion) {
                 	                	
                 	for (Tramite tramite : procediment.getTramites() ) {
                 		procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());

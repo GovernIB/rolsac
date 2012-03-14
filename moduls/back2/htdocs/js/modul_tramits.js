@@ -388,16 +388,18 @@ function CEscriptoriTramit(){
                 if (data.idTramit > 0) {
                 	
                     escriptori_detall_elm.fadeOut(300, function() {
-                        escriptori_tramits_elm.fadeIn(300, function() { 
-                        									EscriptoriTramit.pintar(data);
+                        escriptori_tramits_elm.fadeIn(300, function() {                         									
                         					            	// Mostrar el botón "eliminar" en la edición
-                        					                escriptori_tramits_elm.find(".btnEliminar").show(300, function() {
-                        					                	escriptori_tramits_elm.find("#modul_documents").show(300, function() {
+                        					                escriptori_tramits_elm.find(".btnEliminar").show(function() {
+                        					                	escriptori_tramits_elm.find("#modul_documents").show(function() {
                         					                		escriptori_tramits_elm.find("#modul_formularis").show();
                         					                	});	
                         					                });
                         								});
-                    });                            
+                    });   
+                    
+                    EscriptoriTramit.pintar(data);
+                    
                 } else if (data.id == -1){
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
                 } else if (data.id < -1){

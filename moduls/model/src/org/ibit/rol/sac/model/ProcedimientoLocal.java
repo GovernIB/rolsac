@@ -95,7 +95,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
         tramites.remove(tramite);
         for (int i = ind; i < tramites.size(); i++) {
             Tramite t = (Tramite) tramites.get(i);
-            t.setOrden((long)i);
+            if (t != null)
+            	t.setOrden((long)i);
         }
     }
 
