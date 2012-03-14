@@ -1,42 +1,40 @@
-// MODUL DOCUMENTS
-
-jQuery(document).ready(function() {
+$(document).ready(function() {
 	// elements
-	escriptori_documents_elm = jQuery("#escriptori_documents");
-    moduls_elm = escriptori_detall_elm.find("div.modul");
-    modul_documents_elm = jQuery("div.modulDocuments:first");
+	escriptori_formularis_tramits_elm = $("#escriptori_formularis_tramits");
+    moduls_elm = escriptori_tramits_elm.find("div.modul");
+    modul_formularis_tramits_elm = $("div.modulFormularisTramit:first");
     
-	ModulDocuments = new CModulDocuments();
-    ModulDocuments.iniciar();
+	ModulFormularisTramit = new CModulFormularisTramit();
+    ModulFormularisTramit.iniciar();
     
-    EscriptoriPare = new CEscriptoriPare();
-    EscriptoriPare.iniciar();
+    EscriptoriPareTramitForm = new CEscriptoriPareTramitForm();
+    EscriptoriPareTramitForm.iniciar();
 });
 
-
-// Lista ordenable para elimiar/ordenar docs en la pantalla "padre"
-function CEscriptoriPare(){
+// Lista ordenable para eliminar/ordenar forms en la pantalla "padre"
+function CEscriptoriPareTramitForm(){
 	this.extend = ListaOrdenable;
 	this.extend();		
     
     // Configuracion de la lista ordenable.
     this.configuracion = {
-        nombre: "documents",
-        nodoOrigen: modul_documents_elm.find(".listaOrdenable"),
+        nombre: "formularisTramit",
+        nodoOrigen: modul_formularis_tramits_elm.find(".listaOrdenable"),
         nodoDestino: "", // documents_seleccionats_elm.find(".listaOrdenable"),
-        atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+        atributos: ["id", "nom", "orden"],	// Campos que queremos que aparezcan en las listas.
         multilang: true
     }
 	
 	var that = this;
 	
 	this.iniciar = function() {
+				
 		// botons
-		modul_documents_elm.find("a.gestiona").bind("click", function(){ModulDocuments.nou(false);} );
+		modul_formularis_tramits_elm.find("a.gestiona").bind("click", function() { ModulFormularisTramit.nou(false); } );
 		
-		documents_seleccionats_elm = escriptori_documents_elm.find("div.escriptori_items_seleccionats:first");
+		formularis_tramits_seleccionats_elm = escriptori_formularis_tramits_elm.find("div.escriptori_items_seleccionats:first");
 		
-		escriptori_documents_elm.find("div.botonera").each(function() {
+		escriptori_formularis_tramits_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);		
 		});
 				
@@ -45,7 +43,7 @@ function CEscriptoriPare(){
 	}	
 
 	this.gestiona = function() {
-		lis_size = modul_documents_elm.find('div.cajaIdioma:first li').length;
+		lis_size = modul_formularis_tramits_elm.find('div.cajaIdioma:first li').length;
 		if (lis_size > 0) {
 			EscriptoriEdifici.contaSeleccionats();
 		} else {
@@ -53,21 +51,21 @@ function CEscriptoriPare(){
 			edificis_seleccionats_elm.find(".listaOrdenable").html("");
 		}
 		
-		escriptori_detall_elm.fadeOut(300, function() {			
+		escriptori_tramits_elm.fadeOut(300, function() {			
 			escriptori_edificis_elm.fadeIn(300);			
 		});
 	}
 	
 	this.eliminaItem = function(item) {
-		var id = jQuery(item).find("input." + that.configuracion.nombre + "_id:first").val();						
-		jQuery(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
+		var id = $(item).find("input." + that.configuracion.nombre + "_id:first").val();						
+		$(that.configuracion.nodoOrigen).find("input[name=" + that.configuracion.nombre + "_id_" + id + "]").parents("li").remove();
 		that.habilitarBotonGuardar();
 	}
     
     this.habilitarBotonGuardar = function() {
-        jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
+        //$("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
+    	escriptori_formularis_tramits_elm.find("#btnGuardar").unbind("click").bind("click",function(){this.guarda_upload();}).parent().removeClass("off");
     }
-    
     
     /**
 	 * Agrega o actualiza un item en la lista de origen.
@@ -82,7 +80,7 @@ function CEscriptoriPare(){
 			listas.html("<ul></ul>");
 		} else {
 			listas.first().find("input." + that.configuracion.nombre + "_id").each(function() {
-				if (jQuery(this).val() == item.id) {
+				if ($(this).val() == item.id) {
 					actualizar = true;
 				}			
 			});			
@@ -92,10 +90,10 @@ function CEscriptoriPare(){
 			for (var i in idiomas) {
 				var idioma = idiomas[i];
 				listas.find("input." + that.configuracion.nombre + "_nombre_" + idioma + "[name$=_" + item.id + "]").each(function() {
-                    var $docInput = jQuery(this);
-                    var $docSpan = $docInput.next();
-                    $docInput.val(item["nombre"][idioma]);
-                    $docSpan.text(item["nombre"][idioma]);
+                    var $formInput = $(this);
+                    var $formSpan = $formInput.next();
+                    $formInput.val(item["nombre"][idioma]);
+                    $formSpan.text(item["nombre"][idioma]);
                 });
 			}
 		} else {
@@ -104,13 +102,13 @@ function CEscriptoriPare(){
             }
             
 			listas.each(function(){
-                var lista = jQuery(this);
+                var lista = $(this);
                 var idioma = that.getIdiomaActivo(lista);
 				var htmlCode = that.getHtmlItem(item, true, idioma);
 				lista.find("ul").append(htmlCode);					
 			});
             
-            ModulDocuments.inicializarDocuments();
+            ModulFormularisTramit.inicializarFormularis();
 		}
 		
 		that.habilitarBotonGuardar();
@@ -128,12 +126,11 @@ function CEscriptoriPare(){
 	}
 };
 
-
-// Creacion/edicion de docs
-function CModulDocuments(){
+// Creacion/edicion de forms
+function CModulFormularisTramit(){
 	this.extend = DetallBase;
-	if (typeof FormulariDadesDoc != 'undefined') {
-		this.extend(true, FormulariDadesDoc);
+	if (typeof FormulariDadesFormTramit != 'undefined') {
+		this.extend(true, FormulariDadesFormTramit);
 	} else {
 		this.extend(true, null);
 	}
@@ -142,17 +139,17 @@ function CModulDocuments(){
 	
 	this.iniciar = function() {			
         // botons        
-        jQuery("#btnVolver_documents").bind("click", that.torna);
+        $("#btnVolver_formularis_tramit").bind("click", that.torna);
 
         // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	jQuery("#formGuardarDoc input, #formGuardarDoc select, #formGuardarDoc textarea").bind("change", function(){that.modificado();});
+    	$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
     	
 		// idioma
-		if (escriptori_documents_elm.find("div.idiomes").size() != 0) {
+		if (escriptori_formularis_tramits_elm.find("div.idiomes").size() != 0) {
 			// Esconder todos menos el primero
-			escriptori_documents_elm.find('div.idioma').slice(1).hide();
+			escriptori_formularis_tramits_elm.find('div.idioma').slice(1).hide();
 			
-			var ul_idiomes_elm = escriptori_documents_elm.find("ul.idiomes:first");
+			var ul_idiomes_elm = escriptori_formularis_tramits_elm.find("ul.idiomes:first");
 
 			var a_primer_elm = ul_idiomes_elm.find("a:first");
 			a_primer_elm.parent().addClass("seleccionat");
@@ -162,7 +159,7 @@ function CModulDocuments(){
 			
 			a_primer_elm.parent().html("<span class=\"" + a_primer_elm_class + "\">" + a_primer_elm_text + "</span>");
 			
-			var div_idiomes_elm = escriptori_documents_elm.find("div.idiomes:first");
+			var div_idiomes_elm = escriptori_formularis_tramits_elm.find("div.idiomes:first");
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
 		}
@@ -173,12 +170,11 @@ function CModulDocuments(){
 	
 	
 	this.torna = function () {
-		escriptori_documents_elm.fadeOut(300, function() {
-	        escriptori_detall_elm.fadeIn(300);
+		escriptori_formularis_tramits_elm.fadeOut(300, function() {
+			escriptori_tramits_elm.fadeIn(300);
 	    });
 	}
-	
-	
+		
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
         // Validamos el formulario
@@ -186,17 +182,13 @@ function CModulDocuments(){
             return false;
         }
         
-        // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
-        var procId = jQuery("#procId");
-        if (procId.length > 0) {
-        	procId.val(jQuery("#item_id").val());
-        } else {
-        	jQuery("#fitxaId").val(jQuery("#item_id").val());
-        }
+        // Coger el id del trámite
+        var tramitId = $("#tramitIdform");         
+        tramitId.val($("#id_tramit_actual").val());
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
-		$("#formGuardarDoc").ajaxSubmit({			
-			url: pagGuardarDoc,
+		//Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+		$("#formGuardarFormTramit").ajaxSubmit({			
+			url: pagGuardarDocTramit,
 			dataType: 'json',
 			beforeSubmit: function() {
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -210,17 +202,17 @@ function CModulDocuments(){
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
                     
 					var nom = new Object();
-                    escriptori_documents_elm.find("input[id^='doc_titol_']").each(function (index) {
-						var $titolDoc = jQuery(this);
+                    escriptori_formularis_tramits_elm.find("input[id^='form_tramit_titol_']").each(function (index) {
+						var $titolDoc = $(this);
 						var idioma = $titolDoc.attr('id').split('_')[3];
 						nom[idioma] = $titolDoc.val();
 					});
 					
 					var docItem = new Object();
 					docItem['id'] = data.id;
-					docItem['nombre'] = nom;
-					EscriptoriPare.agregaActualizaItem(docItem);
-					
+					docItem['nom'] = nom;
+					EscriptoriPareTramitForm.agregaActualizaItem(docItem);
+
 					that.torna();
 				}
 			}
@@ -230,110 +222,111 @@ function CModulDocuments(){
 		return false;
 	}
 	
-	
 	this.modificado = function(){
 		// Habilitamos el botón de guardar.
-		jQuery("#btnGuardar_documents").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
+		$("#btnGuardar_formularis_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
-	
 	
 	this.dataPublicacio = function(e) {		
-		if (jQuery(this).val() == "") {
-			jQuery(this).val(txtImmediat);
+		if ($(this).val() == "") {
+			$(this).val(txtImmediat);
 		}
 	}
-		
-	
+			
 	this.nou = function(edicion) {
+		
+		$("#tramitId").attr("value", $("#id_tramit_actual").val());		
+		$("#procId").attr("value", $("#id_procediment_tramit").val());
+		
 		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-		jQuery("#btnGuardar_documents").parent().addClass("off");
+		$("#btnGuardar_formularis_tramit").parent().addClass("off");
         
 		if (!edicion) {
-            jQuery("#docId").val("");
+            $("#formTramitId").val("");
             for (var i in idiomas) {
                 var idioma = idiomas[i];                
-                jQuery("#doc_descripcio_" + idioma + ", #doc_titol_" + idioma + ", #doc_arxiu_" + idioma).each(limpiarCampo);
+                $("#form_tramit_descripcio_" + idioma + ", #form_tramit_titol_" + idioma + ", #form_tramit_arxiu_" + idioma).each(limpiarCampo);
                 
-                limpiarArchivoMultiidioma("arxiu_actual_doc", idiomas[i]);
+                limpiarArchivoMultiidioma("arxiu_actual_form", idiomas[i]);
 
             }
 		}
 		
-		escriptori_detall_elm.fadeOut(300, function() {
-			escriptori_documents_elm.fadeIn(300);
+		escriptori_tramits_elm.fadeOut(300, function() {
+			escriptori_formularis_tramits_elm.fadeIn(300);
 		});
 		
 		this.actualizaEventos();
-	}		
-	
+	}			
 	
 	this.pintar = function(dades) {		
 		dada_node = dades;
 		
-		jQuery("#docId").val(dada_node.item_id);
+		$("#formTramitId").val(dada_node.item_id);
 
 		// Bloque de pestanyas de idiomas.
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
             
-			jQuery("#doc_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
-			jQuery("#doc_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
+			$("#form_tramit_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
+			$("#form_tramit_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
 			
 			// archivos
-			$("#doc_arxiu_" + idioma).val("");
-			$("#grup_arxiu_actual_doc_" + idioma + " input").removeAttr("checked");
-			var anchors = $("#grup_arxiu_actual_doc_" + idioma + " a");
+			$("#form_tramit_arxiu_" + idioma).val("");
+			$("#grup_arxiu_actual_form_tramit_" + idioma + " input").removeAttr("checked");
+			var anchors = $("#grup_arxiu_actual_form_tramit_" + idioma + " a");
 
             var enllasArxiu = dada_node["idioma_enllas_arxiu_" + idioma];
 			if (typeof enllasArxiu != "undefined" && enllasArxiu != "") {
 				anchors.attr("href", pagArrel + dada_node["idioma_enllas_arxiu_" + idioma]);
 				anchors.text(dada_node["idioma_nom_arxiu_" + idioma]);
 				anchors.show();
-				$("#grup_arxiu_actual_doc_" + idioma + " span").hide();
-				$("#grup_arxiu_actual_doc_" + idioma + " input").show();
-				$("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").show();
+				$("#grup_arxiu_actual_form_tramit_" + idioma + " span").hide();
+				$("#grup_arxiu_actual_form_tramit_" + idioma + " input").show();
+				$("#grup_arxiu_actual_form_tramit_" + idioma + " label.eliminar").show();
 			} else {
-                $("#grup_arxiu_actual_doc_" + idioma + " span").show();
-				$("#grup_arxiu_actual_doc_" + idioma + " input").hide();
-				$("#grup_arxiu_actual_doc_" + idioma + " label.eliminar").hide();
+                $("#grup_arxiu_actual_form_tramit_" + idioma + " span").show();
+				$("#grup_arxiu_actual_form_tramit_" + idioma + " input").hide();
+				$("#grup_arxiu_actual_form_tramit_" + idioma + " label.eliminar").hide();
                 anchors.hide();
             }
 		}
 		// Fin bloque de pestanyas de idiomas
-		
         // Mostrar la pantalla de edicion de documento
 		that.nou(true);
 	}
 	
 	this.contaSeleccionats = function() {		
-		var seleccionats_val = modul_documents_elm.find(".seleccionat").find("li").size();
-		var info_elms = modul_documents_elm.find("p.info");
+		var seleccionats_val = modul_formularis_tramits_elm.find(".seleccionat").find("li").size();
+		var info_elms = modul_formularis_tramits_elm.find("p.info");
 		
 		if (seleccionats_val == 0) {
 			info_elms.text(txtNoHiHaDocumentsSeleccionats+ ".");
 		} else if (seleccionats_val == 1) {
-			info_elms.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtDocument.toLowerCase() + "</strong>.");
+			info_elms.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFormulari.toLowerCase() + "</strong>.");
 		} else if (seleccionats_val > 1) {
-			info_elms.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtDocuments.toLowerCase() + "</strong>.");						
+			info_elms.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtFormularis.toLowerCase() + "</strong>.");						
 		}
 	}
 	
 	
-	this.inicializarDocuments = function(listaDocuments) {
-		if (typeof listaDocuments != 'undefined' && listaDocuments != null) {
-            modul_documents_elm.find(".listaOrdenable").empty();		
-			EscriptoriPare.agregaItems(listaDocuments, true);
+	this.inicializarFormularis = function(listaFormularis) {
+		if (typeof listaFormularis != 'undefined' && listaFormularis != null) {
+            modul_formularis_tramits_elm.find(".listaOrdenable").empty();		
+			EscriptoriPareTramitForm.agregaItems(listaFormularis, true);
         }
         
         // Editar el documento al hacer click sobre el.
-        modul_documents_elm.find('div.documents').each(function() {
+        modul_formularis_tramits_elm.find('div.formularisTramit').each(function() {
             $(this).unbind("click").bind("click", function() {
-                var docId = $(this).find("input.documents_id").val();
+                var docTramitId = $(this).find("input.formularisTramit_id").val();
+                var tramitId  = $("#id_tramit_actual").val();
+                
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
                 $.ajax({
                     type: "GET",
-                    url: pagCarregarDoc,
-                    data: "id=" + docId,
+                    url: pagCarregarDocTramit,
+                    data: "id=" + docTramitId + "&idTramit=" + tramitId,
                     dataType: "json",
                     error: function() {
                         // Missatge.cancelar();
@@ -343,7 +336,7 @@ function CModulDocuments(){
                     success: function(data) {
                         Missatge.cancelar();
                         if (data.id > 0) {
-                            that.pintar(data.document);
+                            that.pintar(data.documentTramit);
                         } else if (data.id == -1){
                             Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
                         } else if (data.id < -1){
@@ -356,18 +349,32 @@ function CModulDocuments(){
 		
 		that.contaSeleccionats();
 		
-		modul_documents_elm.find(".listaOrdenable ul").sortable({ 
+		modul_formularis_tramits_elm.find(".listaOrdenable ul").sortable({ 
 			axis: 'y', 
 			update: function(event,ui){
-				EscriptoriPare.calculaOrden(ui,"origen");
-				EscriptoriPare.habilitarBotonGuardar();
+				EscriptoriPareTramitForm.calculaOrden(ui,"origen");
+				EscriptoriPareTramitForm.habilitarBotonGuardar();
 			}
 		}).css({cursor:"move"});
 		
-		modul_documents_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
-			var itemLista = jQuery(this).parents("li:first");
-			EscriptoriPare.eliminaItem(itemLista);
+		modul_formularis_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
+			var itemLista = $(this).parents("li:first");
+			EscriptoriPareTramitForm.eliminaItem(itemLista);
 			that.contaSeleccionats();
 		});
 	}
+	
+	// Devuelve un string con el formato formularisTramit=n1,n2,...,nm donde n son codigos de formularios de un trámite.
+	this.listarFormularios = function (){
+		var listaFormularios = "formularisTramit=";
+		var separador = "";
+		
+		modul_formularis_tramits_elm.find(".ca div.listaOrdenable input.formularisTramit_id").each(function() {
+			listaFormularios += separador + $(this).val();
+			separador = ",";
+		});
+		
+		return listaFormularios;
+	}	
+	
 };

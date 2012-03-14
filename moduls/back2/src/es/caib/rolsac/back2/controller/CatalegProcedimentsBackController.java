@@ -49,6 +49,7 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -157,8 +158,7 @@ public class CatalegProcedimentsBackController {
 		}
 		
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
-		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
-		
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));		
 		
 		Long materia = null;
 		String materiaString = request.getParameter("materia");
@@ -457,9 +457,11 @@ public class CatalegProcedimentsBackController {
 				
 				listaTramitesDTO = new ArrayList<IdNomDTO>();
 				
-				for( Tramite tramite : proc.getTramites() ) {					
-					String nombreTramite = ((TraduccionTramite) tramite.getTraduccion( request.getLocale().getLanguage())).getNombre();
-					listaTramitesDTO.add( new IdNomDTO( tramite.getId(), nombreTramite ) );					
+				for( Tramite tramite : proc.getTramites() ) {	
+					if (tramite != null) {
+						String nombreTramite = ((TraduccionTramite) tramite.getTraduccion( request.getLocale().getLanguage())).getNombre();
+						listaTramitesDTO.add( new IdNomDTO( tramite.getId(), nombreTramite ) );
+					}
 				}								
 			} 	
 			
@@ -559,6 +561,12 @@ public class CatalegProcedimentsBackController {
 			} else {
 				resultats.put("item_taxa", true);
 			}
+			
+			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) {
+				resultats.put("item_finestreta_unica", false);
+			} else {
+				resultats.put("item_finestreta_unica", true);
+			}
 
 			resultats.put("item_notes", proc.getInfo());			
 			
@@ -633,12 +641,12 @@ public class CatalegProcedimentsBackController {
 					procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
 					procediment.setId(procedimentOld.getId());
 					procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
-					procediment.setTramites(procedimentOld.getTramites());
+					procediment.setTramites(procedimentOld.getTramites());					
+					procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
 				} else {
 					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
 					procediment.setUnidadAdministrativa(ua);
 				}
-
 
                 // Materias
                 /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
@@ -670,6 +678,76 @@ public class CatalegProcedimentsBackController {
                     procediment.setMaterias(materiesNoves);                                   
                 }
                 // Fin Materias
+                
+                // Actualizar la lista de Trámites
+                String tramitsProcediment = request.getParameter("tramitsProcediment");
+                TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
+                
+                if ( !"".equals(tramitsProcediment) ) {
+                	
+                	List<Tramite> listaTramitesOld = procedimentOld.getTramites();
+                	List<Long> listaTramitesBorrar = new ArrayList<Long>();
+                	List<Tramite> tramitesNuevos = new ArrayList<Tramite>();                	
+                	String[] codigosTramitesNuevos = tramitsProcediment.split(",");
+                	
+            		for (int i = 0; i < codigosTramitesNuevos.length; i++) {                			     
+            			for ( Tramite tramite : listaTramitesOld ) {  
+            				                				
+            				if ( !"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i])) ) {
+            					tramitesNuevos.add(tramite);
+            					codigosTramitesNuevos[i] = null;
+            					
+            					break;
+            				}
+            			}                   			
+            		}
+            		                    	
+                	//Eliminar los que se han quitado de la lista
+                	for ( Tramite tramite : listaTramitesOld ) {                		
+                			if (!tramitesNuevos.contains(tramite) && tramite != null)                    				
+                				listaTramitesBorrar.add(tramite.getId());
+                	}
+                	
+                	for (Long id : listaTramitesBorrar ) {
+                		//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
+                		DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
+                		tramiteDelegate.borrarTramite(id);
+                	}
+                	
+                	//Crear los nuevos
+                	if (!"".equals(codigosTramitesNuevos)) {
+	                	for (String codigoTramite : codigosTramitesNuevos) {
+	                		if ( codigoTramite != null ) {
+	                			for ( Tramite tramite : procedimentOld.getTramites() ) {
+	                				if ( !tramitesNuevos.contains(tramite) ) 
+	                					tramitesNuevos.add(tramite);                					
+	                			}
+	                		} 
+	                	}
+                	}                	                   	
+                	
+                	// Actualizamos el orden de la lista de trámites
+                	HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
+                	
+                	for (Tramite tramite : tramitesNuevos ) {
+                		String[] orden = { request.getParameter("tramit_orden_" + tramite.getId()) };
+                		actualizadorTramites.put("orden" + tramite.getId(), orden );
+                	}
+                	
+                	DelegateUtil.getProcedimientoDelegate().actualizarOrdenTramites(actualizadorTramites);                	
+                	procediment.setTramites(tramitesNuevos);
+                	
+                } else {
+                	                	
+                	for (Tramite tramite : procediment.getTramites() ) {
+                		procedimentDelegate.eliminarTramite(tramite.getId(), procediment.getId());
+                		tramiteDelegate.borrarTramite(tramite.getId());
+                	}
+                
+                	procediment.setTramites(null);
+                }               
+                
+                //Fin trámites
                 
                 // Hechos vitales
                 /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
@@ -819,8 +897,7 @@ public class CatalegProcedimentsBackController {
 					
 					procediment.setTraduccion(lang, tpl);
 				}
-				// Fin idiomas
-				
+				// Fin idiomas				
 				
 				try {
 					Integer validacion = Integer.parseInt(request.getParameter("item_estat"));
@@ -860,8 +937,7 @@ public class CatalegProcedimentsBackController {
 					error = messageSource.getMessage("proc.error.formaIniciacio.incorrecta", null, request.getLocale());
 					throw new NumberFormatException();
 				}
-				
-				
+								
 				try {
 					Long familiaId = Long.parseLong(request.getParameter("item_familia"));
 					FamiliaDelegate fDelegate = DelegateUtil.getFamiliaDelegate();
@@ -871,7 +947,6 @@ public class CatalegProcedimentsBackController {
 					error = messageSource.getMessage("proc.error.familia.incorrecte", null, request.getLocale());
 					throw new NumberFormatException();
 				}
-
 				
 				procediment.setResponsable(request.getParameter("item_responsable"));
 				procediment.setTramite(request.getParameter("item_tramite"));
@@ -903,16 +978,13 @@ public class CatalegProcedimentsBackController {
 					}
 				}
 				
-				
 				procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
 				procediment.setVentanillaUnica("on".equalsIgnoreCase(request.getParameter("item_finestreta_unica")) ? "1" : "0");
 							
 				procediment.setInfo(request.getParameter("item_notes"));
 
-				
 				Long procId = procedimentDelegate.grabarProcedimiento(procediment, procediment.getUnidadAdministrativa().getId());
-
 				
 				String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 				result = new IdNomDTO(procId, ok);
@@ -927,8 +999,9 @@ public class CatalegProcedimentsBackController {
 				result = new IdNomDTO(-2l, error);
 				logException(log, dEx);
 			}
+			
 		} catch (NumberFormatException nfe) {
-			result = new IdNomDTO(-3l, error);
+			result = new IdNomDTO(-3l, error);		
 		} catch (ParseException pe) {
 			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
 			result = new IdNomDTO(-4l, error);

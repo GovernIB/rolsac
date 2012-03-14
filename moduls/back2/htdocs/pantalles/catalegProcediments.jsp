@@ -18,11 +18,13 @@
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
@@ -35,13 +37,16 @@
     var pagEsborrarTramit = '<c:url value="/tramit/esborrarTramit.do" />';
     var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
     var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';    
+    var pagGuardarDocTramit = '<c:url value="/documentsTramit/guardarDocumentTramit.do" />';
+    var pagCarregarDocTramit = '<c:url value="/documentsTramit/carregarDocumentTramit.do" />';        
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
+    var txtEsborrarTramitCorrecte = "<spring:message code='txt.tramit_esborrat_correcte'/>";
     var txtEsborrarIncorrecte = "";
     var txtEspere = "<spring:message code='txt.esperi'/>";
     var txtLlistaItem = "<spring:message code='txt.procediment'/>";
-    var txtLlistaItems = "<spring:message code='txt.procediments'/>";
+    var txtLlistaItems = "<spring:message code='txt.procediments'/>";    
     var txtPer = "<spring:message code='txt.per'/>";
     var txtDel = "<spring:message code='txt.del'/>";
     var txtAl = "<spring:message code='txt.al'/>";
@@ -62,6 +67,8 @@
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
     var txtDetallTitol = "<spring:message code='txt.detall_de_la.titol'/> " + txtLlistaItem.toLowerCase();
     var txtItemEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " + txtLlistaItem.toLowerCase() + "?";
+    var txtTramit = "<spring:message code='txt.tramit'/>";
+    var txtTramitEliminar = "<spring:message code='txt.segur_eliminar_aquest'/> " +  txtTramit.toLowerCase() + "?";
     var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
     var txtMostra = "<spring:message code='txt.mostra'/>";
     var txtAmaga = "<spring:message code='txt.amaga'/>";
@@ -81,8 +88,11 @@
     var txtNoHiHaFets = "<spring:message code='txt.noHiHaFetsVitals'/>";
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
     
-    var txtDocument = "<spring:message code='txt.document'/>";
+    var txtDocument = "<spring:message code='txt.document'/>";    
     var txtDocuments = "<spring:message code='txt.documents'/>";
+    var txtFormulari = "<spring:message code='txt.formulari'/>";
+    var txtFormularis = "<spring:message code='txt.formularis'/>"; 
+    		
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
@@ -91,7 +101,8 @@
     
     var txtTramit = "Tramit";
     var txtTramits = "Tramits";
-    
+    var txtTramitCreatCorrecte = "<spring:message code='txt.tramit_creat_correcte'/>";
+    var txtTramitModificatCorrecte = "<spring:message code='txt.tramit_modificat_correcte'/>";
     var txtNoHiHaTramitsSeleccionats = txtNoHiHa + " " + txtTramits.toLowerCase() + " " + txtSeleccionats.toLowerCase();
     
     var txtMateria = "<spring:message code='txt.materia'/>";
@@ -136,6 +147,7 @@
     var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
     var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
     var txtNombreObligatorio = "<spring:message code='personal.formulari.nom.obligatori'/>";    
+    var txtValidacionObligatorio = "<spring:message code='personal.formulari.validacio.tramit.obligatori'/>";    
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     var txtOrganoObligatorio = "<spring:message code='personal.formulari.organ.obligatori'/>";
 
@@ -238,25 +250,6 @@
                 }
         },
         
-        // Silencio administrativo
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_silenci_ca",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            /*"caracters":
-                {
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },*/
-            "error":
-                {
-                	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
-                    "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
-                }
-        },
-        
 		// Organ competent per resoldre 
 		{	
             "modo": "individual",
@@ -274,7 +267,26 @@
                 {
                     "obligatori": txtOrganoObligatorio,
                 }			
-		}
+		},
+        
+        // Silencio administrativo
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_silenci_ca",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            /*"caracters":
+                {
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },*/
+            "error":
+                {
+                	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
+                    "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
+                }
+        }
         
     ];
     
@@ -310,8 +322,20 @@
                 {
                     "tipus": "<spring:message code='tram.formulari.error.versio.nomes_numeros'/>"
                 }
-        }
-                
+        },
+        
+        //Validació
+		{	
+			// Nom del tràmit 
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_validacio_tramit",
+            "obligatori": "si",
+            "error":
+                {
+                    "obligatori": txtValidacionObligatorio
+                }			
+		}          
     ];
 -->
 </script>
@@ -596,7 +620,7 @@
         
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">                
-        
+                	
             <!-- modul -->
             <div class="modul">
                 <fieldset>
@@ -771,7 +795,7 @@
                                             <div class="etiqueta">
                                                 <label for="item_taxa"><spring:message code='camp.taxa'/></label>
                                             </div>                                            
-                                        </div>
+                                        </div>                                        
                                     </div>
                                     
                                     <div class="fila">
@@ -1598,6 +1622,16 @@
                                 </div>
                             </div>
                         </div>
+						<div class="fila">                        
+	                        <div class="element checkbox">
+	                            <div class="control">
+	                                <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
+	                            </div>
+	                            <div class="etiqueta">
+	                                <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnica'/></label>
+	                            </div>                                            
+	                        </div>
+						</div>                        
                     </div>
                 </fieldset>
             </div>
@@ -2112,7 +2146,6 @@
 </div>
 <!-- /escriptori_previsualitza -->
 
-
 <!-- escriptori_documents -->
 <div id="escriptori_documents" class="escriptori_detall">
     <script type="text/javascript">
@@ -2491,11 +2524,20 @@
 <div id="escriptori_tramits">   
     <h2><spring:message code='txt.detallTramit'/></h2>
     <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        
     <form id="formTramits">
 		<div class="escriptori_detall" id="escriptori_detall" style="display: block;">
 			<div class="grupoModulosFormulario modulPrincipal" id="modulPrincipal">    	
 		    	<input id="id_tramit_actual" name="id_tramit_actual" type="hidden"/>        
 		    	<input id="id_procediment_tramit" name="id_procediment_tramit" type="hidden"/>
+		    	
+			    <!-- titol  -->
+	    		<div class="modul" id="titolEdicioTramit">        		
+					<p class="titol"><spring:message code='txt.edicio.tramit'/></p>
+					<p class="titolProcediment" id="nom_procediment_tramit"></p>				        
+	    		</div>
+	    		<!-- fi titol  -->
+		    			    	
 			    <div class="modul">
 			        <fieldset>
 						<legend><spring:message code='txt.dades'/></legend>			
@@ -3065,8 +3107,50 @@
 		                </div>
 		            </fieldset>
 		        </div>
+		        <!-- /modul -->		
+		        
+		        <!-- modul -->
+		        <div class="modul modulFinestretaUnica">
+		            <fieldset>
+		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+		                <legend><spring:message code='camp.finestretaUnica'/></legend>
+		                <div class="modul_continguts mostrat">		                    
+		                    <div class="fila">
+		                        <div class="element t50p">											                       
+		                            <div class="etiqueta">
+		                                <label for="item_codivuds_tramit"><spring:message code='camp.codiVUDS'/></label>
+		                            </div>
+		                            <div class="control">
+		                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
+		                            	<div class="campo">
+		                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" />
+		                                </div>
+                                        <div class="botones">
+                                            <div class="btnCambiar boton btnGenerico">
+                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ');" class="btn consulta">
+                                                    <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
+                                                </a>
+                                            </div>
+                                        </div>		                                
+		                            </div>
+		                        </div>
+		                        
+		                        <div class="element t50p">
+		                            <div class="etiqueta">
+		                                <label for="tramit_item_data_vuds"><spring:message code='camp.dataEnviamentVUDS'/></label>
+		                            </div>		                            
+		                            <div class="control">
+		                                <input id="tramit_item_data_vuds" name="tramit_item_data_vuds" type="text" class="nou" />
+		                            </div>
+		                        </div>
+		                    </div>		                    
+		                </div>
+		            </fieldset>
+		        </div>
 		        <!-- /modul -->		        		               
+		                		               
 	    	</div>
+	    	
 		    <!-- Menú de publicación -->
 		    <div class="modulLateral menuPublicacion">
 		        <div class="modul publicacio">
@@ -3078,25 +3162,30 @@
 		                    <div class="fila">
 		                        <div class="element left">
 		                            <div class="etiqueta">
-		                                <label for="item_estat">Estat</label>
+		                                <label for="item_validacio_tramit">Validació</label>
 		                            </div>
 		                            <div class="control">
-		                                <select name="item_estat" id="item_estat">                                                                
-		                                   <option selected="selected" value="">Tria una opció</option>
-		                                   <option selected="selected" value="1">Pública</option>
-		                                   <option value="2">Interna</option>
-		                                   <option value="3">Reserva</option>                               
+		                                <select name="item_validacio_tramit" id="item_validacio_tramit">                                                                
+		                                   <option selected="selected" value=""><spring:message code='txt.validacio.tria'/></option>
+		                                   <option selected="selected" value="1"><spring:message code='txt.validacio.publica'/></option>
+		                                   <option value="2"><spring:message code='txt.validacio.interna'/></option>
+		                                   <option value="3"><spring:message code='txt.validacio.reserva'/></option>                               
 		                                </select>
 		                            </div>
 		                        </div>
+		                        
 		                        <div class="element right">
 		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_actualitzacio">Data actualització</label>
+		                                <label for="item_moment_tramit">Moment</label>
 		                            </div>
-		                            <div class="control">
-		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_actualitzacio" id="tramit_item_data_actualitzacio">
+		                            <div class="control">  
+		                                <select name="item_moment_tramit" id="item_moment_tramit">                                                                
+		                                   <option selected="selected" value="1"><spring:message code='txt.moment.inicialitzacio'/></option>
+		                                   <option value="2"><spring:message code='txt.moment.instruccio'/></option>
+		                                   <option value="3"><spring:message code='txt.moment.finalitzacio'/></option>                               
+		                                </select>
 		                            </div>
-		                        </div>
+		                        </div>		                        
 		                    </div>
 		                    <!-- /fila -->
 		                    <!-- fila -->
@@ -3136,18 +3225,69 @@
 		                    <!-- /botonera dalt -->
 		                </div>
 		            </fieldset>
-		        </div>
+		        </div>			        		         
 		        
-	            <!-- Documentos -->
-	            <div class="modul" id="modul_documents">
+	            <!-- Formularios -->
+	            <div class="modul" id="modul_formularis_tramits">
 	                <fieldset>
 	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-	                    <legend><spring:message code='document.documentsRelacionats'/></legend>                               
+	                    <legend><spring:message code='document.formularis'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulFormularis -->
+	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+	                        <div class="modulFormularisTramit multilang">                            
+	                            <ul class="idiomes" style="display:none;">                                
+	                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
+	                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
+	                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
+	                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
+	                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
+	                            </ul>
+	                            
+	                            <div class="seleccionats">
+	                                <%-- dsanchez: multiidioma --%>
+	                                <div class="seleccionat cajaIdioma ca">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="es cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="en cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="de cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="fr cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixFormulari'/></span></span></a>
+	                                </div>
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulFormularis -->                                 
+	                    </div>    
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->    		        
+		        
+	            <!-- Documentos -->
+	            <div class="modul" id="modul_documents_tramits">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='document.documentacioInformativa'/></legend>                               
 	                    <div class="modul_continguts mostrat">                                  
 	                        <!-- modulDocuments -->
 	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-	                        <div class="modulDocuments multilang">                            
-	                            <ul class="idiomes">                                
+	                        <div class="modulDocumentsTramit multilang">                            
+	                            <ul class="idiomes" style="display:none;">                                
 	                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
 	                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
 	                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
@@ -3187,64 +3327,633 @@
 	                    </div>    
 	                </fieldset>
 	            </div>
-	            <!-- /modul -->      
-
-	            <!-- Formularios -->
-	            <div class="modul" id="modul_formularis">
-	                <fieldset>
-	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-	                    <legend><spring:message code='document.formularisRelacionats'/></legend>                               
-	                    <div class="modul_continguts mostrat">                                  
-	                        <!-- modulDocuments -->
-	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
-	                        <div class="modulDocuments multilang">                            
-	                            <ul class="idiomes">                                
-	                                <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>
-	                                <li class="es"><spring:message code='txt.idioma.es_abr'/></li>
-	                                <li class="en"><spring:message code='txt.idioma.en_abr'/></li>
-	                                <li class="de"><spring:message code='txt.idioma.de_abr'/></li>
-	                                <li class="fr"><spring:message code='txt.idioma.fr_abr'/></li>
-	                            </ul>
-	                            
-	                            <div class="seleccionats">
-	                                <%-- dsanchez: multiidioma --%>
-	                                <div class="seleccionat cajaIdioma ca">
-	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>
-	                                </div>
-	                                <div class="es cajaIdioma">
-	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>
-	                                </div>
-	                                <div class="en cajaIdioma">
-	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>
-	                                </div>                                
-	                                <div class="de cajaIdioma">
-	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>
-	                                </div>                                
-	                                <div class="fr cajaIdioma">
-	                                    <p class="info"><spring:message code='txt.noHiHaFormularisRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>
-	                                </div>                                
-	                                
-	                                <div class="btnGenerico">
-	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
-	                                </div>
-	                            </div>                                  
-	                        </div>
-	                        <!-- /modulFormularis -->                                 
-	                    </div>    
-	                </fieldset>
-	            </div>
-	            <!-- /modul -->     
-		        
+	            <!-- /modul -->    
+		        	        
 		    </div>
-		    <!-- /Menú de publicación -->
-		                    
+		    <!-- /Menú de publicación -->		    		                   
 	</div>    
 	</form>    
 </div>                           
-
 <!-- /escriptori_tramits -->
+
+<!-- escriptori_formularis_tramits -->
+<div id="escriptori_formularis_tramits" class="escriptori_detall">
+    <script type="text/javascript">
+        var txtTituloFormTramiteObligatorio = "<spring:message code='personal.formulari_document_tramit.titol.obligatori'/>";    
+        var txtTituloNoSoloNumeros = "<spring:message code='personal.formulari_document_tramit.titol.no_nomes_numeros'/>";
+               
+        // dades formularis
+        var FormulariDadesFormTramit = [
+            { // Titol (Catala)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "form_tramit_titol_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error": {
+                    "obligatori": txtTituloFormTramiteObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            }
+        ];
+    </script>
+    
+    <form id="formGuardarFormTramit" action="" method="POST">
+        <input type="hidden" name="formTramitId" id="formTramitId" />
+        <input type="hidden" name="tramitIdform" id="tramitIdform" />        
+        <input type="hidden" name="tipDoc" id="tipDoc" value="1" />
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    
+        <div id="modulFormularis" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.formularis'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+                            <ul class="idiomes">
+                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+                            </ul>
+                            <div class="idiomes">
+                                <!-- ca -->
+                                <div class="idioma ca">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_titol_ca"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="form_tramit_titol_ca" name="form_tramit_titol_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_descripcio_ca"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="form_tramit_descripcio_ca" name="form_tramit_descripcio_ca" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_ca"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_form_tramit_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="form_tramit_arxiu_ca_delete" id="form_tramit_arxiu_ca_delete" value="1"/>
+                                                    <label for="form_tramit_arxiu_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="form_tramit_arxiu_ca" name="form_tramit_arxiu_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /ca -->
+                                <!-- es -->
+                                <div class="idioma es">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_titol_es"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="form_tramit_titol_es" name="form_tramit_titol_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_descripcio_es"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="form_tramit_descripcio_es" name="form_tramit_descripcio_es" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_es"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_form_tramit_es" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="form_tramit_arxiu_es_delete" id="form_tramit_arxiu_es_delete" value="1"/>
+                                                    <label for="form_tramit_arxiu_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="form_tramit_arxiu_es" name="form_tramit_arxiu_es" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /es -->
+                                <!-- en -->
+                                <div class="idioma en">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_titol_en"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="form_tramit_titol_en" name="form_tramit_titol_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_descripcio_en"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="form_tramit_descripcio_en" name="form_tramit_descripcio_en" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_en"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_form_tramit_en" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="form_tramit_arxiu_en_delete" id="form_tramit_arxiu_en_delete" value="1"/>
+                                                    <label for="form_tramit_arxiu_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="form_tramit_arxiu_en" name="form_tramit_arxiu_en" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /en -->
+                                <!-- de -->
+                                <div class="idioma de">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_titol_de"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="form_tramit_titol_de" name="form_tramit_titol_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_descripcio_de"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="form_tramit_descripcio_de" name="form_tramit_descripcio_de" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_de"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_form_tramit_de" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="form_tramit_arxiu_de_delete" id="form_tramit_arxiu_de_delete" value="1"/>
+                                                    <label for="form_tramit_arxiu_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="form_tramit_arxiu_de" name="form_tramit_arxiu_de" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /de -->
+                                <!-- fr -->
+                                <div class="idioma fr">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_titol_fr"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="form_tramit_titol_fr" name="form_tramit_titol_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="form_tramit_descripcio_fr"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="form_tramit_descripcio_fr" name="form_tramit_descripcio_fr" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_fr"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_form_tramit_fr" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="form_tramit_arxiu_fr_delete" id="form_tramit_arxiu_fr_delete" value="1"/>
+                                                    <label for="form_tramit_arxiu_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="form_tramit_arxiu_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="form_tramit_arxiu_fr" name="form_tramit_arxiu_fr" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /fr -->
+                            </div>
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_formularis_tramit" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_formularis_tramit" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_formularis_tramit" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
+</div>
+<!-- escriptori_formularis_tramits -->
+
+<!-- escriptori_documents_tramits -->
+<div id="escriptori_documents_tramits" class="escriptori_detall">
+    <script type="text/javascript">
+        var txtTituloDocTramiteObligatorio = "<spring:message code='personal.formulari_document_tramit.titol.obligatori'/>";    
+        var txtTituloNoSoloNumeros = "<spring:message code='personal.formulari_document_tramit.titol.no_nomes_numeros'/>";
+               
+        // dades formularis
+        var FormulariDadesDocTramit = [
+            { // Titol (Catala)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "doc_tramit_titol_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error": {
+                    "obligatori": txtTituloDocTramiteObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            }
+        ];
+    </script>
+    
+    <form id="formGuardarDocTramit" action="" method="POST">
+        <input type="hidden" name="docTramitId" id="docTramitId" />
+        <input type="hidden" name="tramitIddoc" id="tramitIddoc" />        
+        <input type="hidden" name="tipDoc" id="tipDoc" value="0" />
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    
+        <div id="modulDocuments" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.documents'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+                            <ul class="idiomes">
+                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+                            </ul>
+                            <div class="idiomes">
+                                <!-- ca -->
+                                <div class="idioma ca">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_titol_ca"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_tramit_titol_ca" name="doc_tramit_titol_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_descripcio_ca"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_tramit_descripcio_ca" name="doc_tramit_descripcio_ca" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_ca"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_tramit_ca" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="doc_tramit_arxiu_ca_delete" id="doc_tramit_arxiu_ca_delete" value="1"/>
+                                                    <label for="doc_tramit_arxiu_ca_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_ca"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="doc_tramit_arxiu_ca" name="doc_tramit_arxiu_ca" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /ca -->
+                                <!-- es -->
+                                <div class="idioma es">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_titol_es"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_tramit_titol_es" name="doc_tramit_titol_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_descripcio_es"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_tramit_descripcio_es" name="doc_tramit_descripcio_es" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_es"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_tramit_es" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="doc_tramit_arxiu_es_delete" id="doc_tramit_arxiu_es_delete" value="1"/>
+                                                    <label for="doc_tramit_arxiu_es_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_es"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="doc_tramit_arxiu_es" name="doc_tramit_arxiu_es" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /es -->
+                                <!-- en -->
+                                <div class="idioma en">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_titol_en"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_tramit_titol_en" name="doc_tramit_titol_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_descripcio_en"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_tramit_descripcio_en" name="doc_tramit_descripcio_en" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_en"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_tramit_en" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="doc_tramit_arxiu_en_delete" id="doc_tramit_arxiu_en_delete" value="1"/>
+                                                    <label for="doc_tramit_arxiu_en_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_en"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="doc_tramit_arxiu_en" name="doc_tramit_arxiu_en" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /en -->
+                                <!-- de -->
+                                <div class="idioma de">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_titol_de"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_tramit_titol_de" name="doc_tramit_titol_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_descripcio_de"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_tramit_descripcio_de" name="doc_tramit_descripcio_de" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_de"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_tramit_de" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="doc_tramit_arxiu_de_delete" id="doc_tramit_arxiu_de_delete" value="1"/>
+                                                    <label for="doc_tramit_arxiu_de_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_de"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="doc_tramit_arxiu_de" name="doc_tramit_arxiu_de" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /de -->
+                                <!-- fr -->
+                                <div class="idioma fr">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_titol_fr"><spring:message code='camp.titol'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_tramit_titol_fr" name="doc_tramit_titol_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_tramit_descripcio_fr"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_tramit_descripcio_fr" name="doc_tramit_descripcio_fr" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_fr"><spring:message code='camp.arxiu'/></label></div>
+                                            <div class="control archivo">   
+                                                <div id="grup_arxiu_actual_doc_tramit_fr" class="grup_arxiu_actual">
+                                                    <span><spring:message code='txt.no_arxiu_assignat'/></span>
+                                                    <a href="#" target="_blank"></a>
+                                                    <input type="checkbox" name="doc_tramit_arxiu_fr_delete" id="doc_tramit_arxiu_fr_delete" value="1"/>
+                                                    <label for="doc_tramit_arxiu_fr_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                        
+                                        <div class="element t50p">
+                                            <div class="etiqueta"><label for="doc_tramit_arxiu_fr"><spring:message code='camp.arxiu_nou'/></label></div>
+                                            <div class="control">                                           
+                                                <input id="doc_tramit_arxiu_fr" name="doc_tramit_arxiu_fr" type="file" class="nou" />
+                                            </div>
+                                        </div>                                                                                      
+                                    </div>
+                                </div>
+                                <!-- /fr -->
+                            </div>
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_documents_tramit" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_documents_tramit" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_documents_tramit" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
+</div>
+<!-- escriptori_documents_tramits -->

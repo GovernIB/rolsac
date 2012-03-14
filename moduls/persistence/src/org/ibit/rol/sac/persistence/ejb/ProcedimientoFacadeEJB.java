@@ -188,6 +188,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 session.update(procedimiento);
                 addOperacion(session, procedimiento, Auditoria.MODIFICAR);
             }
+            
+            Hibernate.initialize(procedimiento.getTramites());
             Hibernate.initialize(procedimiento.getMaterias());
             Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
             
@@ -486,10 +488,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 Hibernate.initialize(procedimiento.getTramites());
                 List<Tramite> tramites = procedimiento.getTramites(); 
                 for (Iterator iter = tramites.iterator(); iter.hasNext();) {
-                    Tramite tramite = (Tramite) iter.next();
-                    Hibernate.initialize(tramite.getFormularios()); 
-                    Hibernate.initialize(tramite.getDocsInformatius());
-                    Hibernate.initialize(tramite.getTaxes());
+                	Tramite tramite = (Tramite) iter.next();                
+                	if (tramite != null) {
+                		Hibernate.initialize(tramite.getFormularios()); 
+                		Hibernate.initialize(tramite.getDocsInformatius());
+                		Hibernate.initialize(tramite.getTaxes());
+                	}	
                 }
                 Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
             } else {

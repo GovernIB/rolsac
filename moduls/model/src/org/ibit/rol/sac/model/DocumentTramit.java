@@ -1,29 +1,16 @@
-
 package org.ibit.rol.sac.model;
 
-import java.util.Iterator;
-
-
-
 public class DocumentTramit extends Document  {
-
 	
 	private Tramite tramit;
-
-	
 
 	public Tramite getTramit() {
 		return tramit;
 	}
 
-
-
 	public void setTramit(Tramite tramit) {
 		this.tramit = tramit;
 	}
-
-
-
 
 	@Override
 	public String toString() {

@@ -3,11 +3,11 @@
 $(document).ready(function() {	
 	
 	// elements
-	modul_tramits_elm = jQuery("div.modulTramits:first");
-	resultats_elm = jQuery("#resultats");
+	modul_tramits_elm = $("div.modulTramits:first");
+	resultats_elm = $("#resultats");
 	resultats_actiu_elm = resultats_elm.find("div.actiu:first");
-	escriptori_tramits_elm = jQuery("#escriptori_tramits");	
-	cercador_elm = jQuery("#cercador");
+	escriptori_tramits_elm = $("#escriptori_tramits");	
+	cercador_elm = $("#cercador");
 	
 	ModulTramit = new CModulTramit();
 	EscriptoriTramit = new CEscriptoriTramit();		
@@ -18,18 +18,18 @@ $(document).ready(function() {
 	}
 	
 	// Evento para el botónn de volver al detalle    
-    jQuery("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
+    $("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
     
     // Evento para el botón de guardar
-    jQuery("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
+    $("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
     
     // Evento para el botón de eliminar
-    jQuery("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
+    $("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
     
     // Sincronizar campos sin idioma en zona multi-idioma.   
-    jQuery("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function(){        
-        jQuery("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").val( jQuery(this).val() );        
-    });
+    $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").change(function(){        
+        $("#tramits_item_organ, #tramits_item_organ_es, #tramits_item_organ_ca, #tramits_item_organ_en, #tramits_item_organ_de, #tramits_item_organ_fr").val( $(this).val() );        
+    });    
 });
 
 function CModulTramit(){	
@@ -41,10 +41,11 @@ function CModulTramit(){
 	       
 	this.iniciar = function() {
         
-        jQuery("#tramit_item_data_actualitzacio").datepicker({ dateFormat: 'dd/mm/yy' });
-        jQuery("#tramit_item_data_publicacio").datepicker({ dateFormat: 'dd/mm/yy' });		
-		jQuery("#tramit_item_data_caducitat").datepicker({ dateFormat: 'dd/mm/yy' });
-        
+        $("#tramit_item_data_actualitzacio").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#tramit_item_data_publicacio").datepicker({ dateFormat: 'dd/mm/yy' });		
+		$("#tramit_item_data_caducitat").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#tramit_item_data_vuds").datepicker({ dateFormat: 'dd/mm/yy' });				
+		
 		tramits_seleccionats_elm = escriptori_tramits_elm.find("div.escriptori_items_seleccionats:first");
 		escriptori_tramits_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);		
@@ -99,14 +100,14 @@ function CModulTramit(){
 				//Ocultar el botón "eliminar" en la creación
 				// y los módulos de documentos y formularios
 				escriptori_tramits_elm.find(".btnEliminar").hide();			
-				escriptori_tramits_elm.find("div#modul_documents").hide();
-				escriptori_tramits_elm.find("div#modul_formularis").hide();				
+				escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
+				escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();				
 			});			
 		});
 	}
     
     this.habilitarBotonGuardar = function() {        
-        jQuery("#escriptori_tramits .menuPublicacion .btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();}).parent().removeClass("off");
+        $("#escriptori_tramits .menuPublicacion .btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();}).parent().removeClass("off");
     }
     
     this.inicializarTramites = function( listaTramites ){
@@ -139,10 +140,23 @@ function CModulTramit(){
 		}).css({cursor:"move"});
 		
 		modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
-			var itemLista = jQuery(this).parents("li:first");
+			var itemLista = $(this).parents("li:first");
 			ModulTramit.eliminaItem(itemLista);
 			EscriptoriTramit.contaSeleccionats();
 		});
+	}
+    
+	// Devuelve un string con el formato tramitsProcediment=n1,n2,...,nm donde n son codigos de trámites.
+	this.listaTramites = function (){
+		var listaTramites = "tramitsProcediment=";
+		var separador = "";
+		
+		modul_tramits_elm.find("div.listaOrdenable input.tramit_id").each(function() {
+			listaTramites += separador + $(this).val();
+			separador = ",";
+		});
+		
+		return listaTramites;
 	}
     
 };
@@ -170,21 +184,22 @@ function CEscriptoriTramit(){
         }
         
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
-        var procId = jQuery("#procId");
+        var procId = $("#procId");
         if (procId.length > 0) {
-        	procId.val(jQuery("#item_id").val());
+        	procId.val($("#item_id").val());
         } else {
-        	jQuery("#fitxaId").val(jQuery("#item_id").val());
+        	$("#fitxaId").val($("#item_id").val());
         }
         		
         // Si existe idTramit es que estamos editando un trámite.
 		var idTramit = $("#id_tramit_actual").val();
-					
-        //Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + "&" + ModulFormularisTramit.listarFormularios();			
+		
+        //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
         $("#formTramits").ajaxSubmit({
         	type: "POST",
-            url: pagGuardarTramit,
-            dataType: 'json',            
+            url: pagGuardarTramit + paramsUrl,                       
+            dataType: 'json',               
             beforeSubmit: function() {
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
             },
@@ -192,8 +207,11 @@ function CEscriptoriTramit(){
                 
                 if (data.id < 0) {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-                } else {                   
-                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});                    
+                } else {                   	
+                	
+                	var textoAccion = idTramit != "" ? txtTramitModificatCorrecte : txtTramitCreatCorrecte ;
+                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: textoAccion });
+                    
                     // Actualizamos la lista con el item añadido
                     ModulTramit.agregaItem({
 	            		id:  data.id, 
@@ -218,30 +236,35 @@ function CEscriptoriTramit(){
     	
         var idTramit = $("#id_tramit_actual").val();
         var idProcediment = $("#id_procediment_tramit").val();
-		// missatge
-		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
         
-        dataVars = "id=" + idTramit + "&idProcediment=" + idProcediment;
-        
-        //Enviamos el formulario mediante el mÃ©todo ajaxSubmit del plugin jquery.form
-        $.ajax({
-        	type: "POST",        	
-            url: pagEsborrarTramit,
-            data: dataVars,            
-            dataType: 'json',
-            success: function(data) {                
-                if (data.id < 0) {
-                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-                } else {                   
-                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-                    
-                    // Eliminamos el item de la lista ordenable.
-                    modul_tramits_elm.find(".listaOrdenable input[name=tramit_id_" + idTramit + "]").parents("li").remove();        
-                    that.contaSeleccionats();
-                    that.torna();
-                }
-            }
-        });       
+        Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtTramitEliminar, funcio: function() {        
+			// missatge
+			Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+	        
+	        dataVars = "id=" + idTramit + "&idProcediment=" + idProcediment;
+	        
+	        //Enviamos el formulario mediante el mÃ©todo ajaxSubmit del plugin $.form
+	        $.ajax({
+	        	type: "POST",        	
+	            url: pagEsborrarTramit,
+	            data: dataVars,            
+	            dataType: 'json',
+	            success: function(data) {                
+	                if (data.id > 0) {
+	                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtEsborrarTramitCorrecte});
+					} else if (data.id == -1){
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+					} else if (data.id == -2){
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					}	                	
+	                    
+	                // Eliminamos el item de la lista ordenable.
+	                modul_tramits_elm.find(".listaOrdenable input[name=tramit_id_" + idTramit + "]").parents("li").remove();        
+	                that.contaSeleccionats();
+	                that.torna();
+	            }
+	        }); 
+        }});
     }
     
 	this.torna = function() {		
@@ -255,7 +278,7 @@ function CEscriptoriTramit(){
 	}
 	
 	this.limpia = function(){
-        jQuery('#formTramits :input').each(limpiarCampo);        
+        $('#formTramits :input').each(limpiarCampo);        
         $("#id_tramit_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
 	}
     
@@ -287,7 +310,7 @@ function CEscriptoriTramit(){
 		}
 		
 		modul_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
-			var itemLista = jQuery(this).parents("li:first");
+			var itemLista = $(this).parents("li:first");
 			ModulTramit.eliminaItem(itemLista);
 			EscriptoriTramit.contaSeleccionats();
 		});
@@ -295,11 +318,12 @@ function CEscriptoriTramit(){
     
     this.pintar = function( datos ){    
         
-        // Importante mantener el id del trÃ¡mite que estamos mostrando.
-        jQuery("#id_tramit_actual").val(datos.idTramit);
-                        
+        // Importante mantener el id del trámite que estamos mostrando.
+        $("#id_tramit_actual").val(datos.idTramit);
+                         
         $("#id_tramit_actual").val(datos.id_tramit_actual);
-        $("#id_procediment_tramit").val(datos.id_procediment_tramit);        
+        $("#id_procediment_tramit").val(datos.id_procediment_tramit);
+        $("#nom_procediment_tramit").text(datos.nom_procediment_tramit);        
 		$("#tramit_item_data_actualitzacio").val(datos.tramit_item_data_actualitzacio);		
 		$("#tramit_item_data_publicacio").val(datos.tramit_item_data_publicacio);
 		$("#tramit_item_data_caducitat").val(datos.tramit_item_data_caducitat);        
@@ -307,6 +331,11 @@ function CEscriptoriTramit(){
 		$("#item_tramite_tramit").val(datos.item_tramite_tramit);
 		$("#item_url_tramit").val(datos.item_url_tramit );
 		$("#item_version_tramit").val( datos.item_version_tramit != 0 ? datos.item_version_tramit : 0);        
+				
+		$("#item_codivuds_tramit").val( datos.item_codivuds_tramit );
+		$("#tramit_item_data_vuds").val( datos.tramit_item_data_vuds );
+		$("#item_moment_tramit").val( datos.item_moment_tramit );
+		$("#item_validacio_tramit").val( datos.item_validacio_tramit ); 
 		
 		// Bloque de pestanyas de idiomas
         idiomas = datos.idiomas;
@@ -324,7 +353,18 @@ function CEscriptoriTramit(){
 				$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));
 			}
 		}
-		// Fin bloque de pestanyas de idiomas				       
+		// Fin bloque de pestañas de idiomas
+		
+		// Mostrar bloque de ventanilla única según la información del procedimiento
+		if (datos.item_finestreta_unica == "1")
+			escriptori_tramits_elm.find(".modulFinestretaUnica").show();
+		else
+			escriptori_tramits_elm.find(".modulFinestretaUnica").hide();		
+			
+		// Cargar documentos, formularios y tasas
+		ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
+		ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);
+		//ModulTaxesTramit.inicializarTaxes()		
     }
     
     this.editarTramit = function( el ) {
@@ -333,7 +373,7 @@ function CEscriptoriTramit(){
         
         Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
         
-        jQuery.ajax({
+        $.ajax({
             type: "POST",
             url: pagDetallTramit,
             data: "id=" + tramitId,
@@ -351,9 +391,11 @@ function CEscriptoriTramit(){
                         escriptori_tramits_elm.fadeIn(300, function() { 
                         									EscriptoriTramit.pintar(data);
                         					            	// Mostrar el botón "eliminar" en la edición
-                        					                escriptori_tramits_elm.find(".btnEliminar").show();
-                        					        		escriptori_tramits_elm.find("div#modul_documents").show();
-                        					        		escriptori_tramits_elm.find("div#modul_formularis").show();                        					                
+                        					                escriptori_tramits_elm.find(".btnEliminar").show(300, function() {
+                        					                	escriptori_tramits_elm.find("#modul_documents").show(300, function() {
+                        					                		escriptori_tramits_elm.find("#modul_formularis").show();
+                        					                	});	
+                        					                });
                         								});
                     });                            
                 } else if (data.id == -1){

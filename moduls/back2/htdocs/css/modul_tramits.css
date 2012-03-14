@@ -93,7 +93,7 @@
     overflow: hidden;
 }
 
-#escriptori_tramits .grupoModulosFormulario .obligatori{ 
+#escriptori_tramits .grupoModulosFormulario .obligatori, #escriptori_tramits .modulLateral .obligatori { 
     color: #CC0000;
 }
 
@@ -154,4 +154,19 @@
 
 #escriptori_tramits li span.enllas {
 	display: block;
+}
+
+#escriptori_tramits p.titolProcediment {
+	font-size: 1.1em;
+	font-weight:bold;
+}
+
+#escriptori_tramits .grupoModulosFormulario div.modul#titolEdicioTramit {
+	padding: 10px 16px;
+}
+
+#escriptori_tramits .campo input#item_codivuds_tramit {
+	float:left;
+	width: 220px;
+	margin-right: 10px;
 }

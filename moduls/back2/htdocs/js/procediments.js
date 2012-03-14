@@ -25,6 +25,8 @@ $(document).ready(function() {
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 
+	escriptori_tramits_elm = $("#escriptori_tramits");
+	
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
@@ -325,6 +327,7 @@ function CDetall(){
 	this.guarda = function() {
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
+		urlParams += "&" + ModulTramit.listaTramites();
 		this._baseGuarda(urlParams);
 	}
 	
@@ -386,6 +389,10 @@ function CDetall(){
         jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").change(function(){
             jQuery("#item_iniciacio,#item_iniciacio_es,#item_iniciacio_ca,#item_iniciacio_en,#item_iniciacio_de,#item_iniciacio_fr").val( jQuery(this).val() );
         });
+        
+        jQuery("#item_finestreta_unica").change(function() { 
+        						$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
+        					});
 	}
 	
 	this.dataPublicacio = function(e) {		
@@ -513,15 +520,16 @@ function CDetall(){
 			jQuery('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);                        
             jQuery("#item_fi_vida_administrativa").change();
 		}
-		/*
-		if (dada_node.item_finestreta_unica != undefined) {
-			$('#item_finestreta_unica').attr('checked', dada_node.item_finestreta_unica);
-		}
-		*/
+		
 		if (dada_node.item_taxa != undefined) {
 			jQuery('#item_taxa').attr('checked', dada_node.item_taxa);                        
             jQuery("#item_taxa").change();
 		}
+		
+		if (dada_node.item_finestreta_unica != undefined) {
+			$("#item_finestreta_unica").attr("checked", dada_node.item_finestreta_unica);
+			$("#item_finestreta_unica").change();
+		}		
 		
 		$("#item_responsable").val(dada_node.item_responsable);
 		

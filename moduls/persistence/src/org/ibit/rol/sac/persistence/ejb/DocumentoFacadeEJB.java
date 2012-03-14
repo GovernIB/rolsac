@@ -1,36 +1,33 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-
-
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Hibernate;
-import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.HechoVital;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
-import org.ibit.rol.sac.persistence.ejb.FichaFacadeEJB.FichaUAComparator;
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.persistence.ws.Actualizador;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.*;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 /**
  * SessionBean para mantener y consultar Documentos.
@@ -323,7 +320,33 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    /**
+     * Obtiene el archivo de un documento de trámite.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public Archivo obtenerArchivoDocumentoTramite(Long id, String lang, boolean useDefault) {
+        Session session = getSession();
+        try {
+            DocumentTramit documento = (DocumentTramit) session.load(DocumentTramit.class, id);
+            TraduccionDocumento tradDocumento = (TraduccionDocumento) documento.getTraduccion(lang);
+            if (tradDocumento == null || tradDocumento.getArchivo() == null) {
+                if (useDefault) {
+                	tradDocumento = (TraduccionDocumento) documento.getTraduccion();
+                } else {
+                    return null;
+                }
+            }
+            Hibernate.initialize(tradDocumento.getArchivo());
+            return tradDocumento.getArchivo();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
     /**
      * 
      * Actualiza los ordenes de los documentos de una sección de una Ficha
