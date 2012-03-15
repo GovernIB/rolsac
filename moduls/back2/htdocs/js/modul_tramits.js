@@ -88,10 +88,9 @@ function CModulTramit(){
 				
 		EscriptoriTramit.limpia();
 		
-		$("#item_data_actualitzacio").attr("value", "");
-		$("#item_data_publicacio").attr("value", "");
-		$("#item_data_caducitat").attr("value", "");
-		
+		$("#tramit_item_data_publicacio").val("");
+		$("#tramit_item_data_caducitat").val("");
+				
 		$("#id_procediment_tramit").attr("value",  $("#item_id").val() );
 				
 		// animacio

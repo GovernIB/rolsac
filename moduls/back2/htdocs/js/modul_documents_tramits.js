@@ -248,9 +248,17 @@ function CModulDocumentsTramit(){
             for (var i in idiomas) {
                 var idioma = idiomas[i];                
                 $("#doc_tramit_descripcio_" + idioma + ", #doc_tramit_titol_" + idioma + ", #doc_tramit_arxiu_" + idioma).each(limpiarCampo);
-                
-                limpiarArchivoMultiidioma("arxiu_actual_doc", idiomas[i]);
 
+                //Limpiar campos de fichero
+            	$("#grup_arxiu_actual_doc_tramit_" + idioma + " span").show();
+            	$("#grup_arxiu_actual_doc_tramit_" + idioma + " input").hide();
+            	$("#grup_arxiu_actual_doc_tramit_" + idioma + " label.eliminar").hide();
+            	$("#grup_arxiu_actual_doc_tramit_" + idioma + " a").hide().attr("href","").empty();
+            	
+            	var thumbnail = $("#grup_arxiu_actual_doc_tramit_" + idioma).closest(".fila").find(".thumbnail");
+            	
+            	if (thumbnail.size() > 0) 
+            		thumbnail.children().remove();
             }
 		}
 		
