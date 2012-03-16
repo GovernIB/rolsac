@@ -286,8 +286,7 @@
                 	"obligatori": "<spring:message code='proc.formulari.error.silenciAdministratiu.obligatori'/>",
                     "tipus": "<spring:message code='proc.formulari.error.silenciAdministratiu.no_nomes_numeros'/>"
                 }
-        }
-        
+        }        
     ];
     
     var FormulariTramits = [                            
@@ -335,7 +334,26 @@
                 {
                     "obligatori": txtValidacionObligatorio
                 }			
-		}          
+		},
+		
+		// Organ competent per tramitar 
+		{	
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "tramits_item_organ_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtOrganoObligatorio,
+                }			
+		}		
     ];
 -->
 </script>
@@ -2634,7 +2652,7 @@
 		                                    <div class="control">
 		                                        <input id="tramits_item_organ_id" name="tramits_item_organ_id" type="hidden" />
 		                                        <div class="campo">                                           
-		                                            <input id="tramits_item_organ" name="tramits_item_organ" type="text" class="nou" readonly="readonly" />
+		                                            <input id="tramits_item_organ_ca" name="tramits_item_organ_ca" type="text" class="nou" readonly="readonly" />
 		                                        </div>
 		                                        <div class="botones">
 		                                            <div class="btnCambiar boton btnGenerico">
@@ -3123,11 +3141,11 @@
 		                            <div class="control">
 		                            	<input id="item_id_codivuds_tramit" name="item_id_codivuds_tramit" type="hidden" />
 		                            	<div class="campo">
-		                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" />
+		                                	<input id="item_codivuds_tramit" name="item_codivuds_tramit" type="text" class="nou" readonly="readonly" />
 		                                </div>
                                         <div class="botones">
                                             <div class="btnCambiar boton btnGenerico">
-                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ');" class="btn consulta">
+                                                <a href="" class="btn consulta">
                                                     <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
                                                 </a>
                                             </div>
@@ -3195,7 +3213,7 @@
 		                                <label for="tramit_item_data_publicacio">Data publicació</label>
 		                            </div>
 		                            <div class="control">
-		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
+		                                <input type="text" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
 		                            </div>
 		                        </div>
 		                        <div class="element right">
@@ -3203,7 +3221,7 @@
 		                                <label for="tramit_item_data_caducitat">Data caducitat</label>
 		                            </div>
 		                            <div class="control">
-		                                <input type="text" readonly="readonly" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
+		                                <input type="text" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
 		                            </div>
 		                        </div>
 		                    </div>                        
@@ -3226,6 +3244,45 @@
 		                </div>
 		            </fieldset>
 		        </div>			        		         
+		        
+		        <!--  Tasas -->
+		        <div class="modul" id="modul_taxes_tramits">
+		        	<fieldset>
+		        		<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+		        		<legend><spring:message code='tramit.taxes'/></legend>
+		        		<div class="modul_continguts mostrat">
+			        		<!-- modulTaxes -->
+			        		<div class="modulFormularisTramit multilang">			        		
+	                            <div class="seleccionats">
+	                                <div class="seleccionat cajaIdioma ca">
+	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="es cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="en cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="de cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                <div class="fr cajaIdioma">
+	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>                                
+	                                
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixFormulari'/></span></span></a>
+	                                </div>
+	                            </div>                                  
+			        		</div>
+		        		</div>
+		        	</fieldset>
+		        </div>
 		        
 	            <!-- Formularios -->
 	            <div class="modul" id="modul_formularis_tramits">
@@ -3335,6 +3392,12 @@
 	</form>    
 </div>                           
 <!-- /escriptori_tramits -->
+
+<!--  escriptori_taxes_tramits -->
+<div id="escriptori_taxes_tramits" class="escriptori_detall">
+	
+</div>
+<!-- /escriptori_taxes_tramits -->
 
 <!-- escriptori_formularis_tramits -->
 <div id="escriptori_formularis_tramits" class="escriptori_detall">

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -71,9 +73,7 @@ public class TramiteBackController {
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	Long idTramite = new Long(request.getParameter("id"));
     	
-    	try {
-    		
-			// Idiomas    	
+    	try {    		    	
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> idiomas = idiomaDelegate.listarLenguajes();			
     		Tramite tramite = DelegateUtil.getTramiteDelegate().obtenerTramite(idTramite);
@@ -95,11 +95,17 @@ public class TramiteBackController {
     		resultats.put("item_codivuds_tramit", tramite.getCodiVuds());
     		resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());    		
     		resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
+    		resultats.put("item_taxes", procedimiento.getTaxa());
+    		resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());    		    		
     		
 			// Idiomas
-    		for ( String idioma : idiomas )
-    			resultats.put(idioma, (TraduccionTramite) tramite.getTraduccion(idioma) );		
-    		
+    		for ( String idioma : idiomas ) {
+    			resultats.put(idioma, (TraduccionTramite) tramite.getTraduccion(idioma));
+    			//TraduccionUA traduccionUA = ((TraduccionUA) tramite.getOrganCompetent().getTraduccion(idioma));
+    			String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);    			
+    			resultats.put("ua_" + idioma, nombreUA);
+    		}
+    	
     		// Documentos
     		Set<DocumentTramit> listaDocumentos = tramite.getDocsInformatius();
     		Set<DocumentTramit> listaFormularios = tramite.getFormularios();
@@ -238,6 +244,13 @@ public class TramiteBackController {
 			}
 			
 			tramite.setCodiVuds(request.getParameter("item_id_codivuds_tramit"));						 
+						
+			Scanner scanner = new Scanner( request.getParameter("tramits_item_organ_id") );
+
+			if ( scanner.hasNextLong() ) {
+				UnidadAdministrativa unidadAdministrativa = DelegateUtil.getUADelegate().obtenerUnidadAdministrativa( scanner.nextLong() );
+				tramite.setOrganCompetent( unidadAdministrativa );				
+			}
 			
 			// Idiomas
 			TraduccionTramite traduccionTramite;			
@@ -266,7 +279,7 @@ public class TramiteBackController {
 				traducciones.put(lang, traduccionTramite);				
 			}
 			
-			tramite.setTraduccionMap(traducciones);
+			tramite.setTraduccionMap(traducciones);					
 			// Fin idiomas
 			
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
@@ -458,5 +471,4 @@ public class TramiteBackController {
 
 		return resultatStatus;
 	}	
-	
 }
