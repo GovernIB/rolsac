@@ -272,7 +272,7 @@ SearchNormativa {
 			feedUrl.append("&any_ini=").append(anyo).append("&any_fin=").append(anyo);
 			feedUrl.append("&num_ini=").append(num).append("&num_fin=").append(num);
 		} else {
-			feedUrl.append("&any_ini=").append(fsearch.getFecha()).append("&any_fin=").append(fsearch.getFecha());
+			feedUrl.append("&fec_ini=").append(fsearch.getFecha()).append("&fec_fin=").append(fsearch.getFecha());
 		}
 
 		try {
