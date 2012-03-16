@@ -3252,7 +3252,7 @@
 		        		<legend><spring:message code='tramit.taxes'/></legend>
 		        		<div class="modul_continguts mostrat">
 			        		<!-- modulTaxes -->
-			        		<div class="modulFormularisTramit multilang">			        		
+			        		<div class="modulTaxesTramits multilang">			        		
 	                            <div class="seleccionats">
 	                                <div class="seleccionat cajaIdioma ca">
 	                                    <p class="info"><spring:message code='txt.noHiHaTaxesRelacionades'/>.</p>
@@ -3276,7 +3276,7 @@
 	                                </div>                                
 	                                
 	                                <div class="btnGenerico">
-	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixFormulari'/></span></span></a>
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixTaxa'/></span></span></a>
 	                                </div>
 	                            </div>                                  
 			        		</div>

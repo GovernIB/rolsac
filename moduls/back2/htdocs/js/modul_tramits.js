@@ -92,13 +92,16 @@ function CModulTramit(){
 		$("#tramit_item_data_caducitat").val("");
 				
 		$("#id_procediment_tramit").attr("value",  $("#item_id").val() );
-				
+			
+		$("#tramits_item_organ_id").val($("#item_organ_id").val());
+	 	$("#tramits_item_organ_ca").val($("#item_organ").val());
+	 	  
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_tramits_elm.fadeIn(300, function() {
 				//Ocultar el botón "eliminar" en la creación
 				// y los módulos de documentos y formularios
-				escriptori_tramits_elm.find(".btnEliminar").hide();			
+				escriptori_tramits_elm.find(".btnEliminar").hide();
 				escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
 				escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();				
 			});			
@@ -335,12 +338,14 @@ function CEscriptoriTramit(){
 		$("#tramit_item_data_vuds").val( datos.tramit_item_data_vuds );
 		$("#item_moment_tramit").val( datos.item_moment_tramit );
 		$("#item_validacio_tramit").val( datos.item_validacio_tramit ); 
+		$("#tramits_item_organ_id").val( datos.tramits_item_organ_id );
 		
 		// Bloque de pestanyas de idiomas
         idiomas = datos.idiomas;
         
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
+			var idiomaUA = "ua_" + idioma;
 			
 			if (datos[idioma] != null) {
 				$("#item_nom_tramit_" + idioma).val(printStringFromNull(datos[idioma]["nombre"]));
@@ -349,9 +354,12 @@ function CEscriptoriTramit(){
 				$("#item_documentacio_tramit_" + idioma).val(printStringFromNull(datos[idioma]["documentacion"]));
 				$("#item_termini_tramit_" + idioma).val(printStringFromNull(datos[idioma]["plazos"]));
 				$("#item_lloc_tramit_" + idioma).val(printStringFromNull(datos[idioma]["lugar"]));
-				$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));
+				$("#item_observacions_tramit_" + idioma).val(printStringFromNull(datos[idioma]["observaciones"]));								
 			}
-		}
+							
+			if (datos[idiomaUA] != null) 
+				$("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));			
+		}		
 		// Fin bloque de pestañas de idiomas
 		
 		// Mostrar bloque de ventanilla única según la información del procedimiento
@@ -360,10 +368,16 @@ function CEscriptoriTramit(){
 		else
 			escriptori_tramits_elm.find(".modulFinestretaUnica").hide();		
 			
+		// Mostrar módulo de tasas según la información del procedimiento
+		if (datos.item_taxes == "1")
+			escriptori_tramits_elm.find("#modul_taxes_tramits").show();
+		else
+			escriptori_tramits_elm.find("#modul_taxes_tramits").hide();
+				
 		// Cargar documentos, formularios y tasas
 		ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
-		ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);
-		//ModulTaxesTramit.inicializarTaxes()		
+		ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);		
+		//ModulTaxesTramit.inicializarTaxes();		
     }
     
     this.editarTramit = function( el ) {
@@ -387,14 +401,11 @@ function CEscriptoriTramit(){
                 if (data.idTramit > 0) {
                 	
                     escriptori_detall_elm.fadeOut(300, function() {
-                        escriptori_tramits_elm.fadeIn(300, function() {                         									
-                        					            	// Mostrar el botón "eliminar" en la edición
-                        					                escriptori_tramits_elm.find(".btnEliminar").show(function() {
-                        					                	escriptori_tramits_elm.find("#modul_documents").show(function() {
-                        					                		escriptori_tramits_elm.find("#modul_formularis").show();
-                        					                	});	
-                        					                });
-                        								});
+                        escriptori_tramits_elm.fadeIn(300, function() {                        	
+            				escriptori_tramits_elm.find(".btnEliminar").show();
+            				escriptori_tramits_elm.find("div#modul_documents_tramits").show();
+            				escriptori_tramits_elm.find("div#modul_formularis_tramits").show();				                        	
+                        });
                     });   
                     
                     EscriptoriTramit.pintar(data);
