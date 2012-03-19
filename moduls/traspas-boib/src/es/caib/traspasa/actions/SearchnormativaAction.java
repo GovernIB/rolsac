@@ -49,7 +49,7 @@ public class SearchnormativaAction extends Action {
     	return mapping.findForward("successError");
     }
     
-    if (bdcons.getNumeroNormativas().equals("1")) {
+    if (bdcons.getNumeroNormativas().equals("1") && bdcons.getNormativabean() != null) {
       request.setAttribute("APPTRS_normativa",bdcons.getNormativabean());
       return mapping.findForward("successOne");
     } else {
