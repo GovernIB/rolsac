@@ -16,6 +16,7 @@ $(document).ready(function() {
 	// INICIEM
 	Error = new CError();
 	Detall = new CDetall(false);
+	Auditoria = new ModulAuditories();
 	
 	Detall.iniciar();
 	
@@ -31,6 +32,8 @@ function CDetall(soloFicha){
 	this.extend(soloFicha);
 
 	var that = this;
+	this.tipusAuditoria = 'unitat';
+
 	var materias = "";
 	
 	this.iniciar = function() {
@@ -244,6 +247,10 @@ function CDetall(soloFicha){
                     });
 				} else {
 					Detall.pintar(dada);
+					if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
+						//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
+						Auditoria.busca(that.tipusAuditoria, itemID);
+					}
 				}
 			}
 		});

@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
 
-	// El bot√≥n de guardar est√° inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
+	// El botÛn de guardar est· inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
 	jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
@@ -47,8 +47,11 @@ function DetallBase(soloFicha, reglasFormulario){
     
     this.idiomas = ["es","ca","en","de","fr"];
 
-	// Url de la previsualizaci√≥n (tiene que sobreescribirse al extender la clase).
+	// Url de la previsualizacion (tiene que sobreescribirse al extender la clase).
 	this.urlPrevisualizar = null;
+	
+	// Tipo de auditoria
+	this.tipusAuditoria = null;
 
 
 	// Preparar reglas de validacion del formulario.
@@ -121,7 +124,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el bot√≥n de guardar.
+		// Habilitamos el botÛn de guardar.
 		jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
 	}
 
@@ -142,7 +145,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	/**
-	 * Inicia la eliminaci√≥n de un item confirmando la operaci√≥n.
+	 * Inicia la eliminaciÛn de un item confirmando la operaciÛn.
 	 */
 	this.eliminar = function() {
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
@@ -152,7 +155,7 @@ function DetallBase(soloFicha, reglasFormulario){
 
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el bot√≥n de guardar.
+		// Deshabilitamos inicialmente el botÛn de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
@@ -183,6 +186,10 @@ function DetallBase(soloFicha, reglasFormulario){
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
 						} else {
 							Detall.pintar(data);
+							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
+								//Existe auditoria para el detalle y se ha cargado el objeto de auditorÌas
+								Auditoria.busca(that.tipusAuditoria, itemID);
+							}
 						}
 					}
 				});

@@ -33,6 +33,7 @@ $(document).ready(function() {
 	Llistat = new CLlistat();
 	Detall = new CDetall();
 	Error = new CError();
+	Auditoria = new ModulAuditories();
 
 	Detall.iniciar();
     // Mostrar detall?
@@ -310,6 +311,7 @@ function CDetall(){
 	this.extend = DetallBase;
 	this.extend(false, FormulariDades);
 	var that = this;
+	this.tipusAuditoria = 'fitxa';
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this.guarda = function() {

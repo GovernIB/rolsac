@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 <link href='<c:url value="/css/normativa.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_afectacions.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
@@ -14,6 +15,7 @@
 <script type="text/javascript" src="<c:url value='/js/normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 
     <script type="text/javascript">
     <!--
@@ -24,7 +26,7 @@
         var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
         var pagCercaBoib = '<c:url value="/normativa/cercaBoib.do" />';
         var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
-        
+        var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagArrel = '<c:url value="/" />';
         
         var pagBOIB = "json/boibsJSON.php";
@@ -1863,16 +1865,19 @@
         </div>
         <!-- /modul -->
         
+	  <c:if test="${rolAdmin}">
         <!-- modul -->
-        <div class="modul auditorias">                
+        <div id="modulAuditories" class="modul auditorias">                
             <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
             <legend>AUDITORIES</legend>
             <div class="modul_continguts mostrat">
+               <p class="executant"><spring:message code='txt.carregant'/></p>
+             <%--
                 <table>
                     <thead>
                         <th class="usuario"><div>USUARI</div></th>
-                            <th class="fecha"><div>DATA</div></th>
-                            <th class="operacion"><div>OPERACIÓ</div></th>
+                        <th class="fecha"><div>DATA</div></th>
+                        <th class="operacion"><div>OPERACIÓ</div></th>
                     </thead>                    
                     <tbody>
                         <tr>
@@ -1892,10 +1897,12 @@
                         </tr>
                     </tbody>
                 </table>
+                --%>
             </div>
         </div>
         <!-- /modul -->
-        
+      </c:if>
+
     </div>
     <!-- /modulPrincipal -->
 

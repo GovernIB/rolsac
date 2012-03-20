@@ -31,6 +31,7 @@ $(document).ready(function() {
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
 	Error = new CError();
+	Auditoria = new ModulAuditories();
 	
     Detall.iniciar();
     // Mostrar detall?
@@ -321,7 +322,9 @@ function CDetall(){
 	this.extend();
 	
     var that = this;
-    
+
+	this.tipusAuditoria = 'procediment';
+	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this._baseGuarda = this.guarda;	
 	this.guarda = function() {

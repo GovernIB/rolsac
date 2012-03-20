@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 <link href='<c:url value="/css/fitxes.css"/>' rel="stylesheet" type="text/css" media="screen" />    
 <link href='<c:url value="/css/modul_seccions_ua.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_ua_arbre.css"/>' rel="stylesheet" type="text/css" media="screen" />
@@ -25,6 +26,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 
 <script type="text/javascript">
    // accesos
@@ -36,6 +38,7 @@
    var pagEsborrar = '<c:url value="/fitxainf/esborrarFitxa.do" />';
    var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
+   var pagAuditories = '<c:url value="/auditories/llistat.do" />';
 
    // texts
    var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -863,38 +866,43 @@
             </div>
             <!-- /modul -->
             
-            <!-- modul -->
-            <div class="modul auditorias">                
-                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>AUDITORIES</legend>
-                <div class="modul_continguts mostrat">
-                    <table>
-                        <thead>
-                            <th class="usuario"><div>USUARI</div></th>
-                            <th class="fecha"><div>DATA</div></th>
-                            <th class="operacion"><div>OPERACIÓ</div></th>
-                        </thead>                    
-                        <tbody>
-                            <tr>
-                                <td class="usuario"><div>rsanz</div></td>
-                                <td class="fecha"><div>16/01/2012</div></td>
-                                <td class="operacion"><div>Modificació</div></td>
-                            </tr>
-                            <tr>
-                                <td class="usuario"><div>jfernandez</div></td>
-                                <td class="fecha"><div>16/01/2012</div></td>
-                                <td class="operacion"><div>Modificació</div></td>
-                            </tr>
-                            <tr>
-                                <td class="usuario"><div>flopez</div></td>
-                                <td class="fecha"><div>16/01/2012</div></td>
-                                <td class="operacion"><div>Alta</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- /modul -->
+		  <c:if test="${rolAdmin}">
+	        <!-- modul -->
+	        <div id="modulAuditories" class="modul auditorias">                
+	            <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	            <legend>AUDITORIES</legend>
+	            <div class="modul_continguts mostrat">
+	               <p class="executant"><spring:message code='txt.carregant'/></p>
+	             <%--
+	                <table>
+	                    <thead>
+	                        <th class="usuario"><div>USUARI</div></th>
+	                        <th class="fecha"><div>DATA</div></th>
+	                        <th class="operacion"><div>OPERACIÓ</div></th>
+	                    </thead>                    
+	                    <tbody>
+	                        <tr>
+	                            <td class="usuario"><div>rsanz</div></td>
+	                            <td class="fecha"><div>16/01/2012</div></td>
+	                            <td class="operacion"><div>Modificació</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="usuario"><div>jfernandez</div></td>
+	                            <td class="fecha"><div>16/01/2012</div></td>
+	                            <td class="operacion"><div>Modificació</div></td>
+	                        </tr>
+	                        <tr>
+	                            <td class="usuario"><div>flopez</div></td>
+	                            <td class="fecha"><div>16/01/2012</div></td>
+	                            <td class="operacion"><div>Alta</div></td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	                --%>
+	            </div>
+	        </div>
+	        <!-- /modul -->
+      </c:if>
         </div>
         <!-- /modulPrincipal -->        
         <!-- modulLateral -->

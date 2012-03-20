@@ -29,6 +29,7 @@ $(document).ready(function() {
 	Error = new CError();
 	Llistat = new CLlistat();	
 	Detall = new CDetall();
+	Auditoria = new ModulAuditories();
 	
 	Detall.iniciar();
     // Mostrar detall?
@@ -639,6 +640,8 @@ function CDetall(){
 	this.extend();
 	
 	var that = this;
+	
+	this.tipusAuditoria = 'normativa';
 	
 	this.iniciar = function() {			
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos

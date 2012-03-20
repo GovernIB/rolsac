@@ -798,6 +798,14 @@ div.table div.tbody div.td a:hover{
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias{
     padding: 0;
 }
+
+.escriptori_detall .grupoModulosFormulario div.modul.auditorias{
+    padding: 0;
+}
+#modulAuditories .modul_continguts {
+	display:none;
+}
+
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias legend{
     padding: 25px 0 0 21px;
 }

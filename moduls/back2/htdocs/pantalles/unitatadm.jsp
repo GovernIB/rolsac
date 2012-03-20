@@ -2,7 +2,7 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
-
+<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
 	<link href="<c:url value='/css/modul_seccions_fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />        
@@ -780,6 +780,46 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+
+			  <c:if test="${rolAdmin}">
+		        <!-- modul -->
+		        <div id="modulAuditories" class="modul auditorias">                
+		            <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+		            <legend>AUDITORIES</legend>
+		            <div class="modul_continguts amagat">
+		               <p class="executant"><spring:message code='txt.carregant'/></p>
+		             <%--
+		                <table>
+		                    <thead>
+		                        <th class="usuario"><div>USUARI</div></th>
+		                        <th class="fecha"><div>DATA</div></th>
+		                        <th class="operacion"><div>OPERACIÓ</div></th>
+		                    </thead>                    
+		                    <tbody>
+		                        <tr>
+		                            <td class="usuario"><div>rsanz</div></td>
+		                            <td class="fecha"><div>16/01/2012</div></td>
+		                            <td class="operacion"><div>Modificació</div></td>
+		                        </tr>
+		                        <tr>
+		                            <td class="usuario"><div>jfernandez</div></td>
+		                            <td class="fecha"><div>16/01/2012</div></td>
+		                            <td class="operacion"><div>Modificació</div></td>
+		                        </tr>
+		                        <tr>
+		                            <td class="usuario"><div>flopez</div></td>
+		                            <td class="fecha"><div>16/01/2012</div></td>
+		                            <td class="operacion"><div>Alta</div></td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+		                --%>
+		            </div>
+		        </div>
+		        <!-- /modul -->
+	      </c:if>
+            
+            
         </div>
         <!-- /modulPrincipal -->
         
@@ -1340,6 +1380,7 @@
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
     
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
@@ -1351,6 +1392,7 @@
         var pagSeccionsFitxes = '<c:url value="/unitatadm/llistatFitxesUA.do" />'; 
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
+        var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagArrel = '<c:url value="/" />';    
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
