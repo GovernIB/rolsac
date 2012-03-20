@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.model.dto;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -19,16 +20,17 @@ public class NormativaDTO implements ValueObject, Comparable {
     private String tipologia;
     private Date fechaDate; //para el compareTo
     private Boolean caducat;
+    private String registro;
 	
     public NormativaDTO() {
     	super();
     }
-    
+
 	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat) {
 		
 	    super();
-	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	    
+	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	    this.id = id;
 	    this.numero = numero;
 	    this.titulo = titulo;
@@ -38,6 +40,11 @@ public class NormativaDTO implements ValueObject, Comparable {
 	    this.tipologia = tipologia;
 	    this.fecha_boletin = fecha_boletin != null ? df.format(fecha_boletin) : "";
 	    this.caducat = caducat;
+	}
+
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat, String registro) {
+		this(id, numero, titulo, fecha, fecha_boletin, tipo, tipologia, caducat);
+		this.registro = registro;
 	}
 
 	/**
@@ -229,6 +236,14 @@ public class NormativaDTO implements ValueObject, Comparable {
 
 	public Boolean getCaducat() {
 		return caducat;
+	}
+
+	public void setRegistro(String registro) {
+		this.registro = registro;
+	}
+
+	public String getRegistro() {
+		return registro;
 	}
 
 	

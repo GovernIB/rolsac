@@ -48,6 +48,10 @@ import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
+import org.ibit.rol.sac.persistence.eboib.EBoibSearchNormativa;
+import org.ibit.rol.sac.persistence.eboib.SearchNormativa;
+import org.ibit.rol.sac.persistence.eboib.TrListadoNormativaLocalBean;
+import org.ibit.rol.sac.persistence.eboib.TrNormativaLocalBean;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -60,7 +64,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
-
 
 @Controller
 @RequestMapping("/normativa/")
@@ -90,7 +93,13 @@ public class NormativaBackController {
         if (session.getAttribute("unidadAdministrativa")!=null){
             model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
             model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa());            
-        } 		
+        } 	
+        
+        String traspasboib = System.getProperty("es.caib.rolsac.traspasboib");
+        if (traspasboib == null) { 
+        	traspasboib = "N";
+        }
+        model.put("traspasboib", traspasboib);
         
         //Listas para el buscador
         try {
@@ -262,6 +271,80 @@ public class NormativaBackController {
 	}
 
 
+	@RequestMapping(value = "/cercaBoib.do", method = POST)
+	public @ResponseBody Map<String, Object> llistatEnviamentsBoib(HttpServletRequest request, HttpSession session)  {
+
+		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		
+		String idioma = request.getLocale().getLanguage();
+
+		//TODO: ordenación
+		//Obtenemos la ordenación por parámetro
+		String campoOrdenacion = request.getParameter("ordreCamp");
+		String orden = request.getParameter("ordreTipus");
+		
+		//Realizar la consulta y obtener resultados
+		SearchNormativa bdcons = new EBoibSearchNormativa(request.getParameter("numeroboletin"), request.getParameter("numeroregistro"), request.getParameter("fecha"));
+		bdcons.makeSearch();
+		
+		/*
+		if ((bdcons.getNumeroNormativas() == -1) {
+			return mapping.findForward("successError");
+		}
+		*/
+		
+		if (bdcons.getNumeroNormativas() > 0) {
+			llistaNormativesDTO = pasarListaEboibADTO(bdcons.getListadonormativas(), idioma);
+		}
+		
+		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("nodes", llistaNormativesDTO);
+
+		return resultats;
+	}
+
+
+	@RequestMapping(value = "/detallBoib.do", method = POST)
+	public @ResponseBody Map<String, Object> detallBoib(HttpServletRequest request, Map<String, Object> model) {
+			
+	    Map<String, Object> normativaDetall = new HashMap<String, Object>();
+	        
+		SearchNormativa bdcons = new EBoibSearchNormativa(null, null, null);
+        bdcons.makeSearchFromBoibRegistro(request.getParameter("id"));
+        
+        if (bdcons.getNumeroNormativas() == 1) {
+	        TrNormativaLocalBean normativa = bdcons.getNormativabean();
+	        
+        	//Campos por idioma
+	        normativaDetall.put("idioma_ca_titol", normativa.getTra_titulo_c());
+	        normativaDetall.put("idioma_ca_enllac", normativa.getTra_enlace_c());
+	        normativaDetall.put("idioma_ca_apartat", normativa.getTra_apartado_c());
+	        normativaDetall.put("idioma_ca_pagini", normativa.getTra_paginaInicial_c());
+	        normativaDetall.put("idioma_ca_pagfin", normativa.getTra_paginaFinal_c());
+	        	
+	        normativaDetall.put("idioma_es_titol", normativa.getTra_titulo_v());
+	        normativaDetall.put("idioma_es_enllac", normativa.getTra_enlace_v());
+	        normativaDetall.put("idioma_es_apartat", normativa.getTra_apartado_v());
+	        normativaDetall.put("idioma_es_pagini", normativa.getTra_paginaInicial_v());
+	        normativaDetall.put("idioma_es_pagfin", normativa.getTra_paginaFinal_v());
+	        	
+	        
+	        normativaDetall.put("numero", normativa.getNumeroboib());
+	        normativaDetall.put("butlleti_id", normativa.getIdBoletin());
+	        normativaDetall.put("butlleti", normativa.getNombreBoletin());
+	        normativaDetall.put("data_butlleti", normativa.getFechaBoletin() != null ? DateUtils.formatearddMMyyyy(normativa.getFechaBoletin()) : null);
+	        normativaDetall.put("registre", normativa.getValorRegistro());
+	        normativaDetall.put("validacio", normativa.getValidacion());
+	        
+        } else {
+        	normativaDetall.put("error", bdcons.getMensajeavisobean().getCabecera() + ": " + bdcons.getMensajeavisobean().getSubcabecera());
+        }
+
+        return normativaDetall;
+	}
+
+	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
 			
@@ -300,9 +383,8 @@ public class NormativaBackController {
         		TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
         		
     	        normativaDetall.put("idioma_" + idioma + "_titol", traNorm != null ? traNorm.getTitulo() : "");
-    	        //En Back2 los campos idioma_*_enllac no existe y idioma_*_apartat no existen, item_apartat no es multiidioma
-    	        //normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
-    	        //normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
+    	        normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
+    	        normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
     	        normativaDetall.put("idioma_" + idioma + "_pagini", traNorm != null ? traNorm.getPaginaInicial() : "");
     	        normativaDetall.put("idioma_" + idioma + "_pagfin", traNorm != null ? traNorm.getPaginaFinal() : "");
     	        if (normativaLocal)
@@ -491,9 +573,8 @@ public class NormativaBackController {
         		}
 
         		traNorm.setTitulo(valoresForm.get("item_titol_" + idioma));
-        		//Campos inexistentes en el Back2
-        		//traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
-        		//traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
+        		traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
+        		traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
         		if (valoresForm.get("item_pagina_inicial_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_inicial_" + idioma)))
         			traNorm.setPaginaInicial(ParseUtil.parseInt(valoresForm.get("item_pagina_inicial_" + idioma)));
 
@@ -504,12 +585,10 @@ public class NormativaBackController {
         		//traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
 
         		//Responsable sólo en normativa externa
-        		//Campo comentado en Back2
-        		/*
         		if (!normativaLocal) {        				
         			((TraduccionNormativaExterna)traNorm).setResponsable(valoresForm.get("item_responsable_" + idioma));
         		}
-        		*/
+
         		//Archivo
         		FileItem fileItem = ficherosForm.get("item_arxiu_" + idioma);
         		if ( fileItem.getSize() > 0 ) {
@@ -731,6 +810,42 @@ public class NormativaBackController {
 		return resultats;
 		
 	}	
+
+
+	/**
+	 * Obtiene una lista de NormativaDTO a partir de una lista de envíos de eboib
+	 * @param listadonormativas
+	 * @param idioma
+	 * @return
+	 */
+	private List<NormativaDTO> pasarListaEboibADTO(List<TrListadoNormativaLocalBean> listadonormativas, String idioma) {
+
+		List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
+		
+		for (TrListadoNormativaLocalBean normativa : listadonormativas) {
+
+			//Retirar posible enlace incrustado en titulo
+			llistaNormativesDTO.add(
+						new NormativaDTO(
+								0, 
+								Long.parseLong(normativa.getBoib()), 
+								normativa.getTitulo(), 
+								null,
+								normativa.getFechaBoletin(),
+								null,
+								"BOIB",
+								true,
+								normativa.getRegistro()
+								)
+					);
+		}
+		
+		return llistaNormativesDTO;
+
+	
+	}
+
+	
 	
 	/**
 	 * Obtiene una lista de NormativaDTO a partir de una lista de Normativa.

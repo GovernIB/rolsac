@@ -4,7 +4,9 @@
 <link href='<c:url value="/css/normativa.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_afectacions.css"/>' rel="stylesheet" type="text/css" media="screen" />
 <link href='<c:url value="/css/modul_procediments.css"/>' rel="stylesheet" type="text/css" media="screen" />
+<%-- obsoleto? borrar
 <link href='<c:url value="/css/modul_traspas.css"/>' rel="stylesheet" type="text/css" media="screen" />
+ --%>
 <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
@@ -20,6 +22,8 @@
         var pagDetall = '<c:url value="/normativa/pagDetall.do" />';
         var pagGuardar = '<c:url value="/normativa/guardar.do" />';
         var pagEliminar = '<c:url value="/normativa/eliminar.do" />';
+        var pagCercaBoib = '<c:url value="/normativa/cercaBoib.do" />';
+        var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
         
         var pagArrel = '<c:url value="/" />';
         
@@ -69,6 +73,7 @@
         var txtLocal = "<spring:message code='txt.local'/>";
         var txtExterna = "<spring:message code='txt.externa'/>";
         var txtBOIB = "BOIB";
+        var txtNumRegistro = "Registre";
         
         
         var txtCercant = "<spring:message code='txt.cercant'/>";
@@ -199,7 +204,59 @@
                         "tipus": "<spring:message code='normativa.formulari.titol_ca.no_nomes_numeros'/>"
                     }
             },
-            /*{
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_titol_es",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 230,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_titol_en",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 230,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_titol_de",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 230,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_titol_fr",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 230,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    }
+            },
+            {
                 "modo": "individual",
                 "etiqueta": "id",
                 "etiquetaValor": "item_enllas_ca",
@@ -211,11 +268,11 @@
                         "mostrar": "no",
                         "abreviat": "no"
                     },
-            },*/
+            },
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_apartat",
+                "etiquetaValor": "item_enllas_es",
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
@@ -228,7 +285,7 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_responsable",
+                "etiquetaValor": "item_enllas_en",
                 "obligatori": "no",
                 "tipus": "alfanumeric",
                 "caracters":
@@ -241,7 +298,163 @@
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_pagina_inicial",
+                "etiquetaValor": "item_enllas_de",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_enllas_fr",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_ca",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_es",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_en",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_de",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_apartat_fr",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_ca",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_es",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_en",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_de",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_responsable_fr",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 480,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_ca",
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -254,11 +467,79 @@
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_inicial_ca.tipus'/>"
                     }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_es",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_es.tipus'/>"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_en",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_en.tipus'/>"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_de",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_de.tipus'/>"
+                    }
+            },
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_inicial_fr",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_inicial_fr.tipus'/>"
+                    }
             },            
             {
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_pagina_final",
+                "etiquetaValor": "item_pagina_final_ca",
                 "obligatori": "no",
                 "tipus": "numeric",
                 "caracters":
@@ -270,6 +551,74 @@
                 "error":
                     {
                         "tipus": "<spring:message code='normativa.formulari.pagina_final_ca.tipus'/>"
+                    }
+            },            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_es",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_es.tipus'/>"
+                    }
+            },            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_en",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_en.tipus'/>"
+                    }
+            },            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_de",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_de.tipus'/>"
+                    }
+            },            
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_pagina_final_fr",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 18,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='normativa.formulari.pagina_final_fr.tipus'/>"
                     }
             },    
 
@@ -381,10 +730,16 @@
         <li class="opcio C">            
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
+
         <c:if test="${idUA > 0}">
             <li class="opcions nuevo">
                 <a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span><spring:message code='normativa.crea_nova_normativa'/></span></span></a>
             </li>
+	        <c:if test="${traspasboib == 'Y'}">
+	            <li class="opcio nuevo"><!--  qué es L C ... -->
+	                <a id="tabTraspasBoib" href="javascript:;">Traspàs del BOIB<!-- spring:message code='contenidos.normativas.traspaso.label'/ --></a>
+	            </li>
+	        </c:if>
         </c:if>
     </ul>
     <div id="resultats">
@@ -601,7 +956,74 @@
             <input type="hidden" value="DESC" class="ordreTipus" /> 
             <input type="hidden" value="id" class="ordreCamp" />
         </div>
+
+<c:if test="${traspasboib == 'Y'}">
+        <div class="resultats TL">
+            <div class="dades">
+                <p class="executant"><spring:message code='normativa.carregant_llistat_normativa'/></p>
+            </div>
+            <input type="hidden" value="0" class="pagPagina" /> 
+            <input type="hidden" value="DESC" class="ordreTipus" /> 
+            <input type="hidden" value="id" class="ordreCamp" />
+        </div>
+        <div class="resultats T">
+            <div id="cercadorTB">
+                <div id="cercadorTB_contingut">
+                    <div class="busquedaBasica">
+                        <h2><spring:message code='tab.cercador'/></h2>
+                    
+                        <div class="fila">
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="numeroboletinTB">N. Butlletí</label>
+                                </div>
+                                <div class="control">
+                                    <input id="numeroboletinTB" name="numeroboletinTB" type="text" />
+                                </div>                          
+                            </div>
+                            
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="numeroregistroTB">N. Registre</label>
+                                </div>
+                                <div class="control">
+                                    <input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
+                                </div>
+                            </div>
+
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="fechaTB">N. data</label>
+                                </div>
+                                <div class="control">
+                                    <input id="fechaTB" name="fechaTB" type="text" class="data" />
+                                </div>
+                            </div>
+                        	<div class="botonera">
+	                            <div class="boton btnGenerico">
+	                              <a id="btnLimpiarFormTB" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+	                            </div>
+	                            <div class="boton btnGenerico">
+	                             <a id="btnBuscarFormTB" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+	                            </div>
+	                        </div>
+
+                        </div>
+                    </div>
+                                        
+                </div>
+            </div>
+            <!-- /cercador -->
+            <div class="dades"></div>
+            <input type="hidden" value="0" class="pagPagina" /> 
+            <input type="hidden" value="DESC" class="ordreTipus" /> 
+            <input type="hidden" value="id" class="ordreCamp" />
+        </div>
+	<!-- /traspas_boib -->
+</c:if>
+
     </div>
+
 </div>
 <!-- /escriptori_contingut -->
 <!-- escriptori_detall -->
@@ -1211,10 +1633,36 @@
                                 <input id="item_registre" name="item_registre" type="text" class="nou" />
                             </div>
                         </div>
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_apartat"><spring:message code='camp.apartat'/></label></div>
-                            <div class="control">
-                                <input id="item_apartat" name="item_apartat" type="text" class="nou" />
+                        <div class="element t50p multilang">
+                          	<div class="campoIdioma ca">
+	                            <div class="etiqueta"><label for="item_apartat_ca"><spring:message code='camp.apartat'/></label></div>
+	                            <div class="control">
+	                                <input id="item_apartat_ca" name="item_apartat_ca" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma es">
+	                            <div class="etiqueta"><label for="item_apartat_es"><spring:message code='camp.apartat'/></label></div>
+	                            <div class="control">
+	                                <input id="item_apartat_es" name="item_apartat_es" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma en">
+	                            <div class="etiqueta"><label for="item_apartat_en"><spring:message code='camp.apartat'/></label></div>
+	                            <div class="control">
+	                                <input id="item_apartat_en" name="item_apartat_en" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma fr">
+	                            <div class="etiqueta"><label for="item_apartat_fr"><spring:message code='camp.apartat'/></label></div>
+	                            <div class="control">
+	                                <input id="item_apartat_fr" name="item_apartat_fr" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma de">
+	                            <div class="etiqueta"><label for="item_apartat_de"><spring:message code='camp.apartat'/></label></div>
+	                            <div class="control">
+	                                <input id="item_apartat_de" name="item_apartat_de" type="text" class="nou" />
+	                            </div>
                             </div>
                         </div>
                         <%--<div class="element t25p">
@@ -1242,16 +1690,68 @@
                     
                     <!-- fila -->
                     <div class="fila">
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_pagina_inicial"><spring:message code='camp.pagina_inicial'/></label></div>
-                            <div class="control">
-                                <input id="item_pagina_inicial" name="item_pagina_inicial" type="text" class="nou" />
+                        <div class="element t50p multilang">
+                          	<div class="campoIdioma ca">
+	                            <div class="etiqueta"><label for="item_pagina_inicial_ca"><spring:message code='camp.pagina_inicial'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_inicial_ca" name="item_pagina_inicial_ca" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma es">
+	                            <div class="etiqueta"><label for="item_pagina_inicial_es"><spring:message code='camp.pagina_inicial'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_inicial_es" name="item_pagina_inicial_es" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma en">
+	                            <div class="etiqueta"><label for="item_pagina_inicial_en"><spring:message code='camp.pagina_inicial'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_inicial_en" name="item_pagina_inicial_en" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma de">
+	                            <div class="etiqueta"><label for="item_pagina_inicial_de"><spring:message code='camp.pagina_inicial'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_inicial_de" name="item_pagina_inicial_de" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma fr">
+	                            <div class="etiqueta"><label for="item_pagina_inicial_fr"><spring:message code='camp.pagina_inicial'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_inicial_fr" name="item_pagina_inicial_fr" type="text" class="nou" />
+	                            </div>
                             </div>
                         </div>
-                        <div class="element t50p">
-                            <div class="etiqueta"><label for="item_pagina_final"><spring:message code='camp.pagina_final'/></label></div>
-                            <div class="control">
-                                <input id="item_pagina_final" name="item_pagina_final" type="text" class="nou" />
+                        <div class="element t50p multilang">
+                          	<div class="campoIdioma ca">
+	                            <div class="etiqueta"><label for="item_pagina_final_ca"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_ca" name="item_pagina_final_ca" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma es">
+	                            <div class="etiqueta"><label for="item_pagina_final_es"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_es" name="item_pagina_final_es" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma en">
+	                            <div class="etiqueta"><label for="item_pagina_final_en"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_en" name="item_pagina_final_en" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma de">
+	                            <div class="etiqueta"><label for="item_pagina_final_de"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_de" name="item_pagina_final_de" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma fr">
+	                            <div class="etiqueta"><label for="item_pagina_final_fr"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_fr" name="item_pagina_final_fr" type="text" class="nou" />
+	                            </div>
                             </div>
                         </div>
                     </div>
@@ -1311,10 +1811,36 @@
                 <legend>INFORMADOR</legend>
                 <div class="modul_continguts mostrat">
                     <div class="fila">                        
-                        <div class="element t99p">
-                            <div class="etiqueta"><label for="item_responsable"><spring:message code='camp.responsable'/></label></div>
-                            <div class="control">
-                                <input id="item_responsablea" name="item_responsable" type="text" class="nou" />
+                        <div class="element t99p multilang">
+                          	<div class="campoIdioma ca">
+	                            <div class="etiqueta"><label for="item_responsable_ca"><spring:message code='camp.responsable'/></label></div>
+	                            <div class="control">
+	                                <input id="item_responsable_ca" name="item_responsable_ca" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma es">
+	                            <div class="etiqueta"><label for="item_responsable_es"><spring:message code='camp.responsable'/></label></div>
+	                            <div class="control">
+	                                <input id="item_responsable_es" name="item_responsable_es" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma en">
+	                            <div class="etiqueta"><label for="item_responsable_en"><spring:message code='camp.responsable'/></label></div>
+	                            <div class="control">
+	                                <input id="item_responsable_en" name="item_responsable_en" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma de">
+	                            <div class="etiqueta"><label for="item_responsable_de"><spring:message code='camp.responsable'/></label></div>
+	                            <div class="control">
+	                                <input id="item_responsable_de" name="item_responsable_de" type="text" class="nou" />
+	                            </div>
+                            </div>
+                          	<div class="campoIdioma fr">
+	                            <div class="etiqueta"><label for="item_responsable_fr"><spring:message code='camp.responsable'/></label></div>
+	                            <div class="control">
+	                                <input id="item_responsable_fr" name="item_responsable_fr" type="text" class="nou" />
+	                            </div>
                             </div>
                         </div>                                    
                     </div>
@@ -1747,87 +2273,6 @@
     </div>
 </div-->
 <!-- /escriptori_previsualitza -->
-<!-- escriptori_traspas -->
-<!-- div id="escriptori_traspas">
-    <h2>Gestió del traspàs del BOIB</h2>
-    <div class="botonera dalt">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span>Torna al detall</span>
-                </span>
-            </a></li>
-        </ul>
-    </div>
-    <p>Use el cercador per a trobar la norma que dessitja traspassar.
-        Després simplement premi al títol de la mateixa per a importar totes
-        les dades.</p>
-
-    <div class="escriptori_items_llistat">
-
-        <div class="escriptori_items_cercador">
-            <h3>Cercador</h3>
-            <div class="fila">
-                <div class="element t18">
-                    <div class="etiqueta">
-                        <label for="cerca_boib_titol">Títol del butlletí</label>
-                    </div>
-                    <div class="control">
-                        <input id="cerca_boib_titol" name="cerca_boib_titol" type="text"
-                            maxlength="100" class="titol" />
-                    </div>
-                </div>
-                <div class="element t10">
-                    <div class="etiqueta">
-                        <label for="cerca_boib_numero">Número del butlletí</label>
-                    </div>
-                    <div class="control">
-                        <input id="cerca_boib_numero" name="cerca_boib_numero" type="text"
-                            maxlength="10" class="numero" />
-                    </div>
-                </div>
-                <div class="element t10">
-                    <div class="etiqueta">
-                        <label for="cerca_boib_registre">Número de Registre</label>
-                    </div>
-                    <div class="control">
-                        <input id="cerca_boib_registre" name="cerca_boib_registre"
-                            type="text" maxlength="10" class="registre" />
-                    </div>
-                </div>
-                <div class="element t10">
-                    <div class="etiqueta">
-                        <label for="cerca_boib_data">Data del butlletí</label>
-                    </div>
-                    <div class="control">
-                        <input id="cerca_boib_data" name="cerca_boib_data" type="text"
-                            class="data" />
-                    </div>
-                </div>
-                
-                
-            </div>
-            <div class="botonera">
-                <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span>
-                </span>
-                </a>
-            </div>
-        </div>
-
-        <div class="dades"></div>
-        <input type="hidden" value="0" class="pagPagina" /> <input
-            type="hidden" value="DESC" class="ordreTipus" /> <input
-            type="hidden" value="id" class="ordreCamp" />
-    </div>
-
-    <div class="botonera baix">
-        <ul>
-            <li><a href="javascript:;" class="btn torna"><span><span>Torna
-                            al detall</span>
-                </span>
-            </a></li>
-        </ul>
-    </div>
-</div-->
-<!-- /escriptori_traspas -->
 
 <!-- escriptori_afectacions -->
 <div id="escriptori_afectacions">

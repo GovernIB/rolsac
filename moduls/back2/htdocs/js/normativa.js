@@ -71,12 +71,13 @@ var itemID_ultim = 0;
 function CLlistat(){	
 	this.extend = ListadoBase;		
 	this.extend();
-	
+
 	this.iniciar = function() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		$("#cerca_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });				
+		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
         
-		Llistat.carregar({});		
+		Llistat.carregar({});
 	}
 	
 	this.finCargaListado = function( opcions, data ){
@@ -344,6 +345,289 @@ function CLlistat(){
 			});
 		});
 	}
+	
+	// FUNCIONALITAT TRASPAS BOIB
+
+	var that = this;
+	jQuery("#tabTraspasBoib").bind("click",function(){that.tabTraspasBoib();});
+	jQuery("#btnBuscarFormTB").bind("click",function(){that.buscaTB();});
+	jQuery("#btnLimpiarFormTB").bind("click",function(){that.limpiaTB();});
+	
+	var cercador_traspas_elm = jQuery("#cercadorTB");
+	
+	// Cambia a la pestaña del buscador.
+	this.tabTraspasBoib = function(){
+		jQuery("#opcions .actiu").removeClass("actiu");
+		jQuery("#tabTraspasBoib").parent().addClass("actiu");
+		
+		opcio_unitat = "T";
+		
+		// resultats
+		resultats_elm.find("div.actiu").slideUp(300,function() {
+			jQuery(this).removeClass("actiu");
+			resultats_elm.find("div."+opcio_unitat).slideDown(300,function() {
+				jQuery(this).addClass("actiu");
+				
+				resultats_actiu_elm = resultats_elm.find("div.actiu:first");								
+			});
+		});
+	}
+
+	// Limpia el formulario de búsqueda.
+	this.limpiaTB = function(){
+        jQuery('#cercadorTB_contingut :input').each(limpiarCampo);
+	}
+
+	this.buscaTB = function(){
+
+		multipagina.setPaginaActual(0);
+		cercador_traspas_elm.find("input, select").attr("disabled", "disabled");
+		
+		resultats_dades_elm = resultats_actiu_elm.find("div.dades:first");
+		
+		// animacio
+		resultats_dades_elm.fadeOut(300, function() {
+			// pintem
+			codi_cercant = "<p class=\"executant\">" + txtCercantElements + "</p>";
+			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
+			
+				// events taula
+				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera página.
+				Llistat.carregarTB({});
+				
+			});
+		});
+	}
+	
+	this.carregarTB = function(opcions) {
+
+		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)		
+		
+		dataVars = "";
+		
+		pagPagina_elm = pagPagina_cercador_elm;
+		ordreTipus_elm = ordreTipus_cercador_elm;
+		ordreCamp_elm = ordreCamp_cercador_elm;
+		
+		// cercador
+		dataVars_cercador = "&numeroboletin=" + $("#numeroboletinTB").val();
+		dataVars_cercador += "&numeroregistro=" + $("#numeroregistroTB").val();
+		dataVars_cercador += "&fecha=" + $("#fechaTB").val();			
+			
+		// ordreTipus
+		if (typeof opcions.ordreTipus != "undefined") {
+			ordreTipus_elm.val(opcions.ordreTipus);
+		}
+		// ordreCamp
+		if (typeof opcions.ordreCamp != "undefined") {
+			ordreCamp_elm.val(opcions.ordreCamp);
+		}
+			
+		// paginacio
+		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
+			
+		// ordre
+		ordre_Tipus = ordreTipus_elm.val();
+		ordre_Camp = ordreCamp_elm.val();
+			
+		// variables
+		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+										
+		// ajax		
+		$.ajax({
+			type: "POST",
+			url: pagCercaBoib,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+				
+				if (!a_enllas) {
+					// missatge
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					// error
+					Error.llansar();
+				}
+				
+			},
+			success: function(data) {				
+				Llistat.finCargaListadoTB(opcions,data);
+			}
+		});
+	
+	}
+
+	// Cambia de página.
+	this.cambiaPaginaTB = function( pag ){
+		multipagina.setPaginaActual(pag-1);
+		pag_Pag = pag;
+		this.anar(pag, that.carregarTB);
+	}
+		
+	
+	
+	this.finCargaListadoTB = function( opcions, data ){
+		// total
+		resultats_total = parseInt(data.total,10);
+		
+		if (resultats_total > 0) {
+			
+			// minim per cercador
+			if (resultats_total > numCercadorMinim) {
+				opcions_elm.find("li.C").animate({
+					duration: "slow", width: 'show'
+					}, 300);
+			}
+			
+			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
+			
+			
+			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
+			if (resultats_total % pag_Res > 0){
+				ultimaPag++;
+			}
+			if (pag_Pag > ultimaPag) {
+				pag_Pag = ultimaPag;
+			}						
+			
+			resultatInici = ((pag_Pag*pag_Res)+1);
+			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
+			
+			//TODO: ordenació
+			ordre_T = ordre_Tipus;
+			ordre_C = ordre_Camp;
+			ordre_c1 = (ordre_C == "titol") ? " " + ordre_T : "";
+			ordre_c2 = (ordre_C == "registre") ? " " + ordre_T : "";
+			ordre_c3 = (ordre_C == "butlleti") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			
+			txt_ordenacio = "";
+			
+			if (resultats_total > 1) {
+			
+				txt_ordenats = (ordre_T == "ASC") ? txtOrdenades + " <em>" + txtAscendentment + "</em>" : txtOrdenades + " <em>" + txtDescendentment + "</em>";
+				
+				if (ordre_C == "id") {
+					txt_per = txtLlistaItem;
+				} else if (ordre_C == "numero") {
+					txt_per = txtNumero;
+				} else if (ordre_C == "tipo") {
+					txt_per = txtTipus;
+				} else {
+					txt_per = txtData;
+				}
+				
+				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
+			
+			}
+			
+			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+
+			/* per ara no hi ha ordenació
+			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
+			codi_cap2 = "<div class=\"th registre" + ordre_c2 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtNumRegistro + "</a></div>";			
+			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
+			codi_cap4 = "<div class=\"th fecha" + ordre_c4 + "\" role=\"columnheader\"><a class=\"fecha\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";
+			*/						
+			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
+			codi_cap2 = "<div class=\"th registre" + ordre_c2 + "\" role=\"columnheader\">" + txtNumRegistro + "</div>";			
+			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\">" + txtNumBoletin + "</div>";
+			codi_cap4 = "<div class=\"th fecha" + ordre_c4 + "\" role=\"columnheader\">" + txtFechaBoletin + "</div>";
+			
+			
+			// codi taula
+			codi_taula = "<div class=\"table llistat llistattrasllat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
+			
+			// codi cap + cuerpo
+			codi_taula += "<div class=\"thead\">";
+			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
+			codi_taula += "</div>";
+			codi_taula += "</div>";
+			codi_taula += "<div class=\"tbody\">";
+			
+			// codi cuerpo
+			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+				dada_node = this;
+				parClass = (i%2) ? " par": "";
+				caducat_titol_class = (dada_node.caducat) ? " normativa" : " normativaCaducada";
+				
+				codi_taula += '<div class="tr' + parClass + '" role="row">';
+				
+				codi_taula += '<div class="td titol ' + caducat_titol_class + ' role="gridcell">';
+				codi_taula += '<input type="hidden" value="' + dada_node.numero + 'X' + dada_node.registro + '" class="id" />';
+				codi_taula += '<a id="normativa_'+dada_node.numero + 'X' + dada_node.registro+'" href="javascript:void(0);" class="titol">' + dada_node.titulo + '</a>';
+				codi_taula += "</div>";
+				
+				codi_taula += "<div class=\"td registre\" role=\"gridcell\">" + dada_node.registro + "</div>";
+				codi_taula += "<div class=\"td numero\" role=\"gridcell\">" + dada_node.numero + "</div>";
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha_boletin + "</div>";
+				
+				codi_taula += "</div>";
+			});
+			
+			codi_taula += "</div>";
+			codi_taula += "</div>";
+			
+			if($.browser.opera) {
+				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
+			}
+			
+			// Instanciamos el navegador multipágina.					
+			multipagina.init({
+				total: resultats_total,
+				itemsPorPagina: pag_Res,
+				paginaActual: pag_Pag,
+				funcionPagina: "Llistat.cambiaPaginaTB"
+			});					
+			
+			codi_navegacio = multipagina.getHtml();
+			
+			// codi final
+			codi_final = codi_totals + codi_taula + codi_navegacio;
+		
+		} else {
+			
+			// no hi ha items
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
+			
+		}
+		
+		// animacio
+		dades_elm = resultats_elm.find("div.actiu:first div.dades:first");
+		dades_elm.fadeOut(300, function() {
+			// pintem
+			dades_elm.html(codi_final).fadeIn(300, function() {
+			
+				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
+				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.fichaTB(this);});
+                /* TODO por ahora no hay ordenación
+                // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
+                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                    Llistat.ordena(this,opcions);
+                });
+                */
+
+				// cercador
+				cercador_traspas_elm.find("input, select").removeAttr("disabled");
+				
+			});
+		});
+	}
+	
+	/**
+	 * Carga la ficha de un item del listado.
+	 * @param link Objeto <A> sobre el que se realizó la acción.
+	 */
+	this.fichaTB = function( link ){
+		// Obtenemos el id del item a partir del id del enlace.
+		itemID = jQuery(link).attr("id").split("_")[1];
+		Detall.carregarTB(itemID);
+		
+		//itemID_ultim = itemID;
+		//this.itemID = itemID;
+	}
+	
+	
 };
 
 // items array
@@ -381,6 +665,11 @@ function CDetall(){
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			
 			ul_idiomes_elm.bind("click",function(e){Detall.idioma(e);});			
+
+            // Solo mostramos los idiomas activos para los campos multi-idioma.
+            escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();            
+            escriptori_detall_elm.find(".element.multilang .campoIdioma:first-child").show().addClass("seleccionat");            
+			
 		}
 		
         // Sincronizar campos sin idioma en zona multi-idioma.   
@@ -470,11 +759,9 @@ function CDetall(){
 	this.tipologia = function(e) {
 		
 		if ($(this).val() == "B") {
-			$("#gestioTraspas").fadeIn(300);
 			modulAfectacions_pare_elm.fadeOut(300);
 			modulProcediments_pare_elm.fadeOut(300);
 		} else {
-			$("#gestioTraspas").fadeOut(300);
 			modulAfectacions_pare_elm.fadeIn(300);
 			modulProcediments_pare_elm.fadeIn(300);
 		}
@@ -503,7 +790,7 @@ function CDetall(){
 		$("#botonBorrarUA a").show();		
 
 		//Borrar valores de los campos
-		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select.nou").val("").end().find("h2:first").text(txtNouTitol);
+		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select.nou, div.modulDocuments input.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
 		//Establecer UA por defecto
 		$("#item_ua_id").val(idUaActual);
@@ -545,7 +832,6 @@ function CDetall(){
 		$("#modulLateral p.baix:first").removeClass("iPublicat");
 		
 
-		$("#gestioTraspas").hide();
 		modulAfectacions_pare_elm.show();
 		modulProcediments_pare_elm.show();
 		
@@ -579,13 +865,12 @@ function CDetall(){
 			var idioma = idiomas[i];
 			
 			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
-			//Campos inexistentes en el Back2
-			//$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
-			//$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
+			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
 			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
 			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
+			$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
 			//Campos comentados en Back2
-			//$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
 			//$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
 			
 			$("#item_arxiu_" + idioma).val("");
@@ -631,20 +916,16 @@ function CDetall(){
 		
 		if (dada_node.tipus == "B") {
 			
-			$("#gestioTraspas").show();
 			modulAfectacions_pare_elm.hide();
 			modulProcediments_pare_elm.hide();
 		
 		} else {
 			
-			$("#gestioTraspas").hide();
 			modulAfectacions_pare_elm.show();
 			modulProcediments_pare_elm.show();
 			
-			
 			// afectacions
 			ModulAfectacions.inicializarAfectacions(dada_node.afectacions);
-			
 			
 			// procediments
 			pro_seleccionats_elm = escriptori_detall_elm.find("div.modulProcediments div.listaOrdenable");
@@ -738,6 +1019,105 @@ function CDetall(){
 			}
 		});			
 	}
+	
+	//Métodos para traspaso BOIB
+
+	this.carregarTB = function(boibID){
+		//Cargamos los datos de un edicto del boib en una ficha vacía de normativa nueva
+
+		escriptori_contingut_elm.fadeOut(300, function() {
+
+			codi_carregant = "<div id=\"carregantDetall\"><p class=\"executant\">" + txtCarregantDetall + "</p></div>";
+			escriptori_elm.append(codi_carregant).slideDown(300, function() {
+
+				dataVars = "accio=carregar" + "&id=" + boibID;
+
+				// ajax
+				$.ajax({
+					type: "POST",
+					url: pagDetallBoib,
+					data: dataVars,
+					dataType: "json",
+					error: function() {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					},
+					success: function(data) {
+						if (typeof data.error != 'undefined') {
+							$("#carregantDetall").fadeOut(300, function() {
+								$(this).remove();
+								escriptori_contingut_elm.fadeIn(300);
+							});
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
+						} else {
+							Detall.pintarTB(data);
+						}
+					}
+				});
+			});
+		});
+
+		this.actualizaEventos();
+	}
+	
+	this.pintarTB = function(dades) {	
+		
+		Detall.nou();		
+
+		//Rellena el formulario con los datos de un elemento BOIB
+		dada_node = dades;
+		
+		$("#item_validacio").val(dada_node.validacio);
+
+		for (var i in idiomas) {		
+			var idioma = idiomas[i];
+			
+			$("#item_titol_" + idioma).val(nn(dada_node["idioma_" + idioma + "_titol"]));
+			$("#item_enllas_" + idioma).val(nn(dada_node["idioma_" + idioma + "_enllac"]));
+			$("#item_apartat_" + idioma).val(nn(dada_node["idioma_" + idioma + "_apartat"]));
+			$("#item_pagina_inicial_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagini"]));
+			$("#item_pagina_final_" + idioma).val(nn(dada_node["idioma_" + idioma + "_pagfin"]));
+			$("#item_responsable_" + idioma).val(nn(dada_node["idioma_" + idioma + "_responsable"]));
+			//Campos comentados en Back2
+			////$("#item_des_curta_" + idioma).val(nn(dada_node["idioma_" + idioma + "_observacions"]));
+			
+			$("#grup_arxiu_actual_" + idioma + " span").show();
+			$("#grup_arxiu_actual_" + idioma + " input").hide();
+			$("#grup_arxiu_actual_" + idioma + " label.eliminar").hide();
+			$("#grup_arxiu_actual_" + idioma + " a").hide();			
+						
+		}
+		
+		$("#item_numero").val(nn(dada_node.numero));
+		$("#item_butlleti_id").val(nn(dada_node.butlleti_id));
+		$("#item_butlleti").val(nn(dada_node.butlleti));
+		$("#item_registre").val(nn(dada_node.registre));
+		$("#item_data_butlleti").val(nn(dada_node.data_butlleti));
+		
+		if ($("#carregantDetall").size() > 0) {
+			
+			$("#carregantDetall").fadeOut(300, function() {
+				
+				$(this).remove();
+				
+				// array
+				Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
+				
+				escriptori_detall_elm.fadeIn(300);
+											
+			});
+			
+		} else {
+			
+			escriptori_contingut_elm.fadeOut(300, function() {
+				escriptori_detall_elm.fadeIn(300);
+			});
+		
+		}
+		
+	}
+	
+	
+	
 };
 
 

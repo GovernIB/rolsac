@@ -1,14 +1,14 @@
 @charset "utf-8";
 
-/* gestio traspas */
-
-#gestioTraspas { display:none; margin-left:1em; }
-
 /* llistats table */
 
 div.llistat div.thead div.titol { 
     width: 390px; 
     padding-left: 60px;
+}
+div.llistattrasllat div.thead div.titol { 
+    width: 450px; 
+    padding-left: 30px;
 }
 div.llistat div.thead div.numero { 
     width: 160px;
@@ -22,6 +22,9 @@ div.llistat div.thead div.tipologia {
 div.llistat div.thead div.data { 
     width:140px;
 }
+div.llistat div.thead div.registre { 
+    width: 160px;
+}
 
 div.llistat div.tbody div.titol { 
     line-height: 1.4em; 
@@ -31,6 +34,12 @@ div.llistat div.tbody div.titol {
     padding-left: 60px;     
     background: transparent url(../img/taula_llistat/normativa.gif) no-repeat 2em 1em;
 }
+
+div.llistattrasllat div.tbody div.titol { 
+    width: 450px; 
+    padding-left: 10px;
+}
+
 div.llistat div.tbody div.numero { 
     width: 160px;
     line-height: 1.4em;
@@ -45,6 +54,10 @@ div.llistat div.tbody div.tipologia {
 }
 div.llistat div.tbody div.data {
     width: 140px;
+    line-height: 1.4em;
+}
+div.llistat div.tbody div.registre { 
+    width: 160px;
     line-height: 1.4em;
 }
 
@@ -110,4 +123,152 @@ div.table div.tbody div.td a{
     width: 87%;
     display: block;
     text-align: justify;
+}
+
+
+/* traspàs boib */
+
+#cercadorTB_contingut { 
+    overflow:hidden;     
+    padding:1em; 
+    margin:0 auto;  
+}
+#cercadorTB h2 { 
+    font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
+    color: #333333;
+    text-transform: uppercase;  
+    margin: 5px 0 20px 0;
+}
+#cercadorTB div.fila { 
+    overflow:hidden; 
+    width:100%; 
+    padding:0; 
+    margin-bottom:1em;
+}
+#cercadorTB div.element {
+    overflow:hidden;
+    float: left;
+    height:54px;    
+}
+#cercadorTB .element.t6{
+    width: 5.9%;
+}
+#cercadorTB .element.t10{
+    width: 9.9%;
+}
+#cercadorTB .element.t13{
+    width: 12.9%;
+}
+#cercadorTB .element.t16{
+    width: 15.9%;
+}
+#cercadorTB .element.t21{
+    width: 20.9%;
+}
+#cercadorTB .element.t25{
+    width: 24.9%;
+}
+#cercadorTB .element.t30{
+    width: 29.9%;
+}
+#cercadorTB .element.t50{
+    width: 49.9%;
+}
+#cercadorTB .element.t75{
+    width: 74.9%;
+}
+#cercadorTB div.element .control{
+    padding-right: 20px;
+}
+#cercadorTB input[type=text], #cercadorTB select, #cercadorTB input[type=password]{
+    width: 99.9%;
+}
+#cercadorTB input[type=text], #cercadorTB input[type=password] {
+    height: 20px;
+}
+
+#cercadorTB div input.on { background-color:#ddfeff !important; border:1px solid #7f9db9 !important; }
+#cercadorTB div input.t17 { width:12.5em !important; }
+
+#cercadorTB input.text { width:15.5em; background-color:#fff; border:1px solid #7f9db9; }
+#cercadorTB texconvenio { width:50em; height:5.5em; background-color:#fff; border:1px solid #7f9db9; }
+#cercadorTB texconvenio.texconvenioOn { background-color:#ddfeff; }
+
+#cercadorTB ul.seleccioMultiple { overflow:auto; width:20em; height:5.5em; background-color:#fff; border:1px solid #7f9db9; }
+#cercadorTB ul.seleccioMultiple li { padding-left:.5em; }
+#cercadorTB ul.enLinia li { display:inline; padding-left:.5em; border-left:1px solid #e0e0e0; }
+
+#cercadorTB div.etiqueta, #cercadorTB label.etiqueta {    
+    font: 13px Arial, Helvetica, Sans-serif;
+}
+#cercadorTB div.etiqueta:after { content:":"; }
+
+#cercadorTB label.checkbox {
+    padding-right: 2em;
+}
+
+#cercadorTB div.control {
+    padding-top: 2px;
+}
+#cercadorTB div.control ul { list-style:none; }
+
+#cercadorTB div.noClear{
+    clear: none !important;
+}
+#cercadorTB div.botonera { 
+	margin-top: 15px;
+    float:right;    
+}
+#cercadorTB .botonera .boton{
+    margin-left: 11px;
+}
+#cercadorTB .botonera .btn.consulta > span > span{
+    background: url(../img/pestanyas/ico_buscador.gif) 15px 50% no-repeat;
+}
+#cercadorTB .botonera .btn.borrar > span > span{
+    background: url(../img/botons/iconos/borrar.png) 15px 50% no-repeat;
+}
+#cercadorTB .botonera .btn.torna > span > span{
+    background: url(../img/botons/iconos/volver.gif) 15px 50% no-repeat;
+}
+#cercadorTB .botonera .btnGenerico a span span{
+    padding-left : 35px;
+}
+
+
+#cercadorTB div.mesDades { display:none; }
+
+#cercadorTB a.mesDades { padding-left:1.2em; background:transparent url(../img/cercador/mesDades_off.gif) no-repeat left center; }
+#cercadorTB a.on { background-image:url(../img/cercador/mesDades_on.gif); }
+
+#cercadorTB_contingut  .busquedaBasica,
+#cercadorTB_contingut .busquedaAvanzada{
+    float: left;
+    width: 835px;
+    padding-bottom: 20px;
+}
+
+#cercadorTB_contingut .opcionesBusqueda{
+    float: right;
+    width: 201px;
+    border-radius: 10px;
+    background-color: #F3F3F3;
+    border: 1px solid #D3D3D3;
+    padding: 20px;
+}
+#cercadorTB_contingut .opcionesBusqueda h2{
+    margin: 0 0 15px 0;
+}
+#cercadorTB_contingut .opcionesBusqueda .fila{
+    padding-bottom: 10px;
+    margin-bottom:0;
+}
+#cercadorTB_contingut .opcionesBusqueda .fila .element{
+    height: auto;
+}
+#cercadorTB_contingut .opcionesBusqueda .fila label{
+    font: 13px Arial, Helvetica, Sans-serif;
+}
+#cercadorTB_contingut .opcionesBusqueda .checkbox  input{
+    float: left;
 }

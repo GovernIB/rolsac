@@ -146,8 +146,11 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	 * Método llamado al cambiar de página.
 	 * @param enlace_html Número de la página de destino.
 	 */
-	this.anar = function(enlace_html){
-						
+	this.anar = function(enlace_html, carregarFunc){
+
+		if (!carregarFunc || carregarFunc == 'undefined' ) {
+			carregarFunc = that.carregar;
+		}
 		resultats_actiu_elm = resultats_elm.find("div.actiu:first");
 				
 		num = parseInt(enlace_html,10);
@@ -166,10 +169,10 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 				
 				if (resultats_actiu_elm.hasClass("C")) {
 					//Llistat.carregar({pagina: num-1, cercador: "si"});
-					that.carregar({pagina: num-1, cercador: "si"});
+					carregarFunc({pagina: num-1, cercador: "si"});
 				} else {
 					//Llistat.carregar({pagina: num-1});
-					that.carregar({pagina: num-1});
+					carregarFunc({pagina: num-1});
 				}
 				
 			});
