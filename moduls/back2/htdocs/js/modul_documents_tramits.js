@@ -323,11 +323,12 @@ function CModulDocumentsTramit(){
 	
 	
 	this.inicializarDocuments = function(listaDocuments) {
+		
 		if (typeof listaDocuments != 'undefined' && listaDocuments != null) {
             modul_documents_tramits_elm.find(".listaOrdenable").empty();		
 			EscriptoriPareTramit.agregaItems(listaDocuments, true);
         }
-        
+				       
         // Editar el documento al hacer click sobre el.
         modul_documents_tramits_elm.find('div.documentsTramit').each(function() {
             $(this).unbind("click").bind("click", function() {
@@ -368,7 +369,7 @@ function CModulDocumentsTramit(){
 				EscriptoriPareTramit.habilitarBotonGuardar();
 			}
 		}).css({cursor:"move"});
-		
+				
 		modul_documents_tramits_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
 			var itemLista = $(this).parents("li:first");
 			EscriptoriPareTramit.eliminaItem(itemLista);

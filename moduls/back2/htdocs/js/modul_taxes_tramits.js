@@ -2,13 +2,13 @@ $(document).ready(function() {
 	// elements
 	escriptori_taxes_tramits_elm = $("#escriptori_taxes_tramits");
     moduls_elm = escriptori_tramits_elm.find("div.modul");
-    modul_taxes_tramits_elm = $("div.modulTaxesTramit:first");
+    modul_taxes_tramits_elm = $("div.modulTaxesTramits:first");
     
 	ModulTaxesTramit = new CModulTaxesTramit();
     ModulTaxesTramit.iniciar();
     
     EscriptoriPareTramitTaxa = new CEscriptoriPareTramitTaxa();
-    EscriptoriPareTramitTaxa.iniciar();
+    EscriptoriPareTramitTaxa.iniciar();    
 });
 
 // Lista ordenable para eliminar/ordenar forms en la pantalla "padre"
@@ -27,11 +27,10 @@ function CEscriptoriPareTramitTaxa(){
 	
 	var that = this;
 	
-	this.iniciar = function() {
-				
-		// botons
-		modul_taxes_tramits_elm.find("a.gestiona").bind("click", function() { ModulTaxesTramit.nou(false); } );
+	this.iniciar = function() {		
 		
+		// botons
+		modul_taxes_tramits_elm.find("a.gestiona").bind("click", function() { ModulTaxesTramit.nou(false); } );			
 		formularis_tramits_seleccionats_elm = escriptori_taxes_tramits_elm.find("div.escriptori_items_seleccionats:first");
 		
 		escriptori_taxes_tramits_elm.find("div.botonera").each(function() {
@@ -40,6 +39,11 @@ function CEscriptoriPareTramitTaxa(){
 				
 		// Configuramos la lista ordenable.
 		this.configurar(that.configuracion);
+
+		if ( $("#item_taxa:checked").val() == "on") {
+			$("#modul_taxes_tramits").show();			
+		} else 
+			$("#modul_taxes_tramits").hide();
 	}	
 
 	this.gestiona = function() {
@@ -47,7 +51,7 @@ function CEscriptoriPareTramitTaxa(){
 		if (lis_size > 0) {
 			EscriptoriEdifici.contaSeleccionats();
 		} else {
-			edificis_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaEdificisSeleccionats + ".");			
+			edificis_seleccionats_elm.find("ul").remove().end().find("p.info:first").text(txtNoHiHaTaxesSeleccionades + ".");			
 			edificis_seleccionats_elm.find(".listaOrdenable").html("");
 		}
 		
@@ -63,7 +67,6 @@ function CEscriptoriPareTramitTaxa(){
 	}
     
     this.habilitarBotonGuardar = function() {
-        //$("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
     	escriptori_taxes_tramits_elm.find("#btnGuardar").unbind("click").bind("click",function(){this.guarda_upload();}).parent().removeClass("off");
     }
     
@@ -108,7 +111,7 @@ function CEscriptoriPareTramitTaxa(){
 				lista.find("ul").append(htmlCode);					
 			});
             
-            ModulTaxesTramit.inicializarFormularis();
+            ModulTaxesTramit.inicializarTaxes();
 		}
 		
 		that.habilitarBotonGuardar();
@@ -129,8 +132,8 @@ function CEscriptoriPareTramitTaxa(){
 // Creacion/edicion de forms
 function CModulTaxesTramit(){
 	this.extend = DetallBase;
-	if (typeof FormulariDadesFormTramit != 'undefined') {
-		this.extend(true, FormulariDadesFormTramit);
+	if (typeof FormulariDadesTaxaTramit != 'undefined') {
+		this.extend(true, FormulariDadesTaxaTramit);
 	} else {
 		this.extend(true, null);
 	}
@@ -139,10 +142,10 @@ function CModulTaxesTramit(){
 	
 	this.iniciar = function() {			
         // botons        
-        $("#btnVolver_formularis_tramit").bind("click", that.torna);
+        $("#btnVolver_taxes_tramit").bind("click", that.torna);
 
         // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-    	$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
+    	$("#formGuardarTaxaTramit input, #formGuardarTaxaTramit textarea").bind("change", function(){that.modificado();});
     	
 		// idioma
 		if (escriptori_taxes_tramits_elm.find("div.idiomes").size() != 0) {
@@ -183,12 +186,12 @@ function CModulTaxesTramit(){
         }
         
         // Coger el id del trámite
-        var tramitId = $("#tramitIdform");         
+        var tramitId = $("#idTramit");         
         tramitId.val($("#id_tramit_actual").val());
 
 		//Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
-		$("#formGuardarFormTramit").ajaxSubmit({			
-			url: pagGuardarDocTramit,
+		$("#formGuardarTaxaTramit").ajaxSubmit({			
+			url: pagGuardarTaxaTramit,
 			dataType: 'json',
 			beforeSubmit: function() {
 				Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
@@ -199,13 +202,13 @@ function CModulTaxesTramit(){
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
 				} else {                   
-					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
+					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTaxaCreadaCorrecte});
                     
 					var nom = new Object();
-                    escriptori_taxes_tramits_elm.find("input[id^='form_tramit_titol_']").each(function (index) {
-						var $titolDoc = $(this);
-						var idioma = $titolDoc.attr('id').split('_')[3];
-						nom[idioma] = $titolDoc.val();
+                    escriptori_taxes_tramits_elm.find("input[id^='taxa_tramit_codi_']").each(function (index) {
+						var $titolTaxa = $(this);
+						var idioma = $titolTaxa.attr('id').split('_')[3];
+						nom[idioma] = $titolTaxa.val();
 					});
 					
 					var taxaItem = new Object();
@@ -224,7 +227,7 @@ function CModulTaxesTramit(){
 	
 	this.modificado = function(){
 		// Habilitamos el botón de guardar.
-		$("#btnGuardar_formularis_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
+		$("#btnGuardar_taxes_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 	
 	this.dataPublicacio = function(e) {		
@@ -236,27 +239,15 @@ function CModulTaxesTramit(){
 	this.nou = function(edicion) {
 		
 		$("#tramitId").attr("value", $("#id_tramit_actual").val());		
-		$("#procId").attr("value", $("#id_procediment_tramit").val());
 		
 		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
-		$("#btnGuardar_formularis_tramit").parent().addClass("off");
+		$("#btnGuardar_taxes_tramit").parent().addClass("off");
         
 		if (!edicion) {
-            $("#formTramitId").val("");
+            $("#taxaTramitId").val("");
             for (var i in idiomas) {
                 var idioma = idiomas[i];                
-                $("#form_tramit_descripcio_" + idioma + ", #form_tramit_titol_" + idioma + ", #form_tramit_arxiu_" + idioma).each(limpiarCampo);
-                
-                //Limpiar campos de fichero
-            	$("#grup_arxiu_actual_form_tramit_" + idioma + " span").show();
-            	$("#grup_arxiu_actual_form_tramit_" + idioma + " input").hide();
-            	$("#grup_arxiu_actual_form_tramit_" + idioma + " label.eliminar").hide();
-            	$("#grup_arxiu_actual_form_tramit_" + idioma + " a").hide().attr("href","").empty();
-            	
-            	var thumbnail = $("#grup_arxiu_actual_form_tramit_" + idioma).closest(".fila").find(".thumbnail");
-            	
-            	if (thumbnail.size() > 0) 
-            		thumbnail.children().remove();
+                $("#taxa_tramit_codi_" + idioma + ", #taxa_tramit_descripcio_" + idioma + ", #taxa_tramit_forma_pagament_" + idioma).each(limpiarCampo);
             }
 		}
 		
@@ -270,36 +261,18 @@ function CModulTaxesTramit(){
 	this.pintar = function(dades) {		
 		dada_node = dades;
 		
-		$("#formTramitId").val(dada_node.item_id);
+		$("#taxaTramitId").val(dada_node.item_id);
 
 		// Bloque de pestanyas de idiomas.
 		for (var i in idiomas) {
 			var idioma = idiomas[i];
             
-			$("#form_tramit_titol_" + idioma).val(printStringFromNull(dada_node["idioma_titol_" + idioma]));
-			$("#form_tramit_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
-			
-			// archivos
-			$("#form_tramit_arxiu_" + idioma).val("");
-			$("#grup_arxiu_actual_form_tramit_" + idioma + " input").removeAttr("checked");
-			var anchors = $("#grup_arxiu_actual_form_tramit_" + idioma + " a");
-
-            var enllasArxiu = dada_node["idioma_enllas_arxiu_" + idioma];
-			if (typeof enllasArxiu != "undefined" && enllasArxiu != "") {
-				anchors.attr("href", pagArrel + dada_node["idioma_enllas_arxiu_" + idioma]);
-				anchors.text(dada_node["idioma_nom_arxiu_" + idioma]);
-				anchors.show();
-				$("#grup_arxiu_actual_form_tramit_" + idioma + " span").hide();
-				$("#grup_arxiu_actual_form_tramit_" + idioma + " input").show();
-				$("#grup_arxiu_actual_form_tramit_" + idioma + " label.eliminar").show();
-			} else {
-                $("#grup_arxiu_actual_form_tramit_" + idioma + " span").show();
-				$("#grup_arxiu_actual_form_tramit_" + idioma + " input").hide();
-				$("#grup_arxiu_actual_form_tramit_" + idioma + " label.eliminar").hide();
-                anchors.hide();
-            }
-		}
+			$("#taxa_tramit_codi_" + idioma).val(printStringFromNull(dada_node["idioma_codificacio_" + idioma]));
+			$("#taxa_tramit_descripcio_" + idioma).val(printStringFromNull(dada_node["idioma_descripcio_" + idioma]));
+			$("#taxa_tramit_forma_pagament_" + idioma).val(printStringFromNull(dada_node["idioma_forma_pagament_" + idioma]));					
+		}		
 		// Fin bloque de pestanyas de idiomas
+		
         // Mostrar la pantalla de edicion de documento
 		that.nou(true);
 	}
@@ -309,32 +282,31 @@ function CModulTaxesTramit(){
 		var info_elms = modul_taxes_tramits_elm.find("p.info");
 		
 		if (seleccionats_val == 0) {
-			info_elms.text(txtNoHiHaDocumentsSeleccionats+ ".");
+			info_elms.text(txtNoHiHaTaxesSeleccionades+ ".");
 		} else if (seleccionats_val == 1) {
-			info_elms.html(txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFormulari.toLowerCase() + "</strong>.");
+			info_elms.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtTaxa.toLowerCase() + "</strong>.");
 		} else if (seleccionats_val > 1) {
-			info_elms.html(txtSeleccionats + " <strong>" + seleccionats_val + " " + txtFormularis.toLowerCase() + "</strong>.");						
+			info_elms.html(txtSeleccionades + " <strong>" + seleccionats_val + " " + txtTaxes.toLowerCase() + "</strong>.");						
 		}
 	}
 	
-	
-	this.inicializarFormularis = function(listaFormularis) {
-		if (typeof listaFormularis != 'undefined' && listaFormularis != null) {
+	this.inicializarTaxes = function(listaTaxes) {
+		if (typeof listaTaxes != 'undefined' && listaTaxes != null) {
             modul_taxes_tramits_elm.find(".listaOrdenable").empty();		
-			EscriptoriPareTramitTaxa.agregaItems(listaFormularis, true);
+			EscriptoriPareTramitTaxa.agregaItems(listaTaxes, true);
         }
         
         // Editar el documento al hacer click sobre el.
         modul_taxes_tramits_elm.find('div.taxesTramit').each(function() {
             $(this).unbind("click").bind("click", function() {
-                var docTramitId = $(this).find("input.taxesTramit_id").val();
+                var taxaTramitId = $(this).find("input.taxesTramit_id").val();
                 var tramitId  = $("#id_tramit_actual").val();
                 
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
                 $.ajax({
-                    type: "GET",
-                    url: pagCarregarDocTramit,
-                    data: "id=" + docTramitId + "&idTramit=" + tramitId,
+                    type: "POST",
+                    url: pagCarregarTaxaTramit,
+                    data: "id=" + taxaTramitId + "&idTramit=" + tramitId,
                     dataType: "json",
                     error: function() {
                         // Missatge.cancelar();
@@ -344,7 +316,7 @@ function CModulTaxesTramit(){
                     success: function(data) {
                         Missatge.cancelar();
                         if (data.id > 0) {
-                            that.pintar(data.taxaTramit);
+                            that.pintar(data.taxa);
                         } else if (data.id == -1){
                             Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
                         } else if (data.id < -1){

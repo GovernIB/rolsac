@@ -147,12 +147,12 @@ public class TramiteBackController {
     			listaTasasDTO = new ArrayList<IdNomDTO>();
     			
     			for (Taxa tasa : listaTasas) {
-    				String descripcionTasa = ((TraduccionTaxa) tasa.getTraduccion(request.getLocale().getLanguage())).getDescripcio();
-    				listaTasasDTO.add( new IdNomDTO(tasa.getId(), descripcionTasa));
+    				String codificacionTasa = ((TraduccionTaxa) tasa.getTraduccion(request.getLocale().getLanguage())).getCodificacio();
+    				listaTasasDTO.add( new IdNomDTO(tasa.getId(), codificacionTasa));
     			}    		
     		}
     		
-    		resultats.put("tasas", listaTasasDTO);
+    		resultats.put("tasasTramite", listaTasasDTO);
     		// Fin tasas relacionadas
     		    		
     	} catch (DelegateException dEx) {
@@ -224,24 +224,17 @@ public class TramiteBackController {
 			
 			// Rellenar los campos
 			Date fechaPublicacion = DateUtils.parseDate(request.getParameter("tramit_item_data_publicacio"));
-			if (fechaPublicacion != null) {
-				tramite.setDataPublicacio(fechaPublicacion);
-			}
+			tramite.setDataPublicacio(fechaPublicacion);
 			
 			Date fechaActualizacion = DateUtils.parseDate(request.getParameter("tramit_item_data_actualitzacio"));
-			if (fechaActualizacion != null) {
-				tramite.setDataActualitzacio(fechaActualizacion);
-			}
+			tramite.setDataActualitzacio(fechaActualizacion);
 			
 			Date fechaCaducidad = DateUtils.parseDate(request.getParameter("tramit_item_data_caducitat"));
-			if (fechaCaducidad != null) {
-				tramite.setDataCaducitat(fechaCaducidad);
-			}
+			tramite.setDataCaducitat(fechaCaducidad);
 			
 			Date fechaVUDS = DateUtils.parseDate(request.getParameter("tramit_item_data_vuds"));
-			if (fechaVUDS != null) {
-				tramite.setDataActualitzacioVuds( new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS) );
-			}
+			String fechaActualizacionVUDS  = fechaVUDS != null ? new SimpleDateFormat("dd/MM/yyyy").format(fechaVUDS) : "";			
+			tramite.setDataActualitzacioVuds( fechaActualizacionVUDS );			
 			
 			tramite.setCodiVuds(request.getParameter("item_id_codivuds_tramit"));						 
 						
@@ -294,14 +287,70 @@ public class TramiteBackController {
         	} else {
         		request.setAttribute("alert", "confirmacion.modificacion");        		
          	   
+            	Tramite tramiteOld = tramiteDelegate.obtenerTramite( new Long(request.getParameter("id_tramit_actual")) );
+            	
+        		//Guardar tasas
+        		String tasasTramite = request.getParameter("taxesTramit");
+        		        		
+        		if (!"".equals(tasasTramite)) {
+        			
+        			Set<Taxa> listaTasasOld = tramiteOld.getTaxes();
+        			List<Long> listaTasasBorrar = new ArrayList<Long>();
+        			Set<Taxa> tasasNuevas = new HashSet<Taxa>();
+        			String[] codigosTasasNuevas = tasasTramite.split(",");
+        			
+        			for ( int i = 0; i < codigosTasasNuevas.length; i++ ) {        				
+        				for ( Taxa tasa : listaTasasOld ) {
+        					if ( !"".equals(codigosTasasNuevas[i]) && tasa.getId()
+        							.equals(Long.valueOf(codigosTasasNuevas[i])) ) {
+        						
+        						tasasNuevas.add( tasa );
+        						codigosTasasNuevas[i] = null;
+        						
+        						break;
+        					}
+        				}
+        			}
+        			
+        			//Eliminar los que se han quitado de la lista
+        			for ( Taxa tasa : listaTasasOld ) {
+        				if ( !tasasNuevas.contains(tasa) )
+        					listaTasasBorrar.add(tasa.getId());        				
+        			}
+        			
+        			for ( Long id : listaTasasBorrar ) 
+        				DelegateUtil.getTramiteDelegate().borrarTaxa(id);
+        			
+        			//Crear los nuevos
+        			if (!"".equals(codigosTasasNuevas)) {
+        				for (String codigoTasa : codigosTasasNuevas ) {
+        					if ( codigoTasa != null ) {
+        						for ( Taxa tasa : tramiteOld.getTaxes() ) {
+        							if ( !tasasNuevas.contains(tasa) )
+        								tasasNuevas.add(tasa);
+        						}
+        					}
+        				}
+        			}
+        			
+        			// Actualizamos el orden de la lista de tasas
+        			HashMap<String, String[]> actualizadorTasas = new HashMap<String, String[]>();
+        			
+        			for ( Taxa tasa : tasasNuevas ) {
+        				String[] orden = { request.getParameter("taxesTramit_orden_" + tasa.getId() ) }; 
+        				actualizadorTasas.put("orden_taxa" + tasa.getId(), orden);
+        			}
+        			
+        			DelegateUtil.getTramiteDelegate().actualizarOrdenTasas(actualizadorTasas, tramite.getId());
+        			//tramite.setTaxes(tasasNuevas);        			
+        		}           	        		
+        		
             	//Guardar documentos y formularios
             	String formulariosTramite = request.getParameter("formularisTramit");
             	String documentosTramite = request.getParameter("documentsTramit");
             	String separador = (!"".equals(formulariosTramite) && !"".equals(documentosTramite)  ? "," : ""); 
             	
             	documentosTramite = documentosTramite + separador + formulariosTramite;
-            	
-            	Tramite tramiteOld = tramiteDelegate.obtenerTramite( new Long(request.getParameter("id_tramit_actual")) );
 
         		Set<DocumentTramit> listaDocumentosOld = tramiteOld.getDocsInformatius();
         		Set<DocumentTramit> listaFormulariosOld = tramiteOld.getFormularios();

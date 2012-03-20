@@ -30,7 +30,6 @@ function CEscriptoriPareTramitForm(){
 	this.iniciar = function() {
 				
 		// botons
-		alert("ENTRA");
 		modul_formularis_tramits_elm.find("a.gestiona").bind("click", function() { ModulFormularisTramit.nou(false); } );
 			
 		
@@ -237,7 +236,6 @@ function CModulFormularisTramit(){
 			
 	this.nou = function(edicion) {
 		
-		alert("ENTRA");
 		$("#tramitId").attr("value", $("#id_tramit_actual").val());		
 		$("#procId").attr("value", $("#id_procediment_tramit").val());
 		

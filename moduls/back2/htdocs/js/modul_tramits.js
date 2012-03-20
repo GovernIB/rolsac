@@ -85,17 +85,18 @@ function CModulTramit(){
 	}	
     
 	this.gestiona = function() {
-				
+						
 		EscriptoriTramit.limpia();
 		
 		$("#tramit_item_data_publicacio").val("");
 		$("#tramit_item_data_caducitat").val("");
 				
 		$("#id_procediment_tramit").attr("value",  $("#item_id").val() );
-			
+	 	$("#nom_procediment_tramit").text( $("input#item_nom_ca").val());
+	 	
 		$("#tramits_item_organ_id").val($("#item_organ_id").val());
 	 	$("#tramits_item_organ_ca").val($("#item_organ").val());
-	 	  
+	 	
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_tramits_elm.fadeIn(300, function() {
@@ -104,6 +105,7 @@ function CModulTramit(){
 				escriptori_tramits_elm.find(".btnEliminar").hide();
 				escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
 				escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();				
+				escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();				
 			});			
 		});
 	}
@@ -195,7 +197,9 @@ function CEscriptoriTramit(){
         		
         // Si existe idTramit es que estamos editando un trámite.
 		var idTramit = $("#id_tramit_actual").val();
-		var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + "&" + ModulFormularisTramit.listarFormularios();			
+		var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
+						"&" + ModulFormularisTramit.listarFormularios() + 
+						"&" + ModulTaxesTramit.listarTasas();			
 		
         //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
         $("#formTramits").ajaxSubmit({
@@ -376,14 +380,14 @@ function CEscriptoriTramit(){
 				
 		// Cargar documentos, formularios y tasas
 		ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
-		ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);		
-		//ModulTaxesTramit.inicializarTaxes();		
+		ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);				
+		ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);		
     }
     
     this.editarTramit = function( el ) {
 
     	var tramitId = $(el).find("input.tramit_id").val();
-        
+    	
         Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
         
         $.ajax({
@@ -404,7 +408,12 @@ function CEscriptoriTramit(){
                         escriptori_tramits_elm.fadeIn(300, function() {                        	
             				escriptori_tramits_elm.find(".btnEliminar").show();
             				escriptori_tramits_elm.find("div#modul_documents_tramits").show();
-            				escriptori_tramits_elm.find("div#modul_formularis_tramits").show();				                        	
+            				escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
+            				
+            				if ( $("#item_taxa:checked").val() == "on") {
+            					escriptori_tramits_elm.find("div#modul_taxes_tramits").show();			
+            				} else 
+            					escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();            				
                         });
                     });   
                     

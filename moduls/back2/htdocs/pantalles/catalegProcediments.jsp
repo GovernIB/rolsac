@@ -24,12 +24,13 @@
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_taxes_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
-    var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';
+    var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';    
     var pagEsborrar = '<c:url value="/catalegProcediments/esborrarProcediment.do" />';
     var seccioNormatives = '<c:url value="/catalegProcediments/cercarNormatives.do" />';
     var pagDetallTramit = '<c:url value="/tramit/carregarTramit.do" />';
@@ -38,7 +39,9 @@
     var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
     var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';    
     var pagGuardarDocTramit = '<c:url value="/documentsTramit/guardarDocumentTramit.do" />';
-    var pagCarregarDocTramit = '<c:url value="/documentsTramit/carregarDocumentTramit.do" />';        
+    var pagCarregarDocTramit = '<c:url value="/documentsTramit/carregarDocumentTramit.do" />';
+    var pagGuardarTaxaTramit = '<c:url value="/taxa/guardarTaxa.do" />';
+    var pagCarregarTaxaTramit = '<c:url value="/taxa/carregarTaxaTramit.do" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -91,11 +94,15 @@
     var txtDocument = "<spring:message code='txt.document'/>";    
     var txtDocuments = "<spring:message code='txt.documents'/>";
     var txtFormulari = "<spring:message code='txt.formulari'/>";
-    var txtFormularis = "<spring:message code='txt.formularis'/>"; 
+    var txtFormularis = "<spring:message code='txt.formularis'/>";
+    var txtTaxa = "<spring:message code='txt.taxa'/>";
+    var txtTaxes = "<spring:message code='txt.taxes'/>";
     		
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
+    var txtNoHiHaTaxes = txtNoHiHa + " " + txtTaxes;
     var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
+    var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
     
     var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
     
@@ -103,6 +110,10 @@
     var txtTramits = "Tramits";
     var txtTramitCreatCorrecte = "<spring:message code='txt.tramit_creat_correcte'/>";
     var txtTramitModificatCorrecte = "<spring:message code='txt.tramit_modificat_correcte'/>";
+    
+    var txtTaxaCreadaCorrecte = "<spring:message code='txt.taxa_creada_correcte'/>";
+    var txtTaxaModificadaCorrecte = "<spring:message code='txt.taxa_modificada_correcte'/>";    
+    
     var txtNoHiHaTramitsSeleccionats = txtNoHiHa + " " + txtTramits.toLowerCase() + " " + txtSeleccionats.toLowerCase();
     
     var txtMateria = "<spring:message code='txt.materia'/>";
@@ -1734,157 +1745,6 @@
             </div>
             <!-- /modul -->
             
-            <!-- modul -->
-            <%--
-            <div class="modul">
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
-                    <div class="modul_continguts mostrat">
-                        <div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_codi"><spring:message code='camp.codi'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_codi" name="item_codi" type="text" class="nou" />
-                                </div>
-                            </div>
-                            <!--<div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_iniciacio"><spring:message code='camp.formaIniciacio'/></label>
-                                </div>
-                                <div class="control select">
-                                    <select id="item_iniciacio" name="item_iniciacio" class="nou">
-                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${iniciacions}" var="iniciacio">
-                                            <option value="<c:out value="${iniciacio.id}"/>"><c:out value="${iniciacio.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>-->
-                        </div>
-                        <div class="fila">
-                            <!--<div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_url"><spring:message code='camp.urlTramitExtern'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_url" name="item_url" type="text" class="nou" />
-                                </div>
-                            </div>-->
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_familia"><spring:message code='camp.familia'/></label>
-                                </div>
-                                <div class="control select">
-                                    <select id="item_familia" name="item_familia" class="nou">
-                                        <option value="" selected="selected"><spring:message code='camp.cap'/></option>
-                                        <c:forEach items="${families}" var="familia">
-                                            <option value="<c:out value="${familia.id}"/>"><c:out value="${familia.nom}"/></option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <!--<div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_tramite"><spring:message code='camp.idTramit'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_tramite" name="item_tramite" type="text" class="nou" />
-                                </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_version"><spring:message code='camp.versioTramit'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_version" name="item_version" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>-->
-                        <div class="fila">
-                            <!--<div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_organ"><spring:message code='camp.organCompetent'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_organ" name="item_organ" type="text" class="nou" readonly="true" />
-                                    <input id="item_organ_id" name="item_organ_id" type="hidden" />
-                                </div>
-                            </div>-->
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_responsable"><spring:message code='unitatadm.formulari.responsable'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_responsable" name="item_responsable" type="text" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t50p">
-                                <div id="cercador">
-                                    <div class="botonera" style="margin-top: 0px; float:left;">
-                                        <div class="boton btnGenerico" style="margin-left: 0px;">
-                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">                                           
-                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
-                                            </a>
-                                        </div>
-                                        <div class="boton btnGenerico">
-                                            <a href="javascript:EliminaArbreUA('item_organ', 'item_organ_id');" class="btn borrar">
-                                            <span><span><spring:message code='boto.borrar'/></span></span>
-                                            </a>
-                                        </div>
-                                    </div>                                  
-                                </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnicaDirectiva'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <!--<div class="fila">
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_fi_vida_administrativa"><spring:message code='camp.fiViaAdministrativa'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
-                                </div>
-                            </div>
-                            <div class="element t50p">
-                                <div class="etiqueta">
-                                    <label for="item_taxa"><spring:message code='camp.taxa'/></label>
-                                </div>
-                                <div class="control">
-                                    <input id="item_taxa" name="item_taxa" type="checkbox" class="nou" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="element t99p">
-                                <div class="etiqueta">
-                                    <label for="item_notes"><spring:message code='camp.notesInformadors'/></label>
-                                </div>
-                                <div class="control">
-                                    <textarea id="item_notes" name="item_notes" cols="50" rows="2"
-                                        class="nou"></textarea>
-                                </div>
-                            </div>
-                        </div>-->
-                    </div>
-                </fieldset>
-            </div>
-            <!-- /modul -->                        
-            --%>
-            
         </div>
         <!-- /modulPrincipal -->
         <!-- modulLateral -->
@@ -2659,7 +2519,7 @@
 		                                        </div>
 		                                        <div class="botones">
 		                                            <div class="btnCambiar boton btnGenerico">
-		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ');" class="btn consulta">
+		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_ca');" class="btn consulta">		                                                
 		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
 		                                                </a>
 		                                            </div>
@@ -3249,7 +3109,7 @@
 		        </div>			        		         
 		        
 		        <!--  Tasas -->
-		        <div class="modul" id="modul_taxes_tramits">
+		        <div class="modul" id="modul_taxes_tramits" style="display:none;">
 		        	<fieldset>
 		        		<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
 		        		<legend><spring:message code='tramit.taxes'/></legend>
@@ -3396,8 +3256,296 @@
 </div>                           
 <!-- /escriptori_tramits -->
 
-<!--  escriptori_taxes_tramits -->
+<!-- escriptori_taxes_tramits -->
 <div id="escriptori_taxes_tramits" class="escriptori_detall">
+	<script type="text/javascript">
+    	var txtCodigoTasaTramiteObligatorio = "<spring:message code='personal.formulari_taxes_tramit.codi.obligatori'/>";    
+    	var txtFormaPagoTasaObligatorio = "<spring:message code='personal.formulari_taxes_tramit.pagament.obligatori'/>";
+
+        // dades formularis
+        var FormulariDadesTaxaTramit = [
+            { // Codi (Catala)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "taxa_tramit_codi_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 256,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error": {
+                    "obligatori": txtCodigoTasaTramiteObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            },
+            
+            { // Forma de pagament (Català)
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "taxa_tramit_forma_pagament_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters": {
+                    "maxim": 4000,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error": {
+                    "obligatori": txtFormaPagoTasaObligatorio,
+                    "tipus": txtTituloNoSoloNumeros
+                }
+            }
+            
+        ];
+	</script>
+
+    <form id="formGuardarTaxaTramit" action="" method="POST">
+        <input type="hidden" name="idTramit" id="idTramit" />
+        <input type="hidden" name="taxaTramitId" id="taxaTramitId" />        
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->                            
+        <div id="modulTaxes" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='tramit.taxes'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+                            <ul class="idiomes">
+                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
+                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+                            </ul>
+                            <div class="idiomes">
+                                <!-- ca -->
+                                <div class="idioma ca">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_codi_ca"><spring:message code='camp.codi'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_codi_ca" name="taxa_tramit_codi_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_descripcio_ca"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="taxa_tramit_descripcio_ca" name="taxa_tramit_descripcio_ca" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_forma_pagament_ca"><spring:message code='camp.formaPagament'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_forma_pagament_ca" name="taxa_tramit_forma_pagament_ca" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /ca -->
+                                
+                                <!-- es -->
+                                <div class="idioma es">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_codi_es"><spring:message code='camp.codi'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_codi_es" name="taxa_tramit_codi_es" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_descripcio_es"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="taxa_tramit_descripcio_es" name="taxa_tramit_descripcio_es" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_forma_pagament_es"><spring:message code='camp.formaPagament'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_forma_pagament_es" name="taxa_tramit_forma_pagament_es" type="text" class="nou" />
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                                <!-- /es -->
+                                
+                                <!-- en -->
+                                <div class="idioma en">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_codi_en"><spring:message code='camp.codi'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_codi_en" name="taxa_tramit_codi_en" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_descripcio_en"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="taxa_tramit_descripcio_en" name="taxa_tramit_descripcio_en" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">  
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_forma_pagament_en"><spring:message code='camp.formaPagament'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_forma_pagament_en" name="taxa_tramit_forma_pagament_en" type="text" class="nou" />
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                                <!-- /en -->
+                                
+                                <!-- de -->
+                                <div class="idioma de">
+                                
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_codi_de"><spring:message code='camp.codi'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_codi_de" name="taxa_tramit_codi_de" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_descripcio_de"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="taxa_tramit_descripcio_de" name="taxa_tramit_descripcio_de" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_forma_pagament_de"><spring:message code='camp.formaPagament'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_forma_pagament_de" name="taxa_tramit_forma_pagament_de" type="text" class="nou" />
+                                            </div>
+                                        </div>                                    	
+                                    </div>
+                                </div>
+                                <!-- /de -->
+                                
+                                <!-- fr -->
+                                <div class="idioma fr">
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_codi_fr"><spring:message code='camp.codi'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_codi_fr" name="taxa_tramit_codi_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_descripcio_fr"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="taxa_tramit_descripcio_fr" name="taxa_tramit_descripcio_fr" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="taxa_tramit_forma_pagament_fr"><spring:message code='camp.formaPagament'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="taxa_tramit_forma_pagament_fr" name="taxa_tramit_forma_pagament_fr" type="text" class="nou" />
+                                            </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                                <!-- /fr -->
+                                
+                            </div>
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_taxes_tramit" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_taxes_tramit" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_taxes_tramit" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
 	
 </div>
 <!-- /escriptori_taxes_tramits -->

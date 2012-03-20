@@ -4,45 +4,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Formulario;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Tramite.Operativa;
-import org.ibit.rol.sac.persistence.dao.saver.TramiteDAOSaver;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
-import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI;
-import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
-import org.ibit.rol.sac.persistence.remote.vuds.TramiteValidado;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.saver.TramiteSaver;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
 
 /**
  * SessionBean para mantener y consultar Tramites.
@@ -555,6 +541,63 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 
 	}
 
+	
+	/**
+	 * @ejb.interface-method
+	 * @ejb.permission 
+	 *                 role-name="${role.system},${role.admin},${role.super},${role.oper}"
+	 */
+	public void actualizarOrdenTasas(Map<String, String[]> map, long tid)
+			throws DelegateException {
+		Session session = getSession();
+		if (!getAccesoManager().tieneAccesoTramite(tid)) {
+			throw new SecurityException("No tiene acceso a la tasa");
+		}
+		try {
+			// 1. ordenar segun orden relativo dado por el usuario
+			Long id;
+			int valor_orden = 0;
+			List<Taxa> taxa_orden = new ArrayList<Taxa>();
+
+			Iterator it = map.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry e = (Map.Entry) it.next();
+
+				String paramName = e.getKey().toString();
+				if (paramName.startsWith("orden_taxa")) {
+					id = Long.valueOf(paramName.substring(10)).longValue();
+					String[] parametros = (String[]) e.getValue();
+					valor_orden = Integer.parseInt(parametros[0]);
+
+					Taxa tasa = (Taxa) session.load(
+							Taxa.class, id);
+					tasa.setOrden((long)valor_orden);
+					taxa_orden.add(tasa);
+				}
+			}
+			session.flush();
+
+			// 2. ordenar segun orden natural (1..N)
+			Collections.sort(taxa_orden, new TasaOrdenComparator());
+
+			actualitzarTaxesPerOrdreNatural(session, taxa_orden);
+
+			// 3. eliminar taxes del cache perqu� es recarreguin les llistes de taxes amb el nou ordre.
+			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.taxes", tid);
+			// 4. Actualizamos WS
+			Tramite tramite=cargaTramite(session,tid);
+			if(tramite.getProcedimiento()!=null){
+				log.debug("Cambio Orden tasas: Lanzo el actualizador");
+				Actualizador.actualizar(tramite,true);
+			}
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+
+	}
+	
 	// ====================== seccio privada =============================
 
 	class DocOrdenComparator implements Comparator<DocumentTramit> {
@@ -564,6 +607,14 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			return x1.compareTo(x2);
 		}
 	}
+	
+	class TasaOrdenComparator implements Comparator<Taxa> {
+		public int compare(Taxa o1, Taxa o2) {
+			Long x1 = o1.getOrden();
+			Long x2 = o2.getOrden();
+			return x1.compareTo(x2);
+		}
+	}	
 
 	private void actualitzarDocumentsPerOrdreNatural(Session session,
 			List<DocumentTramit> docs) {
@@ -581,6 +632,23 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			throw new EJBException(he);
 		}
 	}
+	
+	private void actualitzarTaxesPerOrdreNatural(Session session, List<Taxa> tasas) {
+		try {
+			Long contador = 1L;
+			Iterator<Taxa> it = tasas.iterator();
+			while (it.hasNext()) {
+				Taxa t = it.next();
+				t.setOrden(contador++);
+				session.update(t);
+			}
+			session.flush();
+
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		}
+	}
+	
 
 	// es fa publica pq t� que se accedida desde procedimentFacadeEJB
 	public Tramite cargaTramite(Session session, Long tid)
