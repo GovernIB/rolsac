@@ -169,8 +169,8 @@ function ValidaFecha(oTxt){
     }    
 
  
-    function abrirDato(opcion) {
-        obrir("popnormativa.do", "Seleccionar", 538, 140);
+    function abrirDato(contextFrom, opcion) {
+        obrir(contextFrom+"/contenido/normativa/popup.do?opcion="+opcion, "Seleccionar", 538, 140);
     }
 
     function actualizaDato(id, nombre, field) {
@@ -300,11 +300,9 @@ function obrirImatge(url) {
           <div class="component">
             <div class="etiqueta">Tipus Normativa</div>
             <input type="hidden" name="idTipo" value="<bean:write name="APPTRS_normativa" property="idTipo" />"/>
-            <input type="text" name="nombreTipo" value="<bean:write name="APPTRS_normativa" property="nombreTipo" />" readonly="readonly" class="ctext"/>
+            <input type="text" name="nombreTipo" value="<bean:write name="APPTRS_normativa" property="nombreTipo" />" readonly="true" class="ctext"/>
             <div class="botoneraconsulta1">
-            <!--
-              <input type="button" name="boton" tabindex="3" value="Seleccionar" onclick="abrirDato('Tipo')"/>
-            //-->              
+              <input type="button" name="boton" tabindex="3" value="Seleccionar" onclick="abrirDato('<bean:write name="contextFrom_"/>', 'Tipo')"/>
             </div>
           </div>
           <div class="component">
@@ -345,7 +343,7 @@ function obrirImatge(url) {
               </div>
               <div class="component">
                 <div class="etiqueta">URL</div>
-                <input type="text" name="traducciones[0].enlace" maxlength="512" tabindex="13" value="" class="btext"/>
+                <input type="text" name="traducciones[0].enlace" maxlength="512" tabindex="13" value="<bean:write name="APPTRS_normativa" property="tra_enlace_c" />" class="btext"/>
               </div>
               <div class="component">
                 <div class="etiqueta">Apartat</div>
@@ -383,7 +381,7 @@ function obrirImatge(url) {
               </div>
               <div class="component">
                 <div class="etiqueta">URL</div>
-                <input type="text" name="traducciones[1].enlace" maxlength="512" tabindex="13" value="" class="btext"/>
+                <input type="text" name="traducciones[1].enlace" maxlength="512" tabindex="13" value="<bean:write name="APPTRS_normativa" property="tra_enlace_v" />" class="btext"/>
               </div>
               <div class="component">
                 <div class="etiqueta">Apartat</div>
@@ -410,7 +408,7 @@ function obrirImatge(url) {
           <div id="capa2" class="capa">
             <div class="pestanyes">
               <div class="notab">
-                <a href="javascript:activarCapa(0, 4)" class="notabb">Catlà</a>
+                <a href="javascript:activarCapa(0, 4)" class="notabb">Català</a>
               </div>
               <div class="notab">
                 <a href="javascript:activarCapa(1, 4)" class="notabb">Castellà</a>

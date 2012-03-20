@@ -25,6 +25,16 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 
+/**
+ * 
+ * TODO @author enric
+ * Falta documentar! Para alguien nuevo en rolsac, y ve la clase Crawler 
+ * por primera vez:
+ * Que objetivo tiene el crawler del rolsac?
+ * Cuales son las entradas, salidas del crawler y que estado cambia?  
+ * 
+ */
+
 public class Crawler{
     
 
@@ -156,15 +166,18 @@ public class Crawler{
         }
     }
     
-  //Función recursiva que indexa un MicroSite
+  //Función recursiva que indexa el contenido de un MicroSite
     private void indexMS(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
-		counter++;
+
+
+    	counter++;
 		String sHijo="";
 		// Comprobamos el nivel de profundidad que deseamos
 		if (counter <= profundidadMS) {
 
 			try {
 
+				// se leen los links de la pagina apuntada por la URL 
 				LinkParser lp = new LinkParser(padre.getURL());
 				URL[] links = lp.ExtractLinks();
 
@@ -172,20 +185,17 @@ public class Crawler{
 
 				for (URL l : links) {
 
+					//se convierte la URL a unicode
 					String strEscapeHTML = StringEscapeUtils.unescapeHtml(l
 							.toURI().toString());
 					if (strEscapeHTML.endsWith("#")) {
 						strEscapeHTML = l.toURI().toString().replace("#", "");
 					}
 
-					// Comprobamos que cumpla estas 3 condiciones = 1)
-					// Pertenezca al dominio de la URL inicial 2) Que contenga
-					// el valor de la clave de la URL inicial y la clave 3)Que esté en el
-					// idioma de de la ficha
-						if (isMicrosite(strEscapeHTML)
-							&& contieneClavesMS(strEscapeHTML)
-							&& strEscapeHTML.toLowerCase().contains(
-									"lang=" + idioma)) {
+						
+						if (micrositeEsIndexable(idioma, strEscapeHTML)) {
+							
+							//se comprueba que sea un microsite aun no leido. 
 							Nodo hijo = null;
 							for (Nodo leido : arbol) {
 								if (strEscapeHTML.toLowerCase().equals(leido.getURL().toLowerCase())) {
@@ -194,6 +204,7 @@ public class Crawler{
 								}
 							}
 	
+							// se añade el contenido del microsite en la lista de indexacion. 
 							if (hijo == null) {
 								hijo = htmlDocument.Document(idFicha,strEscapeHTML,arbol,counter,true);
 								
@@ -210,6 +221,7 @@ public class Crawler{
 
 				}
 
+				//recursivamente se indexan los microsite hijos
 				for (Nodo indexarNodo : indexarList) {
 					indexMS(indexarNodo,counter,idFicha,idioma);
 				}
@@ -221,6 +233,22 @@ public class Crawler{
 		}
 
 	}
+    
+    
+	private boolean micrositeEsIndexable(String idioma, String strEscapeHTML)
+			throws Exception {
+		
+		// Solo se indexan los microsites
+		// que cumplan estas 3 condiciones = 1)
+		// Pertenezca al dominio de la URL inicial 2) Que contenga
+		// el valor de la clave de la URL inicial y la clave 3)Que esté en el
+		// idioma de de la ficha
+		return isMicrosite(strEscapeHTML)
+			&& contieneClavesMS(strEscapeHTML)
+			&& strEscapeHTML.toLowerCase().contains(
+					"lang=" + idioma);
+	}
+	
     //Función recursiva que indexa una URL Básica
     private void indexBasica(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
 		counter++;

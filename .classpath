@@ -95,6 +95,11 @@
 	<classpathentry kind="lib" path="test/lib/powermock-rule-agent/powermock-module-junit4-rule-agent-1.4.10.jar"/>
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="test/lib/p6spy.jar"/>
+	<classpathentry kind="lib" path="lib/icu4j-3.4.4.jar"/>
+	<classpathentry kind="lib" path="lib/iri-0.8.jar"/>
+	<classpathentry kind="lib" path="lib/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="lib/rome-1.0RC2.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/caib-utilities.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
