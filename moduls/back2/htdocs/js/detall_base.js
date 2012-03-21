@@ -1,4 +1,6 @@
 jQuery(document).ready(function(){
+	LANG_TRADUCTOR = "ca";
+	
 	jQuery("#btnVolver").bind("click",function(){Detall.torna();});
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
@@ -376,5 +378,42 @@ function DetallBase(soloFicha, reglasFormulario){
 		escriptori_previsualitza_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300);
 		});
+	}
+	
+	this.traduir = function (url, inputs, datos) {
+        Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+        
+        var dataVars = "";
+        for (var i in inputs) {
+            var campo = inputs[i] + LANG_TRADUCTOR;
+            var and = i == 0 ? "" : "&";
+            dataVars += and + campo + "=" + jQuery("#" + campo).val();
+        }
+        
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: dataVars,
+            dataType: "json",
+            error: function() {
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+            },
+            success: function(data) {
+                if (typeof data.error != "undefined") {
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: data.error});
+                } else {
+                    for (var i in data.traduccions) {
+                        var traduccio = data.traduccions[i].traduccio;
+                        var lang = data.traduccions[i].lang;
+                        for (var j in inputs) {
+                            var campo = inputs[j] + lang;
+                            var valor = traduccio[datos[j]] || "";
+                            jQuery("#" + campo).val(valor);
+                        }
+                    }
+                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTraduccioCorrecta});
+                }
+            }
+        });
 	}
 }

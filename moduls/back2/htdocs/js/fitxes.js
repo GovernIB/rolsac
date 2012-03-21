@@ -29,6 +29,10 @@ $(document).ready(function() {
 	escriptori_detall_elm = $("#escriptori_detall");
 	escriptori_previsualitza_elm = $("#escriptori_previsualitza");
 	
+	// Datos traductor
+	CAMPOS_TRADUCTOR_FICHA = ["item_titol_", "item_des_curta_", "item_des_llarga_"];
+    DATOS_TRADUCIDOS_FICHA = ["titulo", "descAbr", "descripcion"];
+    
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();
@@ -73,7 +77,7 @@ function CLlistat(){
 		$("#cerca_fechaActualizacion").datetimepicker({ timeFormat: 'hh:mm' });
 	
 		Llistat.carregar({});
-		
+	
 	}
 	
 	this.finCargaListado = function(opcions,data){
@@ -394,8 +398,17 @@ function CDetall(){
         jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").change(function(){
             jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
         });
+        
+        // boton de traducir
+        jQuery("#botoTraduirFitxa").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
 	}
 
+    this.traduirWrapper = function () {
+		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_FICHA, DATOS_TRADUCIDOS_FICHA);
+	}
+	
 	this.dataPublicacio = function(e) {
 //		if ($(this).val() == "") {
 //			$(this).val(txtImmediat);

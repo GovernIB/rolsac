@@ -27,6 +27,33 @@ $(document).ready(function() {
 
 	escriptori_tramits_elm = $("#escriptori_tramits");
 	
+	// datos traductor
+	CAMPOS_TRADUCTOR_PROCEDIMIENTO = [
+        "item_nom_",
+		"item_objecte_",
+        "item_presentacio_",
+        "item_lloc_",
+        "item_destinataris_",
+        "item_requisits_",
+        "item_notificacio_",
+        "item_observacions_",
+        "item_resolucio_",
+        "item_silenci_"
+    ];
+    
+    DATOS_TRADUCIDOS_PROCEDIMIENTO = [
+	    "nombre",
+	    "resumen",
+	    "plazos",
+	    "lugar",
+	    "destinatarios",
+	    "requisitos",
+	    "notificacion",
+	    "observaciones",
+	    "resolucion",
+	    "silencio"
+    ];
+    
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
@@ -395,8 +422,17 @@ function CDetall(){
         });
         
         jQuery("#item_finestreta_unica").change(function() { 
-        						$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
-        					});
+			$("#item_finestreta_unica").attr("checked", jQuery(this).is(":checked")); 
+		});
+        
+        // boton de traducir
+        jQuery("#botoTraduirProcediment").unbind("click").bind("click", function() {
+            Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+        });
+	}
+	
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduir, CAMPOS_TRADUCTOR_PROCEDIMIENTO, DATOS_TRADUCIDOS_PROCEDIMIENTO);
 	}
 	
 	this.dataPublicacio = function(e) {		
@@ -411,7 +447,7 @@ function CDetall(){
         jQuery("#modul_tramits").hide();
         jQuery("#modulAuditories").hide();
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
-		
+        
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();
 		ModulNormativa.nuevo();

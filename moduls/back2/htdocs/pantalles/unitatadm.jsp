@@ -48,9 +48,6 @@
                                 <li class="idioma">
                                     <a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a>
                                 </li>
-                                <li class="traduix btnGenerico">
-                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
-                                </li>
                             </ul>
                             <div class="idiomes">
                             <!-- ca -->

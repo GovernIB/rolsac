@@ -46,6 +46,8 @@
     var pagGuardarTaxaTramit = '<c:url value="/taxa/guardarTaxa.do" />';
     var pagCarregarTaxaTramit = '<c:url value="/taxa/carregarTaxaTramit.do" />';
     var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+    var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
+    var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
     
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
@@ -667,7 +669,7 @@
                                 <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
                                 <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
                                 <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
-                                <li class="traduix btnGenerico">
+                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
@@ -2480,7 +2482,7 @@
 				                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
 				                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
 				                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
-                                <li class="traduix btnGenerico">
+                                <li class="traduix btnGenerico" id="botoTraduirTramit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>				                                                
 				            </ul>
@@ -2718,7 +2720,7 @@
 												<label for="item_requisits_tramit_en"><spring:message code='camp.requisits'/></label>
 											</div>
 											<div class="control">
-												<textarea id="item_requisits_tramit_es" name="item_requisits_tramit_en"
+												<textarea id="item_requisits_tramit_en" name="item_requisits_tramit_en"
 													cols="50" rows="2" class="nou"></textarea>
 											</div>
 										</div>

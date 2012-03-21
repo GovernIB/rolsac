@@ -105,4 +105,9 @@
     // Errores de validación
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
+    
+    // Traductor
+    var txtTraduccioCorrecta = "<spring:message code='traductor.traduccio.correcta'/>";
+    var txtTraductorAvis = "<spring:message code='traductor.avis'/>";
+    var txtTraductorAvisTitol = "<spring:message code='traductor.avis.titol'/>";
 </script>

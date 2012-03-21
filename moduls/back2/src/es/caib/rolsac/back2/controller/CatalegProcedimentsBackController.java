@@ -65,10 +65,13 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.utils.DateUtils;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
 public class CatalegProcedimentsBackController {
+	
+	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
 	
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
@@ -891,7 +894,6 @@ public class CatalegProcedimentsBackController {
 					tpl.setNombre(request.getParameter("item_nom_" + lang));
 					tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
 					tpl.setResumen(request.getParameter("item_objecte_" + lang));
-					tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
 					tpl.setRequisitos(request.getParameter("item_requisits_" + lang));
 					tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
 					tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
@@ -1103,6 +1105,86 @@ public class CatalegProcedimentsBackController {
 			Integer orden2 = (Integer) hvp2.get("orden");
 			return orden1.compareTo(orden2); 
 		}
+	}
+	
+
+	@RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setNombre(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setPlazos(request.getParameter("item_presentacio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_requisits_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setRequisitos(request.getParameter("item_requisits_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setObservaciones(request.getParameter("item_observacions_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setResolucion(request.getParameter("item_resolucio_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setSilencio(request.getParameter("item_silenci_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			List<String> langs = traductor.getListLang();
+			Map<String, Object> traduccio;
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+	        
+	        for (String lang: langs){
+	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
+	        		TraduccionProcedimientoLocal traduccioDesti = new TraduccionProcedimientoLocal();
+	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
+	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)){
+	        			traduccio = new HashMap<String, Object>();
+	        			traduccio.put("lang", lang);
+	        			traduccio.put("traduccio", traduccioDesti);
+	        			traduccions.add(traduccio);
+	        		} else {
+	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+	        			break;
+	        		}
+	        	}
+	        }
+	        
+			resultats.put("traduccions", traduccions);
+			
+		} catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("CatalegProcedimentBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("CatalegProcedimentBackController.traduir: Error en al traducir procedimiento: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
 	}
 	
 }

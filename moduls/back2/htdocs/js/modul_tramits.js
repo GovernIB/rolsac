@@ -9,6 +9,25 @@ $(document).ready(function() {
 	escriptori_tramits_elm = $("#escriptori_tramits");	
 	cercador_elm = $("#cercador");
 	
+	// datos traductor
+	CAMPOS_TRADUCTOR_TRAMITE = [
+        "item_nom_tramit_",
+		"item_descripcio_tramit_",
+        "item_requisits_tramit_",
+        "item_documentacio_tramit_",
+        "item_termini_tramit_",
+        "item_lloc_tramit_"
+    ];
+    
+    DATOS_TRADUCIDOS_TRAMITE = [
+	    "nombre",
+	    "descripcion",
+	    "requisits",
+	    "documentacion",
+	    "plazos",
+	    "lugar"
+    ];
+    
 	ModulTramit = new CModulTramit();
 	EscriptoriTramit = new CEscriptoriTramit();		
 	
@@ -177,9 +196,17 @@ function CEscriptoriTramit(){
         
         /*	formulariComprovarTramits = new FormulariComprovar(FormulariTramits);		
 		formulariComprovarTramits.iniciar();*/
-		
+		// boton de traducir
+	    
+		jQuery("#botoTraduirTramit").unbind("click").bind("click", function() {
+	        Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTraductorAvisTitol, text: txtTraductorAvis, funcio: that.traduirWrapper});
+	    });
 	}
-    	
+
+	this.traduirWrapper = function () {
+		that.traduir(pagTraduirTramit, CAMPOS_TRADUCTOR_TRAMITE, DATOS_TRADUCIDOS_TRAMITE);
+	}
+    
 	this.guardar = function (){			
         
         //Validam el formulari de tramit		

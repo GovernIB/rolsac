@@ -39,6 +39,7 @@
    var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
    var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+   var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
 
    // texts
    var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -435,7 +436,7 @@
                                 <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
                                 <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
                                 
-                                <li class="traduix btnGenerico">
+                                <li class="traduix btnGenerico" id="botoTraduirFitxa">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='boto.traduix'/></span></span></a>
                                 </li>
                             </ul>

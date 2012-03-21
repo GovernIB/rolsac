@@ -64,6 +64,7 @@
         <fileset dir="${web.product}">
         	<include name="${prefix.modul}-utils.jar"/>
             <include name="model.jar"/>
+        	<include name="integracion.jar"/>
         	<include name="${prefix.modul}-persistence.jar"/>
         </fileset>
 		<!-- agarcia: librerias comunes en 00librerias -->

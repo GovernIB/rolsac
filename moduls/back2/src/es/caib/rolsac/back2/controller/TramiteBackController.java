@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -48,11 +50,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.utils.DateUtils;
+import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/tramit/")
 public class TramiteBackController {
 
+	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
+	
 	private static Log log = LogFactory.getLog(TramiteBackController.class);	
 	private MessageSource messageSource = null;
 	
@@ -520,4 +525,71 @@ public class TramiteBackController {
 
 		return resultatStatus;
 	}	
+	
+	@RequestMapping(value = "/traduir.do")
+	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			TraduccionTramite traduccioOrigen = new TraduccionTramite();
+			
+			if (StringUtils.isNotEmpty(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setNombre(request.getParameter("item_nom_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setDescripcion(request.getParameter("item_descripcio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_requisits_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setRequisits(request.getParameter("item_requisits_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_documentacio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setDocumentacion(request.getParameter("item_documentacio_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_termini_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setPlazos(request.getParameter("item_termini_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_tramit_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setLugar(request.getParameter("item_lloc_tramit_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			List<String> langs = traductor.getListLang();
+			Map<String, Object> traduccio;
+			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
+	        
+	        for (String lang: langs){
+	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
+	        		TraduccionTramite traduccioDesti = new TraduccionTramite();
+	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
+	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)){
+	        			traduccio = new HashMap<String, Object>();
+	        			traduccio.put("lang", lang);
+	        			traduccio.put("traduccio", traduccioDesti);
+	        			traduccions.add(traduccio);
+	        		} else {
+	        			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+	        			break;
+	        		}
+	        	}
+	        }
+	        
+			resultats.put("traduccions", traduccions);
+			
+		} catch (DelegateException dEx) {
+			logException(log, dEx);
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+		} catch (NullPointerException npe) {
+			log.error("tramiteBackController.traduir: El traductor no se encuentra en en contexto.");
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		} catch (Exception e) {
+			log.error("TramiteBackController.traduir: Error en al traducir tramite: " + e);
+			resultats.put("error", messageSource.getMessage("error.traductor", null, request.getLocale()));
+		}
+		
+		return resultats;
+	}
 }
