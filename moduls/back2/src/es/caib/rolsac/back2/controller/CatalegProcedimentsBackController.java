@@ -691,34 +691,38 @@ public class CatalegProcedimentsBackController {
                 
                 if ( !"".equals(tramitsProcediment) ) {
                 	
-                	List<Tramite> listaTramitesOld = procedimentOld.getTramites();
                 	List<Long> listaTramitesBorrar = new ArrayList<Long>();
                 	List<Tramite> tramitesNuevos = new ArrayList<Tramite>();                	
                 	String[] codigosTramitesNuevos = tramitsProcediment.split(",");
-                	
-            		for (int i = 0; i < codigosTramitesNuevos.length; i++) {                			     
-            			for ( Tramite tramite : listaTramitesOld ) {  
-            				                				
-            				if ( !"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i])) ) {
-            					tramitesNuevos.add(tramite);
-            					codigosTramitesNuevos[i] = null;
-            					
-            					break;
-            				}
-            			}                   			
-            		}
-            		                    	
-                	//Eliminar los que se han quitado de la lista
-                	for ( Tramite tramite : listaTramitesOld ) {                		
-                			if (!tramitesNuevos.contains(tramite) && tramite != null)                    				
-                				listaTramitesBorrar.add(tramite.getId());
+
+                	if (edicion) {
+                    	List<Tramite> listaTramitesOld = procedimentOld.getTramites();
+
+                		for (int i = 0; i < codigosTramitesNuevos.length; i++) {                			     
+                			for ( Tramite tramite : listaTramitesOld ) {  
+                				                				
+                				if ( !"".equals(codigosTramitesNuevos[i]) && tramite != null && tramite.getId().equals(Long.valueOf(codigosTramitesNuevos[i])) ) {
+                					tramitesNuevos.add(tramite);
+                					codigosTramitesNuevos[i] = null;
+                					
+                					break;
+                				}
+                			}                   			
+                		}
+                		                    	
+                    	//Eliminar los que se han quitado de la lista
+                    	for ( Tramite tramite : listaTramitesOld ) {                		
+                    			if (!tramitesNuevos.contains(tramite) && tramite != null)                    				
+                    				listaTramitesBorrar.add(tramite.getId());
+                    	}
+
+                    	for (Long id : listaTramitesBorrar ) {
+                    		//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
+                    		DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
+                    		tramiteDelegate.borrarTramite(id);
+                    	}
                 	}
                 	
-                	for (Long id : listaTramitesBorrar ) {
-                		//procediment.removeTramite( tramiteDelegate.obtenerTramite(id) );
-                		DelegateUtil.getProcedimientoDelegate().eliminarTramite(id, procediment.getId());
-                		tramiteDelegate.borrarTramite(id);
-                	}
                 	
                 	//Crear los nuevos
                 	if (!"".equals(codigosTramitesNuevos)) {

@@ -3060,7 +3060,7 @@
 		                                </div>
                                         <div class="botones">
                                             <div class="btnCambiar boton btnGenerico">
-                                                <a href="" class="btn consulta">
+                                                <a href="#" class="btn consulta">
                                                     <span><span><spring:message code='boto.seleccionarVUDS'/></span></span>
                                                 </a>
                                             </div>
