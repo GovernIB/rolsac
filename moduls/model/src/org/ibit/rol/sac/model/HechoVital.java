@@ -70,6 +70,11 @@ public class HechoVital extends Traducible {
         hpv.setOrden(hechosVitalesProcedimientos.size());
         hechosVitalesProcedimientos.add(hpv);
     }
+    
+    public void addHechoVitalProcedimientoRespetandoOrden(HechoVitalProcedimiento hpv){
+        hpv.setHechoVital(this);
+        hechosVitalesProcedimientos.add(hpv);
+    }
 
     public void removeHechoVitalProcedimiento(HechoVitalProcedimiento hechovp){
         int ind = hechosVitalesProcedimientos.indexOf(hechovp);

@@ -25,6 +25,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals_procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_taxes_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
@@ -82,17 +83,19 @@
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
     var txtFamilia = "<spring:message code='txt.familia'/>";
     var txtFechaActualizacion = "<spring:message code='camp.dataActualitzacio'/>";
+    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
+    var txtSeleccionat = "<spring:message code='txt.seleccionat'/>";
 
-    // modul fets vitals
-    var txtFet = "<spring:message code='txt.fet_vital'/>";
-    var txtFets = "<spring:message code='txt.fets_vitals'/>";
-    var txtNoHiHaFets = txtNoHiHa + " " + txtFets;;
-    
     var txtHiHa = "<spring:message code='txt.hi_ha'/>";
     var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
     var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
     var txtNoHiHaFets = "<spring:message code='txt.noHiHaFetsVitals'/>";
     var txtNouTitol = "<spring:message code='txt.nova'/> " + txtLlistaItem.toLowerCase();
+
+    var txtFet = "<spring:message code='txt.fet_vital'/>";
+    var txtFets = "<spring:message code='txt.fets_vitals'/>";
+    var txtNoHiHaFets = txtNoHiHa + " " + txtFets;
+    var txtNoHiHaFetsSeleccionats = txtNoHiHaFets + " " + txtSeleccionats.toLowerCase();
     
     var txtDocument = "<spring:message code='txt.document'/>";    
     var txtDocuments = "<spring:message code='txt.documents'/>";
@@ -100,15 +103,12 @@
     var txtFormularis = "<spring:message code='txt.formularis'/>";
     var txtTaxa = "<spring:message code='txt.taxa'/>";
     var txtTaxes = "<spring:message code='txt.taxes'/>";
-    		
     var txtNoHiHaDocuments = txtNoHiHa + " " + txtDocuments;
     var txtNoHiHaTaxes = txtNoHiHa + " " + txtTaxes;
-    var txtSeleccionats = "<spring:message code='txt.seleccionats'/>";
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
     
     var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
-    
     var txtTramit = "Tramit";
     var txtTramits = "Tramits";
     var txtTramitCreatCorrecte = "<spring:message code='txt.tramit_creat_correcte'/>";
@@ -2010,7 +2010,51 @@
             </div>
             <!-- /modul -->  
             
-            
+            <!-- modul -->
+            <div class="modul" id="fetsVitals">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.fets_vitals'/></legend>
+                    <div class="modul_continguts mostrat">                    
+                        <!-- modulFetsVitals -->
+                        <div class="modulFetsVitals selectorChecks">
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_fets_vitals'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+                                    <c:forEach items="${llistaFetsVitals}" var="fetVital" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${fetVital.nom}" /></span><input type="checkbox" value="<c:out value='${fetVital.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulFetsVitals -->                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
             
         </div>
         <!-- /modulLateral -->

@@ -28,6 +28,14 @@ public class HechoVitalProcedimientoDelegate implements StatelessDelegate {
        }
    }
 
+   public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) throws DelegateException {
+       try {
+           getFacade().grabarHechoVitalProcedimientos(hvpsAGrabar);
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+   }
+   
    public HechoVitalProcedimiento obtenerHechoVitalProcedimiento(Long id) throws DelegateException {
        try {
            return getFacade().obtenerHechoVitalProcedimiento(id);

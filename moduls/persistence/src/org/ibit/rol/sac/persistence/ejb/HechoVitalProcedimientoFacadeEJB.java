@@ -9,7 +9,6 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
 
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
@@ -60,6 +59,35 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
                 session.flush();
             }
             return hvp.getId();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * Crea o actualiza los HechoVitalProcedimiento de una coleccion.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+    public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) {
+        Session session = getSession();
+        try {
+        	for(HechoVitalProcedimiento hvp: hvpsAGrabar) {
+	            if (hvp.getId() == null) {
+	                HechoVital hecho = (HechoVital) session.load(HechoVital.class, hvp.getHechoVital().getId());
+	                ProcedimientoLocal proc = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, hvp.getProcedimiento().getId());
+	                Hibernate.initialize(proc.getMaterias());
+	                Hibernate.initialize(proc.getHechosVitalesProcedimientos());
+	                hecho.addHechoVitalProcedimientoRespetandoOrden(hvp);
+	                proc.addHechoVitalProcedimiento(hvp);  // siempre respeta orden
+	                Actualizador.actualizar(proc);
+	            } else {
+	                session.update(hvp);
+	            }
+        	}
+            session.flush();
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -165,5 +193,4 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
 }

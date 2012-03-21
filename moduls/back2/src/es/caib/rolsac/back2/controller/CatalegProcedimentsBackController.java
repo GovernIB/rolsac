@@ -5,11 +5,14 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -44,6 +47,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
+import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -117,7 +121,7 @@ public class CatalegProcedimentsBackController {
 		try {
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
 			model.put("llistaFetsVitals", LlistatUtil.llistarHechosVitales(lang));
-			model.put("llistaPublicObjectiu", LlistatUtil.llistarPublicObjectius(lang));
+//			model.put("llistaPublicObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 		} catch (DelegateException dEx) {
@@ -374,8 +378,9 @@ public class CatalegProcedimentsBackController {
 			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
 			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
 			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
-			// TODO: Implementar getPublic()
-//			resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
+
+			// TODO: Implementar getPublico()
+			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
 			
 			// Idiomas
 			if (proc.getTraduccion("ca") != null) {
@@ -481,16 +486,17 @@ public class CatalegProcedimentsBackController {
             // Fin Materias asociadas
             
 			// Hechos vitales asociados
-            if (proc.getHechosVitalesProcedimientos() != null) {             
-                List<IdNomDTO> llistaFetsDTO = new ArrayList<IdNomDTO>();
-                for(HechoVitalProcedimiento hechoVital : proc.getHechosVitalesProcedimientos()){
-                	TraduccionHechoVital thv = (TraduccionHechoVital) hechoVital.getHechoVital().getTraduccion(lang);
-                    llistaFetsDTO.add(new IdNomDTO(hechoVital.getHechoVital().getId(), thv.getNombre()));                
-                }
-                resultats.put("fetsVitals", llistaFetsDTO);
-            } else {
-                resultats.put("fetsVitals", null);
-            } 
+            List<Map<String, Object>> llistaFetsDTO = new ArrayList<Map<String, Object>>();
+            for(HechoVitalProcedimiento hechoVitalProc : proc.getHechosVitalesProcedimientos()) {
+            	TraduccionHechoVital thv = (TraduccionHechoVital) hechoVitalProc.getHechoVital().getTraduccion(lang);
+            	Map<String, Object> hvpDTO = new HashMap<String, Object>();
+            	hvpDTO.put("id", hechoVitalProc.getHechoVital().getId());
+            	hvpDTO.put("nom", thv.getNombre());
+            	hvpDTO.put("orden", hechoVitalProc.getOrden());
+                llistaFetsDTO.add(hvpDTO);                
+            }
+            Collections.sort(llistaFetsDTO, new HechoVitalProcedimientoDTOComparator());
+            resultats.put("fetsVitals", llistaFetsDTO);
             // Fin Hechos vitales asociados
             
             // Normativas asociadas
@@ -616,7 +622,7 @@ public class CatalegProcedimentsBackController {
 		try {
 			UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);
 			if (ua == null) {
-				error = messageSource.getMessage("procediment.error.falten.camps", null, request.getLocale());
+				error = messageSource.getMessage("proc.error.falta.ua", null, request.getLocale());
 				result = new IdNomDTO(-3l, error);
 			} else {
 				
@@ -746,41 +752,39 @@ public class CatalegProcedimentsBackController {
                 
                 	procediment.setTramites(null);
                 }               
-                
                 //Fin trámites
                 
-                // Hechos vitales
-                /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
-                 * En el primer caso es bastante probable que se repitan la mayoria de materias.
-                 */
-                if (request.getParameter("fetsVitals") != null && !"".equals(request.getParameter("fetsVitals"))){
-                    HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
-                    Set<HechoVitalProcedimiento> fetsVitalsNous = new HashSet<HechoVitalProcedimiento>();
-                    String[] codisFetsVitalsNous = request.getParameter("fetsVitals").split(",");
-                    
-                    if (edicion) {
-                        for (int i = 0; i < codisFetsVitalsNous.length; i++){
-                            for (HechoVitalProcedimiento fetVitalProc : procedimentOld.getHechosVitalesProcedimientos()){
-                                if(fetVitalProc.getHechoVital().getId().equals(Long.valueOf(codisFetsVitalsNous[i]))) {//materia ya existente
-                                	fetsVitalsNous.add(fetVitalProc);
-                                	codisFetsVitalsNous[i] = null;
-                                    break;
-                                }
-                            }                            
-                        }                         
-                    }                    
-                    
-                    for (String codiFetVital : codisFetsVitalsNous) {
-                        if (codiFetVital != null) {
-                        	for (HechoVitalProcedimiento hvp : (List<HechoVitalProcedimiento>) hechoVitalDelegate.obtenerHechoVital(Long.valueOf(codiFetVital)).getHechosVitalesProcedimientos()) {
-                        		if (!fetsVitalsNous.contains(hvp)) {
-                        			fetsVitalsNous.add(hvp);
-                        		}
-                        	}
-                        }                        
+                // Hechos vitales 
+                if (request.getParameter("fetsVitals") != null && edicion) {
+                	String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
+                	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
+                	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+
+                	// Eliminamos los hechos vital procedimiento existentes
+                	List<Long> hvpIds = new LinkedList<Long>();
+                	if (procediment.getHechosVitalesProcedimientos() != null) {
+	                	for (HechoVitalProcedimiento hvp: procediment.getHechosVitalesProcedimientos()) {
+	                		hvpIds.add(hvp.getId());
+	                	}
+	                	hvpDelegate.borrarHechoVitalProcedimientos(hvpIds);
+                	}
+                	procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
+                	
+                	// Guardamos los nuevos
+                	int orden = 0;
+                	Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
+                	for (int i = 0; i < codisFetsVitals.length; i++) {
+                    	Long hvId = ParseUtil.parseLong(codisFetsVitals[i]);
+                    	if (hvId != null) {
+                    		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+                    		hvp.setOrden(orden++);
+                    		hvp.setProcedimiento(procediment);
+                    		hvp.setHechoVital(hvDelegate.obtenerHechoVital(hvId));
+                    		hvpsAGuardar.add(hvp);
+                    	}
                     }
-                    
-                    procediment.setHechosVitalesProcedimientos(fetsVitalsNous);                                   
+                    hvpDelegate.grabarHechoVitalProcedimientos(hvpsAGuardar);
+                    procediment.setHechosVitalesProcedimientos(hvpsAGuardar); 
                 }
                 // Fin Hechos vitales
                 
@@ -1091,5 +1095,13 @@ public class CatalegProcedimentsBackController {
 		return resultats;
 	}
 
+	
+	class HechoVitalProcedimientoDTOComparator implements Comparator<Map<String, Object>> {
+		public int compare(Map<String, Object> hvp1, Map<String, Object> hvp2) {
+			Integer orden1 = (Integer) hvp1.get("orden");
+			Integer orden2 = (Integer) hvp2.get("orden");
+			return orden1.compareTo(orden2); 
+		}
+	}
 	
 }

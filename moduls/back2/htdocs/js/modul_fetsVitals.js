@@ -1,4 +1,4 @@
-// MODULO DE HECHOS VITALES RELACIONADOS
+// MODULO DE HECHOS VITALES RELACIONADOS PARA FICHAS
 
 jQuery(document).ready(function() {
 	ModulFetsVitals = new CModulFetsVitals();

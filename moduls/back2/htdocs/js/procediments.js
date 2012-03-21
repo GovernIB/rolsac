@@ -330,6 +330,7 @@ function CDetall(){
 	this.guarda = function() {
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
+		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 		urlParams += "&" + ModulTramit.listaTramites();
 		this._baseGuarda(urlParams);
 	}
@@ -547,15 +548,10 @@ function CDetall(){
                 {id:2,nombre:"Tramite inicial 2",orden:1}
             ]);        
             */
-		        
 		ModulDocuments.inicializarDocuments(dada_node.documents);
-        
 		ModulMateries.inicializarMaterias(dada_node.materies);
-		
-		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
-		
+		ModulFetsVitals.inicializarHechosVitales(dada_node.fetsVitals);
 		ModulNormativa.inicializarNormativas(dada_node.normatives);
-		
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
