@@ -784,6 +784,7 @@ function CDetall(){
 		
 		//Ocultar botones
 		$("#modulLateral li.btnEliminar").hide();
+        jQuery("#modulAuditories").hide();
 		
 		//Ocultar campos clave primaria		
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();

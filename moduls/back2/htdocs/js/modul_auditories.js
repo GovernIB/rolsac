@@ -27,6 +27,9 @@ function ModulAuditories(idModuloAuditorias){
 	
 	this.carregar = function(tipusAuditoria, itemID) {
 
+		if (!itemID) {
+			return;
+		}
 		// variables
 		var dataVars = "&id=" + itemID;
 		dataVars += "&tipus=" + tipusAuditoria;
@@ -60,34 +63,34 @@ function ModulAuditories(idModuloAuditorias){
 		var resultats_total = parseInt(data.total,10);
 		
 		// codi taula
-		codi_taula = '<table>';
-		codi_taula +=' <thead>';
-		codi_taula +='  <th class="usuario"><div>USUARI</div></th>';
-		codi_taula +='  <th class="fecha"><div>DATA</div></th>';
-		codi_taula +='  <th class="operacion"><div>OPERACI&Oacute;</div></th>';
-		codi_taula +=' </thead>';                    
-		codi_taula +=' <tbody>';
+		codi_taula_audit = '<table>';
+		codi_taula_audit +=' <thead>';
+		codi_taula_audit +='  <th class="usuario"><div>USUARI</div></th>';
+		codi_taula_audit +='  <th class="fecha"><div>DATA</div></th>';
+		codi_taula_audit +='  <th class="operacion"><div>OPERACI&Oacute;</div></th>';
+		codi_taula_audit +=' </thead>';                    
+		codi_taula_audit +=' <tbody>';
 		
 		if (resultats_total > 0) {
 			// codi cuerpo
 			$(data.nodes).each(function(i) {
 				dada_node = this;
 
-				codi_taula += '<tr>';
-				codi_taula += ' <td class="usuario"><div>' + dada_node.usuario + '</div></td>';
-				codi_taula += ' <td class="fecha"><div>' + dada_node.fecha + '</div></td>';
-				codi_taula += ' <td class="operacion"><div>' + dada_node.tituloOperacion + '</div></td>';
-				codi_taula += '</tr>';
+				codi_taula_audit += '<tr>';
+				codi_taula_audit += ' <td class="usuario"><div>' + dada_node.usuario + '</div></td>';
+				codi_taula_audit += ' <td class="fecha"><div>' + dada_node.fecha + '</div></td>';
+				codi_taula_audit += ' <td class="operacion"><div>' + dada_node.tituloOperacion + '</div></td>';
+				codi_taula_audit += '</tr>';
 			});
 		} else {
-			codi_taula += '<tr>';
+			codi_taula_audit += '<tr>';
 			//TODO: internacionalizar
-			codi_taula += ' <td colspan="3" class="usuario"><div>no hi ha auditories registrades</div></td>';
-			codi_taula += '</tr>';
+			codi_taula_audit += ' <td colspan="3" class="usuario"><div>no hi ha auditories registrades</div></td>';
+			codi_taula_audit += '</tr>';
 		}
 		
-        codi_taula +=' </tbody>';
-        codi_taula +='</table>';
+        codi_taula_audit +=' </tbody>';
+        codi_taula_audit +='</table>';
 
         /* TODO: comprobar si es necesario adaptarlo
 		if($.browser.opera) {
@@ -96,9 +99,9 @@ function ModulAuditories(idModuloAuditorias){
 		*/
 		
 		// codi final
-		codi_final = codi_taula;
-		
-		moduloAuditorias_elm.find("div.modul_continguts:first").html(codi_final);
+		codi_final_audit = codi_taula_audit;
+		moduloAuditorias_elm.find("div.modul_continguts:first").html(codi_final_audit);
+		jQuery("#modulAuditories").show();
 		
 	}
 	

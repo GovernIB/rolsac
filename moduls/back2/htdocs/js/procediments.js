@@ -332,7 +332,7 @@ function CDetall(){
 		urlParams += "&" + ModulMateries.listaMaterias();
 		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 		urlParams += "&" + ModulTramit.listaTramites();
-		this._baseGuarda(urlParams);
+		that._baseGuarda(urlParams);
 	}
 	
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
@@ -409,6 +409,7 @@ function CDetall(){
         //Ocultar paneles
 		jQuery("#modul_documents").hide();
         jQuery("#modul_tramits").hide();
+        jQuery("#modulAuditories").hide();
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		
 		ModulMateries.nuevo();

@@ -405,6 +405,7 @@ function CDetall(){
 	this.nou = function() {
 		//Ocultar paneles
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+        jQuery("#modulAuditories").hide();
 		
 		$("#item_id").val("");
 		

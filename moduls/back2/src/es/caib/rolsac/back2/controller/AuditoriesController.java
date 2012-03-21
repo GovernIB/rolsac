@@ -40,7 +40,7 @@ public class AuditoriesController {
 
 
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatUsuaris(HttpServletRequest request, HttpSession session) {
+	public @ResponseBody Map<String, Object> llistatAuditories(HttpServletRequest request, HttpSession session) {
 
 		List<AuditoriaDTO> llistaDTO = new ArrayList<AuditoriaDTO>();
 		Map<String, Object> resultats = new HashMap<String, Object>();

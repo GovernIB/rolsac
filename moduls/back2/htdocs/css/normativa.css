@@ -114,13 +114,13 @@ div.llistat div.tbody div.normativaCaducada {
 
 div.table div.tbody div.td span.id{
     float: left;
-    width: 9.9%;
+    width: 15%;
     display: block;    
     padding: 0;
 }
 div.table div.tbody div.td a{
     float: right;
-    width: 87%;
+    width: 83%;
     display: block;
     text-align: justify;
 }
