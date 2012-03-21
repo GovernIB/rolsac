@@ -2576,7 +2576,7 @@
 		                                                </a>
 		                                            </div>
 		                                            <div class="boton btnGenerico">                                    
-		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ', 'tramits_item_organ_id');" class="btn borrar">
+		                                                <a href="javascript:EliminaArbreUA('tramits_item_organ_ca', 'tramits_item_organ_id');" class="btn borrar">
 		                                                    <span><span><spring:message code='boto.borrar'/></span></span>
 		                                                </a>
 		                                            </div>
