@@ -29,6 +29,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_taxes_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
@@ -46,6 +47,7 @@
     var pagGuardarTaxaTramit = '<c:url value="/taxa/guardarTaxa.do" />';
     var pagCarregarTaxaTramit = '<c:url value="/taxa/carregarTaxaTramit.do" />';
     var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+    var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
     
@@ -816,7 +818,7 @@
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
+                                                <input id="item_fi_vida_administrativa" name="item_fi_vida_administrativa" type="checkbox" value="on" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -824,7 +826,7 @@
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_taxa" name="item_taxa" type="checkbox" class="nou" />
+                                                <input id="item_taxa" name="item_taxa" type="checkbox" value="on" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_taxa"><spring:message code='camp.taxa'/></label>
@@ -986,7 +988,7 @@
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_fi_vida_administrativa_es" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
+                                                <input id="item_fi_vida_administrativa_es" name="item_fi_vida_administrativa_es" value="on" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa_es"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -994,7 +996,7 @@
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_taxa_es" name="item_taxa" type="checkbox" class="nou" />
+                                                <input id="item_taxa_es" name="item_taxa_es" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_taxa_es"><spring:message code='camp.taxa'/></label>
@@ -1157,7 +1159,7 @@
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_fi_vida_administrativa_en" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
+                                                <input id="item_fi_vida_administrativa_en" name="item_fi_vida_administrativa_en" value="on" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa_en"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -1165,7 +1167,7 @@
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_taxa_en" name="item_taxa" type="checkbox" class="nou" />
+                                                <input id="item_taxa_en" name="item_taxa_en" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_taxa_en"><spring:message code='camp.taxa'/></label>
@@ -1327,7 +1329,7 @@
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_fi_vida_administrativa_de" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
+                                                <input id="item_fi_vida_administrativa_de" name="item_fi_vida_administrativa_de" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa_de"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -1335,7 +1337,7 @@
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_taxa_de" name="item_taxa" type="checkbox" class="nou" />
+                                                <input id="item_taxa_de" name="item_taxa_de" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_taxa_de"><spring:message code='camp.taxa'/></label>
@@ -1498,7 +1500,7 @@
                                     <div class="fila">
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_fi_vida_administrativa_fr" name="item_fi_vida_administrativa" type="checkbox" class="nou" />
+                                                <input id="item_fi_vida_administrativa_fr" name="item_fi_vida_administrativa_fr" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_fi_vida_administrativa_fr"><spring:message code='camp.fiViaAdministrativa'/></label>
@@ -1506,7 +1508,7 @@
                                         </div>
                                         <div class="element checkbox">
                                             <div class="control">
-                                                <input id="item_taxa_fr" name="item_taxa" type="checkbox" class="nou" />
+                                                <input id="item_taxa_fr" name="item_taxa_fr" type="checkbox" class="nou" />
                                             </div>
                                             <div class="etiqueta">
                                                 <label for="item_taxa_fr"><spring:message code='camp.taxa'/></label>
@@ -1704,14 +1706,16 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul">
+            <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend>
+                    <legend>ESTADÍSTIQUES</legend> 
                     <div class="modul_continguts mostrat">
+                    <%-- 
                         <div class="fila">
                             <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
                         </div>
+                    --%>
                     </div>
                 </fieldset>
             </div>

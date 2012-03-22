@@ -128,7 +128,7 @@
 	 			<h2><spring:message code='quadreControl.grafica.estadistica_ua'/> <c:out value="${nomUA }" /></h2>
 	 			<c:choose>
 	 				<c:when test="${idUA > 0}">
-	 					<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=1&id=${idUA }${totUA }"/>" border="0" />
+	 					<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=1&id=${idUA }${totUA }"/>" border="0" />
 	 				</c:when>
 	 				<c:otherwise>
 	 					<spring:message code='quadreControl.grafica.escull_ua'/>
@@ -158,15 +158,15 @@
 					    </ul>
 					    <div id="resultats">
 					        <div class="resultats actiu" id="divAlta" style="display: block;">
-				            	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=2&id=${idUA }${totUA }"/>" border="0" />			 				
+				            	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=2&id=${idUA }${totUA }"/>" border="0" />			 				
 					        </div>
 					        <%--
 					        <div class="resultats " style="display: none;" id="divBaixa">
-					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=3&id=${idUA }${totUA }"/>" border="0" />
+					        	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=3&id=${idUA }${totUA }"/>" border="0" />
 					        </div>
 					        --%> 
 					        <div class="resultats " style="display: none;" id="divModificacio">
-					        	<img alt="" src="<c:url value="/quadreControl/grafica.do?tipoOperacion=4&id=${idUA }${totUA }"/>" border="0" />
+					        	<img alt="" src="<c:url value="/estadistiques/grafica.do?tipus=quadreControl&tipoOperacion=4&id=${idUA }${totUA }"/>" border="0" />
 					        </div>
 					        
 					    </div>	

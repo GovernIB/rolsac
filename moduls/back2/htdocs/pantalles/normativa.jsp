@@ -16,6 +16,7 @@
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
     <script type="text/javascript">
     <!--
@@ -27,6 +28,7 @@
         var pagCercaBoib = '<c:url value="/normativa/cercaBoib.do" />';
         var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+        var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
         var pagArrel = '<c:url value="/" />';
         
         var pagBOIB = "json/boibsJSON.php";
@@ -1847,19 +1849,21 @@
         </div>
         <!-- /modul -->
         
-        <!-- modul -->
-        <div class="modul">
-            <fieldset>
-                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>ESTADÍSTIQUES</legend>
-                <div class="modul_continguts mostrat">
-                    <div class="fila">
-                        <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+            <!-- modul -->
+            <div id="modulEstadistiques" class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>ESTADÍSTIQUES</legend> 
+                    <div class="modul_continguts mostrat">
+                    <%-- 
+                        <div class="fila">
+                            <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+                        </div>
+                    --%>
                     </div>
-                </div>
-            </fieldset>
-        </div>
-        <!-- /modul -->
+                </fieldset>
+            </div>
+            <!-- /modul -->
         
 	  <c:if test="${rolAdmin}">
         <!-- modul -->

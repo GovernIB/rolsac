@@ -17,6 +17,7 @@ $(document).ready(function() {
 	Error = new CError();
 	Detall = new CDetall(false);
 	Auditoria = new ModulAuditories();
+	Estadistica = new ModulEstadistiques();
 	
 	Detall.iniciar();
 	
@@ -33,6 +34,7 @@ function CDetall(soloFicha){
 
 	var that = this;
 	this.tipusAuditoria = 'unitat';
+	this.tipusEstadistica = 'unitat';
 
 	var materias = "";
 	
@@ -250,6 +252,10 @@ function CDetall(soloFicha){
 					if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
 						//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
 						Auditoria.busca(that.tipusAuditoria, itemID);
+					}
+					if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') { 
+						//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
+						Estadistica.pinta(that.tipusEstadistica, itemID);
 					}
 				}
 			}

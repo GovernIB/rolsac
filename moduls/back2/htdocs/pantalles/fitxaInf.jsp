@@ -27,6 +27,7 @@
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
    // accesos
@@ -39,6 +40,7 @@
    var pagGuardarDoc = '<c:url value="/documents/guardarDocument.do" />';
    var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';
    var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+   var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
    var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
 
    // texts
@@ -268,7 +270,7 @@
                                 <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
                             </div>
                         </div>
-                        <div class="element>                        
+                        <div class="element">                        
                             <label for="cerca_estat">Visibilitat</label>                            
 	                           <select id="cerca_estat" name="cerca_estat" class="t8">
 	                               <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
@@ -854,14 +856,16 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul">
+            <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend>
+                    <legend>ESTADÍSTIQUES</legend> 
                     <div class="modul_continguts mostrat">
+                    <%-- 
                         <div class="fila">
                             <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
                         </div>
+                    --%>
                     </div>
                 </fieldset>
             </div>

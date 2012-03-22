@@ -30,6 +30,7 @@ $(document).ready(function() {
 	Llistat = new CLlistat();	
 	Detall = new CDetall();
 	Auditoria = new ModulAuditories();
+	Estadistica = new ModulEstadistiques();
 	
 	Detall.iniciar();
     // Mostrar detall?
@@ -642,6 +643,7 @@ function CDetall(){
 	var that = this;
 	
 	this.tipusAuditoria = 'normativa';
+	this.tipusEstadistica = 'normativa';
 	
 	this.iniciar = function() {			
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos
@@ -784,7 +786,7 @@ function CDetall(){
 		
 		//Ocultar botones
 		$("#modulLateral li.btnEliminar").hide();
-        jQuery("#modulAuditories").hide();
+        jQuery("#modulAuditories, #modulEstadistiques").hide();
 		
 		//Ocultar campos clave primaria		
 		jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();

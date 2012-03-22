@@ -55,6 +55,8 @@ function DetallBase(soloFicha, reglasFormulario){
 	// Tipo de auditoria
 	this.tipusAuditoria = null;
 
+	// Tipo de estadística
+	this.tipusEstadistica = null;
 
 	// Preparar reglas de validacion del formulario.
 	if (typeof reglasFormulario == 'undefined' && typeof FormulariDades != 'undefined') {
@@ -82,7 +84,7 @@ function DetallBase(soloFicha, reglasFormulario){
 		return formulariComprovar.formComprovacio;
 	}
 
-	this.guarda = function(dataVars) {
+	this.guardaGenerico = function(dataVars) {
 
 		// Validamos el formulario
         if (!that.formulariValid()) {
@@ -93,6 +95,7 @@ function DetallBase(soloFicha, reglasFormulario){
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
 		dataForm = $("#formGuardar").serialize();
+		alert(dataForm);
 
 		if (typeof dataVars != 'undefined' && dataVars.length > 0) {
 			dataForm += "&" + dataVars;
@@ -123,6 +126,10 @@ function DetallBase(soloFicha, reglasFormulario){
 
 			}
 		});
+	}
+	
+	this.guarda = function (dataVars) {
+		that.guardaGenerico(dataVars);
 	}
 
 	this.modificado = function(){
@@ -191,6 +198,10 @@ function DetallBase(soloFicha, reglasFormulario){
 							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
 								//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
 								Auditoria.busca(that.tipusAuditoria, itemID);
+							}
+							if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') { 
+								//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
+								Estadistica.pinta(that.tipusEstadistica, itemID);
 							}
 						}
 					}

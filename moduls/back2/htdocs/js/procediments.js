@@ -59,6 +59,7 @@ $(document).ready(function() {
 	Detall = new CDetall();	
 	Error = new CError();
 	Auditoria = new ModulAuditories();
+	Estadistica = new ModulEstadistiques();
 	
     Detall.iniciar();
     // Mostrar detall?
@@ -351,15 +352,16 @@ function CDetall(){
     var that = this;
 
 	this.tipusAuditoria = 'procediment';
+	this.tipusEstadistica = 'procediment';
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
-	this._baseGuarda = this.guarda;	
+	//this._baseGuarda = this.guarda;	
 	this.guarda = function() {
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
 		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
 		urlParams += "&" + ModulTramit.listaTramites();
-		that._baseGuarda(urlParams);
+		that.guardaGenerico(urlParams);
 	}
 	
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
@@ -443,9 +445,8 @@ function CDetall(){
 		
 	this.nou = function() {
         //Ocultar paneles
-		jQuery("#modul_documents").hide();
-        jQuery("#modul_tramits").hide();
-        jQuery("#modulAuditories").hide();
+		jQuery("#modul_documents, #modul_tramits").hide();
+        jQuery("#modulAuditories, #modulEstadistiques").hide();
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
         
 		ModulMateries.nuevo();
@@ -456,6 +457,7 @@ function CDetall(){
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
+		escriptori_detall_elm.find("div.fila input.nou[type=checkbox]").val("on");
 		
 		doc_seleccionats_elm = escriptori_detall_elm.find("div.modulDocuments div.seleccionats");
 		doc_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaDocuments + ".");

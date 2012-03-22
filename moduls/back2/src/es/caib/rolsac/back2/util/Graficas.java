@@ -1,6 +1,7 @@
 package es.caib.rolsac.back2.util;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GradientPaint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.Axis;
 import org.jfree.chart.axis.CategoryAnchor;
 import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
@@ -73,7 +75,8 @@ public class Graficas {
 		categoryRenderer.setSeriesItemLabelsVisible(0, Boolean.TRUE);
 
 		CategoryAxis domainAxis = plot.getDomainAxis();
-
+		domainAxis.setCategoryLabelPositions(CategoryLabelPositions.DOWN_45);
+		//domainAxis.setLabelFont(new Font("SansSerif", Font.PLAIN, 8));
 		domainAxis.setMaximumCategoryLabelWidthRatio(0.8f);
 		domainAxis.setLowerMargin(0.02);
 		domainAxis.setUpperMargin(0.02);
@@ -85,6 +88,7 @@ public class Graficas {
 		// set the range axis to display integers only...
 		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
 		rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
 		// Pintar etiquetes laterals
 		rangeAxis.setTickLabelsVisible(true);
 		rangeAxis.setTickMarksVisible(true);
@@ -92,7 +96,7 @@ public class Graficas {
 		// AutoEscala
 		rangeAxis.setAutoRange(true);
 		// Marge superior
-		rangeAxis.setUpperMargin(0.10);
+		rangeAxis.setUpperMargin(0.25);
 
 		rangeAxis.setAutoRangeIncludesZero(true);
 		rangeAxis.setAutoRangeStickyZero(true);

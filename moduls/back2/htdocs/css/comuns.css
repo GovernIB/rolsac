@@ -802,7 +802,7 @@ div.table div.tbody div.td a:hover{
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias{
     padding: 0;
 }
-#modulAuditories {
+#modulAuditories, #modulEstadistiques {
 	display:none;
 }
 

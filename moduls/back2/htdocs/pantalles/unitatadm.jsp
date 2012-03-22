@@ -778,6 +778,22 @@
             </div>
             <!-- /modul -->
 
+            <!-- modul -->
+            <div id="modulEstadistiques" class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>ESTADÍSTIQUES</legend> 
+                    <div class="modul_continguts mostrat">
+                    <%-- 
+                        <div class="fila">
+                            <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+                        </div>
+                    --%>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+
 			  <c:if test="${rolAdmin}">
 		        <!-- modul -->
 		        <div id="modulAuditories" class="modul auditorias">                
@@ -1378,6 +1394,7 @@
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
     
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
@@ -1390,6 +1407,7 @@
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
         var pagEsborrar = '<c:url value="/unitatadm/esborrar.do" />';
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
+        var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
         var pagArrel = '<c:url value="/" />';    
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';

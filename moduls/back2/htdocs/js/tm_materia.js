@@ -27,6 +27,7 @@ $(document).ready(function() {
 	// INICIEM
 	Llistat = new CLlistat();
 	Detall = new CDetall();	
+	Estadistica = new ModulEstadistiques();
 	
     Detall.iniciar();
     // Mostrar detall?
@@ -266,6 +267,8 @@ function CDetall(){
 	
     var that = this;
 
+	this.tipusEstadistica = 'materia';
+    
 	this.iniciar = function() {	
 		// idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
@@ -309,6 +312,7 @@ function CDetall(){
 		//Ocultar paneles y campos
 		jQuery("#modul_icones").hide();
         jQuery("#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr").closest("div.fila").hide();
+        jQuery("#modulEstadistiques").hide();
 		
         $("#item_id").val("");
         $('#formGuardar input').each(limpiarCampo);

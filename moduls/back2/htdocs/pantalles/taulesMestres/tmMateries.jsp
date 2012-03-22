@@ -11,6 +11,7 @@
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_materia.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/materies/llistat.do" />';
@@ -19,6 +20,7 @@
     var pagEsborrar = '<c:url value="/materies/esborrarMateria.do" />';
     var pagCarregarIcona = '<c:url value="/iconesMateria/carregarIcona.do" />';
     var pagGuardarIcona = '<c:url value="/iconesMateria/guardarIcona.do" />';
+    var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
 
     //texts
     var txtTria = "<spring:message code='camp.tria.opcio'/>";
@@ -980,7 +982,25 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+
+
+            <!-- modul -->
+            <div id="modulEstadistiques" class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend>ESTADÍSTIQUES</legend> 
+                    <div class="modul_continguts mostrat">
+                    <%-- 
+                        <div class="fila">
+                            <img src="/sacback2/quadreControl/grafica.do?tipoOperacion=1&id=1" width="728px" />
+                        </div>
+                    --%>
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
             
+                        
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->

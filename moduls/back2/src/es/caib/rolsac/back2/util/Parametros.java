@@ -59,13 +59,25 @@ public class Parametros {
 	public static Integer NUMERO_REGISTROS = 5;
 	
 	public static Integer WIDTH_ESTADISTICA_QUADRE_CONTROL = 1010;
-	public static Integer HEIGHT_ESTADISTICA_QUADRE_CONTROL = 170;
+	public static Integer HEIGHT_ESTADISTICA_QUADRE_CONTROL = 200;
+
+	public static Integer WIDTH_ESTADISTICA_MODULO = 728;
+	public static Integer HEIGHT_ESTADISTICA_MODULO = 170;
 	
 	public static Integer GRAFICA_ESTADISTICA = 1;
 	public static Integer GRAFICA_RESUM_PERIODE = 7;
 	public static Integer GRAFICA_RESUM_ALTA = 2;
 	public static Integer GRAFICA_RESUM_MODIFICACIO = 3;
 	public static Integer GRAFICA_RESUM_BAIXA = 4;
+
+	public static String TIPUS_GRAFICA_QUADRE_CONTROL 	= "quadreControl";
+	public static String TIPUS_GRAFICA_MODUL 			= "modulo";
+	public static String MODUL_GRAFICA_PROCEDIMENT 		= "procediment";
+	public static String MODUL_GRAFICA_UA 				= "unitat";
+	public static String MODUL_GRAFICA_FITXA 			= "fitxa";
+	public static String MODUL_GRAFICA_NORMATIVA 		= "normativa";
+	public static String MODUL_GRAFICA_MATERIA 			= "materia";
+
 	
 	public static String COORDENADA_LATITUD = "39.5690036";
 	public static String COORDENADA_LONGITUD = "2.6436571";

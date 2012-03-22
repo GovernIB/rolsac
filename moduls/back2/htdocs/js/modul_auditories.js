@@ -101,7 +101,7 @@ function ModulAuditories(idModuloAuditorias){
 		// codi final
 		codi_final_audit = codi_taula_audit;
 		moduloAuditorias_elm.find("div.modul_continguts:first").html(codi_final_audit);
-		jQuery("#modulAuditories").show();
+		moduloAuditorias_elm.show();
 		
 	}
 	

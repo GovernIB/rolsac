@@ -38,6 +38,7 @@ $(document).ready(function() {
 	Detall = new CDetall();
 	Error = new CError();
 	Auditoria = new ModulAuditories();
+	Estadistica = new ModulEstadistiques();
 
 	Detall.iniciar();
     // Mostrar detall?
@@ -316,6 +317,7 @@ function CDetall(){
 	this.extend(false, FormulariDades);
 	var that = this;
 	this.tipusAuditoria = 'fitxa';
+	this.tipusEstadistica = 'fitxa';
 	
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	this.guarda = function() {
@@ -418,7 +420,7 @@ function CDetall(){
 	this.nou = function() {
 		//Ocultar paneles
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
-        jQuery("#modulAuditories").hide();
+        jQuery("#modulAuditories, #modulEstadistiques").hide();
 		
 		$("#item_id").val("");
 		
