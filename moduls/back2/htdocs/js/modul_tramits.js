@@ -437,7 +437,7 @@ function CEscriptoriTramit(){
             				escriptori_tramits_elm.find("div#modul_documents_tramits").show();
             				escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
             				
-            				if ( $("#item_taxa:checked").val() == "on") {
+            				if ( $("#item_taxa").val() == "on") {
             					escriptori_tramits_elm.find("div#modul_taxes_tramits").show();			
             				} else 
             					escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();            				

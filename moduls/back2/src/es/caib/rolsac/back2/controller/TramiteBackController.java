@@ -295,12 +295,12 @@ public class TramiteBackController {
             	Tramite tramiteOld = tramiteDelegate.obtenerTramite( new Long(request.getParameter("id_tramit_actual")) );
             	
         		//Guardar tasas
-        		String tasasTramite = request.getParameter("taxesTramit");
-        		        		
+        		String tasasTramite = request.getParameter("taxesTramit");        		   
+        		Set<Taxa> listaTasasOld = tramiteOld.getTaxes();
+        		
         		if (!"".equals(tasasTramite)) {
-        			
-        			Set<Taxa> listaTasasOld = tramiteOld.getTaxes();
-        			List<Long> listaTasasBorrar = new ArrayList<Long>();
+        			        			
+        			List<Taxa> listaTasasBorrar = new ArrayList<Taxa>();
         			Set<Taxa> tasasNuevas = new HashSet<Taxa>();
         			String[] codigosTasasNuevas = tasasTramite.split(",");
         			
@@ -320,12 +320,14 @@ public class TramiteBackController {
         			//Eliminar los que se han quitado de la lista
         			for ( Taxa tasa : listaTasasOld ) {
         				if ( !tasasNuevas.contains(tasa) )
-        					listaTasasBorrar.add(tasa.getId());        				
+        					listaTasasBorrar.add(tasa);        				
         			}
         			
-        			for ( Long id : listaTasasBorrar ) 
-        				DelegateUtil.getTramiteDelegate().borrarTaxa(id);
-        			
+        			for ( Taxa tasa : listaTasasBorrar ) { 
+        				tramite.removeTaxa(tasa);
+    					tramiteDelegate.borrarTaxa(tasa.getId());
+        			}
+        				
         			//Crear los nuevos
         			if (!"".equals(codigosTasasNuevas)) {
         				for (String codigoTasa : codigosTasasNuevas ) {
@@ -348,7 +350,12 @@ public class TramiteBackController {
         			
         			DelegateUtil.getTramiteDelegate().actualizarOrdenTasas(actualizadorTasas, tramite.getId());
         			//tramite.setTaxes(tasasNuevas);        			
-        		}           	        		
+        		} else {
+        			for (Taxa taxa : listaTasasOld ) {        				
+        				tramite.removeTaxa(taxa);
+        				tramiteDelegate.borrarTaxa(taxa.getId());
+        			}        		        			
+        		}          	        		
         		
             	//Guardar documentos y formularios
             	String formulariosTramite = request.getParameter("formularisTramit");

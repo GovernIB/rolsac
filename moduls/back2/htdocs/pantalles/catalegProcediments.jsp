@@ -1859,11 +1859,11 @@
                             <div class="modulTramits">
                                 <div class="seleccionats">                                
                                     <div class="seleccionat">
-                                        <p class="info">No hay tramites seleccionados</p>
+                                        <p class="info">No hi ha tràmits seleccionats</p>
                                         <div class="listaOrdenable"></div>
                                     </div>
                                     <div class="btnGenerico">
-                                        <a class="btn gestiona" href="javascript:;"><span><span>Gestiona trámites</span></span></a>
+                                        <a class="btn gestiona" href="javascript:;"><span><span>Gestiona tràmits</span></span></a>
                                     </div>
                                 </div>                                  
                             </div>
