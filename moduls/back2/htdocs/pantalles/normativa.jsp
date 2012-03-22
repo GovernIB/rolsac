@@ -148,6 +148,8 @@
         
         var txtNoHiHaNormatives = txtNoHiHa + " " + txtNormatives;
         
+        var txtIntroduceBoibOFecha = "<spring:message code='normativa.formulari.traspas_eboib.introduce_boib_o_fecha'/>";
+        
         var Afectacions_arr = [];
         <c:forEach items="${llistaTipusAfectacio}" var="tipus">
             Afectacions_arr.push({id : '<c:out value="${tipus.id}" />', nom : '<c:out value="${tipus.nom}" />'});        
@@ -721,6 +723,67 @@
             }
             
         ];
+        
+        <c:if test="${traspasboib == 'Y'}">
+        
+	        // Validación del formulario de búsqueda de Traspaso EBOIB
+	        var FormularioBusquedaTB = [{
+	            "modo": "individual",
+	            "etiqueta": "id",
+	            "etiquetaValor": "numeroboletinTB",
+	            "obligatori": "no",
+	            "tipus": "numeric",
+	            "caracters":
+	                {
+	                    "maxim": 50,
+	                    "mostrar": "no",
+	                    "abreviat": "no"
+	                },
+	            "error":
+	                {
+	                    "obligatori": "",
+	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_boletin_numero'/>"
+	                }
+	            
+	            },{
+	            
+	            "modo": "individual",
+	            "etiqueta": "id",
+	            "etiquetaValor": "numeroregistroTB",
+	            "obligatori": "no",
+	            "tipus": "numeric",
+	            "caracters":
+	                {
+	                    "maxim": 50,
+	                    "mostrar": "no",
+	                    "abreviat": "no"
+	                },
+	            "error":
+	                {
+	                    "obligatori": "",
+	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_registro_numero'/>"
+	                }
+	            },{
+	            "modo": "individual",
+	            "etiqueta": "id",
+	            "etiquetaValor": "fechaTB",
+	            "obligatori": "no",
+	            "tipus": "data",
+	            "caracters":
+	                {
+	                    "maxim": 9,
+	                    "mostrar": "no",
+	                    "abreviat": "no"
+	                },
+	            "error":
+	                {
+	                    "obligatori": "",
+	                    "tipus": "<spring:message code='normativa.formulari.traspas_eboib.campo_data_formato'/>"
+	                }            
+	            }
+            ];
+        
+        </c:if>
     -->
     </script>
 

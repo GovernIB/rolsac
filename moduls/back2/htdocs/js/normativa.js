@@ -73,6 +73,8 @@ var itemID_ultim = 0;
 function CLlistat(){	
 	this.extend = ListadoBase;		
 	this.extend();
+    
+    var formulariComprovarTB;
 
 	this.iniciar = function() {
 		$("#cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -80,6 +82,9 @@ function CLlistat(){
 		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
         
 		Llistat.carregar({});
+        
+        formulariComprovarTB = new FormulariComprovar(FormularioBusquedaTB);
+        formulariComprovarTB.iniciar();
 	}
 	
 	this.finCargaListado = function( opcions, data ){
@@ -140,7 +145,7 @@ function CLlistat(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
-			//De momento no habr· ordenaciÛn
+			//De momento no habr√° ordenaci√≥n
 			/*
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNumero + "</a></div>";
@@ -194,7 +199,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -341,7 +346,7 @@ function CLlistat(){
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p·gina.
+				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p√°gina.
 				Llistat.carregar({cercador: "si"});
 				
 			});
@@ -357,7 +362,7 @@ function CLlistat(){
 	
 	var cercador_traspas_elm = jQuery("#cercadorTB");
 	
-	// Cambia a la pestaÒa del buscador.
+	// Cambia a la pesta√±a del buscador.
 	this.tabTraspasBoib = function(){
 		jQuery("#opcions .actiu").removeClass("actiu");
 		jQuery("#tabTraspasBoib").parent().addClass("actiu");
@@ -375,13 +380,24 @@ function CLlistat(){
 		});
 	}
 
-	// Limpia el formulario de b˙squeda.
+	// Limpia el formulario de b√∫squeda.
 	this.limpiaTB = function(){
         jQuery('#cercadorTB_contingut :input').each(limpiarCampo);
 	}
 
 	this.buscaTB = function(){
-
+        
+        // Se ha de rellenar el campo bolet√≠n o fecha.
+        if( jQuery("#numeroboletinTB").val() == "" && jQuery("#fechaTB").val() == "" ){
+            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtIntroduceBoibOFecha});
+            return;
+        }
+        
+        formulariComprovarTB.llansar();        
+		if( !formulariComprovarTB.formComprovacio ){
+            return;
+        }        
+        
 		multipagina.setPaginaActual(0);
 		cercador_traspas_elm.find("input, select").attr("disabled", "disabled");
 		
@@ -394,7 +410,7 @@ function CLlistat(){
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p·gina.
+				pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p√°gina.
 				Llistat.carregarTB({});
 				
 			});
@@ -458,7 +474,7 @@ function CLlistat(){
 	
 	}
 
-	// Cambia de p·gina.
+	// Cambia de p√°gina.
 	this.cambiaPaginaTB = function( pag ){
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -494,7 +510,7 @@ function CLlistat(){
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
 			
-			//TODO: ordenaciÛ
+			//TODO: ordenaci√≥
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
 			ordre_c1 = (ordre_C == "titol") ? " " + ordre_T : "";
@@ -524,7 +540,7 @@ function CLlistat(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
-			/* per ara no hi ha ordenaciÛ
+			/* per ara no hi ha ordenaci√≥
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
 			codi_cap2 = "<div class=\"th registre" + ordre_c2 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtNumRegistro + "</a></div>";			
 			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
@@ -574,7 +590,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -602,7 +618,7 @@ function CLlistat(){
 			
 				// Asociamos el evento onclick a los elementos de la lista para poder ir a ver su ficha.
 				escriptori_contingut_elm.find("#resultats .llistat .tbody a").unbind("click").bind("click",function(){Llistat.fichaTB(this);});
-                /* TODO por ahora no hay ordenaciÛn
+                /* TODO por ahora no hay ordenaci√≥n
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
                 jQuery("#resultats .table .th a").unbind("click").click(function(){
                     Llistat.ordena(this,opcions);
@@ -618,7 +634,7 @@ function CLlistat(){
 	
 	/**
 	 * Carga la ficha de un item del listado.
-	 * @param link Objeto <A> sobre el que se realizÛ la acciÛn.
+	 * @param link Objeto <A> sobre el que se realiz√≥ la acci√≥n.
 	 */
 	this.fichaTB = function( link ){
 		// Obtenemos el id del item a partir del id del enlace.
@@ -646,7 +662,7 @@ function CDetall(){
 	this.tipusEstadistica = 'normativa';
 	
 	this.iniciar = function() {			
-		//redigirimos el mÈtodo que guarda porque en este caso tambiÈn hacemos un upload de archivos
+		//redigirimos el m√©todo que guarda porque en este caso tambi√©n hacemos un upload de archivos
 		this.guarda = this.guarda_upload;
 		
 		jQuery("#item_data_norma, #item_data_norma_ca, #item_data_norma_es, #item_data_norma_en, #item_data_norma_de, #item_data_norma_fr, #item_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -708,7 +724,7 @@ function CDetall(){
 	},
 	
 
-	//Sobreescribe el mÈtodo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el m√©todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
 	    // Validamos el formulario
@@ -737,7 +753,7 @@ function CDetall(){
 		$("#afectaciones").val( ModulAfectacions.jsonAfectacions() );
 		
 
-		//Enviamos el formulario mediante el mÈtodo ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el m√©todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({			
 			url: pagGuardar,
 			dataType: 'json',
@@ -805,7 +821,7 @@ function CDetall(){
 		//Poner tipo Normativa local por defecto
 		$("#tipoNormativa").text(txtNormativaLocal);
 		
-		//Establecer ValidaciÛn por defecto si el usuario es operador
+		//Establecer Validaci√≥n por defecto si el usuario es operador
 		if ( $("#rolusuario").val() == "RSC_OPER" ) {
 			$("#item_validacio").val(2);
 		}
@@ -1026,10 +1042,10 @@ function CDetall(){
 		});			
 	}
 	
-	//MÈtodos para traspaso BOIB
+	//M√©todos para traspaso BOIB
 
 	this.carregarTB = function(boibID){
-		//Cargamos los datos de un edicto del boib en una ficha vacÌa de normativa nueva
+		//Cargamos los datos de un edicto del boib en una ficha vac√≠a de normativa nueva
 
 		escriptori_contingut_elm.fadeOut(300, function() {
 
