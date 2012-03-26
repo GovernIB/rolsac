@@ -130,7 +130,7 @@ function CLlistat(){
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
 			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
-            ordre_c2 = (ordre_C == "familia.id") ? " " + ordre_T : "";
+            ordre_c2 = (ordre_C == "familia") ? " " + ordre_T : "";            
 			ordre_c3 = (ordre_C == "fechaActualizacion") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
@@ -141,7 +141,7 @@ function CLlistat(){
 				
 				if (ordre_C == "id") {
 					txt_per = txtLlistaItem;
-				} else if (ordre_C == "familia.id") {					
+				} else if (ordre_C == "familia") {
                     txt_per = txtFamilia;
 				} else {
 					txt_per = txtFechaActualizacion;
