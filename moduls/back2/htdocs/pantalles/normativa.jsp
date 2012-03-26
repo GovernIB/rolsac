@@ -17,6 +17,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_afectacions.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 
     <script type="text/javascript">
     <!--
@@ -49,7 +50,7 @@
         var txtTrobades = "<spring:message code='txt.trobades'/>";
         var txtLlistaItem = "<spring:message code='txt.normativa'/>";
         var txtLlistaItems = "<spring:message code='txt.normatives'/>";
-        var txtData = "<spring:message code='txt.data'/>";
+        var txtData = "<spring:message code='txt.dataNorma'/>";
         var txtDataButlleti = "<spring:message code='camp.data_butlleti'/>";
         var txtPublicacio = "<spring:message code='boto.publicacio'/>";
         var txtCaducitat = "<spring:message code='txt.caducitat'/>";
@@ -72,7 +73,6 @@
         var txtTipoBoletin = "Tipus Butlletí";
         var txtTipologia = "<spring:message code='camp.tipologia'/>";
         var txtTipologiaNorma = "Tipología Norma";
-        var txtData = "<spring:message code='camp.data'/>";
         var txtFechaBoletin = "Data butlletí";
         var txtLocal = "<spring:message code='txt.local'/>";
         var txtExterna = "<spring:message code='txt.externa'/>";
@@ -178,7 +178,6 @@
     -->
     </script>
     
-    <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
     <script type="text/javascript">
     <!--
         var txtMaxim = "<spring:message code='txt.maxim'/>";
@@ -983,7 +982,7 @@
                                                                                     
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_data"><spring:message code='camp.data'/></label>
+                                    <label for="cerca_data"><spring:message code='txt.dataNorma'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="cerca_data" name="cerca_data" type="text" class="data" />
@@ -1160,7 +1159,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_data_norma">Data norma (Data)</label></div>
+                                        <div class="etiqueta"><label for="item_data_norma"><spring:message code='txt.dataNorma'/></label></div>
                                         <div class="control">
                                             <input id="item_data_norma" name="item_data_norma" type="text" class="nou" />
                                         </div>
@@ -1255,7 +1254,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_data_norma_es">Data norma (Data)</label></div>
+                                        <div class="etiqueta"><label for="item_data_norma_es"><spring:message code='txt.dataNorma'/></label></div>
                                         <div class="control">
                                             <input id="item_data_norma_es" name="item_data_norma_es" type="text" class="nou" />
                                         </div>
@@ -1361,7 +1360,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_data_norma_en">Data norma (Data)</label></div>
+                                        <div class="etiqueta"><label for="item_data_norma_en"><spring:message code='txt.dataNorma'/></label></div>
                                         <div class="control">
                                             <input id="item_data_norma_en" name="item_data_norma_en" type="text" class="nou" />
                                         </div>
@@ -1468,7 +1467,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_data_norma_de">Data norma (Data)</label></div>
+                                        <div class="etiqueta"><label for="item_data_norma_de"><spring:message code='txt.dataNorma'/></label></div>
                                         <div class="control">
                                             <input id="item_data_norma_de" name="item_data_norma_de" type="text" class="nou" />
                                         </div>
@@ -1575,7 +1574,7 @@
                                         </div>
                                     </div>
                                     <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_data_norma_fr">Data norma (Data)</label></div>
+                                        <div class="etiqueta"><label for="item_data_norma_fr"><spring:message code='txt.dataNorma'/></label></div>
                                         <div class="control">
                                             <input id="item_data_norma_fr" name="item_data_norma_fr" type="text" class="nou" />
                                         </div>

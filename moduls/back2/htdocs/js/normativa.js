@@ -82,9 +82,12 @@ function CLlistat(){
 		$("#fechaTB").datepicker({ dateFormat: 'dd/mm/yy' });
         
 		Llistat.carregar({});
-        
-        formulariComprovarTB = new FormulariComprovar(FormularioBusquedaTB);
-        formulariComprovarTB.iniciar();
+ 
+		if (typeof FormularioBusquedaTB === "undefined")		
+			FormularioBusquedaTB = "";
+		
+		formulariComprovarTB = new FormulariComprovar(FormularioBusquedaTB);
+        formulariComprovarTB.iniciar();		
 	}
 	
 	this.finCargaListado = function( opcions, data ){
