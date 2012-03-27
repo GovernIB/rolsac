@@ -244,7 +244,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             Query query;
             if ("local".equals(tipo)) {
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery);
+                query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery);                
             } else { // "externa".equals(tipo))
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
                 query = session.createQuery("from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery);
@@ -253,6 +253,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 Object o = params.get(i);
                 query.setParameter(i, o);
             }
+            
             List normativas = query.list();
 
             List normativasAcceso = new ArrayList();

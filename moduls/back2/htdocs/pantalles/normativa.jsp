@@ -30,10 +30,9 @@
         var pagDetallBoib = '<c:url value="/normativa/detallBoib.do" />';
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
-        var pagArrel = '<c:url value="/" />';
-        
+        var pagArrel = '<c:url value="/" />';        
         var pagBOIB = "json/boibsJSON.php";
-        var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';
+      	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';             
         var pagProcediments = "json/procedimentsJSON.php";
         
         var idUaActual = '<c:out value="${idUA}" />';
@@ -2365,7 +2364,7 @@
                         </div>
                          <div class="element t12">
                              <div class="etiqueta">
-                                 <label for="afec_cerca_data"><spring:message code='camp.data'/></label>
+                                 <label for="afec_cerca_data"><spring:message code='txt.dataNorma'/></label>
                              </div>
                              <div class="control">
                                  <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" readonly="readonly" />

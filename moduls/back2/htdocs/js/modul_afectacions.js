@@ -261,15 +261,27 @@ function CModulAfectacions() {
 };
 
 function CEscriptoriAfectacions() {
+	
 	this.extend = ListadoBase;
 	this.extend("opcions_afectacions", "resultats_afectacions", "cercador_afectacions", "cercador_afectacions_contingut", "", "", "", "btnBuscarForm_afectacions", "btnLimpiarForm_afectacions");
-
+	
 	var that = this;
 	
+	// Sobreescribimos la función porque la genérica no funciona con
+	// componentes de fecha y hay que limpiarlos a mano
+	this._limpia = this.limpia;	
+	this.limpia = function() {
+			
+		this._limpia();
+		//$("#cercador_afectacions_contingut:input").each(limpiarCampo);				
+		$("#afec_cerca_data").val("");
+		$("#afec_cerca_data_butlleti").val("");		
+	}
+	
 	this.nuevo = function() {
-		that.limpia();
+		this.limpiarTodo();
 		resultats_afectacions_elm.find('div.dades').empty();
-	}	
+	}
 		
 	/**
 	 * Agrega un item a la lista.
@@ -493,6 +505,7 @@ function CEscriptoriAfectacions() {
 		$.ajax({
 			type: "POST",
 			url: pagNormativa,
+			//url: pagNormativaAfectades,
 			data: dataVars,
 			dataType: "json",
 			error: function() {
@@ -585,5 +598,5 @@ function CEscriptoriAfectacions() {
 			EscriptoriAfectacions.contaSeleccionats();
 		});
 		
-	}
+	}	
 };

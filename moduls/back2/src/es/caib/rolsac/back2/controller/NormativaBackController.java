@@ -76,8 +76,7 @@ public class NormativaBackController {
     @Autowired
     public void setMessageSource(MessageSource messageSource){
         this.messageSource = messageSource;
-    }	
-    	
+    }	    	
 
 	@RequestMapping(value = "/normativa.do", method = GET)
 	public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
@@ -151,7 +150,6 @@ public class NormativaBackController {
 		
 		return "index";
 	}
-	
 	
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
@@ -328,7 +326,6 @@ public class NormativaBackController {
 	        normativaDetall.put("idioma_es_apartat", normativa.getTra_apartado_v());
 	        normativaDetall.put("idioma_es_pagini", normativa.getTra_paginaInicial_v());
 	        normativaDetall.put("idioma_es_pagfin", normativa.getTra_paginaFinal_v());
-	        	
 	        
 	        normativaDetall.put("numero", normativa.getNumeroboib());
 	        normativaDetall.put("butlleti_id", normativa.getIdBoletin());
@@ -343,7 +340,6 @@ public class NormativaBackController {
 
         return normativaDetall;
 	}
-
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
@@ -403,8 +399,7 @@ public class NormativaBackController {
     	        } else {
     	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "");
     	        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", "");
-    	        }
-    	        
+    	        }    	        
         	}
 	        
 	        normativaDetall.put("numero", normativa.getNumero());	        
@@ -753,13 +748,11 @@ public class NormativaBackController {
 		String idioma = request.getLocale().getLanguage();
 		
 		//TODO obtener la ordenación por parámetro
-		String campoOrdenacion = "normativa.fecha";
+		String campoOrdenacion = "fecha";
 		String orden = "desc";		
 		
-		
 		try {
-			//Obtener parámetros de búsqueda
-		
+			//Obtener parámetros de búsqueda					
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));
@@ -778,8 +771,7 @@ public class NormativaBackController {
 				paramTrad.put("titulo", titulo);
 			} else {
 				paramTrad.put("idioma", idioma);
-			}			
-			
+			}						
 			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
@@ -791,7 +783,6 @@ public class NormativaBackController {
 			
 			//Ordenar lista (por fecha descendente)		
 			Collections.sort(llistaNormativesDTO);
-			
 			
 		} catch (ParseException e) {			
 			log.error("Error: " + e.getMessage());
@@ -810,7 +801,6 @@ public class NormativaBackController {
 		return resultats;
 		
 	}	
-
 
 	/**
 	 * Obtiene una lista de NormativaDTO a partir de una lista de envíos de eboib
@@ -886,8 +876,7 @@ public class NormativaBackController {
 		
 		return llistaNormativesDTO;
 	}	
-	
-	
+		
 	//TODO: mover a clase de utilidades.
 	/**
 	 * De un string que contiene un enlace HTML extrae el título del enlace.
