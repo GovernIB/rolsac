@@ -4,11 +4,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.ibit.rol.sac.model.ValueObject;
 
 public class NormativaDTO implements ValueObject, Comparable {
-
+	
 	private static final long serialVersionUID = 3258125847574821172L;
 	
 	private long id;
@@ -55,32 +54,41 @@ public class NormativaDTO implements ValueObject, Comparable {
 	 * @return -1, 0, 1 si el objeto es menor, igual o mayor que el pasado por parámetro.
 	 */
 	public int compareTo(Object o) {
+		
+		//Comparador para fecha boletín
 		NormativaDTO cmp = (NormativaDTO)o;
 		if (cmp == null)
 			cmp = new NormativaDTO();
 			
-		if (this.fechaDate == null) {
-			if (cmp.fechaDate != null)
+		if (this.fecha_boletin == null) {
+			if (cmp.fecha_boletin != null)
 				return -1;
 			else
 				return 0;
 		}
-		else if (cmp.fechaDate == null)
+		else if (cmp.fecha_boletin == null)
 			return 1;
 		
-		else if (this.fechaDate.equals(cmp.fechaDate)) {
-			return 0;
-		}
-		else if (this.fechaDate.before(cmp.fechaDate)) {
-			return -1;
-		}
-		else if (this.fechaDate.after(cmp.fechaDate)) {
-			return 1;
-		} else
-			return 0;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		
+		try {
+					
+			Date fechaBoletinA = sdf.parse(this.fecha_boletin);
+			Date fechaBoletinB = sdf.parse(cmp.fecha_boletin);
+		
+			if (fechaBoletinA.equals(fechaBoletinB))
+				return 0;
+			else if (fechaBoletinA.before(fechaBoletinB))
+				return -1;
+			else if (fechaBoletinA.after(fechaBoletinB))
+				return 1;			
+			
+		} catch (ParseException e) {
+            return 0;				
+		}	
+		
+		return 0;
 	}
-	
-		
 	
 	/**
 	 * Devuelve el valor de fecha_boletin.

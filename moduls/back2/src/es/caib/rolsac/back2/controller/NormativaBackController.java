@@ -247,8 +247,12 @@ public class NormativaBackController {
 			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
 			
 			//Ordenar lista si se combinan locales y externas
-			if (buscaExternas) {				
+			if (buscaExternas) {
+				
 				Collections.sort(llistaNormativesDTO);
+				
+				if ("DESC".equals(orden))
+					Collections.reverse(llistaNormativesDTO);
 			}
 			
 		} catch (ParseException e) {
