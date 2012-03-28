@@ -2367,7 +2367,7 @@
                                  <label for="afec_cerca_data"><spring:message code='txt.dataNorma'/></label>
                              </div>
                              <div class="control">
-                                 <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data" readonly="readonly" />
+                                 <input id="afec_cerca_data" name="afec_cerca_data" type="text" class="data"/>
                              </div>
                          </div>          
                          
@@ -2376,7 +2376,7 @@
                                  <label for="afec_cerca_data_butlleti"><spring:message code='camp.data_butlleti'/></label>
                              </div>
                              <div class="control">
-                                 <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data" readonly="readonly"/>
+                                 <input id="afec_cerca_data_butlleti" name="afec_cerca_data_butlleti" type="text" class="data"/>
                              </div>
                          </div>
                     </div>
