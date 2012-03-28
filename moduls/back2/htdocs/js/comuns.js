@@ -312,11 +312,12 @@ var Aplicacio = {
 		$("#tancarAplicacio").attr('aria-haspopup', 'true').click(Aplicacio.llansar);
 	},
 	llansar: function() {
-		Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTancarAplicacio, funcio: Aplicacio.tancar});
+		Missatge.llansar({tipus: "confirmacio", modo: "atencio", titol: txtTancarAplicacio, funcio: Aplicacio.tancar});	
 		eixir = true;
 	},
 	tancar: function() {
-		window.location.href = pagTancarAplicacio;
+		//window.location.href = pagTancarAplicacio;
+		document.location.href = pagIntranetCaib;
 	}
 };
 

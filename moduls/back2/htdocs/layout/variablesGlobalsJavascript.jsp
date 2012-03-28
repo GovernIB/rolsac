@@ -7,6 +7,7 @@
     // pagines comuns
     var pagArrel = '<c:url value="/" />';
     var pagTancarAplicacio = '<c:url value="/logout.do"/>';
+    var pagIntranetCaib = "http://intranet.caib.es";
     var tinyMceUrl = '<c:url value="/js/tiny_mce/tiny_mce.js" />';  
     var popupUA = '<c:url value="/pantalles/popArbreUA.do"/>';
 //    var pagCap = "json/cap.php"; // no se usa de momento.
@@ -25,7 +26,7 @@
     // missatge
     var txtAccepta = '<spring:message code="aplicacio.accepta"/>';
     var txtCancela = '<spring:message code="aplicacio.cancela"/>';
-    var txtTancarAplicacio = '<spring:message code="aplicacio.logout.pregunta"/>';
+    var txtTancarAplicacio = '<spring:message code="aplicacio.logout.pregunta"/>';    
     var txtCargandoEntidades = '<spring:message code="aplicacio.carregant_entitas"/>';
     
     // cap
