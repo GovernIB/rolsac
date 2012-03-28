@@ -5,7 +5,7 @@ jQuery(document).ready(function(){
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
 
-	// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
+	// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
 	jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
@@ -55,7 +55,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	// Tipo de auditoria
 	this.tipusAuditoria = null;
 
-	// Tipo de estadística
+	// Tipo de estadï¿½stica
 	this.tipusEstadistica = null;
 
 	// Preparar reglas de validacion del formulario.
@@ -95,7 +95,6 @@ function DetallBase(soloFicha, reglasFormulario){
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
 		dataForm = $("#formGuardar").serialize();
-		alert(dataForm);
 
 		if (typeof dataVars != 'undefined' && dataVars.length > 0) {
 			dataForm += "&" + dataVars;
@@ -133,7 +132,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
 	}
 
@@ -154,7 +153,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	/**
-	 * Inicia la eliminación de un item confirmando la operación.
+	 * Inicia la eliminaciï¿½n de un item confirmando la operaciï¿½n.
 	 */
 	this.eliminar = function() {
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
@@ -164,7 +163,7 @@ function DetallBase(soloFicha, reglasFormulario){
 
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el botón de guardar.
+		// Deshabilitamos inicialmente el botï¿½n de guardar.
 		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
@@ -196,11 +195,11 @@ function DetallBase(soloFicha, reglasFormulario){
 						} else {
 							Detall.pintar(data);
 							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
-								//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
+								//Existe auditoria para el detalle y se ha cargado el objeto de auditorï¿½as
 								Auditoria.busca(that.tipusAuditoria, itemID);
 							}
 							if (that.tipusEstadistica != null && typeof Estadistica.pinta != 'undefined') { 
-								//Existe auditoria para el detalle y se ha cargado el objeto de auditorías
+								//Existe auditoria para el detalle y se ha cargado el objeto de auditorï¿½as
 								Estadistica.pinta(that.tipusEstadistica, itemID);
 							}
 						}

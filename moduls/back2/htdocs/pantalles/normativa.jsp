@@ -1929,37 +1929,39 @@
 	  <c:if test="${rolAdmin}">
         <!-- modul -->
         <div id="modulAuditories" class="modul auditorias">                
-            <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-            <legend>AUDITORIES</legend>
-            <div class="modul_continguts mostrat">
-               <p class="executant"><spring:message code='txt.carregant'/></p>
-             <%--
-                <table>
-                    <thead>
-                        <th class="usuario"><div>USUARI</div></th>
-                        <th class="fecha"><div>DATA</div></th>
-                        <th class="operacion"><div>OPERACIÓ</div></th>
-                    </thead>                    
-                    <tbody>
-                        <tr>
-                            <td class="usuario"><div>rsanz</div></td>
-                            <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Modificació</div></td>
-                        </tr>
-                        <tr>
-                            <td class="usuario"><div>jfernandez</div></td>
-                            <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Modificació</div></td>
-                        </tr>
-                        <tr>
-                            <td class="usuario"><div>flopez</div></td>
-                            <td class="fecha"><div>16/01/2012</div></td>
-                            <td class="operacion"><div>Alta</div></td>
-                        </tr>
-                    </tbody>
-                </table>
-                --%>
-            </div>
+            <fieldset>
+                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                <legend>AUDITORIES</legend>
+                <div class="modul_continguts mostrat">
+                   <p class="executant"><spring:message code='txt.carregant'/></p>
+                 <%--
+                    <table>
+                        <thead>
+                            <th class="usuario"><div>USUARI</div></th>
+                            <th class="fecha"><div>DATA</div></th>
+                            <th class="operacion"><div>OPERACIÓ</div></th>
+                        </thead>                    
+                        <tbody>
+                            <tr>
+                                <td class="usuario"><div>rsanz</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificació</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>jfernandez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Modificació</div></td>
+                            </tr>
+                            <tr>
+                                <td class="usuario"><div>flopez</div></td>
+                                <td class="fecha"><div>16/01/2012</div></td>
+                                <td class="operacion"><div>Alta</div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    --%>
+                </div>
+            </fieldset>
         </div>
         <!-- /modul -->
       </c:if>

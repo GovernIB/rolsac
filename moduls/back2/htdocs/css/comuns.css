@@ -811,7 +811,7 @@ div.table div.tbody div.td a:hover{
 }
 
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias legend{
-    padding: 25px 0 0 21px;
+    padding: 25px 0 20px 21px;
 }
 .escriptori_detall .grupoModulosFormulario div.modul.auditorias table{
     width: 100%;
@@ -864,8 +864,7 @@ div.table div.tbody div.td a:hover{
 .escriptori_detall .grupoModulosFormulario legend, .escriptori_detall .grupoModulosFormulario p.titol {
     font: bold 11px Verdana, Arial, Helvetica, Sans-serif;
     color: #333333;
-    text-transform: uppercase;
-    margin-bottom: 15px;
+    text-transform: uppercase;    
 }
 .escriptori_detall .grupoModulosFormulario .etiqueta{
     height: 21px;   
