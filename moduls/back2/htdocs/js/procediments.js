@@ -470,8 +470,10 @@ function CDetall(){
 		}
 		
 //		$("#item_data_publicacio").val(txtImmediat);
+		$("#item_familia").val("");
         $("#item_id").val("");
 		$("#item_organ_id").val("");
+		
 		$("#modulPrincipal :input").each(limpiarCampo);
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
