@@ -160,7 +160,7 @@ function CLlistat(){
             codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"unidadAdministrativa.id\" href=\"javascript:void(0)\">" + txtTipologiaNorma + "</a></div>";
 			codi_cap3 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
 			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtTipoBoletin + "</a></div>";			
-			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fecha\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
+			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fechaBoletin\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
 			
 			
 			// codi taula
