@@ -19,7 +19,7 @@ if (window.innerHeight){
        espacio_iframe = 478
    }
 }
-document.write ('<iframe frameborder="0" src="/traspasboib/traspasa.do?contextfrom=<%=request.getContextPath()%>" width="770" height="' + espacio_iframe + '">')
+document.write ('<iframe id="traspasboib_ifr" frameborder="0" src="/traspasboib/traspasa.do?contextfrom=<%=request.getContextPath()%>" width="770" height="' + espacio_iframe + '">')
 document.write ('</iframe>')
 </script>
 <noscript>
