@@ -1029,7 +1029,8 @@ public class CatalegProcedimentsBackController {
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		
 		// TODO obtener la ordenaci�n por par�metro
-		String campoOrdenacion = "normativa.fecha";
+		//String campoOrdenacion = "normativa.fecha";
+		String campoOrdenacion = "fecha";
 		String orden = "desc";		
 				
 		String idioma = getRequestLanguage(request);
