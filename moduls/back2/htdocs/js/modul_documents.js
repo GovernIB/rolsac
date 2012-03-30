@@ -212,7 +212,7 @@ function CModulDocuments(){
 					var nom = new Object();
                     escriptori_documents_elm.find("input[id^='doc_titol_']").each(function (index) {
 						var $titolDoc = jQuery(this);
-						var idioma = $titolDoc.attr('id').split('_')[3];
+						var idioma = $titolDoc.attr('id').split('_')[2];
 						nom[idioma] = $titolDoc.val();
 					});
 					
