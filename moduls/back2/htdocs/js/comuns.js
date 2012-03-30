@@ -1,5 +1,4 @@
-// CERRAR Y MENSAJES
-
+// CERRAR Y MENSAJES	
 $(document).ready(function(){
 	
 	$(window).bind('resize',function(e){
@@ -64,6 +63,7 @@ $(document).ready(function(){
 });
 
 var TaulesMestre = {
+		
 	iniciar: function() {
 		
 		if ($("#taules_mestre").size() != 0) {
@@ -88,23 +88,22 @@ var TaulesMestre = {
 		elm_pos_L = taules_mestre_btn.offset().left;*/
 		// dsanchez: Restamos 3 píxels por cuestiones de diseño.
 		elm_H = taules_mestre_btn.outerHeight()-5;
-		
+				
 		//taulesMestre_elm.css({ top: elm_pos_T + elm_H + "px", left: elm_pos_L + "px" }).slideToggle(300, function() {
 		taulesMestre_elm.css({ top: elm_H + "px" }).slideToggle(300, function() {
 		
 			taules_mestre_btn.bind("click",TaulesMestre.llansar);
 			
 			if (taulesMestre_elm.css("display") == "block") {
-				$(window).one("click",TaulesMestre.tancar);
+				$(window).one("click", TaulesMestre.tancar);
 			}
 			
 		});
 		
 	},
-	tancar : function() {
-		
+	
+	tancar : function() {				
 		taulesMestre_elm.slideUp(300);
-		
 	}
 };
 

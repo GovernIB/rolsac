@@ -8,7 +8,6 @@
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 
-<script type="text/javascript" src="<c:url value='/js/comuns.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/tm_espai_territorial.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_espais.js'/>"></script>
