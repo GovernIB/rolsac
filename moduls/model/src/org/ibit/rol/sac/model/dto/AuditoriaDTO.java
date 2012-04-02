@@ -16,7 +16,7 @@ public class AuditoriaDTO implements ValueObject, Comparable {
 
 	public AuditoriaDTO(Long id, String usuario, int codigoOperacion, String tituloOperacion, Date fecha) {
 		super();
-	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+	    DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 	    
 	    this.id = id;
 	    this.usuario = usuario;
