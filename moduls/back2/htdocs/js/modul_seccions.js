@@ -1003,16 +1003,25 @@ function CEscriptoriSeccioFitxes() {
 			
 		} else if (seleccionats_val == 1)			
 			info_elm.html( info_elm.text() + txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");			
-		else			
+		else {			
 			info_elm.html( info_elm.text() + txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
-						
+			
+			fitxes_seleccionats_elm.find(".listaOrdenable ul").sortable({
+				axis: 'y',
+				update: function(event, ui) {
+					ModulFitxes.calculaOrden(ui, "origen");
+					EscriptoriSeccioFitxes.contaSeleccionats();
+				}
+			}).css({cursor:"move"});			
+		}
+		
 		fitxes_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
 			var itemLista = jQuery(this).parents("li:first");
 			ModulSeccions.eliminaItem(itemLista);
 			EscriptoriSeccioFitxes.contaSeleccionats( nomSeccio );
 		});
 	}
-	
+		
 	this.finCargaListado = function(data, opcions) {
 
 		// total

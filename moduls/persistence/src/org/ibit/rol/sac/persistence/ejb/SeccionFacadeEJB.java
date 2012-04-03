@@ -24,7 +24,6 @@ import net.sf.hibernate.expression.Expression;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
@@ -35,7 +34,6 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.webcaib.DocumentModel;
 import org.ibit.rol.sac.model.webcaib.LinkModel;
 import org.ibit.rol.sac.model.webcaib.TemaModel;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.util.Parametros;
 
@@ -169,7 +167,6 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
     
     /**
      * Abre huecos en los ordenes de las fichas de una sección

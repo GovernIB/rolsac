@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -649,16 +650,68 @@ public class UnitatAdmBackController {
 				}
 			} 			
 			
+			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));			
+			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 			
 			//Secciones-Fichas
-			String llistaSeccions = valoresForm.get("llistaSeccions");						
-			if (llistaSeccions != null) {
-				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions.split("[,]"));
-        	}
+			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
 			
-			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
-            
-			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);		
+			if (llistaSeccions != null) {
+				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions );        	
+
+				// Actualizar el orden de las fichas			
+				for (int i = 0; i < llistaSeccions.length; i++) {
+					
+					//Obtener las fichas de la sección actual y preparar la ordenación
+					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
+					List<Long> listaIdFichasUA = new ArrayList<Long>();
+					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
+					String separador = "";
+					String fUA = "";
+					
+					for (int j = 0; j < fichasUA.length; j++) {
+						
+						// Necesitamos los códigos de Ficha UA para la ordenación 
+						Set<FichaUA> listaFichasUA = DelegateUtil
+								.getSeccionDelegate().obtenerSeccion(idSeccion)
+								.getFichasUA();					
+						Iterator<FichaUA> it = listaFichasUA.iterator();					
+						boolean isEncontrado = false;
+						Long idFUA = null;
+						
+						while (it.hasNext() && !isEncontrado ) {
+							FichaUA fichaUA = it.next();
+							
+							if (fichaUA.getFicha().getId().equals( new Long(fichasUA[j]) )) {
+								idFUA = fichaUA.getId();
+								listaIdFichasUA.add(fichaUA.getId());
+								isEncontrado = true;
+							}
+						}						
+						
+						fUA += separador + "orden_fic" + idFUA;
+						separador = ",";					
+					} 
+					
+					Map actualizadorFichasUA = new HashMap();
+					StringTokenizer parametros = new StringTokenizer(fUA, ","); 
+					
+					int pos = 0;
+					for (Long idFichaUA : listaIdFichasUA ) {
+						String[] orden = { String.valueOf(pos) };
+						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden );
+						pos++;
+					} 
+					
+					//DelegateUtil.getSeccionDelegate().actualizarOrdenFichasUASeccion(
+					//		idSeccion, parametros, actualizadorFichasUA);
+					DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
+							parametros, actualizadorFichasUA);
+				}
+			}
+			
+			//Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
+			//crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);		
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
@@ -1033,7 +1086,7 @@ public class UnitatAdmBackController {
 	
 	/**
 	 * Ordena un treemap segun el key
-	 *
+	 * 
 	 */
 	private TreeMap ordenarArbolSecciones(TreeMap arbolSecciones) {
 	
@@ -1047,8 +1100,10 @@ public class UnitatAdmBackController {
 	    	//Obtenemos el orden de la sección de cualquier FichaUA de la sección actual
 	    	//para reordenar el TreeMap original
 	    	if (arbolSecciones.get(key) != null){
-	            int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();
-	            newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));   
+	            int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();	            
+	            newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));	            
+	            //La lista de fichasUA se devolverá ordenada según su campo "orden"
+	            Collections.sort( (ArrayList<FichaUA>) arbolSecciones.get(key) );	            
 	    	}	    	
 	    }
 		    

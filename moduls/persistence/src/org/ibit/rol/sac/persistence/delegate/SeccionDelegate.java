@@ -53,7 +53,7 @@ public class SeccionDelegate implements StatelessDelegate {
     		throw new DelegateException(e);
     	}
     }
-
+    
     public void actualizarOrdenFichasSeccionHuecos(Long id)	throws DelegateException {
     	try {
     		getFacade().actualizarOrdenFichasSeccionHuecos(id);

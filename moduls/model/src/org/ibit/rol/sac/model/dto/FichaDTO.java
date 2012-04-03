@@ -16,7 +16,7 @@ public class FichaDTO implements ValueObject {
 	private String fechaActualizacion;
 	private Boolean caducat;
 	private Long ordre;
-		
+	
 	public Long getOrdre() { 
 		return ordre; 
 	}
@@ -88,5 +88,4 @@ public class FichaDTO implements ValueObject {
 	public Boolean getCaducat() {
 		return caducat;
 	}
-    
 }

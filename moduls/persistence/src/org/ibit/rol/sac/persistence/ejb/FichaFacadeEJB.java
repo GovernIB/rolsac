@@ -2381,8 +2381,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				listaNuevas.add( fichaUA );
 		}		
 		
-		actualizaSeccionesFichaUA( ua, listaFUABorrar, listaNuevas);		
-		
+		actualizaSeccionesFichaUA( ua, listaFUABorrar, listaNuevas);
+				
 	}	
 			
 	private void actualizaSeccionesFichaUA( UnidadAdministrativa ua, List<Long> listaBorrar, List<SimpleFichaUA> listaNuevas ) {
@@ -2447,8 +2447,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            Seccion seccion = (Seccion) session.load(Seccion.class, simpleFichaUA.getIdSeccion() );
 	            if (!getAccesoManager().tieneAccesoSeccion( simpleFichaUA.getIdSeccion() )) 
 	                throw new SecurityException("No tiene acceso a la sección");
-	            
-	            // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
+
+	            // Cuando se anyade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
 	            fichaUA.setSeccion(seccion);	            
 	            seccion.addFichaUA(fichaUA);
 
