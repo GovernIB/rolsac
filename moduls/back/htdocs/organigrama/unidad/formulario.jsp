@@ -40,7 +40,7 @@
 
     function cambiaPadre(){
        <%--obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?action=", "<bean:message key='boton.seleccionar' />", 538, 440);--%>
-       obrir("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
+       obrirScroll("<html:rewrite page='/organigrama/unidad/poparbol.do'/>?idUA=0&action=&ficha=true", "<bean:message key='boton.relacionar' />", 538, 440);
     }
     function popUA(){
             poprealcion = obrirScroll(context+"/organigrama/unidad/poparbol.do?idUA=0&action=&ficha=true", "Relacionar", 538, 440);
@@ -55,7 +55,7 @@
         document.forms[0].nombrePadre.value = nombre;
     }
 
-    // Función para abrir la lista de fichasUA para relacion
+    // Funciï¿½n para abrir la lista de fichasUA para relacion
     function altaFichaUA(){
         obrir("<html:rewrite page='/organigrama/unidad/popFichaUA.do'/>", "<bean:message key='boton.seleccionar' />", 538, 175);
     }
@@ -75,17 +75,17 @@
         }
 	}
 
-    // Función para abrir la lista de edificios para relación
+    // Funciï¿½n para abrir la lista de edificios para relaciï¿½n
     function listaEdificios(){
         obrir("<html:rewrite page='/organigrama/unidad/popedificio.do'/>", "<bean:message key='boton.seleccionar' />", 538, 140);
     }
 
-    // Función para abrir la lista de materias para relación
+    // Funciï¿½n para abrir la lista de materias para relaciï¿½n
     function listaMaterias(){
         obrir("<html:rewrite page='/organigrama/unidad/popmateria.do'/>", "<bean:message key='boton.seleccionar' />", 538, 140);
     }
 
-    // Función para abrir la lista de usuarios para relación
+    // Funciï¿½n para abrir la lista de usuarios para relaciï¿½n
     function listaUsuarios(){
         obrir("<html:rewrite page='/organigrama/unidad/popusuario.do'/>", "<bean:message key='boton.seleccionar' />", 538, 140);
     }
@@ -407,11 +407,11 @@ tinyMCE.init({
                     </div>
                     <div class="component">
                         
-           				<!-- tiny  -->
-						<div>
-							<div class="etiqueta tiny"><bean:message key="ua.presentacion" /></div>
-							<html:textarea name="traducciones" property="presentacion" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
-						</div>
+           			<!-- tiny  -->
+					<div>
+						<div class="etiqueta tiny"><bean:message key="ua.presentacion" /></div>
+						<html:textarea name="traducciones" property="presentacion" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
+					</div>
 						
                     </div>
                     <div class="component">
@@ -422,6 +422,13 @@ tinyMCE.init({
                         <div class="etiqueta"><bean:message key="ua.url" /></div>
                         <html:text styleClass="btext" property="url" name="traducciones" indexed="true" maxlength="512"/>
                     </div>
+                    
+                    <!-- tiny  -->
+					<div>
+						<div class="etiqueta tiny"><bean:message key="ua.cvResponsable" /></div>
+						<html:textarea name="traducciones" property="cvResponsable" indexed="true" rows="5" cols="60" style="width:585px; height:120px;" />
+					</div>
+                    
                 </div>
             </div>
         </logic:iterate>
@@ -813,7 +820,7 @@ tinyMCE.init({
     </div><br />
       
  
-<!-- XAPUÇA -->
+<!-- XAPUï¿½A -->
 <% pageContext.removeAttribute(Globals.XHTML_KEY);%>
 <html:javascript
     formName="unidadForm"
