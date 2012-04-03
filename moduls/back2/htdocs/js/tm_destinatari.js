@@ -164,7 +164,7 @@ function CLlistat(){
 		} else {
 			
 			// no hi ha items
-			codi_final = "<p class=\"noItems\">" + txtNoHiHaLlistat + ".</p>";
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaItems + ".</p>";
 			
 		}
 		
