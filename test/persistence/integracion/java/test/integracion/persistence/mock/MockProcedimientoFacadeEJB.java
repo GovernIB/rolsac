@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 
 import javax.ejb.EJBException;
 
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoProcedimiento;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.persistence.ejb.ProcedimientoFacadeEJB;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
@@ -57,4 +59,6 @@ public class MockProcedimientoFacadeEJB extends ProcedimientoFacadeEJB {
 		// TODO Auto-generated method stub
 	
 	}
+	
+
 }

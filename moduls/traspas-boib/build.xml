@@ -65,6 +65,9 @@
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
         	<include name="boib.jar"/>
+			<include name="jena-2.6.4.jar"/>
+        	<include name="jdom.jar"/>
+			<include name="rome-1.0RC2.jar"/>
         </fileset>
         <fileset dir="${web.product}">
             <include name="model.jar"/>
@@ -204,7 +207,12 @@
             <classes dir="${web.resources}" includes="*.properties"/>
 
         	<lib dir="${lib.dir}">
-	         <include name="struts.jar"/>
+	          <include name="struts.jar"/>
+    		  <include name="jena-2.6.4.jar"/>
+		 	  <include name="icu4j-3.4.4.jar"/>
+	 		  <include name="iri-0.8.jar"/>
+        	  <include name="slf4j-api-1.6.4.jar"/>
+        	  <include name="slf4j-log4j12-1.6.4.jar"/>
     		</lib>
 
             <webinf dir="${web.etc}" includes="*.xml" excludes="struts-config.xml,jboss-web.xml"/>

@@ -59,6 +59,10 @@
             <field property="nombre" depends="required">
                 <arg0 key="usuario.nombre"/>
             </field>
+            <field property="perfil" depends="required">
+                <arg0 key="usuario.perfil"/>
+            </field>
+            
             <field property="observaciones" depends="maxlength">
                 <arg0 key="usuario.observaciones" />
                 <arg1 name="maxlength" key="${var:maxlength}" resource="false"/>

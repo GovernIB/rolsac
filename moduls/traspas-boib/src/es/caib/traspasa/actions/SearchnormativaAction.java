@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 
 import es.caib.traspasa.actionsforms.SearchnormativaActionForm;
 import es.caib.traspasa.util.BdSearchnormativa;
+import es.caib.traspasa.util.SearchNormativa;
 
 public class SearchnormativaAction extends Action {
 
@@ -19,7 +20,18 @@ public class SearchnormativaAction extends Action {
    System.out.println("ENTRAMOS EN ACTION. COMIENZA EL PROCESO");
     //recogemos el formulario
     SearchnormativaActionForm f = (SearchnormativaActionForm) form;
-    BdSearchnormativa bdcons= new BdSearchnormativa(f);
+    SearchNormativa bdcons;
+    
+    String traspasboibMode = System.getProperty("es.caib.rolsac.traspasboib.mode");
+    if (traspasboibMode == null || !traspasboibMode.equals("eBoib")) {
+    	traspasboibMode = "boib";
+    }
+    if (traspasboibMode.equalsIgnoreCase("eboib")) {
+        bdcons = new EBoibSearchNormativa(f);
+    } else {
+        bdcons = new BdSearchnormativa(f);
+    }
+    
     
     String parametro = "" + request.getParameter("trsid");
     System.out.println("PARAMETRO  "+ parametro);
@@ -37,7 +49,7 @@ public class SearchnormativaAction extends Action {
     	return mapping.findForward("successError");
     }
     
-    if (bdcons.getNumeroNormativas().equals("1")) {
+    if (bdcons.getNumeroNormativas().equals("1") && bdcons.getNormativabean() != null) {
       request.setAttribute("APPTRS_normativa",bdcons.getNormativabean());
       return mapping.findForward("successOne");
     } else {
