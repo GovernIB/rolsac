@@ -1068,7 +1068,7 @@ public class FitxaInfBackController {
 				traduccioOrigen.setDescripcion(request.getParameter("item_des_llarga_" + IDIOMA_ORIGEN_TRADUCTOR));
 			}
 			
-			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");
+			Traductor traductor = (Traductor) request.getSession().getServletContext().getAttribute("traductor");					
 			List<String> langs = traductor.getListLang();
 			Map<String, Object> traduccio;
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
