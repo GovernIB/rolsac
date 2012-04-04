@@ -52,6 +52,8 @@
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
     
     //texts
+    //<c:set var="urlPrev" value="${requestScope[urlPrevisualizar]}" />     
+    //var txtUrlPrevisualizar = "";
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
     var txtEsborrarTramitCorrecte = "<spring:message code='txt.tramit_esborrat_correcte'/>";
     var txtEsborrarIncorrecte = "";

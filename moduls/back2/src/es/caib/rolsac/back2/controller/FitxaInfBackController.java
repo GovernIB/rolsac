@@ -4,9 +4,8 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.text.ParseException;
-
 import java.io.UnsupportedEncodingException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,11 +21,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.StringUtils;
-
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
@@ -38,7 +36,6 @@ import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionEnlace;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.EnlaceDTO;
@@ -75,9 +72,9 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 @Controller
 @RequestMapping("/fitxainf/")
 public class FitxaInfBackController {
-
-	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
 	
+	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";	
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url"; 	
 	private static Log log = LogFactory.getLog(FitxaInfBackController.class);
 	
     private MessageSource messageSource = null;
@@ -89,7 +86,7 @@ public class FitxaInfBackController {
 
     @RequestMapping(value = "/fitxainf.do", method = GET)
     public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-
+    	
         model.put("menu", 0);
         model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
         model.put("submenu_seleccionado", 3);
@@ -136,7 +133,8 @@ public class FitxaInfBackController {
         		// model.put("error", "altres");
         		log.error(ExceptionUtils.getStackTrace(dEx));
         	}
-        }            
+        }     
+        
         return "index";
     }
 
@@ -263,6 +261,7 @@ public class FitxaInfBackController {
         resultats.put("total", llistaFitxesDTO.size());
         resultats.put("nodes", llistaFitxesDTO);
 
+        request.setAttribute("urlPrevisualizar", System.getProperty(URL_PREVISUALIZACION));        
         return resultats;
     
     }
@@ -461,13 +460,12 @@ public class FitxaInfBackController {
             }
            
             //Enlla�os
-            
-          
             if (fitxa.getEnlaces() != null){
                 for (Enlace enllas : fitxa.getEnlaces()){
-                	llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(),
-                                                                    enllas.getOrden(),
-                                                                    enllas.getTraduccionMap()));
+                	if (enllas != null) {
+						llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(),
+								enllas.getOrden(), enllas.getTraduccionMap()));
+                	}
                     
                 }
                 resultats.put("enllassos", llistaEnllassosDTO);
@@ -482,8 +480,8 @@ public class FitxaInfBackController {
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
-        }
-        
+        }    
+                
         return resultats;
     }
 

@@ -73,6 +73,7 @@ public class CatalegProcedimentsBackController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
 	
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
 	private MessageSource messageSource = null;
@@ -97,7 +98,6 @@ public class CatalegProcedimentsBackController {
 			crearModelComplert_pantalla();
 		else
 			crearModelSencill_pantalla();
-
 
 		return "index";
 	}
@@ -360,7 +360,8 @@ public class CatalegProcedimentsBackController {
 
 		resultats.put("total", llistaProcedimientoLocalDTO.size());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
-
+		resultats.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION) );
+		
 		return resultats;
 	}
 
@@ -577,7 +578,7 @@ public class CatalegProcedimentsBackController {
 				resultats.put("item_finestreta_unica", true);
 			}
 
-			resultats.put("item_notes", proc.getInfo());			
+			resultats.put("item_notes", proc.getInfo());
 			
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
@@ -587,7 +588,7 @@ public class CatalegProcedimentsBackController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-
+		
 		return resultats;
 	}
 	
@@ -1095,7 +1096,7 @@ public class CatalegProcedimentsBackController {
 		
 		resultats.put("total", llistaNormativesDTO.size());
 		resultats.put("nodes", llistaNormativesDTO);
-
+		
 		return resultats;
 	}
 
@@ -1167,9 +1168,9 @@ public class CatalegProcedimentsBackController {
 	        		}
 	        	}
 	        }
-	        
+	        	        
 			resultats.put("traduccions", traduccions);
-			
+						
 		} catch (DelegateException dEx) {
 			logException(log, dEx);
 			if (dEx.isSecurityException()) {

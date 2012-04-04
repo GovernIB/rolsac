@@ -363,6 +363,7 @@ function CDetall(){
 	}
 
 	this.urlPrevisualizar = "http://www.caib.es/govern/sac/fitxa.do";
+	//this.urlPrevisualizar = txtUrlPrevisualizar + "/fitxa.do"; 
 	
 	this.iniciar = function() {
 		// dates		

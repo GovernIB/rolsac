@@ -44,6 +44,7 @@
    var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
 
    // texts
+   //var txtUrlPrevisualizar = '<c:out value="${requestScope[urlPrevisualizar]}" />';
    var txtEspere = "<spring:message code='txt.esperi'/>";
    var txtCarregant = "<spring:message code='txt.carregant'/>";
    var txtSi = "<spring:message code='txt.si'/>";
