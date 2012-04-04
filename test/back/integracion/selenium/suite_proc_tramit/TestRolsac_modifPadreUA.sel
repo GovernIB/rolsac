@@ -23,15 +23,20 @@
 	<td></td>
 </tr>
 <tr>
+	<td>verifyText</td>
+	<td>link=Consell de Govern (Código:676634)</td>
+	<td>Consell de Govern (Código:676634)</td>
+</tr>
+<tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='ccontingut']/div[2]/div[16]/div[2]/form/input[3]</td>
+	<td>xpath=(//input[@name='action'])[8]</td>
 	<td></td>
 </tr>
 <!---- verificar que se guarda OK cuando padre es diferente de la conselleria-->
 <tr>
 	<td>waitForValue</td>
 	<td>traducciones[0].nombre</td>
-	<td>Conselleria Proves</td>
+	<td>Consell de Govern</td>
 </tr>
 <tr>
 	<td>storeText</td>
@@ -66,23 +71,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForPopUp</td>
-	<td>Relacionar</td>
-	<td>30000</td>
-</tr>
-<tr>
 	<td>selectWindow</td>
 	<td>title=SAC Arbol - Seccion</td>
 	<td></td>
 </tr>
+<!---- abrimos el desplegable del link Govern de les Illes Balears-->
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='llistat']/ul/li/a[1]/img</td>
+	<td>//div[@id='llistat']/ul/li[4]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>link=Consell de Govern</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Conselleria Proves</td>
+	<td>link=Consell de Govern</td>
 	<td></td>
 </tr>
 <tr>
@@ -100,7 +106,6 @@
 	<td>La unidad no puede tener como padre a sí misma </td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

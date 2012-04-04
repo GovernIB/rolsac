@@ -26,6 +26,7 @@
 	<td>Modificación Unidad Administrativa</td>
 	<td></td>
 </tr>
+<!---- se selecciona asociar nuevo edificio-->
 <tr>
 	<td>click</td>
 	<td>//div[@id='ccontingut']/center[2]/a</td>
@@ -42,6 +43,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>selectWindow</td>
+	<td>name=Seleccionar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=edificio</td>
+	<td>label=Aeroport de Son Sant Joan</td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>//input[@value='Relacionar']</td>
 	<td></td>
@@ -56,17 +67,22 @@
 	<td>Aeroport de Son Sant Joan</td>
 	<td></td>
 </tr>
+<!---- se borra el edificio asociado-->
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='ccontingut']/div[3]/div[3]/div[2]/form/input[5]</td>
+	<td>selectWindow</td>
+	<td>null</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertTextNotPresent</td>
+	<td>click</td>
+	<td>xpath=(//input[@value='Eliminar'])[5]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextNotPresent</td>
 	<td>Aeroport de Son Sant Joan</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

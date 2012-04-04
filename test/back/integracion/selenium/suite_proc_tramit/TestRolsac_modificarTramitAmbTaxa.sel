@@ -4,17 +4,22 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
-<title>TestRolsac_creaTramite</title>
+<title>TestRolsac_modificarTramitAmbTaxa</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestRolsac_creaTramite</td></tr>
+<tr><td rowspan="1" colspan="3">TestRolsac_modificarTramitAmbTaxa</td></tr>
 </thead><tbody>
-<!---- se selecciona procedimento -->
+<!---- se selecciona el procedimiento 952769. Tiene taxa. No es vuds-->
 <tr>
 	<td>click</td>
 	<td>link=Procedimientos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td></td>
 	<td></td>
 </tr>
 <tr>
@@ -29,8 +34,8 @@
 </tr>
 <tr>
 	<td>waitForPopUp</td>
-	<td></td>
-	<td></td>
+	<td>Seleccionar</td>
+	<td>30000</td>
 </tr>
 <tr>
 	<td>selectWindow</td>
@@ -52,71 +57,67 @@
 	<td>title=SAC</td>
 	<td></td>
 </tr>
-<!---- se crea el tramite-->
 <tr>
-	<td>waitForTextPresent</td>
-	<td>Nuevo Registro</td>
+	<td>waitForValue</td>
+	<td>traducciones[0].nombre</td>
+	<td>Llicència de pesca marítima recreativa individual Gabriel Ramis</td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=taxa</td>
+	<td>on</td>
+</tr>
+<!---- se selecciona tramite -->
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=id('ccontingut')/div[2]/form/div/div/table//tr/td[2][contains(.,&quot;	Sol·licitud&quot; )]/../../../../../div[2]/input[@name='Seleccionar']</td>
+	<td></td>
+</tr>
+<!---- se crea una tasa-->
+<tr>
+	<td>assertTextPresent</td>
+	<td>Listado de tasas </td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Nuevo Registro</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>Alta Trámite</td>
+	<td>link=Nueva tasa</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>name=traducciones[0].nombre</td>
-	<td>test tramite prueba</td>
+	<td>name=traducciones[0].codificacio</td>
+	<td>tasa de prueba</td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>name=validacio</td>
-	<td>label=Pública</td>
+	<td>type</td>
+	<td>name=traducciones[0].descripcio</td>
+	<td>descripcio de la tasa</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=traducciones[0].formaPagament</td>
+	<td>gratis!</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
 	<td>name=action</td>
 	<td></td>
 </tr>
+<!---- se borra tasa desde el tramite-->
 <tr>
-	<td>waitForAlertPresent</td>
-	<td></td>
-	<td></td>
-</tr>
-<!---- se borra el tramite desde el procedimento-->
-<tr>
-	<td>assertAlert</td>
-	<td>Se ha realizado el alta correctamente</td>
+	<td>assertTextPresent</td>
+	<td>tasa de prueba </td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>xpath=(//input[@name='action'])[3]</td>
+	<td>name=Eliminar</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForTextPresent</td>
-	<td>test tramite prueba </td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>xpath=(//input[@name='Eliminar'])[2]</td>
-	<td>Eliminar</td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>952769</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextNotPresent</td>
-	<td>test tramite prueba </td>
+	<td>assertTextNotPresent</td>
+	<td>tasa de prueba </td>
 	<td></td>
 </tr>
 </tbody></table>
