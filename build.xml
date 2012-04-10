@@ -268,19 +268,19 @@
             </fileset>
 			
 			<!-- Incluimos el .sar de propiedades del sistema -->						
-            <fileset dir="${home}">
-                <include name="01${projecte.name.rolsac}.sar" />
-            </fileset>
+<!--            <fileset dir="${home}"> -->
+<!--                <include name="01${projecte.name.rolsac}.sar" /> -->
+<!--            </fileset> -->
     	</ear>
   </target>	
 	
-	<target name="makeSar" description="Genera el archivo SAR para el despliegue.">
-		<delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
-		<jar
-			jarfile="${home}/01${projecte.name.rolsac}.sar">
-			<metainf dir="${home}" includes="jboss-service.xml"/>					           
-	    </jar>
-	</target>
+<target name="makeSar" description="Genera el archivo SAR para el despliegue.">
+	<delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
+	<jar
+		jarfile="${home}/01${projecte.name.rolsac}.sar">
+		<metainf dir="${home}" includes="jboss-service.xml"/>					           
+    </jar>
+</target>
 	
   <!-- ================================================================== -->
   <!-- main                                                                                                                              -->
