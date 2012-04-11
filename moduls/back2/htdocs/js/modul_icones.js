@@ -166,13 +166,18 @@ function CModulIcones(){
 		this.guarda = this.guarda_upload;
 	}
 	
-	
 	this.torna = function () {
+		
 		escriptori_icones_elm.fadeOut(300, function() {
 	        escriptori_detall_elm.fadeIn(300);
+	        
+			// Los iconos del módulo de familias y el de materias utilizan "modul_icones.js" pero 
+			// los la gestión de cambios de pantalla es distinta. Para que funcione en los dos 
+			// casos debemos añadir esta línea
+			limpiarArchivo("icona_arxiu");
+	        
 	    });
 	}
-	
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
@@ -232,8 +237,8 @@ function CModulIcones(){
 		if (!edicion) {
             jQuery("#iconaId").val("");
             jQuery("#icona_perfil, #icona_arxiu").each(limpiarCampo);
-            jQuery("#grup_arxiu_actual_icona span").show();
-            jQuery("#grup_arxiu_actual_icona a").hide();
+            jQuery("#grup_icona_arxiu span").show();
+            jQuery("#grup_icona_arxiu a").hide();
         }
 		
 		escriptori_detall_elm.fadeOut(300, function() {
@@ -252,19 +257,22 @@ function CModulIcones(){
 		
 		// archivos
 		$("#icona_arxiu").val("");
-		$("#grup_arxiu_actual_icona input").removeAttr("checked");
-		var anchors = $("#grup_arxiu_actual_icona a");
+		$("#grup_icona_arxiu input").removeAttr("checked");
+		var anchors = $("#grup_icona_arxiu a");
         var enllasArxiu = dada_node.enllas_arxiu;
 		if (typeof enllasArxiu != "undefined" && enllasArxiu != "") {
 			anchors.attr("href", pagArrel + enllasArxiu);
 			anchors.text(dada_node.nom_arxiu);
 			anchors.show();
-			$("#grup_arxiu_actual_icona span").hide();
+			$("#grup_icona_arxiu span").hide();
 		} else {
-            $("#grup_arxiu_actual_icona span").show();
+            $("#grup_icona_arxiu span").show();
             anchors.hide();
         }
 		
+        limpiarArchivo("icona_arxiu");
+		pintarArchivo("icona_arxiu", dades);            
+
         // Mostrar la pantalla de edicion de iconos
 		that.nou(true);
 	}

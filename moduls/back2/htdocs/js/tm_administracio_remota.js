@@ -347,6 +347,10 @@ function CDetall(){
 		$("#grup_item_logo_gran label.eliminar").hide();
 		$("#grup_item_logo_gran a").hide();
 		
+		//Resetear thumbnails
+		limpiarArchivo("item_logo_petit");
+		limpiarArchivo("item_logo_gran");		
+		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
@@ -361,55 +365,16 @@ function CDetall(){
 		escriptori_detall_elm.find("a.elimina").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
+		
 		$("#item_id").val(dada_node.item_id);
 		$("#item_nom").val(dada_node.item_nom);
 		$("#item_endPoint").val(dada_node.item_endPoint);
 		$("#item_profunditat").val(dada_node.item_profunditat);
 		$("#item_codi_estandart").val(dada_node.item_codi_estandart);
 		
-		//Logotipos
-		//LogoPetit
-		$("#item_logo_petit").val("");
-		$("#grup_item_logo_petit input").removeAttr("checked");
-		if (dada_node["item_logo_petit_enllas_arxiu"]) {
-			
-			$("#grup_item_logo_petit a").show();					
-			
-			$("#grup_item_logo_petit a").attr("href", pagArrel + dada_node["item_logo_petit_enllas_arxiu"]);
-			$("#grup_item_logo_petit a").text(dada_node["item_logo_petit"]);
-			
-			$("#grup_item_logo_petit span").hide();
-			$("#grup_item_logo_petit input").show();
-			$("#grup_item_logo_petit label.eliminar").show();
-						
-		} else {
-			$("#grup_item_logo_petit span").show();
-			$("#grup_item_logo_petit input").hide();
-			$("#grup_item_logo_petit label.eliminar").hide();
-			$("#grup_item_logo_petit a").hide();			
-		}
-		
-		
-		//LogoGran
-		$("#item_logo_gran").val("");
-		$("#grup_item_logo_gran input").removeAttr("checked");
-		if (dada_node["item_logo_gran_enllas_arxiu"]) {
-			
-			$("#grup_item_logo_gran a").show();
-			
-			$("#grup_item_logo_gran a").attr("href", pagArrel + dada_node["item_logo_gran_enllas_arxiu"]);
-			$("#grup_item_logo_gran a").text(dada_node["item_logo_gran"]);
-			
-			$("#grup_item_logo_gran span").hide();
-			$("#grup_item_logo_gran input").show();
-			$("#grup_item_logo_gran label.eliminar").show();
-						
-		} else {
-			$("#grup_item_logo_gran span").show();
-			$("#grup_item_logo_gran input").hide();
-			$("#grup_item_logo_gran label.eliminar").hide();
-			$("#grup_item_logo_gran a").hide();			
-		}
+		//Logotipos		
+		pintarArchivo("item_logo_petit", dades);			
+		pintarArchivo("item_logo_gran", dades);
 		
 		$("#item_espai_territorial").val(dada_node.item_espai_territorial).attr('selected',true);
 		//marcarOpcionSelect("item_espai_territorial",dada_node.item_espai_territorial);

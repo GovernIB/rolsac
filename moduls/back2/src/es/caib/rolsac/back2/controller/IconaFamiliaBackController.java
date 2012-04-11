@@ -157,7 +157,6 @@ public class IconaFamiliaBackController extends ArchivoController {
 		return new ResponseEntity<String>(jsonResult, responseHeaders, HttpStatus.CREATED);
 	}
 
-	
 	@RequestMapping(value = "/carregarIcona.do")
 	public @ResponseBody Map<String, Object> carregarIcona(HttpServletRequest request)  {
 		Map<String, Object> resultats = new HashMap<String, Object>();
@@ -170,10 +169,12 @@ public class IconaFamiliaBackController extends ArchivoController {
 			
 			// archivo
 	        if (icona.getIcono() != null) {
-	        	mapIcona.put("enllas_arxiu", "iconesFamilia/archivo.do?id=" + icona.getId());
+	        	mapIcona.put("icona_arxiu_enllas_arxiu", "iconesFamilia/archivo.do?id=" + icona.getId());
+	        	mapIcona.put("icona_arxiu", icona.getIcono().getNombre());
 	        	mapIcona.put("nom_arxiu", icona.getIcono().getNombre());
 	        } else {
-	        	mapIcona.put("enllas_arxiu", "");
+	        	mapIcona.put("icona_arxiu_enllas_arxiu", "");
+	        	mapIcona.put("icona_arxiu", icona.getIcono().getNombre());
 	        	mapIcona.put("nom_arxiu", "");
 	        }
 				
@@ -199,7 +200,6 @@ public class IconaFamiliaBackController extends ArchivoController {
 		return resultats;
 	}
 	
-
 	@RequestMapping(value = "/archivo.do")
     public void devolverArchivoIcono(HttpServletRequest request, HttpServletResponse response) throws Exception {
         this.devolverArchivo(request, response);   

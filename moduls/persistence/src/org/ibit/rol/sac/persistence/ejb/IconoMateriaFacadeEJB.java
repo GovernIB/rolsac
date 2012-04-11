@@ -2,18 +2,17 @@ package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Collection;
 
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
-import org.ibit.rol.sac.model.IconoFamilia;
+import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
-import org.ibit.rol.sac.model.Archivo;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
 
 /**
  * SessionBean para mantener y consultar IconoMateria.

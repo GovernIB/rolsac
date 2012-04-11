@@ -170,13 +170,16 @@ public class IconaMateriaBackController extends ArchivoController {
 			
 			// archivo
 	        if (icona.getIcono() != null) {
-	        	mapIcona.put("enllas_arxiu", "iconesMateria/archivo.do?id=" + icona.getId());
+	        	//mapIcona.put("enllas_arxiu", "iconesMateria/archivo.do?id=" + icona.getId());
+	        	mapIcona.put("icona_arxiu_enllas_arxiu", "iconesMateria/archivo.do?id=" + icona.getId());
+	        	mapIcona.put("icona_arxiu", icona.getIcono().getNombre());
 	        	mapIcona.put("nom_arxiu", icona.getIcono().getNombre());
 	        } else {
-	        	mapIcona.put("enllas_arxiu", "");
+	        	mapIcona.put("icona_arxiu_enllas_arxiu", "");
+	        	mapIcona.put("icona_arxiu", icona.getIcono().getNombre());
 	        	mapIcona.put("nom_arxiu", "");
 	        }
-				
+	        
 			mapIcona.put("item_id", icona.getId());
 			mapIcona.put("perfil", icona.getPerfil().getId());
 

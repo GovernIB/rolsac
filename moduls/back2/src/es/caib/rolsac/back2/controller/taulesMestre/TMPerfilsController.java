@@ -149,6 +149,8 @@ public class TMPerfilsController {
 			        	iconaDTO = new HashMap<String, Object>(3);
 				        iconaDTO.put("id", iconaFamilia.getId());
 				        iconaDTO.put("nombre", iconaFamilia.getIcono().getNombre());
+				        iconaDTO.put("url", "iconesFamilia/archivo.do?id=" + iconaFamilia.getId());
+				        
 				        llistaIcones.add(iconaDTO);
 			        } else {
 			        	log.error("La família " + perfil.getId() + " te una icona null o sense arxiu.");
@@ -172,6 +174,8 @@ public class TMPerfilsController {
 			        	iconaDTO = new HashMap<String, Object>(3);
 				        iconaDTO.put("id", iconaMateria.getId());
 				        iconaDTO.put("nombre", iconaMateria.getIcono().getNombre());
+				        iconaDTO.put("url", "iconesMateria/archivo.do?id=" + iconaMateria.getId());
+				        
 				        llistaIcones.add(iconaDTO);
 			        } else {
 			        	log.error("La matèria " + perfil.getId() + " te una icona null o sense arxiu.");

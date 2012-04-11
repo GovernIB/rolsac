@@ -1105,10 +1105,12 @@
                             </div>
                         </div>
                         <div class="fila">
-                            <div class="element t50p">
+                            <div class="element t50p campoImagen">
+                            	<div class="thumbnail"></div>
                                 <div class="etiqueta"><label for="icona_arxiu"><spring:message code='camp.arxiu'/> *</label></div>
                                 <div class="control archivo">   
-                                    <div id="grup_arxiu_actual_icona" class="grup_arxiu_actual">
+                                    <!-- <div id="grup_arxiu_actual_icona" class="grup_arxiu_actual"> -->
+                                     <div id="grup_icona_arxiu" class="grup_arxiu_actual">
                                         <span><spring:message code='txt.no_arxiu_assignat'/></span>
                                         <a href="#" target="_blank"></a>
                                         <!-- input type="checkbox" name="icona_arxiu_delete" id="icona_arxiu_delete" value="1"/>
