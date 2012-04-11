@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="back2" basedir="." default="main">
-    
 
     <property name="modul" value="back2"/>
     <property name="package" value="es.caib.rolsac.back2"/>
@@ -10,7 +9,6 @@
 	<property file="${home.dir}/default.properties"/>
 	<property file="${basedir}/build.properties"/>
 
-
     <property name="web.dir" value="${basedir}/src"/>
     <property name="web.etc" location="${basedir}/etc"/>
 	<property name="web.resources" location="${web.etc}/resources"/>
@@ -18,15 +16,15 @@
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 	<property name="web.htdocs" value="${basedir}/htdocs"/>
 	<property name="web.product" location="${output.dir}/moduls"/>
-	
+
     <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
     <property name="web.classes" location="${modul.output.dir}/classes"/>
 	<property name="lib.dir" location="${home.dir}/lib"/>
 	<property name="xdoclet.dir" location="${lib.dir}/xdoclet123"/>
 	<property name="web.merge.web" location="${web.etc}/merge/web"/>
-    
+
     <property name="jboss.deploy.dir" value="${deploy.dir}"/>
-    
+
 	<path id="xdoclet.classpath">
 		<fileset dir="${xdoclet.dir}">
 			<include name="*.jar" />
@@ -39,7 +37,7 @@
 			<include name="commons-collections-3.2.1.jar"/>
 		</fileset>		
 	</path>
-	
+
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
@@ -84,20 +82,20 @@
 		</fileset>
 
 	</path>
-	
+
 	<target name="prepare">
 		<delete dir="${modul.output.dir}"/>
 		<mkdir dir="${modul.output.dir}"/>		
         <mkdir dir="${web.gen.etc}"/>
         <mkdir dir="${web.classes}"/>
     </target>
-	
-	
+
+
 	<target name="main" depends="build" description="Packages app as WAR">
     	<delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
         <war destfile="${web.product}/${prefix.modul}-${modul}.war" webxml="${web.gen.etc}/web.xml" compress="true">
             <classes dir="${web.classes}" />
-	
+
 			<webinf dir="${web.etc}" includes="*-servlet.xml"/>
 			<webinf dir="${web.etc}" includes="*.tld"/>
 			<webinf dir="${web.gen.etc}" includes="jboss-web.xml"/>
@@ -106,19 +104,25 @@
                 <exclude name="**/WEB-INF/classes/**"/>
             </fileset>
 
-			<lib dir="${home.dir}/lib" includes="*.jar"/>
+			<lib dir="${home.dir}/lib">
+				<include name="*.jar"/>
+				<exclude name="boib.jar"/>
+				<exclude name="micromodel.jar"/>
+				<exclude name="sac-micropersistence.jar"/>
+			</lib>
 
 			<!-- agarcia: librerias comunes en 00librerias -->
 			<lib dir="${home.dir}/lib/webcaib">
-				<include name="*.jar"/>
+				<include name="org.springframework.*.jar"/>
 			</lib>
-	
+
+
 			<lib dir="${lib.dir}/jstl">
            		<include name="**/*.jar" />
         	</lib>	
         </war>
     </target>
-	
+
     <target name="build" depends="prepare, webGeneration">
         <javac destdir="${web.classes}" encoding="ISO-8859-1" source="1.5" target="1.5" debug="true" deprecation="false" optimize="false" failonerror="true">
             <src path="${web.dir}"/>
@@ -128,7 +132,7 @@
 			<include name="**/*.properties"/> 
 		</copydir>
     </target>
-	
+
 	<target name="webGeneration" description="web_back">
 		<taskdef name="webdoclet" classname="xdoclet.modules.web.WebDocletTask" classpathref="xdoclet.classpath" />
 		<webdoclet destDir="${web.gen.etc}" mergeDir="${web.merge.web}">
