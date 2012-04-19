@@ -23,8 +23,6 @@
 	<classpathentry kind="lib" path="lib/ojdbc14.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/seyconsession-common.jar"/>
-	<classpathentry kind="lib" path="lib/struts.jar"/>
-	<classpathentry kind="lib" path="lib/micromodel.jar"/>
 	<classpathentry kind="lib" path="lib/htmllexer.jar"/>
 	<classpathentry kind="lib" path="lib/jms.jar"/>
 	<classpathentry kind="lib" path="lib/sac-micropersistence.jar"/>
@@ -100,5 +98,7 @@
 	<classpathentry kind="lib" path="lib/jstl/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-all-1.8.5.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/axis.jar"/>
+	<classpathentry kind="lib" path="lib/micromodel.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/struts.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

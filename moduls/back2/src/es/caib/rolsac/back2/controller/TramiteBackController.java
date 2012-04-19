@@ -101,14 +101,19 @@ public class TramiteBackController {
     		resultats.put("tramit_item_data_vuds", tramite.getDataActualitzacioVuds());    		
     		resultats.put("item_finestreta_unica", procedimiento.getVentanillaUnica());
     		resultats.put("item_taxes", procedimiento.getTaxa());
-    		resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());    		    		
+    		if (tramite.getOrganCompetent() != null) {
+    			resultats.put("tramits_item_organ_id", tramite.getOrganCompetent().getId());
+    		}
+    		    		    		
     		
 			// Idiomas
     		for ( String idioma : idiomas ) {
     			resultats.put(idioma, (TraduccionTramite) tramite.getTraduccion(idioma));
     			//TraduccionUA traduccionUA = ((TraduccionUA) tramite.getOrganCompetent().getTraduccion(idioma));
-    			String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);    			
-    			resultats.put("ua_" + idioma, nombreUA);
+    			if (tramite.getOrganCompetent() != null) {
+        			String nombreUA = tramite.getOrganCompetent().getNombreUnidadAdministrativa(idioma);    			
+        			resultats.put("ua_" + idioma, nombreUA);
+    			}
     		}
     	
     		// Documentos

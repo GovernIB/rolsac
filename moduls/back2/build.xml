@@ -139,7 +139,7 @@
 			<deploymentdescriptor Servletspec="2.3">
 				<welcomefile file="/login.jsp"></welcomefile>
 			</deploymentdescriptor>
-			<jbosswebxml securitydomain="java:/jaas/seycon" Version="3.2" destDir="${web.gen.etc}">
+			<jbosswebxml securitydomain="${back.auth.domain}" Version="3.2" destDir="${web.gen.etc}">
 			</jbosswebxml>
 			<fileset dir="src" includes="**/*Servlet.java" excludes="**/front/**">
 			</fileset>
