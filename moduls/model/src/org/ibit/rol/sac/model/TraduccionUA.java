@@ -2,13 +2,20 @@
 
 package org.ibit.rol.sac.model;
 
+import java.io.Serializable;
+
 /**
  * (PORMAD)
  */
 
-public class TraduccionUA implements Traduccion {
+public class TraduccionUA implements Traduccion, Serializable {
 
-    public String getNombre() {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7877188547331601640L;
+	
+	public String getNombre() {
         return nombre;
     }
 

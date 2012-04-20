@@ -2,11 +2,12 @@
 
 package org.ibit.rol.sac.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 
-public class Normativa extends Traducible implements Indexable, Validable {
+public class Normativa extends Traducible implements Indexable, Validable, Comparator {
 
 	private Long id;
     private Long numero;
@@ -147,6 +148,12 @@ public class Normativa extends Traducible implements Indexable, Validable {
         return true;
     }
 
+    public int compare(Object o1, Object o2) {
+	    Normativa u1 = (Normativa) o1;
+	    Normativa u2 = (Normativa) o2;
+	    return u1.getId().intValue() - u2.getId().intValue();
+	}
+    
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
     }

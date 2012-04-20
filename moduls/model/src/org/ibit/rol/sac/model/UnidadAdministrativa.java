@@ -2,15 +2,26 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * (PORMAD)
  */
-public class UnidadAdministrativa extends Traducible implements Indexable, Validable {
+public class UnidadAdministrativa extends Traducible implements Indexable, Validable, Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 372155523459384201L;
+
 	// Constructores
 
 	public UnidadAdministrativa() {
@@ -186,7 +197,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         this.tratamiento = tratamiento;
     }
 
-    public Set getEdificios() {
+    public Set<Edificio> getEdificios() {
         return edificios;
     }
 
@@ -477,7 +488,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private UnidadAdministrativa padre;
     private List<UnidadAdministrativa> hijos;
     private Tratamiento tratamiento;
-    private Set edificios;
+    private Set<Edificio> edificios;
     private Set<Personal> personal;
     private Set<Normativa> normativas;
     private Set<ProcedimientoLocal> procedimientos;

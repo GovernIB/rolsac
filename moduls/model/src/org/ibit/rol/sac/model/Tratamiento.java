@@ -2,9 +2,16 @@
 
 package org.ibit.rol.sac.model;
 
-public class Tratamiento extends Traducible {
+import java.io.Serializable;
 
-    public Long getId() {
+public class Tratamiento extends Traducible implements Serializable {
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3705311290289780900L;
+	
+	public Long getId() {
         return id;
     }
 

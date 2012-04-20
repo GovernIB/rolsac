@@ -3,6 +3,8 @@ package org.ibit.rol.sac.persistence.delegate;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Validable;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
@@ -16,8 +18,11 @@ import javax.ejb.Handle;
 import javax.naming.NamingException;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -129,6 +134,17 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
 
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscarProcedimientosUATexto(java.lang.Long, java.lang.String, java.lang.String)
+	 */
+    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
+        try {
+            return getFacade().buscarProcedimientosUATexto(idUnidad, texto, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#anyadirNormativa(java.lang.Long, java.lang.Long)
 	 */
@@ -272,6 +288,42 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
 
+
+    private boolean publico(ProcedimientoLocal proc) {
+        final Date now = new Date();
+        boolean noCaducado = ((proc.getFechaCaducidad() == null) || proc.getFechaCaducidad().after(now));
+        boolean publicado = ((proc.getFechaPublicacion() == null) || proc.getFechaPublicacion().before(now));
+        return this.visible(proc) && noCaducado && publicado;
+    }
+
+    protected boolean visible(Validable validable) {
+        return (validable.getValidacion().equals(Validacion.PUBLICA) || validable.getValidacion().equals(Validacion.RESERVA ) );
+    }
+
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosPublicosUA(java.lang.Long)
+	 */
+    public List listarProcedimientosPublicos() throws DelegateException {
+    	List procedimientosPublicos = new ArrayList();
+    	try {
+            List todosProcedimientos = getFacade().listarProcedimientos();
+            for( Iterator i = todosProcedimientos.iterator(); i.hasNext();  )
+            {
+            	ProcedimientoLocal pl = ( ProcedimientoLocal )i.next();
+            	if( this.publico( pl ) )
+            	{
+            		procedimientosPublicos.add( pl );
+            	}
+            }
+        } 
+    	catch (RemoteException e) 
+        {
+            throw new DelegateException(e);
+        }
+        return procedimientosPublicos;
+    }
+
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#listarProcedimientosHechoVital(java.lang.Long)
 	 */

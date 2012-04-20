@@ -30,8 +30,11 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 import org.ibit.lucene.indra.model.Catalogo;
+import org.ibit.lucene.indra.model.IndexEncontrado;
+import org.ibit.lucene.indra.model.IndexResultados;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
 import org.ibit.rol.sac.model.AdministracionRemota;
@@ -52,6 +55,7 @@ import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
 import org.ibit.rol.sac.model.Taxa;
+import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
@@ -122,6 +126,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -447,9 +452,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     /**
      * Lista todos los procedimientos.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * @ejb.permission unchecked="true"
      */
     public List listarProcedimientos() {
+    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este método debe ser unchecked para permitir accesos via WS 
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
@@ -461,8 +467,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 ProcedimientoLocal pl =  (ProcedimientoLocal)procs.get(i);
                 if(!pl.getTraduccionMap().isEmpty()){
                     procsvalidos.add(pl);
+                    Hibernate.initialize( pl.getMaterias() );
                 }
             }
+            
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsvalidos, new ProcedimientoLocal());
+            
             return procsvalidos;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -471,6 +482,42 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
 
+    
+    /**
+     * Lista todos los procedimientos.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List listarProcedimientosPublicos() {
+    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+        Session session = this.getSession();
+        try {
+            Criteria criteri = session.createCriteria( ProcedimientoLocal.class );
+            //criteri.setFetchMode("traducciones", FetchMode.EAGER);
+            criteri.setCacheable(true);
+            List procsvalidos= new ArrayList<ProcedimientoLocal>();
+            List procs = criteri.list();
+            for (int i = 0; i < procs.size(); i++) {
+                ProcedimientoLocal pl =  (ProcedimientoLocal)procs.get(i);
+                if(!pl.getTraduccionMap().isEmpty() && this.publico( pl ) )
+                {
+                    procsvalidos.add(pl);
+                	Hibernate.initialize( pl.getMaterias() );//agarcia
+                }
+            }
+
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsvalidos, new ProcedimientoLocal());
+
+            return procsvalidos;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            this.close(session);
+        }
+    }
+
+    
     /**
      * Obtiene un procedimiento Local.
      * @ejb.interface-method
@@ -483,19 +530,99 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
             if (visible(procedimiento)) {
             	Hibernate.initialize(procedimiento.getDocumentos());
+            	for( Documento d : procedimiento.getDocumentos() )
+            	{
+            		if (d==null) {
+            			continue; //por algún motivo, en ocasiones los documentos en la colección son nulos 
+            		}
+            		Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionDocumento trad = ( TraduccionDocumento )d.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                		
+                	}
+            	}            	
                 Hibernate.initialize(procedimiento.getMaterias());
                 Hibernate.initialize(procedimiento.getNormativas());
-                Hibernate.initialize(procedimiento.getTramites());
-                List<Tramite> tramites = procedimiento.getTramites(); 
-                for (Iterator iter = tramites.iterator(); iter.hasNext();) {
-                	Tramite tramite = (Tramite) iter.next();                
-                	if (tramite != null) {
-                		Hibernate.initialize(tramite.getFormularios()); 
-                		Hibernate.initialize(tramite.getDocsInformatius());
-                		Hibernate.initialize(tramite.getTaxes());
-                	}	
+                for( Normativa n : procedimiento.getNormativas() )
+                {
+                	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                	}
+                }       
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa() );
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getHijos() );
+                Hibernate.initialize( procedimiento.getOrganResolutori() );
+                if (procedimiento.getOrganResolutori() != null) {
+                	Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
                 }
-                Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getNormativas() );
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getEdificios() );
+                for( Normativa n : procedimiento.getUnidadAdministrativa().getNormativas() )
+                {
+                	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                		
+                	}
+                }
+                
+                Hibernate.initialize( procedimiento.getTramites() );
+                for ( Tramite t : procedimiento.getTramites() ) 
+                {
+                	Hibernate.initialize( t.getFormularios() ); 
+                    Hibernate.initialize( t.getDocsInformatius() );
+                    Hibernate.initialize( t.getTaxes() );
+                    Hibernate.initialize( t.getOrganCompetent() );
+                    for( DocumentTramit dt : t.getDocsInformatius() )
+                    {
+                    	Hibernate.initialize( dt.getArchivo() );
+
+                    	Map<String, Traduccion> mapaTraduccions = dt.getTraduccionMap();
+                    	Set<String> idiomes = mapaTraduccions.keySet();
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                    	{
+                    		TraduccionDocumento trad = ( TraduccionDocumento )dt.getTraduccion( i.next() );
+                    		if (trad != null) {
+                    			Hibernate.initialize( trad.getArchivo() );
+                    		}
+                    		
+                    	}
+                    }
+
+                    for( DocumentTramit df : t.getFormularios() )
+                    {
+                    	Hibernate.initialize( df.getArchivo() );
+                    	Map<String, Traduccion> mapaTraduccions = df.getTraduccionMap();
+                    	Set<String> idiomes = mapaTraduccions.keySet();
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                    	{
+                    		TraduccionDocumento trad = ( TraduccionDocumento )df.getTraduccion( i.next() );
+                    		if (trad != null) {
+                    			Hibernate.initialize( trad.getArchivo() );
+                    		}
+                    	}
+                    }
+                }
+                Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
+                Hibernate.initialize( procedimiento.getIniciacion() );
+                Hibernate.initialize( procedimiento.getFamilia() );
             } else {
                 throw new SecurityException("El procedimiento no es visible");
             }
@@ -504,10 +631,58 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         } finally {
             close(session);
         }
-   		ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
-		Comparator comp = new DocsProcedimientoComparator();
-	  	Collections.sort(listaOrdenada, comp);
-	  	procedimiento.setDocumentos(listaOrdenada);    
+   		//Esto no está funcionando bien...
+        //----------------------------------------------------------------------
+        //ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
+		//Comparator comp = new DocsProcedimientoComparator();
+	  	//Collections.sort(listaOrdenada, comp);
+        //----------------------------------------------------------------------
+
+        //Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
+        List procs = new ArrayList(procedimiento.getDocumentos());
+        Collections.sort(procs, new Documento()); 
+	  	procedimiento.setDocumentos(procs);   
+        
+	    //Ordenamos las materias por el campo id
+	  	List mats = new ArrayList(procedimiento.getMaterias());
+	  	Collections.sort(mats, new Materia()); 
+	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
+	  	
+	  	//Ordenamos las normativas por el campo id
+	  	List norms = new ArrayList(procedimiento.getNormativas());
+	  	Collections.sort(norms, new Normativa()); 
+	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
+	  	
+		/* TODO: error de compilación tras el merge con 177
+	  	//Ordenamos los normativas por el campo id
+	  	List tramites = new ArrayList(procedimiento.getTramites());
+	  	Collections.sort(tramites, new Tramite()); 
+	  	procedimiento.setTramites(new HashSet<Tramite>(tramites));
+		*/
+	  	
+	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
+	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
+	  	Collections.sort(hechosVitales); 
+	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
+
+//	  	log.debug("##################################################################################################");
+//	  	log.debug("ObtenerProcedimiento: " + id.intValue());
+//	  	log.debug("Id Unidad Administrativa: " + procedimiento.getUnidadAdministrativa().getId().intValue());
+//	  	log.debug("Tramites: " + procedimiento.getTramites().size());
+//	  	log.debug("Documentos: " + procedimiento.getDocumentos().size());
+//	  	log.debug("Id Familia: " + procedimiento.getFamilia().getId().intValue());
+//	  	log.debug("Ventana: " + procedimiento.getVentana());
+//	  	log.debug("Materias: " + procedimiento.getMaterias().size());
+//	  	log.debug("Normativas: " + procedimiento.getNormativas().size());
+//	  	log.debug("Id Iniciacion: " + procedimiento.getIniciacion().getId());
+//	  	log.debug("Responsable: " + procedimiento.getResponsable());
+//	  	log.debug("Indicador: " + procedimiento.getIndicador());
+//	  	log.debug("Info: " + procedimiento.getInfo());
+//	  	log.debug("Signatura: " + procedimiento.getSignatura());
+//	  	log.debug("Url: " + procedimiento.getUrl());
+//	  	log.debug("Hechos Vitales: " + procedimiento.getHechosVitalesProcedimientos().size());
+//	  	log.debug("##################################################################################################");
+	  		  	
         
         return procedimiento;
     }
@@ -627,6 +802,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             }
 */           	
             if (!userIsOper()) {
+            	//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+                Collections.sort(procedimientos, new ProcedimientoLocal());
                 return procedimientos;
             } else {
                 List procedimientosAcceso = new ArrayList();
@@ -637,6 +814,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                        procedimientosAcceso.add(procedimiento);
                     }
                 }
+                //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+                Collections.sort(procedimientosAcceso, new ProcedimientoLocal());
                 return procedimientosAcceso;
             }
         } catch (HibernateException he) {
@@ -820,7 +999,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         try {
             String sQuery = "procedimiento.familia.id = " + id;
             Query query = session.createQuery("from ProcedimientoLocal as procedimiento where " + sQuery);
-            return query.list();
+            List procs = new ArrayList(query.list());
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procs, new ProcedimientoLocal());
+            return procs;
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -845,6 +1027,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                     result.add(procedimiento);
                 }
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -938,6 +1122,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                     result.add(proc);
                 }
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -946,6 +1132,84 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
 
+    /**
+     * Busca todos los Procedimientos con un texto determinado.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) {
+        
+    	IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
+    	
+        IndexResultados indexResultados;
+        
+        List idProcs = new ArrayList();
+       
+		try {
+			indexResultados = delegate.buscaravanzado(texto, "", "", "", "PRC", "", "", null, null, "", idioma, true, true);
+			List list = indexResultados.getLista();
+			
+			log.debug("###################################### buscarProcedimientosUATexto\n RESULTADOS DE LA BUSQUEDA: " + list.size() + "\n#######################################################");
+			for (Object obj : list) {
+				if (obj instanceof IndexEncontrado) {
+					IndexEncontrado indexEncontrado = (IndexEncontrado) obj;
+					String str = indexEncontrado.getId(); //El id que devuelve no es de tipo PRC.EXTERNO.DCMTS.39
+					
+					//Obtenemos el valor numerico del final
+					Long n = Long.valueOf(str.substring((str.lastIndexOf('.')+1))).longValue();
+					
+					//Obtenemos el procedimiento, recuperamos el identificador y lo añadimos a la lista
+					idProcs.add( obtenerProcedimiento(n).getId());
+				}
+			}
+			
+			if (idProcs == null || idProcs.size() == 0) {
+				return Collections.EMPTY_LIST;
+			}
+			
+		} catch (DelegateException e) {
+			log.error("Error buscando", e);
+			  throw new EJBException(e);
+        }
+		
+		Session session = getSession();
+        try {
+            // Obtener una lista de los identificadores de todo el arbol de Unidades.
+            // Habrï¿½ una consulta por nivel.
+            List idUnidades = new ArrayList();
+            List currentParents = Collections.singletonList(idUnidad);
+            while (!currentParents.isEmpty()) {
+                idUnidades.addAll(currentParents);
+                Query uaQuery = session.createQuery("select ua.id from UnidadAdministrativa ua where ua.padre.id in (:uas)");
+                uaQuery.setParameterList("uas", currentParents);
+                currentParents = uaQuery.list();
+            }
+
+            // Filtraremos por los ids obtenidos con lucene.
+            // y la lista de unidades administrativas.
+            Criteria criteria = session.createCriteria(ProcedimientoLocal.class);
+            criteria.add(Expression.in("id", idProcs));
+            criteria.add(Expression.in("unidadAdministrativa.id", idUnidades));
+            criteria.addOrder(Order.desc("tramite"));
+            List result = new ArrayList();
+            
+            
+            for (Iterator iterator = criteria.list().iterator(); iterator.hasNext();) {
+                ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
+                if (publico(proc)) {
+                    result.add(proc);
+                }
+            }
+      
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
+            return result;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }    
     /**
      * Aï¿½ade una nueva normativa al procedimiento.
      * @ejb.interface-method
@@ -1149,7 +1413,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         try {
             UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
             Hibernate.initialize(unidadAdministrativa.getProcedimientos());
-            return new ArrayList(unidadAdministrativa.getProcedimientos());
+            List procs = new ArrayList(unidadAdministrativa.getProcedimientos());
+            
+			//Ordena la lista por el atributo id
+            Collections.sort(procs, new ProcedimientoLocal());
+        	 
+            return procs;
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -1170,15 +1439,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             hql+=" where (pro.unidadAdministrativa=:uaid"; 
             hql+=" or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
             hql+=" or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
-            hql+=" )";		      
-            hql+=" and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > :now ) and pro.validacion = 1";
+            hql+=" )";
+            //TODO: comprobar este cambio, estaba en ROLSAC_STAMARGA
+            //hql+=" and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > :now ) and pro.validacion = 1";
             if (conse==1) { hql+=" order by pro.orden  asc,pro.fechaActualizacion desc";}
             if (conse==2) { hql+=" order by pro.orden2 asc,pro.fechaActualizacion desc";}	
             if (conse==3) { hql+=" order by pro.orden3 asc,pro.fechaActualizacion desc";} 
             Query query = session.createQuery(hql);
             query.setLong("uaid", id);
-            query.setDate("now", new Date());
-            return query.list();
+            //query.setDate("now", new Date());
+            List procs = new ArrayList(query.list());
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procs, new ProcedimientoLocal());
+            for (Object proc:procs) {
+            	//Inicializamos las materias del procedimiento
+            	Hibernate.initialize( ((ProcedimientoLocal)proc).getMaterias());
+            }
+            
+            return procs;
 
         } catch (Exception he) {
 
@@ -1221,6 +1499,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
             result.addAll(procedimientosPublicosRecursivosUA(uaHijo));
         }
+        //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+        Collections.sort(result, new ProcedimientoLocal());
         return result;
     }
 
@@ -1279,6 +1559,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     				}
     			}
     		}
+    		//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsFinales, new ProcedimientoLocal());
     		return procsFinales;
     	} catch (HibernateException he) {
     		throw new EJBException(he);
@@ -1450,6 +1732,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 ProcedimientoLocal procedimiento = ((HechoVitalProcedimiento) iterator.next()).getProcedimiento();
                 result.add(procedimiento);
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1476,6 +1760,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 }
             }
 
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1614,7 +1900,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        	Query query = session.createQuery("from ProcedimientoLocal as prc, prc.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
 	        	query.setString("idioma", idioma);
 	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = (List<ProcedimientoLocal>)query.list();
+	        	resultado = query.list();
 	        } catch (HibernateException he) {
 	            throw new EJBException(he);
 	        } finally {
@@ -1624,6 +1910,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			resultado = Collections.emptyList();
 		}
 		
+		//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+        Collections.sort(resultado, new ProcedimientoLocal());
 		return resultado;
 	}
 

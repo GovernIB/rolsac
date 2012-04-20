@@ -138,6 +138,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
             Hibernate.initialize(materia.getFoto());
             Hibernate.initialize(materia.getIcono());
             Hibernate.initialize(materia.getIconoGrande());
+            Hibernate.initialize(materia.getProcedimientosLocales());
             for (Iterator iterator = materia.getIconos().iterator(); iterator.hasNext();) {
                 IconoMateria icono = (IconoMateria) iterator.next();
                 Hibernate.initialize(icono.getIcono());

@@ -3,10 +3,11 @@ package org.ibit.rol.sac.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Set;
 
 
-public class Tramite extends Ordenable {
+public class Tramite extends Ordenable implements Comparator {
 
     public final static int INICIACION = 1;
     public final static int INSTRUCCION = 2;
@@ -329,5 +330,12 @@ public class Tramite extends Ordenable {
 	    boolean publicado = (getDataPublicacio() == null || getDataPublicacio().before(now));
 	    boolean visible = (getValidacio() == null || Validacion.PUBLICA.equals(Integer.valueOf(getValidacio().toString())));
 	    return visible && noCaducado && publicado;
+	}
+
+    
+    public int compare(Object o1, Object o2) {
+	    Tramite u1 = (Tramite) o1;
+	    Tramite u2 = (Tramite) o2;
+	    return u1.getId().intValue() - u2.getId().intValue();
 	}
 }

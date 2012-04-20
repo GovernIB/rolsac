@@ -12,6 +12,24 @@ public class TraduccionNormativaTransferible extends AbstractTraduccion implemen
 		this.titulo = titulo;
 	}
 
+	public String getEnlace() {
+		return enlace;
+	}
+
+	public void setEnlace(String enlace) {
+		this.enlace = enlace;
+	}
+
+	public ArchivoTransferible getArchivo() {
+		return archivo;
+	}
+
+	public void setArchivo(ArchivoTransferible archivo) {
+		this.archivo = archivo;
+	}
+
 	private String titulo;
+    private String enlace;
+    private ArchivoTransferible archivo;
 
 }

@@ -1,13 +1,11 @@
 package org.ibit.rol.sac.model.ws;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +19,12 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
 	private Long id;
     private Long numero;
     private Integer validacion;
+
+    private TipoTransferible tipo;
+
+    private String titulo;
+    private String enlace;
+    private ArchivoTransferible archivo;
     
     private TraduccionNormativaTransferible[] traducciones;
     
@@ -49,6 +53,31 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
 		this.validacion = validacion;
 	}
 	
+	public TipoTransferible getTipo() {
+		return tipo;
+	}
+	public void setTipo(TipoTransferible tipo) {
+		this.tipo = tipo;
+	}
+	public String getTitulo() {
+		return titulo;
+	}
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+	public String getEnlace() {
+		return enlace;
+	}
+	public void setEnlace(String enlace) {
+		this.enlace = enlace;
+	}
+
+	public ArchivoTransferible getArchivo() {
+		return archivo;
+	}
+	public void setArchivo(ArchivoTransferible archivo) {
+		this.archivo = archivo;
+	}
 
 	public TraduccionNormativaTransferible[] getTraducciones() {
 		return traducciones;
@@ -63,6 +92,7 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
     		this.setId(normativa.getId());
     		this.setNumero(normativa.getNumero());
     		this.setValidacion(normativa.getValidacion());
+            this.setTipo( TipoTransferible.generar( normativa.getTipo() ) );
     		
     		 //Relleno las traducciones
     		final List<TraduccionNormativaTransferible> traducciones = new ArrayList<TraduccionNormativaTransferible>(); 
@@ -71,6 +101,8 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
                 if(traduccion!=null){
                     final TraduccionNormativaTransferible temp =  new TraduccionNormativaTransferible();
                     temp.setTitulo(traduccion.getTitulo());
+                    temp.setEnlace( traduccion.getEnlace() );
+                    temp.setArchivo( ArchivoTransferible.generar( traduccion.getArchivo() ) );
                     temp.setCodigoEstandarIdioma(idioma);
                     traducciones.add(temp);
                 }
@@ -78,6 +110,7 @@ public class NormativaTransferible extends ActuacionTransferible implements Seri
     		this.setTraducciones(traducciones.toArray(new TraduccionNormativaTransferible[0]));
     	}
     }
+	
 	
     public static NormativaTransferible generar(Normativa normativa){
     	NormativaTransferible normT = new NormativaTransferible();

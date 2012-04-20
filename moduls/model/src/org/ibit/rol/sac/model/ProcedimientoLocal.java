@@ -1,6 +1,7 @@
 package org.ibit.rol.sac.model;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * Modificado para (PORMAD)
  */
  
-public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable {
+public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable, Comparator {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -321,6 +322,20 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	private String obtenirId() {
 		return null==id? null : id.toString();
 	}
+	
+	
+	public int compare(Object o1, Object o2) {
+	    ProcedimientoLocal u1 = (ProcedimientoLocal) o1;
+	    ProcedimientoLocal u2 = (ProcedimientoLocal) o2;
+	    int res = 0;
+	    if (u1.getOrden()!=null && u2.getOrden()!=null){
+	    	res = u1.getOrden().intValue() - u2.getOrden().intValue();
+	    } else {
+	    	res = u1.getId().intValue() - u2.getId().intValue();
+	    }
+	    return res;
+	}
+
 	
 
 	public String getUrl() {

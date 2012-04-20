@@ -46,6 +46,11 @@ public class ProcedimientoDelegate {
     public boolean autorizaModificarProcedimiento(Long idProcedimiento) throws DelegateException {
             return impl.autorizaModificarProcedimiento(idProcedimiento);
     }     
+    
+    
+    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
+        return impl.buscarProcedimientosUATexto(idUnidad, texto, idioma);
+    }    
 
 	public void actualizarOrdenPros(Map map) throws DelegateException {
 		impl.actualizarOrdenPros(map);
@@ -146,6 +151,10 @@ public class ProcedimientoDelegate {
 		impl.indexInsertaProcedimiento(proc, filter);
 	}
 
+	public List listarProcedimientosPublicos() throws DelegateException {
+		return impl.listarProcedimientosPublicos();
+    }
+	
 	public List listarProcedimientos() throws DelegateException {
 		return impl.listarProcedimientos();
 	}
