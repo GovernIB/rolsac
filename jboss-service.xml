@@ -23,6 +23,9 @@
 
 	   es.caib.rolsac.tramite.sistra=Y
 	   
+	   <!-- url pel botó de sortir de l'aplicació -->
+	   es.caib.rolsac.back2.urlSortir=http://intranet.caib.es
+	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es

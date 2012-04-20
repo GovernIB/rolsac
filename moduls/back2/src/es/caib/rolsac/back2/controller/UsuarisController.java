@@ -24,8 +24,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,18 +33,10 @@ import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
 @RequestMapping("/usuaris/")
-public class UsuarisController {
+public class UsuarisController extends PantallaBaseController {
     
 	private static Log log = LogFactory.getLog(UsuarisController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-
-
     @RequestMapping(value = "/usuaris.do")
     public String pantallaUsuaris(Map<String, Object> model, HttpServletRequest request) {
     	model.put("menu", 2);
@@ -59,6 +49,7 @@ public class UsuarisController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }
 

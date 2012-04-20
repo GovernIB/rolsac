@@ -4,8 +4,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -15,14 +13,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/administracio/")
-public class AdministracioController {
-    
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
+/**
+ * TODO: Parece que no se usa, comprobar y borrar.
+ */
+public class AdministracioController extends PantallaBaseController {
     
     @RequestMapping(value = "/llistat.do", method = GET)
     public String llistatMateries(Map<String, Object> model, HttpSession session) {

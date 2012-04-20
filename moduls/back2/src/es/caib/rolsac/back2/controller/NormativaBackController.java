@@ -53,8 +53,6 @@ import org.ibit.rol.sac.persistence.eboib.SearchNormativa;
 import org.ibit.rol.sac.persistence.eboib.TrListadoNormativaLocalBean;
 import org.ibit.rol.sac.persistence.eboib.TrNormativaLocalBean;
 import org.ibit.rol.sac.persistence.util.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,18 +65,11 @@ import es.caib.rolsac.back2.util.UploadUtil;
 
 @Controller
 @RequestMapping("/normativa/")
-public class NormativaBackController {
+public class NormativaBackController extends PantallaBaseController {
 		
 	private static Log log = LogFactory.getLog(NormativaBackController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }	    	
-
-	@RequestMapping(value = "/normativa.do", method = GET)
+    @RequestMapping(value = "/normativa.do", method = GET)
 	public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 
 		String idioma = request.getLocale().getLanguage();
@@ -148,6 +139,7 @@ public class NormativaBackController {
             }        	
         }
 		
+		loadIndexModel (model, request);	
 		return "index";
 	}
 	

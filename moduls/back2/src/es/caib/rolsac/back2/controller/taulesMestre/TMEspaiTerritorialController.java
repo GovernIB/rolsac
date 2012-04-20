@@ -38,8 +38,6 @@ import org.ibit.rol.sac.persistence.delegate.EspacioTerritorialDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +45,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -54,17 +53,10 @@ import es.caib.rolsac.back2.util.UploadUtil;
 
 @Controller
 @RequestMapping("/espaisTerritorials/")
-public class TMEspaiTerritorialController {
+public class TMEspaiTerritorialController extends PantallaBaseController {
     
 	private static Log log = LogFactory.getLog(TMEspaiTerritorialController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
     @RequestMapping(value = "/espaiTerritorialBreadcrumb.do")
     public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request) {
     	Map<String, Object> resultats = new HashMap<String, Object>();
@@ -145,6 +137,7 @@ public class TMEspaiTerritorialController {
         	model.put("error", "permisos");
         }
         
+		loadIndexModel (model, request);	
         return "index";
     }
     

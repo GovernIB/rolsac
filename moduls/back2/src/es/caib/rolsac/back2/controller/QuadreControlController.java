@@ -23,8 +23,6 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,18 +30,10 @@ import es.caib.rolsac.back2.util.Parametros;
 
 @Controller
 @RequestMapping(value = "/quadreControl/")
-public class QuadreControlController {
+public class QuadreControlController extends PantallaBaseController {
 
 	private static Log log = LogFactory.getLog(QuadreControlController.class);	
 	
-	private MessageSource messageSource = null;
-
-	
-	@Autowired
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-
 	@RequestMapping(value = "/quadreControl.do")
 	public String quadreControl(HttpSession session,
 			HttpServletRequest request, Map<String, Object> model)
@@ -141,6 +131,7 @@ public class QuadreControlController {
 			log.error(ExceptionUtils.getStackTrace(e));
 		}
 
+		loadIndexModel (model, request);	
 		return "index";
 	}
 	

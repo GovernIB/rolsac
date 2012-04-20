@@ -32,8 +32,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -48,16 +47,9 @@ import es.caib.rolsac.back2.util.UploadUtil;
 
 @Controller
 @RequestMapping("/fetsVitals/")
-public class TMFetsVitalsController {
+public class TMFetsVitalsController extends PantallaBaseController {
 	
 	private static Log log = LogFactory.getLog(TMFetsVitalsController.class);
-    
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
     
     @RequestMapping(value = "/fetsVitals.do")
     public String pantallaFetsVitals(Map<String, Object> model, HttpServletRequest request) {
@@ -83,6 +75,7 @@ public class TMFetsVitalsController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }
     

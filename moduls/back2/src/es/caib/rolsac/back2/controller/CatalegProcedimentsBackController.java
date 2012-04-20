@@ -55,8 +55,6 @@ import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -69,36 +67,21 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
-public class CatalegProcedimentsBackController {
+public class CatalegProcedimentsBackController extends PantallaBaseController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
 	
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
-	private MessageSource messageSource = null;
-
-	@Autowired
-	public void setMessageSource(MessageSource messageSource) {
-		this.messageSource = messageSource;
-	}
-
-	private Map<String, Object> model;
-	private HttpSession session;
-	HttpServletRequest request;
-	
 	@RequestMapping(value = "/catalegProcediments.do")
 	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-	
-		this.model = model;
-		this.session = session;
-		this.request = request;
-		
 		if (estemEnUnitatAdministrativa(session) )  
-			crearModelComplert_pantalla();
+			crearModelComplert_pantalla(model, session, request);
 		else
-			crearModelSencill_pantalla();
+			crearModelSencill_pantalla(model, session, request);
 
+		loadIndexModel (model, request);	
 		return "index";
 	}
 
@@ -106,15 +89,15 @@ public class CatalegProcedimentsBackController {
 		return null!= getUAFromSession(session);
 	}
 
-	private void crearModelComplert_pantalla() {
-		crearModelSencill_pantalla();
+	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+		crearModelSencill_pantalla(model, session, request);
 		model.put("idUA", getUAFromSession(session).getId());
 		String lang = getRequestLanguage(request);
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
 
 	}
 
-	private void crearModelSencill_pantalla() {
+	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);

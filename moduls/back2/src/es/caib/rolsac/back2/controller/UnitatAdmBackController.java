@@ -51,8 +51,6 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,18 +64,11 @@ import es.caib.rolsac.utils.DateUtils;
 
 @Controller
 @RequestMapping("/unitatadm/")
-public class UnitatAdmBackController {
+public class UnitatAdmBackController extends PantallaBaseController {
 
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
-	private static class TreeOrdenSeccionComparator implements Comparator {
+    private static class TreeOrdenSeccionComparator implements Comparator {
 		public int compare(Object element1, Object element2) {
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
@@ -152,6 +143,7 @@ public class UnitatAdmBackController {
         model.put("llistaTractaments", llistaTractamentsDTO);
         model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
         
+		loadIndexModel (model, request);
 		return "index";
 	}
 	

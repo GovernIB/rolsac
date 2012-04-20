@@ -12,8 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +34,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -44,17 +43,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/seccions/")
-public class TMSeccionsController {
+public class TMSeccionsController extends PantallaBaseController {
     
 private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
     @RequestMapping(value = "/seccioBreadcrumb.do")
     public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request) {
     	Map<String, Object> resultats = new HashMap<String, Object>();
@@ -127,6 +119,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
         	model.put("error", "permisos");
         }
         
+		loadIndexModel (model, request);	
         return "index";
     }
     

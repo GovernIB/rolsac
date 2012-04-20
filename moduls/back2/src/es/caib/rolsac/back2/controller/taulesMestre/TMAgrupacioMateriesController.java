@@ -12,8 +12,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +41,7 @@ import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -51,18 +50,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/agrupacioMateries/")
-public class TMAgrupacioMateriesController {
+public class TMAgrupacioMateriesController extends PantallaBaseController {
     
 	private static Log log = LogFactory.getLog(TMMateriesController.class);
 	
-	private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
-    @RequestMapping(value = "/agrupacioMateries.do")
+	@RequestMapping(value = "/agrupacioMateries.do")
     public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
     	model.put("menu", 1);
     	model.put("submenu", "layout/submenu/submenuTMAgrupacioMateries.jsp");
@@ -140,6 +132,7 @@ public class TMAgrupacioMateriesController {
     		model.put("error", "permisos");
     	}
 
+		loadIndexModel (model, request);	
     	return "index";
     }
 

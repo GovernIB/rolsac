@@ -44,13 +44,13 @@
                     <c:import url="${submenu}" /> <!-- jsp:include page="layout/submenu.jsp" flush="true"/-->
                     <div role="content" id="continguts">
                         <jsp:include page="layout/titol.jsp" flush="true"/>
-                        <div id="escriptori">               
+                        <div id="escriptori">
                             <c:import url="${escriptori}" />                                                    
                         </div>
                     </div>
                 </c:otherwise>
             </c:choose>
-            <jsp:include page="layout/peu.jsp" flush="true"/>               
+            <jsp:include page="layout/peu.jsp" flush="true"/>
         </div>
     </body>
 </html>

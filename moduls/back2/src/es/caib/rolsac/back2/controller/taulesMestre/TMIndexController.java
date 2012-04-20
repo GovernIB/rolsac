@@ -14,27 +14,19 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
 @RequestMapping("/index/")
-public class TMIndexController {
+public class TMIndexController extends PantallaBaseController {
     
 	private static Log log = LogFactory.getLog(TMIndexController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
     @RequestMapping(value = "/index.do", method = GET)
     public String pantallaIndex(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
@@ -47,6 +39,7 @@ public class TMIndexController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }
     

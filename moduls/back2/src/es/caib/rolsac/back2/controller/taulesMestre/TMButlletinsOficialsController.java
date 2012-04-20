@@ -15,30 +15,21 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.BoletinDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @RequestMapping("/butlletinsOficials/")
-public class TMButlletinsOficialsController {
+public class TMButlletinsOficialsController extends PantallaBaseController {
     
     private static Log log = LogFactory.getLog(TMButlletinsOficialsController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
-    
     @RequestMapping(value = "/butlletins.do")
     public String pantallaButlletins(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
@@ -51,6 +42,7 @@ public class TMButlletinsOficialsController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }    
     

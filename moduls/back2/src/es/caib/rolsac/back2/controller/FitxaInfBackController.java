@@ -54,8 +54,6 @@ import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,19 +69,12 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/fitxainf/")
-public class FitxaInfBackController {
+public class FitxaInfBackController extends PantallaBaseController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";	
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url"; 	
 	private static Log log = LogFactory.getLog(FitxaInfBackController.class);
 	
-    private MessageSource messageSource = null;
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
     @RequestMapping(value = "/fitxainf.do", method = GET)
     public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
     	
@@ -135,6 +126,7 @@ public class FitxaInfBackController {
         	}
         }     
         
+		loadIndexModel (model, request);	
         return "index";
     }
 

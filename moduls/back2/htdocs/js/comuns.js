@@ -315,8 +315,7 @@ var Aplicacio = {
 		eixir = true;
 	},
 	tancar: function() {
-		//window.location.href = pagTancarAplicacio;
-		document.location.href = pagIntranetCaib;
+		document.location.href = pagSortirAplicacio;
 	}
 };
 
@@ -557,15 +556,6 @@ var Selects = {
 	}
 };
 
-//window.onbeforeunload = function(e) {
-//	if (!eixir && !a_enllas && !f5_polsat && !$.browser.msie) {
-//		var e = e || window.event;
-//		if (e) {
-//			e.returnValue = txtEixirAplicacio;
-//		}
-//		return txtEixirAplicacio;
-//	}
-//};
 
 function diesEnMes(mes, any) {
   return new Date(any || new Date().getFullYear(), mes, 0).getDate();

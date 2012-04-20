@@ -6,22 +6,14 @@
    
     // pagines comuns
     var pagArrel = '<c:url value="/" />';
-    var pagTancarAplicacio = '<c:url value="/logout.do"/>';
-    var pagIntranetCaib = "http://intranet.caib.es";
+    var pagSortirAplicacio = "<c:out value="${capUrlSortir}"/>"; 
     var tinyMceUrl = '<c:url value="/js/tiny_mce/tiny_mce.js" />';  
     var popupUA = '<c:url value="/pantalles/popArbreUA.do"/>';
-//    var pagCap = "json/cap.php"; // no se usa de momento.
-    //var pagLlistat = '';
     // pagines
     var pagProcediments = '<c:url value="/catalegProcediments/catalegProcediments.do"/>';
-//    var pagNormativa = "normativa.php";
-//    var pagFitxes = "fitxes.php"
-//    var pagInici = "json/iniciJSON.php";
     //resultados por pagina
     var pag_Res = 5; //TODO: Se tiene que recuperar de BBDD
     
-    // eixir aplicacio
-    var txtEixirAplicacio = '<spring:message code="aplicacio.logout.missatge"/>';
     var txtSinValor = '<spring:message code="aplicacio.sense_valor"/>';
     // missatge
     var txtAccepta = '<spring:message code="aplicacio.accepta"/>';

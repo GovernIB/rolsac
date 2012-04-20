@@ -34,8 +34,6 @@ import org.ibit.rol.sac.persistence.delegate.IconoMateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,24 +41,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
 @Controller
 @RequestMapping("/materies/")
-public class TMMateriesController {
+public class TMMateriesController extends PantallaBaseController {
     
 	private static Log log = LogFactory.getLog(TMMateriesController.class);
 	
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-    
-    
     @RequestMapping(value = "/materia.do")
     public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
@@ -89,6 +80,7 @@ public class TMMateriesController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }
     

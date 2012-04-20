@@ -21,26 +21,18 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
 @RequestMapping("/tipusUnitat/")
-public class TMTipusUnitatController {
+public class TMTipusUnitatController extends PantallaBaseController {
 	
 	private static Log log = LogFactory.getLog(TMTipusUnitatController.class);
-    
-    private MessageSource messageSource = null;
-    
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
     
     @RequestMapping(value = "/tipusUnitat.do")
     public String pantallaTipusUnitat(Map<String, Object> model, HttpServletRequest request) {
@@ -54,6 +46,7 @@ public class TMTipusUnitatController {
         	model.put("error", "permisos");
         }
 
+		loadIndexModel (model, request);	
         return "index";
     }
     
