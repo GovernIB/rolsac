@@ -61,7 +61,7 @@ function CLlistat(){
 		Llistat.carregar({});		
 	}
 	
-	// MÈtodo llamado al terminar de cargar el listado por ajax.
+	// M√©todo llamado al terminar de cargar el listado por ajax.
 	this.finCargaListado = function( opcions, data ){			
 		
 		// total
@@ -175,7 +175,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -385,8 +385,8 @@ function CDetall(){
 		// moduls
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
-		// m‡scares camps
-		$("#item_codi").mask("u999999");
+		// m√†scares camps
+		$("#item_codi").mask("999999");
 		$("#item_epui, #item_epri, #item_em").mask("99999");
 		$("#item_nlpui, #item_nlpri, #item_nlm").mask("999999999");
 		
