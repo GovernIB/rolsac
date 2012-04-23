@@ -599,7 +599,8 @@ div.table div.tbody div.td a:hover{
 
 /* cercador */
 
-#cercador_contingut { 
+#cercador_contingut,
+.cercador_contingut { 
     overflow:hidden;     
     padding:1em; 
     margin:0 auto;  

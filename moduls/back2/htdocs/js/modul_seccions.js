@@ -24,7 +24,7 @@ $(document).ready(function() {
 	multipagina = new Multipagina();
 	multipaginaFitxes = new Multipagina();
 	
-	// Evento para el botÛn de volver al detalle
+	// Evento para el bot√≥n de volver al detalle
 	jQuery(".btnVolverDetalleSecciones").bind("click",function() { EscriptoriSeccio.torna(); } );	
 	jQuery("#btnFinalizarSecciones").bind("click",function() { EscriptoriSeccio.finalizar(); } );
 	
@@ -40,8 +40,8 @@ function CModulSeccio() {
 	var paramsFicha;
 	var seccions_llistat_seccions;
 	
-	//Necessitem una cÚpia de la llista original de seccions-fitxes. Es necessari perquË l'usuari podria
-	//esborrar una secciÛ amb les seves fitxes i tornar a afegir-la des de els resultats de la cerca de 
+	//Necessitem una c√≤pia de la llista original de seccions-fitxes. Es necessari perqu√® l'usuari podria
+	//esborrar una secci√≥ amb les seves fitxes i tornar a afegir-la des de els resultats de la cerca de 
 	//seccions si troba que s'ha equivocat.
 	var copiaNodesOrigen;
 	
@@ -53,7 +53,7 @@ function CModulSeccio() {
 	
 	this.mostraFitxes = function(e)  {
 		
-		//Mostrar panel de fichas de la secciÛn actual
+		//Mostrar panel de fichas de la secci√≥n actual
 		divFichas = $(e).next();
 		
 		if ($(divFichas).is(":visible"))
@@ -121,7 +121,7 @@ function CModulSeccio() {
 		ordreTipus_fitxa_elm = fitxes_llistat_elm.find("input.ordreTipus:first");
 		ordreCamp_fitxa_elm = fitxes_llistat_elm.find("input.ordreCamp:first");		
 		
-		escriptori_seccions_elm.find("div.botonera").each(function() {
+		/*escriptori_seccions_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);
 			
 			if ( $("div.rabillo_dalt").html() == null && $("div.rabillo").html() == null ) {
@@ -131,9 +131,9 @@ function CModulSeccio() {
 					botonera_elm.before("<div class=\"rabillo\">&nbsp;</div>").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 				}
 			}
-		});
+		});*/
 		
-		escriptori_fitxes_elm.find("div.botonera").each(function() {
+		/*escriptori_fitxes_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);
 			
 			if ( $("div.rabillo_dalt").html() == null && $("div.rabillo").html() == null ) {			
@@ -143,12 +143,12 @@ function CModulSeccio() {
 					botonera_elm.before("<div class=\"rabillo\">&nbsp;</div>").css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 				}
 			}
-		});
+		});*/
 				
 		seccions_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 		fitxes_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});
 				
-		// enllaÁos
+		// enlla√ßos
 		modul_seccions_elm.bind("click", CModulSeccio.cerca);
 				
 		params = {
@@ -159,8 +159,8 @@ function CModulSeccio() {
 				multilang: false
 		} 
 		
-		// En el cas de les fitxes, "nodoOrigen" varia en funciÛ de quina secciÛ 
-		// s'est‡ gestionant		
+		// En el cas de les fitxes, "nodoOrigen" varia en funci√≥ de quina secci√≥ 
+		// s'est√† gestionant		
 		paramsFicha = {
 				nombre: "fitxa",
 				nodoOrigen: "",
@@ -182,7 +182,7 @@ function CModulSeccio() {
 				if (llistaFitxes != null)
 					texteFitxes = " (" + llistaFitxes.length  + " " + ( llistaFitxes.length > 1 ? txtFitxes : txtFitxa ) + ")";
 				
-				// crearem una llista per a cada enllaÁ de secciÛ, que contindr‡ les fitxes que tÈ assignades
+				// crearem una llista per a cada enlla√ß de secci√≥, que contindr√† les fitxes que t√© assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\"><input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a>" + texteFitxes;
 				codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
 				codi_seccions += "<div class=\"listaOrdenable\">";
@@ -260,20 +260,20 @@ function CModulSeccio() {
 		
 	this.gestionaFitxes = function(el) {
 				
-		// Guarda la referËncia al node principal de la secciÛ escollida
+		// Guarda la refer√®ncia al node principal de la secci√≥ escollida
 		nodeSeccio = $(el).parent().parent();
 		
-		// Guarda el total de fitxes d'aquesta secciÛ per a la cÚpia
+		// Guarda el total de fitxes d'aquesta secci√≥ per a la c√≤pia
 		nomSeccio = nodeSeccio.prev().html();
 		
-		// Si no hi ha fitxes en aquesta secciÛ, el seu nom el trobarem en "parent"
+		// Si no hi ha fitxes en aquesta secci√≥, el seu nom el trobarem en "parent"
 		if (nomSeccio == null)
 			nomSeccio = nodeSeccio.parent().prev().html();			
 		
 		lis_size = $(nodeSeccio).find("div.listaOrdenable ul").size();
 		
 		// Cada vegada que canviem de llista (seccions o fitxes), hem de reconfigurar-la per a que 
-		// es tinguin en compte els parametres corresponents i actualitzar el node origen de secciÛ.
+		// es tinguin en compte els parametres corresponents i actualitzar el node origen de secci√≥.
 		paramsFicha.nodoOrigen = nodeSeccio;		
 		this.configurar( paramsFicha );
 		
@@ -327,9 +327,9 @@ function CModulSeccio() {
 	}
 	
 	/**
-	 * Copia les dades de la llista origen a la de destinaciÛ (mËtode sobre-escrit).  
-	 * En aquest cas hem de copiar nomÈs la llista de seccions sense tenir en compte les 
-	 * seves fitxes (el mËtode per defecte inclou ambues en fer ".find('li')" ).
+	 * Copia les dades de la llista origen a la de destinaci√≥ (m√®tode sobre-escrit).  
+	 * En aquest cas hem de copiar nom√©s la llista de seccions sense tenir en compte les 
+	 * seves fitxes (el m√®tode per defecte inclou ambues en fer ".find('li')" ).
 	 */
 	this.copiaInicial = function() {		
 		var i;
@@ -363,9 +363,9 @@ function CModulSeccio() {
 	}
 	
 	/**
-	 * Copia les dades de la llista origen a la de destinaciÛ.  
-	 * En aquest cas hem de copiar nomÈs la llista de fitxes de la secciÛ actual sense 
-	 * tenir en compte la resta d'informaciÛ.
+	 * Copia les dades de la llista origen a la de destinaci√≥.  
+	 * En aquest cas hem de copiar nom√©s la llista de fitxes de la secci√≥ actual sense 
+	 * tenir en compte la resta d'informaci√≥.
 	 */	
 	this.copiaInicialFitxes = function() {
 		
@@ -401,8 +401,8 @@ function CModulSeccio() {
 	}
 	
 	/**
-	 * Sobre-escrivim tambÈ el mËtode de finalitzaciÛ i de cÚpia final perquË no hem de 
-	 * tenir en compte els nodes fills (fitxes) en la llista de destinaciÛ.
+	 * Sobre-escrivim tamb√© el m√®tode de finalitzaci√≥ i de c√≤pia final perqu√® no hem de 
+	 * tenir en compte els nodes fills (fitxes) en la llista de destinaci√≥.
 	 */	
 	this.copiaFinal = function() {
 		
@@ -423,7 +423,7 @@ function CModulSeccio() {
 			
 			//Si es troba el node, l'afegim a la nova llista
 			//juntament amb les seves fitxes filles. Si no el trobem
-			//es crear‡ un de nou amb el contenidor de fitxes corresponent
+			//es crear√† un de nou amb el contenidor de fitxes corresponent
 			if ( tmpSeccio.length != 0 ) 
 //				html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
 				html += "<li class=\"nodoListaSecciones\">" +
@@ -463,7 +463,7 @@ function CModulSeccio() {
 	
 	this.copiaFinalFitxes = function() {
 
-		//Actualizamos la lista de fichas de las secciÛn actual		
+		//Actualizamos la lista de fichas de las secci√≥n actual		
 		idSeccio = $(paramsFicha.nodoOrigen).parent().find("input").val();
 		
 		html = "<div class=\"listaOrdenable\"><ul>";
@@ -487,7 +487,7 @@ function CModulSeccio() {
 		
 		$(paramsFicha.nodoOrigen).html(html);
 				
-		// Actualizar el n˙mero de fichas de la secciÛn despuÈs de los cambios
+		// Actualizar el n√∫mero de fichas de la secci√≥n despu√©s de los cambios
 		texteFitxes = "(0 fitxes)";
 		
 		if ( numFitxes > 0 )
@@ -565,7 +565,7 @@ function CModulSeccio() {
 		
 	}
 	
-	//Actualiza la lista de fichas cuando se carga la ficha de la secciÛn
+	//Actualiza la lista de fichas cuando se carga la ficha de la secci√≥n
 	this.inicializarFichas = function(listaFichas){
 		modul_fitxes_elm.find(".listaOrdenable").empty();
 		if (typeof listaFichas != 'undefined' && listaFichas != null && listaFichas.length > 0) {
@@ -573,7 +573,7 @@ function CModulSeccio() {
 		}
 		
 		modul_fitxes_elm.find('div.fitxa').each(function() {
-			// AÒadimos imagen de OK o CADUCADO.
+			// A√±adimos imagen de OK o CADUCADO.
 			var caducado = $(this).find("input.fitxa_caducado").val() == "N";
 			var caducat_titol_class = caducado ? " fitxaCaducat" : " fitxaNoCaducat";
 			
@@ -732,7 +732,7 @@ function CEscriptoriSeccio() {
 			nombre: titulo
 		};
 		
-		// Agrega el item, y si se ha aÒadido correctamente (si no existÌa previamente) actualiza el mensaje de items seleccionados.
+		// Agrega el item, y si se ha a√±adido correctamente (si no exist√≠a previamente) actualiza el mensaje de items seleccionados.
 		if( ModulSeccions.agregaItem( item ) ){		
 			this.contaSeleccionats();		
 		}				
@@ -840,7 +840,7 @@ function CEscriptoriSeccio() {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Actualizamos el navegador multip·gina.
+			// Actualizamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -929,13 +929,13 @@ function CEscriptoriSeccio() {
 		
 		nombre_llistat = ModulSeccions.finalizar();
 		
-		// Marcamos el formulario como modificado para habilitar el botÛn de guardar.
+		// Marcamos el formulario como modificado para habilitar el bot√≥n de guardar.
 		Detall.modificado();
 		
 		this.torna();
 	}
 		
-	// MÈtodo sobreescrito
+	// M√©todo sobreescrito
 	this.anar = function(enlace_html) {
 				
 		num = parseInt(enlace_html,10);
@@ -982,7 +982,7 @@ function CEscriptoriSeccioFitxes() {
 			nombre: titulo
 		};
 		
-		// Agrega el item, y si se ha aÒadido correctamente (si no existÌa previamente) actualiza el mensaje de items seleccionados.
+		// Agrega el item, y si se ha a√±adido correctamente (si no exist√≠a previamente) actualiza el mensaje de items seleccionados.
 		if( ModulSeccions.agregaItem( item ) ) {		
 			this.contaSeleccionats( $("#titolNomSeccio").html() );		
 		}				
@@ -993,7 +993,7 @@ function CEscriptoriSeccioFitxes() {
 		seleccionats_val = fitxes_seleccionats_elm.find(".seleccionat").find("li").size();
 		info_elm = fitxes_seleccionats_elm.find("p.info:first");
 		
-		// AÒadimos un tÌtulo a las fichas para saber en quÈ secciÛn nos encontramos
+		// A√±adimos un t√≠tulo a las fichas para saber en qu√© secci√≥n nos encontramos
 		info_elm.text("<legend id='titolSeccio'>" + txtSeccio + ": <span id='titolNomSeccio'>" + nomSeccio + "</span></legend>" );
 		
 		if (seleccionats_val == 0) {
@@ -1094,7 +1094,7 @@ function CEscriptoriSeccioFitxes() {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Actualizamos el navegador multip·gina.
+			// Actualizamos el navegador multip√°gina.
 			multipaginaFitxes.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -1184,13 +1184,13 @@ function CEscriptoriSeccioFitxes() {
 		
 		nombre_llistat = ModulSeccions.finalizarFitxes();
 		
-		// Marcamos el formulario como modificado para habilitar el botÛn de guardar.
+		// Marcamos el formulario como modificado para habilitar el bot√≥n de guardar.
 		Detall.modificado();
 		
 		this.torna();
 	}	
 	
-	// MÈtodo sobreescrito
+	// M√©todo sobreescrito
 	this.anar = function(enlace_html) {
 				
 		num = parseInt(enlace_html,10);

@@ -1216,7 +1216,7 @@
         <div id="resultats" class="escriptori_items_llistat">            
             <div class="resultats C actiu" style="display: block;">
                 <div id="cercador" class="escriptori_items_cercador"> 
-                    <div id="cercador_contingut">
+                    <div id="cercador_contingut_edificis" class="cercador_contingut">
                         
                         <div class="fila">                                  
                             <div class="element t18">                               

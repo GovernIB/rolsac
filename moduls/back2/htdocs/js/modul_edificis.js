@@ -19,7 +19,7 @@ $(document).ready(function() {
 		ModulEdifici.iniciar();
 	}
 	
-	// Evento para el botÛn de volver al detalle
+	// Evento para el bot√≥n de volver al detalle
 	jQuery(".btnVolverDetalle").bind("click",function(){EscriptoriEdifici.torna();});	
 	jQuery("#btnFinalizar").bind("click",function(){EscriptoriEdifici.finalizar();});
 	
@@ -57,7 +57,7 @@ function CModulEdifici(){
 			multilang: false
 			});
 		
-		// one al botÛ de gestionar
+		// one al bot√≥ de gestionar
 		modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();} );
 		
 	}	
@@ -87,7 +87,8 @@ function CModulEdifici(){
 
 function CEscriptoriEdifici(){		
 	this.extend = ListadoBase;
-	this.extend();
+    this.extend("", "", "", "cercador_contingut_edificis", "", "", "", "", "btnLimpiarForm");
+	//this.extend();
 	
 	var that = this;
 	
@@ -110,13 +111,13 @@ function CEscriptoriEdifici(){
 			}*/
 		};
 		
-		// Agrega el item, y si se ha aÒadido correctamente (si no existÌa previamente) actualiza el mensaje de items seleccionados.
+		// Agrega el item, y si se ha a√±adido correctamente (si no exist√≠a previamente) actualiza el mensaje de items seleccionados.
 		if( ModulEdifici.agregaItem( item ) ){		
 			this.contaSeleccionats();		
 		}				
 	}	
 	
-	// Cambia de p·gina.
+	// Cambia de p√°gina.
 	this.cambiaPagina = function( pag ){
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -214,7 +215,7 @@ function CEscriptoriEdifici(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Actualizamos el navegador multip·gina.
+			// Actualizamos el navegador multip√°gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -326,13 +327,13 @@ function CEscriptoriEdifici(){
 			}).css({cursor:"move"});
 		}
 		
-		// Marcamos el formulario como modificado para habilitar el botÛn de guardar.
+		// Marcamos el formulario como modificado para habilitar el bot√≥n de guardar.
 		Detall.modificado();
 		
 		this.torna();
 	}
 	
-	// MÈtodo sobreescrito
+	// M√©todo sobreescrito
 	this.anar = function(enlace_html) {
 				
 		num = parseInt(enlace_html,10);
