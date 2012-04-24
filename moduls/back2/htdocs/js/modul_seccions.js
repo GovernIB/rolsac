@@ -845,7 +845,7 @@ function CEscriptoriSeccio() {
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "EscriptoriSeccio.cambiaPagina",
+				funcionPagina: "EscriptoriSeccio.cambiaPagina"
 			});
 			
 			codi_navegacio = multipagina.getHtml();
@@ -1099,7 +1099,7 @@ function CEscriptoriSeccioFitxes() {
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "EscriptoriSeccioFitxes.cambiaPagina",
+				funcionPagina: "EscriptoriSeccioFitxes.cambiaPagina"
 			});
 			
 			codi_navegacio = multipaginaFitxes.getHtml();
