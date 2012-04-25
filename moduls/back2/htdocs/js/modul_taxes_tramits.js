@@ -39,11 +39,6 @@ function CEscriptoriPareTramitTaxa(){
 				
 		// Configuramos la lista ordenable.
 		this.configurar(that.configuracion);
-
-		if ( $("#item_taxa:checked").val() == "on") {
-			$("#modul_taxes_tramits").show();			
-		} else 
-			$("#modul_taxes_tramits").hide();
 	}	
 
 	this.gestiona = function() {
@@ -291,6 +286,13 @@ function CModulTaxesTramit(){
 	}
 	
 	this.inicializarTaxes = function(listaTaxes) {
+		
+		if (  $("#item_taxa").attr("checked") == undefined ) {
+			$("#modul_taxes_tramits").hide();
+			return;
+		} else 
+			$("#modul_taxes_tramits").show();
+				
 		if (typeof listaTaxes != 'undefined' && listaTaxes != null) {
             modul_taxes_tramits_elm.find(".listaOrdenable").empty();		
 			EscriptoriPareTramitTaxa.agregaItems(listaTaxes, true);

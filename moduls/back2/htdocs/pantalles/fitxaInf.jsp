@@ -154,7 +154,8 @@
    var txtEnllassos = "<spring:message code='txt.enllassos'/>";
    var txtNoHiHaEnllassos = "<spring:message code='txt.no_hi_ha_cap'/> " + txtEnllas.toLowerCase();
    var txtNoHiHaEnllassosSeleccionats = "<spring:message code='txt.no_hi_ha'/> " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
-       
+   var txtErrorRelacioBuida = "Les relacions han de contenir una secció i una UA obligatoriament. Per favor, revisi la relació que vol establir.";
+   
    // suggeriments
    var suggeriments = "";
 

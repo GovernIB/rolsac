@@ -140,7 +140,12 @@ var EscriptoriSeccionsUA = {
 				ua_ID = ua_pare_div_elm.find("input.id").val();
 				ua_NOM = ua_pare_div_elm.find("a.selecciona").text();
 				
-				EscriptoriSeccionsUA.afegir({idSecc: secc_ID, nomSecc: secc_NOM, idUA: ua_ID, nomUA: ua_NOM });				
+				// La realció que es vol inserir conté una secció i una UA 							
+				if ( secc_ID == undefined || ua_ID == undefined ) {
+					Missatge.llansar({tipus: "alerta", modo:"error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorRelacioBuida + "</p>"});					
+				} else {								
+					EscriptoriSeccionsUA.afegir({idSecc: secc_ID, nomSecc: secc_NOM, idUA: ua_ID, nomUA: ua_NOM });
+				}
 				
 			} else if (a_elm.hasClass("finalitza")) {
 				
@@ -172,7 +177,6 @@ var EscriptoriSeccionsUA = {
 				modul_seccions_ua_elm.find("div.listaOrdenable").html(codi_llistat);
 
 				Detall.modificado();
-				
 				EscriptoriSeccionsUA.torna();
 				
 			}
