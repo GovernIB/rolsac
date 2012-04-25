@@ -586,6 +586,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 Hibernate.initialize( procedimiento.getTramites() );
                 for ( Tramite t : procedimiento.getTramites() ) 
                 {
+                	if (t == null) continue;
+                	
                 	Hibernate.initialize( t.getFormularios() ); 
                     Hibernate.initialize( t.getDocsInformatius() );
                     Hibernate.initialize( t.getTaxes() );

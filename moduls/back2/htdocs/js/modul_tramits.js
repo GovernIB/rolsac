@@ -400,10 +400,10 @@ function CEscriptoriTramit(){
 			escriptori_tramits_elm.find(".modulFinestretaUnica").hide();		
 			
 		// Mostrar módulo de tasas según la información del procedimiento
-		if (datos.item_taxes == "1")
-			escriptori_tramits_elm.find("#modul_taxes_tramits").show();
-		else
-			escriptori_tramits_elm.find("#modul_taxes_tramits").hide();
+//		if (datos.item_taxes == "1")
+//			escriptori_tramits_elm.find("#modul_taxes_tramits").show();
+//		else
+//			escriptori_tramits_elm.find("#modul_taxes_tramits").hide();
 				
 		// Cargar documentos, formularios y tasas
 		ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
@@ -437,7 +437,7 @@ function CEscriptoriTramit(){
             				escriptori_tramits_elm.find("div#modul_documents_tramits").show();
             				escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
             				
-            				if ( $("#item_taxa").val() == "on") {
+            				if ( $("#item_taxa").attr("checked") != undefined) {
             					escriptori_tramits_elm.find("div#modul_taxes_tramits").show();			
             				} else 
             					escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();            				
