@@ -2396,7 +2396,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			
 			// Borrar
 			for ( Long idBorrar : listaBorrar ) {
-				
+
 	            if (!getAccesoManager().tieneAccesoFichaUnidad(idBorrar))
 	                throw new SecurityException("No tiene acceso a la relación");
 				
@@ -2416,13 +2416,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 //indexInsertaFicha(ficha,null);
                 
                 session.delete(fichaUA);                
-
+                
                 if(borrar) log.debug("Entro en borrar remoto ficha UA");	                	
 			} 
 			
 			// Crear nuevas FichasUA
 			for (SimpleFichaUA simpleFichaUA : listaNuevas ) {
-				
+		
+
 	            if (!getAccesoManager().tieneAccesoFicha(simpleFichaUA.getIdFicha())) {
 	                throw new SecurityException("No tiene acceso a la ficha");
 	            }
@@ -2430,7 +2431,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            FichaUA fichaUA = new FichaUA();
 	            
 	            if (ua.getId() != null) {
-	                
+
+              
 	                if (!getAccesoManager().tieneAccesoUnidad(ua.getId(), false)) {
 	                    throw new SecurityException("No tiene acceso a la ficha");
 	                }
@@ -2445,6 +2447,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            }
 
 	            Seccion seccion = (Seccion) session.load(Seccion.class, simpleFichaUA.getIdSeccion() );
+	            
 	            if (!getAccesoManager().tieneAccesoSeccion( simpleFichaUA.getIdSeccion() )) 
 	                throw new SecurityException("No tiene acceso a la sección");
 
@@ -2454,7 +2457,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
 	            Ficha ficha = (Ficha) session.load(Ficha.class, simpleFichaUA.getIdFicha());
 	            ficha.addFichaUA(fichaUA);
-
+	            
 	            Ficha fichasend = obtenerFicha( simpleFichaUA.getIdFicha() );
 	            Actualizador.actualizar(fichasend);
 	            
@@ -2470,7 +2473,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		} catch (HibernateException he) {
             throw new EJBException(he);			
 		} finally {            
-			close(session);			
+			close(session);		
 		}		
 	}
 	

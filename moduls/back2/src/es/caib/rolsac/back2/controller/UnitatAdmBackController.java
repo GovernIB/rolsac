@@ -154,10 +154,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 	    List<IdNomDTO> llistaEdificisDTO = new ArrayList<IdNomDTO>();
 	    
-	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();	    	    	    	    
+	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
 
 	    if (request.getParameter("id") == null || "".equals(request.getParameter("id"))) {
 	    	try {
+	    		
 		    	if (unitatDelegate.autorizarCrearUA()) {
 		    		resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
 		    	} else {
@@ -176,7 +177,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    	} 
 	    	return resultats;
         }
-         
+        
 	    Long idUA = new Long(request.getParameter("id"));            
 	    try {
 	        UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativa(idUA);
@@ -470,7 +471,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			unitatAdministrativa.setTraduccionMap(traduccions);
 			
 			// Fin idiomas
-
 			
             //Condifuracion/gestion
             //unitatAdministrativa.setClaveHita(valoresForm.get("item_clau_hita"));
@@ -648,6 +648,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			//Secciones-Fichas
 			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
 			
+			
+			Map actualizadorFichasUA = new HashMap();
+			String fUA = "";
+			
 			if (llistaSeccions != null) {
 				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions );        	
 
@@ -659,15 +663,17 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					List<Long> listaIdFichasUA = new ArrayList<Long>();
 					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
 					String separador = "";
-					String fUA = "";
+					fUA = "";
+
+					// Necesitamos los códigos de Ficha UA para la ordenación 
+					Set<FichaUA> listaFichasUA = DelegateUtil
+							.getSeccionDelegate().obtenerSeccion(idSeccion)
+							.getFichasUA();					
 					
 					for (int j = 0; j < fichasUA.length; j++) {
 						
-						// Necesitamos los códigos de Ficha UA para la ordenación 
-						Set<FichaUA> listaFichasUA = DelegateUtil
-								.getSeccionDelegate().obtenerSeccion(idSeccion)
-								.getFichasUA();					
-						Iterator<FichaUA> it = listaFichasUA.iterator();					
+						Iterator<FichaUA> it = listaFichasUA.iterator();	
+						
 						boolean isEncontrado = false;
 						Long idFUA = null;
 						
@@ -685,8 +691,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 						separador = ",";					
 					} 
 					
-					Map actualizadorFichasUA = new HashMap();
-					StringTokenizer parametros = new StringTokenizer(fUA, ","); 
+//					Map actualizadorFichasUA = new HashMap();
+//					StringTokenizer parametros = new StringTokenizer(fUA, ",");
+					
+//					parametros = new StringTokenizer(fUA, ",");
 					
 					int pos = 0;
 					for (Long idFichaUA : listaIdFichasUA ) {
@@ -695,12 +703,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 						pos++;
 					} 
 					
-					//DelegateUtil.getSeccionDelegate().actualizarOrdenFichasUASeccion(
-					//		idSeccion, parametros, actualizadorFichasUA);
-					DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
-							parametros, actualizadorFichasUA);
+//					DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
+//							parametros, actualizadorFichasUA);
 				}
 			}
+			
+			StringTokenizer parametros = new StringTokenizer(fUA, ",");
+			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
+					parametros, actualizadorFichasUA);
 			
 			//Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
 			//crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);		
