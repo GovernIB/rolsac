@@ -2307,6 +2307,9 @@
                 <div class="modul_continguts mostrat">
                     <!-- modulAfectacions -->
                     <div class="modulAfectacions">
+                    
+                        <input name="modulo_afectaciones_modificado" value="0" type="hidden"/>
+                    
                         <div class="seleccionats">
                             <div class="seleccionat">
                                 <p class="info"><spring:message code='txt.no_afectacions'/></p>

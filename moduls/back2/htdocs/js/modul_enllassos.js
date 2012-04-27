@@ -1,4 +1,4 @@
-// MODUL ENLLA«OS
+// MODUL ENLLA√áOS
 
 $(document).ready(function() {	
 	
@@ -21,7 +21,7 @@ $(document).ready(function() {
 		EscriptoriEnllas.iniciar();
 	}
 	
-	// Evento para el botÛn de volver al detalle
+	// Evento para el bot√≥n de volver al detalle
 	jQuery("#btnVolverDetalle").bind("click",function(){EscriptoriEnllas.torna();});
 	jQuery("#btnLimpiarCampos").bind("click",function(){EscriptoriEnllas.limpia();});
 	jQuery("#btnFinalitzar").bind("click",function(){EscriptoriEnllas.finalizar();});
@@ -35,9 +35,12 @@ function CModulEnllas(){
 	this.extend();		
 	
 	var that = this;
+    
+    // Campo hidden para controlar los cambios sobre un m√≥dulo.
+    var $moduloModificado = modul_enllassos_elm.find('input[name="modulo_enlaces_modificado"]');
 	
 	this.iniciar = function() {
-				
+				                        
 		enllassos_seleccionats_elm = escriptori_enllassos_elm.find("div.escriptori_items_seleccionats:first");
 		escriptori_enllassos_elm.find("div.botonera").each(function() {
 			botonera_elm = $(this);		
@@ -76,7 +79,7 @@ function CModulEnllas(){
 			//multilang: false
 			});
 		
-		// one al botÛ de gestionar
+		// one al bot√≥ de gestionar
 		modul_enllassos_elm.find("a.gestiona").one("click", function(){ModulEnllas.gestiona();} );
 		
 	}	
@@ -105,16 +108,22 @@ function CModulEnllas(){
 		});
 	}
 	
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
+    
 	this.nuevo = function() {
 		
 		modul_enllassos_seleccionats_elm = escriptori_detall_elm.find("div.modulEnllassos div.seleccionats");
-		modul_enllassos_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEnllassos + ".");
-		
+		modul_enllassos_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaEnllassos + ".");		
 		
 	}
 
 	this.cargarEnlaces = function() {
 		
+        // Iniciamos el campo de control de cambios 0.
+        $moduloModificado.val(0);
+        
 		en_seleccionats_elm = escriptori_detall_elm.find("div.modulEnllassos div.seleccionats");
 		en_llistat_elm = escriptori_detall_elm.find("div.modulEnllassos div.llistat");
 		enllassos_nodes = dada_node.enllassos;
@@ -220,7 +229,7 @@ function CEscriptoriEnllas(){
 		
 			var max_ordre = parseInt(enllassos_seleccionats_elm.find(".listaOrdenable li:last input.enllas_orden").val());
 			
-			//En cas de llista buÔda
+			//En cas de llista bu√Øda
 			
 			max_ordre = (isNaN(max_ordre)) ? 0 : max_ordre + 1 ; 		
 			
@@ -275,6 +284,9 @@ function CEscriptoriEnllas(){
 				}
 			}).css({cursor:"move"});
 		}
+        
+        // Marcamos el m√≥dulo como modificado.
+        ModulEnllas.modificado();
 
 		Detall.modificado();
 		

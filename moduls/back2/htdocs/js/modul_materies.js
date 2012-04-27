@@ -7,13 +7,16 @@ jQuery(document).ready(function() {
 	
 	if (modul_materies_elm.size() == 1) {
 		ModulMateries.iniciar();
-	}
+	}        
 });
 
 function CModulMateries(){
 	this.extend = ListaOrdenable;
 	this.extend();
-	
+	        
+    // Campo hidden para controlar los cambios sobre un m√≥dulo.
+    var $moduloModificado = null;
+    
 	var that = this;
 	
 	this.iniciar = function() {
@@ -25,6 +28,14 @@ function CModulMateries(){
 			atributos: ["id", "nom", "orden"],	// Campos que queremos que aparezcan en las listas.
 			multilang: false
 		});
+
+        // Obtenemos el campo oculto para controlar los cambios.
+        $moduloModificado = modul_materies_elm.find('input[name="modulo_materias_modificado"]');        
+        
+        // Controlamos los cambios sobre los elementos del m√≥dulo, poniendo el campo hidden correspondiente a 1.
+        modul_materies_elm.find("input[type=checkbox]").change(function(){
+            $moduloModificado.val(1);
+        });                
 	}
 	
 	var modul_materies_elm = jQuery("div.modulMateries");
@@ -62,9 +73,16 @@ function CModulMateries(){
 		
 		materies_seleccionats_elm.slideDown(300);
 		materies_llistat_elm.slideUp(300);
+        
+        // Restauramos el estado del campo de control de cambios.
+        $moduloModificado.val( $moduloModificado.data('oldvalue') );
 	}
 	
 	this.gestiona = function(){
+    
+        // Guardamos el estado del campo de control de cambios.
+        $moduloModificado.data( 'oldvalue', $moduloModificado.val() );
+    
 		materies_seleccionats_elm.slideUp(300);
 		materies_llistat_elm.slideDown(300);
 	}
@@ -155,7 +173,7 @@ function CModulMateries(){
 
 			mat_llistat_elm.find("input").removeAttr("checked");
 		
-			//AÒadimos o eliminamos el atributo "checked" en funciÛn de si est· o no marcado.
+			//A√±adimos o eliminamos el atributo "checked" en funci√≥n de si est√° o no marcado.
 			mat_llistat_elm.find("input").each(
 				function() {
 					$( this ).bind( "click", function() {

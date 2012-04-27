@@ -19,7 +19,7 @@ $(document).ready(function() {
 		ModulNormativa.iniciar();
 	}
 	
-	// Evento para el botÛn de volver al detalle
+	// Evento para el bot√≥n de volver al detalle
 	jQuery("#btnVolverDetalle_normativa").bind("click",function(){EscriptoriNormativa.torna();});	
 	jQuery("#btnFinalizar_normativa").bind("click",function(){EscriptoriNormativa.finalizar();});
 });
@@ -31,6 +31,9 @@ function CModulNormativa(){
 	
 	var that = this;
 	
+    // Campo hidden para controlar los cambios sobre un m√≥dulo.
+    var $moduloModificado = modul_normatives_elm.find('input[name="modulo_normativas_modificado"]');
+    
 	this.iniciar = function() {
 		jQuery("#cerca_normativa_data").datepicker({ dateFormat: 'dd/mm/yy' });
 		jQuery("#cerca_normativa_data_butlleti").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -60,11 +63,15 @@ function CModulNormativa(){
 			multilang: false
 		});
 		
-		// one al botÛ de gestionar
+		// one al bot√≥ de gestionar
 		modul_normatives_elm.find("a.gestiona").one("click", function(){ModulNormativa.gestiona();} );
 	}	
 			
-	
+	// Marcar el m√≥dulo como modificado.    
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
+    
 	this.nuevo = function() {       
 		norma_seleccionats_elm = escriptori_detall_elm.find("div.modulNormatives div.seleccionats");
 		norma_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaNormativa + ".");
@@ -150,13 +157,13 @@ function CEscriptoriNormativa(){
 			nombre: titulo
 		};
 		
-		// Agrega el item, y si se ha aÒadido correctamente (si no existÌa previamente) actualiza el mensaje de items seleccionados.
+		// Agrega el item, y si se ha a√±adido correctamente (si no exist√≠a previamente) actualiza el mensaje de items seleccionados.
 		if( ModulNormativa.agregaItem( item ) ){		
 			this.contaSeleccionats();		
 		}				
 	}	
 	
-	// Cambia de p·gina.
+	// Cambia de p√°gina.
 	this.cambiaPagina = function( pag ){
 		multipagina_normativa.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -254,7 +261,7 @@ function CEscriptoriNormativa(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Actualizamos el navegador multip·gina.
+			// Actualizamos el navegador multip√°gina.
 			multipagina_normativa.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -364,13 +371,16 @@ function CEscriptoriNormativa(){
 //			}).css({cursor:"move"});
 //		}
 
-		// Marcamos el formulario como modificado para habilitar el botÛn de guardar.
+        // Marcamos el m√≥dulo como modificado.
+        ModulNormativa.modificado();
+
+		// Marcamos el formulario como modificado para habilitar el bot√≥n de guardar.
 		Detall.modificado();
 		
 		this.torna();
 	}
 	
-	// MÈtodo sobreescrito
+	// M√©todo sobreescrito
 	this.anar = function(enlace_html) {
 				
 		num = parseInt(enlace_html,10);

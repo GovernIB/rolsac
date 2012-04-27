@@ -10,6 +10,13 @@ function CModulFetsVitals(){
 	var modul_fets_elm = jQuery("div.modulFetsVitals");
 	var fets_seleccionats_elm;
 	var fets_llistat_elm;
+    
+    // Campo hidden para controlar los cambios sobre un módulo.
+    var $moduloModificado = modul_fets_elm.find('input[name="modulo_hechos_modificado"]');
+    
+    modul_fets_elm.find("input[type=checkbox]").change(function(){               
+        $moduloModificado.val(1);
+    });
 					 	
 	if ( modul_fets_elm.size() == 1 ) {		
 
@@ -29,6 +36,10 @@ function CModulFetsVitals(){
 	}
 	
 	this.cancela = function(){
+    
+        // Restauramos el estado del campo de control de cambios.
+        $moduloModificado.val( $moduloModificado.data('oldvalue') );
+    
 //		fets_llistat_elm = escriptori_detall_elm.find("div.modulMateries div.llistat");
 		fets_llistat_elm.find("input[type=checkbox]").each(function() {
 			$this = jQuery(this);
@@ -43,9 +54,17 @@ function CModulFetsVitals(){
 	}
 	
 	this.gestiona = function(){
+    
+        // Guardamos el estado del campo de control de cambios.
+        $moduloModificado.data( 'oldvalue', $moduloModificado.val() );
+    
 		fets_seleccionats_elm.slideUp(300);
 		fets_llistat_elm.slideDown(300);
 	}
+    
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
 	
 	this.finaliza = function(){
 		nombre_llistat = 0;
@@ -76,11 +95,17 @@ function CModulFetsVitals(){
 		
 		fets_seleccionats_elm.slideDown(300);
 		fets_llistat_elm.slideUp(300);
-		
+        
+        // Marcamos el módulo como modificado.
+        this.modificado();		
 	}
 	
 	//Actualiza la lista de hechos vitales seleccionados y marca los checkboxes cuando se carga una ficha
 	this.cargarHechosVitales = function(dades){
+    
+        // Nos aseguramos de que esté a 0 el campo de control de cambios.
+        $moduloModificado.val(0);
+    
 		fets_seleccionats_elm = escriptori_detall_elm.find("div.modulFetsVitals div.seleccionats");
 		fets_llistat_elm = escriptori_detall_elm.find("div.modulFetsVitals div.llistat");
 		fets_nodes = dades;

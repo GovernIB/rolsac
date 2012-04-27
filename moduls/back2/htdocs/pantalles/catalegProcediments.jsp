@@ -24,7 +24,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<!--<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>-->
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals_procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_taxes_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_formularis_tramits.js'/>"></script>
@@ -1958,6 +1958,9 @@
                         
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
+                        
+                            <input name="modulo_materias_modificado" type="hidden" value="0" />
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='unitatadm.formulari.materies.noInfo'/>.</p>
                                 <div class="listaOrdenable"></div>
@@ -2003,6 +2006,9 @@
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulNormatives -->
                         <div class="modulNormatives">
+                        
+                            <input name="modulo_normativas_modificado" type="hidden" value="0" />
+                        
                             <div class="seleccionats">
                                 <%-- dsanchez: un solo idioma --%>
                                 <div class="seleccionat">
@@ -2028,6 +2034,9 @@
                     <div class="modul_continguts mostrat">                    
                         <!-- modulFetsVitals -->
                         <div class="modulFetsVitals selectorChecks">
+                        
+                            <input name="modulo_hechos_modificado" type="hidden" value="0" />
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
                                 <div class="listaOrdenable"></div>

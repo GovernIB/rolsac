@@ -5,7 +5,7 @@ jQuery(document).ready(function() {
 	modul_fets_elm = jQuery("div.modulFetsVitals:first");
 	fets_seleccionats_elm = modul_fets_elm.find("div.seleccionats:first");
     fets_llistat_elm = modul_fets_elm.find("div.llistat:first");
-    
+            
 	ModulFetsVitals = new CModulFetsVitals();
     if (modul_fets_elm.size() == 1) {
 		ModulFetsVitals.iniciar();
@@ -17,6 +17,13 @@ function CModulFetsVitals(){
 	this.extend();		
 	
 	var that = this;
+                                    
+    // Campo hidden para controlar los cambios sobre un módulo.
+    var $moduloModificado = modul_fets_elm.find('input[name="modulo_hechos_modificado"]');
+    
+    modul_fets_elm.find("input[type=checkbox]").change(function(){               
+        $moduloModificado.val(1);
+    });
 
     this.iniciar = function() {
         // Bindings botones.
@@ -35,6 +42,10 @@ function CModulFetsVitals(){
     }
     
 	this.cancela = function(){
+    
+        // Restauramos el estado del campo de control de cambios.
+        $moduloModificado.val( $moduloModificado.data('oldvalue') );
+    
 		fets_llistat_elm.find("input[type=checkbox]").each(function() {
 			$this = jQuery(this);
 			if ($this.hasClass(fetVitalDefaultClass)) {
@@ -48,9 +59,17 @@ function CModulFetsVitals(){
 	}
 	
 	this.gestiona = function(){
+    
+        // Guardamos el estado del campo de control de cambios.
+        $moduloModificado.data( 'oldvalue', $moduloModificado.val() );
+        
 		fets_seleccionats_elm.slideUp(300);
 		fets_llistat_elm.slideDown(300);
 	}
+    
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
 	
 	this.finaliza = function(){
 		var nombre_llistat = 0;
@@ -94,8 +113,11 @@ function CModulFetsVitals(){
 		fets_seleccionats_elm.slideDown(300);
 		fets_llistat_elm.slideUp(300);
 		
-		// Marcamos el formulario como modificado para habilitar el bot�n de guardar.
+		// Marcamos el formulario como modificado para habilitar el botón de guardar.
 		Detall.modificado();
+        
+        // Marcamos el módulo como modificado.
+        this.modificado();
 	}
 	
 	this.contaSeleccionats = function() {		
@@ -120,6 +142,9 @@ function CModulFetsVitals(){
 	}
 
 	this.inicializarHechosVitales = function(listaHechos) {
+    
+        $moduloModificado.val(0);
+            
 		// Vaciar lista
         modul_fets_elm.find(".listaOrdenable").empty();		
 		if (typeof listaHechos != 'undefined' && listaHechos != null && listaHechos.length > 0) {

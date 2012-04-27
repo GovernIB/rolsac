@@ -931,9 +931,12 @@
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='unitatadm.formulari.materies'/></legend>
                     <div class="modul_continguts mostrat">
-                        
+                                                                        
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
+                        
+                            <input name="modulo_materias_modificado" type="hidden" value="0" />
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='unitatadm.formulari.materies.noInfo'/></p>
                                 <div class="listaOrdenable"></div>
@@ -980,6 +983,7 @@
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulSeccions -->
                         <div class="modulSeccions">                                     
+                            <input name="modulo_secciones_modificado" type="hidden" value="0" />
                             <div class="seleccionats">                                          
                                 <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
                                 <div class="listaOrdenable"></div>
@@ -1015,6 +1019,9 @@
                             </ul>-->
                             
                             <div class="seleccionats">
+                            
+                                <input name="modulo_edificios_modificado" type="hidden" value="0" />
+                            
                                 <%-- dsanchez: un solo idioma --%>
                                 <div class="seleccionat">
                                     <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>

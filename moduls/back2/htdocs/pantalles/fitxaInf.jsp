@@ -998,6 +998,9 @@
                     <div class="modul_continguts mostrat">                    
                         <!-- modulMateries -->
                         <div class="modulMateries selectorChecks">
+                        
+                            <input type="hidden" name="modulo_materias_modificado" value="0">
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='fitxes.no_hi_ha_materies'/></p>
                                 <div class="listaOrdenable"></div>
@@ -1045,6 +1048,9 @@
                     <div class="modul_continguts mostrat">                    
                         <!-- modulFetsVitals -->
                         <div class="modulFetsVitals selectorChecks">
+                        
+                            <input type="hidden" name="modulo_hechos_modificado" value="0" />
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='fitxes.no_hi_ha_fets_vitals'/></p>
                                 <div class="listaOrdenable"></div>
@@ -1145,6 +1151,9 @@
                     <div class="modul_continguts mostrat">
                         <!-- modulSeccionsUA -->
                         <div class="modulSeccionsUA">
+                        
+                            <input type="hidden" name="modulo_seccionesua_modificado" value="0">
+                        
                             <div class="seleccionats">
                                 <p class="info"><spring:message code='fitxes.no_hi_ha_seccions_ua'/></p>
                                 <div class="listaOrdenable"></div>
@@ -1170,6 +1179,9 @@
                         <!-- modulEnllaços -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulEnllassos multilang">
+                            
+                            <input type="hidden" name="modulo_enlaces_modificado" value="0"/>
+                        
                             <ul class="idiomes">
                             	<li class="introIdiomas"><spring:message code='txt.idioma.idioma'/></li>
                                 <li class="ca seleccionat"><spring:message code='txt.idioma.ca_abr'/></li>

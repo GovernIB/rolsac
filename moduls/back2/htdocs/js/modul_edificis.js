@@ -27,7 +27,10 @@ $(document).ready(function() {
 
 function CModulEdifici(){
 	this.extend = ListaOrdenable;
-	this.extend();		
+	this.extend();
+    
+    // Campo hidden para controlar los cambios sobre un módulo.
+    var $moduloModificado = modul_edificis_elm.find('input[name="modulo_edificios_modificado"]');
 	
 	this.iniciar = function() {
 			
@@ -60,7 +63,12 @@ function CModulEdifici(){
 		// one al botó de gestionar
 		modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();} );
 		
-	}	
+	}
+    
+    // Marcar el módulo como modificado.    
+    this.modificado = function(){
+        $moduloModificado.val(1);        
+    }
 			
 	this.gestiona = function() {
 						
@@ -87,8 +95,7 @@ function CModulEdifici(){
 
 function CEscriptoriEdifici(){		
 	this.extend = ListadoBase;
-    this.extend("", "", "", "cercador_contingut_edificis", "", "", "", "", "btnLimpiarForm");
-	//this.extend();
+    this.extend("", "", "", "cercador_contingut_edificis", "", "", "", "", "btnLimpiarForm");	
 	
 	var that = this;
 	
@@ -326,6 +333,9 @@ function CEscriptoriEdifici(){
 				}
 			}).css({cursor:"move"});
 		}
+                        
+        // Marcamos el módulo como modificado.
+        ModulEdifici.modificado();
 		
 		// Marcamos el formulario como modificado para habilitar el botón de guardar.
 		Detall.modificado();

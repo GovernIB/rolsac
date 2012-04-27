@@ -17,7 +17,7 @@ $(document).ready(function() {
 	}
 		
 	
-	// Evento para el botÛn de volver al detalle
+	// Evento para el bot√≥n de volver al detalle
 	jQuery("#btnVolverDetalle_afectacions").bind("click",function(){EscriptoriAfectacions.torna();});	
 	jQuery("#btnFinalizar_afectacions").bind("click",function(){EscriptoriAfectacions.finalizar();});	
 	
@@ -28,6 +28,9 @@ function CModulAfectacions() {
 	this.extend();
 	
 	var that = this;
+        
+    // Campo hidden para controlar los cambios sobre un m√≥dulo.
+    var $moduloModificado = modul_afectacions_elm.find('input[name="modulo_afectaciones_modificado"]');
 	
 	this.iniciar = function() {
 		jQuery("#afec_cerca_data").datepicker({ dateFormat: 'dd/mm/yy' });
@@ -50,7 +53,7 @@ function CModulAfectacions() {
 		afectacions_llistat_elm.add(afectacions_seleccionats_elm);
 				
 		
-		// one al botÛ de gestionar
+		// one al bot√≥ de gestionar
 		modul_afectacions_elm.find("a.gestiona").one("click", function() {ModulAfectacions.gestiona();});
 		
 		// Configuramos la lista ordenable.
@@ -62,10 +65,10 @@ function CModulAfectacions() {
 			multilang: false
 		});
 		
-		// one al botÛ de gestionar
+		// one al bot√≥ de gestionar
 		modul_afectacions_elm.find("a.gestiona").one("click", function(){ModulAfectacions.gestiona();} );		
 		
-		//Sobreescribimos los mÈtodos de ListaOrdenable para este caso particular
+		//Sobreescribimos los m√©todos de ListaOrdenable para este caso particular
 		this.getHtmlItem = this.getHtmlItemPropio;		
 		this.copiaFinal = this.copiaFinalPropia;
 		this.copiaInicial = this.copiaInicialPropia;
@@ -103,6 +106,10 @@ function CModulAfectacions() {
 		
 	}	
 		
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
+        
 	this.nuevo = function() {       
 		afec_seleccionats_elm = escriptori_detall_elm.find("div.modulAfectacions div.seleccionats");
 		afec_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaAfectacions + ".");
@@ -233,6 +240,9 @@ function CModulAfectacions() {
 	}
 	
 	this.inicializarAfectacions = function(listaAfectacions) {
+    
+        $moduloModificado.val(0);
+        
 		modul_afectacions_elm.find(".listaOrdenable").empty();		
 		if (typeof listaAfectacions != 'undefined' && listaAfectacions != null && listaAfectacions.length > 0) {
 			that.agregaItems(listaAfectacions);
@@ -267,7 +277,7 @@ function CEscriptoriAfectacions() {
 	
 	var that = this;
 	
-	// Sobreescribimos la funciÛn porque la genÈrica no funciona con
+	// Sobreescribimos la funci√≥n porque la gen√©rica no funciona con
 	// componentes de fecha y hay que limpiarlos a mano
 	this._limpia = this.limpia;	
 	this.limpia = function() {
@@ -327,7 +337,7 @@ function CEscriptoriAfectacions() {
 		
 	}	
 	
-	// Cambia de p·gina.
+	// Cambia de p√°gina.
 	this.cambiaPagina = function( pag ){
 		multipagina_afec.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -428,7 +438,7 @@ function CEscriptoriAfectacions() {
 			}
 			
 			
-			// Instanciamos el navegador multip·gina.					
+			// Instanciamos el navegador multip√°gina.					
 			multipagina_afec.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -534,7 +544,10 @@ function CEscriptoriAfectacions() {
 		
 		modul_afectacions_elm.find("p.info").html(codi_info);
 		
-		// Marcamos el formulario como modificado para habilitar el botÛn de guardar.
+        // Marcamos el m√≥dulo como modificado.
+        ModulAfectacions.modificado();
+        
+		// Marcamos el formulario como modificado para habilitar el bot√≥n de guardar.
 		Detall.modificado();
 		
 		this.torna();

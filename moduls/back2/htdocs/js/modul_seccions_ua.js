@@ -1,11 +1,13 @@
 // MODUL SECCIONS UA
-
 $(document).ready(function() {
 	
 	// elements
 	modul_seccions_ua_elm = $("div.modulSeccionsUA");
 	escriptori_seccions_ua_elm = $("#escriptori_seccions_ua");
 	
+    ModulSeccionsUA = new CModulSeccionsUA();
+    EscriptoriSeccionsUA = new CEscriptoriSeccionsUA();
+    
 	if (modul_seccions_ua_elm.size() == 1) {
 		
 		// INICIEM
@@ -15,9 +17,17 @@ $(document).ready(function() {
 	
 });
 
-var ModulSeccionsUA = {
-	iniciar: function() {
-		
+function CModulSeccionsUA(){
+    var that = this;
+    
+    // Campo hidden para controlar los cambios sobre un módulo.
+    var $moduloModificado = modul_seccions_ua_elm.find('input[name="modulo_seccionesua_modificado"]');
+    
+	this.iniciar = function() {
+    
+        // Iniciamos el campo de control de cambios 0.
+        $moduloModificado.val(0);
+        		
 		seccions_ua_llistat_elm = escriptori_seccions_ua_elm.find("div.escriptori_items_llistat");
 		seccions_ua_seleccionats_elm = escriptori_seccions_ua_elm.find("div.escriptori_items_seleccionats:first");
 		
@@ -32,11 +42,11 @@ var ModulSeccionsUA = {
 			}
 		});				
 		
-		// one al botó de gestionar
+		// one al botÃ³ de gestionar
 		modul_seccions_ua_elm.find("a.gestiona").one("click", ModulSeccionsUA.gestiona);
 		
-	},
-	gestiona: function() {
+	}
+	this.gestiona = function() {
 		
 		lis_size = modul_seccions_ua_elm.find("li").size();
 		
@@ -104,13 +114,17 @@ var ModulSeccionsUA = {
 				escriptori_seccions_ua_elm.bind("click",EscriptoriSeccionsUA.llansar);
 			});
 			
-		});
-		
+		});		
 	}
+    
+    this.modificado = function(){
+        $moduloModificado.val(1);
+    }
 };
 
-var EscriptoriSeccionsUA = {
-	llansar: function(e) {
+function CEscriptoriSeccionsUA(){
+	
+    this.llansar = function(e) {
 		
 		elm = $(e.target);
 
@@ -140,7 +154,7 @@ var EscriptoriSeccionsUA = {
 				ua_ID = ua_pare_div_elm.find("input.id").val();
 				ua_NOM = ua_pare_div_elm.find("a.selecciona").text();
 				
-				// La realci� que es vol inserir cont� una secci� i una UA 							
+				// La realció que es vol inserir conté una secció i una UA 							
 				if ( secc_ID == undefined || ua_ID == undefined ) {
 					Missatge.llansar({tipus: "alerta", modo:"error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorRelacioBuida + "</p>"});					
 				} else {								
@@ -149,6 +163,9 @@ var EscriptoriSeccionsUA = {
 				
 			} else if (a_elm.hasClass("finalitza")) {
 				
+                // Marcamos el módulo como modificado.
+                ModulSeccionsUA.modificado();
+                
 				escriptori_seccions_ua_elm.unbind("click",EscriptoriSeccionsUA.llansar);
 				
 				nombre_llistat = 0;
@@ -189,8 +206,8 @@ var EscriptoriSeccionsUA = {
 			EscriptoriSeccionsUA.contaSeleccionats();			
 		}
 		
-	},
-	torna: function() {
+	}
+	this.torna = function() {
 		
 		// animacio
 		escriptori_seccions_ua_elm.fadeOut(300, function() {
@@ -202,8 +219,8 @@ var EscriptoriSeccionsUA = {
 			
 		});
 		
-	},
-	contaSeleccionats: function() {
+	}
+	this.contaSeleccionats = function() {
 		
 		seleccionats_val = seccions_ua_seleccionats_elm.find("li").size();
 		info_elm = seccions_ua_seleccionats_elm.find("p.info:first");
@@ -224,7 +241,7 @@ var EscriptoriSeccionsUA = {
 			
 		}
 	},
-	afegir: function(dades) {
+	this.afegir = function(dades) {
 		
 		seccio_id = dades.idSecc;
 		seccio_titol = dades.nomSecc;
@@ -255,8 +272,8 @@ var EscriptoriSeccionsUA = {
 			
 			EscriptoriSeccionsUA.contaSeleccionats();
 		}
-	},
-	llistaSeccUa: function(){
+	}
+	this.llistaSeccUa = function(){
 		//Retorna una llista de parelles idSecc, idUA.
 		
 		var listaSeccUa = "";
