@@ -1,4 +1,6 @@
-13.jul.2011
+
+versio 1.0.0 - 16.ago.2011
+------------
 - correcció d'un bug en el contextPath del link 'eliminar' de elementOrdenat.jsp (afecta a docs i forms del tramit)
 - elimninats alguns logs posats temporalment
 - canviats a nivell DEBUG tots els logs INFO.
@@ -6,7 +8,50 @@
 - reordenació camps CLOB als mappings hibernate per evitar l'error ORA-24816: Se han proporcionado datos de enlace no LONG 
 después de la columna LONG o LOB real
 - restauració de la constant Idioma.DEFAULT perquè la usa el webcaib
+- evitar que el usuari pugui modificar una UA posant com a pare a si mateixa 
 
-16.ago.2011
-- evitar que el usuari pugui modificar una UA posant com a pare a si mateixa
 
+versio 1.0.1  - 25.nov.2011
+------------
+- 0000001: [Documentació] Eliminades les propietats db.texttype.descabr i db.texttype.descri - resolved.
+- 0000142: [test] tests aceptació per la versió 1.0.1 (ejaen-dgtic) - resolved.
+- 0000138: [bug] S'envien Unitats Administratives de més baix nivell que el sincronitzat. (mgonzalez-ibit) - resolved.
+- 0000094: [configuració] conflicte de standard.jar amb el portal informador (ejaen-dgtic) - resolved.
+- 0000092: Afegir Scroll a la finestra per triar una Unitat Administrativa al procediment i a la unitat administrativa (mgonzalez-ibit) - resolved.
+- 0000090: [refactorització] substitució caràcters latins per ascii (ejaen-dgtic) - resolved.
+- 0000086: [millora] Mejora en las consultas de novedades/destacados de fichas - resolved.
+- 0000085: [millora] Millores en la sincronització de FItxes per reduir el volum d'informació que pasa via WS. - resolved.
+- 0000084: [millora] Millores en la sincronització de Procediments per reduir el volum d'informació que pasa via WS. (mgonzalez-ibit) - resolved.
+- 0000082: [base de dades] Scripts de POSTGRES per fer l'update a la versió 1.0 no funcionen. (mgonzalez-ibit) - resolved.
+- 0000080: [bug] Problemas en el crawler para mostrar búsquedas por título de ficha (eschouten-ibit) - resolved.
+- 0000077: [bug] no es poden crear tràmits (ejaen-dgtic) - resolved.
+- 0000081: [base de dades] Error als scripts d'update de la versió 177. - resolved.
+- 0000145: [construcció (build)] desacoplar el config.properties del build.xml (ejaen-dgtic) - resolved.
+- 0000073: [bug] apareix null pointer quan algunes propietats no estan definides (ejaen-dgtic) - resolved.
+
+
+versio 1.0.2 - 20.des.2011
+------------
+- 0000012: [construcció (build)] eliminar els jars (sobretot de test) que no s'usen per tal de fer + ràpid el checkout. (ejaen-dgtic) - resolved.
+- 0000079: [nova funcionalitat] afegir codi de curriculum en UA (ejaen-dgtic) - resolved.
+- 0000190: [bug] no es poden assignar operadors a una UA (ejaen-dgtic) - resolved.
+- 0000195: [bug] Modificar metode borrarProcedimiento() per que gestioni els documents associats. (mgonzalez-ibit) - resolved.
+
+
+versio 1.0.3  - 3.abr.2012
+------------
+- 0000250: [nova funcionalitat] Adaptar la funcionalitat de traspàs BOIB al nou eBOIB (ejaen-dgtic) - resolved.
+- 0000325: [versions] Crear el tag rolsac-1.0.3 a partir de la branca rolsac-1.0 (anadal-ibit) - resolved.
+- 0000259: [bug] Creació d'usuaris: El camp perfil ha de ser obligatori (ejaen-dgtic) - resolved.
+- 0000262: [refactorització] Reestructurar scripts de bbdd segons el document de qualitat en la forja (anadal-ibit) - resolved.
+- 0000079: [nova funcionalitat] afegir codi de curriculum en UA (anadal-ibit) - resolved.
+- 0000235: [base de dades] mantenir coherent export en preproducció (ejaen-dgtic) - resolved.
+
+
+versio 1.1.0  
+------------
+
+- 0000287: [nova funcionalitat] Integrar la versió 1 del API (tonig) - resolved.
+- 0000146: [construcció (build)] desacoplar el config.properties del build.xml (tonig) - resolved.
+- 0000225: [bug] [pma] posar a null la url remota en actuacion transferible quan no està la propietat establerta (ejaen-dgtic) - resolved.
+- 0000198: [bug] Modificar metode borrarProcedimiento() per que gestioni els documents associats. (mgonzalez-ibit) - resolved.
