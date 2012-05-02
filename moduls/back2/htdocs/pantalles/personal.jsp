@@ -120,7 +120,7 @@
                 "tipus": "alfanumeric",
                 "caracters":
                     {
-                        "maxim": 10,
+                        "maxim": 20,
                         "mostrar": "no",
                         "abreviat": "no"
                     },

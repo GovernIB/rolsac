@@ -386,7 +386,7 @@ function CDetall(){
 		moduls_elm = escriptori_detall_elm.find("div.modul");		
 		
 		// màscares camps
-		$("#item_codi").mask("999999");
+		//$("#item_codi").mask("999999");
 		$("#item_epui, #item_epri, #item_em").mask("99999");
 		$("#item_nlpui, #item_nlpri, #item_nlm").mask("999999999");
 		
