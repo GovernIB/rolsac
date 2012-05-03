@@ -386,7 +386,7 @@ function CDetall(soloFicha){
 			} else {
 			
 				var itemsLista = [];
-				var i=0;
+				var i=1;
 				jQuery(edificis_nodes).each(function(){
 					edifici_node = this;
 

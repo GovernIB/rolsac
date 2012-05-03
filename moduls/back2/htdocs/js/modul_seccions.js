@@ -155,7 +155,7 @@ function CModulSeccio() {
 			
 			codi_seccions = "<ul>";
 			
-			$(seccions_nodes).each( function() {
+			$(seccions_nodes).each( function(index) {
 				seccio_node = this;
 				
 				texteFitxes = "(0 fitxes)";
@@ -167,7 +167,8 @@ function CModulSeccio() {
 				// crearem una llista per a cada enllaç de secció, que contindrà les fitxes que té assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\">";
                 codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
-                codi_seccions += "<input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a>" + texteFitxes;
+                codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
+                codi_seccions += "<input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a>" + texteFitxes;                
 				codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
 				codi_seccions += "<div class=\"listaOrdenable\">";
 				codi_seccions += "<ul>";
@@ -369,7 +370,7 @@ function CModulSeccio() {
 				
 		html = "<ul>";
 		
-		jQuery( paramsFicha.nodoOrigen ).find("li").each(function() {			
+		jQuery( paramsFicha.nodoOrigen ).find("li").each(function(index) {			
 			
 			var li_elm = jQuery(this);			
 			var item = [];
@@ -379,10 +380,13 @@ function CModulSeccio() {
 				
 				atributo = paramsFicha.atributos[i];
 				
-				if ( atributo != "nombre" ) 						
-					item[atributo] = li_elm.find( "input." + paramsFicha.nombre + "_" + atributo ).val();
-				else 
+                if( atributo == "orden" ){
+                    item[atributo] = index+1;                    
+				}else if ( atributo != "nombre" ){
+					item[atributo] = li_elm.find( "input." + paramsFicha.nombre + "_" + atributo ).val();                
+				}else{
 					item[atributo] = li_elm.find("span").html();					
+                }
 			}
 						
 			html += _this.getHtmlItem( item, true );
@@ -411,21 +415,22 @@ function CModulSeccio() {
 			numSecciones++;
 			
 			idSeccioNode = $(this).find(".seccio_id").val();			
-			ordreSeccio = $(this).find(".seccio_orden").val();
-			
+			ordreSeccio = $(this).find(".seccio_orden").val();            
+                        			
 			tmpSeccio = $(copiaNodesOrigen).find( "#seccio_id_" + idSeccioNode ).parent();
 			
 			//Si es troba el node, l'afegim a la nova llista
 			//juntament amb les seves fitxes filles. Si no el trobem
 			//es crearà un de nou amb el contenidor de fitxes corresponent
-			if ( tmpSeccio.length != 0 ) 
-				// html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
-				html += "<li class=\"nodoListaSecciones\">" +
-				    	"<input type=\"hidden\" id=\"seccio_ordre_" + idSeccioNode +"\" value=\"" + 					    
-				    	ordreSeccio + "\">" +				
-				    	tmpSeccio.html() + 
-						"</li>";			
-			else  {				
+			if ( tmpSeccio.length != 0 ) {
+
+                tmpSeccio.att
+                   
+				 html += "<li class=\"nodoListaSecciones\">" +  tmpSeccio.html() + "</li>";
+				/*html += "<li class=\"nodoListaSecciones\">" +
+				    	"<input type=\"text\" id=\"seccio_orden_" + idSeccioNode +"\" value=\"" + ordreSeccio + "\">" + tmpSeccio.html() + 
+						"</li>";*/
+			} else  {				
 				
 				html += "<li class=\"nodoListaSecciones\">" +
                         '<input type="hidden" name="seccio_modificada_'+ idSeccioNode +'" value="1"/>' +
@@ -445,7 +450,7 @@ function CModulSeccio() {
 		
 		html += "</ul>";
 		$(params.nodoOrigen).html(html);
-					
+                
 		if ( seccions_llistat_seccions != undefined )
 			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + numSecciones + " " + txt_seccions + ""  + "</strong>");
 		
@@ -454,6 +459,11 @@ function CModulSeccio() {
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 		
+        // Recalculamos el orden
+        jQuery(params.nodoOrigen).find("li.nodoListaSecciones input.seccio_orden").each(function(i) {				
+            jQuery(this).val(i+1);
+        });			
+        
 		return numSecciones;
 	}
 	
@@ -466,12 +476,13 @@ function CModulSeccio() {
 		
 		numFitxes = $(paramsFicha.nodoDestino).find("li").size();
 		
-		$(paramsFicha.nodoDestino).find("li").each( function() {
+		$(paramsFicha.nodoDestino).find("li").each( function(index) {
 			
-			idFitxaNode = $(this).find(".fitxa_id").val();
+			idFitxaNode = $(this).find(".fitxa_id").val();            
 
-			html += "<li>";
-			html += "<input class=\"fitxa_id\" type=\"hidden\" value=\"" + idFitxaNode + "\" /><span>" + $(this).find(".fitxa_nombre").val() + "</span>";
+			html += "<li>";			
+            html += "<input class=\"fitxa_id\" type=\"hidden\" value=\"" + idFitxaNode + "\" /><span>" + $(this).find(".fitxa_nombre").val() + "</span>";
+            html += "<input class=\"fitxa_orden\" type=\"hidden\" value=\"" + (index+1) + "\" />";
 			html += "</li>";			
 			
 		});

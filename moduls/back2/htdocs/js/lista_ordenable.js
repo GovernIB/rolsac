@@ -19,7 +19,7 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Replica la ordenaciÛn de la lista actual al resto de listas (solo en modo multi-idioma).
+	 * Replica la ordenaci√≥n de la lista actual al resto de listas (solo en modo multi-idioma).
 	 */
 	var actualizaOrden = function( claves, tipo ){		
 		var id;		
@@ -58,7 +58,7 @@ function ListaOrdenable(){
 		if( idioma ){
 			sufijoIdioma += "_"+idioma;
 		}
-	
+                	
 		var html = "<li>";
 			html += '<div class="'+params.nombre+'">';
 			
@@ -93,8 +93,8 @@ function ListaOrdenable(){
 						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
 						break;
 
-					case "orden":
-						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+					case "orden":                        
+						html += "<input class=\"" + params.nombre + "_" + atributo + "\" id=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";                        
 						break;															
 						
 					default:
@@ -113,12 +113,12 @@ function ListaOrdenable(){
 	}
 	
 	/**
-	 * Establece los par·metros de configuraciÛn.
+	 * Establece los par√°metros de configuraci√≥n.
 	 * _params = {
 	 *		nombre: "etiqueta",
      *		nodoOrigen: modul_edificis_elm.find(".listaOrdenable"), hace referencia a la lista "final" en la que se graban los datos definitivos para guardar.
 	 *		nodoDestino: edificis_seleccionats_elm.find(".listaOrdenable"), hace referencia a la lista "intermedia" que el usuario modifica.
-	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deberÌan aparecer siempre.
+	 *		atributos: ["id", "nombre", "orden", "..."], los campos "id" y "nombre" deber√≠an aparecer siempre.
 	 *	    multilang: true | false // Especifica si la lista es multiidioma.
 	 * }
  	 */
@@ -155,13 +155,13 @@ function ListaOrdenable(){
 		
 		jQuery(params.nodoDestino).each(function(){						
 			jQuery(this).find("li").each(function(i) {				
-				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i);			
+				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i+1);
 			});			
 		});				
 				
 		jQuery(params.nodoOrigen).each(function(){
 			jQuery(this).find("li").each(function(i) {
-				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i);			
+				jQuery(this).find( "input." + params.nombre + "_orden" ).val(i+1);
 			});
 		});
 				
@@ -186,7 +186,7 @@ function ListaOrdenable(){
 		var itemYaExiste = false;
 		var html;		
 		var idioma;
-						
+						                                
 		if ( tamLista == 0) {
 						
 			jQuery(params.nodoDestino).html("<ul></ul>");
@@ -234,7 +234,7 @@ function ListaOrdenable(){
         var _this = this;
         
 		var item, idioma;		
-		
+                		
 		var eliminar;
 		if (typeof btnEliminar != "undefined") {
 			eliminar = Boolean(btnEliminar);

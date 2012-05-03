@@ -72,7 +72,7 @@ function CModulFetsVitals(){
     }
 	
 	this.finaliza = function(){
-		var nombre_llistat = 0;
+		var nombre_llistat = 1;
 		var codi_llistat = "<ul>";
 		var id;
 		var orden;
@@ -83,9 +83,9 @@ function CModulFetsVitals(){
             if (input_elm.is(":checked")) {
             	id = "fetVital_id_" + input_elm.val();
             	orden = "fetVital_orden_" + input_elm.val();
-            	
+                                            	
             	codi_llistat += '<li><input type="hidden" class="fetsVitals_id" id="' + id + '" name="' + id + '" value="' + input_elm.val() + '" />' + li_elm.find("span").text();
-				codi_llistat += '<input type="hidden" class="fetsVitals_orden" id="' + orden + '" name="' + orden + '" value="' + nombre_llistat++ + '" /></li>';
+				codi_llistat += '<input type="hidden" class="fetsVitals_orden" id="' + orden + '" name="' + orden + '" value="' + (nombre_llistat++) + '" /></li>';
 				
 				input_elm.addClass(fetVitalDefaultClass);
 			} else {
