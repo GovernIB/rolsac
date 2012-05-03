@@ -172,18 +172,20 @@ span.sep { margin:0 1.5em; }
 #cap #tancarAplicacio { 
     display:block; 
     float: right; 
-    width: 154px;
+    width: 52px;    
     height:32px; 
-    text-align:right;
+    padding-left: 25px;
+    padding-right: 20px;
+    text-align:center;    
     margin-top: 15px;
-    background-image: url(../img/cap/btn_cerrar_aplicacion.png);
+    background-image: url(../img/cap/btn_salir.png);    
 }
 #cap #tancarAplicacio  a{
     display:block;  
     text-decoration: none;
     font-size: 13px;
     color: #666666;
-    padding: 6px 13px 0 0;
+    padding: 6px 0 0 0;
 }
 #cap #tancarAplicacio  a:hover,
 #cap #tancarAplicacio  a:focus{

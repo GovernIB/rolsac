@@ -16,7 +16,7 @@
             </p>
         </div>
         <div id="tancarAplicacio">
-            <a href="javascript:;" aria-haspopup="true"><span><span><spring:message code='cap.sortir_aplicacio'/></span></span></a>                             
+            <a href="javascript:;" aria-haspopup="true"><span><span><spring:message code='cap.sortir'/></span></span></a>                             
         </div>
         <!-- dsanchez: Hay que mover el botón otra capa --> 
         <!--
