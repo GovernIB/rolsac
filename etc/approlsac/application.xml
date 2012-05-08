@@ -21,10 +21,10 @@
   			<!-- BACK -->
     		<module><ejb>sac-persistence.jar</ejb></module>
     		<module><java>hibernate2.jar</java></module>
-    		<module><java>ehcache.jar</java></module>
-    		
 
-    		<!--  module><java>sac-back.jar</java></module-->
+		    <!-- agarcia: ehcache ya esta en 00librerias.ear
+    		<module><java>ehcache.jar</java></module>
+		    -->
 
 			<module>
         		<web>

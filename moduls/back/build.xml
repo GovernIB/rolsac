@@ -47,26 +47,16 @@
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
-            <include name="struts.jar"/>
             <include name="hibernate2.jar"/>
             <include name="commons-logging.jar"/>
-            <include name="commons-beanutils.jar"/>
-            <include name="commons-collections.jar"/>
-            <include name="commons-lang-2.1.jar"/>
-            <include name="chartbuilder.jar"/>
         	<include name="axis-1.4/axis.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
-        	<include name="micromodel.jar"/>
-        	<include name="json.jar"/>
-        	<include name="quartz.jar"/>
         	<include name="mail.jar"/>
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
         	<include name="boib.jar"/>
-        	<include name="lucene-caib.jar"/>
-        	<include name="dom4j.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
@@ -80,7 +70,21 @@
             <include name="sac-persistence-client.jar"/>
         	<include name="sac-persistence.jar"/>
         </fileset>
-    </path>
+	    <!-- agarcia: librerías comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+		     <include name="chartbuilder.jar"/>
+			 <include name="commons-lang-2.1.jar"/>
+			 <include name="commons-lang-2.1.jar"/>
+		 	 <include name="commons-collections-3.2.1.jar"/>
+		 	 <include name="commons-beanutils-1.8.3.jar"/>
+			 <include name="commons-validator-1.3.1.jar"/>
+			 <include name="dom4j.jar"/>
+			 <include name="json.jar"/>
+			 <include name="quartz-1.8.5.jar"/>
+		     <include name="struts.jar"/>
+		</fileset>
+
+	</path>
 
     <path id="doclet.class.path">
         <fileset dir="${xdoclet.dir}">
@@ -234,16 +238,18 @@
             	<include name="sac-back.jar"/>
             </lib>
             	
+			<!-- agarcia: librerias comunes en 00librerias -->
+			<lib dir="${home.dir}/lib/webcaib">
+				 <include name="commons-lang-2.1.jar"/>
+			  	 <include name="commons-collections-3.2.1.jar"/>
+			  	 <include name="commons-beanutils-1.8.3.jar"/>
+				 <include name="commons-validator-1.3.1.jar"/>
+				 <include name="quartz-1.8.5.jar"/>
+		         <include name="struts.jar"/>
+			</lib>
         	
         	<lib dir="${lib.dir}">
-	         <include name="struts.jar"/>
-        	 <include name="commons-lang-2.4.jar"/>
-           	 <include name="commons-collections.jar"/>
-           	 <include name="commons-beanutils.jar"/>
-        	 <include name="commons-validator.jar"/>
-        	 <include name="quartz.jar"/>
         	 <include name="mail.jar"/>
-
         	 <!--include name="axis2-1.5/*jar" /-->
     		</lib>
 

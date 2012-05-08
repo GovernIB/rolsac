@@ -27,10 +27,7 @@
         <fileset dir="${lib.dir}">
             <include name="cglib2.jar"/>
             <include name="commons-logging.jar"/>
-            <include name="juddi-proxy.jar"/>
-            <!--include name="axis.jar"/-->
             <include name="jaxrpc.jar"/>
-        	<include name="struts.jar"/>  <!-- vuds -->
         	<include name="servlet-api.jar"/>   <!-- vuds -->
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
@@ -45,6 +42,12 @@
     	<fileset dir="${lib.dir}/axis-1.4">
     	    <include name="**/*.jar" />
     	 </fileset>
+		<!-- agarcia: librerias comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+		    <!--include name="axis.jar"/-->
+		    <include name="juddi-proxy.jar"/>
+			<include name="struts.jar"/>  <!-- vuds -->
+		</fileset>
     </path>
 
     <target name="prepare">
