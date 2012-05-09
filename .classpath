@@ -15,7 +15,6 @@
 	<classpathentry kind="src" path="test/persistence/integracion/resources"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
-	<classpathentry kind="lib" path="lib/aclibico.jar"/>
 	<classpathentry kind="lib" path="test/lib/powermock-easymock/cglib-nodep-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
 	<classpathentry kind="lib" path="lib/chartbuilder.jar"/>
