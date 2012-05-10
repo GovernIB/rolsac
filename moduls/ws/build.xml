@@ -2,7 +2,6 @@
 
 <project name="sac.ws" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="ws"/>
     <property name="package" value="org.ibit.rol.sac.ws"/>
@@ -10,7 +9,8 @@
     <property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
-	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -44,6 +44,10 @@
             <include name="jsp-api.jar"/>
             <include name="commons-logging.jar"/>
         </fileset>
+    	
+    	<fileset dir="${lib.dir}/webcaib">
+    		<include name="commons-collections-3.2.1.jar"/>
+    	</fileset>
     </path>
 
     <path id="doclet.class.path">
@@ -139,8 +143,8 @@
     </target>
 
     <target name="web.war" depends="web.compile">
-        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/sac-${modul}.war"
+        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
@@ -158,7 +162,7 @@
 
     <target name="web.rewar" depends="web.war">
         <unwar
-            src="${web.product}/sac-${modul}.war"
+            src="${web.product}/${prefix.modul}-${modul}.war"
             dest="${web.webapp}"
             />
         <jspc
@@ -182,8 +186,8 @@
         <replace file="${web.gen.etc}/web.xml">
             <replacefilter token="&lt;!-- @jspc.mappings --&gt;" value="${jspc.mappings}"/>
         </replace>
-        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/sac-${modul}.war"
+        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
             basedir="${web.webapp}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/web.xml,META-INF/MANIFEST.MF">
@@ -217,4 +221,7 @@
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
     <target name="main" depends="web.war" description="Construeye el war"/>
 
+	<import file="../build_sonar.xml"/>
+
+	
 </project>

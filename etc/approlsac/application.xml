@@ -8,8 +8,6 @@
 
 	     	<module><java>extractor.jar</java></module>
     		<module><java>model.jar</java></module>
-    		
-    	<!--	<module><java>integracion.jar</java></module> -->
 
 			<module>
         		<web>
@@ -19,7 +17,7 @@
     		</module>
 
   			<!-- BACK -->
-    		<module><ejb>sac-persistence.jar</ejb></module>
+    		<module><ejb>@prefix.modul@-persistence.jar</ejb></module>
     		<module><java>hibernate2.jar</java></module>
 
 		    <!-- agarcia: ehcache ya esta en 00librerias.ear
@@ -28,13 +26,13 @@
 
 			<module>
         		<web>
-    	      	<web-uri>sac-back.war</web-uri>
+    	      	<web-uri>@prefix.modul@-back.war</web-uri>
 	  	        <context-root>@context.back@</context-root>
         		</web>
     		</module>
 			<module>
         		<web>
-    	      	<web-uri>sac-ws.war</web-uri>
+    	      	<web-uri>@prefix.modul@-ws.war</web-uri>
     	  	    <context-root>@context.ws@</context-root>
         		</web>
     		</module>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project name="test" basedir=".">
-	
+
 	<property name="test.unitario.src.dir" location="${home.dir}/test/${modul}/unitario/java"/>
 	<property name="test.unitario.etc.dir" location="${home.dir}/test/${modul}/unitario/resources"/>
 	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
@@ -10,6 +10,7 @@
     <property name="test.classes" location="${modul.output.dir}/test/classes"/>
 	<property name="test.unitario.resources" location="${modul.output.dir}/test/unitario/resources"/>
 	<property name="test.integracion.resources" location="${modul.output.dir}/test/integracion/resources"/>
+    <property name="lib.dir" location="${home.dir}/lib"/>
 
     <target name="prepare.test">
     	<mkdir dir="${test.classes}"/>
@@ -34,6 +35,9 @@
 		<fileset dir="${test.lib.dir}"/>
 		<fileset dir="${output.dir}/moduls">
 		    <include name="test_utils.jar"/>
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="org.springframework.**.jar"/>
 		</fileset>
 	</path>	
 

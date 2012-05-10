@@ -2,7 +2,6 @@
 
 <project name="sac.persistence" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="persistence"/>
     <property name="package" value="org.ibit.rol.sac.persistence"/>
@@ -10,7 +9,8 @@
     <property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
-	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -43,6 +43,7 @@
 	    	<include name="hibernate2.jar"/>
             <include name="cglib2.jar"/>
             <include name="ejb-2_0.jar"/>
+			<include name="jena-2.6.4.jar"/>
             <include name="jms.jar"/>
             <include name="commons-logging.jar"/>
         	<include name="jaxrpc.jar"/>
@@ -68,18 +69,20 @@
 			<include name="commons-beanutils-1.8.3.jar"/>
 		    <include name="dom4j.jar"/>
 			<include name="htmlparser.jar"/>
+		    <include name="jdom.jar"/>
 			<include name="jericho-html-2.5.jar"/>        	
 			<include name="lucene-caib.jar"/>
 			<include name="lucene-core-2.2.0.jar"/>
-			<include name="lucene-spellchecker-2.2.0.jar"/>	
+			<include name="lucene-spellchecker-2.2.0.jar"/>
+			<include name="rome-1.0RC2.jar"/>
 		</fileset>
 
     </path>
 
     <path id="doclet.class.path">
         <path refid="ejb.class.path"/>
-        <fileset dir="${lib.dir}">
-            <include name="commons-collections.jar"/>
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="commons-collections-3.2.1.jar"/>
         </fileset>
         <fileset dir="${xdoclet.dir}">
             <include name="*.jar"/>
@@ -121,7 +124,7 @@
     </target>
 
     <target name="ejb.gen.all" depends="prepare,init">
-
+		<echo>1</echo>
     	<!-- http://xdoclet.sourceforge.net/xdoclet/ant/xdoclet/modules/ejb/EjbDocletTask.html -->
         <ejbdoclet
             destdir="${ejb.gen.src}"
@@ -130,12 +133,11 @@
             force="false"
             verbose="true"
             >
-
+			
             <fileset dir="${ejb.src}">
                 <include name="**/*EJB.java"/>
                 <include name="**/*MDB.java"/>
-            </fileset>
-
+            </fileset>			
             <packageSubstitution packages="ejb" substituteWith="intf"/>
             <localinterface pattern="{0}Local"/>
             <localhomeinterface pattern="{0}LocalHome"/>
@@ -164,8 +166,7 @@
                 unauthenticatedPrincipal="${persistence.auth.principal}"
                 />
 
-        </ejbdoclet>
-		
+        </ejbdoclet>		
         <copy file="${ejb.etc}/hibernate-rolsac.cfg.xml" todir="${ejb.gen.etc}" overwrite="true"/>
     	<copy file="${ejb.etc}/email.properties" todir="${ejb.gen.etc}" overwrite="true"/>
     	
@@ -209,7 +210,7 @@
             jarfile="${ejb.product}/sac-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="Fundaciï¿½ IBIT"/>
             </manifest>
             <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate-rolsac.cfg.xml"/>
             <fileset dir="${ejb.gen.etc}" includes="hibernate-rolsac.cfg.xml"/>
@@ -224,7 +225,7 @@
             jarfile="${ejb.product}/sac-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="Fundaciï¿½ IBIT"/>
             </manifest>
             <include name="**/delegate/**/*.class"/>
             <include name="**/intf/**/*.class"/>
@@ -240,7 +241,7 @@
             overview="${ejb.doc}/overview.html"
             windowtitle="API del componente ${modul}"
             doctitle="API del componente ${modul}"
-            bottom="Fundació Ibit">
+            bottom="Fundaciï¿½ Ibit">
             <sourcepath>
                 <pathelement path="${ejb.gen.src}"/>
                 <pathelement path="${ejb.src}"/>
@@ -251,7 +252,7 @@
         </javadoc>
     </target>
 
-    <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentación"/>
+    <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentaciï¿½n"/>
     <target name="main" depends="ejb.jar,ejb.client" description="Construye el componente"/>
 
 
@@ -311,10 +312,6 @@
 	-delimiter=;	set an end of line delimiter for the script
 	
 	-->
-	<!--
-		properties="etc/hibernate.properties"
-		properties="${basedir}/../../config.properties_dgtic"
-	-->
 	
 	<target name="schemaupdate">
 
@@ -339,5 +336,7 @@
 	<property name="module.classes"  location="${ejb.classes}"/>
 	
 	<import file="../build_test.xml"/>
+	<import file="../build_sonar.xml"/>
+
 	
 </project>

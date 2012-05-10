@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="sonar" basedir=".">
+	
+	<property name="sonar.projectKey" value="caib:rolsac-${modul}" />
+  	<property name="sonar.sources" value="${basedir}/src" />
+    <property name="sonar.binaries" value="${modul.output.dir}/classes" />
+    
+</project>

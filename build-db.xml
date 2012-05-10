@@ -31,7 +31,7 @@
             classpathref="db.classpath"/>
 
         <schemaexport
-        	properties="${basedir}/config.properties"
+        	properties="${basedir}/default.properties"
             quiet="no"
             text="yes"
             delimiter=";"
@@ -49,7 +49,7 @@
 				classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
 				classpathref="db.classpath"/>
 			<schemaupdate
-				properties="${basedir}/config.properties"
+				properties="${basedir}/default.properties"
 				text="yes"
 				quiet="no">
 
