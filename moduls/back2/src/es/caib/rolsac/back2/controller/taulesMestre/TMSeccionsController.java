@@ -1,5 +1,7 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -12,6 +14,20 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionSeccion;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,27 +35,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.TraduccionFicha;
-import org.ibit.rol.sac.model.TraduccionSeccion;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.dto.IdNomDTO;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
-
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 @RequestMapping("/seccions/")
@@ -225,7 +224,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
             	Map<String, String> map;
             	List<Map<String, String>> llistaFitxes = new ArrayList<Map<String, String>>();
             	TraduccionFicha traF;
-            	TraduccionUA traUA;
+            	Traduccion traUA;
 				String nombre;
                 String nombreUA;
                 String idUA;
@@ -235,7 +234,6 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 					
 					if (ficha != null && ficha.getFicha() != null) {
 						traF = (TraduccionFicha) ficha.getFicha().getTraduccion(lang);
-						traUA = (TraduccionUA) ficha.getUnidadAdministrativa().getTraduccion(lang);
 						nombre = "";
 						idUA = "";
 						nombreUA = "";
@@ -244,9 +242,12 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traF.getTitulo());
 	    				}
 	    				if (ficha.getUnidadAdministrativa() != null) {
+	    				    traUA = ficha.getUnidadAdministrativa().getTraduccion(lang);
+	    				    nombreUA = traUA != null ? ((TraduccionUA)traUA).getAbreviatura() : "";
 	    					idUA = ficha.getUnidadAdministrativa().getId().toString();
-	    					nombreUA = traUA.getAbreviatura();
-	    					if (nombreUA == null || "".equals(nombreUA)) nombreUA = idUA;
+	    					if (nombreUA == null || "".equals(nombreUA)) {
+	    					    nombreUA = idUA;
+	    					}
 	    				}
 	    				GregorianCalendar dataActual = new GregorianCalendar(); 
 	    				
