@@ -500,8 +500,8 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         try {      
         	
-        	//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+        	//Aqui nos llegarïa un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 

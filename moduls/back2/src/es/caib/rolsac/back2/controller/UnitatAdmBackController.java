@@ -445,11 +445,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
             } 
             
             UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-            
             UnidadAdministrativa unitatAdministrativa;
             
 			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
-			if (id != null) { 
+			boolean edicion = id != null;
+			if (edicion) { 
 				unitatAdministrativa = unitatAdministrativaDelegate.consultarUnidadAdministrativa(id);
 			} else {									
 				unitatAdministrativa = new UnidadAdministrativa();
@@ -576,8 +576,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				unitatAdministrativa.setNumfoto4(ParseUtil.parseInt(valoresForm.get("item_nivell_4")));
 			}
 			
-			//Materias asociadas						
-			if (valoresForm.get("materies") != null ) {
+			//Materias asociadas
+			if (valoresForm.get("materies") != null && isModuloModificado("modulo_materias_modificado", valoresForm)) {
             	
             	UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
             	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
@@ -587,17 +587,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				String[] codisMateriesNoves = valoresForm.get("materies").split(",");				
 				
 				//Si es edición sólo tendremos en cuenta las nuevas materias
-				if (id != null) {
+				if (edicion) {
 										
 					borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
 					
 					//Saltamos este paso si se han borrado todas las materias
 					if ( !"".equals(valoresForm.get("materies")) ) {
-						
 		                for (int i = 0; i < codisMateriesNoves.length; i++) {
-		                		   
 		                    for ( UnidadMateria unidadMateria: unitatAdministrativa.getUnidadesMaterias() ) {
-		                    	
 		                        if ( unidadMateria.getMateria().getId().equals(Long.valueOf(codisMateriesNoves[i]) ) ) { //materia ya existente
 		                            unidadesMateriasNuevas.add(unidadMateria);
 		                            codisMateriesNoves[i] = null;
@@ -611,7 +608,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					
 				if ( !"".equals(valoresForm.get("materies")) ) {				
 	                for (String codiMateria: codisMateriesNoves) {
-	                	
 	                    if (codiMateria != null) {                    	
 	                    	UnidadMateria nuevaUnidadMateria = new UnidadMateria();
 	                    	Materia materia = materiaDelegate.obtenerMateria(Long.valueOf(codiMateria));
@@ -621,8 +617,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				}
             }
             
-			//Sólo en caso de edición
-			if (id != null) {
+			// Edificios solo en caso de edición
+			if (edicion && isModuloModificado("modulo_edificios_modificado", valoresForm)) {
 				EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
 				
 				//Recollir els edificis actuals de la UA
@@ -645,75 +641,64 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 			
+			
 			//Secciones-Fichas
-			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
-			
-			
-			Map actualizadorFichasUA = new HashMap();
-			String fUA = "";
-			
-			if (llistaSeccions != null) {
-				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions );        	
-
-				// Actualizar el orden de las fichas			
-				for (int i = 0; i < llistaSeccions.length; i++) {
-					
-					//Obtener las fichas de la sección actual y preparar la ordenación
-					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
-					List<Long> listaIdFichasUA = new ArrayList<Long>();
-					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
-					String separador = "";
-					fUA = "";
-
-					// Necesitamos los códigos de Ficha UA para la ordenación 
-					Set<FichaUA> listaFichasUA = DelegateUtil
-							.getSeccionDelegate().obtenerSeccion(idSeccion)
-							.getFichasUA();					
-					
-					for (int j = 0; j < fichasUA.length; j++) {
-						
-						Iterator<FichaUA> it = listaFichasUA.iterator();	
-						
-						boolean isEncontrado = false;
-						Long idFUA = null;
-						
-						while (it.hasNext() && !isEncontrado ) {
-							FichaUA fichaUA = it.next();
-							
-							if (fichaUA.getFicha().getId().equals( new Long(fichasUA[j]) )) {
-								idFUA = fichaUA.getId();
-								listaIdFichasUA.add(fichaUA.getId());
-								isEncontrado = true;
-							}
-						}						
-						
-						fUA += separador + "orden_fic" + idFUA;
-						separador = ",";					
-					} 
-					
-//					Map actualizadorFichasUA = new HashMap();
-//					StringTokenizer parametros = new StringTokenizer(fUA, ",");
-					
-//					parametros = new StringTokenizer(fUA, ",");
-					
-					int pos = 0;
-					for (Long idFichaUA : listaIdFichasUA ) {
-						String[] orden = { String.valueOf(pos) };
-						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden );
-						pos++;
-					} 
-					
-//					DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
-//							parametros, actualizadorFichasUA);
-				}
-			}
-			
-			StringTokenizer parametros = new StringTokenizer(fUA, ",");
-			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(
-					parametros, actualizadorFichasUA);
-			
-			//Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));
-			//crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);		
+			if(isModuloModificado("modulo_secciones_modificado", valoresForm)) {
+    			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
+    			
+    			Map actualizadorFichasUA = new HashMap();
+    			String fUA = "";
+    			String separador = "";
+    			
+    			if (llistaSeccions != null) {
+    				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions);
+    
+    				// Actualizar el orden de las fichas			
+    				for (int i = 0; i < llistaSeccions.length; i++) {
+    					
+    					//Obtener las fichas de la sección actual y preparar la ordenación si ha habido cambios en la seccion
+    					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
+    					if (isSeccionModificada(idSeccion, valoresForm)) {
+        				
+    					    List<Long> listaIdFichasUA = new ArrayList<Long>();
+        					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
+        					// fUA = "";
+        
+        					// Necesitamos los códigos de Ficha UA para la ordenación
+        					Set<FichaUA> listaFichasUA = DelegateUtil.getSeccionDelegate().obtenerSeccion(idSeccion).getFichasUA();
+        					
+        					for (int j = 0; j < fichasUA.length; j++) {
+        						Iterator<FichaUA> it = listaFichasUA.iterator();	
+        						
+        						boolean isEncontrado = false;
+        						Long idFUA = null;
+        						
+        						while (it.hasNext() && !isEncontrado ) {
+        							FichaUA fichaUA = it.next();
+        							if (fichaUA.getFicha().getId().equals( new Long(fichasUA[j]) )) {
+        								idFUA = fichaUA.getId();
+        								listaIdFichasUA.add(fichaUA.getId());
+        								isEncontrado = true;
+        							}
+        						}						
+        
+        				        fUA += separador + "orden_fic" + idFUA;
+        						separador = ",";
+        					} 
+        
+        					int pos = 0;
+        					for (Long idFichaUA : listaIdFichasUA ) {
+        						String[] orden = { String.valueOf(pos) };
+        						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden);
+        						pos++;
+        					}
+    					}
+    				}
+    			}
+    			
+    			StringTokenizer parametros = new StringTokenizer(fUA, ",");
+    			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(parametros, actualizadorFichasUA);
+			}			
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
@@ -1122,7 +1107,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * @return String
 	 */
 	private String toFormatComparacio( String cadena ) {
-		
 		return cadena.toLowerCase().replaceAll("[áàä]", "a")
 					 			   .replaceAll("[éèë]", "e")
 					 			   .replaceAll("[íìï]", "i")
@@ -1130,4 +1114,26 @@ public class UnitatAdmBackController extends PantallaBaseController {
 					 			   .replaceAll("[úùü]", "u");		
 	}
 	
+	/**
+	 * Devuelve true si ha habido algun cambio en el modulo.
+	 * 
+	 * @param modulo
+	 * @param valoresForm
+	 * @return boolean
+	 */
+	private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
+	    return "1".equals(valoresForm.get(modulo));
+	}
+	
+	/**
+     * Devuelve true si ha habido algun cambio en la seccion.
+     * 
+     * @param seccionId
+     * @param valoresForm
+     * @return boolean
+     */
+    private boolean isSeccionModificada(long seccionId, Map<String, String> valoresForm) {
+        return "1".equals(valoresForm.get("seccio_modificada_" + seccionId));
+    }
+    
 }

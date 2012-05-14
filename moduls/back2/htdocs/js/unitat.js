@@ -134,7 +134,7 @@ function CDetall(soloFicha){
 		
 		// Preparamos la lista de secciones-ficha
 		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
-		// (S = Sección, F = Ficha)
+		// (S = Seccion, F = Ficha)
 		if ( !$("#llistaSeccions").length ) {
 			htmlSecciones = '<input type="hidden" id="llistaSeccions" name="llistaSeccions" value="">';
 			$("#formGuardar").append(htmlSecciones);
@@ -147,11 +147,11 @@ function CDetall(soloFicha){
 			
 			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + $(this).attr("value") + "#");
 
-			// Añadir las fichas del edificio actual
+			// Anadir las fichas del edificio actual
 			idSeccio = $(this).val();
 			
-			// Aquí tendremos añadir una validación extra y comprobar que todas las secciones contienen fichas, 
-			// en caso contrario deberá mostrarse un error y devolver "false"
+			// Aqui tendremos anadir una validacion extra y comprobar que todas las secciones contienen fichas, 
+			// en caso contrario debera mostrarse un error y devolver "false"
 			if ( !errorSeccionSinFichas && $("#seccio_id_" + idSeccio).parent().find("li").size() == 0 )				
 				errorSeccionSinFichas = true;			
 			
@@ -168,7 +168,7 @@ function CDetall(soloFicha){
 			return false;
 		}
 		
-		// Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		// Enviamos el formulario mediante el metodo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',
