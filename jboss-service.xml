@@ -26,6 +26,11 @@
 	   <!-- url pel botó de sortir de l'aplicació -->
 	   es.caib.rolsac.back2.urlSortir=http://intranet.caib.es
 	   
+	   <!-- urls per les previsualitzacions -->
+	   es.caib.rolsac.previsualitzacio.procediment.url=http://www.caib.es/govern/sac/visor_proc.do
+	   es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxa.do
+	   es.caib.rolsac.previsualitzacio.ua.url=http://www.caib.es/govern/organigrama/area.do
+	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es

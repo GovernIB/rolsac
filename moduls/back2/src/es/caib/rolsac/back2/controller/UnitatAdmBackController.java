@@ -67,6 +67,7 @@ import es.caib.rolsac.utils.DateUtils;
 public class UnitatAdmBackController extends PantallaBaseController {
 
 	private static Log log = LogFactory.getLog(UnitatAdmBackController.class);
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.ua.url";
 	
     private static class TreeOrdenSeccionComparator implements Comparator {
 		public int compare(Object element1, Object element2) {
@@ -134,6 +135,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         model.put("submenu_seleccionado", 2);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");
+		
         if (session.getAttribute("unidadAdministrativa")!=null){
             model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
             model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
@@ -142,6 +144,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
         model.put("llistaMateries", llistaMateriesDTO);        
         model.put("llistaTractaments", llistaTractamentsDTO);
         model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
+
+        model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION) );
         
 		loadIndexModel (model, request);
 		return "index";

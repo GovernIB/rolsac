@@ -71,7 +71,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
 	
-	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url";
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
 	@RequestMapping(value = "/catalegProcediments.do")
@@ -102,6 +102,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);
 		model.put("escriptori", "pantalles/catalegProcediments.jsp");
+		model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 		
 		String lang = getRequestLanguage(request);
 		try {
@@ -343,7 +344,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		resultats.put("total", llistaProcedimientoLocalDTO.size());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
-		resultats.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION) );
 		
 		return resultats;
 	}

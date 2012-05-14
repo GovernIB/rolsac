@@ -365,8 +365,7 @@ function CDetall(){
 		that.guardaGenerico(urlParams);
 	}
 	
-	this.urlPrevisualizar = "http://www.caib.es/govern/sac/visor_proc.do";
-	//this.urlPrevisualizar = txtUrlPrevisualizar + "/visor_proc.do";
+	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
 
 	this.iniciar = function() {	
 		// dates

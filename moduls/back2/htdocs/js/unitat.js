@@ -472,7 +472,7 @@ function CDetall(soloFicha){
 			fitxa_idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
 			fitxa_ID = escriptori_detall_elm.find("#item_id").val();
 			
-			previsualitza_url = "http://www.caib.es/govern/organigrama/area.do?lang=" + fitxa_idiomaSeleccionat + "&coduo=" + fitxa_ID;
+			previsualitza_url = urlPrevisualizarUA + "?lang=" + fitxa_idiomaSeleccionat + "&coduo=" + fitxa_ID;
 			
 			escriptori_previsualitza_elm.find("iframe").attr("src", previsualitza_url).end().fadeIn(300, function() {
 			

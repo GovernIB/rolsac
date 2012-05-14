@@ -31,7 +31,7 @@ public abstract class PantallaBaseController {
 	}
 
 	/**
-	 * Carga en el modelo lo necesario para poder la pantalla index
+	 * Carga en el modelo lo necesario para la pantalla index
 	 * @param model
 	 * @param request
 	 */

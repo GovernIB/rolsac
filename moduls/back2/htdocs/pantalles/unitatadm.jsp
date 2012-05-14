@@ -1421,6 +1421,8 @@
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         
+		var urlPrevisualizarUA = '<c:out value="${urlPrevisualitzacio}"/>';
+		
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
         var txtCarregant = "<spring:message code='txt.carregant'/>";

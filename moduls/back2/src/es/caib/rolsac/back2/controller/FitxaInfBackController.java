@@ -72,7 +72,7 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 public class FitxaInfBackController extends PantallaBaseController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";	
-	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualizacion.url"; 	
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.fitxa.url"; 	
 	private static Log log = LogFactory.getLog(FitxaInfBackController.class);
 	
     @RequestMapping(value = "/fitxainf.do", method = GET)
@@ -83,6 +83,8 @@ public class FitxaInfBackController extends PantallaBaseController {
         model.put("submenu_seleccionado", 3);
         model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
         model.put("escriptori", "pantalles/fitxaInf.jsp");
+        request.setAttribute("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
+        
         String lang = request.getLocale().getLanguage();
         if (session.getAttribute("unidadAdministrativa") != null) {
             model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
@@ -252,8 +254,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         resultats.put("total", llistaFitxesDTO.size());
         resultats.put("nodes", llistaFitxesDTO);
-
-        request.setAttribute("urlPrevisualizar", System.getProperty(URL_PREVISUALIZACION));        
+        
         return resultats;
     
     }

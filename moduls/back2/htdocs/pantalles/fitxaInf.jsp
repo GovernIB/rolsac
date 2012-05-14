@@ -43,8 +43,9 @@
    var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
    var pagTraduir = '<c:url value="/fitxainf/traduir.do" />';
 
-   // texts
-   //var txtUrlPrevisualizar = '<c:out value="${requestScope[urlPrevisualizar]}" />';
+   var urlPrevisualizarFicha = '<c:out value="${urlPrevisualitzacio}"/>';
+   
+   // texts   
    var txtEspere = "<spring:message code='txt.esperi'/>";
    var txtCarregant = "<spring:message code='txt.carregant'/>";
    var txtSi = "<spring:message code='txt.si'/>";
