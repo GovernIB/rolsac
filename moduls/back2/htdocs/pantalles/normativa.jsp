@@ -67,16 +67,16 @@
         // taula
 
         var txtNumero = "<spring:message code='camp.numero'/>";
-        var txtNumBoletin = "Número Butlletí";
+        var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";
         var txtTipus = "<spring:message code='camp.tipus'/>";
-        var txtTipoBoletin = "Tipus Butlletí";
+        var txtTipoBoletin = "<spring:message code='camp.tipusButlleti'/>";
         var txtTipologia = "<spring:message code='camp.tipologia'/>";
-        var txtTipologiaNorma = "Tipología Norma";
-        var txtFechaBoletin = "Data butlletí";
+        var txtTipologiaNorma = "<spring:message code='camp.tipologiaNorma'/>";
+        var txtFechaBoletin = "<spring:message code='camp.dataButlleti'/>";
         var txtLocal = "<spring:message code='txt.local'/>";
         var txtExterna = "<spring:message code='txt.externa'/>";
-        var txtBOIB = "BOIB";
-        var txtNumRegistro = "Registre";
+        var txtBOIB = "<spring:message code='txt.boib'/>";
+        var txtNumRegistro = "<spring:message code='camp.registre'/>";
         
         
         var txtCercant = "<spring:message code='txt.cercant'/>";
