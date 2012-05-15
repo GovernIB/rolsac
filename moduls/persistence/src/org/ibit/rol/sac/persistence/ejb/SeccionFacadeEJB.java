@@ -99,7 +99,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             if (padreOld_id != null)
                 padreOld = this.obtenerSeccion(padreOld_id);
 
-            if (padre_id != padreOld_id) {
+            if ( (padre_id == null && padreOld_id != null) || (padre_id != null && padreOld_id == null) || (padre_id != null && padreOld_id != null && !padre_id.equals(padreOld_id))) {
                 if (padre_id == null) { // Quitamos de jerarquia i metemos en raiz.
                     if (padreOld != null)
                         padreOld.removeHijo(seccion);

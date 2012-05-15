@@ -2017,8 +2017,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         for(int i=0; i<hijos.size(); i++){
 
             UnidadAdministrativa uni = (UnidadAdministrativa)hijos.get(i);
-            ids.add(uni.getId());
-            cargarHijosUnidadId(uni.getId(), ids, session);
+            if (uni != null) {
+            	ids.add(uni.getId());
+            	cargarHijosUnidadId(uni.getId(), ids, session);
+            }
         }
 
     }
