@@ -11,11 +11,11 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.webcaib.LinkModel;
 import org.ibit.rol.sac.persistence.intf.SeccionFacade;
 import org.ibit.rol.sac.persistence.intf.SeccionFacadeHome;
+import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.ibit.rol.sac.persistence.util.SeccionFacadeUtil;
 
 /**
@@ -70,6 +70,15 @@ public class SeccionDelegate implements StatelessDelegate {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public List<FichaUAFichaIds> obtenerFichaUAFichaIds(long idUA, long idSeccion) throws DelegateException {
+        try {
+            return (List<FichaUAFichaIds>) getFacade().obtenerFichaUAFichaIds(idUA, idSeccion);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public Seccion obtenerSeccion(Long id) throws DelegateException {
         try {
             return getFacade().obtenerSeccion(id);

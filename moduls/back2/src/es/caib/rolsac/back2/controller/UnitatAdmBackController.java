@@ -51,6 +51,7 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
+import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -666,30 +667,23 @@ public class UnitatAdmBackController extends PantallaBaseController {
         				
     					    List<Long> listaIdFichasUA = new ArrayList<Long>();
         					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
-        					// fUA = "";
         
         					// Necesitamos los códigos de Ficha UA para la ordenación
-        					Set<FichaUA> listaFichasUA = DelegateUtil.getSeccionDelegate().obtenerSeccion(idSeccion).getFichasUA();
-        					
+        					SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+        					List<FichaUAFichaIds> idsList = seccionDelegate.obtenerFichaUAFichaIds(unitatAdministrativa.getId(), idSeccion);
         					for (int j = 0; j < fichasUA.length; j++) {
-        						Iterator<FichaUA> it = listaFichasUA.iterator();	
-        						
-        						boolean isEncontrado = false;
-        						Long idFUA = null;
-        						
-        						while (it.hasNext() && !isEncontrado ) {
-        							FichaUA fichaUA = it.next();
-        							if (fichaUA.getFicha().getId().equals( new Long(fichasUA[j]) )) {
-        								idFUA = fichaUA.getId();
-        								listaIdFichasUA.add(fichaUA.getId());
-        								isEncontrado = true;
-        							}
-        						}						
-        
-        				        fUA += separador + "orden_fic" + idFUA;
-        						separador = ",";
-        					} 
-        
+        					    Long idFUA = null;
+                                for (FichaUAFichaIds ids: idsList) {
+                                    if (new Long(fichasUA[j]).equals(ids.getFichaId())) {
+                                        idFUA = ids.getFichaUAId();
+                                        listaIdFichasUA.add(ids.getFichaUAId());
+                                        break;
+                                    }
+                                }
+                                fUA += separador + "orden_fic" + idFUA;
+                                separador = ",";
+        					}
+
         					int pos = 0;
         					for (Long idFichaUA : listaIdFichasUA ) {
         						String[] orden = { String.valueOf(pos) };
