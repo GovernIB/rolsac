@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -656,7 +657,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
     			String separador = "";
     			
     			if (llistaSeccions != null) {
+    			    log.info("Inici de crearSeccionesFichas().");
+    			    Date startTrace = new Date();
     				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions);
+    				long execTime = new Date().getTime() - startTrace.getTime();
+    				log.info("Temps d'execucio de crearSeccionesFichas(): " + execTime + " milisegons.");
     
     				// Actualizar el orden de las fichas			
     				for (int i = 0; i < llistaSeccions.length; i++) {
@@ -670,7 +675,12 @@ public class UnitatAdmBackController extends PantallaBaseController {
         
         					// Necesitamos los códigos de Ficha UA para la ordenación
         					SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+        					log.info("Inici de obtenerFichaUAFichaIds().");
+                            startTrace = new Date();
         					List<FichaUAFichaIds> idsList = seccionDelegate.obtenerFichaUAFichaIds(unitatAdministrativa.getId(), idSeccion);
+        					execTime = new Date().getTime() - startTrace.getTime();
+                            log.info("Temps d'execucio de obtenerFichaUAFichaIds(): " + execTime + " milisegons.");
+                            
         					for (int j = 0; j < fichasUA.length; j++) {
         					    Long idFUA = null;
                                 for (FichaUAFichaIds ids: idsList) {
@@ -695,7 +705,12 @@ public class UnitatAdmBackController extends PantallaBaseController {
     			}
     			
     			StringTokenizer parametros = new StringTokenizer(fUA, ",");
+    			log.info("Inici de actualizarOrdenFichasUA().");
+                Date startTrace = new Date();
     			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(parametros, actualizadorFichasUA);
+    			long execTime = new Date().getTime() - startTrace.getTime();
+                log.info("Temps d'execucio de actualizarOrdenFichasUA(): " + execTime + " milisegons.");
+    			
 			}			
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
