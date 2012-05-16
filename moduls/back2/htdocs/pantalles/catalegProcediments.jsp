@@ -32,6 +32,9 @@
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
+    var idUAMollapa = '<c:out value="${idUA}"/>';
+    var nomUAMollapa = '<c:out value="${nomUA}"/>';
+
     var pagLlistat = '<c:url value="/catalegProcediments/llistat.do" />';
     var pagDetall = '<c:url value="/catalegProcediments/pagDetall.do" />';
     var pagGuardar = '<c:url value="/catalegProcediments/guardar.do" />';    
@@ -170,6 +173,7 @@
     var txtValidacionObligatorio = "<spring:message code='personal.formulari.validacio.tramit.obligatori'/>";    
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     var txtOrganoObligatorio = "<spring:message code='personal.formulari.organ.obligatori'/>";
+    var txtOrganoResponsableObligatorio = "<spring:message code='personal.formulari.organ.responsable.obligatori'/>";
 
     // dades formularios
     var FormulariDades = [
@@ -270,8 +274,27 @@
                 }
         },
         
-		// Organ competent per resoldre 
-		{	
+        // Organisme responsable 
+        {   
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_organ_responsable_id",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 250,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtOrganoResponsableObligatorio
+                }           
+        },
+        
+        // Organ competent per resoldre 
+        {   
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_organ_id",
@@ -286,8 +309,8 @@
             "error":
                 {
                     "obligatori": txtOrganoObligatorio
-                }			
-		},
+                }           
+        },
         
         // Silencio administrativo
         {
@@ -764,6 +787,31 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoResponsable">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_responsable"><spring:message code='camp.organResponsable'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="item_organ_responsable_id" name="item_organ_responsable_id" type="hidden" />
+                                                <div class="campo">
+                                                    <input id="item_organ_responsable" name="item_organ_responsable" type="text" class="nou" readonly="readonly" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_responsable', 'item_organ_responsable_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element organoCompetente">
                                             <div class="etiqueta">
                                                 <label for="item_organ"><spring:message code='camp.organCompetent'/></label>
@@ -934,6 +982,30 @@
                                                 <textarea id="item_notificacio_es" name="item_notificacio_es"
                                                     cols="50" rows="2" class="nou"></textarea>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element organoResponsable">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_responsable_es"><spring:message code='camp.organResponsable'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_responsable_es" name="item_organ_responsable_es" type="text" class="nou" readonly="readonly" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable_es');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_responsable_es', 'item_organ_responsable_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">
@@ -1108,13 +1180,37 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoResponsable">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_responsable_en"><spring:message code='camp.organResponsable'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_responsable_en" name="item_organ_responsable_en" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable_en');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_responsable_en', 'item_organ_responsable_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element organoCompetente">
                                             <div class="etiqueta">
                                                 <label for="item_organ_en"><spring:message code='camp.organCompetent'/></label>
                                             </div>
                                             <div class="control">                                                
                                                 <div class="campo">
-                                                    <input id="item_organ_en" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                    <input id="item_organ_en" name="item_organ_en" type="text" class="nou" readonly="true" />                                                
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
@@ -1279,13 +1375,37 @@
                                         </div>
                                     </div>
                                     <div class="fila">
+                                        <div class="element organoResponsable">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_responsable_de"><spring:message code='camp.organResponsable'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_responsable_de" name="item_organ_responsable_de" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable_de');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_responsable_de', 'item_organ_responsable_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                    <div class="fila">
                                         <div class="element organoCompetente">
                                             <div class="etiqueta">
                                                 <label for="item_organ_de"><spring:message code='camp.organCompetent'/></label>
                                             </div>
                                             <div class="control">                                                
                                                 <div class="campo">
-                                                    <input id="item_organ_de" name="item_organ_es" type="text" class="nou" readonly="true" />                                                
+                                                    <input id="item_organ_de" name="item_organ_de" type="text" class="nou" readonly="true" />                                                
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
@@ -1446,6 +1566,30 @@
                                                 <textarea id="item_notificacio_fr" name="item_notificacio_fr"
                                                     cols="50" rows="2" class="nou"></textarea>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="fila">
+                                        <div class="element organoResponsable">
+                                            <div class="etiqueta">
+                                                <label for="item_organ_responsable_fr"><spring:message code='camp.organResponsable'/></label>
+                                            </div>
+                                            <div class="control">                                                
+                                                <div class="campo">
+                                                    <input id="item_organ_responsable_fr" name="item_organ_responsable_fr" type="text" class="nou" readonly="true" />                                                
+                                                </div>
+                                                <div class="botones">
+                                                    <div class="btnCambiar boton btnGenerico">
+                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable_fr');" class="btn consulta">
+                                                            <span><span><spring:message code='boto.canviarOrgan'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                    <div class="boton btnGenerico">                                    
+                                                        <a href="javascript:EliminaArbreUA('item_organ_responsable_fr', 'item_organ_responsable_id');" class="btn borrar">
+                                                            <span><span><spring:message code='boto.borrar'/></span></span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>                                            
                                         </div>
                                     </div>
                                     <div class="fila">

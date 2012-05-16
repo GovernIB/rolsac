@@ -416,6 +416,10 @@ function CDetall(){
             jQuery("#item_clave_primaria,#item_clave_primaria_es,#item_clave_primaria_en,#item_clave_primaria_de,#item_clave_primaria_fr").val( jQuery(this).val() );
         });
         
+        jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").change(function(){        
+            jQuery("#item_organ_responsable, #item_organ_responsable_es, #item_organ_responsable_ca, #item_organ_responsable_en, #item_organ_responsable_de, #item_organ_responsable_fr").val( jQuery(this).val() );        
+        });
+        
         jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").change(function(){        
             jQuery("#item_organ, #item_organ_es, #item_organ_ca, #item_organ_en, #item_organ_de, #item_organ_fr").val( jQuery(this).val() );        
         });
@@ -454,7 +458,6 @@ function CDetall(){
 		ModulFetsVitals.nuevo();
 		ModulNormativa.nuevo();
         EscriptoriNormativa.nuevo();
-
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
@@ -476,6 +479,13 @@ function CDetall(){
 		$("#item_organ_id").val("");
 		
 		$("#modulPrincipal :input").each(limpiarCampo);
+		
+		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
+			$("#item_organ_responsable_id").val("");
+		} else {
+			$("#item_organ_responsable_id").val(idUAMollapa);
+			$("#item_organ_responsable").val(nomUAMollapa).change();
+		}
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
 		escriptori_contingut_elm.fadeOut(300, function() {
@@ -538,6 +548,11 @@ function CDetall(){
 		if (dada_node.item_iniciacio != undefined) {
 			jQuery("#item_iniciacio").val(dada_node.item_iniciacio);
             jQuery("#item_iniciacio").change();
+		}
+		
+		if (dada_node.item_organ_responsable_id != undefined) {
+			$("#item_organ_responsable_id").val(dada_node.item_organ_responsable_id);
+			$("#item_organ_responsable").val(dada_node.item_organ_responsable_nom).change();
 		}
 		
 		if (dada_node.item_organ_id != undefined) {

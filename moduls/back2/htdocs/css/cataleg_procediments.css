@@ -53,16 +53,16 @@ div.llistat div.tbody div.procediment {
     width: 400px;
 }
 
-#escriptori_detall .organoCompetente{
+#escriptori_detall .organoCompetente, #escriptori_detall .organoResponsable{
     float: none;
 }
-#escriptori_detall .organoCompetente .campo{
+#escriptori_detall .organoCompetente .campo, #escriptori_detall .organoResponsable .campo{
     width: 502px;
     float: left;
 }
-#escriptori_detall .organoCompetente .botones{
+#escriptori_detall .organoCompetente .botones, #escriptori_detall .organoResponsable .botones{
     float: right;
 }
-#escriptori_detall .organoCompetente .botones .btnCambiar{
+#escriptori_detall .organoCompetente .botones .btnCambiar, #escriptori_detall .organoResponsable .botones .btnCambiar{
     margin-right: 17px;
 }

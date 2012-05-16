@@ -126,7 +126,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private UnidadAdministrativa getUAFromSession(HttpSession session) {
-		return (UnidadAdministrativa)session.getAttribute("unidadAdministrativa");
+		return (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 	}
 
 	
@@ -350,7 +350,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		String lang = getRequestLanguage(request);
 		try {
@@ -520,8 +520,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_iniciacio", iniciacion.getId());
 			}
 
+			if (proc.getUnidadAdministrativa() != null) {
+			    UnidadAdministrativa ua = proc.getUnidadAdministrativa();
+                resultats.put("item_organ_responsable_id", ua.getId());
+                resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
+			}
+			
 			if (proc.getOrganResolutori() != null) {
-				UnidadAdministrativa ua = proc.getOrganResolutori();
+			    UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
 				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
@@ -631,14 +637,14 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 				if (edicion) {
 					// Mantenemos los valores originales que tiene el procedimiento.
-					procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
+//					procediment.setUnidadAdministrativa(procedimentOld.getUnidadAdministrativa());
 					procediment.setId(procedimentOld.getId());
 					procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
 					procediment.setTramites(procedimentOld.getTramites());					
 					procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
-				} else {
-					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
-					procediment.setUnidadAdministrativa(ua);
+//				} else {
+//					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
+//					procediment.setUnidadAdministrativa(ua);
 				}
 
                 // Materias
@@ -958,16 +964,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				
 				
 				if (!"".equals(request.getParameter("item_organ_id"))) {
-					try {
-						Long organId = Long.parseLong(request.getParameter("item_organ_id"));
-						UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-						UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
-						procediment.setOrganResolutori(organ);
-					} catch (NumberFormatException e) {
-						error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
-						throw new NumberFormatException();
-					}
-				}
+                    try {
+                        Long organId = Long.parseLong(request.getParameter("item_organ_id"));
+                        UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+                        UnidadAdministrativa organ = uaDelegate.obtenerUnidadAdministrativa(organId);
+                        procediment.setOrganResolutori(organ);
+                    } catch (NumberFormatException e) {
+                        error = messageSource.getMessage("proc.error.organ.incorrecte", null, request.getLocale());
+                        throw new NumberFormatException();
+                    }
+                }
+				
+                try {
+                    Long organRespID = Long.parseLong(request.getParameter("item_organ_responsable_id"));
+                    UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+                    UnidadAdministrativa organResp = uaDelegate.obtenerUnidadAdministrativa(organRespID);
+                    procediment.setUnidadAdministrativa(organResp);
+                } catch (NumberFormatException e) {
+                    error = messageSource.getMessage("proc.error.organ.responsable.incorrecte", null, request.getLocale());
+                    throw new NumberFormatException();
+                }
 				
 				procediment.setTaxa("on".equalsIgnoreCase(request.getParameter("item_taxa")) ? "1" : "0");
 				procediment.setIndicador("on".equalsIgnoreCase(request.getParameter("item_fi_vida_administrativa")) ? "1" : "0");
