@@ -1141,7 +1141,7 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_tipus"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus" name="item_tipus" class="nou">
@@ -1150,12 +1150,6 @@
                                                     <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
                                                 </c:forEach>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma">Nº norma</label></div>
-                                        <div class="control">
-                                            <input id="item_num_norma" name="item_num_norma" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">
@@ -1236,7 +1230,7 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_tipus_es"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus_es" name="item_tipus_es" class="nou">
@@ -1245,12 +1239,6 @@
                                                     <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
                                                 </c:forEach>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma_es">Nº norma (Llei)</label></div>
-                                        <div class="control">
-                                            <input id="item_num_norma_es" name="item_num_norma_es" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">
@@ -1342,7 +1330,7 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_tipus_en"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus_en" name="item_tipus_en" class="nou">
@@ -1351,12 +1339,6 @@
                                                     <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
                                                 </c:forEach>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma_en">Nº norma (Llei)</label></div>
-                                        <div class="control">
-                                            <input id="item_num_norma_en" name="item_num_norma_en" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">
@@ -1449,7 +1431,7 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_tipus_de"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus_de" name="item_tipus_de" class="nou">
@@ -1458,12 +1440,6 @@
                                                     <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
                                                 </c:forEach>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma_de">Nº norma (Llei)</label></div>
-                                        <div class="control">
-                                            <input id="item_num_norma_de" name="item_num_norma_de" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">
@@ -1556,7 +1532,7 @@
                                     </div>
                                 </div>
                                 <div class="fila">
-                                    <div class="element t50p">
+                                    <div class="element t75p">
                                         <div class="etiqueta"><label for="item_tipus_fr"><spring:message code='camp.tipus_normativa'/></label></div>
                                         <div class="control select">
                                             <select id="item_tipus_fr" name="item_tipus_fr" class="nou">
@@ -1565,12 +1541,6 @@
                                                     <option value='<c:out value="${tipus.id}" />'><c:out value="${tipus.nom}" /></option>
                                                 </c:forEach>
                                             </select>
-                                        </div>
-                                    </div>
-                                    <div class="element t25p">
-                                        <div class="etiqueta"><label for="item_num_norma_fr">Nº norma (Llei)</label></div>
-                                        <div class="control">
-                                            <input id="item_num_norma_fr" name="item_num_norma_fr" type="text" class="nou" />
                                         </div>
                                     </div>
                                     <div class="element t25p">

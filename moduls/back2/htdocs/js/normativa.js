@@ -707,9 +707,6 @@ function CDetall(){
         jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").change(function(){
             jQuery("#item_tipus,#item_tipus_es,#item_tipus_en,#item_tipus_de,#item_tipus_fr").val( jQuery(this).val() );
         });        
-        jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").change(function(){
-            jQuery("#item_num_norma,#item_num_norma_es,#item_num_norma_en,#item_num_norma_de,#item_num_norma_fr").val( jQuery(this).val() );
-        });        
         jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").change(function(){
             jQuery("#item_data_norma,#item_data_norma_es,#item_data_norma_en,#item_data_norma_de,#item_data_norma_fr").val( jQuery(this).val() );
         });
@@ -937,9 +934,6 @@ function CDetall(){
 		$("#item_tipus").val(nn(dada_node.tipus));
         $("#item_tipus").change();
 		
-        $("#item_num_norma").val(nn(dada_node.num_norma));
-        $("#item_num_norma").change();
-        
 		$("#item_ua_id").val(nn(dada_node.idUA));
 		$("#item_ua_nom").val(nn(dada_node.nomUA));
 		
