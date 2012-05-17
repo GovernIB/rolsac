@@ -350,11 +350,11 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 }
             	
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+                query = session.createQuery("select distinct normativa from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
                 
             } else { // "externa".equals(tipo))
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+                query = session.createQuery("select distinct normativa from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
             }
             
             for (int i = 0; i < params.size(); i++) {
