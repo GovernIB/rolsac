@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.ibit.rol.sac.model.ValueObject;
 
 public class NormativaDTO implements ValueObject, Comparable {
@@ -15,6 +16,7 @@ public class NormativaDTO implements ValueObject, Comparable {
     private String titulo;
     private String fecha;
     private String fecha_boletin;
+    private String boletin;
     private String tipo;
     private String tipologia;
     private Date fechaDate; //para el compareTo
@@ -25,7 +27,7 @@ public class NormativaDTO implements ValueObject, Comparable {
     	super();
     }
 
-	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat) {
+	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String boletin, String tipo, String tipologia, Boolean caducat) {
 		
 	    super();
 	    
@@ -38,11 +40,12 @@ public class NormativaDTO implements ValueObject, Comparable {
 	    this.tipo = tipo;
 	    this.tipologia = tipologia;
 	    this.fecha_boletin = fecha_boletin != null ? df.format(fecha_boletin) : "";
+	    this.setBoletin(boletin);
 	    this.caducat = caducat;
 	}
 
 	public NormativaDTO(long id, long numero, String titulo, Date fecha, Date fecha_boletin, String tipo, String tipologia, Boolean caducat, String registro) {
-		this(id, numero, titulo, fecha, fecha_boletin, tipo, tipologia, caducat);
+		this(id, numero, titulo, fecha, fecha_boletin, null, tipo, tipologia, caducat);
 		this.registro = registro;
 	}
 
@@ -108,7 +111,15 @@ public class NormativaDTO implements ValueObject, Comparable {
 		this.fecha_boletin = fecha_boletin;
 	}
 
-	/**
+	public String getBoletin() {
+        return boletin;
+    }
+
+    public void setBoletin(String boletin) {
+        this.boletin = boletin;
+    }
+
+    /**
 	 * Devuelve el valor de tipologia.
 	 *
 	 * @return Valor de tipologia.
@@ -253,6 +264,5 @@ public class NormativaDTO implements ValueObject, Comparable {
 	public String getRegistro() {
 		return registro;
 	}
-
 	
 }

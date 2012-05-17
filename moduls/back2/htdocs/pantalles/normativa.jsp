@@ -70,6 +70,7 @@
         var txtNumBoletin = "<spring:message code='camp.nombreButlleti'/>";
         var txtTipus = "<spring:message code='camp.tipus'/>";
         var txtTipoBoletin = "<spring:message code='camp.tipusButlleti'/>";
+        var txtBoletin = "<spring:message code='txt.butlleti'/>";
         var txtTipologia = "<spring:message code='camp.tipologia'/>";
         var txtTipologiaNorma = "<spring:message code='camp.tipologiaNorma'/>";
         var txtFechaBoletin = "<spring:message code='camp.dataButlleti'/>";

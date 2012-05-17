@@ -838,7 +838,7 @@ public class NormativaBackController extends PantallaBaseController {
 	 * @param llistaNormatives Lista de Normativa.
 	 * @param idioma Idioma seleccionado por el usuario.
 	 */
-	private List<NormativaDTO> pasarListaNormativasADTO(List<Normativa> llistaNormatives,	 String idioma) {
+	private List<NormativaDTO> pasarListaNormativasADTO(List<Normativa> llistaNormatives, String idioma) {
 		
 		List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
 		
@@ -864,6 +864,7 @@ public class NormativaBackController extends PantallaBaseController {
 								titulo, 
 								normativa.getFecha(),
 								normativa.getFechaBoletin(),
+								normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : "",
 								tipus,
 								local ? "Local" : "Externa",
 								normativa.isVisible())
