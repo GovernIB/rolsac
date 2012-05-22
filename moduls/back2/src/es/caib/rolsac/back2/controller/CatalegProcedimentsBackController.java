@@ -651,7 +651,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
                  * En el primer caso es bastante probable que se repitan la mayoria de materias.
                  */
-                if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))){
+                if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) && isModuloModificado("modulo_materias_modificado",request)){
                     MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
                     Set<Materia> materiesNoves = new HashSet<Materia>();
                     String[] codisMateriaNous = request.getParameter("materies").split(",");
@@ -749,7 +749,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 //Fin trámites
                 
                 // Hechos vitales 
-                if (request.getParameter("fetsVitals") != null && edicion) {
+                if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado",request)) {
                 	String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
                 	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
                 	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
@@ -786,7 +786,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
                  * En el primer caso es bastante probable que se repitan la mayoria de normativas.
                  */
-                if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))){
+                if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives")) && isModuloModificado("modulo_normativas_modificado",request)){
                     NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
                     Set<Normativa> normativesNoves = new HashSet<Normativa>();
                     String[] codisNormativesNoves= request.getParameter("normatives").split(",");
@@ -1187,5 +1187,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 		return resultats;
 	}
+	
+	   /**
+     * Devuelve true si ha habido algun cambio en el modulo.
+     * 
+     * @param modulo
+     * @param request
+     * @return boolean
+     */
+    private boolean isModuloModificado(String modulo, HttpServletRequest request) {
+        return "1".equals(request.getParameter(modulo));
+    }
 	
 }

@@ -630,38 +630,41 @@ public class NormativaBackController extends PantallaBaseController {
         		normativaDelegate.grabarNormativaExterna((NormativaExterna)normativa);
         	}
         	
+        	if (isModuloModificado("modulo_afectaciones_modificado", valoresForm)){
+            	
+        		//Gestionar afectaciones
+        		ObjectMapper mapper = new ObjectMapper();    	
+        		String jsonAfectaciones = valoresForm.get("afectaciones");
+        		AfectacionesDTO afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesDTO.class);
+    
+        		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
+        		if (edicion) {
+        			Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
+        			for (Afectacion afectacionOld : listaActualAfectaciones) {
+        				
+        				//Buscar la afectación afectacionOld en la lista nueva recibida en el post
+        				boolean estaEnLaListaNueva = false;
+        				for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
+        					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
+        						estaEnLaListaNueva = true;
+        						afectaciones.getListaAfectaciones().remove(afectacionNew);
+        						break;
+        					}
+        				}
+        				//Si no está en la lista nueva es que hay que eliminarla		
+        				if (!estaEnLaListaNueva) {    				
+        					normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
+        				}
+        			}
+        		}
+        		
+        		//Añadir afectaciones
+    			for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
+    				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
+    			}         	
         	
-    		//Gestionar afectaciones
-    		ObjectMapper mapper = new ObjectMapper();    	
-    		String jsonAfectaciones = valoresForm.get("afectaciones");
-    		AfectacionesDTO afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesDTO.class);
-
-    		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
-    		if (edicion) {
-    			Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
-    			for (Afectacion afectacionOld : listaActualAfectaciones) {
-    				
-    				//Buscar la afectación afectacionOld en la lista nueva recibida en el post
-    				boolean estaEnLaListaNueva = false;
-    				for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
-    					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
-    						estaEnLaListaNueva = true;
-    						afectaciones.getListaAfectaciones().remove(afectacionNew);
-    						break;
-    					}
-    				}
-    				//Si no está en la lista nueva es que hay que eliminarla		
-    				if (!estaEnLaListaNueva) {    				
-    					normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
-    				}
-    			}
-    		}
-    		
-    		//Añadir afectaciones
-			for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
-				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
-			}         	
-        	
+        	}
+			
 			//Finalizado correctamente
         	result = new IdNomDTO(normativa.getId(), messageSource.getMessage("normativa.guardat.correcte", null, request.getLocale()) );
         	
@@ -899,4 +902,15 @@ public class NormativaBackController extends PantallaBaseController {
 		} else 
 			return texto;
 	}
+	
+    /**
+     * Devuelve true si ha habido algun cambio en el modulo.
+     * 
+     * @param modulo
+     * @param valoresForm
+     * @return boolean
+     */
+    private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
+        return "1".equals(valoresForm.get(modulo));
+    }
 }

@@ -672,7 +672,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             
             //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
             //probable que se repitan la mayoria de materias.
-            if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))){
+            if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies")) && isModuloModificado("modulo_materias_modificado", valoresForm)){
                 MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
                 Set<Materia> materiesNoves = new HashSet<Materia>();
                 String[] codisMateriaNous = valoresForm.get("materies").split(",");
@@ -705,7 +705,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             
             //Fets vitals
                 
-            if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))){
+            if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals")) && isModuloModificado("modulo_hechos_modificado", valoresForm)){
                 HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
                 Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
                 String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
@@ -807,152 +807,159 @@ public class FitxaInfBackController extends PantallaBaseController {
             execTime = new Date().getTime() - startTrace.getTime();
             log.debug("Temps d'execucio de grabarFicha(" + idFitxa + "): " + execTime + " milisegons.");
                 
-            //Asociacion de ficha con Unidad administrativa                                
-            String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");                                      
-            boolean esborrarFichaUA = true;
+            //Asociacion de ficha con Unidad administrativa
             
-            if (edicion){
-                for (FichaUA fichaUA: fitxaOld.getFichasua()){
-                    esborrarFichaUA = true;
-                    for (int i = 0; i<codisSeccUaNous.length; i++){
-                        if (codisSeccUaNous[i] != null){//Per a no repetir cerques
-                            String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
-                            if(fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))){
-                                esborrarFichaUA = false;
-                                codisSeccUaNous[i] = null;
-                                break;
-                            }    
-                        }
-                    }
-                    if (esborrarFichaUA){
-                        Long codi = fichaUA.getId();
-                        log.debug("Inici de borrarFichaUA(" + codi + ")");
-                        startTrace = new Date();
-                        fitxaDelegate.borrarFichaUA(codi);
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
-                    }                            
-                }
-            }
+            if(isModuloModificado("modulo_seccionesua_modificado", valoresForm)){
+            
+                String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");                                      
+                boolean esborrarFichaUA = true;
                 
-            //Tots els que tenen id = -1, son nous i se poden afegir directament
-            for (String codiSeccUa: codisSeccUaNous){
-                if (codiSeccUa != null){
-                    String[] seccUA = codiSeccUa.split("#");
-                    Long idSeccion = ParseUtil.parseLong(seccUA[1]);
-                    Long idUA = ParseUtil.parseLong(seccUA[2]);
-
-                    log.debug("Inici de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + ")");
-                    startTrace = new Date();
-                    fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
-
-                    String pidip = System.getProperty("es.caib.rolsac.pidip");
-                    if(!((pidip == null) || pidip.equals("N"))) {
-                        // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
-                        if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
-                        {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
-                            int existe=0;
-                            Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
-                            
-                            log.debug("Inici de listarFichasSeccionTodas(" + portadas + ")");
+                if (edicion){
+                    for (FichaUA fichaUA: fitxaOld.getFichasua()){
+                        esborrarFichaUA = true;
+                        for (int i = 0; i<codisSeccUaNous.length; i++){
+                            if (codisSeccUaNous[i] != null){//Per a no repetir cerques
+                                String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
+                                if(fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))){
+                                    esborrarFichaUA = false;
+                                    codisSeccUaNous[i] = null;
+                                    break;
+                                }    
+                            }
+                        }
+                        if (esborrarFichaUA){
+                            Long codi = fichaUA.getId();
+                            log.debug("Inici de borrarFichaUA(" + codi + ")");
                             startTrace = new Date();
-                            List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
+                            fitxaDelegate.borrarFichaUA(codi);
                             execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de listarFichasSeccionTodas(" + portadas + "): " + execTime + " milisegons.");
-                            
-                            Iterator iter = listac.iterator();
-                            while (iter.hasNext())
-                            {
-                                Ficha ficac=(Ficha)iter.next();
-                                if((""+ficac.getId()).equals(""+idFitxa))
-                                    existe=1;
-                            }
-                            if (existe==0) {
-                                log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
+                            log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
+                        }                            
+                    }
+                }
+                    
+                //Tots els que tenen id = -1, son nous i se poden afegir directament
+                for (String codiSeccUa: codisSeccUaNous){
+                    if (codiSeccUa != null){
+                        String[] seccUA = codiSeccUa.split("#");
+                        Long idSeccion = ParseUtil.parseLong(seccUA[1]);
+                        Long idUA = ParseUtil.parseLong(seccUA[2]);
+    
+                        log.debug("Inici de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + ")");
+                        startTrace = new Date();
+                        fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
+                        execTime = new Date().getTime() - startTrace.getTime();
+                        log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
+    
+                        String pidip = System.getProperty("es.caib.rolsac.pidip");
+                        if(!((pidip == null) || pidip.equals("N"))) {
+                            // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
+                            if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
+                            {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
+                                int existe=0;
+                                Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
+                                
+                                log.debug("Inici de listarFichasSeccionTodas(" + portadas + ")");
                                 startTrace = new Date();
-                                fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
+                                List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
                                 execTime = new Date().getTime() - startTrace.getTime();
-                                log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + "): " + execTime + " milisegons.");
+                                log.debug("Temps d'execucio de listarFichasSeccionTodas(" + portadas + "): " + execTime + " milisegons.");
+                                
+                                Iterator iter = listac.iterator();
+                                while (iter.hasNext())
+                                {
+                                    Ficha ficac=(Ficha)iter.next();
+                                    if((""+ficac.getId()).equals(""+idFitxa))
+                                        existe=1;
+                                }
+                                if (existe==0) {
+                                    log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
+                                    startTrace = new Date();
+                                    fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
+                                    execTime = new Date().getTime() - startTrace.getTime();
+                                    log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + "): " + execTime + " milisegons.");
+                                }
+                            }
+                        }                                                
+                    }
+                }
+            }
+            
+            //Tractament d'enllassos
+            
+            if (isModuloModificado("modulo_enlaces_modificado", valoresForm)){
+            
+                List<Enlace> enllassosNous = new ArrayList<Enlace>();
+                
+                for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
+    				String nomParameter = (String)iterator.next();
+    			               
+                    String[] elements = nomParameter.split("_");
+                    
+                    if (elements[0].equals("enllas") && elements[1].equals("id")){
+                        //En aquest cas, elements[2] es igual al id del enllas                                                 
+                                     
+                        Enlace enllas = new Enlace();                                           
+                        
+                        if (elements[2].charAt(0) == 't'){//Element nou, amb id temporal
+                            enllas.setId(null);                            
+                        } else {
+                            enllas.setId(ParseUtil.parseLong(valoresForm.get(nomParameter)));
+                        }
+                        
+                        enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));                        
+                        
+                        for (String lang: langs){
+                         
+                            TraduccionEnlace traduccio = new TraduccionEnlace();
+                            
+                            traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
+                            traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
+                            
+                            enllas.setTraduccion(lang, traduccio);
+                            
+                        }
+                        
+                        enllas.setFicha(fitxa);
+                        
+                        enllassosNous.add(enllas);
+                    
+                    }                                                            
+                }
+                    
+                EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
+                
+                for (Enlace enllas: enllassosNous){
+                    log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
+                    startTrace = new Date();
+                    enllasDelegate.grabarEnlace(enllas, null, idFitxa);
+                    execTime = new Date().getTime() - startTrace.getTime();
+                    log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
+                }                
+                
+                //Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no                
+                if (edicion){
+                    
+                    List<Enlace> enllassosEliminar = fitxaOld.getEnlaces();                                    
+                    
+                    for(Enlace enllas: enllassosNous){
+                        for (Iterator<Enlace> it = enllassosEliminar.iterator(); it.hasNext(); ){
+                            if (it.next().getId().equals(enllas.getId())){
+                                it.remove();
                             }
                         }
-                    }                                                
-                }
-            }                                                                                                           
-
-            //Tractament d'enllassos        
-            List<Enlace> enllassosNous = new ArrayList<Enlace>();
-            
-            for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
-				String nomParameter = (String)iterator.next();
-			               
-                String[] elements = nomParameter.split("_");
-                
-                if (elements[0].equals("enllas") && elements[1].equals("id")){
-                    //En aquest cas, elements[2] es igual al id del enllas                                                 
-                                 
-                    Enlace enllas = new Enlace();                                           
+                    }                    
                     
-                    if (elements[2].charAt(0) == 't'){//Element nou, amb id temporal
-                        enllas.setId(null);                            
-                    } else {
-                        enllas.setId(ParseUtil.parseLong(valoresForm.get(nomParameter)));
-                    }
-                    
-                    enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));                        
-                    
-                    for (String lang: langs){
-                     
-                        TraduccionEnlace traduccio = new TraduccionEnlace();
-                        
-                        traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
-                        traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
-                        
-                        enllas.setTraduccion(lang, traduccio);
-                        
-                    }
-                    
-                    enllas.setFicha(fitxa);
-                    
-                    enllassosNous.add(enllas);
-                
-                }                                                            
+                    for (Enlace enllas: enllassosEliminar){
+                        Long codi = enllas.getId();
+                        log.debug("Inici de borrarEnlace(" + codi + ")");
+                        startTrace = new Date();
+                        enllasDelegate.borrarEnlace(codi);
+                        execTime = new Date().getTime() - startTrace.getTime();
+                        log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
+                    }                    
+                }            
             }
-                
-            EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-            
-            for (Enlace enllas: enllassosNous){
-                log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
-                startTrace = new Date();
-                enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-                execTime = new Date().getTime() - startTrace.getTime();
-                log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
-            }                
-            
-            //Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no                
-            if (edicion){
-                
-                List<Enlace> enllassosEliminar = fitxaOld.getEnlaces();                                    
-                
-                for(Enlace enllas: enllassosNous){
-                    for (Iterator<Enlace> it = enllassosEliminar.iterator(); it.hasNext(); ){
-                        if (it.next().getId().equals(enllas.getId())){
-                            it.remove();
-                        }
-                    }
-                }                    
-                
-                for (Enlace enllas: enllassosEliminar){
-                    Long codi = enllas.getId();
-                    log.debug("Inici de borrarEnlace(" + codi + ")");
-                    startTrace = new Date();
-                    enllasDelegate.borrarEnlace(codi);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
-                }
-                
-            }                                                                                
             // Fi enllassos
             
             
@@ -1169,4 +1176,15 @@ public class FitxaInfBackController extends PantallaBaseController {
 		return resultats;
 	}
 
+    /**
+     * Devuelve true si ha habido algun cambio en el modulo.
+     * 
+     * @param modulo
+     * @param valoresForm
+     * @return boolean
+     */
+    private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
+        return "1".equals(valoresForm.get(modulo));
+    }
+    
 }

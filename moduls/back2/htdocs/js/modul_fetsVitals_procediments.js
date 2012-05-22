@@ -72,7 +72,7 @@ function CModulFetsVitals(){
     }
 	
 	this.finaliza = function(){
-		var nombre_llistat = 1;
+		var nombre_llistat = 0;
 		var codi_llistat = "<ul>";
 		var id;
 		var orden;
