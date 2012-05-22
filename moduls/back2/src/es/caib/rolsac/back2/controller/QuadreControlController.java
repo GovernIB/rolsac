@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,14 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.HistoricoFicha;
+import org.ibit.rol.sac.model.HistoricoNormativa;
+import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.EstadisticaDelegate;
@@ -23,6 +31,7 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -72,6 +81,28 @@ public class QuadreControlController extends PantallaBaseController {
 					log.error(ExceptionUtils.getStackTrace(dEx));
 				}
 			}
+			
+		} else {
+		    
+		    try {
+		        
+		        UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+		        UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+		        
+		        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());		        		        		        
+		        
+	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()){
+	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));                   
+	                }
+		        
+            } catch (DelegateException dEx) {
+                if (dEx.isSecurityException()) {
+                    String error = messageSource.getMessage("error.permisos", null,request.getLocale());
+                } else {
+                    String error = messageSource.getMessage("error.altres", null,request.getLocale());
+                    log.error(ExceptionUtils.getStackTrace(dEx));
+                }
+            } 
 		}
 
 		
@@ -92,6 +123,25 @@ public class QuadreControlController extends PantallaBaseController {
 			
 			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS,llistaUnitatAdministrativaId);
 			
+			String idioma = request.getLocale().getLanguage();
+			
+			if (idioma != null && !"".equals(idioma)){			
+    			for (Object element: llistaCanvis.values()){
+    			    if(element instanceof HistoricoFicha){
+    			        //Ficha
+    			        ((HistoricoFicha) element).setNombre(((TraduccionFicha)((HistoricoFicha) element).getFicha().getTraduccion(idioma)).getTitulo());
+    			    } else 
+    			        if (element instanceof HistoricoProcedimiento){
+    			        //Procedimiento
+    			        ((HistoricoProcedimiento) element).setNombre(((TraduccionProcedimiento)((HistoricoProcedimiento) element).getProcedimiento().getTraduccion(idioma)).getNombre());
+    			    } else {
+    			        //Normativa    			        
+    			        ((HistoricoNormativa) element).setNombre(((TraduccionNormativa)((HistoricoNormativa) element).getNormativa().getTraduccion(idioma)).getTitulo());
+    			    }    			       			    
+    			}
+			
+			}
+
 			model.put("darreresModificacions", llistaCanvis);
 
 		} catch (DelegateException dEx) {

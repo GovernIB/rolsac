@@ -1312,12 +1312,18 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	        				"and nor.unidadAdministrativa.id in (:lId)");
 	        		query.setInteger("validacion", Validacion.PUBLICA);
 	        		query.setParameterList("lId", listaUnitatAdministrativaId, Hibernate.LONG);
-	        	} else {
+	        		
+	        		resultado = (Integer) query.uniqueResult();
+	        		
+	        	}/* else {
+	        	    
 	        		query = session.createQuery("select count(*) from NormativaLocal as nor where nor.validacion = :validacion ");
 	        		query.setInteger("validacion", Validacion.PUBLICA);
+	        			        	    
 	        	}
 	        	
 	        	resultado = (Integer) query.uniqueResult();
+	        	*/	        		        	
 	    		
 	        } catch (HibernateException he) {
 	            throw new EJBException(he);

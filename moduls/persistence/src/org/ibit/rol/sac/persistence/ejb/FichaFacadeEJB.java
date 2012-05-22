@@ -2229,16 +2229,19 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
         		query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        	} else {
+        		
+        		resultado = (Integer) query.uniqueResult();
+        	}/* else {
         		query = session.createQuery(" select count(*) from Ficha as fic where fic.validacion = :validacion " +
         				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
         				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) ");
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
 	        	
-        	}
+        	} 
         	
         	resultado = (Integer) query.uniqueResult();
+        	*/       	        	
     		
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -2275,7 +2278,9 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	        	query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
 	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        	} else {
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+        	}/* else {
         		query = session.createQuery("select count(*) from Ficha as fic where ( " +
 	        			" ( fic.validacion != :validacion ) " +
 	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
@@ -2292,6 +2297,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         	}
         	resultado = (Integer) query.uniqueResult();
     		
+        	*/
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {

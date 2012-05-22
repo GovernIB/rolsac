@@ -654,7 +654,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         		return historicoOrdenado;
         		
         	} else {
-        		Query query = null;
+        	/*	Query query = null;
         		query = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a " +
             			"where h.id=a.historico.id and h.class in (HistoricoProcedimiento, HistoricoNormativa, HistoricoFicha ) " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR + 
@@ -671,7 +671,8 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         			historico.put((Timestamp)obj[0], obj[1]);
         		}
         		
-        		 return historico;
+        		 return historico;*/
+        	    return new HashMap<Timestamp, Object>();
         	}
            
         } catch (HibernateException he) {

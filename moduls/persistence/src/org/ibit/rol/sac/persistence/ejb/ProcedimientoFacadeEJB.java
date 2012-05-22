@@ -3561,16 +3561,20 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         		query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
 	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        	} else {
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+        	}/* else {
+        	   
         		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
         				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
 						" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) ");
         		query.setInteger("validacion", Validacion.PUBLICA);
         		query.setDate("fecha", fechaCaducidad);
+        		
         	}
         	
         	resultado = (Integer) query.uniqueResult();
-    		
+    		*/
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -3606,7 +3610,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        	query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
 	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        	} else {
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+	        	
+        	}/* else {
+        	   
         		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
 	        			" ( prc.validacion != :validacion ) " +
 	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
@@ -3615,8 +3623,11 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        			" ) ");
 	        	query.setInteger("validacion", Validacion.PUBLICA);
 	        	query.setDate("fecha", fechaCaducidad);
+	        	        	    
 	        }
-        	resultado = (Integer) query.uniqueResult();
+	        
+	        resultado = (Integer) query.uniqueResult();
+	        */        	
     		
         } catch (HibernateException he) {
             throw new EJBException(he);
