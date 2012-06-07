@@ -20,17 +20,17 @@
 <tr>
 	<td>type</td>
 	<td>name=username</td>
-	<td>usuarioProva4</td>
+	<td>usuarioProva7</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name=password</td>
-	<td>usuarioProva4</td>
+	<td>usuarioProva7</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>name=nombre</td>
-	<td>usuarioProva4</td>
+	<td>usuarioProva7</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -72,7 +72,7 @@
 <tr>
 	<td>type</td>
 	<td>name=username</td>
-	<td>usuarioProva4</td>
+	<td>usuarioProva7</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
@@ -94,7 +94,6 @@
 	<td>Se ha realizado la baja correctamente</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

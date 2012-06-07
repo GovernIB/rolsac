@@ -105,7 +105,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Agricultura</td>
+	<td>link=Agricultura.</td>
 	<td></td>
 </tr>
 <!---- esborrar materia-->
@@ -140,7 +140,6 @@
 	<td>Se ha realizado la baja correctamente</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -40,7 +40,7 @@
 <tr>
 	<td>type</td>
 	<td>idSelect</td>
-	<td>952769</td>
+	<td>822056</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -107,11 +107,11 @@
 <tr>
 	<td>click</td>
 	<td>xpath=(//input[@name='Eliminar'])[2]</td>
-	<td>Eliminar</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForTextPresent</td>
-	<td>952769</td>
+	<td>822056</td>
 	<td></td>
 </tr>
 <tr>
