@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="01rolsac" default="main01ROLSAC">
 	
-	<property name="projecte" value="${ant.project.name}"/>
+<project name="rolsac-1.1.0" default="main01ROLSAC">
+	
+	<property name="rolsac.target" value="${ant.project.name}"/>
 	<property name="home" value="."/>
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
@@ -232,7 +233,8 @@
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
 			<manifest>
-				<attribute name="Created-By" value="CAIB"/>
+				<attribute name="Generated-By" value="${rolsac.author}"/>
+				<attribute name="Version" value="${rolsac.target}"/>
 			</manifest>
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
