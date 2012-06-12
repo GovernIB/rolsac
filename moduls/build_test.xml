@@ -7,7 +7,7 @@
 	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
 	<property name="test.integracion.etc.dir" location="${home.dir}/test/${modul}/integracion/resources"/>
     <property name="test.lib.dir" location="${home.dir}/test/lib"/>
-    <property name="test.classes" location="${modul.output.dir}/test/classes"/>
+    <property name="test.classes" location="${output.dir}/test/classes"/>
 	<property name="test.unitario.resources" location="${modul.output.dir}/test/unitario/resources"/>
 	<property name="test.integracion.resources" location="${modul.output.dir}/test/integracion/resources"/>
     <property name="lib.dir" location="${home.dir}/lib"/>
@@ -36,10 +36,10 @@
 		<fileset dir="${output.dir}/moduls">
 		    <include name="test_utils.jar"/>
 		</fileset>
-		<fileset dir="${lib.dir}">
+		<fileset dir="${lib.dir}/webcaib"> <!--  FIXME /webcaib es temporal -->
 			<include name="org.springframework.**.jar"/>
 		</fileset>
-	</path>	
+	</path>	 
 
 	
 	<path id="test.unitario.classpath">

@@ -11,6 +11,13 @@
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
 	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
 	<classpathentry kind="src" path="moduls/utils/src"/>
+	<classpathentry kind="src" path="test/utils/unitario/java"/>
+	<classpathentry kind="src" path="test/utils/unitario/resources"/>
+	<classpathentry kind="src" path="test/persistence/unitario/java"/>
+	<classpathentry kind="src" path="test/persistence/unitario/resources"/>
+	<classpathentry kind="src" path="test/common/java"/>
+	<classpathentry kind="src" path="test/back/unitario/java"/>
+	<classpathentry kind="src" path="test/back/unitario/resources"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
@@ -76,6 +83,16 @@
 	<classpathentry kind="lib" path="lib/webcaib/lucene-spellchecker-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/rome-1.0RC2.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/powermock-easymock-1.4.10-full.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/easymock-3.0.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-easymock/javassist-3.15.0-GA.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/mockito-all-1.8.5.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="test/lib/powermock-mockito/powermock-mockito-1.4.10-full.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-webmvc-struts.jar"/>
+	<classpathentry kind="lib" path="test/lib/spring/spring-test-3.0.6.RELEASE.jar"/>
+	<classpathentry kind="lib" path="test/lib/struts/spring-webmvc-struts.jar"/>
+	<classpathentry kind="lib" path="test/lib/struts/strutstest-2.0.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jasper/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/commons-el.jar"/>

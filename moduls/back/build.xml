@@ -59,6 +59,7 @@
         	<include name="mail.jar"/>
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
+        	<include name="commons-validator.jar"/> <!-- struts necessita aquesta versió del jar -->
         	<include name="boib.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
@@ -85,6 +86,7 @@
 			 <include name="json.jar"/>
 			 <include name="quartz-1.8.5.jar"/>
 		     <include name="struts.jar"/>
+			 <include name="lucene-caib.jar"/>
 		</fileset>
 
 	</path>
@@ -362,7 +364,6 @@
 	
 	
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
-    <target name="main" depends="web.war" description="Construye el war"/>
 
 	<target   name="module.package"   depends="jar.jar"/>
 	<path       id="module.classpath"   refid="web.class.path"/>
@@ -371,4 +372,6 @@
 	<import file="../build_test.xml"/>
 	<import file="../build_sonar.xml"/>
 	
+    <target name="main" depends="test.unitario, web.war" description="Construye el war"/>
+
 </project>

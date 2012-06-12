@@ -93,12 +93,14 @@
 
 
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
-    <target name="main" depends="jar.jar" description="Construye el jar"/>
+
 
 	<target name="module.package" depends="jar.jar"/>
 	<path id="module.classpath" refid="jar.class.path"/>
 	<property name="module.classes"  location="${jar.classes}"/>
 
 	<import file="../build_test.xml"/>
+
+    <target name="main" depends="test.unitario, jar.jar" description="Construye el jar"/>
 	
 </project>

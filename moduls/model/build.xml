@@ -36,7 +36,7 @@
         <fileset dir="${lib.dir}">
             <include name="commons-logging.jar"/>
             <include name="hibernate2.jar"/>
-		    <include name="ojdbc14.jar"/>
+        	<include name="ojdbc14.jar" if="bbdd.oracle"/>
 			<include name="jaxrpc.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
@@ -122,8 +122,7 @@
 
 	
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
-    <target name="main" depends="jar.jar" description="Construye el jar"/>
-
+    
 
 	<target name="module.package" depends="jar.jar"/>
 	<path id="module.classpath" refid="jar.class.path"/>
@@ -131,5 +130,7 @@
 
 	<import file="../build_test.xml"/>
 	<import file="../build_sonar.xml"/>
+	
+	<target name="main" depends="test.unitario, jar.jar" description="Construye el jar"/>
 	
 </project>

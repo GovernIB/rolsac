@@ -28,18 +28,21 @@
       class="test.unitario.back.mock.MockTramiteDelegate">
   </bean>
   
-    <bean name="materiaDelegate" 
-      class="test.unitario.back.mock.MockMateriaDelegate">
-  </bean>
   
+  <bean name="materiaDelegate" 
+      class="test.unitario.persistence.mock.MockMateriaDelegate">
+  </bean>
 
+ 
     <bean name="familiaDelegate" 
-      class="test.unitario.back.mock.MockFamiliaDelegate">
+      class="test.unitario.persistence.mock.MockFamiliaDelegate">
+  </bean>
+
+ 
+  <bean name="iniciacionDelegate" 
+      class="test.unitario.persistence.mock.MockIniciacionDelegate">
   </bean>
   
-  <bean name="iniciacionDelegate" 
-      class="test.unitario.back.mock.MockIniciacionDelegate">
-  </bean>
   
   <bean name="uaResponsableDelegate" 
       class="test.unitario.back.mock.MockUnidadAdministrativaDelegate">
