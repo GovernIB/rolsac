@@ -27,7 +27,7 @@
 	<property name="etc.approlsac" value="${etc}/approlsac"/>
 
 	<property environment="env"/>
-
+	
 	
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
@@ -143,6 +143,8 @@
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
   
+   <!-- enric@dgtic donat que en els update el inheritall es false, cal pasar rolsac.target explicitament -->
+	
 	<target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
 		<antcall target="update.extractor"/>
 		<antcall target="update.model"/>
@@ -150,41 +152,77 @@
 	</target>
 	
 	<target name="update.utils" description="Actualizar utilidades">
-		<ant dir="moduls/utils" target="main" inheritall="false"/>
+		<ant dir="moduls/utils" target="main" inheritall="false">
+			<propertyset>
+		   		<propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	
 	<target name="update.extractor" description="Actualizar herramientas de texto">
-		<ant dir="moduls/extractor" target="main" inheritall="false"/>
+		<ant dir="moduls/extractor" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+	</ant>
 	</target>
 
 	<target name="update.model" description="Actualizar el modelo de datos">
-		<ant dir="moduls/model" target="main" inheritall="false"/>
+		<ant dir="moduls/model" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.persistence" description="Actualizar la capa de persistencia">
-		<ant dir="moduls/persistence" target="main" inheritall="false"/>
+		<ant dir="moduls/persistence" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.integracion" description="Actualizar la capa de integracion">
-		<ant dir="moduls/integracion" target="main" inheritall="false"/>
+		<ant dir="moduls/integracion" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.back" description="Actualizar el modulo web legacy de backoffice">
-		<ant dir="moduls/back" target="main" inheritall="false"/>
+		<ant dir="moduls/back" target="main" inheritall="false">
+			<propertyset>
+		   		<propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.back2" description="Actualizar el modulo web de backoffice">
-		<ant dir="moduls/back2" target="main" inheritall="false"/>
+		<ant dir="moduls/back2" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.ws" description="Actualitar el mdulo web de webservices">
-		<ant dir="moduls/ws" target="main" inheritall="false"/>
+		<ant dir="moduls/ws" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<!--Traspas boib afegit marilen-->
     <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
-		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
+		<ant dir="moduls/traspas-boib" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 
@@ -295,6 +333,7 @@
 	       </antcall>
 	  
 	      <antcall target="assemble01ROLSAC"/>
+	  	
 	      <antcall target="deploy01ROLSAC"/>
 	  </target>	
 
@@ -302,25 +341,63 @@
   <!-- propagate                                                                                                                     -->
   <!-- ================================================================== -->
 
+	   <!-- enric@dgtic donat que en els update el inheritall es false, cal pasar rolsac.target explicitament -->
+
 	  <target name="propagate01ROLSAC">
 	  	<echo>UTILS</echo>
-		<ant dir="moduls/utils" target="${task}" inheritall="false"/>
+		<ant dir="moduls/utils" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>EXTRACTOR</echo>
-		<ant dir="moduls/extractor" target="${task}" inheritall="false"/>
+		<ant dir="moduls/extractor" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>MODEL</echo>
-		<ant dir="moduls/model" target="${task}" inheritall="false"/>
+		<ant dir="moduls/model" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>PERSISTENCE</echo>
-	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
+	  	<ant dir="moduls/persistence" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>INTEGRACION</echo>
-	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
+	  	<ant dir="moduls/integracion" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>WS</echo>
-		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
+		<ant dir="moduls/ws" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>BACK</echo>
-		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+		<ant dir="moduls/back" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>BACK2</echo>
-		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
+		<ant dir="moduls/back2" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  	<echo>TRASPAS-BOIB</echo>
-		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
+		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
 	  </target>	
  	
 	
