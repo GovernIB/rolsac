@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,7 @@ public class EspacioTerritorial extends Traducible {
 		this.hijos = hijos;
 	}
 	public  void addHijo(EspacioTerritorial hijo) {
+		if (hijos == null) hijos = new HashSet<EspacioTerritorial>();
 		if (!hijos.contains(hijo)) {
             if (hijo.getPadre() != null) {
                 hijo.getPadre().removeHijo(hijo);
@@ -88,5 +90,10 @@ public class EspacioTerritorial extends Traducible {
 
     public void setAdminRemotas(Set<AdministracionRemota> adminRemotas) {
         this.adminRemotas = adminRemotas;
+    }
+    
+    public String getNombreEspacioTerritorial(String idioma) {
+        TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) getTraduccion(idioma);
+        return tet == null ? null : tet.getNombre();
     }
 }

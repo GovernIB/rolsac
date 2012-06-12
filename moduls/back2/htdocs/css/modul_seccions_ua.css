@@ -1,0 +1,103 @@
+@charset "utf-8";
+
+/* modul lateral normativa */
+
+div.modulSeccionsUA { padding-bottom:1em; }
+/*div.modulSeccionsUA div.seleccionats ul { list-style:circle; margin-left:2em; }*/
+div.modulSeccionsUA div.seleccionats ul li { padding-bottom:.4em; }
+div.modulSeccionsUA div.seleccionats ul li:hover { background-color:#ffc; }
+div.modulSeccionsUA div.seleccionats p.info { margin-top:0; }
+
+/* escriptori seccions_ua */
+
+#escriptori_seccions_ua { display:none; margin:0 0 4em 0; }
+#escriptori_seccions_ua h2 { font-size:1.4em; margin-top:0; margin-bottom:.5em; }
+
+/*#escriptori_seccions_ua div.botonera { clear:both; padding:.7em 0; background-color:#f0f0ee; }*/
+#escriptori_seccions_ua div.botonera ul { overflow:hidden; width:100%; height:1.8em; list-style:none; padding:.2em 0; }
+#escriptori_seccions_ua div.botonera ul li { float:left; height:1.8em; padding:.1em 0 .1em 2em; }
+#escriptori_seccions_ua div.botonera ul li.e { float:right !important; padding-right:2em; }
+
+#escriptori_seccions_ua div.dalt { margin-top:2em; }
+#escriptori_seccions_ua div.rabillo_dalt { height:1em; margin-bottom:2em; /*background:transparent url(../img/botonera/rabillo_dalt_c_ccd7e2.gif) no-repeat center top;*/ }
+#escriptori_seccions_ua div.rabillo { clear:both; height:1em; /*background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom;*/ }
+
+/* escriptori llistat */
+/*
+div.escriptori_items_llistat { 
+	overflow:hidden; 
+	float:left; 
+	width:42em; 
+	padding:1em 1em 2em 1em; 
+	margin-right:1em; 
+	margin-bottom:1em; 
+	border:1px solid #f2f2f2; }
+*/
+#escriptori_seccions_ua div.escriptori_items_llistat { 
+    overflow:hidden; 
+    float:left; 
+    width: 42em;
+	padding:1em 1em 2em 1em; 
+	margin-right:1em; 
+	margin-bottom:1em;
+}
+
+#escriptori_seccions_ua div.escriptori_items_cercador div.botonera { text-align:center; background-color:#ccd7e2 !important; }
+
+#escriptori_seccions_ua div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+
+div.escriptori_selector_seccions { overflow:hidden; float:left; width:20em; }
+
+div.escriptori_selector_uas { overflow:hidden; float:right; width:20em; }
+
+div.escriptori_selector_seccions h3, div.escriptori_selector_uas h3 { margin-top:0; }
+#escriptori_seccions_ua p.executant { font-style:italic; padding-left:1.8em; background:transparent url(../img/executant.gif) no-repeat left .1em; }
+
+/* escriptori seleccionarts*/
+
+/*div.escriptori_items_seleccionats { overflow:hidden; float:left; width:28em; padding:1em 1em 2em 1em; margin-bottom:1em; border:1px solid #f2f2f2; }
+
+div.escriptori_items_seleccionats p.botonera { padding:0.5em 1em; margin-bottom:1em; background-color:#ccd7e2; }
+
+div.escriptori_items_seleccionats h3 { margin-top:0; }
+
+div.escriptori_items_seleccionats ul { list-style:circle; margin-left:1.5em; margin-bottom:1em; }
+div.escriptori_items_seleccionats ul li { padding:.2em 0; }
+div.escriptori_items_seleccionats ul li div.se_ua { overflow:hidden; width:100%; text-align:right; }
+
+div.escriptori_items_seleccionats ul li span.se_ua { display:block; width:24em; float:left; text-align:left; }
+div.escriptori_items_seleccionats ul li span.ua { font-style:italic; }
+*/
+/* escriptori seleccionarts*/
+
+#escriptori_seccions_ua div.escriptori_items_seleccionats { 
+    overflow:hidden; 
+    float:right; 
+    background: #F3F3F3;    
+    border: 1px solid #D3D3D3;
+    margin-bottom: 33px;    
+    position: relative;
+    border-radius: 15px 15px 15px 15px;     
+    width: 34em;
+    font: 13px Arial, Helvetica, Sans-serif;
+}
+#escriptori_seccions_ua div.escriptori_items_seleccionats .interior{
+    padding: 15px;
+}
+#escriptori_seccions_ua div.escriptori_items_seleccionats .interior h3{
+    font: bold 11px Verdana, Helvetica, Sans-serif;
+    text-transform: uppercase;
+}
+
+#escriptori_seccions_ua div.escriptori_items_seleccionats .seleccionat {
+	clear: both;
+}
+
+#escriptori_seccions_ua div.escriptori_items_seleccionats .botonera .btnGenerico {
+    margin-left: 11px;
+}
+
+/*
+div.escriptori_items_seleccionats ul li div.seccio { overflow:hidden; float:left; width:28em; text-align:left; padding-right:2.5em; }
+div.escriptori_items_seleccionats ul li div.ua { overflow:hidden; float:left; width:35em; text-align:left; }
+*/

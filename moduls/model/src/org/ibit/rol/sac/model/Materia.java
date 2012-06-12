@@ -2,16 +2,18 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.Set;
 
 /**
  * Modificado para (PORMAD)
  */
 
-public class Materia extends Traducible {
+public class Materia extends Traducible implements Comparator {
 
-    public Long getId() {
+	private static final long serialVersionUID = -4138848500142267423L;
+
+	public Long getId() {
         return id;
     }
 
@@ -164,6 +166,12 @@ public class Materia extends Traducible {
 		return true;
 	}
 
+    
+    public int compare(Object o1, Object o2) {
+	    Materia u1 = (Materia) o1;
+	    Materia u2 = (Materia) o2;
+	    return u1.getId().intValue() - u2.getId().intValue();
+	}	
 
 	private boolean noEsDelTipusMateria(Object o) {
 		return !(o instanceof Materia);
@@ -191,6 +199,9 @@ public class Materia extends Traducible {
 				+ destacada + "]";
 	}
 
+    public String getNombreMateria(String idioma) {
+        TraduccionMateria tma = (TraduccionMateria) getTraduccion(idioma);
+        return tma == null ? null : tma.getNombre();
+    }    
 
-    
 }

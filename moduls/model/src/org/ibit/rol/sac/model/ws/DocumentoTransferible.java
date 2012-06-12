@@ -1,15 +1,12 @@
 package org.ibit.rol.sac.model.ws;
 
-import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.Documento;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,6 +23,10 @@ public class DocumentoTransferible extends ActuacionTransferible implements Seri
 
 	private Long orden;
 
+	private String titulo;
+    private String descripcion;
+    private ArchivoTransferible archivo;
+	
 	private TraduccionDocumentoTransferible[] traducciones;
 
     public Long getId() {
@@ -50,6 +51,25 @@ public class DocumentoTransferible extends ActuacionTransferible implements Seri
 
 	public void setOrden(Long orden) {
 		this.orden = orden;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	public ArchivoTransferible getArchivo() {
+		return archivo;
+	}
+	public void setArchivo(ArchivoTransferible archivo) {
+		this.archivo = archivo;
 	}
 
 	public TraduccionDocumentoTransferible[] getTraducciones() {
@@ -86,7 +106,17 @@ public class DocumentoTransferible extends ActuacionTransferible implements Seri
 
     }
 
-    public static DocumentoTransferible generar(Documento documento){
+	public static IniciacionTransferible generar( Iniciacion iniciacion )
+    {
+		IniciacionTransferible iniT = new IniciacionTransferible();
+    	if( iniciacion != null )
+    	{
+    		iniT.rellenar( iniciacion );
+    	}
+    	return iniT;
+    }
+
+	public static DocumentoTransferible generar(Documento documento){
     	DocumentoTransferible documentoTransferible = new DocumentoTransferible();
     	if(documento!=null){
     		documentoTransferible.rellenar(documento);

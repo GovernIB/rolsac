@@ -1,0 +1,34 @@
+
+	<!-- ************************ CONFIGURACION SEGURIDAD ************************-->
+
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>sacback2</web-resource-name>
+        <url-pattern>*.do</url-pattern>
+        <url-pattern>*.jsp</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>@role.system@</role-name>
+        <role-name>@role.admin@</role-name>
+        <role-name>@role.super@</role-name>
+        <role-name>@role.oper@</role-name>
+    </auth-constraint>
+</security-constraint>
+
+<login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name><![CDATA[ROL - SAC]]></realm-name>
+</login-config>
+
+<security-role>
+    <role-name>@role.system@</role-name>
+</security-role>
+<security-role>
+    <role-name>@role.admin@</role-name>
+</security-role>
+<security-role>
+    <role-name>@role.super@</role-name>
+</security-role>
+<security-role>
+    <role-name>@role.oper@</role-name>
+</security-role>

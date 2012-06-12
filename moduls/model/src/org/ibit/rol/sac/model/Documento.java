@@ -2,6 +2,7 @@
 
 package org.ibit.rol.sac.model;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 
@@ -10,7 +11,7 @@ import java.util.Iterator;
  * a les taules noves. 
  */
 
-public class Documento extends Traducible implements Indexable {
+public class Documento extends Traducible implements Indexable, Comparator {
 
 /* TODO u02770 - Disseny actual no sembla idoni, pq hi ha poca cohesio. 
  * Potser seria millor crear relacions d'herencia: 
@@ -70,7 +71,14 @@ public class Documento extends Traducible implements Indexable {
         this.orden = orden;
     }
 
-    
+    public int compare(Object o1, Object o2) {
+    	if (o2 == null) return -1;
+    	if (o1 == null) return 1;
+	    Documento u1 = (Documento) o1;
+	    Documento u2 = (Documento) o2;
+	    return Long.valueOf(u1.getOrden()).intValue() - Long.valueOf(u2.getOrden()).intValue();
+	}
+        
     
 	public IndexObject indexObject() {
         final IndexObject io = new IndexObject();

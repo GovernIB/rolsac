@@ -1,15 +1,20 @@
 package org.ibit.rol.sac.model;
 
-import org.apache.commons.beanutils.PropertyUtils;
-
-import java.util.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.beanutils.PropertyUtils;
 
 /**
  * Modificado para (PORMAD)
  */
  
-public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable {
+public class ProcedimientoLocal extends Classificable implements Procedimiento, Indexable, Validable, Comparator {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -91,7 +96,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
         tramites.remove(tramite);
         for (int i = ind; i < tramites.size(); i++) {
             Tramite t = (Tramite) tramites.get(i);
-            t.setOrden((long)i);
+            if (t != null)
+            	t.setOrden((long)i);
         }
     }
 
@@ -317,6 +323,20 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		return null==id? null : id.toString();
 	}
 	
+	
+	public int compare(Object o1, Object o2) {
+	    ProcedimientoLocal u1 = (ProcedimientoLocal) o1;
+	    ProcedimientoLocal u2 = (ProcedimientoLocal) o2;
+	    int res = 0;
+	    if (u1.getOrden()!=null && u2.getOrden()!=null){
+	    	res = u1.getOrden().intValue() - u2.getOrden().intValue();
+	    } else {
+	    	res = u1.getId().intValue() - u2.getId().intValue();
+	    }
+	    return res;
+	}
+
+	
 
 	public String getUrl() {
 		return url;
@@ -364,6 +384,29 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	
 	public boolean esVentanillaUnica() {
 		 return "1".equals(getVentanillaUnica());
+	}
+	
+
+	public Boolean isVisible() {
+		
+		GregorianCalendar dataActual = new GregorianCalendar(); 
+		Boolean visible;
+		
+		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
+		Boolean noCaducat = (this.getFechaCaducidad() != null && this.getFechaCaducidad().after(dataActual.getTime())) || this.getFechaCaducidad() == null;
+		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
+		
+		if (esPublic && noCaducat && esPublicat) {
+			visible = Boolean.TRUE;
+		} else {
+			visible = Boolean.FALSE;
+		}
+		return visible;
+	}
+	
+	// Metode creat per poder ser cridad des de la JSP atraves de jstl
+	public Boolean getIsVisible() {
+		return this.isVisible();
 	}
 	
 }

@@ -3,7 +3,7 @@
 package org.ibit.rol.sac.model;
 
 
-public class FichaUA implements ValueObject {
+public class FichaUA implements ValueObject, Comparable {
 	
 	
 	//Constructores
@@ -73,5 +73,17 @@ public class FichaUA implements ValueObject {
 
 	public void setOrdenseccion(int ordenseccion) {
 		this.ordenseccion = ordenseccion;
+	}
+
+	public int compareTo(Object o) {
+		if (o == null)
+			return 1;
+		
+		if ( this.getOrden() == ((FichaUA) o).getOrden() )
+			return 0;
+		else if (this.getOrden() < ((FichaUA) o).getOrden())
+			return -1;
+		else
+			return 1;		
 	}
 }

@@ -1,0 +1,85 @@
+@charset "utf-8";
+
+p#index {
+    color: #333333;
+    font-size: 1.25em;
+    font-weight: bold;
+}   
+div.modul {
+    border: 1px solid #D4D4D4;
+    float: left;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    padding: 1em;
+    width: 53em;
+    background-color: White;
+    border-radius: 15px 15px 15px 15px;
+}
+
+div.m100 {
+    width: 72em;
+    height: 20em;
+}
+
+div.modul h2 {
+    margin-bottom: 1em;
+    margin-top: 0;
+}
+
+span.missatge {
+    background: url("../img/missatge/alerta.gif") no-repeat scroll 0 0.0em transparent;
+    padding-left: 2em;    
+    padding-bottom: 22px;
+    display: inline-block;
+    font-size: 1.1em;
+}
+
+div.actiu {
+    display: block;
+}
+
+#indexContainer { 
+    margin-top: 110px;
+    text-align: center;
+}
+
+#indexContainer div.indexContainer { 
+    display: none;
+}
+
+#indexContainer  span.btnGenerico{ 
+    display: inline-block;
+    float: none;
+}
+
+#indexContainer div.actiu {
+    display: block !important;
+}
+
+#indexContainer p {
+    font-size: 1.1em;
+}
+
+#opcionsIndex li.actiu {
+    color: Black;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+#opcionsIndex li.actiu a {
+    color: Black;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+#opcionsIndex li.actiu a:hover {
+    text-decoration: none;
+}
+
+#submenu_contingut ul li.seleccionat {
+    border-left: 0px solid #000000;
+}
+#submenu_contingut ul li.primer {
+    border-left: 0px solid #000000;
+}

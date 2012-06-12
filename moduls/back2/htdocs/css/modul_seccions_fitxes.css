@@ -1,0 +1,79 @@
+@charset "utf-8";
+
+/* modul lateral edificis */
+
+#escriptori_fitxes { 
+    display:none; 
+}
+
+#escriptori_fitxes div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+
+div.fitxes div.nom{   
+    width: 524px;
+    padding-left: 21px;
+}
+
+/* resultats */
+#resultatsFitxes { 
+    clear:both;
+    border: 1px solid #D3D3D3;
+    /*border-top: none;*/
+    border-radius: 0 10px 10px 10px;
+    background-color: White;
+}
+#resultatsFitxes div.resultats { display:none; }
+#resultatsFitxes div.actiu { display:block !important; }
+
+#resultatsFitxes p.executant { 
+    font-size:1.3em; 
+    font-style:italic; 
+    padding:1em 0 1em 1.6em; 
+    margin-left: 1em;
+    background:#fff url(../img/executant.gif) no-repeat 0 1.1em;
+}
+
+#resultatsFitxes p.info { 
+    padding: 10px 21px 0 21px;
+    font: 13px Arial, Helvetica, Sans-serif;
+    color: #333333;
+}
+#resultatsFitxes p.info strong { text-transform:lowercase; }
+
+#resultatsFitxes p.noItems { 
+    font-size:1.3em; 
+    padding: 1em 0 1em 2em !important; 
+    margin-left: 1em;
+    background:#fff url(../img/missatge/alerta.gif) no-repeat 0 50%;
+}
+
+/* Navegador multipágina */
+
+#resultatsFitxes p.paginacio {
+    font: 15px Arial, Helvetica, Sans-serif;
+    color: #333333;
+    text-align:left; 
+    padding: 13px 20px 10px 20px;
+}
+#resultatsFitxes p.paginacio a{
+    color: #333333;
+    text-decoration: underline;
+}
+#resultatsFitxes p.paginacio a:hover{
+    color: #F47900;
+}
+#resultatsFitxes p.paginacio strong{
+    font-size: 25px;    
+    color: #F47900;
+}
+#resultatsFitxes p.paginacio a,
+#resultatsFitxes p.paginacio strong{
+    margin: 0 5px;
+}
+
+legend#titolSeccio {
+	color: #333333;
+	display: block;
+	font: bold 11px Verdana,Helvetica,Sans-serif;
+	padding-bottom: 15px;
+	text-transform: uppercase;
+}

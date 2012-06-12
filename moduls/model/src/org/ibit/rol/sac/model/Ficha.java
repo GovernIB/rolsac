@@ -1,9 +1,9 @@
 package org.ibit.rol.sac.model;
 
-import java.util.Set;
-import java.util.List;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Bean que representa a una ficha. Modificado para (PORMAD)
@@ -266,10 +266,27 @@ public class Ficha extends Classificable implements Indexable, Validable {
         return io;
     }
     */
-    
- 
+	
+	public Boolean isVisible() {
+	
+		GregorianCalendar dataActual = new GregorianCalendar(); 
+		Boolean visible;
+		
+		Boolean esPublic = Validacion.PUBLICA.equals(this.getValidacion());
+		Boolean noCaducat = (this.getFechaCaducidad() != null && this.getFechaCaducidad().after(dataActual.getTime())) || this.getFechaCaducidad() == null;
+		Boolean esPublicat =  (this.getFechaPublicacion() != null && this.getFechaPublicacion().before(dataActual.getTime())) || this.getFechaPublicacion() == null;
+		
+		if (esPublic && noCaducat && esPublicat) {
+			visible = Boolean.TRUE;
+		} else {
+			visible = Boolean.FALSE;
+		}
+		return visible;
+	}
+	
+	// Metode creat per poder ser cridad des de la JSP atraves de jstl
+	public Boolean getIsVisible() {
+		return this.isVisible();
+	}
 
-
-
-    
 }

@@ -75,15 +75,12 @@ public class Seccion extends Traducible implements Comparable {
     }
 
     public void removeHijo(Seccion hijo) {
-        int ind = hijos.indexOf(hijo);
-        if (ind > -1) {
-            hijo.setPadre(null);
-            hijos.remove(ind);
-            for (int i = ind; i < hijos.size(); i++) {
-                Seccion seccion = (Seccion) hijos.get(i);
-                seccion.setOrden(i);
-            }
-        }
+    	hijo.setPadre(null);
+    	hijos.remove(hijo);
+    	for (int i = 0; i < hijos.size(); i++) {
+    		Seccion seccion = (Seccion) hijos.get(i);
+    		seccion.setOrden(i);
+    	}
     }
 
     public void addFichaUA(FichaUA ficha) {

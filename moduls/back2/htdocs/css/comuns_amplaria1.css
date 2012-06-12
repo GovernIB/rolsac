@@ -1,0 +1,78 @@
+@charset "utf-8";
+
+/* ids */
+
+#cap_contingut { width:77em; } /* 58, 77 */
+
+#cap .logos { width:15em; } /* 12, 15 */
+#cap .logos .caib_logo { width:15em; } /* 12, 15 */
+
+#cap .aplicacio { width:13em; } /* 10, 13 */
+
+#cap .usuari { width:30em; } /* 17, 30 */
+
+/* menu*/
+
+#menu_contingut { width:77em; } /* 57, 76 */
+
+#submenu_contingut { width:77em; } /* 58, 77 */
+
+/* mollaPa */
+
+#mollaPa_contingut { width:77em; } /* 57, 76 */
+
+#uas { width:30em; } /* 20, 30 */
+
+/* titol */
+
+#titol_contingut { width:77em; } /* 58, 77 */
+
+/* escriptori */
+
+#escriptori { width:77em; } /* 58, 77 */
+
+/* suggeriment */
+
+#suggeriment_contingut { width:65em; } /* 50, 65 */
+
+/* peu */
+
+#peu_contingut { width:77em; } /* 58, 77 */
+
+/* missatge */
+
+#missatge { width:40em; } /* 30, 40 */
+
+/* idiomes */
+
+/*#modulPrincipal ul.idiomes { width:54.5em; }*/
+
+/*#modulPrincipal ul.idiomes { width:47em; }*/
+
+/* llistatDocs */
+
+div.llistatDocs div.thead div.doc { width:50em; }
+div.llistatDocs div.thead div.opcions { width:8em; }
+div.llistatDocs div.tbody div.doc { width:50em; }
+div.llistatDocs div.tbody div.opcions { width:8em; }
+
+#modulPrincipal div.llistat { width:53em; }
+
+#modulPrincipal div.docs div.thead div.nom { width:19em; }
+#modulPrincipal div.docs div.thead div.arxiu { width:21em; }
+#modulPrincipal div.docs div.thead div.opcions { width:8em; }
+#modulPrincipal div.docs div.tbody div.nom { width:19em; }
+#modulPrincipal div.docs div.tbody div.nom input { width:15em; }
+#modulPrincipal div.docs div.tbody div.arxiu { width:21em; }
+#modulPrincipal div.docs div.tbody div.opcions { width:8em; }
+
+#modulPrincipal div.enllasos div.thead div.nom { width:40em; }
+#modulPrincipal div.enllasos div.thead div.opcions { width:8em; }
+#modulPrincipal div.enllasos div.tbody div.nom { width:40em; }
+#modulPrincipal div.enllasos div.tbody div.nom input { width:35em; }
+#modulPrincipal div.enllasos div.tbody div.opcions { width:8em; }
+
+
+
+
+

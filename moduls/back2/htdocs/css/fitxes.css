@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+div.llistat div.thead div.fitxa { 
+    width: 600px; 
+    padding-left: 50px; 
+}
+div.llistat div.tbody div.fitxa{ 
+    width: 600px;   
+    padding-left: 50px;
+    background: url(../img/taula_llistat/fitxa.gif) 21px 7px no-repeat;
+}
+div.llistat div.publicacio,
+div.llistat div.caducitat { 
+    width: 100px;
+    padding: 0 12px;
+}
+
+.escriptori_detall .modulLateral .left input, .escriptori_detall .modulLateral .right input, escriptori_detall .modulLateral .left select {
+    width: 85%;
+}
+
+div.llistat div.tbody div.fitxaCaducat {
+    background: url("../img/taula_llistat/fitxa_caducada.gif") no-repeat scroll 21px 7px transparent;
+    width: 600px;   
+    padding-left: 50px;
+}

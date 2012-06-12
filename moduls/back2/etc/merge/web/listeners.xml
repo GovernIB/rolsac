@@ -1,0 +1,6 @@
+    <listener>
+		<listener-class>es.indra.rol.sac.integracion.listener.traductor.TraductorInitializer</listener-class>
+    </listener>
+	<listener>
+	   <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>

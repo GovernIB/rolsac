@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+/* llistats table */
+
+div.llistat div.destinatari { 
+    width: 100%;
+    padding-left: 21px;
+}
+div.llistat div.tbody div.destinatari {
+    padding-left: 21px;
+    width: 100%;
+}

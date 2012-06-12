@@ -2,15 +2,26 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * (PORMAD)
  */
-public class UnidadAdministrativa extends Traducible implements Indexable, Validable {
+public class UnidadAdministrativa extends Traducible implements Indexable, Validable, Serializable {
 	
-	private static final long serialVersionUID = 1L;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 372155523459384201L;
+
 	// Constructores
 
 	public UnidadAdministrativa() {
@@ -186,7 +197,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         this.tratamiento = tratamiento;
     }
 
-    public Set getEdificios() {
+    public Set<Edificio> getEdificios() {
         return edificios;
     }
 
@@ -307,8 +318,11 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 
     public void removeFichaUA(FichaUA ficha) {
         int ind = fichasUA.indexOf(ficha);
+        
+        if ( !(ficha == null) ) ficha.setUnidadAdministrativa(null);
+        
         if (ind > -1) {
-            ficha.setUnidadAdministrativa(null);
+            //ficha.setUnidadAdministrativa(null);
             fichasUA.remove(ind);
             for (int i = ind; i < fichasUA.size(); i++) {
                 FichaUA f = (FichaUA) fichasUA.get(i);
@@ -340,6 +354,29 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         }
         return result;
 
+    }
+    
+    //Añadido para mostrar según el campo orden
+    public Map getMapSeccionFichasUAConOrden() {
+    	
+        Map result = new TreeMap();
+        Iterator todas= todasfichas.iterator();
+        
+        while(todas.hasNext()) {
+        	
+        	FichaUA fichaUA = (FichaUA)todas.next();
+        	String newIdseccion = fichaUA.getSeccion().getId().longValue() + 
+        							"#" + 
+        							((TraduccionSeccion)fichaUA.getSeccion().getTraduccion("ca")).getNombre();
+            List fichasSeccion = (List) result.get(newIdseccion);
+            if (fichasSeccion == null) {
+                fichasSeccion = new ArrayList();
+                result.put(newIdseccion, fichasSeccion);
+            }
+            fichasSeccion.add(fichaUA);  
+
+        }
+        return result;
     }
 
     public void addPersonal(Personal persona) {
@@ -451,7 +488,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     private UnidadAdministrativa padre;
     private List<UnidadAdministrativa> hijos;
     private Tratamiento tratamiento;
-    private Set edificios;
+    private Set<Edificio> edificios;
     private Set<Personal> personal;
     private Set<Normativa> normativas;
     private Set<ProcedimientoLocal> procedimientos;
@@ -569,8 +606,14 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	  	return idsList;
 	}
 
-	String getNombreUnidadAdministrativa(String idioma) {
-		return ((TraduccionUA)getTraduccion(idioma)).getNombre();
+	public String getNombreUnidadAdministrativa(String idioma) {
+		TraduccionUA tua = (TraduccionUA) getTraduccion(idioma);
+		return tua == null ? null : tua.getNombre();
+	}
+	
+	public String getNombreUnidadAdministrativa() {
+		TraduccionUA tua = (TraduccionUA) getTraduccion();
+		return tua == null ? null : tua.getNombre();
 	}
  
  
