@@ -10,7 +10,7 @@
     <property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
-	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/default.properties"/>
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -38,16 +38,16 @@
             <include name="extractor.jar"/>
         </fileset>
         <fileset dir="${lib.dir}">
-            <include name="commons-beanutils.jar"/>
+		    <include name="ojdbc14.jar"/>
+			<include name="jaxrpc.jar"/>
             <include name="commons-logging.jar"/>
-            <include name="commons-lang-2.1.jar"/>
             <include name="hibernate2.jar"/>
-        	<include name="lucene-caib.jar"/>        	
         </fileset>
-        <fileset dir="${lib.dir}">
-            <include name="ojdbc14.jar"/>
-        	<!--include name="axis.jar"/-->
-        	<include name="jaxrpc.jar"/>
+        <fileset dir="${lib.dir}/webcaib">
+			<!--include name="axis.jar"/-->
+		 	<include name="commons-beanutils-1.8.3.jar"/>
+			<include name="commons-lang-2.1.jar"/>
+			<include name="lucene-caib.jar"/>        	
         </fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
     	     <include name="**/*.jar" />

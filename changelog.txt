@@ -36,3 +36,22 @@ versio 1.0.2 - 20.des.2011
 - 0000079: [nova funcionalitat] afegir codi de curriculum en UA (ejaen-dgtic) - resolved.
 - 0000190: [bug] no es poden assignar operadors a una UA (ejaen-dgtic) - resolved.
 - 0000195: [bug] Modificar metode borrarProcedimiento() per que gestioni els documents associats. (mgonzalez-ibit) - resolved.
+
+
+versio 1.0.3  - 3.abr.2012
+------------
+- 0000250: [nova funcionalitat] Adaptar la funcionalitat de traspàs BOIB al nou eBOIB (ejaen-dgtic) - resolved.
+- 0000325: [versions] Crear el tag rolsac-1.0.3 a partir de la branca rolsac-1.0 (anadal-ibit) - resolved.
+- 0000259: [bug] Creació d'usuaris: El camp perfil ha de ser obligatori (ejaen-dgtic) - resolved.
+- 0000262: [refactorització] Reestructurar scripts de bbdd segons el document de qualitat en la forja (anadal-ibit) - resolved.
+- 0000079: [nova funcionalitat] afegir codi de curriculum en UA (anadal-ibit) - resolved.
+- 0000235: [base de dades] mantenir coherent export en preproducció (ejaen-dgtic) - resolved.
+
+
+versio 1.1.0  
+------------
+
+- 0000287: [nova funcionalitat] Integrar la versió 1 del API (tonig) - resolved.
+- 0000146: [construcció (build)] desacoplar el config.properties del build.xml (tonig) - resolved.
+- 0000225: [bug] [pma] posar a null la url remota en actuacion transferible quan no està la propietat establerta (ejaen-dgtic) - resolved.
+- 0000198: [bug] Modificar metode borrarProcedimiento() per que gestioni els documents associats. (mgonzalez-ibit) - resolved.

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="01rolsac" default="usage">
 	
-     
-	<property name="projecte" value="${ant.project.name}"/>
+<project name="rolsac-1.1.0" default="main01ROLSAC">
+	
+	<property name="rolsac.target" value="${ant.project.name}"/>
 	<property name="home" value="."/>
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
-	<property file="${home}/config.properties"/>
+	<property file="${home}/default.properties"/>
 	<property name="doc" value="${home}/doc"/>
 	<property name="components" value="${home}/moduls"/>
 	<property name="etc" value="${home}/etc"/>
@@ -24,7 +24,10 @@
 	
 	<property name="projecte.name.rolsac" value="rolsac"/>	
 
-	<property name="etc.approlsac" value="${etc}/approlsac"/>	
+	<property name="etc.approlsac" value="${etc}/approlsac"/>
+
+	<property environment="env"/>
+
 	
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
@@ -33,40 +36,50 @@
   <!-- ====================================================================== -->
   <target name="usage">
     <echo>
-		---------------------------------------------------------------------------------------------------
-		Tasques del projecte :
+        ---------------------------------------------------------------------------------------------------
+        Tasques del projecte :
 	
-		****** Tasques d'ajuda :
+    
+        ****** Tasques d'ajuda :
 	
-		usage : aquesta ajuda
-		properties : mostra les propietats definides
+        usage             : aquesta ajuda
+        properties        : mostra les propietats definides
         info              : usage + properties
 
+	
         ****** Tasques de preparació :
+	
         prepare           : crea l'estructura de directoris necessaria per la construcció de l'aplicació
 	
+	
         ****** Tasques d'actualització de components :
+
 	    update.extractor  : actualitza eines de text
         update.model      : actualitza el model de dades
 	    update.persistence: actualitza la capa de persistencia
         update.XDOCLET    : update.extractor + update.model + update.persistence
-
+		
 	    update.integracion: actualitza la capa d'integració
 	    update.back       : actualitza el mòdul web legacy de backoffice
+        update.back2      : actualitza el mòdul web de backoffice
 	    update.ws         : actualitza el mòdul web de webservices
 	    update.traspasboib: actualitza el mòdul traspas-boib
 
-		****** Tasques de documentacio i control
+	
+        ****** Tasques de documentacio i control
 	
 	    test.unitario     : executa els tests unitaris
 	    doc               : genera la documentació de tots els mòduls
+
 	
-		****** Tasques de construccio :
+        ****** Tasques de construccio :
+	
 	    assemble01ROLSAC  : construeix el ear amb tots els components existents
 	    main01ROLSAC      : construeix tota l'aplicacio
+	    makeSar           : genera el arxiu SAR per al desplegament
 	    clean             : esborra els directoris de treball
 	    deploy01ROLSAC    : copia el ear al directori de deploy
-		---------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------
       </echo>
   </target>
   
@@ -84,10 +97,10 @@
 		product.dir=${product.dir}
 		lib=${lib}
 		doc=${doc}
-        ant.file=${ant.file}
-        ant.version=${ant.version}
-        ant.project.name=${ant.project.name}
-        ant.java.version=${ant.java.version}
+          ant.file=${ant.file}
+          ant.version=${ant.version}
+          ant.project.name=${ant.project.name}
+          ant.java.version=${ant.java.version}
 		---------------------------------------------------------------------------------------------------
 	</echo>
 	<echoproperties/>
@@ -103,7 +116,7 @@
   <!-- ================================================================== -->
   <target name="info" depends="usage,properties"/>
 
-
+	
   <!-- ================================================================== -->
   <!-- prepare                                                                                                                         -->
   <!-- ================================================================== -->
@@ -114,17 +127,18 @@
      <mkdir dir="${doc.dir}"/>
   </target>
 
+
+
   <!-- ================================================================== -->
   <!-- doc                                                                                                                        -->
   <!-- ================================================================== -->
-  <target name="doc" depends="prepare" description="Genera la documentación">
-  	<antcall target="propagate">
+  <target name="doc" depends="prepare" description="Genera la documentacin">
+  	<antcall target="propagate01ROLSAC">
      	<param name="task" value="doc"/>
      </antcall>
   </target>
 
-
-
+	
   <!-- ================================================================== -->
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
@@ -135,6 +149,9 @@
 		<antcall target="update.persistence"/>
 	</target>
 	
+	<target name="update.utils" description="Actualizar utilidades">
+		<ant dir="moduls/utils" target="main" inheritall="false"/>
+	</target>
 
 	
 	<target name="update.extractor" description="Actualizar herramientas de texto">
@@ -153,16 +170,20 @@
 		<ant dir="moduls/integracion" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.back" description="Actualizar el módulo web de backoffice">
+	<target name="update.back" description="Actualizar el modulo web legacy de backoffice">
 		<ant dir="moduls/back" target="main" inheritall="false"/>
 	</target>
 
-	<target name="update.ws" description="Actualitar el módulo web de webservices">
+	<target name="update.back2" description="Actualizar el modulo web de backoffice">
+		<ant dir="moduls/back2" target="main" inheritall="false"/>
+	</target>
+
+	<target name="update.ws" description="Actualitar el mdulo web de webservices">
 		<ant dir="moduls/ws" target="main" inheritall="false"/>
 	</target>
 
 	<!--Traspas boib afegit marilen-->
-    <target name="update.traspasboib" description="Actualitar el módulo traspas-boib">
+    <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
 		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
 	</target>
 
@@ -191,44 +212,45 @@
 	 	
 
 
-  <!-- ================================================================== -->
-  <!-- application.xml                                                                                                                    -->
-  <!-- ================================================================== -->
-       <copy file="${etc.approlsac}/application.xml" todir="${output.dir}" overwrite="true"/>
-
-
-        <replace file="${output.dir}/application.xml">
-            <replacefilter token="@context.back@" value="${context.back}"/>
-            <replacefilter token="@context.ws@" value="${context.ws}"/>
-        </replace>
-
-
 	
   <!-- ================================================================== -->
   <!-- assemble                                                                                                                      -->
   <!-- ================================================================== -->
 
 
-	<target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac.">
+	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac.">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
+        <!-- application.xml  -->
+       <copy file="${etc.approlsac}/application.xml" todir="${output.dir}" overwrite="true"/>
+        <replace file="${output.dir}/application.xml">
+            <replacefilter token="@context.back@" value="${context.back}"/>
+			<replacefilter token="@context.back2@" value="${context.back2}"/>
+            <replacefilter token="@context.ws@" value="${context.ws}"/>
+            <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
+        </replace>
+
+
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
 			<manifest>
-				<attribute name="Created-By" value="INDRA"/>
+				<attribute name="Generated-By" value="${rolsac.author}"/>
+				<attribute name="Version" value="${rolsac.target}"/>
 			</manifest>
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
-			<!-- Incluimos los .war y .jar generados con la aplicación para rolsac-->
+			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
+				<include name="${prefix.modul}-utils.jar" />
 				<include name="extractor.jar" />
 				<include name="model.jar" />
 				<include name="integracion.war" />
-				<include name="sac-persistence.jar" />				
-				<include name="sac-persistence-client.jar" />
-				<!--include name="sac-back.jar" /-->
-				<include name="sac-back.war" />
-				<include name="sac-ws.war" />
+				<include name="${prefix.modul}-persistence.jar" />				
+				<include name="${prefix.modul}-persistence-client.jar" />
+				<include name="${prefix.modul}-back2-persistence.jar" />
+				<include name="${prefix.modul}-back2.war" />
+				<include name="${prefix.modul}-back.war" />
+				<include name="${prefix.modul}-ws.war" />
 				<include name="traspasboib.war" />
 			</fileset>
 			
@@ -242,22 +264,31 @@
 			-->
 			
 			<!-- Incluimos los .jar dependientes -->
-			<fileset dir="${lib}">
-				<include name="hibernate2.jar" />
-				<include name="ehcache.jar" />
-			</fileset>
-
+            <fileset dir="${lib}">
+                <include name="hibernate2.jar" />
+                <include name="ehcache.jar" />
+            </fileset>
+			
+			<!-- Incluimos el .sar de propiedades del sistema -->						
+<!--            <fileset dir="${home}"> -->
+<!--                <include name="01${projecte.name.rolsac}.sar" /> -->
+<!--            </fileset> -->
     	</ear>
   </target>	
+	
+<target name="makeSar" description="Genera el archivo SAR para el despliegue.">
+	<delete file="${home}/01${projecte.name.rolsac}.sar" quiet="yes"/>
+	<jar
+		jarfile="${home}/01${projecte.name.rolsac}.sar">
+		<metainf dir="${home}" includes="jboss-service.xml"/>					           
+    </jar>
+</target>
 	
   <!-- ================================================================== -->
   <!-- main                                                                                                                              -->
   <!-- ================================================================== -->
   
-  
-
-
-	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construcción de ROLSAC">
+	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
@@ -272,12 +303,23 @@
   <!-- ================================================================== -->
 
 	  <target name="propagate01ROLSAC">
+	  	<echo>UTILS</echo>
+		<ant dir="moduls/utils" target="${task}" inheritall="false"/>
+	  	<echo>EXTRACTOR</echo>
 		<ant dir="moduls/extractor" target="${task}" inheritall="false"/>
+	  	<echo>MODEL</echo>
 		<ant dir="moduls/model" target="${task}" inheritall="false"/>
+	  	<echo>PERSISTENCE</echo>
 	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
+	  	<echo>INTEGRACION</echo>
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
+	  	<echo>WS</echo>
 		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
+	  	<echo>BACK</echo>
 		<ant dir="moduls/back" target="${task}" inheritall="false"/>
+	  	<echo>BACK2</echo>
+		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
+	  	<echo>TRASPAS-BOIB</echo>
 		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
 	  </target>	
  	
@@ -291,7 +333,31 @@
           <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
 	  </target>		  	
 
-
-
+	  <!-- ================================================================== -->
+	  <!-- sonar (analitzador de codi)                                                                                                                             -->
+	  <!-- ================================================================== -->
+	
+	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+	    <classpath path="${lib}/sonar-ant-task-1.2.jar" /> 
+	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
+	    <!-- In such case this classpath node is no more mandatory -->
+	  </taskdef>
+	 
+	  <property name="sonar.host.url" value="http://localhost:9000" />
+		  
+	  <target name="sonar">
+	    <!-- list of mandatories Sonar properties -->
+	    <property name="sonar.modules" 
+	    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml" />
+	 
+	    <!-- list of optional Sonar properties -->
+<!--
+	    <property name="sonar.binaries" value="..." />
+	  	<property name="sonar.projectName" value="this value overrides the name defined in Ant root node" />
+	    <property name="sonar.tests" value="list of test source directories separated by a comma" />
+	    <property name="sonar.libraries" value="list of paths to libraries separated by a comma (These libraries are for example used by the Sonar Findbugs plugin)" />
+-->	 
+	    <sonar:sonar key="caib:rolsac" version="1.1" xmlns:sonar="antlib:org.sonar.ant"/>
+	  </target>
 	
 </project>

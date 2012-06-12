@@ -94,4 +94,7 @@ public class MockAccesoManagerLocal implements AccesoManagerLocal {
 		return true;
 	}
 	
+	public boolean tieneAccesoCrearUnidad() {
+		return true;
+	}
 }

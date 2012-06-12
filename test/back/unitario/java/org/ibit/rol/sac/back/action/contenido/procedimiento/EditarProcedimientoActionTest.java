@@ -24,8 +24,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import es.caib.test.common.LogSpy;
 
 import servletunit.struts.MockStrutsTestCase;
-import test.unitario.back.mock.MockMateriaDelegate;
 import test.unitario.back.mock.MockProcedimientoDelegate;
+import test.unitario.persistence.mock.MockMateriaDelegate;
 
 
 /**

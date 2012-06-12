@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
+<title>TestRolsac_creaTramite</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestRolsac_creaTramite</td></tr>
+</thead><tbody>
+<!---- se selecciona procedimento -->
+<tr>
+	<td>click</td>
+	<td>link=Procedimientos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Seleccionar por código</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Seleccionar por código</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Procedimiento - POPUP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>idSelect</td>
+	<td>822056</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Seleccionar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<!---- se crea el tramite-->
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Nuevo Registro</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Nuevo Registro</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>Alta Trámite</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=traducciones[0].nombre</td>
+	<td>test tramite prueba</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=validacio</td>
+	<td>label=Pública</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<!---- se borra el tramite desde el procedimento-->
+<tr>
+	<td>assertAlert</td>
+	<td>Se ha realizado el alta correctamente</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//input[@name='action'])[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>test tramite prueba </td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//input[@name='Eliminar'])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForTextPresent</td>
+	<td>822056</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextNotPresent</td>
+	<td>test tramite prueba </td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
