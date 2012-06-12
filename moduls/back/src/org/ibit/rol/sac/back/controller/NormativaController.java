@@ -5,26 +5,24 @@
  */
 package org.ibit.rol.sac.back.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.struts.tiles.Controller;
-import org.apache.struts.tiles.ComponentContext;
-import org.ibit.rol.sac.back.action.contenido.ficha.EditarFichaAction;
-import org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.persistence.delegate.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.struts.tiles.ComponentContext;
+import org.apache.struts.tiles.Controller;
+import org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate;
+import org.ibit.rol.sac.persistence.delegate.BoletinDelegate;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.TipoNormativaDelegate;
 
 public class NormativaController implements Controller {
 

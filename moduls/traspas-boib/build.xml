@@ -2,7 +2,6 @@
 
 <project name="caib.traspas-boib" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
 
     <property name="modul" value="traspasboib"/>
     <property name="package" value="es.caib.traspasa"/>
@@ -10,7 +9,8 @@
     <property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
-	<property file="${home.dir}/config.properties"/>
+	<property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
 
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -47,34 +47,39 @@
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
-            <include name="struts.jar"/>
             <include name="hibernate2.jar"/>
             <include name="commons-logging.jar"/>
-            <include name="commons-beanutils.jar"/>
-            <include name="commons-collections.jar"/>
-            <include name="commons-lang.jar"/>
-            <include name="chartbuilder.jar"/>
-        	<include name="axis.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
-        	<include name="micromodel.jar"/>
-        	<include name="json.jar"/>
-        	<include name="quartz.jar"/>
         	<include name="mail.jar"/>
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
         	<include name="boib.jar"/>
 			<include name="jena-2.6.4.jar"/>
-        	<include name="jdom.jar"/>
-			<include name="rome-1.0RC2.jar"/>
-        </fileset>
+
+		</fileset>
         <fileset dir="${web.product}">
             <include name="model.jar"/>
           <!--  <include name="integracion.jar"/>-->
-            <include name="sac-persistence-client.jar"/>
+            <include name="${prefix.modul}-persistence-client.jar"/>
         </fileset>
        <!-- <pathelement location="${output.dir}/back/classes"/>-->
+	
+		<!-- agarcia: librerias comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="axis.jar"/>
+		    <include name="chartbuilder.jar"/>
+			<include name="commons-lang-2.1.jar"/>
+			<include name="commons-collections-3.2.1.jar"/>
+			<include name="commons-beanutils-1.8.3.jar"/>
+			<include name="jdom.jar"/>
+			<include name="json.jar"/>
+			<include name="quartz-1.8.5.jar"/>
+			<include name="rome-1.0RC2.jar"/>
+		    <include name="struts.jar"/>
+		</fileset>
+    	
     </path>
 
     <path id="doclet.class.path">
@@ -200,19 +205,21 @@
             excludes="WEB-INF/**">
             <manifest>
                 <attribute name="Created-By" value="Govern"/>
-            	<attribute name="Class-Path" value="sac-back.jar"/>
+            	<attribute name="Class-Path" value="${prefix.modul}-back.jar"/>
             </manifest>
 
         	<classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
 
         	<lib dir="${lib.dir}">
-	          <include name="struts.jar"/>
-    		  <include name="jena-2.6.4.jar"/>
-		 	  <include name="icu4j-3.4.4.jar"/>
-	 		  <include name="iri-0.8.jar"/>
-        	  <include name="slf4j-api-1.6.4.jar"/>
-        	  <include name="slf4j-log4j12-1.6.4.jar"/>
+    		 <include name="jena-2.6.4.jar"/>
+			 <include name="icu4j-3.4.4.jar"/>
+	 		 <include name="iri-0.8.jar"/>
+    		</lib>
+
+        	<!-- agarcia: librerias comunes en 00librerias --> 
+        	<lib dir="${lib.dir}/webcaib">
+	        	<include name="struts.jar"/>
     		</lib>
 
             <webinf dir="${web.etc}" includes="*.xml" excludes="struts-config.xml,jboss-web.xml"/>
@@ -303,5 +310,7 @@
 
     <target name="doc" depends="web.javadoc" description="Realiza las tareas de documentación "/>
     <target name="main" depends="web.war" description="Construeye el war"/>
+
+	<import file="../build_sonar.xml"/>
 
 </project>

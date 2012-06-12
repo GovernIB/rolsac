@@ -96,12 +96,12 @@
         eval("document.getElementById('url').value=url");
     }
 
-    // Funciï¿½n para abrir la lista de fichasUA para relacion
+    // Función para abrir la lista de fichasUA para relacion
     function altaFichaUA(){
         obrir("<html:rewrite page='/contenido/ficha/popFichaUA.do'/>", "<bean:message key='boton.seleccionar' />", 538, 175);
     }
 
-    // Funciï¿½n para abrir la lista de materias para busqueda o relacion
+    // Función para abrir la lista de materias para busqueda o relacion
     function listaMaterias(opcion){
         if (opcion == "busqueda"){
             obrir("<html:rewrite page='/contenido/ficha/popmateria.do?accion=busqueda'/>", "<bean:message key='boton.seleccionar' />", 538, 140);
@@ -111,7 +111,7 @@
         }
     }
     
-    // Funciï¿½n para abrir la lista de hechosVitales para busqueda o relacion
+    // Función para abrir la lista de hechosVitales para busqueda o relacion
     function listaHechoVital(opcion){
         if (opcion == "busqueda"){
             obrir("<html:rewrite page='/contenido/ficha/pophechovital.do?accion=busqueda'/>", "<bean:message key='boton.seleccionar' />", 538, 140);
@@ -523,7 +523,7 @@
     </logic:notPresent>
 
 </center>
-<!-- XAPUï¿½A -->
+<!-- XAPUÇA -->
 <% pageContext.removeAttribute(Globals.XHTML_KEY);%>
 <html:javascript
     formName="fichaForm"
@@ -576,7 +576,7 @@
         </logic:notEmpty>
     </div><br />
     <center>  
-		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/documento/form.do?idFicha=<bean:write name="fichaForm" property="id" />&titol=documento.alta','Si ha realizado cambios y no los guarda antes de asignar los documentos, se perderï¿½n. ï¿½Quiere continuar con la inserciï¿½n de documentos?')" ><bean:message key="boton.nuevo" /></a>]
+		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/documento/form.do?idFicha=<bean:write name="fichaForm" property="id" />&titol=documento.alta','Si ha realizado cambios y no los guarda antes de asignar los documentos, se perderán. ¿Quiere continuar con la inserción de documentos?')" ><bean:message key="boton.nuevo" /></a>]
     </center>
 
     <br /><br />
@@ -618,7 +618,7 @@
         </logic:notEmpty>
     </div><br />
     <center>  
-		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/enlace/form.do?idFicha=<bean:write name="fichaForm" property="id" />','Si ha realizado cambios y no los guarda antes de asignar los enlaces, se perderï¿½n. ï¿½Quiere continuar con la inserciï¿½n de enlaces?')" ><bean:message key="boton.nuevo" /></a>]
+		[<a href="javascript: obrirConfirmant('<%=context%>/contenido/enlace/form.do?idFicha=<bean:write name="fichaForm" property="id" />','Si ha realizado cambios y no los guarda antes de asignar los enlaces, se perderán. ¿Quiere continuar con la inserción de enlaces?')" ><bean:message key="boton.nuevo" /></a>]
     </center>
 
     <br /><br />

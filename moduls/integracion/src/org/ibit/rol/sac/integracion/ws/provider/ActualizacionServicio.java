@@ -46,9 +46,11 @@ public class ActualizacionServicio{
 	public Boolean actualizarUnidadAdministrativa(final String idRemoto,
 			UnidadAdministrativaTransferible uaT)
 			throws DelegateException {
+
 		if(!DelegateUtil.getAdministracionRemotaDelegate().isEmpty(idRemoto)){
 			log.debug("Recibida UA para actualizar");
-			
+
+
 			UARemotaDelegate delegate = DelegateUtil.getUARemotaDelegate();
 
             AdministracionRemota adminRemota = delegate.obtenerAdministracionRemota(idRemoto);

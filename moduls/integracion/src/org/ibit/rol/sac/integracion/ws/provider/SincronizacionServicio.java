@@ -47,11 +47,11 @@ public class SincronizacionServicio {
             final List<Ficha> fichas = fichaDelegate.listarFichasSeccionUA(idUA, codEstSecc, codEstHV, codEstMat);
             FichaTransferible[] fichasTransArray = null;
             if(fichas!=null && !fichas.isEmpty()){
-                List<FichaTransferible> fichasTrans = new ArrayList<FichaTransferible>();
-                for(final Ficha ficha: fichas){
-                    final FichaTransferible fichaTrans = new FichaTransferible();
-                    fichaTrans.rellenar(ficha);
-                    /** Obtengo el responsable del histórico**/
+               List<FichaTransferible> fichasTrans = new ArrayList<FichaTransferible>();
+               for(final Ficha ficha: fichas){
+                   final FichaTransferible fichaTrans = new FichaTransferible();
+					fichaTrans.rellenar(ficha);
+                 /** Obtengo el responsable del histÃ³rico**/
         			if(fichaTrans.getResponsable() == null || fichaTrans.getResponsable().trim().length()<= 0){
         				String responsables = obtenerResponsableHistorico(ficha.getId(),"ficha");
         				if (responsables!=null && responsables.length()>0)fichaTrans.setResponsable(responsables);
@@ -152,12 +152,12 @@ public class SincronizacionServicio {
             final List<ProcedimientoLocal> procs = procedimientoDelegate.listarProcedimientosPublicosUAHVMateria(idUA, codEstMat, codEstHV);
             ProcedimientoTransferible[] procsTransArray = null;
 
-            if(procs!=null && !procs.isEmpty()){
+             if(procs!=null && !procs.isEmpty()){
 
                 final List<ProcedimientoTransferible> procsTrans = new ArrayList<ProcedimientoTransferible>();
                 for(final ProcedimientoLocal proc: procs){
                     final ProcedimientoTransferible procTrans = ProcedimientoTransferible.generar(proc);
-                    /** Obtengo el responsable del histórico**/
+                    /** Obtengo el responsable del histÃ³rico**/
                     if(procTrans.getResponsable() == null || procTrans.getResponsable().trim().length()<= 0){
     					String responsables = obtenerResponsableHistorico(proc.getId(),"procedimiento");
     					if (responsables!=null && responsables.length()>0)procTrans.setResponsable(responsables);
@@ -188,7 +188,7 @@ public class SincronizacionServicio {
                 final List<Long> procsTrans = new ArrayList<Long>();
                 /*for(final ProcedimientoLocal proc: procs){
                    final ProcedimientoTransferible procTrans = ProcedimientoTransferible.generar(proc);
-                    *//** Obtengo el responsable del histórico**//*
+                    *//** Obtengo el responsable del histÃ³rico**//*
                     if(procTrans.getResponsable() == null || procTrans.getResponsable().trim().length()<= 0){
     					String responsables = obtenerResponsableHistorico(proc.getId(),"procedimiento");
     					if (responsables!=null && responsables.length()>0)procTrans.setResponsable(responsables);

@@ -69,7 +69,7 @@ public class SincronizacionServicio extends StandardInvoker{
     }
 
 
-    public FichaTransferible[] recogerFichasUASeccion(String codEstSecc, Long idUA, String[] codEstHV, String[] codEstMat) throws WSInvocatorException {
+     public FichaTransferible[] recogerFichasUASeccion(String codEstSecc, Long idUA, String[] codEstHV, String[] codEstMat) throws WSInvocatorException {
         try {
             setOperationName("recogerFichasUASeccion");
 

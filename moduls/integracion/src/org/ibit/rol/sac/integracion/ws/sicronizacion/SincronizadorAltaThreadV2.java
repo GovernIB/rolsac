@@ -91,7 +91,7 @@ public class SincronizadorAltaThreadV2 extends SincronizadorAltaThread{
 			final EdificioTransferible[] edificioTransferibles = sincInvoker.recogerEdificiosRelacionados(ua.getIdExterno());
 			
 			if(edificioTransferibles!=null){
-				log.debug("Edificios recogidos tamaño: "+edificioTransferibles.length);
+				log.debug("Edificios recogidos tamaï¿½o: "+edificioTransferibles.length);
 				
 				for(EdificioTransferible edificioTransferible : edificioTransferibles){
 					log.debug("getId: "+edificioTransferible.getId());

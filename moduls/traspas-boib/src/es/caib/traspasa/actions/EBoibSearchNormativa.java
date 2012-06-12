@@ -119,7 +119,7 @@ SearchNormativa {
 	                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
 	                if (estaInsertadoEnSac) {
 	                    numeroregistros=-1;
-	                    mensajeavisobean.setCabecera("ERROR EN LOS PARÀMETRES");
+	                    mensajeavisobean.setCabecera("ERROR EN ELS PARÀMETRES");
 	                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introduïts en el SAC");
 	                }
 	                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);

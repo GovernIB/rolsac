@@ -4,6 +4,8 @@ import net.sf.cglib.proxy.Enhancer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import es.caib.rolsac.api.v1.RolsacQueryService;
+
 /**
  * Factoria de servicios.
  */
@@ -19,4 +21,15 @@ public class ServiceFactory {
 
         return client;
     }
+    
+
+    public static RolsacQueryService getExportService(String endPoint) {
+        log.info("Creando RolsacQueryService para " + endPoint);
+
+        AxisInterceptor interceptor = new AxisInterceptor(endPoint, RolsacQueryService.types);
+        RolsacQueryService client = (RolsacQueryService) Enhancer.create(RolsacQueryService.class, interceptor);
+
+        return client;
+    }
+    
 }
