@@ -9,7 +9,9 @@ import javax.ejb.EJBException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import net.sf.hibernate.*;
 
@@ -83,24 +85,26 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         Session session = getSession();
         try {
             session.update(espacio);
-            EspacioTerritorial padreOld = espacio.getPadre();
-            Long padreOld_id = (padreOld != null ? padreOld.getId() : null);
+            Long padreOld_id = (espacio.getPadre() != null ? espacio.getPadre().getId() : null);
+            EspacioTerritorial padreOld = null;
+            if (padreOld_id != null) padreOld = this.obtenerEspacioTerritorial(padreOld_id);
 
             if (padre_id != padreOld_id) {
                 if (padre_id == null) { // Quitamos de jerarquia i metemos en raiz.
-                    padreOld.removeHijo(espacio);
+                    if (padreOld != null) padreOld.removeHijo(espacio);
                     espacio.setNivel(0);
                     espacio.setPadre(null);
                 } else { // Passamos a otra jerarquia
-                    EspacioTerritorial padreNew = (EspacioTerritorial) session.load(EspacioTerritorial.class, padre_id);
-                    padreNew.addHijo(espacio);
+                    EspacioTerritorial padreNew = this.obtenerEspacioTerritorial(padre_id);
+                    if (padreOld != null) padreOld.removeHijo(espacio);
+                    espacio.setPadre(padreNew);
                     
                     int nivel = 0;
-                    do{
+                    do {
                     	nivel++;
                     	padreNew = padreNew.getPadre();
-                    }while (padreNew!=null);
-                    ajustarNivel(nivel,espacio);
+                    } while (padreNew != null);
+                    ajustarNivel(nivel, espacio);
                 }
             }
 
@@ -207,6 +211,9 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         Session session = getSession();
         try {
             EspacioTerritorial espacioTerritorial = (EspacioTerritorial) session.load(EspacioTerritorial.class, id);
+            session.refresh(espacioTerritorial);
+            Hibernate.initialize(espacioTerritorial.getHijos());
+            Hibernate.initialize(espacioTerritorial.getPadre());
             Hibernate.initialize(espacioTerritorial.getMapa());
             Hibernate.initialize(espacioTerritorial.getLogo());
             return espacioTerritorial;
@@ -371,12 +378,11 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
     private void ajustarNivel(int nivel, final EspacioTerritorial espacio){
     	espacio.setNivel(nivel);
     	nivel++;
-    	if(espacio.getHijos()!=null){
+    	if(espacio.getHijos() != null) {
     		for (EspacioTerritorial hijo : espacio.getHijos()) {
 				ajustarNivel(nivel, hijo);
 			}
     	}
     }
-
 
 }

@@ -9,6 +9,7 @@ import javax.ejb.Handle;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  * Business delegate para manipular MateriaAgrupacionM.
@@ -49,7 +50,15 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
            throw new DelegateException(e);
        }
    }
-
+   
+   public List listarAgrupacionMaterias() throws DelegateException {
+       try {
+           return getFacade().listarAgrupacionMaterias();
+       } catch (RemoteException e) {
+           throw new DelegateException(e);
+       }
+   }
+   
    /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

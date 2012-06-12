@@ -1,20 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.Map;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.persistence.intf.TramiteFacade;
 import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
-import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
-import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
-
-
-import javax.ejb.CreateException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Map;
 
 /*
  * ejaen@dgtic  - u92770
@@ -158,6 +156,17 @@ public class TramiteDelegateImpl implements StatelessDelegate, TramiteDelegateI 
         }		
 	}
 	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#actualizarOrdenDocs(java.util.Map, long)
+	 */
+	public void actualizarOrdenTasas(Map<String, String[]> map, long tid)
+			throws DelegateException {
+		 try {
+			 	getFacade().actualizarOrdenTasas(map,tid);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }		
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.TramiteDelegateI#obtenirTaxa(java.lang.Long)

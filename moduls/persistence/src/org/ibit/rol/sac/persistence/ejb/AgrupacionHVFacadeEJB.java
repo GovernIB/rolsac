@@ -51,6 +51,39 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
         }
     }
 
+    
+    /**
+     * Crea o actualiza una Agrupacion Hecho Vital.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+    public Long guardarAgrupacionHV(AgrupacionHechoVital hechov, List<HechoVitalAgrupacionHV> llistaFetsVitalsOld) {
+        Session session = getSession();
+        try {
+        	
+            for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : llistaFetsVitalsOld) {
+                if (hechoVitalAgrupacionHV != null){
+                    session.delete(hechoVitalAgrupacionHV);   
+                }                    
+            }                   
+        	
+        	List<HechoVitalAgrupacionHV> listaHechoVitalAgrupacionHV = hechov.getHechosVitalesAgrupacionHV();
+        	
+        	// Seteamos el nuevo list
+        	for (HechoVitalAgrupacionHV hechoVitalAgrupacionHV : listaHechoVitalAgrupacionHV) {
+				session.saveOrUpdate(hechoVitalAgrupacionHV);
+			}
+        	
+            session.saveOrUpdate(hechov);
+            session.flush();
+            return hechov.getId();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
     /**
      * Lista todas las Agrupaciones Hechos Vitales.
      * @ejb.interface-method

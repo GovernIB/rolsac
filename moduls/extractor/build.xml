@@ -2,12 +2,16 @@
 
 <project name="sac.extractor" default="main" basedir=".">
 
-    <property file="${basedir}/build.properties"/>
-
     <property name="modul" value="extractor"/>
     <property name="package" value="org.ibit.rol.sac.extractor"/>
-
     <property name="home.dir" location="${basedir}/../.."/>
+
+	<property file="${home.dir}/build.${user.name}.properties" />
+	<property file="${home.dir}/build.${rolsac.target}.properties"/>
+	<property file="${home.dir}/default.properties"/>
+	<property file="${basedir}/build.properties"/>
+
+	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
 	
@@ -26,18 +30,17 @@
 
 	
     <path id="jar.class.path">
-        <fileset dir="${lib.dir}">
-            <include name="poi.jar"/>
-            <include name="pdfbox.jar"/>
-        	<include name="jericho-html-2.5.jar"/>
-        	<include name="Tidy.jar"/>
-        	<include name="taw.jar"/>
-        	<include name="wai.jar"/>
-        	<include name="aclibico.jar"/>
-        	<include name="img.jar"/>
-        	<include name="lax.jar"/>
-        	<include name="htmlparser.jar"/>
-        </fileset>
+		<!-- agarcia: librerias comunes en 00librerias -->
+		<fileset dir="${lib.dir}/webcaib">
+			<include name="aclibico.jar"/>
+			<include name="htmlparser.jar"/>
+			<include name="img.jar"/>
+			<include name="jericho-html-2.5.jar"/>
+			<include name="lax.jar"/>
+		    <include name="pdfbox.jar"/>
+		    <include name="poi.jar"/>
+		</fileset>
+
     </path>
 
     <target name="prepare">

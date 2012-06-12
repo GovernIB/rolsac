@@ -1,32 +1,91 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-
-import net.sf.hibernate.*;
-import net.sf.hibernate.expression.Expression;
-
-import org.ibit.lucene.indra.model.Catalogo;
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
-
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.persistence.util.DateUtils;
-import org.ibit.rol.sac.persistence.ws.Actualizador;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.*;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
+
+import org.ibit.lucene.indra.model.Catalogo;
+import org.ibit.lucene.indra.model.IndexEncontrado;
+import org.ibit.lucene.indra.model.IndexResultados;
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.lucene.indra.model.TraModelFilterObject;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.DocumentTramit;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.ProcedimientoRemoto;
+import org.ibit.rol.sac.model.Taxa;
+import org.ibit.rol.sac.model.Traduccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionIniciacion;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionNormativa;
+import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionTaxa;
+import org.ibit.rol.sac.model.TraduccionTramite;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.Tramite;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
+import org.ibit.rol.sac.model.webcaib.ActuacioModel;
+import org.ibit.rol.sac.model.webcaib.DocumentModel;
+import org.ibit.rol.sac.model.webcaib.NormativaModel;
+import org.ibit.rol.sac.model.webcaib.TaxaModel;
+import org.ibit.rol.sac.model.webcaib.Traduccio;
+import org.ibit.rol.sac.model.webcaib.TramitModel;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
+import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+import org.ibit.rol.sac.persistence.util.DateUtils;
+import org.ibit.rol.sac.persistence.ws.Actualizador;
+
 
 /**
  * SessionBean para mantener y consultar Procedimientos.
@@ -55,6 +114,8 @@ import java.util.*;
 
 public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements ProcedimientoDelegateI {
 
+	private static String idioma_per_defecte = "ca";
+	
     /**
      * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
@@ -65,6 +126,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -131,6 +193,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 session.update(procedimiento);
                 addOperacion(session, procedimiento, Auditoria.MODIFICAR);
             }
+            
+            Hibernate.initialize(procedimiento.getTramites());
             Hibernate.initialize(procedimiento.getMaterias());
             Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
             
@@ -388,9 +452,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     /**
      * Lista todos los procedimientos.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     * @ejb.permission unchecked="true"
      */
     public List listarProcedimientos() {
+    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este método debe ser unchecked para permitir accesos via WS 
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
@@ -402,8 +467,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 ProcedimientoLocal pl =  (ProcedimientoLocal)procs.get(i);
                 if(!pl.getTraduccionMap().isEmpty()){
                     procsvalidos.add(pl);
+                    Hibernate.initialize( pl.getMaterias() );
                 }
             }
+            
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsvalidos, new ProcedimientoLocal());
+            
             return procsvalidos;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -412,6 +482,42 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
 
+    
+    /**
+     * Lista todos los procedimientos.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List listarProcedimientosPublicos() {
+    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+        Session session = this.getSession();
+        try {
+            Criteria criteri = session.createCriteria( ProcedimientoLocal.class );
+            //criteri.setFetchMode("traducciones", FetchMode.EAGER);
+            criteri.setCacheable(true);
+            List procsvalidos= new ArrayList<ProcedimientoLocal>();
+            List procs = criteri.list();
+            for (int i = 0; i < procs.size(); i++) {
+                ProcedimientoLocal pl =  (ProcedimientoLocal)procs.get(i);
+                if(!pl.getTraduccionMap().isEmpty() && this.publico( pl ) )
+                {
+                    procsvalidos.add(pl);
+                	Hibernate.initialize( pl.getMaterias() );//agarcia
+                }
+            }
+
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsvalidos, new ProcedimientoLocal());
+
+            return procsvalidos;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            this.close(session);
+        }
+    }
+
+    
     /**
      * Obtiene un procedimiento Local.
      * @ejb.interface-method
@@ -424,17 +530,101 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
             if (visible(procedimiento)) {
             	Hibernate.initialize(procedimiento.getDocumentos());
+            	for( Documento d : procedimiento.getDocumentos() )
+            	{
+            		if (d==null) {
+            			continue; //por algún motivo, en ocasiones los documentos en la colección son nulos 
+            		}
+            		Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionDocumento trad = ( TraduccionDocumento )d.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                		
+                	}
+            	}            	
                 Hibernate.initialize(procedimiento.getMaterias());
                 Hibernate.initialize(procedimiento.getNormativas());
-                Hibernate.initialize(procedimiento.getTramites());
-                List<Tramite> tramites = procedimiento.getTramites(); 
-                for (Iterator iter = tramites.iterator(); iter.hasNext();) {
-                    Tramite tramite = (Tramite) iter.next();
-                    Hibernate.initialize(tramite.getFormularios()); 
-                    Hibernate.initialize(tramite.getDocsInformatius());
-                    Hibernate.initialize(tramite.getTaxes());
+                for( Normativa n : procedimiento.getNormativas() )
+                {
+                	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                	}
+                }       
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa() );
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getHijos() );
+                Hibernate.initialize( procedimiento.getOrganResolutori() );
+                if (procedimiento.getOrganResolutori() != null) {
+                	Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
                 }
-                Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
+
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getNormativas() );
+                Hibernate.initialize( procedimiento.getUnidadAdministrativa().getEdificios() );
+                for( Normativa n : procedimiento.getUnidadAdministrativa().getNormativas() )
+                {
+                	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
+                	Set<String> idiomes = mapaTraduccions.keySet();
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                	{
+                		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
+                		if (trad != null) {
+                			Hibernate.initialize( trad.getArchivo() );
+                		}
+                		
+                	}
+                }
+                
+                Hibernate.initialize( procedimiento.getTramites() );
+                for ( Tramite t : procedimiento.getTramites() ) 
+                {
+                	if (t == null) continue;
+                	
+                	Hibernate.initialize( t.getFormularios() ); 
+                    Hibernate.initialize( t.getDocsInformatius() );
+                    Hibernate.initialize( t.getTaxes() );
+                    Hibernate.initialize( t.getOrganCompetent() );
+                    for( DocumentTramit dt : t.getDocsInformatius() )
+                    {
+                    	Hibernate.initialize( dt.getArchivo() );
+
+                    	Map<String, Traduccion> mapaTraduccions = dt.getTraduccionMap();
+                    	Set<String> idiomes = mapaTraduccions.keySet();
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                    	{
+                    		TraduccionDocumento trad = ( TraduccionDocumento )dt.getTraduccion( i.next() );
+                    		if (trad != null) {
+                    			Hibernate.initialize( trad.getArchivo() );
+                    		}
+                    		
+                    	}
+                    }
+
+                    for( DocumentTramit df : t.getFormularios() )
+                    {
+                    	Hibernate.initialize( df.getArchivo() );
+                    	Map<String, Traduccion> mapaTraduccions = df.getTraduccionMap();
+                    	Set<String> idiomes = mapaTraduccions.keySet();
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
+                    	{
+                    		TraduccionDocumento trad = ( TraduccionDocumento )df.getTraduccion( i.next() );
+                    		if (trad != null) {
+                    			Hibernate.initialize( trad.getArchivo() );
+                    		}
+                    	}
+                    }
+                }
+                Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
+                Hibernate.initialize( procedimiento.getIniciacion() );
+                Hibernate.initialize( procedimiento.getFamilia() );
             } else {
                 throw new SecurityException("El procedimiento no es visible");
             }
@@ -443,10 +633,58 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         } finally {
             close(session);
         }
-   		ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
-		Comparator comp = new DocsProcedimientoComparator();
-	  	Collections.sort(listaOrdenada, comp);
-	  	procedimiento.setDocumentos(listaOrdenada);    
+   		//Esto no está funcionando bien...
+        //----------------------------------------------------------------------
+        //ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
+		//Comparator comp = new DocsProcedimientoComparator();
+	  	//Collections.sort(listaOrdenada, comp);
+        //----------------------------------------------------------------------
+
+        //Ordenamos los documentos por el campo orden (si nulo, ordena por el campo id)
+        List procs = new ArrayList(procedimiento.getDocumentos());
+        Collections.sort(procs, new Documento()); 
+	  	procedimiento.setDocumentos(procs);   
+        
+	    //Ordenamos las materias por el campo id
+	  	List mats = new ArrayList(procedimiento.getMaterias());
+	  	Collections.sort(mats, new Materia()); 
+	  	procedimiento.setMaterias(new HashSet<Materia>(mats));
+	  	
+	  	//Ordenamos las normativas por el campo id
+	  	List norms = new ArrayList(procedimiento.getNormativas());
+	  	Collections.sort(norms, new Normativa()); 
+	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
+	  	
+		/* TODO: error de compilación tras el merge con 177
+	  	//Ordenamos los normativas por el campo id
+	  	List tramites = new ArrayList(procedimiento.getTramites());
+	  	Collections.sort(tramites, new Tramite()); 
+	  	procedimiento.setTramites(new HashSet<Tramite>(tramites));
+		*/
+	  	
+	    //Ordenamos los Hechos vitales procedimientos por el campo orden (si nulo, ordena por el campo id)
+	  	List hechosVitales = new ArrayList(procedimiento.getHechosVitalesProcedimientos());
+	  	Collections.sort(hechosVitales); 
+	  	procedimiento.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>(hechosVitales));
+
+//	  	log.debug("##################################################################################################");
+//	  	log.debug("ObtenerProcedimiento: " + id.intValue());
+//	  	log.debug("Id Unidad Administrativa: " + procedimiento.getUnidadAdministrativa().getId().intValue());
+//	  	log.debug("Tramites: " + procedimiento.getTramites().size());
+//	  	log.debug("Documentos: " + procedimiento.getDocumentos().size());
+//	  	log.debug("Id Familia: " + procedimiento.getFamilia().getId().intValue());
+//	  	log.debug("Ventana: " + procedimiento.getVentana());
+//	  	log.debug("Materias: " + procedimiento.getMaterias().size());
+//	  	log.debug("Normativas: " + procedimiento.getNormativas().size());
+//	  	log.debug("Id Iniciacion: " + procedimiento.getIniciacion().getId());
+//	  	log.debug("Responsable: " + procedimiento.getResponsable());
+//	  	log.debug("Indicador: " + procedimiento.getIndicador());
+//	  	log.debug("Info: " + procedimiento.getInfo());
+//	  	log.debug("Signatura: " + procedimiento.getSignatura());
+//	  	log.debug("Url: " + procedimiento.getUrl());
+//	  	log.debug("Hechos Vitales: " + procedimiento.getHechosVitalesProcedimientos().size());
+//	  	log.debug("##################################################################################################");
+	  		  	
         
         return procedimiento;
     }
@@ -566,6 +804,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             }
 */           	
             if (!userIsOper()) {
+            	//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+                Collections.sort(procedimientos, new ProcedimientoLocal());
                 return procedimientos;
             } else {
                 List procedimientosAcceso = new ArrayList();
@@ -576,6 +816,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                        procedimientosAcceso.add(procedimiento);
                     }
                 }
+                //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+                Collections.sort(procedimientosAcceso, new ProcedimientoLocal());
                 return procedimientosAcceso;
             }
         } catch (HibernateException he) {
@@ -584,8 +826,170 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
+    
 
+    /**
+	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital) {
+		Session session = getSession();
 
+		try {
+			if (!userIsOper()) {
+				parametros.put("validacion", Validacion.PUBLICA);
+			}
+
+			List params = new ArrayList();
+			String i18nQuery = "";
+			if (traduccion.get("idioma") != null) {
+				i18nQuery = populateQuery(parametros, traduccion, params);
+			} else {
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				if (paramsQuery.length() == 0) {
+					i18nQuery += " where ";
+				} else {
+					i18nQuery += paramsQuery + " and ";
+				}
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+			}
+
+			Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+			Set<Long> uasIds = new HashSet<Long>();
+
+			if (ua != null) {
+				ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+				uas.add(ua);
+			}
+
+			if (uaMeves) {
+				uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+			}
+
+			if (uaFilles) {
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				for (UnidadAdministrativa uaActual : uas) {
+					uasIds.add(uaActual.getId());
+					List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
+					uasIds.addAll(idsDescendientes);
+				}
+			} else {
+				for (UnidadAdministrativa uaActual : uas) {
+					uasIds.add(uaActual.getId());
+				}
+			}
+
+			String uaQuery;
+			if (!uasIds.isEmpty()) {
+				uaQuery = " and procedimiento.unidadAdministrativa.id in (";
+				String sep = "";
+				for (Long uaId : uasIds) {
+					uaQuery += sep + uaId;
+					sep = ", ";
+				}
+				uaQuery += ")";
+			} else {
+				uaQuery = " ";
+			}
+
+			String queryStr = "select distinct procedimiento from ProcedimientoLocal as procedimiento "
+		        + ", procedimiento.traducciones as trad " + i18nQuery + uaQuery
+		        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			
+			Query query = session.createQuery(queryStr);
+			
+			for (int i = 0; i < params.size(); i++) {
+				String o = (String) params.get(i);
+				query.setString(i, o);
+			}
+
+			List<ProcedimientoLocal> procedimientos = query.list();
+			
+			// Filtrar poc materias y hechos vitales.
+			List<ProcedimientoLocal> procTempList;
+			
+			if (materia != null) {
+				procTempList = new LinkedList<ProcedimientoLocal>();
+				List<ProcedimientoLocal> procsMateries = (List<ProcedimientoLocal>) this.buscarProcedimientosMateria(materia);
+				for (ProcedimientoLocal procMateria: procsMateries) {
+					if (procedimientos.contains(procMateria)) {
+						procTempList.add(procMateria);
+					}
+				}
+				procedimientos = procTempList;
+			}
+			
+			if (fetVital != null) {
+				procTempList = new LinkedList<ProcedimientoLocal>();
+				List<ProcedimientoLocal> procsFetVital = (List<ProcedimientoLocal>) this.listarProcedimientosHechoVital(fetVital);
+				for (ProcedimientoLocal procFetVital: procsFetVital) {
+					if (procedimientos.contains(procFetVital)) {
+						procTempList.add(procFetVital);
+					}
+				}
+				procedimientos = procTempList;
+			}
+
+			
+			// Filtrar si no se tiene acceso
+			if (!userIsOper()) {
+				return procedimientos;
+			} else {
+				List procedimientosAcceso = new ArrayList();
+				Usuario usuario = getUsuario(session);
+				for (int i = 0; i < procedimientos.size(); i++) {
+					ProcedimientoLocal procedimiento = (ProcedimientoLocal) procedimientos.get(i);
+					if (tieneAcceso(usuario, procedimiento)) {
+						procedimientosAcceso.add(procedimiento);
+					}
+				}
+				return procedimientosAcceso;
+			}
+		} catch (DelegateException de) {
+			throw new EJBException(de);
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+    
+    
+    /**
+     * Construye el query de bï¿½squeda multiidioma en todos los campos
+     */
+    private String i18nPopulateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            if (value != null) {
+            	if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
+    }
+    
     
     /**
      * Obtiene una lista de procedimientos de la misma Familia
@@ -597,7 +1001,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         try {
             String sQuery = "procedimiento.familia.id = " + id;
             Query query = session.createQuery("from ProcedimientoLocal as procedimiento where " + sQuery);
-            return query.list();
+            List procs = new ArrayList(query.list());
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procs, new ProcedimientoLocal());
+            return procs;
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -622,6 +1029,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                     result.add(procedimiento);
                 }
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -715,6 +1124,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                     result.add(proc);
                 }
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -723,6 +1134,84 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
 
+    /**
+     * Busca todos los Procedimientos con un texto determinado.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) {
+        
+    	IndexerDelegate delegate = DelegateUtil.getIndexerDelegate();
+    	
+        IndexResultados indexResultados;
+        
+        List idProcs = new ArrayList();
+       
+		try {
+			indexResultados = delegate.buscaravanzado(texto, "", "", "", "PRC", "", "", null, null, "", idioma, true, true);
+			List list = indexResultados.getLista();
+			
+			log.debug("###################################### buscarProcedimientosUATexto\n RESULTADOS DE LA BUSQUEDA: " + list.size() + "\n#######################################################");
+			for (Object obj : list) {
+				if (obj instanceof IndexEncontrado) {
+					IndexEncontrado indexEncontrado = (IndexEncontrado) obj;
+					String str = indexEncontrado.getId(); //El id que devuelve no es de tipo PRC.EXTERNO.DCMTS.39
+					
+					//Obtenemos el valor numerico del final
+					Long n = Long.valueOf(str.substring((str.lastIndexOf('.')+1))).longValue();
+					
+					//Obtenemos el procedimiento, recuperamos el identificador y lo añadimos a la lista
+					idProcs.add( obtenerProcedimiento(n).getId());
+				}
+			}
+			
+			if (idProcs == null || idProcs.size() == 0) {
+				return Collections.EMPTY_LIST;
+			}
+			
+		} catch (DelegateException e) {
+			log.error("Error buscando", e);
+			  throw new EJBException(e);
+        }
+		
+		Session session = getSession();
+        try {
+            // Obtener una lista de los identificadores de todo el arbol de Unidades.
+            // Habrï¿½ una consulta por nivel.
+            List idUnidades = new ArrayList();
+            List currentParents = Collections.singletonList(idUnidad);
+            while (!currentParents.isEmpty()) {
+                idUnidades.addAll(currentParents);
+                Query uaQuery = session.createQuery("select ua.id from UnidadAdministrativa ua where ua.padre.id in (:uas)");
+                uaQuery.setParameterList("uas", currentParents);
+                currentParents = uaQuery.list();
+            }
+
+            // Filtraremos por los ids obtenidos con lucene.
+            // y la lista de unidades administrativas.
+            Criteria criteria = session.createCriteria(ProcedimientoLocal.class);
+            criteria.add(Expression.in("id", idProcs));
+            criteria.add(Expression.in("unidadAdministrativa.id", idUnidades));
+            criteria.addOrder(Order.desc("tramite"));
+            List result = new ArrayList();
+            
+            
+            for (Iterator iterator = criteria.list().iterator(); iterator.hasNext();) {
+                ProcedimientoLocal proc = (ProcedimientoLocal) iterator.next();
+                if (publico(proc)) {
+                    result.add(proc);
+                }
+            }
+      
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
+            return result;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }    
     /**
      * Aï¿½ade una nueva normativa al procedimiento.
      * @ejb.interface-method
@@ -926,7 +1415,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         try {
             UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
             Hibernate.initialize(unidadAdministrativa.getProcedimientos());
-            return new ArrayList(unidadAdministrativa.getProcedimientos());
+            List procs = new ArrayList(unidadAdministrativa.getProcedimientos());
+            
+			//Ordena la lista por el atributo id
+            Collections.sort(procs, new ProcedimientoLocal());
+        	 
+            return procs;
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -947,15 +1441,24 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             hql+=" where (pro.unidadAdministrativa=:uaid"; 
             hql+=" or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
             hql+=" or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
-            hql+=" )";		      
-            hql+=" and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > :now ) and pro.validacion = 1";
+            hql+=" )";
+            //TODO: comprobar este cambio, estaba en ROLSAC_STAMARGA
+            //hql+=" and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > :now ) and pro.validacion = 1";
             if (conse==1) { hql+=" order by pro.orden  asc,pro.fechaActualizacion desc";}
             if (conse==2) { hql+=" order by pro.orden2 asc,pro.fechaActualizacion desc";}	
             if (conse==3) { hql+=" order by pro.orden3 asc,pro.fechaActualizacion desc";} 
             Query query = session.createQuery(hql);
             query.setLong("uaid", id);
-            query.setDate("now", new Date());
-            return query.list();
+            //query.setDate("now", new Date());
+            List procs = new ArrayList(query.list());
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procs, new ProcedimientoLocal());
+            for (Object proc:procs) {
+            	//Inicializamos las materias del procedimiento
+            	Hibernate.initialize( ((ProcedimientoLocal)proc).getMaterias());
+            }
+            
+            return procs;
 
         } catch (Exception he) {
 
@@ -998,10 +1501,12 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
             result.addAll(procedimientosPublicosRecursivosUA(uaHijo));
         }
+        //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+        Collections.sort(result, new ProcedimientoLocal());
         return result;
     }
 
-    /**
+  /**
      * Obtiene los procedimientos publicos de una unidad administrativa (PORMAD recuperacion de datos inicial)
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1056,6 +1561,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     				}
     			}
     		}
+    		//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(procsFinales, new ProcedimientoLocal());
     		return procsFinales;
     	} catch (HibernateException he) {
     		throw new EJBException(he);
@@ -1227,6 +1734,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 ProcedimientoLocal procedimiento = ((HechoVitalProcedimiento) iterator.next()).getProcedimiento();
                 result.add(procedimiento);
             }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1253,6 +1762,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 }
             }
 
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
             return result;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -1306,7 +1817,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
-            if (value != null) {
+            if (!key.startsWith("ordre") && value != null) {
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
@@ -1391,7 +1902,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	        	Query query = session.createQuery("from ProcedimientoLocal as prc, prc.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
 	        	query.setString("idioma", idioma);
 	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = (List<ProcedimientoLocal>)query.list();
+	        	resultado = query.list();
 	        } catch (HibernateException he) {
 	            throw new EJBException(he);
 	        } finally {
@@ -1401,6 +1912,8 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			resultado = Collections.emptyList();
 		}
 		
+		//Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+        Collections.sort(resultado, new ProcedimientoLocal());
 		return resultado;
 	}
 
@@ -1729,7 +2242,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 	
     /**
-     * 
      * Actualiza el orden de los tramites 
 	 *
      * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB 
@@ -1834,5 +2346,1295 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			Long x2=new Long (((Tramite)o2).getOrden());
 			return x1.compareTo( x2 ); 
 		}
+	}
+    
+    
+    //WEBCAIB//
+    
+	 /**
+	  * WEBCAIB
+     * Obtiene una actuaciï¿½n.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ActuacioModel getActuacio ( String code, String idioma, String previ ) {
+    	
+        Session session = getSession();
+        try {
+    		Query query = session.createQuery(
+    				"select pro " +
+    				"from ProcedimientoLocal as pro " + 					
+    					"where pro.id = :id_pro " +
+    					("n".equals(previ) ? " and pro.validacion = 1 " : "") );
+    		
+    		query.setParameter("id_pro", code);
+    		
+    		ProcedimientoLocal proc = (ProcedimientoLocal)query.uniqueResult();
+    		
+    		if (proc == null)
+    			return null;
+    		
+    		
+    		TraduccionProcedimientoLocal traProcDefecto = (TraduccionProcedimientoLocal)proc.getTraduccion(idioma_per_defecte);
+    		TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idioma);
+    		if (traProc == null)
+    			traProc = traProcDefecto;
+
+    		
+    		ActuacioModel actuacioModel = new ActuacioModel();
+    		actuacioModel.setCodi(proc.getId().toString());
+    		actuacioModel.setDataActualitzacio(proc.getFechaActualizacion());
+    		actuacioModel.setData_caducitat(proc.getFechaCaducidad());
+    		actuacioModel.setData_publicacio(proc.getFechaPublicacion());
+    		UnidadAdministrativa una = proc.getUnidadAdministrativa();
+    		if (una != null)
+    			actuacioModel.setCodiOrganismeGenerador(una.getId().toString());
+    		actuacioModel.setIdTramite(proc.getTramite());
+    		
+    		
+    		Long tmp = proc.getVersion();
+    		if (tmp != null)
+    			actuacioModel.setVersionTramite(tmp.intValue());
+    		    		    		
+    		actuacioModel.setUrlExternaTramite(proc.getUrl());
+    		actuacioModel.setIndicador(proc.getIndicador());
+    		actuacioModel.setTaxa("on".equals(proc.getTaxa()));
+    		UnidadAdministrativa unaRes = proc.getOrganResolutori();
+    		if (unaRes != null) 
+    			actuacioModel.addOrganismeResolutori(unaRes.getId().toString());
+    		
+    		actuacioModel.setNom(traProc.getNombre() != null ? traProc.getNombre() : traProcDefecto.getNombre());    		
+    		actuacioModel.setResum(traProc.getResumen() != null ? traProc.getResumen() : traProcDefecto.getResumen());    		
+    		actuacioModel.setResultat(traProc.getResultat() != null ? traProc.getResultat() : traProcDefecto.getResultat());
+    		actuacioModel.setDestinataris(traProc.getDestinatarios() != null ? traProc.getDestinatarios() : traProcDefecto.getDestinatarios());
+    		actuacioModel.setObservacions(traProc.getObservaciones() != null ? traProc.getObservaciones() : traProcDefecto.getObservaciones());
+    		actuacioModel.setTerminis(traProc.getPlazos() != null ? traProc.getPlazos() : traProcDefecto.getPlazos());
+    		actuacioModel.setResolucion(traProc.getResolucion() != null ? traProc.getResolucion() : traProcDefecto.getResolucion());
+    		actuacioModel.setNotificacion(traProc.getNotificacion() != null ? traProc.getNotificacion() : traProcDefecto.getNotificacion());
+    		actuacioModel.setSilenci(traProc.getSilencio() != null ? traProc.getSilencio() : traProcDefecto.getSilencio());
+    		Familia fam = proc.getFamilia();
+    		if (fam != null) {
+    			TraduccionFamilia traFam = (TraduccionFamilia)fam.getTraduccion(idioma);
+    			TraduccionFamilia traFamDefecto = (TraduccionFamilia)fam.getTraduccion(idioma_per_defecte);
+    			if (traFam == null)
+    				traFam = traFamDefecto;
+    			actuacioModel.setFamilia(traFam.getNombre() != null ? traFam.getNombre() : traFamDefecto.getNombre());
+    		}
+    		Iniciacion ini = proc.getIniciacion();
+    		if (ini != null) {
+    			TraduccionIniciacion traIni = (TraduccionIniciacion)ini.getTraduccion(idioma);
+    			TraduccionIniciacion traIniDefecto = (TraduccionIniciacion)ini.getTraduccion(idioma_per_defecte);
+    			if (traIni == null)
+    				traIni = traIniDefecto;
+    			actuacioModel.setIniciacion(traIni.getNombre() != null ? traIni.getNombre() : traIniDefecto.getNombre());
+    		}
+    		actuacioModel.setRequisits(traProc.getRequisitos() != null ? traProc.getRequisitos() : traProcDefecto.getRequisitos());
+    		
+    		UnidadAdministrativa unaGen = proc.getUnidadAdministrativa();
+    		if (unaGen != null) {
+    			TraduccionUA traUnaGen = (TraduccionUA)unaGen.getTraduccion(idioma);
+    			TraduccionUA traUnaGenDefecto = (TraduccionUA)unaGen.getTraduccion(idioma_per_defecte);
+    			if (traUnaGen ==null)
+    				traUnaGen = traUnaGenDefecto;
+    			//actuacioModel.setOrganismeGenerador(Cadenas.initTab(traUnaGen.getNombre() != null ? traUnaGen.getNombre() : traUnaGenDefecto.getNombre()));
+    			actuacioModel.setOrganismeGenerador(traUnaGen.getNombre() != null ? traUnaGen.getNombre() : traUnaGenDefecto.getNombre());
+    		}
+    		actuacioModel.setRecursos(traProc.getRecursos() != null ? traProc.getRecursos() : traProcDefecto.getRecursos());
+    		actuacioModel.setLloc(traProc.getLugar() != null ? traProc.getLugar() : traProcDefecto.getLugar());
+    		    		
+    		//trï¿½mites
+    		
+    		//List<Tramite> listaTramites = (List)proc.getTramites(); //asï¿½ no salen todos...
+    		Query queryTramites = session.createQuery(
+    				"select tra " +
+    				"from Tramite as tra " + 					
+    					"where tra.procedimiento = :id_pro " +
+    					"and tra.validacio = 1 " +
+    					"order by tra.orden");
+    		
+    		queryTramites.setParameter("id_pro", code);
+    		List<Tramite> listaTramites = (List)queryTramites.list();
+    		
+    		
+    		
+    		//Long publico = new Long(1);
+    		for (Tramite tramite : listaTramites) {
+    			/*
+    			if (!publico.equals(tramite.getValidacio()))
+    				continue;
+    			*/
+    			TramitModel tramitModel = new TramitModel();
+    			tramitModel.setCodi(tramite.getId().intValue());
+    			
+    			boolean caducat = false;
+    			Date datCadu = tramite.getDataCaducitat();
+    			if (null != datCadu) {
+    				caducat = datCadu.compareTo(new Date()) < 0;
+    			}
+    			tramitModel.setCaducat(caducat);
+    			tramitModel.setFase(String.valueOf(tramite.getFase()));
+    			
+    			TraduccionTramite traTramite = (TraduccionTramite)tramite.getTraduccion(idioma);
+    			TraduccionTramite traTramiteDefecto = (TraduccionTramite)tramite.getTraduccion(idioma_per_defecte);
+    			if (traTramite == null)
+    				traTramite = traTramiteDefecto;
+    			
+    			tramitModel.setTitol(traTramite.getNombre() != null ? traTramite.getNombre() : traTramiteDefecto.getNombre());
+    			tramitModel.setDescripcio(traTramite.getDescripcion() != null ? traTramite.getDescripcion() : traTramiteDefecto.getDescripcion());
+    			tramitModel.setDocumentacio(traTramite.getDocumentacion() != null ? traTramite.getDocumentacion() : traTramiteDefecto.getDocumentacion());
+    			tramitModel.setRequisits(traTramite.getRequisits() != null ? traTramite.getRequisits() : traTramiteDefecto.getRequisits());
+    			tramitModel.setTermini(traTramite.getPlazos() != null ? traTramite.getPlazos() : traTramiteDefecto.getPlazos());
+    			tramitModel.setLugar(traTramite.getLugar() != null ? traTramite.getLugar() : traTramiteDefecto.getLugar());
+    			
+    			//Documentos informativos del trï¿½mite
+    			Set<DocumentTramit> documentosInformativos = tramite.getDocsInformatius();
+    			for (DocumentTramit doc : documentosInformativos) {
+    				DocumentModel docModel = new DocumentModel();
+    				TraduccionDocumento traDoc = (TraduccionDocumento)doc.getTraduccion(idioma);
+    				TraduccionDocumento traDocDefecto = (TraduccionDocumento)doc.getTraduccion(idioma_per_defecte);    				
+    				if (traDoc == null)
+    					traDoc = traDocDefecto;
+    				
+    				docModel.setDescripcio(traDoc.getDescripcion() != null ? traDoc.getDescripcion() : traDocDefecto.getDescripcion());
+    				docModel.setTitol(traDoc.getTitulo() != null ? traDoc.getTitulo() : traDocDefecto.getTitulo());
+    				docModel.setArxiu(doc.getArchivo() != null ? doc.getArchivo().getId().intValue() : 0);
+    				
+    				tramitModel.addDocInformatiu(docModel);
+    			}
+    			
+    			//Formularios del trï¿½mite
+    			Set<DocumentTramit> forms = tramite.getFormularios();
+    			for (DocumentTramit doc : forms) {
+    				DocumentModel docModel = new DocumentModel();
+    				TraduccionDocumento traDoc = (TraduccionDocumento)doc.getTraduccion(idioma);
+    				TraduccionDocumento traDocDefecto = (TraduccionDocumento)doc.getTraduccion(idioma_per_defecte);
+    				if (traDoc == null)
+    					traDoc = traDocDefecto;    				
+    				
+    				docModel.setDescripcio(traDoc.getDescripcion() != null ? traDoc.getDescripcion() : traDocDefecto.getDescripcion());
+    				docModel.setTitol(traDoc.getTitulo() != null ? traDoc.getTitulo() : traDocDefecto.getTitulo());
+    				docModel.setArxiu(doc.getArchivo() != null ? doc.getArchivo().getId().intValue() : 0);
+    				
+    				tramitModel.addFormulari(docModel);    				
+    			}
+    			
+    			//Tasas del trï¿½mite
+    			if ("on".equals(proc.getTaxa())) {
+    				Set<Taxa> tasas = tramite.getTaxes();
+    				for (Taxa tasa : tasas) {
+    					TaxaModel taxaModel = new TaxaModel();
+
+    					taxaModel.setCodiTra(tramitModel.getCodi());
+    					
+    					TraduccionTaxa traTasa = (TraduccionTaxa)tasa.getTraduccion(idioma);
+    					TraduccionTaxa traTasaDefecto = (TraduccionTaxa)tasa.getTraduccion(idioma_per_defecte);
+    					if (traTasa == null)
+    						traTasa = traTasaDefecto;
+    					
+    					taxaModel.setCodiTax(traTasa.getCodificacio() != null ? traTasa.getCodificacio() : traTasaDefecto.getCodificacio());
+    					taxaModel.setDesc(traTasa.getDescripcio() != null ? traTasa.getDescripcio() : traTasaDefecto.getDescripcio());
+    					taxaModel.setFormPag(traTasa.getFormaPagament() != null ? traTasa.getFormaPagament() : traTasaDefecto.getFormaPagament());
+    					
+    					tramitModel.addTaxa(taxaModel);
+    				}    				
+    			}
+    			
+    			actuacioModel.addTramit(tramitModel);
+    		}
+    		
+    		//Documentos
+    		List<Documento> listaDocs = proc.getDocumentos();
+    		for (Documento doc : listaDocs) {
+    			DocumentModel docModel = new DocumentModel();
+    			
+    			TraduccionDocumento traDoc = (TraduccionDocumento)doc.getTraduccion(idioma);
+    			TraduccionDocumento traDocDefecto = (TraduccionDocumento)doc.getTraduccion(idioma_per_defecte);
+    			if (traDoc == null)
+    				traDoc = traDocDefecto;
+    			
+    			docModel.setDescripcio(traDoc.getDescripcion() != null ? traDoc.getDescripcion() : traDocDefecto.getDescripcion());
+    			docModel.setTitol(traDoc.getTitulo() != null ? traDoc.getTitulo() : traDocDefecto.getTitulo());
+    			docModel.setArxiu(doc.getArchivo() != null ? doc.getArchivo().getId().intValue() : 0);
+    			
+    			actuacioModel.addDocuments(docModel);
+    		}
+    		
+    		//Normativas
+    		Set<Normativa> normativas = proc.getNormativas();
+    		for (Normativa normativa : normativas) {
+    			NormativaModel normModel = new NormativaModel();
+    			
+    			TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
+    			TraduccionNormativa traNormDefecto = (TraduccionNormativa)normativa.getTraduccion(idioma_per_defecte);
+    			
+    			normModel.setCodi(normativa.getId().intValue());
+    			normModel.setNumeroBoib(normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : null);
+    			normModel.setData(normativa.getFecha());
+    			normModel.setNumero(normativa.getNumero().toString());
+    			normModel.setSumari(traNorm.getTitulo() != null ? traNorm.getTitulo() : traNormDefecto.getTitulo());
+    			normModel.setPagini(traNorm.getPaginaInicial() != null ? traNorm.getPaginaInicial() : traNormDefecto.getPaginaInicial() != null ? traNormDefecto.getPaginaInicial() : null);
+    			normModel.setPagfin(traNorm.getPaginaFinal() != null ? traNorm.getPaginaFinal() : traNormDefecto.getPaginaFinal() != null ? traNormDefecto.getPaginaFinal() : null);
+    			
+    			actuacioModel.addNormativa(normModel);
+    		}
+    		
+    		
+    		return actuacioModel;
+        	
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }    	
+    }
+
+    
+	/** 
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
+	 * fitxa especificada, en l'idioma especificat
+	 *
+	 * @param codiFitxa codi de la fitxa que interessa
+	 * @param idioma en el que volem la informaciï¿½.
+	 * 
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */
+	public Collection actuacionsByMateria ( Long codiMateria, String idioma ) {
+		
+        Session session = getSession();
+        try {
+    		Query query = session.createQuery(
+    				"select pro " +
+    				"from ProcedimientoLocal as pro inner join pro.materias as mat inner join pro.unidadAdministrativa una " + 					
+    					"where mat.id = :id_mat " +
+    					"and pro.validacion = 1 " +
+    					"and (pro.fechaPublicacion is null or pro.fechaPublicacion <= SYSDATE) " +
+    					"and (pro.fechaCaducidad is null or pro.fechaCaducidad > SYSDATE) " +
+    					"order by pro.fechaActualizacion desc");
+    		
+    		query.setParameter("id_mat", codiMateria, Hibernate.LONG);
+    		
+    		List<ProcedimientoLocal> listaProcedimientos = (List)query.list();
+    		
+    		Collection values = new Vector();
+    		
+    		for (ProcedimientoLocal pro : listaProcedimientos) {
+    			ActuacioMinModel model = getActuacioMinModelFromProcedimiento(pro, idioma);
+    			
+    			values.add(model);
+    		}
+    		
+    		return values;
+
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	}
+
+	
+	/** 
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
+	 * fitxa especificada, en l'idioma especificat
+	 *
+	 * @param codiFitxa codi de la fitxa que interessa
+	 * @param idioma en el que volem la informaciï¿½.
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Collection actuacionsByUORSS ( Long codiUO, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	String hql="select pro " +
+	    			"from ProcedimientoLocal pro";
+	    	hql += " where ( pro.unidadAdministrativa=:uaid"; 
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
+	    	hql += " )";
+	    	hql += " and (pro.fechaPublicacion IS NULL OR (pro.fechaPublicacion <= SYSDATE AND pro.fechaPublicacion > SYSDATE - 30)) ";
+	    	hql += " and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) ";
+	    	hql += " and pro.validacion = 1 ";
+	    	
+	    	UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codiUO);
+	    	
+	    	if (unidad.getId().intValue() == 1) {
+	    		hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    	} else {
+	    		//seguro que la unidad tiene padre distinto de nulo (pq la unica unidad con padre nulo es la 1)
+	    		if (unidad.getPadre().getId().intValue() == 1) {
+	    			hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    		} else {
+	    			UnidadAdministrativa uniPadre = unidad.getPadre();
+	    			if (uniPadre.getPadre().getId().intValue() == 1) {
+	    				hql += "order by pro.orden2 asc, pro.fechaActualizacion desc";
+	    			} else {
+	    				hql += "order by pro.orden3 asc, pro.fechaActualizacion desc";
+	    			}
+	    		}	    		
+	    	}
+	    	
+	    	Query query = session.createQuery(hql);
+	    	query.setParameter("uaid", codiUO, Hibernate.LONG);
+	    	
+    		List<ProcedimientoLocal> listaProcedimientos = (List)query.list();
+    		
+    		Collection values = new Vector();
+    		
+    		for (ProcedimientoLocal pro : listaProcedimientos) {
+    			ActuacioMinModel model = getActuacioMinModelFromProcedimiento(pro, idioma);
+    			
+    			values.add(model);
+    		}
+    		
+    		return values;
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}
+	
+	
+	/** 
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
+	 * fitxa especificada, en l'idioma especificat
+	 *
+	 * @param codiFitxa codi de la fitxa que interessa
+	 * @param idioma en el que volem la informaciï¿½.
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Collection actuacionsByUO ( Long codiUO, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	String hql="select pro " +
+	    			"from ProcedimientoLocal pro";
+	    	hql += " where ( pro.unidadAdministrativa=:uaid"; 
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
+	    	hql += " )";
+	    	hql += " and (pro.fechaPublicacion IS NULL OR pro.fechaPublicacion <= SYSDATE) ";
+	    	hql += " and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) ";
+	    	hql += " and pro.validacion = 1 ";
+	    	
+	    	UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codiUO);
+	    	
+	    	if (unidad.getId().intValue() == 1) {
+	    		hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    	} else {
+	    		//seguro que la unidad tiene padre distinto de nulo (pq la unica unidad con padre nulo es la 1)
+	    		if (unidad.getPadre().getId().intValue() == 1) {
+	    			hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    		} else {
+	    			UnidadAdministrativa uniPadre = unidad.getPadre();
+	    			if (uniPadre.getPadre().getId().intValue() == 1) {
+	    				hql += "order by pro.orden2 asc, pro.fechaActualizacion desc";
+	    			} else {
+	    				hql += "order by pro.orden3 asc, pro.fechaActualizacion desc";
+	    			}
+	    		}	    		
+	    	}
+	    	
+	    	Query query = session.createQuery(hql);
+	    	query.setParameter("uaid", codiUO, Hibernate.LONG);
+	    		    	
+    		List<ProcedimientoLocal> listaProcedimientos = (List)query.list();
+    		
+    		Collection values = new Vector();
+    		
+    		for (ProcedimientoLocal pro : listaProcedimientos) {
+    			ActuacioMinModel model = getActuacioMinModelFromProcedimiento(pro, idioma);
+    			
+    			values.add(model);
+    		}
+    		
+    		return values;
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+	
+	/** 
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions mes cercades 
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */
+	public Collection actuacionsMasVisto () {
+		
+	    Session session = getSession();
+	    
+	    try {
+	    	String hql = "select pro.id " +
+	    			"from ProcedimientoLocal pro, Estadistica est, HistoricoProcedimiento his " +
+	    			"where pro = his.procedimiento and pro.id is not null and " +
+	    			"est.historico = his " +
+	    			"and pro.validacion = 1 " +
+	    			"and (pro.fechaPublicacion IS NULL OR pro.fechaPublicacion <= SYSDATE) " +
+	    			"and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) " +
+	    			"group by pro.id " +
+	    			"order by sum(est.contador) desc";
+	    	
+	    		    	
+	    	Query query = session.createQuery(hql);
+	    	
+	    	query.setMaxResults(5);
+	    		    	
+    		List<Long> listaProcedimientos = (List)query.list();
+    		
+    		Collection values = new Vector();
+    		
+    		for (Long idPro : listaProcedimientos) {
+    			ActuacioMinModel model = new ActuacioMinModel();
+    			model.setCodi(idPro.toString());
+    			
+    			values.add(model);
+    		}
+    		
+    		return values;
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}
+	
+	
+	/** 
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions que estan relacionades amb la 
+	 * paraula de cerca
+	 *
+	 * @param word
+	 * @param idioma en el que volem la informaciï¿½.
+	 * 
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */
+	public Collection actuacionsByWord ( String words, String idioma, String solovigor ) {
+	
+	    Session session = getSession();
+	    
+	    Long codiUO = new Long(1);
+	    Collection values = new Vector();
+	    
+	    try {    	
+	    	UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codiUO);
+	    	
+	    	if ( !Validacion.PUBLICA.equals(unidad.getValidacion()) )
+		    	return values;
+	    		    	
+	    	String hql="select pro " +
+			"from ProcedimientoLocal as pro, pro.traducciones as trad ";
+			hql += " where index(trad) = :idioma and ";
+			hql += " ( pro.unidadAdministrativa=:uaid"; 
+			hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
+			hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
+			hql += " )";
+			
+			if ("si".equals(solovigor)) {
+				hql += " and (pro.fechaPublicacion IS NULL OR pro.fechaPublicacion <= SYSDATE) ";
+				hql += " and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) ";
+				hql += " and pro.validacion = 1 ";	    	
+			}
+			
+			hql += " and upper(trad.nombre) like :busqueda ";
+	    	
+	    	if (unidad.getId().intValue() == 1) {
+	    		hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    	} else {
+	    		//seguro que la unidad tiene padre distinto de nulo (pq la unica unidad con padre nulo es la 1)
+	    		if (unidad.getPadre().getId().intValue() == 1) {
+	    			hql += "order by pro.orden asc, pro.fechaActualizacion desc";
+	    		} else {
+	    			UnidadAdministrativa uniPadre = unidad.getPadre();
+	    			if (uniPadre.getPadre().getId().intValue() == 1) {
+	    				hql += "order by pro.orden2 asc, pro.fechaActualizacion desc";
+	    			} else {
+	    				hql += "order by pro.orden3 asc, pro.fechaActualizacion desc";
+	    			}
+	    		}	    		
+	    	}
+	    	
+	    	Query query = session.createQuery(hql);
+	    	query.setParameter("uaid", codiUO, Hibernate.LONG);
+	    	query.setParameter("idioma", "ca");
+	    	query.setParameter("busqueda", "%" + words.trim().toUpperCase() + "%");
+	    	
+    		List<ProcedimientoLocal> listaProcedimientos = (List)query.list();    		   		
+    		
+    		for (ProcedimientoLocal pro : listaProcedimientos) {
+    			ActuacioMinModel model = getActuacioMinModelFromProcedimiento(pro, idioma);
+    			
+    			values.add(model);
+    		}
+    		
+    		return values;
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+		
+	/** 
+	 * WEBCAIB
+	 * Realiza una bï¿½squeda avanzada en procedimientos.
+	 * 
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que hace uso de las instrucciones start with connect by de ORACLE.
+	 * Ademï¿½s recibe en el parï¿½metro condi condiciones where en lenguaje SQL que no entiende HQL y serï¿½a bastante costoso traducir de forma
+	 * dinï¿½mica.
+	 * 
+	 * @return col.lecciï¿½ de ActuacioMinModel amb informaciï¿½ reduida de les actuacions
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */
+	public Collection actuacionsByAvanzado ( String condi, String idioma, String uo, String solovigor, String idisel ) {
+	
+	    Session session = getSession();
+	    	    
+	    Connection dbConnection = null;
+		PreparedStatement stmt = null;
+		ResultSet result = null;
+
+		Collection values = new Vector();
+		Long codi = new Long(1);	    
+	    
+	    try {    	
+	    	
+	    	UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codi);
+	    	
+	    	if ( !Validacion.PUBLICA.equals(unidad.getValidacion()) )
+		    	return values;
+
+			String query = "select tpr_codpro codi, " +
+			"tpr_nombre nom, " +
+			"tpr_resume resume, " +
+			"pro_fecact data, " +
+			"pro_tramit id, "+
+			"pro_versio versio, "+
+			"pro_urlext urlexterna, "+ 
+			"tun_nombre org "+
+			"from rsc_proced, " +
+			"rsc_trapro, " +
+			"rsc_trauna ";
+			//solo si hemos filtrado por tema, aï¿½adimos la tabla  
+			if(!(condi.indexOf("prm_codmat")==-1))
+				query+=",rsc_promat ";	
+			//query+="where (pro_coduna =? "+ 
+			//"or pro_coduna in (select una_codi from rsc_uniadm where una_coduna =? or  una_coduna in (select una_codi from rsc_uniadm where una_coduna =?))) ";
+			
+			//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgï¿½nica
+			//NOCYCLE query+="where (pro_coduna in (select una_codi from rsc_uniadm start with una_codi=? connect by NOCYCLE prior una_codi=una_coduna))";
+			query+="where (pro_coduna in (select una_codi from rsc_uniadm start with una_codi=? connect by prior una_codi=una_coduna))";
+			if(solovigor.equals("si")){
+				query+=" and (pro_fecpub is null or pro_fecpub <= sysdate) " +
+				"and (pro_feccad is null or pro_feccad > sysdate) "+
+				"and pro_valida = 1 ";
+			}
+			query+=condi+
+			" and pro_codi=tpr_codpro " +
+			"and tun_coduna = pro_coduna "+
+			"and tpr_codidi = ? " +
+			"and tun_codidi = tpr_codidi ";
+			if(!(condi.indexOf("prm_codmat")==-1))
+				query+=" and prm_codpro = pro_codi ";
+			
+			if (unidad.getId().intValue() == 1) {
+				query+=	"order by pro_ordcon asc,pro_fecact desc";
+			} else {
+				//seguro que la unidad tiene padre distinto de nulo (pq la unica unidad con padre nulo es la 1)
+				if (unidad.getPadre().getId().intValue() == 1) {
+					query+=	"order by pro_ordcon asc,pro_fecact desc";	
+				} else {
+					UnidadAdministrativa uniPadre = unidad.getPadre();
+					if (uniPadre.getPadre().getId().intValue() == 1) {
+						query+=	"order by pro_orddir asc,pro_fecact desc";
+					} else {
+						query+=	"order by pro_ordser asc,pro_fecact desc";
+					}
+				}	    		
+			}			
+			
+			try {
+				dbConnection = session.connection();
+
+				stmt = dbConnection.prepareStatement(query);
+				/*stmt.setString(1,uo);
+				stmt.setString(2,uo);
+				stmt.setString(3,uo);
+				stmt.setString(4,idioma);*/
+				//CANVI u102068 Aplicar recursivitat de nivells en la cerca per unitat orgï¿½nica
+				stmt.setString(1,uo);
+				stmt.setString(2,idioma);
+
+				result = stmt.executeQuery();
+
+				while (result.next()) {
+					values.add(getMinModelFromResultSet(result, idisel, dbConnection));
+				}
+
+				return values;
+
+			} finally {
+				result.close();
+				stmt.close();
+			}	    	
+	    	
+	    	
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+	 * Retorna el nï¿½mero de actuaciones que tiene la uo.<br/>
+	 * 
+	 * @param codiUO, int cï¿½digo de unidad orgï¿½nica
+	 * @param idioma, String en el que volem la informaciï¿½.
+
+	 * @return int, nï¿½mero de actuaciones que tiene la uo.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Integer cuentaActuacionsByUO ( Long codiUO, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, codiUO);
+	    	if (!Validacion.PUBLICA.equals(unidad.getValidacion()))
+	    		return 0;
+	    	
+	    	
+	    	String hql="select count(pro) " +
+	    			"from ProcedimientoLocal pro";
+	    	hql += " where ( pro.unidadAdministrativa=:uaid"; 
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid) ";
+	    	hql += " or pro.unidadAdministrativa in (SELECT ua.id from UnidadAdministrativa ua where ua.padre in (SELECT ua.id from UnidadAdministrativa ua where ua.padre= :uaid)) ";            
+	    	hql += " )";
+	    	hql += " and (pro.fechaPublicacion IS NULL OR pro.fechaPublicacion <= SYSDATE) ";
+	    	hql += " and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) ";
+	    	hql += " and pro.validacion = 1 ";
+	    		    	
+	    	Query query = session.createQuery(hql);
+	    	query.setParameter("uaid", codiUO, Hibernate.LONG);
+	    		    	
+    		return (Integer)query.uniqueResult();
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+	 * Retorna el nï¿½mero de actuaciones que tiene la uo.<br/>
+	 * 
+	 * @param codiUO, int cï¿½digo de unidad orgï¿½nica
+	 * @param idioma, String en el que volem la informaciï¿½.
+
+	 * @return int, nï¿½mero de actuaciones que tiene la uo.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Integer cuentaActuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	
+	    	String hql="select count(pro) " +
+	    			"from ProcedimientoLocal pro, HistoricoProcedimiento his ";
+	    	hql += " where his.procedimiento = pro and ";
+	    	hql += " pro.familia = :idFamilia and ";
+	    	hql += " ( pro.unidadAdministrativa=:uaid"; 
+	    	hql += " or EXISTS (from UnidadAdministrativa ua where ua.padre= :uaid and ua.id = pro.unidadAdministrativa ) ";
+	    	hql += " )";
+	    	hql += " and (pro.fechaPublicacion IS NULL OR pro.fechaPublicacion <= SYSDATE) ";
+	    	hql += " and (pro.fechaCaducidad IS NULL OR pro.fechaCaducidad > SYSDATE ) ";
+	    	hql += " and pro.validacion = 1 ";
+	    	hql += " and EXISTS ( from Auditoria aud where aud.historico = his ) ";
+	    	
+	    		    	
+	    	Query query = session.createQuery(hql);
+	    	query.setParameter("uaid", coduo, Hibernate.LONG);
+	    	query.setParameter("idFamilia", codiFamilia, Hibernate.LONG);
+	    		    	
+    		return (Integer)query.uniqueResult();
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia determinada 
+	 * ordenada per data publicaciï¿½.
+	 * 
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
+	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
+	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Collection actuacionsByFamilia ( Long codiFamilia, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	
+			Connection dbConnection = null;
+			PreparedStatement stmt = null;
+			ResultSet result = null;
+
+			Collection values = new java.util.Vector();
+
+			String query = "select tpr_codpro codi, "+ 
+			"tpr_nombre nom, "+  
+			"tpr_resume resume, " +	        	
+			"pro_fecact data, "+ 
+			"tun_nombre org, "+
+			"pro_tramit id, "+
+			"pro_versio versio, "+
+			"pro_urlext urlexterna, "+ 
+			"max(pro_fecact) ultimo "+ 				
+			"from rsc_proced, " +
+			"rsc_trapro, " +
+			"rsc_trauna, "+
+			"rsc_histor, "+ 
+			"rsc_audito "+	      	        	
+			"where  "+
+			"pro_codfam = ? "+
+			"and (pro_fecpub is null or pro_fecpub <= sysdate) " +
+			"and (pro_feccad is null or pro_feccad > sysdate) " +
+			"and pro_valida = 1 "+
+			"and pro_codi=tpr_codpro "+  
+			"and tun_coduna = pro_coduna "+
+			"and tpr_codidi = ? "+
+			"and tun_codidi = tpr_codidi  "+
+			"and his_codpro = tpr_codpro "+ 
+			"and his_codi=aud_codhis "+
+			"group by tpr_codpro, tpr_nombre, tpr_resume, pro_fecact, tun_nombre, pro_tramit, pro_versio, pro_urlext "+ 
+			"order by ultimo desc ";
+
+
+			try {
+				dbConnection = session.connection();
+
+				stmt = dbConnection.prepareStatement(query);
+				stmt.setLong(1, codiFamilia);
+				stmt.setString(2,idioma_per_defecte);
+
+				result = stmt.executeQuery();
+
+				while (result.next()) {
+					values.add(getMinModelFromResultSet(result,idioma, dbConnection));
+				}
+
+				return values;
+
+			} finally {
+				result.close();
+				stmt.close();
+			}
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}
+	
+	
+	/**
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia  i unitat orgï¿½nica determinada 
+	 * ordenada per data publicaciï¿½.
+	 * 
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
+	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
+	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Collection<ActuacioMinModel> actuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	
+			Connection dbConnection = null;
+			PreparedStatement stmt = null;
+			ResultSet result = null;
+
+			Collection<ActuacioMinModel> values = new java.util.Vector<ActuacioMinModel>();
+
+			String query = "select tpr_codpro codi, "+ 
+			"tpr_nombre nom, "+  
+			"tpr_resume resume, " +					
+			"pro_fecact data, "+ 
+			"tun_nombre org, "+
+			"pro_tramit id, "+
+			"pro_versio versio, "+	
+			"pro_urlext urlexterna, "+ 
+			"max( pro_fecact) ultimo "+ 					
+			"from rsc_proced, " +
+			"rsc_trapro, " +
+			"rsc_trauna, "+
+			"rsc_histor, "+ 
+			"rsc_audito "+			        	
+			"where "+ 
+			"pro_codfam = ? "+
+			"and (pro_fecpub is null or pro_fecpub <= sysdate) " +
+			"and (pro_feccad is null or pro_feccad > sysdate) " +
+			"and pro_valida = 1 "+ 
+			"and pro_codi=tpr_codpro "+  
+			"and tpr_codidi = ?"+	 
+			"and (pro_coduna in (select distinct(una_codi) from rsc_uniadm where una_coduna = ?) or pro_coduna = ?) "+
+			"and tun_coduna = pro_coduna "+
+			"and tun_codidi = tpr_codidi  "+
+			"and his_codpro = tpr_codpro "+ 
+			"and his_codi=aud_codhis "+
+			"group by tpr_codpro, tpr_nombre, tpr_resume, pro_fecact, tun_nombre, pro_tramit, pro_versio, pro_urlext "+ 
+			"order by ultimo desc ";
+
+			try {
+				dbConnection = session.connection();
+
+				stmt = dbConnection.prepareStatement(query);
+				stmt.setLong(1, codiFamilia);
+				stmt.setString(2,idioma_per_defecte);
+				stmt.setLong(3, coduo);
+				stmt.setLong(4, coduo);
+
+				result = stmt.executeQuery();
+
+				while (result.next()) {
+					values.add(getMinModelFromResultSet(result, idioma, dbConnection));
+				}
+
+				return values;
+
+			} finally {
+				result.close();
+				stmt.close();
+			}
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+	 * Retorna una informaciï¿½ de totes les actuacions d'una familia i matï¿½ria determinada 
+	 * ordenada per data publicaciï¿½.
+	 * 
+	 * Este mï¿½todo se ha copiado directamente del proyecto WEBCAIB durante la migraciï¿½n de mï¿½todos de este proyecto a ROLSAC.
+	 * No ha sido posible su implementaciï¿½n en Hibernate debido a que existe un bug en Hibernate 2 con la instrucciï¿½n group by. En resumen
+	 * requiere poner todos los campos de la entidad en el group by pero al tratarse de una entidad con discriminador no hay forma de 
+	 * incluir el campo discriminador en el group by y la consulta resultante SQL falla en ORACLE.
+	 *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true" 
+	 */	
+	public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) {
+	
+	    Session session = getSession();
+	    
+	    try {
+	    	
+			Connection dbConnection = null;
+			PreparedStatement stmt = null;
+			ResultSet result = null;
+
+			Collection values = new java.util.Vector();
+
+			String query = "select tpr_codpro codi, "+ 
+			"tpr_nombre nom, "+ 
+			"tpr_resume resume, " +					
+			"pro_fecact data, "+ 
+			"tun_nombre org, "+
+			"pro_tramit id, "+
+			"pro_versio versio, "+
+			"pro_urlext urlexterna, "+ 
+			"max(aud_fecha) ultimo "+ 						
+			"from rsc_proced, " +
+			"rsc_trapro, " +
+			"rsc_trauna, "+ 
+			"rsc_promat, "+
+			"rsc_histor, "+ 
+			"rsc_audito "+						
+			"where  "+
+			"pro_codfam = ? "+
+			"and (pro_fecpub is null or pro_fecpub <= sysdate) " +
+			"and (pro_feccad is null or pro_feccad > sysdate) " +
+			"and pro_valida = 1 "+
+			"and pro_codi=tpr_codpro "+  
+			"and tpr_codidi = ? "+
+			"and prm_codpro = pro_codi "+
+			"and prm_codmat = ? "+	
+			"and tun_coduna = pro_coduna "+
+			"and tun_codidi = tpr_codidi  "+
+			"and his_codpro = tpr_codpro "+ 
+			"and his_codi=aud_codhis "+
+			"group by tpr_codpro, tpr_nombre, tpr_resume, pro_fecact, tun_nombre, pro_tramit, pro_versio, pro_urlext "+ 
+			"order by ultimo desc ";
+
+			try {
+				dbConnection = session.connection();
+
+				stmt = dbConnection.prepareStatement(query);
+				stmt.setLong(1, codiFamilia);
+				stmt.setString(2,idioma_per_defecte);
+				stmt.setLong(3, codiMateria);
+
+				result = stmt.executeQuery();
+
+				while (result.next()) {
+					values.add(getMinModelFromResultSet(result, idioma, dbConnection));
+				}
+
+				return values;
+
+			} finally {
+				result.close();
+				stmt.close();
+			}
+
+	    } catch (Exception he) {
+	    	throw new EJBException(he);
+	    } finally {
+	    	close(session);
+	    }		
+		
+	}	
+		
+	
+	/**
+	 * Mï¿½todo de apoyo para transformar datos de la entidad ProcedimientoLocal a la entidad WEBCAIB ActuacioMinModel.
+	 * @param pro ProcedimientoLocal.
+	 * @param idioma idioma preferido.
+	 * @return ActuacioMinModel.
+	 */
+	private ActuacioMinModel getActuacioMinModelFromProcedimiento(ProcedimientoLocal pro, String idioma) {
+		ActuacioMinModel model = new ActuacioMinModel();
+		
+		model.setCodi(pro.getId().toString());
+		if (pro.getFechaActualizacion() != null)
+			model.setData(new java.sql.Date(pro.getFechaActualizacion().getTime()));
+		model.setIdTramite(pro.getTramite());
+		model.setVersionTramite(pro.getVersion() != null ? pro.getVersion().intValue() : 0);
+		model.setUrlExternaTramite(pro.getUrl());
+		
+		TraduccionProcedimientoLocal traPro = (TraduccionProcedimientoLocal)pro.getTraduccion(idioma);
+		TraduccionProcedimientoLocal traProDefecto = (TraduccionProcedimientoLocal)pro.getTraduccion(idioma_per_defecte);
+		if (traPro == null)
+			traPro = traProDefecto;
+		
+		model.setNom( traPro.getNombre() != null ? traPro.getNombre() : traProDefecto.getNombre() );
+		model.setResum( traPro.getResumen() != null ? traPro.getResumen() : traProDefecto.getResumen());
+		
+		UnidadAdministrativa una = pro.getUnidadAdministrativa();
+		if (una != null) {
+			
+			TraduccionUA traUna = (TraduccionUA)una.getTraduccion(idioma);
+			TraduccionUA traUnaDef = (TraduccionUA)una.getTraduccion(idioma_per_defecte);
+			if (traUna == null)
+				traUna = traUnaDef;
+			
+			model.setOrganismeGenerador(traUna.getNombre() != null ? traUna.getNombre() : traUnaDef.getNombre());    				
+		}
+		return model;
+	}	
+	
+	
+	//Mï¿½todo adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
+	private ActuacioMinModel getMinModelFromResultSet (ResultSet result, String idioma, Connection dbConnection) throws Exception {
+
+		ActuacioMinModel model = new ActuacioMinModel();
+
+		model.setCodi(result.getString("codi"));
+		model.setData(result.getDate("data"));
+		model.setIdTramite(result.getString("id"));
+		model.setVersionTramite(result.getInt("versio"));
+		model.setUrlExternaTramite(result.getString("urlexterna"));
+
+		if (idioma.equals(idioma_per_defecte)){
+			model.setNom(result.getString("nom"));
+			model.setResum(result.getString("resume"));
+			model.setOrganismeGenerador(result.getString("org"));
+		}else {
+
+				String queryTraduccio ="select " +
+				"tpr_nombre nom, tpr_resume resume , tun_nombre org " +
+				"from  " +
+				"rsc_proced, " +
+				"rsc_trapro, " +
+				"rsc_trauna "+ 
+				"where " +
+				"tpr_codpro = " + result.getString("codi") +" "+
+				"and pro_codi=tpr_codpro " +
+				"and tun_coduna = pro_coduna "+
+				"and tpr_codidi ='"+idioma+"' " +
+				"and tun_codidi = tpr_codidi ";
+
+				Traduccio acttrad = (Traduccio)getTraduccio(queryTraduccio, 3, dbConnection);
+				if (acttrad != null) {
+					model.setNom(nvl(acttrad.getCamp1(), result.getString("nom")));
+					model.setResum(nvl(acttrad.getCamp2(), result.getString("resume")));
+					model.setOrganismeGenerador(nvl(acttrad.getCamp3(), result.getString("org")));
+				} else {
+					model.setNom(result.getString("nom"));	
+					model.setOrganismeGenerador(result.getString("org"));
+				}	
+		}
+		return model;
+
+	}	
+	
+	
+	//Mï¿½todo adaptado de WEBCAIB para actuacionsByAvanzado, actuacionsByFamilia, actuacionsByFamiliaUO, actuacionsByFamiliaMat.
+	private Traduccio getTraduccio ( String query, int camps, Connection dbConnection ) throws Exception {
+
+		PreparedStatement stmt = null;
+		ResultSet resultTrad = null;
+		try{
+			stmt = dbConnection.prepareStatement(query);
+
+			resultTrad = stmt.executeQuery();
+
+			if (!resultTrad.next()) {
+				//throw new Exception("No s'ha trobat traducciï¿½ per aquest idioma");
+				return null;
+			}
+
+
+			Traduccio trad = new Traduccio();
+
+			if ((resultTrad.getObject(1)!=null)&&(resultTrad.getObject(1).getClass().isPrimitive())){
+				trad.setCamp1(resultTrad.getInt(1));
+			}else{
+				trad.setCamp1(resultTrad.getString(1));
+			}
+
+			if (camps > 1){
+				if ((resultTrad.getObject(2)!=null)&&(resultTrad.getObject(2).getClass().isPrimitive())){
+					trad.setCamp2(resultTrad.getInt(2));
+				}else{
+					trad.setCamp2(resultTrad.getString(2));
+				}
+				if (camps > 2){
+					trad.setCamp3(resultTrad.getString(3));
+					if (camps > 3){
+						trad.setCamp4(resultTrad.getString(4));
+						if (camps > 4){
+							trad.setCamp5(resultTrad.getString(5));
+							if (camps > 5){
+								trad.setCamp6(resultTrad.getString(6));
+								if (camps > 6){
+									trad.setCamp7(resultTrad.getString(7));
+									if (camps > 7){
+										trad.setCamp8(resultTrad.getString(8));
+										if (camps > 8){
+											trad.setCamp9(resultTrad.getString(9));
+											if (camps > 9){
+												trad.setCamp10(resultTrad.getString(10));
+												if (camps > 10){
+													trad.setCamp11(resultTrad.getString(11));
+												}	
+											}	
+										}
+									}	
+								}	
+							}
+						}	
+					}		
+				}		
+
+			}
+
+			return trad;
+
+		} finally {
+			resultTrad.close();
+			stmt.close();
+		}
+	}   	
+	
+	//Mï¿½todo copiado de WEBCAIB para actuacionsByAvanzado.
+    /**
+     * Mï¿½tode d'utilitat per poder evitar els valors nulls
+     * (versiï¿½ amb valor per defecte explï¿½cit)
+     * 
+     * @param value valor que volem comprovar que no sigui null
+     * @param defaultValue valor que emprarem si value es null
+     * @return value si no es null i defaultValue si es null
+     */
+    protected String nvl (String value, String defaultValue ) {
+        if ( value == null ) {
+           return defaultValue;
+        }
+        return value;
+    }	
+    
+    /**
+     * Buscamos el numero de procedimientos activos des de la fecha actual
+     * 
+     * @param List<Long> listaUnidadAdministrativaId
+     * @param Date fechaCaducidad
+     * @return numero de Procedimientos activos
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
+		Integer resultado = 0;
+		Session session = getSession();
+	
+		try {
+			
+        	Query query = null;
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery(" select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
+        				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
+        				" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) " +
+        				" and prc.unidadAdministrativa.id in (:lId) ");
+        		query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+        	}/* else {
+        	   
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where prc.validacion = :validacion " +
+        				" and (prc.fechaCaducidad >= :fecha or prc.fechaCaducidad is null) " +
+						" and (prc.fechaPublicacion <= :fecha or prc.fechaPublicacion is null) ");
+        		query.setInteger("validacion", Validacion.PUBLICA);
+        		query.setDate("fecha", fechaCaducidad);
+        		
+        	}
+        	
+        	resultado = (Integer) query.uniqueResult();
+    		*/
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	
+		
+		return resultado;
+	}
+    
+	 /**
+     * Buscamos el numero de procedimientos activos des de la fecha actual
+     * 
+     * @param List<Long> listaUnidadAdministrativaId
+     * @param Date fechaCaducidad
+     * @return numero de Procedimientos caducados
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
+		
+		Integer resultado = 0;		
+		Session session = getSession();
+		try {
+        	Query query = null;
+        	if (listaUnidadAdministrativaId.size() > 0) {
+	        	query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
+	        			" ( prc.validacion != :validacion ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad is null and prc.fechaPublicacion > :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
+	        			" ) and prc.unidadAdministrativa.id in (:lId) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+	        	
+        	}/* else {
+        	   
+        		query = session.createQuery("select count(*) from ProcedimientoLocal as prc where ( " +
+	        			" ( prc.validacion != :validacion ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad < :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad is null and prc.fechaPublicacion > :fecha ) " +
+	        			" or ( prc.validacion = :validacion and prc.fechaCaducidad >= :fecha and prc.fechaPublicacion > :fecha ) " +
+	        			" ) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+	        	        	    
+	        }
+	        
+	        resultado = (Integer) query.uniqueResult();
+	        */        	
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+			
+		return resultado;
 	}
 }

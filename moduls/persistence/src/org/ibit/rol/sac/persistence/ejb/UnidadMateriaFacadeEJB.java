@@ -1,17 +1,15 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.Query;
 
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.List;
 
 /**
  * SessionBean para mantener y consultar UnidadMateria. (PORMAD)

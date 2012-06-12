@@ -1,26 +1,27 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
-import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
-import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
-
-import org.ibit.rol.sac.persistence.util.Cadenas;
+import java.io.ByteArrayOutputStream;
+import java.rmi.RemoteException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
-import java.util.Date;
-import java.util.Set;
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.webcaib.UOMinModel;
+import org.ibit.rol.sac.model.webcaib.UOModel;
+import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
+import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
+import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 
 /**
  * Business delegate para manipular Unidades Administrativas.
@@ -969,6 +970,23 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	        }
 	}	
 	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#getUaMollaBack2java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
+	 */    
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#getUaMollaBack2(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#getUaMollaBack2(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	public StringBuffer getUaMollaBack2(Long idua, String _idioma, String url, String uaIdPlaceholder) throws DelegateException {
+	       try {
+	            return getFacade().getUaMollaBack2(idua, _idioma, url, uaIdPlaceholder);
+	        } catch (RemoteException e) {
+	            throw new DelegateException(e);
+	        }
+	}	
+	
      public boolean autorizarEliminarUA(Long idUa) throws DelegateException {
          try {
 	            return getFacade().autorizarEliminarUA(idUa);
@@ -977,6 +995,19 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	        }
     }
      
+     
+     /* (non-Javadoc)
+ 	  * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
+ 	  */
+ 	public Boolean autorizarCrearUA() throws DelegateException {
+ 		try {
+            return getFacade().autorizarCrearUA();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+ 	}
+ 	
+ 	
      public void eliminarUaSinRelaciones(Long idUA) throws DelegateException {
          try {
 	            getFacade().eliminarUaSinRelaciones(idUA);
@@ -995,8 +1026,72 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
+    }    
+    
+    //WEBCAIB
+    public String getCodiGovernIlles() throws DelegateException {
+    	try {
+    		return getFacade().getCodiGovernIlles();
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
     
+    public Collection unitatsOrganiquesFilles(String pare, String criteri, String idioma ) throws DelegateException {
+    	try {
+    		return getFacade().unitatsOrganiquesFilles(pare, criteri, idioma);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }        
+    
+    public UOModel getDetails(String codi, String idioma) throws DelegateException {
+    	try {
+    		return getFacade().getDetails(codi, idioma);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public UOMinModel getParent( String codi, String idioma ) throws DelegateException {
+    	try {
+    		return getFacade().getParent(codi, idioma);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public boolean isMateriaInUo( String codi, String materia ) throws DelegateException {
+    	try {
+    		return getFacade().isMateriaInUo(codi, materia);    		
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public ByteArrayOutputStream getLogo( String coduo, String logo ) throws DelegateException {
+    	try {
+    		return getFacade().getLogo(coduo, logo);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
+    public Collection centres(String codi, String idioma ) throws DelegateException {
+    	try {
+    		return getFacade().centres(codi, idioma);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    } 
+    
+    public Collection getUoByMateria( String pare, String materia, String idioma ) throws DelegateException {
+    	try {
+    		return getFacade().getUoByMateria(pare, materia, idioma);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
@@ -1020,5 +1115,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }
+    }    
+    
 }

@@ -1,5 +1,15 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -13,11 +23,9 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.webcaib.MateriaModel;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.*;
+ 
 
 /**
  * SessionBean para mantener y consultar materias.
@@ -33,6 +41,8 @@ import java.util.*;
  */
 public abstract class MateriaFacadeEJB extends HibernateEJB {
 
+	private static String idioma_per_defecte ="ca";
+	
     /**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
@@ -128,6 +138,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
             Hibernate.initialize(materia.getFoto());
             Hibernate.initialize(materia.getIcono());
             Hibernate.initialize(materia.getIconoGrande());
+            Hibernate.initialize(materia.getProcedimientosLocales());
             for (Iterator iterator = materia.getIconos().iterator(); iterator.hasNext();) {
                 IconoMateria icono = (IconoMateria) iterator.next();
                 Hibernate.initialize(icono.getIcono());
@@ -474,6 +485,132 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
         }
         
     }
+	
+	
+	//WEBCAIB//
+	
+	/**
+	 * WEBCAIB
+     * Obtiene la materia
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */	
+	public MateriaModel getMateria ( Long codi, String idioma )  {
+
+		MateriaModel resultado = new MateriaModel();
+		
+		Session session = getSession();
+		try {
+			Materia materia = (Materia) session.get(Materia.class, codi);
+			
+			if (materia != null) {
+				TraduccionMateria traMat = (TraduccionMateria)materia.getTraduccion(idioma);
+				TraduccionMateria traMatDef = (TraduccionMateria)materia.getTraduccion(idioma_per_defecte);
+
+				if (traMat == null)
+					traMat = traMatDef;
+
+				resultado.setCodi(materia.getId().intValue());
+				resultado.setNom(traMat.getNombre() != null ? traMat.getNombre() : traMatDef.getNombre());
+				resultado.setDescripcio(traMat.getDescripcion() != null ? traMat.getDescripcion() : traMatDef.getDescripcion());
+			}			
+			return resultado;
+
+			
+			
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }		
+		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+     * Obtiene la lista de materias.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */	
+	public Collection getMateries ( String idioma ) {
+
+		TraduccionMateria tradMateria = null;
+		
+		//devolver todas las materias y para cada una intentar obtener el idioma especificado y en caso de no existir obtener el idioma por defecto
+        Session session = getSession();
+        try {  	
+        	
+            Query query = session.createQuery("from Materia as mat join mat.traducciones as trad where index(trad) = :idioma order by trad.nombre asc");            
+            query.setString("idioma", idioma_per_defecte);
+                                   
+            List<Materia> materias = query.list();
+            
+            List<MateriaModel> listaMaterias = new Vector<MateriaModel>();
+            for (Materia mat : materias) {
+            	Hibernate.initialize(mat.getTraduccionMap());
+            	MateriaModel materia = new MateriaModel();
+
+    			materia.setCodi(mat.getId().intValue());
+    			TraduccionMateria traduccionMateria = (TraduccionMateria)mat.getTraduccionMap().get(idioma);
+    			
+    			if (traduccionMateria != null) {
+    				materia.setDescripcio(traduccionMateria.getDescripcion());
+    				materia.setNom(traduccionMateria.getNombre());
+    			}
+    			
+    			if (traduccionMateria == null || materia.getDescripcio() == null || materia.getNom() == null) 
+    				tradMateria = (TraduccionMateria)mat.getTraduccionMap().get(idioma_per_defecte);	
+    			    			
+    			//Obtener valores del idioma por defecto en caso de que no exista valor en el idioma seleccionado
+    			if (materia.getDescripcio() == null) 
+    				materia.setDescripcio(tradMateria.getDescripcion());
+    						
+    			if (materia.getNom() == null ) 		
+    				materia.setNom(tradMateria.getNombre());
+            	
+            	listaMaterias.add(materia);            	
+            }
+            
+            return listaMaterias;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }		
+	}	
+	
+	
+	/**
+	 * WEBCAIB
+     * Obtiene los iconos de una materia.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */		
+	public MateriaModel getIcones ( Long codi, Long perfil ) {
+
+        Session session = getSession();
+        try {           
+            Query query = session.createQuery("from IconoMateria as icomat where icomat.materia = :id and icomat.perfil = :perfil");
+            query.setLong("id", codi);
+            query.setLong("perfil", perfil);
+            IconoMateria iconoMateria = (IconoMateria)query.uniqueResult();            
+                  
+            MateriaModel materiaModel = new MateriaModel();
+            materiaModel.setIcona(iconoMateria.getIcono().getId().intValue());
+            materiaModel.setCodi(iconoMateria.getMateria().getId().intValue());
+            materiaModel.setPerfil(iconoMateria.getPerfil().getId().intValue());            
+            
+            return materiaModel;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }		
+	}	
+	
 	
 	
 }

@@ -27,11 +27,13 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 
 /**
  * 
- * TODO @author enric
- * Falta documentar! Para alguien nuevo en rolsac, y ve la clase Crawler 
- * por primera vez:
- * Que objetivo tiene el crawler del rolsac?
- * Cuales son las entradas, salidas del crawler y que estado cambia?  
+ * @autor INDRA
+ * 
+ * @author enric - poso comentaris.
+ * Aquesta classe indexa recursivament el contingut d'un Microsite o una 
+ * pàgina externa en varis idiomes,  segons s'indica en les URLs d'entrada.
+ * Durant la indexació es crea un arbre temporal que contindrà el contingut per indexar. 
+ * Finalment es recorre aquest arbre i s'indexa en el directori Lucene.        
  * 
  */
 
@@ -41,7 +43,10 @@ public class Crawler{
     private IndexWriter writer;
     private  String dominio;
     protected  Log log = LogFactory.getLog(Crawler.class);
+    
+    //TODO es proposa renombrar arbol per arbolParaIndexar
     private static List<Nodo> arbol;
+    
     private static String tipoMicrosite="";
     private static String valorMicrosite="";
     private Analyzer analyzer;
@@ -65,22 +70,30 @@ public class Crawler{
     
     
     public void indexarURLFicha() {
+    	
+    	// Para indexar una url de una ficha ..
     	try {
     		
+    		// .. se coje la url correspondiente a cada idioma  
     		for (Iterator iterator = urls.keySet().iterator(); iterator.hasNext();) {  		
         		String idi = (String) iterator.next();
         		String url= urls.get(idi);
         		
         		log.debug("[IndexInsertarFicha:" + idFicha + "] Traduccion para el idioma: "+idi+" con URL: "+url);
+        		
             	dominio = getDomimio(url);
             	if(dominio!=""){
+            		// .. se comprueba que la url sea una pagina de texto  
             	    if(!comprobarFormato(url)){
             	    	arbol = new ArrayList<Nodo>();
+            	    	// .. se prepara el indice de la pagina y se añade al arbol  
             	    	Nodo padre = htmlDocument.Document(idFicha.toString(),url,arbol,0,isMicrosite(url));	
             	    	if(padre!=null){
         		        	arbol.add(padre);
-        		        	//Comprobamos que la URL sea un Microsite, en ese caso guardamos en la variable "valorMicrosite" el valor
-        		        	//comprobarMicrosite(trad.getUrl());
+        		        	
+        		        	// .. se preparan los indices de las paginas hijas, tanto si es un microsite o no, 
+        		        	//    hasta una cierta profundidad
+        		        	
         		        	if(isMicrosite(url)){
         		        		profundidadMS=Integer.parseInt(System.getProperty("es.caib.rolsac.crawler.profundidadMS"));
         		        		log.debug("[IndexInsertarFicha:" + idFicha + "] Indexamos un Microsite:"+url+" con clave: "+valorMicrosite+" con Profundidad Max.: "+profundidadMS);
@@ -99,7 +112,7 @@ public class Crawler{
         	    	    }
 
             	    }
-            	    //Si se han encontrado resultados proseguimos a guardarlos en el indice de lucene para el crawler
+            	    //.. se indexa el arbol con Lucene 
             	    if(arbol.size()>0){
             	    	guardarResultadosIndice(url,idi);
             	    }
@@ -146,7 +159,7 @@ public class Crawler{
 
                 writer = new IndexWriter(directory, getAnalizador(idioma),false);
         	    
-        	    
+        	    // .. es crea el index Lucene (analisis + segmentació) del arbol
                 for (Nodo nodo : arbol) {
                 	String sDoc="NO contenido";
                 	if(nodo.getDoc()!=null){sDoc="ok";}
@@ -161,12 +174,19 @@ public class Crawler{
 			log.warn("[IndexInsertarFicha:" + idFicha + "] Se ha interrumpido la indexación. Cerrando indice... " + e.fillInStackTrace());
         }
         finally{
+        	
+        	// .. es commita el index
+        	
             //writer.optimize();
             writer.close();
         }
     }
     
-  //Función recursiva que indexa el contenido de un MicroSite
+
+   
+    //Función recursiva que parsea los hijos de un MS hasta una cierta profundidad
+	//TODO es proposa canviar el nomindexMS per prepararIndiceHijosMS()
+
     private void indexMS(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
 
 
@@ -249,30 +269,38 @@ public class Crawler{
 					"lang=" + idioma);
 	}
 	
-    //Función recursiva que indexa una URL Básica
+    //Función recursiva que parsea los hijos de una pagina basica hasta una cierta profundidad, y los añade al arbol
+	//TODO es proposa canviar el nom indexBasica per prepararIndiceHijosDePaginaBasica()
+	
     private void indexBasica(Nodo padre, int counter,String idFicha,String idioma) throws Exception {
 		counter++;
 		
-		// Comprobamos el nivel de profundidad que deseamos
+		//Para parsear los hijos de la pagina ..
+		
+		//.. se comprueba si ya estamos en el nivel de profundidad que deseamos
 		if (counter <= profundidadBasica) {
 
 			try {
 
+				// .. se obtienen las url de la pagina
 				LinkParser lp = new LinkParser(padre.getURL());
 				URL[] links = lp.ExtractLinks();
 
 				List<Nodo> indexarList = new ArrayList<Nodo>();
 
+				// .. por cada url
 				for (URL l : links) {
 
-					String strEscapeHTML = StringEscapeUtils.unescapeHtml(l
-							.toURI().toString());
+					// .. se desescapea la url
+					String strEscapeHTML = StringEscapeUtils.unescapeHtml(l.toURI().toString());
 					if (strEscapeHTML.endsWith("#")) {
 						strEscapeHTML = l.toURI().toString().replace("#", "");
 					}
 
-					// Comprobamos que cumpla que se encuentre en el dominio
-						if (strEscapeHTML.contains(dominio)){
+					// .. se comprueba que este en el mismo dominio que la pagina padre
+					if (strEscapeHTML.contains(dominio)){
+						
+							// .. se ignora si esta pagina ya se encuentra en el arbol
 							Nodo hijo = null;
 							for (Nodo leido : arbol) {
 								if (strEscapeHTML.toLowerCase().equals(leido.getURL().toLowerCase())) {
@@ -281,6 +309,7 @@ public class Crawler{
 								}
 							}
 	
+							// .. se parsea el contenido de la pagina y se añade al arbol  
 							if (hijo == null) {
 								hijo = htmlDocument.Document(idFicha,strEscapeHTML,arbol,counter,false);
 								if (hijo != null) {
@@ -293,6 +322,7 @@ public class Crawler{
 
 				}
 
+				// .. se parsean sus hijos recursivamente 
 				for (Nodo indexarNodo : indexarList) {
 					indexBasica(indexarNodo, counter,idFicha,idioma);
 				}
@@ -305,26 +335,29 @@ public class Crawler{
 
 	}
     
-  
+
     private String getDomimio(String url)
     {	
-   	 String valor="";
-   	 if(url.length()>0){
-   		 try {
-   			 if(url.indexOf(".")!=-1){
-   			     int firstDot = url.indexOf(".");
-   			     int lastDot =  url.lastIndexOf(".");
-   			     return url.substring(firstDot+1,lastDot); 	 
-   			 }
+    	// Para obtener el dominio de una url ..
+    	
+    	String valor="";
+    	if(url.length()>0){
+    		try {
+    			// .. se devuelve el texto entre el primer y el ultimo punto.
+    			if(url.indexOf(".")!=-1){
+    				int firstDot = url.indexOf(".");
+    				int lastDot =  url.lastIndexOf(".");
+    				return url.substring(firstDot+1,lastDot); 	 
+    			}
 
-   		} catch (Exception e) {
-   			// TODO: handle exception
-   			log.warn("Error: No se ha podido capturar el dominio");
-   			valor="";
-   		}
+    		} catch (Exception e) {
+    			// TODO: handle exception
+    			log.warn("Error: No se ha podido capturar el dominio");
+    			valor="";
+    		}
 
-   	 }
-   	 return valor;
+    	}
+    	return valor;
 
     }
 

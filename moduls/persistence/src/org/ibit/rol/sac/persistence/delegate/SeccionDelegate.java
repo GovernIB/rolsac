@@ -1,18 +1,22 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.Tratamiento;
-import org.ibit.rol.sac.persistence.intf.SeccionFacade;
-import org.ibit.rol.sac.persistence.intf.SeccionFacadeHome;
-import org.ibit.rol.sac.persistence.util.SeccionFacadeUtil;
+import java.rmi.RemoteException;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Map;
+
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.webcaib.LinkModel;
+import org.ibit.rol.sac.persistence.intf.SeccionFacade;
+import org.ibit.rol.sac.persistence.intf.SeccionFacadeHome;
+import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
+import org.ibit.rol.sac.persistence.util.SeccionFacadeUtil;
 
 /**
  * Business delegate para manipular Secciones.
@@ -49,7 +53,7 @@ public class SeccionDelegate implements StatelessDelegate {
     		throw new DelegateException(e);
     	}
     }
-
+    
     public void actualizarOrdenFichasSeccionHuecos(Long id)	throws DelegateException {
     	try {
     		getFacade().actualizarOrdenFichasSeccionHuecos(id);
@@ -66,6 +70,15 @@ public class SeccionDelegate implements StatelessDelegate {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public List<FichaUAFichaIds> obtenerFichaUAFichaIds(long idUA, long idSeccion) throws DelegateException {
+        try {
+            return (List<FichaUAFichaIds>) getFacade().obtenerFichaUAFichaIds(idUA, idSeccion);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public Seccion obtenerSeccion(Long id) throws DelegateException {
         try {
             return getFacade().obtenerSeccion(id);
@@ -73,7 +86,7 @@ public class SeccionDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    
     public Seccion obtenerSeccion(String codigo) throws DelegateException {
             try {
                 return getFacade().obtenerSeccion(codigo);
@@ -156,6 +169,150 @@ public class SeccionDelegate implements StatelessDelegate {
         }
     }
 
+    
+    //WEBCAIB//
+    public Collection getPares ( Long codi, String idioma ) throws DelegateException{
+    	try {
+            return getFacade().getPares(codi, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }
+    
+    public Collection getFills ( Long codi, String idioma ) throws DelegateException {
+    	try {
+            return getFacade().getFills(codi, idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
+    public Collection getArrels ( String idioma ) throws DelegateException {
+    	try {
+            return getFacade().getArrels(idioma);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
+    public Collection getLinks ( Long codi, int inicial, int tamany, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinks(codi, inicial, tamany, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }
+    
+    public Collection getLinksByOrderRange ( Long codi, int ordre_i, int ordre_f, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByOrderRange(codi, ordre_i, ordre_f, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    
+    public Collection getLinksByOrderRangeAndUO ( Long codi, int ordre_i, int ordre_f, String coduo, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByOrderRangeAndUO(codi, ordre_i, ordre_f, coduo, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public Collection getLinksByUO ( Long codi, Long coduo, int inicial, int tamany, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByUO(codi, coduo, inicial, tamany, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }    
+    
+    public Collection getLinksByUORSS ( Long codi, Long coduo, int inicial, int tamany, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByUORSS(codi, coduo, inicial, tamany, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }
+    
+    public Collection getLinksByMat ( Long codi, Long codmat, int inicial, int tamany, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByMat(codi, codmat, inicial, tamany, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }
+    
+    public Collection getLinksByMat ( Long codmat, int inicial, int tamany, String idioma, int valida, Date fultenv ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByMat(codmat, inicial, tamany, idioma, valida, fultenv);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    } 
+    
+    public Collection getLinksByMatForo ( Long codi, Long codmat, int inicial, int tamany, String idioma, int valida ) throws DelegateException {
+    	try {
+            return getFacade().getLinksByMatForo(codi, codmat, inicial, tamany, idioma, valida);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }  
+    
+    public LinkModel getLink(Long codi, String idioma, int valida, String previ) throws DelegateException {
+    	try {
+            return getFacade().getLink(codi, idioma, valida, previ);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }
+    
+    public Integer getNumLinks(Long codi) throws DelegateException {
+    	try {
+            return getFacade().getNumLinks(codi);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }    
+    
+    public Integer getNumLinksByUO(Long codi, String coduo) throws DelegateException {
+    	try {
+            return getFacade().getNumLinksByUO(codi, coduo);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }    
+    
+    public Integer getNumLinksByMat(Long codi, String materia) throws DelegateException {
+    	try {
+            return getFacade().getNumLinksByMat(codi, materia);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }    
+    
+    public String getData(Long codiFitxa) throws DelegateException {
+    	try {
+            return getFacade().getData(codiFitxa);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }    	
+    }     
+    
+    public void grabarSeccion(Seccion seccio, Long idPadre) throws DelegateException {
+    	try {
+    		
+    		if (seccio.getId() != null) getFacade().actualizarSeccion(seccio, idPadre);
+    		else getFacade().crearSeccion(seccio, idPadre);
+    		
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

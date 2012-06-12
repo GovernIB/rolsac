@@ -5,8 +5,6 @@ import java.util.Map;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
-import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
 
 
 public interface TramiteDelegateI {
@@ -49,6 +47,9 @@ public interface TramiteDelegateI {
 
 	public abstract void actualizarOrdenDocs(Map<String, String[]> map, long tid)
 			throws DelegateException;
+	
+	public abstract void actualizarOrdenTasas(Map<String, String[]> map, long tid)
+	throws DelegateException;
 
 	public abstract Taxa obtenirTaxa(Long docId) throws DelegateException;
 

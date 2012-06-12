@@ -1,11 +1,43 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.FetchMode;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.*;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocCollector;
+import org.apache.lucene.search.TopDocs;
 import org.ibit.lucene.analysis.AlemanAnalyzer;
 import org.ibit.lucene.analysis.CastellanoAnalyzer;
 import org.ibit.lucene.analysis.CatalanAnalyzer;
@@ -13,23 +45,37 @@ import org.ibit.lucene.analysis.InglesAnalyzer;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.model.ws.FichaUATransferible;
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Enlace;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaCrawler;
+import org.ibit.rol.sac.model.FichaRemota;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HistoricoFicha;
+import org.ibit.rol.sac.model.IndexObject;
+import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.Remoto;
+import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.TraduccionDocumento;
+import org.ibit.rol.sac.model.TraduccionFicha;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.TraduccionSeccion;
+import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IndexerDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
 
 /**
  * SessionBean para mantener y consultar Fichas (PORMAD)
@@ -97,7 +143,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         	Date FechaActualizacionBD = new Date();
             if (ficha.getId() == null) {
                 if (ficha.getValidacion().equals(Validacion.PUBLICA) && !userIsSuper()) {
-                    throw new SecurityException("No puede crear una ficha pï¿½blica");
+                    throw new SecurityException("No puede crear una ficha publica");
                 }
             } else {
                 if (!getAccesoManager().tieneAccesoFicha(ficha.getId())) {
@@ -106,7 +152,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	Ficha fichaBD = obtenerFicha(ficha.getId());
             	FechaActualizacionBD = fichaBD.getFechaActualizacion();            	
             }
-            /* Se alimenta la fecha de actualizaciï¿½n de forma automï¿½tica si no se ha introducido dato*/
+            /* Se alimenta la fecha de actualizacion de forma automatica si no se ha introducido dato */
             if (ficha.getFechaActualizacion() == null || DateUtils.fechasIguales(FechaActualizacionBD,ficha.getFechaActualizacion())) {
             	ficha.setFechaActualizacion(new Date());
             }        	            
@@ -237,6 +283,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         
     }
     
+    
     class DocsFichaComparator implements Comparator {
 		public int compare(Object o1, Object o2) {
 			Long x1; 
@@ -349,6 +396,118 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Busca todas las fichas que cumplen los criterios de busqueda del nuevo back (sacback2). 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {        
+        Session session = getSession();
+        
+        try {           
+            if (!userIsOper()) {
+                parametros.put("validacion", Validacion.PUBLICA);
+            }
+
+            List params = new ArrayList();
+            String i18nQuery = "";
+            String fetVitalQuery = "";            
+            String materiaQuery = "";            
+            String mainQuery = "select distinct ficha from Ficha as ficha , ficha.traducciones as trad, ficha.fichasua as fsua ";
+            
+            if (traduccion.get("idioma") != null) {
+                i18nQuery = populateQuery(parametros, traduccion, params);
+            } else {
+                String paramsQuery = populateQuery(parametros, new HashMap(), params);
+                if (paramsQuery.length() != 0) {
+                    i18nQuery += paramsQuery + " and ";
+                }
+                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+            }
+            
+            String orderBy = "";
+            if (campoOrdenacion != null && orden != null) orderBy = " order by ficha." + campoOrdenacion + " " + orden;
+            
+            Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+            Set<Long> uasIds = new HashSet<Long>();
+            
+            if (ua != null) {
+	            ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+	            uas.add(ua);
+            }
+            
+            if (uaMeves) {
+            	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
+            } 
+            
+            if (uaFilles) {
+            	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate(); 
+            	for (UnidadAdministrativa uaActual : uas) {
+            		uasIds.add(uaActual.getId());
+            		List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
+            		uasIds.addAll(idsDescendientes);                		
+            	}
+            } else {
+            	for (UnidadAdministrativa uaActual : uas) {
+            		uasIds.add(uaActual.getId());
+            	}
+            }
+            
+            String uaQuery;
+            if (!uasIds.isEmpty()) {
+            	uaQuery = " and fsua.unidadAdministrativa.id in (";
+	            String sep = "";
+                for (Long uaId : uasIds) {
+                	uaQuery += sep + uaId;
+                	sep = ", ";
+                }
+                uaQuery += ")";
+            } else {
+            	uaQuery = " ";
+            }
+            
+            
+            if(idFetVital != null){
+              mainQuery += ",ficha.hechosVitales as hec ";  
+              fetVitalQuery = " and hec.id = ? ";
+              params.add(idFetVital);
+            } 
+            
+            if(idMateria != null){
+              mainQuery += ",ficha.materias as mat ";  
+              materiaQuery = " and mat.id = ? "; 
+              params.add(idMateria);
+            }
+                       
+            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + orderBy);
+            for (int i = 0; i < params.size(); i++) {
+                Object o = params.get(i);
+                query.setParameter(i, o);
+            }
+     
+            List<Ficha> fichas = query.list();
+            if (!userIsOper()) {
+                return fichas;
+            } else {
+                List<Ficha> fichasAcceso = new ArrayList<Ficha>();
+                Usuario usuario = getUsuario(session);
+                for (Ficha ficha: fichas){
+                    if(tieneAcceso(usuario, ficha)){
+                        fichasAcceso.add(ficha);
+                     }   
+                }
+                return fichasAcceso;
+            }
+        } catch (DelegateException de) {
+            throw new EJBException(de);
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    
     /**
      * Aï¿½ade una nueva materia a la ficha
      * @ejb.interface-method
@@ -906,11 +1065,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
             Ficha ficha = (Ficha) session.load(Ficha.class, ficha_id);
             ficha.addFichaUA(fichaUA);
-            session.flush();
+            //session.flush();
             Ficha fichasend = obtenerFicha(ficha_id);
             Actualizador.actualizar(fichasend);
             indexBorraFicha(ficha.getId());
             indexInsertaFicha(fichasend,null);
+            
+            session.flush();
+            
             return ficha.getId();
         } catch (HibernateException e) {
             throw new EJBException(e);
@@ -971,7 +1133,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza los ordenes de las fichas de una secciï¿½n de una Unidad administrativa
+     * Actualiza los ordenes de las fichas de una seccion de una Unidad administrativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -993,7 +1155,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             		valor_orden= Integer.parseInt(parametros[0]);
             		
             		if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
-            			throw new SecurityException("No tiene acceso a la relaciï¿½n");
+            			throw new SecurityException("No tiene acceso a la relacion");
             		}
             		FichaUA ficha = (FichaUA) session.load(FichaUA.class, id);
 
@@ -1060,9 +1222,10 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             Ficha ficha = obtenerFicha(idFicha);
             indexBorraFicha(ficha.getId());
             indexInsertaFicha(ficha,null);
+            
             if(borrar)
                 log.debug("Entro en borrar remoto ficha UA");
-            	Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
+            	//Actualizador.borrar(new FichaUATransferible(idUA,idFicha,ceSeccion));
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -1134,9 +1297,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         }
 
         // Tratamiento de traducciones
-        if (aux.length() > 0) aux = aux + " and ";
-        aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
-        traduccion.remove("idioma");
+        if (!traduccion.isEmpty()) {
+            if (aux.length() > 0) aux = aux + " and ";
+            aux = aux + "index(trad) = '" + traduccion.get("idioma") + "'";
+            traduccion.remove("idioma");
+        }
         for (Iterator iter2 = traduccion.keySet().iterator(); iter2.hasNext();) {
             String key = (String) iter2.next();
             Object value = traduccion.get(key);
@@ -1921,7 +2086,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     
                     Ficha ficha = obtenerFicha(Long.valueOf(idFicha));
                     if(ficha.getFechaPublicacion()!=null &&dataInici!=null&&dataFi!=null){
-                    	log.debug("Buscada Crawler entre fechas: Fecha Publicaciï¿½n: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
+                    	log.debug("Buscada Crawler entre fechas: Fecha Publicacion: "+ficha.getFechaPublicacion()+" dataInici: "+dataInici+" dataFi: "+dataFi);
                     	if(ficha.getFechaPublicacion().before(dataFi)&&ficha.getFechaPublicacion().after(dataInici)){
                     		fichaCrawler.setTituloURL(tituloURL);
                             fichaCrawler.setURL(url);
@@ -1960,6 +2125,39 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		return analyzer;
 	}
 
+	 /**
+     * Construye el query de bï¿½squeda multiidioma en todos los campos
+     */
+    private String i18nPopulateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            if (value != null) {
+                if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
+    }
+	
 
      /**
      * Obtiene una Ficha.
@@ -2005,5 +2203,342 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
         return ficha;
 
     }
+    
+    /**
+     * Buscamos el numero de fichas activas des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Fichas activas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
+		Integer resultado = 0;
+		Session session = getSession();
+	
+		try {
+			
+        	Query query = null;
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery(" select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id " +
+        				" and fic.validacion = :validacion " +
+        				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
+        				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) " +
+        				" and ficUA.unidadAdministrativa.id in (:lId)  ");
+        		query.setInteger("validacion", Validacion.PUBLICA);
+        		query.setDate("fecha", fechaCaducidad);
+        		query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+        		
+        		resultado = (Integer) query.uniqueResult();
+        	}/* else {
+        		query = session.createQuery(" select count(*) from Ficha as fic where fic.validacion = :validacion " +
+        				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
+        				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) ");
+        		query.setInteger("validacion", Validacion.PUBLICA);
+        		query.setDate("fecha", fechaCaducidad);
+	        	
+        	} 
+        	
+        	resultado = (Integer) query.uniqueResult();
+        	*/       	        	
+    		
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+	
+		
+		return resultado;
+	}
+    
+	 /**
+     * Buscamos el numero de fichas caducadas des de la fecha actual
+     * 
+     * @param unidadAdministrativa
+     * @param fecha
+     * @return numero de Fichas caducadas
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad){
+		
+		Integer resultado = 0;		
+		Session session = getSession();
+		try {
+        	Query query = null;
+        	if (listaUnidadAdministrativaId.size() > 0) {
+        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ( " +
+	        			" ( fic.validacion != :validacion ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad is null and fic.fechaPublicacion > :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad >= :fecha and fic.fechaPublicacion > :fecha ) " +
+	        			" ) and ficUA.unidadAdministrativa.id in (:lId) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+	        	query.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+	        	
+	        	resultado = (Integer) query.uniqueResult();
+        	}/* else {
+        		query = session.createQuery("select count(*) from Ficha as fic where ( " +
+	        			" ( fic.validacion != :validacion ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad is null and fic.fechaPublicacion > :fecha ) " +
+	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad >= :fecha and fic.fechaPublicacion > :fecha ) " +
+	        			" ) ");
+	        	query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+        		query = session.createQuery("select count(*) from Ficha as fic where fic.validacion != :validacion " +
+        				" or fic.fechaCaducidad < :fecha " +
+        				" or ((fic.fechaCaducidad is null or fic.fechaCaducidad > :fecha) and fic.fechaPublicacion > :fecha) ");
+        		query.setInteger("validacion", Validacion.PUBLICA);
+	        	query.setDate("fecha", fechaCaducidad);
+        	}
+        	resultado = (Integer) query.uniqueResult();
+    		
+        	*/
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+			
+		return resultado;
+	}
+		
+	 /**
+     * Crea las relaciones sección-ficha de una unidad administrativa 
+     * 
+     * @param ua Unidad administrativa a actualizar  
+     * @param listaSeccionesFicha Estructura que contiene las nuevas "secciones-fichas"  
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     *   
+     */	
+	public void crearSeccionesFichas(UnidadAdministrativa ua, String[] listaSeccionesFicha ) {
+		
+		Set<FichaUA> listaFUAOrigen = ua.getTodasfichas();				
+		if (listaFUAOrigen == null) {
+			listaFUAOrigen = new HashSet<FichaUA>();
+		}
+		
+		// Construir una lista con la información de las distintas secciones		
+		Set<SimpleSeccion> listaSimpleSeccion = new HashSet<SimpleSeccion>();
+		
+		for ( FichaUA fichaUA : listaFUAOrigen ) {
+			listaSimpleSeccion.add(new SimpleSeccion(fichaUA.getSeccion().getId())); //, new Long(fichaUA.getOrdenseccion())));
+		}
+		
+		List<Long> listaFUABorrar = new ArrayList<Long>();		
+		List<SimpleFichaUA> listaSimpleFichaUA = new ArrayList<SimpleFichaUA>();
+		List<SimpleFichaUA> listaSimpleFichaUAIgnorar = new ArrayList<SimpleFichaUA>();
+				
+		// Crea una lista seccionID + fichaID + orden sección. El orden
+		// será el mismo en el cual vienen los datos
+		int i = 0;
+		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
+			
+			String seccionesFichaActual = listaSeccionesFicha[i];				
+			String[] datosSeccionFichas = seccionesFichaActual.split("[#]");				
+			String[] listaFichasSeccion = new String[]{};
+			
+			if (datosSeccionFichas.length > 1) {
+				listaFichasSeccion =  datosSeccionFichas[1].split("[|]");
+			}
+				
+			for (int j = 0; j < listaFichasSeccion.length; j++ ) {
+				listaSimpleFichaUA.add( new SimpleFichaUA(new Long(datosSeccionFichas[0]), 
+														  new Long(listaFichasSeccion[j]),
+														  new Long(i) ) );
+			}
+			
+			i++;			
+		}
+		
+		// Detectar las fichas ua a borrar (el orden también se tiene en cuenta)
+		for (FichaUA fUA : listaFUAOrigen ) {
+						
+			boolean encontrada = false;
+			
+			for (SimpleFichaUA simpleFichaUA : listaSimpleFichaUA ) {					
+				
+				if ( fUA.getSeccion().getId().equals( simpleFichaUA.getIdSeccion() ) && 
+					 fUA.getFicha().getId().equals( simpleFichaUA.getIdFicha() ) && 
+					 fUA.getUnidadAdministrativa().getId().equals( ua.getId() ) && 
+					 fUA.getOrdenseccion() == simpleFichaUA.getOrdenSeccion() ) {
 
+					listaSimpleFichaUAIgnorar.add( new SimpleFichaUA( simpleFichaUA.getIdSeccion(), 
+																	  simpleFichaUA.getIdFicha(), 
+																	  simpleFichaUA.getOrdenSeccion()) );
+					encontrada = true;						
+					break;						 					
+				}				
+			}	
+			
+			if ( !encontrada) 
+				listaFUABorrar.add( fUA.getId() );
+		}	
+		
+		//Crear sólo las que no existían antes
+		List<SimpleFichaUA> listaNuevas = new ArrayList<SimpleFichaUA>();
+		for (SimpleFichaUA fichaUA : listaSimpleFichaUA) {
+			if (!listaSimpleFichaUAIgnorar.contains( fichaUA)) { // || fichaUA.isCambioOrden(listaSimpleSeccion)) {
+				listaNuevas.add( fichaUA );
+			}
+		}		
+		
+		actualizaSeccionesFichaUA(ua, listaFUABorrar, listaNuevas);
+				
+	}	
+			
+	private void actualizaSeccionesFichaUA( UnidadAdministrativa ua, List<Long> listaBorrar, List<SimpleFichaUA> listaNuevas ) {
+		
+		Session session = null;
+		
+		try {
+			
+			if ( !(listaBorrar.isEmpty() && listaNuevas.isEmpty()) )
+				session = getSession();
+			
+			// Borrar
+			for ( Long idBorrar : listaBorrar ) {
+
+	            if (!getAccesoManager().tieneAccesoFichaUnidad(idBorrar))
+	                throw new SecurityException("No tiene acceso a la relación");
+				
+                FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idBorrar);
+                //final Long idFicha = fichaUA.getFicha().getId();
+                
+                boolean borrar = !(fichaUA.getFicha() instanceof Remoto); 
+                
+                fichaUA.getFicha().removeFichaUA(fichaUA);
+                fichaUA.getSeccion().removeFichaUA(fichaUA);
+               
+                if (ua != null) 
+                    ua.removeFichaUA(fichaUA);                
+                
+                //Ficha ficha = obtenerFicha(idFicha);
+                //indexBorraFicha(ficha.getId());
+                //indexInsertaFicha(ficha,null);
+                
+                session.delete(fichaUA);                
+                
+                if(borrar) log.debug("Entro en borrar remoto ficha UA");	                	
+			} 
+			
+			// Crear nuevas FichasUA
+			for (SimpleFichaUA simpleFichaUA : listaNuevas ) {
+		
+
+	            if (!getAccesoManager().tieneAccesoFicha(simpleFichaUA.getIdFicha())) {
+	                throw new SecurityException("No tiene acceso a la ficha");
+	            }
+
+	            FichaUA fichaUA = new FichaUA();
+	            
+	            if (ua.getId() != null) {
+
+              
+	                if (!getAccesoManager().tieneAccesoUnidad(ua.getId(), false)) {
+	                    throw new SecurityException("No tiene acceso a la ficha");
+	                }
+	                	                
+	                fichaUA.setOrdenseccion(simpleFichaUA.getOrdenSeccion().intValue());	                
+	                ua.addFichaUA(fichaUA);
+	                
+	            } else {
+	                if (!userIsSystem()) {
+	                    throw new SecurityException("No puede crear fichas generales.");
+	                }
+	            }
+
+	            Seccion seccion = (Seccion) session.load(Seccion.class, simpleFichaUA.getIdSeccion() );
+	            
+	            if (!getAccesoManager().tieneAccesoSeccion( simpleFichaUA.getIdSeccion() )) 
+	                throw new SecurityException("No tiene acceso a la sección");
+
+	            // Cuando se anyade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
+	            fichaUA.setSeccion(seccion);	            
+	            seccion.addFichaUA(fichaUA);
+
+	            Ficha ficha = (Ficha) session.load(Ficha.class, simpleFichaUA.getIdFicha());
+	            ficha.addFichaUA(fichaUA);
+	            
+	            Ficha fichasend = obtenerFicha( simpleFichaUA.getIdFicha() );
+	            Actualizador.actualizar(fichasend);
+	            
+	            //indexBorraFicha(ficha.getId());
+	            //indexInsertaFicha(fichasend,null);				
+			}
+			
+			if (session != null) { 
+				session.flush();
+				session.refresh(ua);
+			}
+			
+		} catch (HibernateException he) {
+            throw new EJBException(he);			
+		} finally {            
+			close(session);		
+		}		
+	}
+	
+	// Clase de apoyo para uso en "crearSeccionesFichas"
+	private class SimpleSeccion {
+		private Long idSeccion;
+//		private Long ordenSeccion; 
+		
+		public SimpleSeccion( Long idSeccion) { // , Long ordenSeccion ) {
+			this.idSeccion = idSeccion;
+//			this.ordenSeccion = ordenSeccion;
+		}
+		
+		public Long getIdSeccion() { return idSeccion; }
+//		public Long getOrdenSeccion() { return ordenSeccion; }
+				
+	}
+	
+	// Clase de apoyo para uso en "crearSeccionesFichas"
+	private class SimpleFichaUA {
+		
+		public SimpleFichaUA(Long idSeccion, Long idFicha, Long ordenSeccion) {
+			this.idSeccion = idSeccion;
+			this.idFicha = idFicha;
+			this.ordenSeccion = ordenSeccion;
+		}
+		
+		private Long idSeccion;
+		private Long idFicha;
+		private Long ordenSeccion;
+		
+		public Long getIdSeccion() { return idSeccion; }
+		public Long getIdFicha() { return idFicha; }
+		public Long getOrdenSeccion() { return ordenSeccion; }
+		
+		public boolean equals( Object o ) {
+			if ( !( o instanceof SimpleFichaUA) ) return false;
+			return getIdSeccion().equals( ((SimpleFichaUA) o).getIdSeccion() ) && 
+				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
+		}
+		
+		// Busca la sección en la lista pasada por parámetro y devuelve true o false 
+		// en función de si ha cambiado el orden o no.
+//		public boolean isCambioOrden( Set<SimpleSeccion> listaSecciones ) {
+//			
+//			boolean esCambioOrden = false;
+//			for (SimpleSeccion simpleSeccion : listaSecciones ) {
+//				
+//				if ( getIdSeccion().equals(simpleSeccion.getIdSeccion()) && 
+//					 !getOrdenSeccion().equals( simpleSeccion.getOrdenSeccion()) ) {
+//					
+//					esCambioOrden = true;
+//					break;
+//				}
+//			}
+//			
+//			return esCambioOrden;
+//		}
+	} 
+	
 }

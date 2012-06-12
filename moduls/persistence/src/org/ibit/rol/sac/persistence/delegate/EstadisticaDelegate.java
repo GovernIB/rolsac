@@ -1,15 +1,20 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.intf.EstadisticaFacade;
-import org.ibit.rol.sac.persistence.intf.EstadisticaFacadeHome;
-import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
+import java.rmi.RemoteException;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.List;
+
+import org.ibit.rol.sac.model.Estadistica;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.intf.EstadisticaFacade;
+import org.ibit.rol.sac.persistence.intf.EstadisticaFacadeHome;
+import org.ibit.rol.sac.persistence.util.EstadisticaFacadeUtil;
 
 /**
  * Business delegate para manipular Estadisticas.
@@ -134,6 +139,30 @@ public class EstadisticaDelegate implements StatelessDelegate {
     public void grabarEstadisticaFichaPorUA(Long ficha_id, Long idUA) throws DelegateException {
         try {
             getFacade().grabarEstadisticaFichaPorUA(ficha_id, idUA);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, List<Long> listaIdUA) throws DelegateException {
+        try {
+            return getFacade().listarUltimasModificaciones(fechaInicio, fechaFin, numeroRegistros, listaIdUA);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List<Integer> resumenOperativa(Date fechaInicio, Date fechaFin, Integer tipoOperacion, List<Long> listaIdUA) throws DelegateException {
+        try {
+            return getFacade().resumenOperativa(fechaInicio, fechaFin, tipoOperacion, listaIdUA);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    public List<Estadistica> listarEstadisticasListaUnidadAdministrativaId(List<Long> listaIdUA, Date fechaInicio, Date fechaFin) throws DelegateException {
+        try {
+            return getFacade().listarEstadisticasListaUnidadAdministrativaId(listaIdUA, fechaInicio, fechaFin);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

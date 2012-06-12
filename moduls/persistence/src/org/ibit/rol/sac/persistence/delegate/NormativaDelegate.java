@@ -1,28 +1,31 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.NormativaLocal;
-import org.ibit.rol.sac.model.NormativaExterna;
-import org.ibit.rol.sac.persistence.intf.NormativaFacade;
-import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
-import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
+import java.rmi.RemoteException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
+
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaExterna;
+import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.webcaib.DadesNormativaModel;
+import org.ibit.rol.sac.persistence.intf.NormativaFacade;
+import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
+import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
 
 /**
  * Business delegate para manipular normativas.
  */
 public class NormativaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public boolean autorizaCrearNormativa(Integer validacionNormativa) throws DelegateException {
@@ -80,6 +83,14 @@ public class NormativaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String campoOrdenacion, String orden) throws DelegateException {
+        try {
+            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, campoOrdenacion, orden);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }    
 
     public List buscarNormativas(String texto) throws DelegateException {
         try {
@@ -200,8 +211,47 @@ public class NormativaDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }  
-    
+   	
+   	//WEBCAIB
+   	public Collection normativesByActuacio(String codiActuacio, String idioma) throws DelegateException {
+   		try {
+   			return getFacade().normativesByActuacio(codiActuacio, idioma);
+   		} catch (RemoteException e) {
+   			throw new DelegateException(e);
+   		}
+   	}
+   	
+   	public Collection normativesByUO(String codiUO, String idioma, String any) throws DelegateException {
+   		try {
+			return getFacade().normativesByUO(codiUO, idioma, any);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+   	}
+   	
+   	public DadesNormativaModel getDadesNormativa(String codi, String idioma) throws DelegateException {
+   		try {
+   			return getFacade().getDadesNormativa(codi, idioma);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+   	}
 
+   	public Collection annexeByNormativa(String codi, String idioma) throws DelegateException {
+   		try {
+   			return getFacade().annexeByNormativa(codi, idioma);
+   		} catch (RemoteException e) {
+   			throw new DelegateException(e);
+   		}
+   	}
+   	
+   	public int buscarNormativasActivas(List<Long> llistaUnitatAdministrativaId) throws DelegateException {
+   		try {
+   			return getFacade().buscarNormativasActivas(llistaUnitatAdministrativaId);
+   		} catch (RemoteException e) {
+   			throw new DelegateException(e);
+   		}
+   	}
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

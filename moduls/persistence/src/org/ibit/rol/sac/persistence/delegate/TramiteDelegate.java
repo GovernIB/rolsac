@@ -1,27 +1,12 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import java.util.Map;
 
-import org.ibit.rol.sac.model.Document;
 import org.ibit.rol.sac.model.DocumentTramit;
-import org.ibit.rol.sac.model.ElementTramit;
-import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.persistence.intf.TramiteFacade;
-import org.ibit.rol.sac.persistence.intf.TramiteFacadeHome;
 import org.ibit.rol.sac.persistence.remote.vuds.ActualizacionVudsException;
 import org.ibit.rol.sac.persistence.remote.vuds.ValidateVudsException;
-import org.ibit.rol.sac.persistence.util.TramiteFacadeUtil;
-
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Map;
 
 /**
  * Business delegate para manipular Tramites.
@@ -50,6 +35,11 @@ public class TramiteDelegate  {
 	public void actualizarOrdenDocs(Map<String, String[]> map, long tid)
 			throws DelegateException {
 		impl.actualizarOrdenDocs(map, tid);
+	}
+	
+	public void actualizarOrdenTasas(Map<String, String[]> map, long tid)
+		throws DelegateException {
+		impl.actualizarOrdenTasas(map, tid);
 	}
 	
 	public void borrarDocument(Long id) throws DelegateException {

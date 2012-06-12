@@ -10,6 +10,7 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 public interface FichaDelegateI {
 
@@ -25,6 +26,8 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract List buscarFichas(String texto) throws DelegateException;
+	
+	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;
 
 	public abstract List listarFichas() throws DelegateException;
 
@@ -38,7 +41,7 @@ public interface FichaDelegateI {
 	public abstract List listarFichasThin() throws DelegateException;
 
 	public abstract Ficha obtenerFicha(Long id) throws DelegateException;
-
+	
 	public abstract List buscarFichasMateria(Long id) throws DelegateException;
 
 	public abstract List buscarFichasHuerfanas() throws DelegateException;
@@ -146,5 +149,10 @@ public interface FichaDelegateI {
 			throws DelegateException;
 
 	public abstract Ficha obtenerFichaPMA(Long id) throws DelegateException;
-
+	
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
+	   
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
+	
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException;
 }

@@ -1,11 +1,13 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.webcaib.MateriaModel;
 
 public interface MateriaDelegateI {
 
@@ -60,5 +62,17 @@ public interface MateriaDelegateI {
 
 	public abstract Materia obtenerMateriaFichasProced(Long id)
 			throws DelegateException;
+	
 
+	//WECCAIB//	
+	public abstract MateriaModel getMateria(Long codi, String idioma)
+		throws DelegateException;
+	
+	public abstract Collection getMateries ( String idioma ) 
+		throws DelegateException;
+	
+	public abstract MateriaModel getIcones ( Long codi, Long perfil ) 
+		throws DelegateException;
+
+	
 }

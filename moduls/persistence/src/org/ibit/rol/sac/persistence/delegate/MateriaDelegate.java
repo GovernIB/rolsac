@@ -1,8 +1,13 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.webcaib.MateriaModel;
 import org.ibit.rol.sac.persistence.intf.MateriaFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
@@ -128,7 +133,21 @@ import java.util.Set;
 			return impl.obtenerMateriaFichasProced(id);
 		}
 
+		//WEBCAIB//
+				
+		public MateriaModel getMateria ( Long codi, String idioma )
+				throws DelegateException {
+			return impl.getMateria(codi, idioma);
+		}		
 		
+		public Collection getMateries ( String idioma ) 
+				throws DelegateException {
+			return impl.getMateries(idioma);
+ 		}
 		
+		public MateriaModel getIcones ( Long codi, Long perfil ) 
+				throws DelegateException {
+			return impl.getIcones(codi, perfil);
+		}
 
 }

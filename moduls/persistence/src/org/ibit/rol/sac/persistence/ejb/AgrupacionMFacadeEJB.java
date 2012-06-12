@@ -124,12 +124,12 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB {
         try {
             AgrupacionMateria agrupacion = (AgrupacionMateria) session.load(AgrupacionMateria.class, id);
 
-            List<MateriaAgrupacionM> mata = agrupacion.getMateriasAgrupacionM();
-            for (MateriaAgrupacionM matagr : mata) {
-            	Materia mat = matagr.getMateria();
-                mat.removeMateriaAgrupacionM(matagr);
+            if (agrupacion.getMateriasAgrupacionM() != null) {
+            	for (MateriaAgrupacionM materiaAgrupacionM : agrupacion.getMateriasAgrupacionM()) {
+            		if (materiaAgrupacionM != null) session.delete(materiaAgrupacionM);
+            	}
             }
-
+            
             session.delete(agrupacion);
             session.flush();
             
@@ -204,5 +204,35 @@ public abstract class AgrupacionMFacadeEJB extends HibernateEJB {
 		return resultado;
 	}
 
-
+	/**
+     * Crea o actualiza una Agrupacion Hecho Vital.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */
+    public Long guardarAgrupacionM(AgrupacionMateria materia, List<MateriaAgrupacionM> llistaMateriesOld) {
+        Session session = getSession();
+        try {
+        	
+        	if (llistaMateriesOld != null) {
+        		for (MateriaAgrupacionM materiaAgrupacionM : llistaMateriesOld) {
+        			if (materiaAgrupacionM != null) session.delete(materiaAgrupacionM);
+        		}
+        	}
+        	
+        	List<MateriaAgrupacionM> listaMateriaAgrupacionM = materia.getMateriasAgrupacionM();
+        	
+        	// Seteamos el nuevo list
+        	for (MateriaAgrupacionM materiaAgrupacionM : listaMateriaAgrupacionM) {
+				session.saveOrUpdate(materiaAgrupacionM);
+			}
+        	
+            session.saveOrUpdate(materia);
+            session.flush();
+            return materia.getId();
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
 }

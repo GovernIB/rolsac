@@ -86,6 +86,17 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     }  
 
     /* (non-Javadoc)
+     * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
+     */
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
+        try {
+            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, uaFilles, uaMeves, campoOrdenacion, orden);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }              
+    
+    /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#listarFichas()
 	 */
     public List listarFichas() throws DelegateException {
@@ -128,7 +139,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
             throw new DelegateException(e);
         }
     }
-
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichasMateria(java.lang.Long)
 	 */
@@ -488,6 +499,31 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	public Ficha obtenerFichaPMA(Long id)  throws DelegateException {
 		 try {
 	           return getFacade().obtenerFichaPMA(id);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	
+	
+	
+	public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
+		try {
+	           return getFacade().buscarFichasActivas(listaUnidadAdministrativaId, fechaCaducidad);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad )throws DelegateException {
+		try {
+	           return getFacade().buscarFichasCaducadas(listaUnidadAdministrativaId,fechaCaducidad);
+	       } catch (RemoteException e) {
+	           throw new DelegateException(e);
+	       }
+	}
+	
+	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException {
+		try {
+	           getFacade().crearSeccionesFichas(ua, listaSeccionesFicha);
 	       } catch (RemoteException e) {
 	           throw new DelegateException(e);
 	       }

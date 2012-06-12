@@ -72,6 +72,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -117,7 +118,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     protected String indexType;
 
     /**
-     * Ubicació del directori de Lucene a emprar.
+     * Ubicaciï¿½ del directori de Lucene a emprar.
      * @ejb.env-entry value="${index.location}"
      */
     protected String indexLocation;
@@ -761,7 +762,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Busca documentos para un idioma concreto, con opción de sugerir
+     * Busca documentos para un idioma concreto, con opciï¿½n de sugerir
      * en caso de haber encontrado nada interesante.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1078,7 +1079,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     /**
-     * Busca documentos para un idioma concreto, con opción de sugerir
+     * Busca documentos para un idioma concreto, con opciï¿½n de sugerir
      * en caso de haber encontrado nada interesante.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1313,8 +1314,6 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
             }            
             
             log.debug(querytotal.toString());
-
-    	
     	return querytotal;
     }
     
@@ -1498,7 +1497,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
         } else if (HIBERNATE_INDEX_TYPE.equals(indexType)) {
             directory = new HibernateDirectory(sessionFactory);
         } else {
-            throw new EJBException("Tipo de índice no valido: " + indexType);
+            throw new EJBException("Tipo de ï¿½ndice no valido: " + indexType);
         }
         if (!IndexReader.indexExists(directory)) {
             new IndexWriter(directory, analyzer, true).close();
@@ -1514,7 +1513,7 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
 			writer.setMergeFactor(25);
 			writer.setMaxMergeDocs(625);
 			
-			//añade un documento
+			//aï¿½ade un documento
     		if (operacion.equals(OPER_ADDDOCUMENT)) {
                 Document document = getDocument(indexObject);
                 writer.addDocument(document);
@@ -1624,8 +1623,8 @@ public abstract class IndexerFacadeEJB extends HibernateEJB {
     
     
     
-	/* Clase que sobreescribe un método de QueryParser para permitir hacer sugerencias 
-	 * cuando las búsquedas sean compuestas
+	/* Clase que sobreescribe un mï¿½todo de QueryParser para permitir hacer sugerencias 
+	 * cuando las bï¿½squedas sean compuestas
 	 * 
 	 */ 
 	

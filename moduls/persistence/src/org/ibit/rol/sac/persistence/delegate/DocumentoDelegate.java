@@ -55,6 +55,14 @@ public class DocumentoDelegate implements StatelessDelegate {
            }
        }
 
+    public Archivo obtenerArchivoDocumentoTramite(Long id, String lang, boolean useDefault) throws DelegateException {
+        try {
+            return getFacade().obtenerArchivoDocumentoTramite(id, lang, useDefault);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }       
+    
     public void actualizarOrdenDocs(Map map) throws DelegateException {
         try {
             getFacade().actualizarOrdenDocs(map);

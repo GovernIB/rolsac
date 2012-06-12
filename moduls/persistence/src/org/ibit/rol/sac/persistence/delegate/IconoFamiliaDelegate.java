@@ -10,7 +10,7 @@ import javax.ejb.Handle;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 import java.rmi.RemoteException;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Business delegate para manipular Iconos familias.
@@ -53,13 +53,21 @@ public class IconoFamiliaDelegate implements StatelessDelegate {
         }
     }
 
-    public void borrarIconoFamilia(Long id) throws DelegateException {
-        try {
-            getFacade().borrarIconoFamilia(id);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }
-    }
+     public void borrarIconoFamilia(Long id) throws DelegateException {
+         try {
+             getFacade().borrarIconoFamilia(id);
+         } catch (RemoteException e) {
+             throw new DelegateException(e);
+         }
+     }
+     
+     public void borrarIconosFamilia(Collection<Long> iconosABorrar) throws DelegateException {
+         try {
+             getFacade().borrarIconosFamilia(iconosABorrar);
+         } catch (RemoteException e) {
+             throw new DelegateException(e);
+         }
+     }
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
