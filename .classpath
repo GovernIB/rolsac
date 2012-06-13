@@ -11,6 +11,8 @@
 	<classpathentry kind="src" path="output/persistence/gen-src"/>
 	<classpathentry kind="src" path="moduls/persistence/vuds/src"/>
 	<classpathentry kind="src" path="moduls/utils/src"/>
+	<classpathentry kind="src" path="moduls/api/src"/>
+	<classpathentry kind="src" path="test/api"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>
@@ -100,5 +102,8 @@
 	<classpathentry kind="lib" path="lib/webcaib/axis.jar"/>
 	<classpathentry kind="lib" path="lib/micromodel.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/struts.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/dom4j.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/odmg.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/ehcache.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

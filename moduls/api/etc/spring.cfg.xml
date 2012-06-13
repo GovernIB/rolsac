@@ -1,0 +1,531 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+    default-lazy-init="true">
+    
+    <!-- TODO: remove default-lazy-init="true" when all is done -->
+
+	<!-- context:annotation-config / -->
+	<!-- context:component-scan base-package="es.caib.rolsac.api.v2"/ -->
+
+
+	<!-- RolsacQueryService beans -->
+	<bean id="rolsacQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.rolsac.RolsacQueryServiceAdapter">
+		<property name="rolsacQueryServiceStrategy" ref="rolsacQueryServiceEJBStrategy" />
+	</bean>
+
+	<bean id="rolsacQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBStrategy">
+		<property name="rolsacQueryServiceDelegate" ref="rolsacQueryServiceDelegate" />
+	</bean>
+
+	<bean id="rolsacQueryServiceDelegate" class="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceDelegate">
+		<property name="rolsacQueryServiceLocator" ref="rolsacQueryServiceEJBLocator" />
+	</bean>
+
+	<bean id="rolsacQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJBLocator" />
+
+	<!-- TODO: Remote rolsacQueryServiceEJB bean? -->
+	<!-- RolsacQueryService beans -->
+
+
+	<!-- AgrupacioFetVitalQueryService beans -->
+	<bean id="agrupacioFetVitalQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter" scope="prototype">
+		<property name="agrupacioFetVitalQueryServiceStrategy" ref="agrupacioFetVitalQueryServiceEJBStrategy" />
+	</bean>
+
+	<bean id="agrupacioFetVitalQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.AgrupacioFetVitalQueryServiceEJBStrategy">
+		<property name="agrupacioFetVitalQueryServiceDelegate" ref="agrupacioFetVitalQueryServiceDelegate" />
+	</bean>
+
+	<bean id="agrupacioFetVitalQueryServiceDelegate" class="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.AgrupacioFetVitalQueryServiceDelegate">
+		<property name="agrupacioFetVitalQueryServiceLocator" ref="agrupacioFetVitalQueryServiceEJBLocator" />
+	</bean>
+
+	<bean id="agrupacioFetVitalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.AgrupacioFetVitalQueryServiceEJBLocator" />
+	<!-- AgrupacioFetVitalQueryService beans -->
+
+
+	<!-- AgrupacioMateriaQueryService beans -->
+	<bean id="agrupacioMateriaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter" scope="prototype">
+		<property name="agrupacioMateriaQueryServiceStrategy" ref="agrupacioMateriaQueryServiceEJBStrategy" />
+	</bean>
+
+	<bean id="agrupacioMateriaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.agrupacioMateria.ejb.AgrupacioMateriaQueryServiceEJBStrategy">
+		<property name="agrupacioMateriaQueryServiceDelegate" ref="agrupacioMateriaQueryServiceDelegate" />
+	</bean>
+
+	<bean id="agrupacioMateriaQueryServiceDelegate" class="es.caib.rolsac.api.v2.agrupacioMateria.ejb.AgrupacioMateriaQueryServiceDelegate">
+		<property name="agrupacioMateriaQueryServiceLocator" ref="agrupacioMateriaQueryServiceEJBLocator" />
+	</bean>
+
+	<bean id="agrupacioMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.agrupacioMateria.ejb.AgrupacioMateriaQueryServiceEJBLocator" />
+	<!-- AgrupacioMateriaQueryService beans -->
+
+
+    <!-- ArxiuMQueryService beans -->
+    <bean id="arxiuQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter" scope="prototype" />
+    <!-- ArxiuMQueryService beans -->
+
+
+	<!-- ButlletiQueryService beans -->
+	<bean id="butlletiQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter" scope="prototype">
+		<property name="butlletiQueryServiceStrategy" ref="butlletiQueryServiceEJBStrategy" />
+	</bean>
+
+	<bean id="butlletiQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.butlleti.ejb.ButlletiQueryServiceEJBStrategy">
+		<property name="butlletiQueryServiceDelegate" ref="butlletiQueryServiceDelegate" />
+	</bean>
+
+	<bean id="butlletiQueryServiceDelegate" class="es.caib.rolsac.api.v2.butlleti.ejb.ButlletiQueryServiceDelegate">
+		<property name="butlletiQueryServiceLocator" ref="butlletiQueryServiceEJBLocator" />
+	</bean>
+
+	<bean id="butlletiQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.butlleti.ejb.ButlletiQueryServiceEJBLocator" />
+	<!-- ButlletiQueryService beans -->
+
+
+	<!-- DocumentQueryService beans -->
+	<bean id="documentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter" scope="prototype">
+		<property name="documentQueryServiceStrategy" ref="documentQueryServiceEJBStrategy" />
+	</bean>
+
+	<bean id="documentQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.document.ejb.DocumentQueryServiceEJBStrategy">
+		<property name="documentQueryServiceDelegate" ref="documentQueryServiceDelegate" />
+	</bean>
+
+	<bean id="documentQueryServiceDelegate" class="es.caib.rolsac.api.v2.document.ejb.DocumentQueryServiceDelegate">
+		<property name="documentQueryServiceLocator" ref="documentQueryServiceEJBLocator" />
+	</bean>
+
+	<bean id="documentQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.document.ejb.DocumentQueryServiceEJBLocator" />
+	<!-- DocumentQueryService beans -->
+
+
+    <!-- DocumentTramitQueryService beans -->
+    <bean id="documentTramitQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter" scope="prototype">
+        <property name="documentTramitQueryServiceStrategy" ref="documentTramitQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="documentTramitQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceEJBStrategy">
+        <property name="documentTramitQueryServiceDelegate" ref="documentTramitQueryServiceDelegate" />
+    </bean>
+
+    <bean id="documentTramitQueryServiceDelegate" class="es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceDelegate">
+        <property name="documentTramitQueryServiceLocator" ref="documentTramitQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="documentTramitQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceEJBLocator" />
+    <!-- DocumentTramitQueryService beans -->
+    
+
+    <!-- EdificiQueryService beans -->
+    <bean id="edificiQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter" scope="prototype">
+        <property name="edificiQueryServiceStrategy" ref="edificiQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="edificiQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.edifici.ejb.EdificiQueryServiceEJBStrategy">
+        <property name="edificiQueryServiceDelegate" ref="edificiQueryServiceDelegate" />
+    </bean>
+
+    <bean id="edificiQueryServiceDelegate" class="es.caib.rolsac.api.v2.edifici.ejb.EdificiQueryServiceDelegate">
+        <property name="edificiQueryServiceLocator" ref="edificiQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="edificiQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.edifici.ejb.EdificiQueryServiceEJBLocator" />
+    <!-- EdificiQueryService beans -->
+
+
+    <!-- EnllacQueryService beans -->
+    <bean id="enllacQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter" scope="prototype">
+        <property name="enllacQueryServiceStrategy" ref="enllacQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="enllacQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJBStrategy">
+        <property name="enllacQueryServiceDelegate" ref="enllacQueryServiceDelegate" />
+    </bean>
+
+    <bean id="enllacQueryServiceDelegate" class="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceDelegate">
+        <property name="enllacQueryServiceLocator" ref="enllacQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="enllacQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJBLocator" />
+    <!-- EnllacQueryService beans -->
+    
+
+    <!-- EspaiTerritorialQueryService beans -->
+    <bean id="espaiTerritorialQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter" scope="prototype">
+        <property name="espaiTerritorialQueryServiceStrategy" ref="espaiTerritorialQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="espaiTerritorialQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.espaiTerritorial.ejb.EspaiTerritorialQueryServiceEJBStrategy">
+        <property name="espaiTerritorialQueryServiceDelegate" ref="espaiTerritorialQueryServiceDelegate" />
+    </bean>
+
+    <bean id="espaiTerritorialQueryServiceDelegate" class="es.caib.rolsac.api.v2.espaiTerritorial.ejb.EspaiTerritorialQueryServiceDelegate">
+        <property name="espaiTerritorialQueryServiceLocator" ref="espaiTerritorialQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="espaiTerritorialQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.espaiTerritorial.ejb.EspaiTerritorialQueryServiceEJBLocator" />
+    <!-- EspaiTerritorialQueryService beans -->
+
+
+    <!-- EstadisticaInsertService beans -->
+    <bean id="estadisticaInsertServiceEJBAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter">
+        <property name="estadisticaInsertServiceStrategy" ref="estadisticaInsertServiceEJBStrategy" />
+    </bean>
+
+    <bean id="estadisticaInsertServiceEJBStrategy" class="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceEJBStrategy">
+        <property name="estadisticaInsertServiceDelegate" ref="estadisticaInsertServiceDelegate" />
+    </bean>
+
+    <bean id="estadisticaInsertServiceDelegate" class="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceDelegate">
+        <property name="estadisticaInsertServiceLocator" ref="estadisticaInsertServiceEJBLocator" />
+    </bean>
+
+    <bean id="estadisticaInsertServiceEJBLocator" class="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceEJBLocator" />
+    <!-- EstadisticaInsertService beans -->
+    
+
+    <!-- FamiliaQueryService beans -->
+    <bean id="familiaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter" scope="prototype">
+        <property name="familiaQueryServiceStrategy" ref="familiaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="familiaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.familia.ejb.FamiliaQueryServiceEJBStrategy">
+        <property name="familiaQueryServiceDelegate" ref="familiaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="familiaQueryServiceDelegate" class="es.caib.rolsac.api.v2.familia.ejb.FamiliaQueryServiceDelegate">
+        <property name="familiaQueryServiceLocator" ref="familiaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="familiaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.familia.ejb.FamiliaQueryServiceEJBLocator" />
+    <!-- FamiliaQueryService beans -->
+    
+    
+    <!-- FetVitalQueryService beans -->
+    <bean id="fetVitalQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter" scope="prototype">
+        <property name="fetVitalQueryServiceStrategy" ref="fetVitalQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="fetVitalQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.fetVital.ejb.FetVitalQueryServiceEJBStrategy">
+        <property name="fetVitalQueryServiceDelegate" ref="fetVitalQueryServiceDelegate" />
+    </bean>
+
+    <bean id="fetVitalQueryServiceDelegate" class="es.caib.rolsac.api.v2.fetVital.ejb.FetVitalQueryServiceDelegate">
+        <property name="fetVitalQueryServiceLocator" ref="fetVitalQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="fetVitalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fetVital.ejb.FetVitalQueryServiceEJBLocator" />
+    <!-- FetVitalQueryService beans -->
+    
+    
+    <!-- FitxaQueryService beans -->
+    <bean id="fitxaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter" scope="prototype">
+        <property name="fitxaQueryServiceStrategy" ref="fitxaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="fitxaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceEJBStrategy">
+        <property name="fitxaQueryServiceDelegate" ref="fitxaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="fitxaQueryServiceDelegate" class="es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceDelegate">
+        <property name="fitxaQueryServiceLocator" ref="fitxaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="fitxaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fitxa.ejb.FitxaQueryServiceEJBLocator" />
+    <!-- FitxaQueryService beans -->
+    
+    
+    <!-- FitxaUAQueryService beans -->
+    <bean id="fitxaUAQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter" scope="prototype">
+        <property name="fitxaUAQueryServiceStrategy" ref="fitxaUAQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="fitxaUAQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBStrategy">
+        <property name="fitxaUAQueryServiceDelegate" ref="fitxaUAQueryServiceDelegate" />
+    </bean>
+
+    <bean id="fitxaUAQueryServiceDelegate" class="es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceDelegate">
+        <property name="fitxaUAQueryServiceLocator" ref="fitxaUAQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="fitxaUAQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBLocator" />
+    <!-- FitxaQueryService beans -->
+    
+    
+    <!-- FormulariQueryService beans -->
+    <bean id="formulariQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter" scope="prototype">
+        <property name="formulariQueryServiceStrategy" ref="formulariQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="formulariQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceEJBStrategy">
+        <property name="formulariQueryServiceDelegate" ref="formulariQueryServiceDelegate" />
+    </bean>
+
+    <bean id="formulariQueryServiceDelegate" class="es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceDelegate">
+        <property name="formulariQueryServiceLocator" ref="formulariQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="formulariQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceEJBLocator" />
+    <!-- FormulariQueryService beans -->
+    
+    
+    <!-- IconaFamiliaQueryService beans -->
+    <bean id="iconaFamiliaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter" scope="prototype">
+        <property name="iconaFamiliaQueryServiceStrategy" ref="iconaFamiliaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="iconaFamiliaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceEJBStrategy">
+        <property name="iconaFamiliaQueryServiceDelegate" ref="iconaFamiliaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="iconaFamiliaQueryServiceDelegate" class="es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceDelegate">
+        <property name="iconaFamiliaQueryServiceLocator" ref="iconaFamiliaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="iconaFamiliaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceEJBLocator" />
+    <!-- IconaFamiliaQueryService beans -->
+    
+    
+    <!-- IconaMateriaQueryService beans -->
+    <bean id="iconaMateriaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter" scope="prototype">
+        <property name="iconaMateriaQueryServiceStrategy" ref="iconaMateriaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="iconaMateriaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.iconaMateria.ejb.IconaMateriaQueryServiceEJBStrategy">
+        <property name="iconaMateriaQueryServiceDelegate" ref="iconaMateriaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="iconaMateriaQueryServiceDelegate" class="es.caib.rolsac.api.v2.iconaMateria.ejb.IconaMateriaQueryServiceDelegate">
+        <property name="iconaMateriaQueryServiceLocator" ref="iconaMateriaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="iconaMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iconaMateria.ejb.IconaMateriaQueryServiceEJBLocator" />
+    <!-- IconaMateriaQueryService beans -->
+    
+    
+    <!-- MateriaQueryService beans -->
+    <bean id="materiaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter" scope="prototype">
+        <property name="materiaQueryServiceStrategy" ref="materiaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="materiaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJBStrategy">
+        <property name="materiaQueryServiceDelegate" ref="materiaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="materiaQueryServiceDelegate" class="es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceDelegate">
+        <property name="materiaQueryServiceLocator" ref="materiaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="materiaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJBLocator" />
+    <!-- MateriaQueryService beans -->
+    
+    
+    <!-- MateriAgrupacioaQueryService beans -->
+    <bean id="materiaAgrupacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceAdapter" scope="prototype">
+        <property name="materiaAgrupacioQueryServiceStrategy" ref="materiaAgrupacioQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="materiaAgrupacioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceEJBStrategy">
+        <property name="materiaAgrupacioQueryServiceDelegate" ref="materiaAgrupacioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="materiaAgrupacioQueryServiceDelegate" class="es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceDelegate">
+        <property name="materiaAgrupacioQueryServiceLocator" ref="materiaAgrupacioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="materiaAgrupacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materia.ejb.MateriaAgrupacioQueryServiceEJBLocator" />
+    <!-- MateriaAgrupacioQueryService beans -->
+    
+    
+    <!-- NormativaQueryService beans -->
+    <bean id="normativaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter" scope="prototype">
+        <property name="normativaQueryServiceStrategy" ref="normativaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="normativaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJBStrategy">
+        <property name="normativaQueryServiceDelegate" ref="normativaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="normativaQueryServiceDelegate" class="es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceDelegate">
+        <property name="normativaQueryServiceLocator" ref="normativaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="normativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJBLocator" />
+    <!-- NormativaQueryService beans -->
+    
+    
+    <!-- PerfilQueryService beans -->
+    <bean id="perfilQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter" scope="prototype">
+        <property name="perfilQueryServiceStrategy" ref="perfilQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="perfilQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.perfil.ejb.PerfilQueryServiceEJBStrategy">
+        <property name="perfilQueryServiceDelegate" ref="perfilQueryServiceDelegate" />
+    </bean>
+
+    <bean id="perfilQueryServiceDelegate" class="es.caib.rolsac.api.v2.perfil.ejb.PerfilQueryServiceDelegate">
+        <property name="perfilQueryServiceLocator" ref="perfilQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="perfilQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.perfil.ejb.PerfilQueryServiceEJBLocator" />
+    <!-- PerfilQueryService beans -->
+
+    
+    <!-- PersonalQueryService beans -->
+    <bean id="personalQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.personal.PersonalQueryServiceAdapter" scope="prototype">
+        <property name="personalQueryServiceStrategy" ref="personalQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="personalQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.personal.ejb.PersonalQueryServiceEJBStrategy">
+        <property name="personalQueryServiceDelegate" ref="personalQueryServiceDelegate" />
+    </bean>
+
+    <bean id="personalQueryServiceDelegate" class="es.caib.rolsac.api.v2.personal.ejb.PersonalQueryServiceDelegate">
+        <property name="personalQueryServiceLocator" ref="personalQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="personalQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.personal.ejb.PersonalQueryServiceEJBLocator" />
+    <!-- PersonalQueryService beans -->
+    
+    
+	<!-- ProcedimentQueryService beans -->
+    <bean id="procedimentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter" scope="prototype">
+        <property name="procedimentQueryServiceStrategy" ref="procedimentQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="procedimentQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceEJBStrategy">
+        <property name="procedimentQueryServiceDelegate" ref="procedimentQueryServiceDelegate" />
+    </bean>
+
+    <bean id="procedimentQueryServiceDelegate" class="es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceDelegate">
+        <property name="procedimentQueryServiceLocator" ref="procedimentQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="procedimentQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceEJBLocator" />
+    <!-- ProcedimentQueryService beans -->
+    
+    
+    <!-- PublicObjectiuQueryService beans -->
+    <bean id="publicObjectiuQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter" scope="prototype">
+        <property name="publicObjectiuQueryServiceStrategy" ref="publicObjectiuQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="publicObjectiuQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBStrategy">
+        <property name="publicObjectiuQueryServiceDelegate" ref="publicObjectiuQueryServiceDelegate" />
+    </bean>
+
+    <bean id="publicObjectiuQueryServiceDelegate" class="es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceDelegate">
+        <property name="publicObjectiuQueryServiceLocator" ref="publicObjectiuQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="publicObjectiuQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBLocator" />
+    <!-- PublicObjectiuQueryService beans -->
+
+    
+    <!-- SeccioQueryService beans -->
+    <bean id="seccioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter" scope="prototype">
+        <property name="seccioQueryServiceStrategy" ref="seccioQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="seccioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.seccio.ejb.SeccioQueryServiceEJBStrategy">
+        <property name="seccioQueryServiceDelegate" ref="seccioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="seccioQueryServiceDelegate" class="es.caib.rolsac.api.v2.seccio.ejb.SeccioQueryServiceDelegate">
+        <property name="seccioQueryServiceLocator" ref="seccioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="seccioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.seccio.ejb.SeccioQueryServiceEJBLocator" />
+    <!-- SeccioQueryService beans -->
+    
+    
+    <!-- TaxaQueryService beans -->
+    <bean id="taxaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter" scope="prototype">
+        <property name="taxaQueryServiceStrategy" ref="taxaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="taxaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.taxa.ejb.TaxaQueryServiceEJBStrategy">
+        <property name="taxaQueryServiceDelegate" ref="taxaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="taxaQueryServiceDelegate" class="es.caib.rolsac.api.v2.taxa.ejb.TaxaQueryServiceDelegate">
+        <property name="taxaQueryServiceLocator" ref="taxaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="taxaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.taxa.ejb.TaxaQueryServiceEJBLocator" />
+    <!-- TaxaQueryService beans -->
+    
+    
+    <!-- TramitQueryService beans -->
+    <bean id="tramitQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter" scope="prototype">
+        <property name="tramitQueryServiceStrategy" ref="tramitQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="tramitQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.tramit.ejb.TramitQueryServiceEJBStrategy">
+        <property name="tramitQueryServiceDelegate" ref="tramitQueryServiceDelegate" />
+    </bean>
+
+    <bean id="tramitQueryServiceDelegate" class="es.caib.rolsac.api.v2.tramit.ejb.TramitQueryServiceDelegate">
+        <property name="tramitQueryServiceLocator" ref="tramitQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="tramitQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.tramit.ejb.TramitQueryServiceEJBLocator" />
+    <!-- TramitQueryService beans -->
+
+
+    <!-- UnitatAdministrativaQueryService beans -->
+    <bean id="unitatAdministrativaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter" scope="prototype">
+        <property name="unitatAdministrativaQueryServiceStrategy" ref="unitatAdministrativaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="unitatAdministrativaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.unitatAdministrativa.ejb.UnitatAdministrativaQueryServiceEJBStrategy">
+        <property name="unitatAdministrativaQueryServiceDelegate" ref="unitatAdministrativaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="unitatAdministrativaQueryServiceDelegate" class="es.caib.rolsac.api.v2.unitatAdministrativa.ejb.UnitatAdministrativaQueryServiceDelegate">
+        <property name="unitatAdministrativaQueryServiceLocator" ref="unitatAdministrativaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="unitatAdministrativaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.unitatAdministrativa.ejb.UnitatAdministrativaQueryServiceEJBLocator" />
+    <!-- UnitatAdministrativaQueryService beans -->
+    
+    
+    <!-- UnitatMateriaQueryService beans -->
+    <bean id="unitatMateriaQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter" scope="prototype">
+        <property name="unitatMateriaQueryServiceStrategy" ref="unitatMateriaQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="unitatMateriaQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.unitatMateria.ejb.UnitatMateriaQueryServiceEJBStrategy">
+        <property name="unitatMateriaQueryServiceDelegate" ref="unitatMateriaQueryServiceDelegate" />
+    </bean>
+
+    <bean id="unitatMateriaQueryServiceDelegate" class="es.caib.rolsac.api.v2.unitatMateria.ejb.UnitatMateriaQueryServiceDelegate">
+        <property name="unitatMateriaQueryServiceLocator" ref="unitatMateriaQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="unitatMateriaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.unitatMateria.ejb.UnitatMateriaQueryServiceEJBLocator" />
+    <!-- UnitatMateriaQueryService beans -->
+    
+    
+    <!-- UsuariQueryService beans -->
+    <bean id="usuariQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter" scope="prototype">
+        <property name="usuariQueryServiceStrategy" ref="usuariQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="usuariQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceEJBStrategy">
+        <property name="usuariQueryServiceDelegate" ref="usuariQueryServiceDelegate" />
+    </bean>
+
+    <bean id="usuariQueryServiceDelegate" class="es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceDelegate">
+        <property name="usuariQueryServiceLocator" ref="usuariQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="usuariQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceEJBLocator" />
+    <!-- UsuariQueryService beans -->    
+    
+</beans>
