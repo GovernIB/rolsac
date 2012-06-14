@@ -877,6 +877,17 @@ public class RolsacQueryServiceTest {
     }
     
     /**
+     * Cas d'us: Recupera Seccions arrel.
+     */
+    @Test
+    public void obtenirSeccionsArrel() {
+        SeccioCriteria seccioCriteria = new SeccioCriteria();
+        seccioCriteria.setArrel(true);
+        List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = rolsacQS.llistarSeccions(seccioCriteria);
+        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 11);
+    }
+    
+    /**
      * Cas d'us: Recupera unitat materia.
      */
     @Test

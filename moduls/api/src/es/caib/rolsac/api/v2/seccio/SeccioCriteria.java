@@ -3,10 +3,11 @@ package es.caib.rolsac.api.v2.seccio;
 import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class SeccioCriteria extends BasicCriteria {
-
+    
     private String codigoEstandard;
     private String perfil;
     private String orden; // int
+    private Boolean arrel = null;
 
     // traducible
     private String t_nombre;
@@ -52,4 +53,13 @@ public class SeccioCriteria extends BasicCriteria {
         this.t_descripcion = t_descripcion;
     }
 
+    public Boolean getArrel() {
+        return arrel;
+    }
+
+    public void setArrel(Boolean arrel) {
+        this.arrel = arrel;
+    }
+   
+    
 }

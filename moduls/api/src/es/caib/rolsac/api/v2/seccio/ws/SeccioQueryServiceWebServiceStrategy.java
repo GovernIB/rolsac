@@ -2,11 +2,13 @@ package es.caib.rolsac.api.v2.seccio.ws;
 
 import java.util.List;
 
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceStrategy;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class SeccioQueryServiceWebServiceStrategy implements SeccioQueryServiceStrategy {
 
@@ -25,17 +27,12 @@ public class SeccioQueryServiceWebServiceStrategy implements SeccioQueryServiceS
         return 0;
     }
 
-    public int getNumArrels(long id) {
+    public int getNumUnitatsAdministratives(long id) {
         // TODO Auto-generated method stub
         return 0;
     }
 
-    public List<SeccioDTO> llistarPares(long id, SeccioCriteria seccioCriteria) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<SeccioDTO> llistarArrels(long id, SeccioCriteria seccioCriteria) {
+    public List<SeccioDTO> llistarPares(long id) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -45,7 +42,17 @@ public class SeccioQueryServiceWebServiceStrategy implements SeccioQueryServiceS
         return null;
     }
 
-    public List<FitxaUADTO> llistarFitxesUA(long id, FitxaUACriteria fitxaUACriteria) {
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public SeccioDTO obtenirPare(Long padre) {
         // TODO Auto-generated method stub
         return null;
     }

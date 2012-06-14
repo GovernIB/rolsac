@@ -2,8 +2,10 @@ package es.caib.rolsac.api.v2.seccio;
 
 import java.util.List;
 
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface SeccioQueryServiceStrategy {
 
@@ -13,14 +15,16 @@ public interface SeccioQueryServiceStrategy {
 
     int getNumPares(long id);
 
-    int getNumArrels(long id);
+    int getNumUnitatsAdministratives(long id);
 
-    List<SeccioDTO> llistarPares(long id, SeccioCriteria seccioCriteria);
-
-    List<SeccioDTO> llistarArrels(long id, SeccioCriteria seccioCriteria);
+    List<SeccioDTO> llistarPares(long id);    
 
     List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria);
 
-    List<FitxaUADTO> llistarFitxesUA(long id, FitxaUACriteria fitxaUACriteria);
+    List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria);
+    
+    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+
+    SeccioDTO obtenirPare(Long padre);
     
 }

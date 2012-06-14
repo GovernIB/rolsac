@@ -2,8 +2,10 @@ package es.caib.rolsac.api.v2.seccio;
 
 import java.util.List;
 
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
-import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryService;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface SeccioQueryService {
 
@@ -12,15 +14,17 @@ public interface SeccioQueryService {
     int getNumFitxes();
 
     int getNumPares();
+    
+    int getNumUnitatsAdministratives();
 
-    int getNumArrels();
+    List<SeccioQueryServiceAdapter> llistarPares();
 
-    List<SeccioQueryService> llistarPares(SeccioCriteria seccioCriteria);
+    List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria);
 
-    List<SeccioQueryService> llistarArrels(SeccioCriteria seccioCriteria);
-
-    List<SeccioQueryService> llistarFilles(SeccioCriteria seccioCriteria);
-
-    List<FitxaUAQueryService> llistarFitxesUA(FitxaUACriteria fitxaUACriteria);
+    List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria);
+    
+    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    
+    SeccioQueryServiceAdapter obtenirPare();
 
 }
