@@ -3,7 +3,7 @@ package es.caib.rolsac.api.v2.personal;
 public class PersonalDTO {
 
     protected Long id;
-    protected Long unitatAdministrativa;
+    protected Long unidadAdministrativa;
 
     protected String username;
     protected String nombre;
@@ -25,12 +25,12 @@ public class PersonalDTO {
         this.id = id;
     }
 
-    public Long getUnitatAdministrativa() {
-        return unitatAdministrativa;
+    public Long getUnidadAdministrativa() {
+        return unidadAdministrativa;
     }
 
-    public void setUnitatAdministrativa(Long unitatAdministrativa) {
-        this.unitatAdministrativa = unitatAdministrativa;
+    public void setUnidadAdministrativa(Long unidadAdministrativa) {
+        this.unidadAdministrativa = unidadAdministrativa;
     }
 
     public String getUsername() {
