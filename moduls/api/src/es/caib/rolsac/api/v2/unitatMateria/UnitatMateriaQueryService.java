@@ -1,15 +1,12 @@
 package es.caib.rolsac.api.v2.unitatMateria;
 
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaQueryService;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
+import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface UnitatMateriaQueryService {
 
-    UnitatAdministrativaQueryService obtenirUnitatAdministrativa(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa();
 
-    MateriaQueryService obtenirMateria(MateriaCriteria materiaCriteria);
+    MateriaQueryServiceAdapter obtenirMateria();
 
 }

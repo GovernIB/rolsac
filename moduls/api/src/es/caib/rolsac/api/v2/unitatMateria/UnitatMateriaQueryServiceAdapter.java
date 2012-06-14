@@ -1,49 +1,46 @@
 package es.caib.rolsac.api.v2.unitatMateria;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaDTO;
-import es.caib.rolsac.api.v2.materia.MateriaQueryService;
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatMateria.ejb.UnitatMateriaQueryServiceEJBStrategy;
 
 public class UnitatMateriaQueryServiceAdapter extends UnitatMateriaDTO implements UnitatMateriaQueryService {
 
+    private static Log log = LogFactory.getLog(UnitatMateriaQueryServiceAdapter.class);
+    
     UnitatMateriaQueryServiceStrategy unitatMateriaQueryServiceStrategy;
+    
+    public void setUnitatMateriaQueryServiceStrategy(UnitatMateriaQueryServiceStrategy unitatMateriaQueryServiceStrategy) {
+        this.unitatMateriaQueryServiceStrategy = unitatMateriaQueryServiceStrategy;
+    }
 
-    public UnitatMateriaQueryServiceAdapter() {
-        // FIXME: don't harcode the UnitatMateriaQueryServiceEJBStrategy.
-        unitatMateriaQueryServiceStrategy = new UnitatMateriaQueryServiceEJBStrategy();
+    private STRATEGY getStrategy() {
+        return unitatMateriaQueryServiceStrategy instanceof UnitatMateriaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public UnitatMateriaQueryServiceAdapter(UnitatMateriaDTO dto) {
-        this();
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             e.printStackTrace(); // FIXME: log.error...
+            log.error("Error instanciando UnitatMateriaQueryServiceAdapter.", e);
         }
     }
     
-    public MateriaQueryService obtenirMateria(MateriaCriteria materiaCriteria) {
-
-        MateriaDTO dto = unitatMateriaQueryServiceStrategy.obtenirMateria(id, materiaCriteria);
-
-        return new MateriaQueryServiceAdapter(dto);
+    public MateriaQueryServiceAdapter obtenirMateria() {
+        if (this.getMateria() == null) {return null;}
+        return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirMateria(this.getMateria()));
     }
 
-    public UnitatAdministrativaQueryService obtenirUnitatAdministrativa(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-
-        UnitatAdministrativaDTO dto = unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(id,
-                unitatAdministrativaCriteria);
-
-        return new UnitatAdministrativaQueryServiceAdapter(dto);
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() {
+        if (this.getUnidad() == null) {return null;}
+        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidad()));
     }
 
 }

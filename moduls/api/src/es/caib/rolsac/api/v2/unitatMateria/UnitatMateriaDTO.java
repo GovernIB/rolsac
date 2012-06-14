@@ -2,7 +2,9 @@ package es.caib.rolsac.api.v2.unitatMateria;
 
 public class UnitatMateriaDTO {
 
-    protected Long id;
+    protected long id;
+    private Long materia;
+    private Long unidad;
     private String unidadPrincipal;
 
     // TraduccioUnitatMateria
@@ -11,15 +13,43 @@ public class UnitatMateriaDTO {
     /**
      * @return the id
      */
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
+    }
+    
+    /**
+     * @return the materia
+     */
+    public Long getMateria() {
+        return materia;
+    }
+
+    /**
+     * @param materia the materia to set
+     */
+    public void setMateria(Long materia) {
+        this.materia = materia;
+    }
+
+    /**
+     * @return the unidad
+     */
+    public Long getUnidad() {
+        return unidad;
+    }
+
+    /**
+     * @param unidad the unidad to set
+     */
+    public void setUnidad(Long unidad) {
+        this.unidad = unidad;
     }
 
     /**
@@ -50,6 +80,5 @@ public class UnitatMateriaDTO {
         this.urlUnidadMateria = urlUnidadMateria;
     }
 
-
-
+    
 }
