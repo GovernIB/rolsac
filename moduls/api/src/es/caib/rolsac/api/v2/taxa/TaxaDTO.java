@@ -27,11 +27,11 @@ public class TaxaDTO {
         this.orden = orden;
     }
 
-    public long getTramit() {
+    public Long getTramit() {
         return tramit;
     }
 
-    public void setTramit(long tramit) {
+    public void setTramit(Long tramit) {
         this.tramit = tramit;
     }
 

@@ -1,17 +1,18 @@
 package es.caib.rolsac.api.v2.taxa.ejb;
 
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceStrategy;
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class TaxaQueryServiceEJBStrategy implements TaxaQueryServiceStrategy {
 
-    TaxaQueryServiceLocator tramitQueryServiceLocator;
-    TaxaQueryServiceDelegate tramitQueryServiceDelegate;
+    TaxaQueryServiceDelegate taxaQueryServiceDelegate;
+    
+    public void setTaxaQueryServiceDelegate(TaxaQueryServiceDelegate taxaQueryServiceDelegate) {
+        this.taxaQueryServiceDelegate = taxaQueryServiceDelegate;
+    }
 
-    public TramitDTO obtenirTramit(long id, TramitCriteria tramitCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public TramitDTO obtenirTramit(long idTramit) {
+        return taxaQueryServiceDelegate.obtenirTramit(idTramit);
     }
 
 }

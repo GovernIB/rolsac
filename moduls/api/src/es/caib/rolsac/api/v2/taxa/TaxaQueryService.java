@@ -1,10 +1,9 @@
 package es.caib.rolsac.api.v2.taxa;
 
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
-import es.caib.rolsac.api.v2.tramit.TramitQueryService;
+import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
 public interface TaxaQueryService {
 
-    TramitQueryService obtenirTramit(TramitCriteria tramitCriteria);
+    TramitQueryServiceAdapter obtenirTramit();
 
 }
