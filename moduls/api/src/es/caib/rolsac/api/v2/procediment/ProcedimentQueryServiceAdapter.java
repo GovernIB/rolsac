@@ -18,6 +18,7 @@ import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
+import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
@@ -53,15 +54,15 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     }
 
     public int getNumNormatives() {
-        return procedimentQueryServiceStrategy.getNumNormatives(id, 0);
+        return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.TOTES);
     }
     
     public int getNumNormativesLocals() {
-        return procedimentQueryServiceStrategy.getNumNormatives(id, 1);
+        return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.LOCAL);
     }
     
     public int getNumNormativesExternes() {
-        return procedimentQueryServiceStrategy.getNumNormatives(id, 2);
+        return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.EXTERNA);
     }    
     
     public int getNumMateries() {

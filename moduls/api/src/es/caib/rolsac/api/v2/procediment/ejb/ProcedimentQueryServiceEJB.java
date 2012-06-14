@@ -28,6 +28,7 @@ import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
+import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByProcedimientoCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.query.FromClause;
@@ -113,15 +114,12 @@ public class ProcedimentQueryServiceEJB {
 
     }
 
-    public int getNumNormatives(long id, int tipus) {
+    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
         List<CriteriaObject> criteris;
         Session sessio = null;    
         QueryBuilder qb = null;
         Query query = null;
         int numResultats = 0;
-        //tipus = 0 : totes les normatives
-        //tipus = 1: nomes les locals
-        //tipus = 2: nomes les externes
         
         try {
             
@@ -131,9 +129,8 @@ public class ProcedimentQueryServiceEJB {
             normativaByProcCO.parseCriteria(String.valueOf(id));
             criteris.add(normativaByProcCO);
             List<FromClause> entities = new ArrayList<FromClause>();
-
             
-            if (tipus == 0 || tipus == 1){
+            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.LOCAL){
                 entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
@@ -142,7 +139,7 @@ public class ProcedimentQueryServiceEJB {
                 numResultats = ((Integer) query.uniqueResult()).intValue();
             }
             
-            if (tipus == 0 || tipus == 2){
+            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            

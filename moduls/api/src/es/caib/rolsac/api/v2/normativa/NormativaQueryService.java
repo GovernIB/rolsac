@@ -10,6 +10,8 @@ import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface NormativaQueryService {
+    
+    public static enum TIPUS_NORMATIVA {TOTES, LOCAL, EXTERNA};
 
     int getNumAfectades();
 

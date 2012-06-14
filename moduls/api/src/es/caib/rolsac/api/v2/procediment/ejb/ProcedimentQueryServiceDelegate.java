@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
+import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
@@ -26,7 +27,7 @@ public class ProcedimentQueryServiceDelegate {
         return ejb.getNumTramits(id);
     }
 
-    public int getNumNormatives(long id, int tipus) {
+    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
         ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
         return ejb.getNumNormatives(id, tipus);
     }
