@@ -20,6 +20,8 @@ import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter;
 
@@ -120,6 +122,16 @@ public class MateriaQueryServiceTest {
         Assert.assertNotNull(materia);
         List<UnitatMateriaQueryServiceAdapter> listUnitatMateriaQueryServiceAdapter = materia.llistarUnitatsMateria(new UnitatMateriaCriteria());
         Assert.assertTrue(listUnitatMateriaQueryServiceAdapter.size() == 1);
+    }
+
+    @Test
+    public void llistarUnitatsAdministratives() {
+        MateriaCriteria materiaCriteria = new MateriaCriteria();
+        materiaCriteria.setId("635627");
+        MateriaQueryServiceAdapter materia = rolsacQS.obtenirMateria(materiaCriteria);
+        Assert.assertNotNull(materia);
+        List<UnitatAdministrativaQueryServiceAdapter> listUnitatAdministrativaQueryServiceAdapter = materia.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
+        Assert.assertTrue(listUnitatAdministrativaQueryServiceAdapter.size() == 3);
     }
     
     @Test

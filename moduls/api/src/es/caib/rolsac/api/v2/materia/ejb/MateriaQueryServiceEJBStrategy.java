@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 
@@ -68,12 +70,16 @@ public class MateriaQueryServiceEJBStrategy implements MateriaQueryServiceStrate
         return materiaQueryServiceDelegate.llistarAgrupacioMateries(id, agrupacioMateriaCriteria);
     }
 
-    public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) {
-        return materiaQueryServiceDelegate.llistarUnitatsMateria(id, unitatMateriaCriteria);
-    }
-
     public List<IconaMateriaDTO> llistarIconesMateries(long id, IconaMateriaCriteria iconaMateriaCriteria) {
         return materiaQueryServiceDelegate.llistarIconesMateries(id, iconaMateriaCriteria);
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        return materiaQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+    }
+
+    public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) {
+        return materiaQueryServiceDelegate.llistarUnitatsMateria(id, unitatMateriaCriteria);
     }
 
 }

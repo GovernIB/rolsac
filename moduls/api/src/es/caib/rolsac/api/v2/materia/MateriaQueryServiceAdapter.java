@@ -21,6 +21,9 @@ import es.caib.rolsac.api.v2.materia.ejb.MateriaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter;
@@ -111,11 +114,20 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
         List<UnitatMateriaDTO> llistaDTO = materiaQueryServiceStrategy.llistarUnitatsMateria(id, unitatMateriaCriteria);
         List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
         for (UnitatMateriaDTO unitatMateriaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatMateriaDTO));
+            llistaQueryServiceAdapter.add((UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), unitatMateriaDTO));
         }
         return llistaQueryServiceAdapter;
     }
 
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        List<UnitatAdministrativaDTO> llistaDTO = materiaQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+        List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+        for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+            llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+        }
+        return llistaQueryServiceAdapter;
+    }
+    
     public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) {
         List<IconaMateriaDTO> llistaDTO = materiaQueryServiceStrategy.llistarIconesMateries(id, iconaMateriaCriteria);
         List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();

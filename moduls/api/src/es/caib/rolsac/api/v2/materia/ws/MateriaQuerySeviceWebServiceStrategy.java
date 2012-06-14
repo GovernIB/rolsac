@@ -13,6 +13,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 
@@ -39,12 +41,7 @@ public class MateriaQuerySeviceWebServiceStrategy implements MateriaQueryService
         // TODO Auto-generated method stub
         return null;
     }
-
-    public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    
     public List<IconaMateriaDTO> llistarIconesMateries(long id, IconaMateriaCriteria iconaMateriaCriteria) {
         // TODO Auto-generated method stub
         return null;
@@ -86,6 +83,16 @@ public class MateriaQuerySeviceWebServiceStrategy implements MateriaQueryService
     }
 
     public ArxiuDTO getIconaGran(long idIconaGran) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) {
         // TODO Auto-generated method stub
         return null;
     }

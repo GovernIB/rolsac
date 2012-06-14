@@ -11,6 +11,8 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria;
 import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 
@@ -86,6 +88,11 @@ public class MateriaQueryServiceDelegate {
     public List<IconaMateriaDTO> llistarIconesMateries(long id, IconaMateriaCriteria iconaMateriaCriteria) {
         MateriaQueryServiceEJB ejb = materiaQueryServiceLocator.getMateriaQueryServiceEJB();
         return ejb.llistarIconesMateries(id, iconaMateriaCriteria);
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        MateriaQueryServiceEJB ejb = materiaQueryServiceLocator.getMateriaQueryServiceEJB();
+        return ejb.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
     }
     
 }
