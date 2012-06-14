@@ -5,23 +5,22 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceEJBStrategy;
 
 public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryService {
 
-    UsuariQueryServiceStrategy usuariQueryServiceStrategy;
+    private UsuariQueryServiceStrategy usuariQueryServiceStrategy;
 
-    public UsuariQueryServiceAdapter() {
-        // FIXME: don't harcode the UsuariQueryServiceEJBStrategy.
-        usuariQueryServiceStrategy = new UsuariQueryServiceEJBStrategy();
+    public void setUsuariQueryServiceStrategy(UsuariQueryServiceStrategy usuariQueryServiceStrategy) {
+        this.usuariQueryServiceStrategy = usuariQueryServiceStrategy;
     }
 
     public UsuariQueryServiceAdapter(UsuariDTO dto) {
-        this();
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
@@ -29,25 +28,20 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
         }
     }
 
+    private STRATEGY getStrategy() {
+        return usuariQueryServiceStrategy instanceof UsuariQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
+    }
+    
     public int getNumUnitatsAdministratives() {
-        // TODO Auto-generated method stub
-        return 0;
+        return usuariQueryServiceStrategy.getNumUnitatsAdministratives(id);
     }
 
-    // Exemple de possible implementació dels mètodes que retornen llistes de
-    // "query services"
-    public List<UnitatAdministrativaQueryService> llistarUnitatsAdministratives(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-
-        List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(id,
-                unitatAdministrativaCriteria);
-
-        List<UnitatAdministrativaQueryService> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryService>();
-
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+        List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
         for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-            llistaUAQueryService.add(new UnitatAdministrativaQueryServiceAdapter(unitatAdministrativaDTO));
+            llistaUAQueryService.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
         }
-
         return llistaUAQueryService;
     }
 

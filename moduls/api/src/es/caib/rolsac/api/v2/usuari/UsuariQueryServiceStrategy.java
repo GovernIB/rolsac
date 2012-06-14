@@ -9,7 +9,6 @@ public interface UsuariQueryServiceStrategy {
 
     int getNumUnitatsAdministratives(long id);
 
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
 
 }

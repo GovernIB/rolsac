@@ -3,13 +3,13 @@ package es.caib.rolsac.api.v2.usuari;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface UsuariQueryService {
 
     int getNumUnitatsAdministratives();
 
-    List<UnitatAdministrativaQueryService> llistarUnitatsAdministratives(
+    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(
             UnitatAdministrativaCriteria unitatAdministrativaCriteria);
 
 }

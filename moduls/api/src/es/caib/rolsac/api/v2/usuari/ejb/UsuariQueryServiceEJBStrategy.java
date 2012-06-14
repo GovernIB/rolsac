@@ -8,18 +8,18 @@ import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceStrategy;
 
 public class UsuariQueryServiceEJBStrategy implements UsuariQueryServiceStrategy {
 
-    UsuariQueryServiceDelegate delegate;
-    UsuariQueryServiceLocator locator;
+    private UsuariQueryServiceDelegate usuariQueryServiceDelegate;
 
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public void setUsuariQueryServiceDelegate(UsuariQueryServiceDelegate usuariQueryServiceDelegate) {
+        this.usuariQueryServiceDelegate = usuariQueryServiceDelegate;
+    }
+
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
+        return usuariQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
     }
 
     public int getNumUnitatsAdministratives(long id) {
-        // TODO Auto-generated method stub
-        return 0;
+        return usuariQueryServiceDelegate.getNumUnitatsAdministratives(id);
     }
 
 }
