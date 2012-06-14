@@ -3,9 +3,9 @@ package es.caib.rolsac.api.v2.enllac;
 public class EnllacDTO {
 
     protected Long id;
-    protected Long ficha;
-    protected Long procedimiento;
-    protected Long orden;
+    private Long ficha;
+    private Long procedimiento;
+    private long orden;
 
     // traducciones
     protected String titulo;
@@ -35,11 +35,11 @@ public class EnllacDTO {
         this.procedimiento = procedimiento;
     }
 
-    public Long getOrden() {
+    public long getOrden() {
         return orden;
     }
 
-    public void setOrden(Long orden) {
+    public void setOrden(long orden) {
         this.orden = orden;
     }
 

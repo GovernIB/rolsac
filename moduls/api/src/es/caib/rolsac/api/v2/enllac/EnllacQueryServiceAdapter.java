@@ -5,19 +5,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJBStrategy;
-import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
-import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
-import es.caib.rolsac.api.v2.fitxa.FitxaQueryService;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
-import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
-import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
-import es.caib.rolsac.api.v2.procediment.ProcedimentQueryService;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceStrategy;
-import es.caib.rolsac.api.v2.unitatAdministrativa.ejb.UnitatAdministrativaQueryServiceEJBStrategy;
 
 public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryService {
 
@@ -42,15 +34,14 @@ private static Log log = LogFactory.getLog(UnitatAdministrativaQueryServiceAdapt
         }
     }
 
-    public FitxaQueryService obtenirFitxa(FitxaCriteria fitxaCriteria) {
-        FitxaDTO dto = enllacQueryServiceStrategy.obtenirFitxa(id, fitxaCriteria);
-        return new FitxaQueryServiceAdapter(dto);
+    public FitxaQueryServiceAdapter obtenirFitxa() {
+        if (this.getFicha() == null) {return null;}
+        return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), enllacQueryServiceStrategy.obtenirFitxa(this.getFicha()));
     }
 
-    public ProcedimentQueryService obtenirProcediment(ProcedimentCriteria procedimentCriteria) {
-
-        ProcedimentDTO dto = enllacQueryServiceStrategy.obtenirProcediment(id, procedimentCriteria);
-        return new ProcedimentQueryServiceAdapter(dto);
+    public ProcedimentQueryServiceAdapter obtenirProcediment() {
+        if (this.getProcedimiento() == null) {return null;}
+        return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), enllacQueryServiceStrategy.obtenirProcediment(this.getProcedimiento()));
     }
 
 }
