@@ -4,6 +4,7 @@
 <project name="rolsac-1.1.0" default="main01ROLSAC">
 	
 	<property name="rolsac.target" value="${ant.project.name}"/>
+	
 	<property name="home" value="."/>
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
@@ -28,7 +29,7 @@
 
 	<property environment="env"/>
 	
-	
+
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
   <!-- ====================================================================== -->
@@ -408,6 +409,7 @@
 
 	   <target name="deploy01ROLSAC" if="deploy.dir">
           <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
+	   	  <echo>ES RECOMANA EXECUTAR test.unitario PER COMPROBAR QUE NO S'HAGI CORROMPUT FUNCIONALITAT.</echo>
 	  </target>		  	
 
 	  <!-- ================================================================== -->
