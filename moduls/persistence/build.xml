@@ -49,7 +49,7 @@
         	<include name="jaxrpc.jar"/>
         	<include name="mail.jar"/>
         	<include name="htmllexer.jar" />
-        	<include name="ojdbc14.jar" if="bbdd.oracle"/>
+        	<include name="ojdbc14.jar"/>
 
         </fileset>
         <fileset dir="${ejb.product}">
@@ -268,7 +268,7 @@
 	<path id="hbm2ddl.class.path">
 	        <fileset dir="${lib.dir}">
 	            <include name="hibernate2.jar"/>
-	        	<include name="ojdbc14.jar" if="bbdd.oracle"/>
+	        	<include name="ojdbc14.jar"/>
 	        	<include name="commons-logging.jar"/>
 	        	<include name="cglib2.jar"/>
 	        </fileset>
