@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.espaiTerritorial.ejb;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceStrategy;
@@ -10,38 +11,39 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class EspaiTerritorialQueryServiceEJBStrategy implements EspaiTerritorialQueryServiceStrategy {
 
-    EspaiTerritorialQueryServiceDelegate delegate;
-    EspaiTerritorialQueryServiceLocator locator;
+    EspaiTerritorialQueryServiceDelegate espaiTerritorialQueryServiceDelegate;
 
-    public int getNumFills() {
-        // TODO Auto-generated method stub
-        return 0;
+    public void setEspaiTerritorialQueryServiceDelegate(EspaiTerritorialQueryServiceDelegate espaiTerritorialQueryServiceDelegate) {
+        this.espaiTerritorialQueryServiceDelegate = espaiTerritorialQueryServiceDelegate;
     }
 
-    public int getNumUnitatsAdministratives() {
-        // TODO Auto-generated method stub
-        return 0;
+    public int getNumFills(long id) {
+        return espaiTerritorialQueryServiceDelegate.getNumFills(id);
     }
 
-    public int getNumAdministracionsRemotes() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public EspaiTerritorialDTO obtenirPare(long id, EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public int getNumUnitatsAdministratives(long id) {
+        return espaiTerritorialQueryServiceDelegate.getNumUnitatsAdministratives(id);
     }
 
     public List<EspaiTerritorialDTO> llistarFills(long id, EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return espaiTerritorialQueryServiceDelegate.llistarFills(id, espaiTerritorialCriteria);
     }
 
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
             UnitatAdministrativaCriteria unitatAdministrativa) {
-        // TODO Auto-generated method stub
-        return null;
+        return espaiTerritorialQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativa);
+    }
+
+    public EspaiTerritorialDTO obtenirPare(Long idPadre) {
+        return espaiTerritorialQueryServiceDelegate.obtenirPare(idPadre);
+    }
+
+    public ArxiuDTO obtenirMapa(Long idMapa) {
+        return espaiTerritorialQueryServiceDelegate.obtenirMapa(idMapa);
+    }
+
+    public ArxiuDTO obtenirLogo(Long idLogo) {
+        return espaiTerritorialQueryServiceDelegate.obtenirLogo(idLogo);
     }
 
 }

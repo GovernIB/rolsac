@@ -2,8 +2,9 @@ package es.caib.rolsac.api.v2.espaiTerritorial;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface EspaiTerritorialQueryService {
 
@@ -11,14 +12,14 @@ public interface EspaiTerritorialQueryService {
 
     int getNumUnitatsAdministratives();
 
-    EspaiTerritorialQueryService obtenirPare(EspaiTerritorialCriteria espaiTerritorialCriteria);
+    EspaiTerritorialQueryServiceAdapter obtenirPare();
 
-    List<EspaiTerritorialQueryService> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria);
+    List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria);
 
-    List<UnitatAdministrativaQueryService> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativa);
+    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativa);
     
+    ArxiuQueryServiceAdapter obtenirMapa();
     
-//    private Archivo mapa;
-//    private Archivo logo
+    ArxiuQueryServiceAdapter obtenirLogo();
 
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
@@ -30,6 +32,8 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter;
 
 public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQueryService {
 
+    private static Log log = LogFactory.getLog(MateriaQueryServiceAdapter.class);
+    
     private MateriaQueryServiceStrategy materiaQueryServiceStrategy;
 
     public void setMateriaQueryServiceStrategy(MateriaQueryServiceStrategy materiaQueryServiceStrategy) {
@@ -41,6 +45,7 @@ public class MateriaQueryServiceAdapter extends MateriaDTO implements MateriaQue
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             e.printStackTrace(); // FIXME: log.error...
+            log.error("Error instanciando MateriaQueryServiceAdapter.", e);
         }
     }
 

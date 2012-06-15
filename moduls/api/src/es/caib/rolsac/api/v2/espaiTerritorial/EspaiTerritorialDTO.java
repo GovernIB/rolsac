@@ -3,14 +3,14 @@ package es.caib.rolsac.api.v2.espaiTerritorial;
 public class EspaiTerritorialDTO {
 
     protected Long id;
-    protected Integer nivel;
-    protected Long mapa;
-    protected Long logo;
-    protected String coordenadas;
-    protected Long padre;
+    private Integer nivel;
+    private Long mapa;
+    private Long logo;
+    private String coordenadas;
+    private Long padre;
 
     // traducciones
-    protected String nombre;
+    private String nombre;
 
     public Long getId() {
         return id;
