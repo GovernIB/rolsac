@@ -20,7 +20,7 @@ import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 
-public class PublicObjectiuQueryServcieEJB {
+public class PublicObjectiuQueryServiceEJB {
 
     private static final String HQL_PUBLIC_OBJECTIU_CLASS = "PublicoObjetivo";
     private static final String HQL_PUBLIC_OBJECTIU_ALIAS = "po";

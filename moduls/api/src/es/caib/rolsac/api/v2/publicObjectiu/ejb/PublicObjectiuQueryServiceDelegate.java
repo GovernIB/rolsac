@@ -14,12 +14,12 @@ public class PublicObjectiuQueryServiceDelegate {
     }
     
     public int getNumAgrupacions(long id) {
-        PublicObjectiuQueryServcieEJB ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
+        PublicObjectiuQueryServiceEJB ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
         return ejb.getNumAgrupacions(id);
     }
 
     public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id, AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) {
-        PublicObjectiuQueryServcieEJB ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
+        PublicObjectiuQueryServiceEJB ejb = publicObjectiuQueryServiceLocator.getPublicObjectiuQueryServceEJB();
         return ejb.llistarAgrupacions(id, agurpacioFetVitalCriteria);
     }
 

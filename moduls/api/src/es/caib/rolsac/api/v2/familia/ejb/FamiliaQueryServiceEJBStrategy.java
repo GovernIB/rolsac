@@ -10,27 +10,26 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 public class FamiliaQueryServiceEJBStrategy implements FamiliaQueryServiceStrategy {
 
-    FamiliaQueryServiceDelegate delegate;
-    FamiliaQueryServiceLocator locator;
+    private FamiliaQueryServiceDelegate familiaQueryServiceDelegate;
+
+    public void setFamiliaQueryServiceDelegate(FamiliaQueryServiceDelegate familiaQueryServiceDelegate) {
+        this.familiaQueryServiceDelegate = familiaQueryServiceDelegate;
+    }
 
     public int getNumProcedimentsLocals(long id) {
-        // TODO Auto-generated method stub
-        return 0;
+        return familiaQueryServiceDelegate.getNumProcedimentsLocals(id);
     }
 
     public int getNumIcones(long id) {
-        // TODO Auto-generated method stub
-        return 0;
+        return familiaQueryServiceDelegate.getNumIcones(id);
     }
 
     public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return familiaQueryServiceDelegate.llistarProcedimentsLocals(id, procedimentCriteria);
     }
 
     public List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return familiaQueryServiceDelegate.llistarIcones(id, iconaFamiliaCriteria);
     }
 
 }
