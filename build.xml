@@ -257,7 +257,7 @@
   <!-- ================================================================== -->
 
 
-	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac.">
+	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
         <!-- application.xml  -->
        <copy file="${etc.approlsac}/application.xml" todir="${output.dir}" overwrite="true"/>
@@ -272,8 +272,9 @@
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
 			<manifest>
-				<attribute name="Generated-By" value="${rolsac.author}"/>
 				<attribute name="Version" value="${rolsac.target}"/>
+				<attribute name="Built-By" value="${project.author}"/>
+				<attribute name="Build-Jdk" value="${java.version}"/>
 			</manifest>
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
@@ -329,6 +330,17 @@
   
 	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
+	  	<fail unless="project.author" message="Et falta definir la propietat project.author"/>
+	  	<fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
+	  	
+		<echo>
+		   Version: ${rolsac.target}
+		   Author: ${project.author}
+		   Compiler: ${java.version}
+		   Ant: ${ant.home}
+		</echo>
+
+	  	
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
 	       </antcall>
