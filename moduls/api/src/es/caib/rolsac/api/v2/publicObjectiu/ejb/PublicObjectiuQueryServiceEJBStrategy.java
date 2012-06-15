@@ -8,17 +8,18 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceStrategy;
 
 public class PublicObjectiuQueryServiceEJBStrategy implements PublicObjectiuQueryServiceStrategy {
 
-    PublicObjectiuQueryServiceDelegate delegate;
-    PublicObjectiuQueryServiceLocator locator;
+    private PublicObjectiuQueryServiceDelegate publicObjectiuQueryServiceDelegate;
 
+    public void setPublicObjectiuQueryServiceDelegate(PublicObjectiuQueryServiceDelegate publicObjectiuQueryServiceDelegate) {
+        this.publicObjectiuQueryServiceDelegate = publicObjectiuQueryServiceDelegate;
+    }
+        
     public int getNumAgrupacions(long id) {
-        // TODO Auto-generated method stub
-        return 0;
+        return publicObjectiuQueryServiceDelegate.getNumAgrupacions(id);
     }
 
     public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id, AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return publicObjectiuQueryServiceDelegate.llistarAgrupacions(id, agurpacioFetVitalCriteria);
     }
 
 }

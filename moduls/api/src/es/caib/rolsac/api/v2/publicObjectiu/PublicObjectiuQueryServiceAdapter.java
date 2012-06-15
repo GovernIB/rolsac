@@ -1,24 +1,26 @@
 package es.caib.rolsac.api.v2.publicObjectiu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
-import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryService;
+import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
+import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBStrategy;
 
 public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO implements PublicObjectiuQueryService {
 
-    PublicObjectiuQueryServiceStrategy publicObjectiuQueryServiceStrategy;
+    private PublicObjectiuQueryServiceStrategy publicObjectiuQueryServiceStrategy;
 
-    public PublicObjectiuQueryServiceAdapter() {
-        // FIXME: don't harcode the ProcedimentQueryServiceEJBStrategy.
-        publicObjectiuQueryServiceStrategy = new PublicObjectiuQueryServiceEJBStrategy();
+    public void setPublicObjectiuQueryServiceStrategy(PublicObjectiuQueryServiceStrategy publicObjectiuQueryServiceStrategy) {
+        this.publicObjectiuQueryServiceStrategy = publicObjectiuQueryServiceStrategy;
     }
-    
+
     public PublicObjectiuQueryServiceAdapter(PublicObjectiuDTO dto) {
-        this();
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
@@ -26,14 +28,21 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
         }
     }
 
+    public STRATEGY getStrategy() {
+        return publicObjectiuQueryServiceStrategy instanceof PublicObjectiuQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
+    }
+    
     public int getNumAgrupacions() {
-        // TODO Auto-generated method stub
-        return 0;
+        return publicObjectiuQueryServiceStrategy.getNumAgrupacions(id);
     }
 
-    public List<AgrupacioFetVitalQueryService> llistarAgrupacions(AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacions(AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) {
+        List<AgrupacioFetVitalDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarAgrupacions(id, agurpacioFetVitalCriteria);
+        List<AgrupacioFetVitalQueryServiceAdapter> llistaAgrupacions = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
+        for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
+            llistaAgrupacions.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO));
+        }
+        return llistaAgrupacions;
     }
 
 }
