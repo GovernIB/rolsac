@@ -6,22 +6,22 @@ public class EdificiDTO extends EntitatRemota {
 
     protected long id;
 
-    protected String direccion;
-    protected String codigoPostal;
-    protected String poblacion;
-    protected String telefono;
-    protected String fax;
-    protected String email;
-    protected String latitud;
-    protected String longitud;
+    private String direccion;
+    private String codigoPostal;
+    private String poblacion;
+    private String telefono;
+    private String fax;
+    private String email;
+    private String latitud;
+    private String longitud;
 
     // Arxius
-    protected Long fotoPequenya;
-    protected Long fotoGrande;
-    protected Long plano;
+    private Long fotoPequenya;
+    private Long fotoGrande;
+    private Long plano;
 
     // TraduccioEdifici
-    protected String descripcio;
+    protected String descripcion;
 
     public long getId() {
         return id;
@@ -119,12 +119,11 @@ public class EdificiDTO extends EntitatRemota {
         this.plano = plano;
     }
 
-    public String getDescripcio() {
-        return descripcio;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripcio(String descripcio) {
-        this.descripcio = descripcio;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
-
 }
