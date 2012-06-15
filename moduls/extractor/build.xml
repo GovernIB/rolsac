@@ -101,6 +101,6 @@
 
 	<import file="../build_test.xml"/>
 
-    <target name="main" depends="test.unitario, jar.jar" description="Construye el jar"/>
+    <target name="main" depends="jar.jar" description="Construye el jar"/>
 	
 </project>

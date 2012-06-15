@@ -139,7 +139,7 @@
 	<import file="../build_test.xml"/>
 	<import file="../build_sonar.xml"/>
 
-    <target name="main" depends="test.unitario, jar.war" description="Construye el jar"/>
+    <target name="main" depends="jar.war" description="Construye el jar"/>
 
 	
 </project>
