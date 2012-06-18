@@ -10,17 +10,26 @@ import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceStrategy;
 
 public class PerfilQueryServiceEJBStrategy implements PerfilQueryServiceStrategy {
 
-    PerfilQueryServiceEJBLocator locator;
-    PerfilQueryServiceDelegate delegate;
+    private PerfilQueryServiceDelegate perfilQueryServiceDelegate;
+
+    public void setPerfilQueryServiceDelegate(PerfilQueryServiceDelegate perfilQueryServiceDelegate) {
+        this.perfilQueryServiceDelegate = perfilQueryServiceDelegate;
+    }
 
     public List<IconaFamiliaDTO> llistarIconesFamilia(long id, IconaFamiliaCriteria iconaFamiliaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return perfilQueryServiceDelegate.llistarIconesFamilia(id, iconaFamiliaCriteria);
     }
 
     public List<IconaMateriaDTO> llistarIconesMateria(long id, IconaMateriaCriteria iconaMateriaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+        return perfilQueryServiceDelegate.llistarIconesMateria(id, iconaMateriaCriteria);
+    }
+
+    public int getNumIconesFamilia(long id) {
+        return perfilQueryServiceDelegate.getNumIconesFamilia(id);
+    }
+
+    public int getNumIconesMateria(long id) {
+        return perfilQueryServiceDelegate.getNumIconesMateria(id);
     }
 
 }

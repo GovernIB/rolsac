@@ -6,6 +6,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 
 public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements IconaFamiliaQueryService {
@@ -25,7 +26,7 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
     }
 
     public STRATEGY getStrategy() {
-        return iconaFamiliaQueryServiceStrategy instanceof IconaFamiliaQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return iconaFamiliaQueryServiceStrategy instanceof IconaFamiliaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public FamiliaQueryServiceAdapter obtenirFamilia() {

@@ -9,8 +9,12 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 
 public interface PerfilQueryServiceStrategy {
 
-    List<IconaFamiliaDTO> llistarIconesFamilia(long id, IconaFamiliaCriteria iconaFamiliaCriteria);
+    public List<IconaFamiliaDTO> llistarIconesFamilia(long id, IconaFamiliaCriteria iconaFamiliaCriteria);
 
-    List<IconaMateriaDTO> llistarIconesMateria(long id, IconaMateriaCriteria iconaMateriaCriteria);
+    public List<IconaMateriaDTO> llistarIconesMateria(long id, IconaMateriaCriteria iconaMateriaCriteria);
+    
+    public int getNumIconesFamilia(long id);
+
+    public int getNumIconesMateria(long id);
 
 }

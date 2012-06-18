@@ -20,4 +20,14 @@ public class PerfilQueryServiceWebServiceStrategy implements PerfilQueryServiceS
         return null;
     }
 
+    public int getNumIconesFamilia(long id) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public int getNumIconesMateria(long id) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.iconaMateria.ejb.IconaMateriaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 
@@ -25,7 +26,7 @@ public class IconaMateriaQueryServiceAdapter extends IconaMateriaDTO implements 
     }
 
     public STRATEGY getStrategy() {
-        return iconaMateriaQueryServiceStrategy instanceof IconaMateriaQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return iconaMateriaQueryServiceStrategy instanceof IconaMateriaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public MateriaQueryServiceAdapter obtenirMateria() {
