@@ -5,8 +5,8 @@ public class FamiliaDTO {
     protected Long id;
 
     // TraduccioFamilia
-    protected String nombre;
-    protected String descripcion;
+    private String nombre;
+    private String descripcion;
 
     public Long getId() {
         return id;

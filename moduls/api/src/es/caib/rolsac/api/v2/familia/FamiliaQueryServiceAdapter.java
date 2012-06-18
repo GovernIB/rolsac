@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.familia.ejb.FamiliaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.general.BeanUtils;
@@ -17,6 +19,8 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 
 public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQueryService {
 
+    private static Log log = LogFactory.getLog(FamiliaQueryServiceAdapter.class);
+    
     private FamiliaQueryServiceStrategy familiaQueryServiceStrategy;
 
     public void setFamiliaQueryServiceStrategy(FamiliaQueryServiceStrategy familiaQueryServiceStrategy) {
@@ -28,6 +32,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             e.printStackTrace(); // FIXME: log.error...
+            log.error("Error instanciando FamiliaQueryServiceAdapter.", e);
         }
     }
 
