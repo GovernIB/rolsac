@@ -289,14 +289,14 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
 
     public FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) {
         FitxaUADTO dto = rolsacQueryServiceStrategy.obtenirFitxaUA(fitxaUACriteria);
-        return (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
+        return (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), dto);
     }
 
     public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) {
         List<FitxaUADTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxesUA(fitxaUACriteria);
         List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
         for (FitxaUADTO fitxaUADTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUADTO));
+            llistaQueryServiceAdapter.add((FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), fitxaUADTO));
         }
         return llistaQueryServiceAdapter;
     }

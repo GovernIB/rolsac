@@ -4,11 +4,11 @@ package es.caib.rolsac.api.v2.fitxaUA;
 public class FitxaUADTO {
 
     protected Long id;
-    protected Long unidadAdministrativa;
-    protected Long ficha;
-    protected Long seccion;
-    protected Integer orden;
-    protected Integer ordenseccion;
+    private Long unidadAdministrativa;
+    private Long ficha;
+    private Long seccion;
+    private Integer orden;
+    private Integer ordenseccion;
 
     public Long getId() {
         return id;

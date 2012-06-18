@@ -1,19 +1,15 @@
 package es.caib.rolsac.api.v2.fitxaUA;
 
-import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
-import es.caib.rolsac.api.v2.fitxa.FitxaQueryService;
-import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
-import es.caib.rolsac.api.v2.seccio.SeccioQueryService;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
+import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface FitxaUAQueryService {
 
-    UnitatAdministrativaQueryService obtenirUnitatAdministrativa(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa();
 
-    FitxaQueryService obtenirFitxa(FitxaCriteria fitxaCriteria);
+    FitxaQueryServiceAdapter obtenirFitxa();
 
-    SeccioQueryService obtenirSeccio(SeccioCriteria seccioCriteria);
+    SeccioQueryServiceAdapter obtenirSeccio();
 
 }

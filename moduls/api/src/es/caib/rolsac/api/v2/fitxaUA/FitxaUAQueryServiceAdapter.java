@@ -1,58 +1,52 @@
 package es.caib.rolsac.api.v2.fitxaUA;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
-import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
-import es.caib.rolsac.api.v2.fitxa.FitxaQueryService;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBStrategy;
-import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
-import es.caib.rolsac.api.v2.seccio.SeccioDTO;
-import es.caib.rolsac.api.v2.seccio.SeccioQueryService;
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQueryService {
 
-    FitxaUAQueryServiceStrategy fitxaUAQueryServiceStrategy;
+    private static Log log = LogFactory.getLog(FitxaUAQueryServiceAdapter.class);
+    
+    FitxaUAQueryServiceStrategy fitxaUAQueryServiceStrategy;    
+    
+    public void setFitxaUAQueryServiceStrategy(FitxaUAQueryServiceStrategy fitxaUAQueryServiceStrategy) {
+        this.fitxaUAQueryServiceStrategy = fitxaUAQueryServiceStrategy;
+    }
 
-    public FitxaUAQueryServiceAdapter() {
-        // FIXME: don't harcode the ProcedimentQueryServiceEJBStrategy.
-        fitxaUAQueryServiceStrategy = new FitxaUAQueryServiceEJBStrategy();
+    private STRATEGY getStrategy() {
+        return fitxaUAQueryServiceStrategy instanceof FitxaUAQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public FitxaUAQueryServiceAdapter(FitxaUADTO dto) {
-        this();
+    public FitxaUAQueryServiceAdapter(FitxaUADTO dto) {        
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             e.printStackTrace(); // FIXME: log.error...
+            log.error("Error instanciando FitxaUAQueryServiceAdapter.", e);
         }
     }
 
-    public UnitatAdministrativaQueryService obtenirUnitatAdministrativa(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-
-        UnitatAdministrativaDTO dto = fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(id,
-                unitatAdministrativaCriteria);
-
-        return new UnitatAdministrativaQueryServiceAdapter(dto);
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() {
+        if (this.getUnidadAdministrativa() == null) {return null;}
+        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa()));
     }
 
-    public FitxaQueryService obtenirFitxa(FitxaCriteria fitxaCriteria) {
-
-        FitxaDTO dto = fitxaUAQueryServiceStrategy.obtenirFitxa(id, fitxaCriteria);
-        return new FitxaQueryServiceAdapter(dto);
+    public FitxaQueryServiceAdapter obtenirFitxa() {
+        if (this.getFicha()== null) {return null;}
+        return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirFitxa(this.getFicha()));
     }
 
-    public SeccioQueryService obtenirSeccio(SeccioCriteria seccioCriteria) {
-
-        SeccioDTO dto = fitxaUAQueryServiceStrategy.obtenirSeccio(id, seccioCriteria);
-        return new SeccioQueryServiceAdapter(dto);
+    public SeccioQueryServiceAdapter obtenirSeccio() {
+        if (this.getSeccion() == null) {return null;}
+        return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), fitxaUAQueryServiceStrategy.obtenirSeccio(this.getSeccion()));
     }
 
 }
