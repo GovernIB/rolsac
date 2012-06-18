@@ -7,11 +7,11 @@ public class TractamentCriteria extends BasicCriteria {
     private String codigoEstandar;
 
     // TraduccioTractament
-    private String tipo;
-    private String cargoM;
-    private String tratamientoM;
-    private String cargoF;
-    private String tratamientoF;
+    private String t_tipo;
+    private String t_cargoM;
+    private String t_tratamientoM;
+    private String t_cargoF;
+    private String t_tratamientoF;
     
     public String getCodigoEstandar() {
         return codigoEstandar;
@@ -19,35 +19,35 @@ public class TractamentCriteria extends BasicCriteria {
     public void setCodigoEstandar(String codigoEstandar) {
         this.codigoEstandar = codigoEstandar;
     }
-    public String getTipo() {
-        return tipo;
+    public String getT_tipo() {
+        return t_tipo;
     }
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
+    public void setT_tipo(String t_tipo) {
+        this.t_tipo = t_tipo;
     }
-    public String getCargoM() {
-        return cargoM;
+    public String getT_cargoM() {
+        return t_cargoM;
     }
-    public void setCargoM(String cargoM) {
-        this.cargoM = cargoM;
+    public void setT_cargoM(String t_cargoM) {
+        this.t_cargoM = t_cargoM;
     }
-    public String getTratamientoM() {
-        return tratamientoM;
+    public String getT_tratamientoM() {
+        return t_tratamientoM;
     }
-    public void setTratamientoM(String tratamientoM) {
-        this.tratamientoM = tratamientoM;
+    public void setT_tratamientoM(String t_tratamientoM) {
+        this.t_tratamientoM = t_tratamientoM;
     }
-    public String getCargoF() {
-        return cargoF;
+    public String getT_cargoF() {
+        return t_cargoF;
     }
-    public void setCargoF(String cargoF) {
-        this.cargoF = cargoF;
+    public void setT_cargoF(String t_cargoF) {
+        this.t_cargoF = t_cargoF;
     }
-    public String getTratamientoF() {
-        return tratamientoF;
+    public String getT_tratamientoF() {
+        return t_tratamientoF;
     }
-    public void setTratamientoF(String tratamientoF) {
-        this.tratamientoF = tratamientoF;
-    }    
+    public void setT_tratamientoF(String t_tratamientoF) {
+        this.t_tratamientoF = t_tratamientoF;
+    }
     
 }
