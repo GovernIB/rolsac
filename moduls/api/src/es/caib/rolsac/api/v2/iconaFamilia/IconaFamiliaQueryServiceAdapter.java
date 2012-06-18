@@ -2,27 +2,21 @@ package es.caib.rolsac.api.v2.iconaFamilia;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
-import es.caib.rolsac.api.v2.familia.FamiliaDTO;
-import es.caib.rolsac.api.v2.familia.FamiliaQueryService;
+import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
-import es.caib.rolsac.api.v2.iconaFamilia.ejb.IconaFamiliaQueryServiceEJBStrategy;
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaDTO;
-import es.caib.rolsac.api.v2.materia.MateriaQueryService;
-import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 
 public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements IconaFamiliaQueryService {
 
-    IconaFamiliaQueryServiceStrategy iconaFamiliaQueryServiceStrategy;
-
-    public IconaFamiliaQueryServiceAdapter() {
-        // FIXME: don't harcode the IconaFamiliaQueryServiceEJBStrategy.
-        iconaFamiliaQueryServiceStrategy = new IconaFamiliaQueryServiceEJBStrategy();
-    }
+    private IconaFamiliaQueryServiceStrategy iconaFamiliaQueryServiceStrategy;
     
+    public void setIconaFamiliaQueryServiceStrategy(IconaFamiliaQueryServiceStrategy iconaFamiliaQueryServiceStrategy) {
+        this.iconaFamiliaQueryServiceStrategy = iconaFamiliaQueryServiceStrategy;
+    }
+
     public IconaFamiliaQueryServiceAdapter(IconaFamiliaDTO dto) {
-        this();
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
@@ -30,13 +24,23 @@ public class IconaFamiliaQueryServiceAdapter extends IconaFamiliaDTO implements 
         }
     }
 
-    public FamiliaQueryService obtenirFamilia(FamiliaCriteria familiaCriteria) {
-        FamiliaDTO dto = iconaFamiliaQueryServiceStrategy.obtenirFamilia(id, familiaCriteria);
-        return new FamiliaQueryServiceAdapter(dto);
+    public STRATEGY getStrategy() {
+        return iconaFamiliaQueryServiceStrategy instanceof IconaFamiliaQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+    }
+    
+    public FamiliaQueryServiceAdapter obtenirFamilia() {
+        if (this.getFamilia() == null) {return null;}
+        return (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirFamilia(this.getFamilia()));
     }
 
-    public MateriaQueryService obtenirMateria(MateriaCriteria materiaCriteria) {
-        MateriaDTO dto = iconaFamiliaQueryServiceStrategy.obtenirMateria(id, materiaCriteria);
-        return new MateriaQueryServiceAdapter(dto);
+    public PerfilQueryServiceAdapter obtenirPerfil() {
+        if (this.getPerfil() == null) {return null;}
+        return (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirPerfil(this.getPerfil()));
     }
+
+    public ArxiuQueryServiceAdapter obtenirIcona() {
+        if (this.getIcono() == null) {return null;}
+        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), iconaFamiliaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+    }
+    
 }

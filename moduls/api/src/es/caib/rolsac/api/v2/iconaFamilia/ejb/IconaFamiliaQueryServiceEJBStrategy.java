@@ -1,24 +1,28 @@
 package es.caib.rolsac.api.v2.iconaFamilia.ejb;
 
-import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
+import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceStrategy;
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaDTO;
+import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 
 public class IconaFamiliaQueryServiceEJBStrategy implements IconaFamiliaQueryServiceStrategy {
 
-    IconaFamiliaQueryServiceLocator locator;
-    IconaFamiliaQueryServiceDelegate delegate;
+    private IconaFamiliaQueryServiceDelegate iconaFamiliaQueryServiceDelegate;
 
-    public FamiliaDTO obtenirFamilia(long id, FamiliaCriteria familiaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public void setIconaFamiliaQueryServiceDelegate(IconaFamiliaQueryServiceDelegate iconaFamiliaQueryServiceDelegate) {
+        this.iconaFamiliaQueryServiceDelegate = iconaFamiliaQueryServiceDelegate;
     }
 
-    public MateriaDTO obtenirMateria(long id, MateriaCriteria materiaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public FamiliaDTO obtenirFamilia(long id) {
+        return iconaFamiliaQueryServiceDelegate.obtenirFamilia(id);
+    }
+
+    public PerfilDTO obtenirPerfil(long id) {
+        return iconaFamiliaQueryServiceDelegate.obtenirPerfil(id);
+    }
+
+    public ArxiuDTO obtenirIcona(long id) {
+        return iconaFamiliaQueryServiceDelegate.obtenirIcona(id);
     }
 
 }

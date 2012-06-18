@@ -10,7 +10,7 @@ import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceStrategy;
 
 public class PerfilQueryServiceEJBStrategy implements PerfilQueryServiceStrategy {
 
-    PerfilQueryServiceLocator locator;
+    PerfilQueryServiceEJBLocator locator;
     PerfilQueryServiceDelegate delegate;
 
     public List<IconaFamiliaDTO> llistarIconesFamilia(long id, IconaFamiliaCriteria iconaFamiliaCriteria) {

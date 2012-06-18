@@ -1,14 +1,13 @@
 package es.caib.rolsac.api.v2.iconaFamilia;
 
-import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
+import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaDTO;
+import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 
 public interface IconaFamiliaQueryServiceStrategy {
 
-    FamiliaDTO obtenirFamilia(long id, FamiliaCriteria familiaCriteria);
-
-    MateriaDTO obtenirMateria(long id, MateriaCriteria materiaCriteria);
+    public FamiliaDTO obtenirFamilia(long id);
+    public PerfilDTO obtenirPerfil(long id);
+    public ArxiuDTO obtenirIcona(long id);
 
 }
