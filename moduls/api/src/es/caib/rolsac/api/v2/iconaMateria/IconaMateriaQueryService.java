@@ -1,14 +1,15 @@
 package es.caib.rolsac.api.v2.iconaMateria;
 
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaQueryService;
-import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
-import es.caib.rolsac.api.v2.perfil.PerfilQueryService;
+import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.perfil.PerfilQueryServiceAdapter;
 
 public interface IconaMateriaQueryService {
 
-    MateriaQueryService obtenirMateria(MateriaCriteria materiaCriteria);
+    public MateriaQueryServiceAdapter obtenirMateria();
 
-    PerfilQueryService obtenirPerfil(PerfilCriteria perfilCriteria);
+    public PerfilQueryServiceAdapter obtenirPerfil();
+    
+    public ArxiuQueryServiceAdapter obtenirIcona();
 
 }
