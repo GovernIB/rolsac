@@ -1,13 +1,14 @@
 package es.caib.rolsac.api.v2.formulari;
 
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
-import es.caib.rolsac.api.v2.tramit.TramitQueryService;
+import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
 public interface FormulariQueryService {
 
-    TramitQueryService obtenirTramit(TramitCriteria tramitCriteria);
+    public ArxiuQueryServiceAdapter obtenirArchivo();
     
-    // Archivo manual
-//    Archivo archivo
+    public ArxiuQueryServiceAdapter obtenirManual();
+    
+    public TramitQueryServiceAdapter obtenirTramit();
 
 }

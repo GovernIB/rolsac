@@ -1,22 +1,26 @@
 package es.caib.rolsac.api.v2.formulari.ejb;
 
+import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceStrategy;
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class FormulariQueryServiceEJBStrategy implements FormulariQueryServiceStrategy {
 
-    FormulariQueryServiceDelegate delegate;
-    FormulariQueryServiceLocator locator;
+    FormulariQueryServiceDelegate formulariQueryServiceDelegate;    
 
-    public TramitDTO obtenirTramit(long id, TramitCriteria tramitCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public void setFormulariQueryServiceDelegate(FormulariQueryServiceDelegate formulariQueryServiceDelegate) {
+        this.formulariQueryServiceDelegate = formulariQueryServiceDelegate;
     }
 
-    public String getTitol(long id) {
-        // TODO Auto-generated method stub
-        return null;
+    public ArxiuDTO obtenirArchivo(Long idArchivo) {
+        return formulariQueryServiceDelegate.obtenirArchivo(idArchivo);
     }
 
+    public ArxiuDTO obtenirManual(Long idManual) {
+        return formulariQueryServiceDelegate.obtenirManual(idManual);
+    }
+
+    public TramitDTO obtenirTramit(Long idTramit) {
+        return formulariQueryServiceDelegate.obtenirTramit(idTramit);
+    }
 }

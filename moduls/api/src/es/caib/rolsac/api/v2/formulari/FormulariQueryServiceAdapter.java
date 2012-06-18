@@ -1,39 +1,51 @@
 package es.caib.rolsac.api.v2.formulari;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceEJBStrategy;
-import es.caib.rolsac.api.v2.tramit.TramitCriteria;
-import es.caib.rolsac.api.v2.tramit.TramitDTO;
-import es.caib.rolsac.api.v2.tramit.TramitQueryService;
+import es.caib.rolsac.api.v2.general.BeanUtils;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
 public class FormulariQueryServiceAdapter extends FormulariDTO implements FormulariQueryService {
 
-    FormulariQueryServiceStrategy formulariQueryServiceStrategy;
-
-    public FormulariQueryServiceAdapter() {
-        // FIXME: don't harcode the formulariQueryServiceEJBStrategy.
-        formulariQueryServiceStrategy = new FormulariQueryServiceEJBStrategy();
-    }
+    private static Log log = LogFactory.getLog(FormulariQueryServiceAdapter.class);
     
+    FormulariQueryServiceStrategy formulariQueryServiceStrategy;
+    
+    public void setFormulariQueryServiceStrategy(FormulariQueryServiceStrategy formulariQueryServiceStrategy) {
+        this.formulariQueryServiceStrategy = formulariQueryServiceStrategy;
+    }
+
     public FormulariQueryServiceAdapter(FormulariDTO dto) {
-        this();
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
             e.printStackTrace(); // FIXME: log.error...
+            log.error("Error instanciando FormulariQueryServiceAdapter.", e);
         }
     }
 
-    public TramitQueryService obtenirTramit(TramitCriteria tramitCriteria) {
-        TramitDTO dto = formulariQueryServiceStrategy.obtenirTramit(id, tramitCriteria);
-        return new TramitQueryServiceAdapter(dto);
+    private STRATEGY getStrategy() {
+        return formulariQueryServiceStrategy instanceof FormulariQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
-
-    public String getTitol() {
-        // TODO Auto-generated method stub
-        return null;
+    
+    public ArxiuQueryServiceAdapter obtenirArchivo() {
+        if (this.getArchivo() == null) {return null;}
+        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
+    }
+    
+    public ArxiuQueryServiceAdapter obtenirManual() {
+        if (this.getManual() == null) {return null;}
+        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
+    }
+    
+    public TramitQueryServiceAdapter obtenirTramit() {
+        if (this.getTramite() == null) {return null;}
+        return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));        
     }
 
 }
