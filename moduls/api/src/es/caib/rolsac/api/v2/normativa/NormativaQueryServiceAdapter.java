@@ -59,7 +59,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectades(id);
         List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
         for (NormativaDTO normativaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", null, normativaDTO));
+            llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
         }
         return llistaQueryServiceAdapter;
     }

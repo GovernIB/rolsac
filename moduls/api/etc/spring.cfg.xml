@@ -466,6 +466,11 @@
     <!-- TipusAfectacioQueryService beans -->
     
     
+    <!-- TractamentQueryService beans -->
+    <bean id="tractamentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter" scope="prototype" />
+    <!-- TractamentQueryService beans -->
+    
+    
     <!-- TramitQueryService beans -->
     <bean id="tramitQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter" scope="prototype">
         <property name="tramitQueryServiceStrategy" ref="tramitQueryServiceEJBStrategy" />

@@ -74,7 +74,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
         List<AgrupacioFetVitalDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFetsVitalsAgrupacionsFV(id, agrupacioFetVitalCriteria);
         List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
         for (AgrupacioFetVitalDTO agrupacioFetVitalDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVItal", getStrategy(), agrupacioFetVitalDTO));
+            llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), agrupacioFetVitalDTO));
         }
         return llistaQueryServiceAdapter;
     }
