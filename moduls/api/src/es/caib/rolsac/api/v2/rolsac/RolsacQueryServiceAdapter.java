@@ -80,6 +80,9 @@ import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tipus.TipusCriteria;
+import es.caib.rolsac.api.v2.tipus.TipusDTO;
+import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
@@ -455,6 +458,20 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         return llistaQueryServiceAdapter;
     }
 
+    public TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) {
+        TipusDTO dto = rolsacQueryServiceStrategy.obtenirTipus(tipusCriteria);
+        return (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), dto);
+    }
+
+    public List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) {
+        List<TipusDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipus(tipusCriteria);
+        List<TipusQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusQueryServiceAdapter>();
+        for (TipusDTO tipusDTO : llistaDTO) {
+            llistaQueryServiceAdapter.add((TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), tipusDTO));
+        }
+        return llistaQueryServiceAdapter;
+    }
+    
     public TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) {
         TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
         return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), dto);

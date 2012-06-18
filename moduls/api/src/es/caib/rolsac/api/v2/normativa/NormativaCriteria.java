@@ -12,7 +12,6 @@ public class NormativaCriteria extends BasicCriteria {
     private Date fecha;
     private Date fechaBoletin;
     private String validacion;
-    private String tipo;
     private String codiVuds;
     private String descCodiVuds;
     private Boolean incluirExternas;
@@ -74,14 +73,6 @@ public class NormativaCriteria extends BasicCriteria {
 
     public void setValidacion(String validacion) {
         this.validacion = validacion;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
 
     public String getCodiVuds() {

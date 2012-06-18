@@ -34,6 +34,7 @@ import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Taxa;
+import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -95,6 +96,8 @@ import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
+import es.caib.rolsac.api.v2.tipus.TipusCriteria;
+import es.caib.rolsac.api.v2.tipus.TipusDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -165,6 +168,8 @@ public class RolsacQueryServiceEJB {
     private static final String HQL_PERFIL_ALIAS = "pc";
     private static final String HQL_SECCIO_CLASS = "Seccion";
     private static final String HQL_SECCIO_ALIAS = "s";
+    private static final String HQL_TIPUS_CLASS = "Tipo";
+    private static final String HQL_TIPUS_ALIAS = "ti";
     private static final String HQL_UNITAT_MATERIA_CLASS = "UnidadMateria";
     private static final String HQL_UNITAT_MATERIA_ALIAS = "um";
 
@@ -3069,6 +3074,113 @@ public class RolsacQueryServiceEJB {
         }
 
         return umDTOList;
+    }
+
+    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) {
+        List<CriteriaObject> criteris;
+        TipusDTO tipusDTO = null;
+        Session sessio = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    TipusCriteria.class,
+                    HQL_TIPUS_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS,
+                    tipusCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_TIPUS_CLASS, HQL_TIPUS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_TIPUS_ALIAS, 
+                    entities, 
+                    tipusCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            Tipo tipus = (Tipo) query.uniqueResult();
+            sessio.close();
+
+            if (tipus != null) {
+                tipusDTO = (TipusDTO) BasicUtils.entityToDTO(TipusDTO.class, tipus, tipusCriteria.getIdioma());
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            e.printStackTrace();
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return tipusDTO;
+    }
+
+    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
+        List<CriteriaObject> criteris;
+        List<TipusDTO> tipusDTOList = new ArrayList<TipusDTO>();
+        Session sessio = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    TipusCriteria.class,
+                    HQL_TIPUS_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS,
+                    tipusCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_TIPUS_CLASS, HQL_TIPUS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_TIPUS_ALIAS, 
+                    entities, 
+                    tipusCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            @SuppressWarnings("unchecked")
+            List<Tipo> tipusResult = (List<Tipo>) query.list();
+            sessio.close();
+
+            for (Tipo t: tipusResult) {
+                tipusDTOList.add((TipusDTO) BasicUtils.entityToDTO(TipusDTO.class, t, tipusCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            e.printStackTrace();
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return tipusDTOList;
     }
     
 }

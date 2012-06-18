@@ -19,7 +19,5 @@ public class TipusCriteria extends BasicCriteria {
     public void setT_nombre(String t_nombre) {
         this.t_nombre = t_nombre;
     }
-    
-    
 
 }

@@ -460,6 +460,22 @@
     <bean id="taxaQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.taxa.ejb.TaxaQueryServiceEJBLocator" />
     <!-- TaxaQueryService beans -->
     
+    <!-- TipusQueryService beans -->
+    <bean id="tipusQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter" scope="prototype">
+        <property name="tipusQueryServiceStrategy" ref="tipusQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="tipusQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.tipus.ejb.TipusQueryServiceEJBStrategy">
+        <property name="tipusQueryServiceDelegate" ref="tipusQueryServiceDelegate" />
+    </bean>
+
+    <bean id="tipusQueryServiceDelegate" class="es.caib.rolsac.api.v2.tipus.ejb.TipusQueryServiceDelegate">
+        <property name="tipusQueryServiceLocator" ref="tipusQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="tipusQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.tipus.ejb.TipusQueryServiceEJBLocator" />
+    <!-- TipusQueryService beans -->
+    
     
      <!-- TipusAfectacioQueryService beans -->
     <bean id="tipusAfectacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter" scope="prototype" />

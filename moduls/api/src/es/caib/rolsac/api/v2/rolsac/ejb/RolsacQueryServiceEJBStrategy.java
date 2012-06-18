@@ -53,6 +53,8 @@ import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
+import es.caib.rolsac.api.v2.tipus.TipusCriteria;
+import es.caib.rolsac.api.v2.tipus.TipusDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -303,6 +305,14 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
 
     public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) {
         return rolsacQueryServiceDelegate.llistarUsuaris(usuariCriteria);
+    }
+
+    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) {
+        return rolsacQueryServiceDelegate.obtenirTipus(tipusCriteria);
+    }
+
+    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
+        return rolsacQueryServiceDelegate.llistarTipus(tipusCriteria);
     }
 
 }

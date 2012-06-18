@@ -61,6 +61,8 @@ import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tipus.TipusCriteria;
+import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -911,6 +913,29 @@ public class RolsacQueryServiceTest {
         for (UnitatMateriaQueryServiceAdapter um: ums) {
             Assert.assertTrue(um.getUnidadPrincipal().equalsIgnoreCase("s"));
         }
+    }
+
+    /**
+     * Cas d'us: Recupera un tipus de normativa.
+     */
+    @Test
+    public void recuperarUnTipusNormativa() {
+        TipusCriteria tnCriteria = new TipusCriteria();
+        tnCriteria.setId("11");
+        TipusQueryServiceAdapter tn = rolsacQS.obtenirTipus(tnCriteria);
+        Assert.assertTrue(tn.getNombre().equals("Resolució"));
+    }
+    
+    /**
+     * Cas d'us: Recupera tipus normativa.
+     */
+    @Test
+    public void recuperarTipusNormativa() {
+        TipusCriteria tnsCriteria = new TipusCriteria();
+        tnsCriteria.setTamany("5");
+        tnsCriteria.setT_nombre("%Llei%");
+        List<TipusQueryServiceAdapter> tns = rolsacQS.llistarTipus(tnsCriteria);
+        Assert.assertTrue(tns.size() == 3);
     }
     
 }

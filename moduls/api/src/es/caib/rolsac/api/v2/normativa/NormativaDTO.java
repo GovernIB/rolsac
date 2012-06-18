@@ -10,8 +10,8 @@ public class NormativaDTO extends EntitatRemota {
     private long numero;
     private long registro;
     private Integer validacion;
-    private long boletin;
-    private long tipo;
+    private Long boletin;
+    private Long tipo;
     private Long unidadAdministrativa;
 
     private Date fecha;
@@ -78,37 +78,7 @@ public class NormativaDTO extends EntitatRemota {
         this.registro = registro;
     }
 
-    /**
-     * /**
-     * 
-     * @return the boletin
-     */
-    public long getBoletin() {
-        return boletin;
-    }
-
-    /**
-     * @param boletin
-     *            the boletin to set
-     */
-    public void setBoletin(long boletin) {
-        this.boletin = boletin;
-    }
-
-    /**
-     * @return the tipo
-     */
-    public long getTipo() {
-        return tipo;
-    }
-
-    /**
-     * @param tipo
-     *            the tipo to set
-     */
-    public void setTipo(long tipo) {
-        this.tipo = tipo;
-    }
+    
 
     /**
      * @return the fecha
@@ -314,20 +284,6 @@ public class NormativaDTO extends EntitatRemota {
     }
 
     /**
-     * @return the unidadAdministrativa
-     */
-    public Long getUnidadAdministrativa() {
-        return unidadAdministrativa;
-    }
-
-    /**
-     * @param unidadAdministrativa the unidadAdministrativa to set
-     */
-    public void setUnidadAdministrativa(Long unidadAdministrativa) {
-        this.unidadAdministrativa = unidadAdministrativa;
-    }
-
-    /**
      * @param numero the numero to set
      */
     public void setNumero(long numero) {
@@ -354,5 +310,47 @@ public class NormativaDTO extends EntitatRemota {
     public void setArchivo(Long archivo) {
         this.archivo = archivo;
     }
-    
+
+    /**
+     * @return the boletin
+     */
+    public Long getBoletin() {
+        return boletin;
+    }
+
+    /**
+     * @param boletin the boletin to set
+     */
+    public void setBoletin(Long boletin) {
+        this.boletin = boletin;
+    }
+
+    /**
+     * @return the tipo
+     */
+    public Long getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(Long tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * @return the unidadAdministrativa
+     */
+    public Long getUnidadAdministrativa() {
+        return unidadAdministrativa;
+    }
+
+    /**
+     * @param unidadAdministrativa the unidadAdministrativa to set
+     */
+    public void setUnidadAdministrativa(Long unidadAdministrativa) {
+        this.unidadAdministrativa = unidadAdministrativa;
+    }
+
 }

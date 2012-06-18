@@ -2,7 +2,7 @@ package es.caib.rolsac.api.v2.tipus;
 
 public class TipusDTO {
 
-    private Long id;
+    protected Long id;
     private String nombre;
     
     public Long getId() {
