@@ -2,11 +2,11 @@ package es.caib.rolsac.api.v2.destinatari;
 
 public class DestinatariDTO {
 
-    long id;
-    String nom;
-    String idRemot;
-    String endPoint;
-    String email;
+    protected long id;
+    private String nom;
+    private String idRemot;
+    private String endPoint;
+    private String email;
 
     public long getId() {
         return id;
