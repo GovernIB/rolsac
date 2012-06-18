@@ -1,14 +1,12 @@
 package es.caib.rolsac.api.v2.materiaAgrupacio;
 
-import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
-import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryService;
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
-import es.caib.rolsac.api.v2.materia.MateriaQueryService;
+import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 
 public interface MateriaAgrupacioQueryService {
 
-    MateriaQueryService obtenirMateria(MateriaCriteria materiaCriteria);
+    MateriaQueryServiceAdapter obtenirMateria();
 
-    AgrupacioMateriaQueryService obtenirAgrupacio(AgrupacioMateriaCriteria agrupacioMateriaCriteria);
+    AgrupacioMateriaQueryServiceAdapter obtenirAgrupacio();
 
 }

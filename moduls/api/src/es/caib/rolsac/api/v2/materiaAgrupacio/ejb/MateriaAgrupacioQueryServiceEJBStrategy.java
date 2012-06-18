@@ -1,8 +1,6 @@
 package es.caib.rolsac.api.v2.materiaAgrupacio.ejb;
 
-import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
-import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceStrategy;
 
@@ -14,14 +12,11 @@ public class MateriaAgrupacioQueryServiceEJBStrategy implements MateriaAgrupacio
         this.materiaAgrupacioQueryServiceDelegate = materiaAgrupacioQueryServiceDelegate;
     }
 
-    public MateriaDTO obtenirMateria(long id, MateriaCriteria materiaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public MateriaDTO obtenirMateria(Long idMateria) {
+        return materiaAgrupacioQueryServiceDelegate.obtenirMateria(idMateria);
     }
 
-    public AgrupacioMateriaDTO obtenirAgrupacioMateria(long id, AgrupacioMateriaCriteria agrupacioMateriaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
+    public AgrupacioMateriaDTO obtenirAgrupacioMateria(Long idAgrupacion) {
+        return materiaAgrupacioQueryServiceDelegate.obtenirAgrupacioMateria(idAgrupacion);
     }
-
 }

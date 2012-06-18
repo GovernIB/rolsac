@@ -338,7 +338,7 @@
         <property name="materiaAgrupacioQueryServiceLocator" ref="materiaAgrupacioQueryServiceEJBLocator" />
     </bean>
 
-    <bean id="materiaAgrupacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materia.ejb.MateriaAgrupacioQueryServiceEJBLocator" />
+    <bean id="materiaAgrupacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceEJBLocator" />
     <!-- MateriaAgrupacioQueryService beans -->
     
     

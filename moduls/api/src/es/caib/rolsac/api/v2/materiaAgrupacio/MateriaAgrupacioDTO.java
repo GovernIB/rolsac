@@ -3,9 +3,9 @@ package es.caib.rolsac.api.v2.materiaAgrupacio;
 public class MateriaAgrupacioDTO {
 
     protected Long id;
-    protected Long materia;
-    protected Long agrupacion;
-    protected Integer orden;
+    private Long materia;
+    private Long agrupacion;
+    private Integer orden;
 
     public Long getId() {
         return id;
