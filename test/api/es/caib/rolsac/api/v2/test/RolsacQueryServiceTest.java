@@ -63,6 +63,8 @@ import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -678,6 +680,27 @@ public class RolsacQueryServiceTest {
         for (PublicObjectiuQueryServiceAdapter po: pos) {
             Assert.assertTrue(po.getTitulo().toLowerCase().contains("persones"));
         }
+    }
+    
+    /**
+     * Cas d'us: Recupera tipus afectacio.
+     */
+    @Test
+    public void recuperarTipusAfectacio() {
+        TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();
+        tipusAfectacioCriteria.setId("2");
+        TipusAfectacioQueryServiceAdapter ta = rolsacQS.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        Assert.assertNotNull(ta);
+    }
+    
+    /**
+     * Cas d'us: Recupera tipus afectacions.
+     */
+    @Test
+    public void recuperarTipusAfectacions() {
+        TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();        
+        List<TipusAfectacioQueryServiceAdapter> tas = rolsacQS.llistarTipusAfectacio(tipusAfectacioCriteria);
+        Assert.assertTrue(tas.size() > 0);        
     }
     
     /**

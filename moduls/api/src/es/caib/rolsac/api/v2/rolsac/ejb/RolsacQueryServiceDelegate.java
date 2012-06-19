@@ -52,6 +52,8 @@ import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusDTO;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -357,6 +359,16 @@ public class RolsacQueryServiceDelegate {
     public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
         RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
         return ejb.llistarTipus(tipusCriteria);
+    }
+
+    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
+        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+        return ejb.obtenirTipusAfectacio(tipusAfectacioCriteria);
+    }
+
+    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
+        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+        return ejb.llistarTipusAfectacio(tipusAfectacioCriteria);
     }
     
 }

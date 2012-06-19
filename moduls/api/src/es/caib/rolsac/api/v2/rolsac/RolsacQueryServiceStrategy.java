@@ -54,6 +54,8 @@ import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusDTO;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -184,5 +186,9 @@ public interface RolsacQueryServiceStrategy {
     TipusDTO obtenirTipus(TipusCriteria tipusCriteria);
 
     List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria);
+
+    TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
+
+    List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
 
 }

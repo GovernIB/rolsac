@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
+import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
@@ -13,7 +15,6 @@ import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
-import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
@@ -55,6 +56,15 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         return normativaQueryServiceStrategy.getNumProcediments(id);
     }
 
+    public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades(){
+        List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectades(id);
+        List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
+        for (AfectacioDTO afectacioDTO : llistaDTO) {
+            llistaQueryServiceAdapter.add((AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO));
+        }
+        return llistaQueryServiceAdapter;
+    }
+    
     public List<NormativaQueryServiceAdapter> llistarAfectades() {
         List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectades(id);
         List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
@@ -64,6 +74,15 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         return llistaQueryServiceAdapter;
     }
 
+    public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectants(){
+        List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectants(id);
+        List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
+        for (AfectacioDTO afectacioDTO : llistaDTO) {
+            llistaQueryServiceAdapter.add((AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO));
+        }
+        return llistaQueryServiceAdapter;
+    }
+    
     public List<NormativaQueryServiceAdapter> llistarAfectants() {
         List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectants(id);
         List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
@@ -86,9 +105,6 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
         return (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), normativaQueryServiceStrategy.obtenirButlleti(this.getBoletin()));
     }
     
-    public TipusQueryServiceAdapter obtenirTipus() {
-        return (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), normativaQueryServiceStrategy.obtenirTipus(this.getTipo()));
-    }
     
     public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() {
         if (this.getUnidadAdministrativa() == null) {return null;}

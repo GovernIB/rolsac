@@ -9,11 +9,12 @@ import net.sf.hibernate.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Tipo;
 
+import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
@@ -30,19 +31,16 @@ import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
-import es.caib.rolsac.api.v2.tipus.TipusCriteria;
-import es.caib.rolsac.api.v2.tipus.TipusDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class NormativaQueryServiceEJB {
 
     private static Log log = LogFactory.getLog(NormativaQueryServiceEJB.class);
-    
-    private static final String HQL_TIPUS_CLASS = "Tipo";
-    private static final String HQL_TIPUS_ALIAS = "T";
 
     private static final String HQL_NORMATIVA_CLASS = "Normativa";
+    private static final String HQL_NORMATIVA_LOCAL_CLASS = "NormativaLocal";
+    private static final String HQL_NORMATIVA_EXTERNA_CLASS = "NormativaExterna";    
     private static final String HQL_NORMATIVA_ALIAS = "n";
         
     private static final String HQL_PROCEDIMIENTOS_LOCALES_CLASS = HQL_NORMATIVA_ALIAS + ".procedimientos";
@@ -329,55 +327,6 @@ public class NormativaQueryServiceEJB {
         return numResultats;
     }
 
-    public TipusDTO obtenirTipus(long idTipus) {
-        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
-        TipusDTO tipusDTO = null;
-        Session sessio = null;
-        TipusCriteria tipusCriteria = new TipusCriteria();
-        tipusCriteria.setId(String.valueOf(idTipus));
-        
-        try {
-            criteris = BasicUtils.parseCriterias(TipusCriteria.class, HQL_TIPUS_ALIAS, HQL_TRADUCCIONES_ALIAS, tipusCriteria);
-            List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_TIPUS_CLASS, HQL_TIPUS_ALIAS));
-            
-            QueryBuilder qb = new QueryBuilder(HQL_TIPUS_ALIAS, entities, tipusCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
-            qb.extendCriteriaObjects(criteris);
-
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            Tipo tipus = (Tipo) query.uniqueResult();
-            sessio.close();
-
-            if (tipus != null) {
-                tipusDTO = (TipusDTO) BasicUtils.entityToDTO(
-                        TipusDTO.class, 
-                        tipus,
-                        tipusCriteria.getIdioma());
-            }
-        } catch (HibernateException e) {
-            log.error(e);
-            e.printStackTrace();
-        } catch (CriteriaObjectParseException e) {
-            log.error(e);
-            e.printStackTrace();
-        } catch (QueryBuilderException e) {
-            log.error(e);
-            e.printStackTrace();
-        } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return tipusDTO;
-    }
-
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
         unitatAdministrativaCriteria.setId(String.valueOf(idUniAdm));
@@ -387,6 +336,134 @@ public class NormativaQueryServiceEJB {
 
     public ArxiuDTO obtenirArxiuNormativa(long idArchivo) {
         return EJBUtils.getArxiuDTO(idArchivo);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
+        List<AfectacioDTO> afectacioDTOList = new ArrayList<AfectacioDTO>();
+        List<Afectacion> afectants = null;
+        List<CriteriaObject> criteris;
+        Session sessio = null;
+        
+        NormativaCriteria normativaCriteria = new NormativaCriteria(); 
+        normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
+        normativaCriteria.setId(String.valueOf(id));       
+
+        try {
+            criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
+            qb.extendCriteriaObjects(criteris);
+            
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
+            
+            if (normativaLocal != null) {
+                afectants = new ArrayList<Afectacion>(normativaLocal.getAfectantes());
+            } else {
+                criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
+                entities = new ArrayList<FromClause>();
+                entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
+                qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
+                qb.extendCriteriaObjects(criteris);
+                query = qb.createQuery(sessio);
+                NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
+                
+                if (normativaExterna != null) {
+                    afectants = new ArrayList<Afectacion>(normativaExterna.getAfectantes());
+                }
+            }
+                        
+            for (Afectacion afec: afectants){
+                afectacioDTOList.add((AfectacioDTO) BasicUtils.entityToDTO(AfectacioDTO.class,  afec, normativaCriteria.getIdioma()));
+            }
+            
+            sessio.close();
+            
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                }
+            }
+        }
+
+        return afectacioDTOList;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
+        List<AfectacioDTO> afectacioDTOList = new ArrayList<AfectacioDTO>();
+        List<Afectacion> afectades = null;
+        List<CriteriaObject> criteris;
+        Session sessio = null;
+        
+        NormativaCriteria normativaCriteria = new NormativaCriteria(); 
+        normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
+        normativaCriteria.setId(String.valueOf(id));       
+
+        try {
+            criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
+            qb.extendCriteriaObjects(criteris);
+            
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
+            
+            if (normativaLocal != null) {
+                afectades = new ArrayList<Afectacion>(normativaLocal.getAfectadas());
+            } else {
+                criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
+                entities = new ArrayList<FromClause>();
+                entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
+                qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
+                qb.extendCriteriaObjects(criteris);
+                query = qb.createQuery(sessio);
+                NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
+                
+                if (normativaExterna != null) {
+                    afectades = new ArrayList<Afectacion>(normativaExterna.getAfectadas());
+                }
+            }
+                        
+            for (Afectacion afec: afectades){
+                afectacioDTOList.add((AfectacioDTO) BasicUtils.entityToDTO(AfectacioDTO.class,  afec, normativaCriteria.getIdioma()));
+            }
+            
+            sessio.close();
+            
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                }
+            }
+        }
+
+        return afectacioDTOList;
     }
 
 }

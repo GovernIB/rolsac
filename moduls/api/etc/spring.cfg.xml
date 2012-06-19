@@ -481,6 +481,21 @@
     <bean id="tipusAfectacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter" scope="prototype" />
     <!-- TipusAfectacioQueryService beans -->
     
+    <!-- AfectacioQueryService beans -->
+    <bean id="afectacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter" scope="prototype">
+        <property name="afectacioQueryServiceStrategy" ref="afectacioQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="afectacioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.afectacio.ejb.AfectacioQueryServiceEJBStrategy">
+        <property name="afectacioQueryServiceDelegate" ref="afectacioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="afectacioQueryServiceDelegate" class="es.caib.rolsac.api.v2.afectacio.ejb.AfectacioQueryServiceDelegate">
+        <property name="afectacioQueryServiceLocator" ref="afectacioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="afectacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.afectacio.ejb.AfectacioQueryServiceEJBLocator" />
+    <!-- AfectacioQueryService beans -->
     
     <!-- TractamentQueryService beans -->
     <bean id="tractamentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.tractament.TractamentQueryServiceAdapter" scope="prototype" />

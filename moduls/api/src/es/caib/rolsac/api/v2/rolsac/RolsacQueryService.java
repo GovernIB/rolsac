@@ -54,6 +54,8 @@ import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -157,6 +159,10 @@ public interface RolsacQueryService {
 
     List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria);
 
+    TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
+    
+    List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
+    
     SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria);
 
     List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria);

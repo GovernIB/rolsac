@@ -83,6 +83,9 @@ import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusDTO;
 import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
@@ -430,6 +433,20 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         return llistaQueryServiceAdapter;
     }
 
+    public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria){
+        TipusAfectacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        return (TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), dto); 
+    }
+    
+    public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
+        List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusAfectacio(tipusAfectacioCriteria);
+        List<TipusAfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusAfectacioQueryServiceAdapter>();
+        for (TipusAfectacioDTO taDTO : llistaDTO) {
+            llistaQueryServiceAdapter.add((TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), taDTO));
+        }
+        return llistaQueryServiceAdapter;
+    }
+    
     public SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) {
         SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
         return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);

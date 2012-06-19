@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
@@ -15,7 +16,6 @@ import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
-import es.caib.rolsac.api.v2.tipus.TipusQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public class NormativaQueryServiceTest {
@@ -98,16 +98,6 @@ public class NormativaQueryServiceTest {
     }    
     
     @Test
-    public void recuperarTipus() {
-        NormativaCriteria normativaCriteria = new NormativaCriteria();
-        normativaCriteria.setId("82472");
-        NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
-        Assert.assertNotNull(normativa);
-        TipusQueryServiceAdapter tipusQueryServiceAdapter = normativa.obtenirTipus();
-        Assert.assertTrue(tipusQueryServiceAdapter.getNombre().equals("Reial Decret Llei"));
-    } 
-    
-    @Test
     public void recuperarUnitatAdministrativa() {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
         normativaCriteria.setId("79579");
@@ -125,5 +115,26 @@ public class NormativaQueryServiceTest {
         Assert.assertNotNull(normativa);
         ArxiuQueryServiceAdapter arxiuvaQueryServiceAdapter = normativa.obtenirArxiuNormativa();
         Assert.assertNotNull(arxiuvaQueryServiceAdapter);
+    }
+    
+    @Test
+    public void recuperarAfectacionsAfectants() {
+        NormativaCriteria normativaCriteria = new NormativaCriteria();
+        normativaCriteria.setId("75074");
+        NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
+        Assert.assertNotNull(normativa);
+        List<AfectacioQueryServiceAdapter> llistatAfectantsQueryServiceAdapter = normativa.llistarAfectacionsAfectants();
+        Assert.assertTrue(llistatAfectantsQueryServiceAdapter.size() == 3);
+    }
+    
+    @Test
+    public void recuperarAfectacionsAfectades() {
+        NormativaCriteria normativaCriteria = new NormativaCriteria();
+        normativaCriteria.setId("13607");
+        NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
+        Assert.assertNotNull(normativa);
+        List<AfectacioQueryServiceAdapter> llistatAfectadesQueryServiceAdapter = normativa.llistarAfectacionsAfectades();
+        
+        Assert.assertTrue(llistatAfectadesQueryServiceAdapter.size() == 2);
     }
 }

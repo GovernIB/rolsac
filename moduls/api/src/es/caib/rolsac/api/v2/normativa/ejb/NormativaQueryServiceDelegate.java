@@ -2,12 +2,12 @@ package es.caib.rolsac.api.v2.normativa.ejb;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
-import es.caib.rolsac.api.v2.tipus.TipusDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class NormativaQueryServiceDelegate {
@@ -53,11 +53,6 @@ public class NormativaQueryServiceDelegate {
         return ejb.getNumProcediments(id);
     }
 
-    public TipusDTO obtenirTipus(long idTipus) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.obtenirTipus(idTipus);
-    }
-
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) {
         NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
         return ejb.obtenirUnitatAdministrativa(idUniAdm);
@@ -66,6 +61,16 @@ public class NormativaQueryServiceDelegate {
     public ArxiuDTO obtenirArxiuNormativa(long idArchivo) {
         NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
         return ejb.obtenirArxiuNormativa(idArchivo);
+    }
+
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
+        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+        return ejb.llistarAfectacionsAfectants(id);
+    }
+
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
+        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+        return ejb.llistarAfectacionsAfectades(id);
     }
 
 }

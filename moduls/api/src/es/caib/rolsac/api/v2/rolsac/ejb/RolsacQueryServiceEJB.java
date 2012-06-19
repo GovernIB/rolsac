@@ -35,6 +35,7 @@ import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
@@ -98,6 +99,8 @@ import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.tipus.TipusCriteria;
 import es.caib.rolsac.api.v2.tipus.TipusDTO;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria;
+import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -170,6 +173,8 @@ public class RolsacQueryServiceEJB {
     private static final String HQL_SECCIO_ALIAS = "s";
     private static final String HQL_TIPUS_CLASS = "Tipo";
     private static final String HQL_TIPUS_ALIAS = "ti";
+    private static final String HQL_TIPUS_AFECTACIO_CLASS = "TipoAfectacion";
+    private static final String HQL_TIPUS_AFECTACIO_ALIAS = "tia";
     private static final String HQL_UNITAT_MATERIA_CLASS = "UnidadMateria";
     private static final String HQL_UNITAT_MATERIA_ALIAS = "um";
 
@@ -3181,6 +3186,113 @@ public class RolsacQueryServiceEJB {
         }
 
         return tipusDTOList;
+    }
+
+    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
+        List<CriteriaObject> criteris;
+        TipusAfectacioDTO tipusAfectacioDTO = null;
+        Session sessio = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    TipusAfectacioCriteria.class,
+                    HQL_TIPUS_AFECTACIO_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS,
+                    tipusAfectacioCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_TIPUS_AFECTACIO_CLASS, HQL_TIPUS_AFECTACIO_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_TIPUS_AFECTACIO_ALIAS, 
+                    entities, 
+                    tipusAfectacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            TipoAfectacion tipusAfectacio = (TipoAfectacion) query.uniqueResult();
+            sessio.close();
+
+            if (tipusAfectacio != null) {
+                tipusAfectacioDTO = (TipusAfectacioDTO) BasicUtils.entityToDTO(TipusAfectacioDTO.class, tipusAfectacio, tipusAfectacioCriteria.getIdioma());
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            e.printStackTrace();
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return tipusAfectacioDTO;
+    }
+
+    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
+        List<CriteriaObject> criteris;
+        List<TipusAfectacioDTO> tipusAfectacioDTOList = new ArrayList<TipusAfectacioDTO>();
+        Session sessio = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    TipusAfectacioCriteria.class,
+                    HQL_TIPUS_AFECTACIO_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS,
+                    tipusAfectacioCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_TIPUS_AFECTACIO_CLASS, HQL_TIPUS_AFECTACIO_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_TIPUS_AFECTACIO_ALIAS, 
+                    entities, 
+                    tipusAfectacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            sessio = HibernateUtils.getSessionFactory().openSession();
+            Query query = qb.createQuery(sessio);
+            @SuppressWarnings("unchecked")
+            List<TipoAfectacion> tipoAfectacionResult = (List<TipoAfectacion>) query.list();
+            sessio.close();
+
+            for (TipoAfectacion t: tipoAfectacionResult) {
+                tipusAfectacioDTOList.add((TipusAfectacioDTO) BasicUtils.entityToDTO(TipusAfectacioDTO.class, t, tipusAfectacioCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            e.printStackTrace();
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            e.printStackTrace();
+        } finally {
+            if (sessio != null && sessio.isOpen()) {
+                try {
+                    sessio.close();
+                } catch (HibernateException e) {
+                    log.error(e);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return tipusAfectacioDTOList;
     }
     
 }

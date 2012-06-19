@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.normativa.ws;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -67,6 +68,16 @@ public class NormativaQuerySeviceWebServiceStrategy implements NormativaQuerySer
     }
 
     public ArxiuDTO obtenirArxiuNormativa(Long idArchivo) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
