@@ -5,8 +5,12 @@
 <head>
 	
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><spring:message code='aplicacio.titol'/></title>
-    <link href="<c:url value='/img/favicon.ico'/>" rel="shortcut icon" type="image/x-icon" />
+    <title><%
+String appTitol = System.getProperty("entitat.aplicacio.titol");
+if (appTitol==null) {
+%><spring:message code='aplicacio.titol'/><% } else { 
+%><%=appTitol%><% } %></title>
+    <jsp:include page="layout/favicon.jsp" flush="true"/>
     <link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/comuns_amplaria1.css'/>" rel="stylesheet" type="text/css" media="screen" />  
     <link href="<c:url value='/css/titol.css'/>" rel="stylesheet" type="text/css" media="screen" />
