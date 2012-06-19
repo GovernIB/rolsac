@@ -5,7 +5,14 @@
 <div id="cap">
     <div id="cap_contingut">
         <div class="logos">
-            <div class="caib_logo"></div>
+<%    
+String logourl = System.getProperty("entitat.logourl");
+String style = "";
+if (logourl != null) {
+  style = "style=\"background:transparent url(" + logourl + ") 0 0 no-repeat;\"";
+}
+%>
+            <div class="caib_logo" <%=style%>></div>
         </div>
         <div class="aplicacio">
             <span class="nom">Rolsac</span> <span class="versio">1.1</span>

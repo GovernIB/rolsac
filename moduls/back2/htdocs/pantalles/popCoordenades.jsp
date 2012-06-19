@@ -7,7 +7,7 @@
 <head>
 	<title><spring:message code='coordenada.coordenades'/></title>
 	<meta content="text/html; charset='ISO-8859-15'" http-equiv="Content-type" />
-	<link href="<c:url value='/img/favicon.ico'/>" rel="shortcut icon" type="image/x-icon" />
+	<jsp:include page="layout/favicon.jsp" flush="true"/>
 	<link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
 	<link href="<c:url value='/css/coordenades.css'/>" rel="stylesheet" type="text/css" media="screen" />
 	
