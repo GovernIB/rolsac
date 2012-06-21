@@ -49,8 +49,6 @@
         	<include name="jaxrpc.jar"/>
         	<include name="mail.jar"/>
         	<include name="htmllexer.jar" />
-        	<include name="ojdbc14.jar"/>
-
         </fileset>
         <fileset dir="${ejb.product}">
             <include name="sac-utils.jar"/>        	
@@ -159,7 +157,7 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="sac-${modul}-client.jar"
+                clientjar="${prefix.modul}-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
@@ -214,9 +212,9 @@
 		
 	
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/${prefix.modul}-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sac-${modul}.jar"
+            jarfile="${ejb.product}/${prefix.modul}-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundaci� IBIT"/>
@@ -229,9 +227,9 @@
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/${prefix.modul}-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sac-${modul}-client.jar"
+            jarfile="${ejb.product}/${prefix.modul}-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundaci� IBIT"/>
@@ -268,7 +266,6 @@
 	<path id="hbm2ddl.class.path">
 	        <fileset dir="${lib.dir}">
 	            <include name="hibernate2.jar"/>
-	        	<include name="ojdbc14.jar"/>
 	        	<include name="commons-logging.jar"/>
 	        	<include name="cglib2.jar"/>
 	        </fileset>

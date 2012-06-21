@@ -36,7 +36,6 @@
         <fileset dir="${lib.dir}">
             <include name="commons-logging.jar"/>
             <include name="hibernate2.jar"/>
-        	<include name="ojdbc14.jar"/>
 			<include name="jaxrpc.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
@@ -69,6 +68,8 @@
 		
 		<replace dir="${jar.gen.etc}" includes="**/*.hbm.xml">			
 			<replacefilter token="RSC_" value="${db.prefix}"/>
+			<replacefilter token="@blob.type@" value="${blob.type}"/>
+			<replacefilter token="@clob.type@" value="${clob.type}"/>
 		</replace>
 		
     	<replace file="${jar.gen.etc}/url.properties">

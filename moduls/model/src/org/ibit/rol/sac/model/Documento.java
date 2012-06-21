@@ -106,9 +106,18 @@ public class Documento extends Traducible implements Indexable, Comparator {
 		long fichaid=ficha==null?-1:ficha.getId();
 		long procid=procedimiento==null?-1:procedimiento.getId();
 
-		return "Documento [archivo=..." +", ficha=" + fichaid + 
+		String archivo = obtenerStringArchivo();
+		
+		return "Documento [archivo=" +archivo +", ficha=" + fichaid + 
 		", id="+ id + ", orden=" + orden + ", " +
 		"procedimiento=" + procid + "]";
+	}
+
+	private String obtenerStringArchivo() {
+		TraduccionDocumento tradoc = (TraduccionDocumento)getTraduccion("ca"); 
+		if(null==tradoc)
+			return null;
+		return tradoc.getArchivo().toString();
 	}
 
 

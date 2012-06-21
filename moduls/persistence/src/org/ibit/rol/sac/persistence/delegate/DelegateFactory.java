@@ -1,7 +1,8 @@
 package org.ibit.rol.sac.persistence.delegate;
 
 import net.sf.cglib.proxy.Enhancer;
-import org.ibit.rol.sac.persistence.util.LogInterceptor;
+
+import org.ibit.rol.sac.persistence.util.DelegateLogInterceptor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ class DelegateFactory {
     }
 
     private static Object getEnhancedInstance(Class clazz) {
-        return Enhancer.create(clazz, new LogInterceptor("delegate"));
+        return Enhancer.create(clazz, new DelegateLogInterceptor("es.caib.rolsac.delegate.interceptor"));
         /*
         try {
             return clazz.newInstance();

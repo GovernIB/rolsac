@@ -1,14 +1,12 @@
-package org.ibit.rol.sac.model.types;
+package es.caib.rolsac.oracle.hibernate;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.UserType;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.*;
-import java.util.Arrays;
+
 
 import org.apache.commons.lang.ObjectUtils;
 

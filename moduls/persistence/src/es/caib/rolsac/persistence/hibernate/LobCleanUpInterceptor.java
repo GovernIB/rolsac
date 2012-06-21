@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.types;
+package es.caib.rolsac.persistence.hibernate;
 
 import net.sf.hibernate.Interceptor;
 import net.sf.hibernate.type.Type;

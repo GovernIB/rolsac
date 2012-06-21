@@ -1,0 +1,6 @@
+			<module>
+        		<web>
+    	      	<web-uri>integracion.war</web-uri>
+        	  	<context-root>integracion</context-root>
+        		</web>
+    		</module>

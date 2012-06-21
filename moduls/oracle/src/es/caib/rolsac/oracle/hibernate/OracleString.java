@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.types;
+package es.caib.rolsac.oracle.hibernate;
 
 /**
  * Created by IntelliJ IDEA.

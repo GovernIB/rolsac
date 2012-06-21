@@ -13,6 +13,7 @@
     <property name="lib.dir" location="${home.dir}/lib"/>
 
     <target name="prepare.test">
+    	<delete dir="${module.classes}"/>
     	<mkdir dir="${test.classes}"/>
     	<mkdir dir="${test.unitario.resources}"/>
     	<copy todir="${test.unitario.resources}" overwrite="true">

@@ -18,6 +18,9 @@
 	<classpathentry kind="src" path="test/common/java"/>
 	<classpathentry kind="src" path="test/back/unitario/java"/>
 	<classpathentry kind="src" path="test/back/unitario/resources"/>
+	<classpathentry kind="src" path="test/model/unitario/java"/>
+	<classpathentry kind="src" path="moduls/oracle/src"/>
+	<classpathentry kind="src" path="test/oracle/unitario/java"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>

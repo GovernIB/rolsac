@@ -16,7 +16,8 @@ import net.sf.hibernate.SessionFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.persistence.util.HibernateLocator;
+
+import es.caib.rolsac.persistence.hibernate.HibernateLocator;
 
 
 

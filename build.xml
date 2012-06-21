@@ -29,7 +29,14 @@
 
 	<property environment="env"/>
 	
+	
+	<!-- se incluyen targets de ant-contrib --> 
 
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${lib}/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
   <!-- ====================================================================== -->
@@ -227,6 +234,18 @@
 	</target>
 
 
+	<!--Oracle afegit ejaen@dgtic -->
+    <target name="update.oracle" description="Actualitar el modulo oracle" if="db.oracle">
+    	
+	  	<echo>ORACLE</echo>
+		<ant dir="moduls/oracle" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
+	</target>
+
+	
 
 	  <!-- ================================================================== -->
 	  <!-- test.unitario    Executa els tests unitaris                        -->
@@ -234,11 +253,21 @@
 
 
 	  <target name="test.unitario">
+	  		<echo> COMMON </echo>
 	  		<ant dir="test/common" target="main" inheritall="false"/>
+	  		<echo> UTILS </echo>
+	  		<ant dir="moduls/utils" target="test.unitario" inheritall="false"/>
+	  		<echo> EXTRACTOR </echo>
 			<ant dir="moduls/extractor" target="test.unitario" inheritall="false"/>
+	  		<echo> MODEL </echo>
 			<ant dir="moduls/model" target="test.unitario" inheritall="false"/>
+	  		<echo> PERSISTENCE </echo>
 		  	<ant dir="moduls/persistence" target="test.unitario" inheritall="false"/>
+	  		<echo> INTEGRACION </echo>
 	  		<ant dir="moduls/integracion" target="test.unitario" inheritall="false"/>
+	  		<echo> ORACLE </echo>
+	  		<ant dir="moduls/oracle" target="test.unitario" inheritall="false"/>
+	  		<echo> BACK </echo>
 	  		<ant dir="moduls/back" target="test.unitario" inheritall="false"/>
 	  	
 	  	<!--
@@ -250,6 +279,49 @@
 	  </target>	
 	 	
 
+	
+  <!-- ================================================================== -->
+  <!-- Construeix el fitxer application.xml							      -->
+  <!-- ================================================================== -->
+
+ <target name="make.application.xml">
+ 	
+	<delete file="${output.dir}/application.xml"/>
+		
+	 <concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+	    <filelist dir="${etc.approlsac}" 	files="01.application.begin.xml"/>
+ 		<filelist dir="moduls/extractor" 	files="appmodule.xml"/>
+	 	<filelist dir="moduls/model" 		files="appmodule.xml"/>
+ 		<filelist dir="moduls/integracion" 	files="appmodule.xml"/>
+ 		<filelist dir="moduls/persistence" 	files="appmodule.xml"/>
+	 	<filelist dir="moduls/traspas-boib" files="appmodule.xml"/>
+	 	<filelist dir="moduls/utils" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/back" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/back2" 		files="appmodule.xml"/>
+ 	</concat>
+ 	
+ 	
+  	<if> <equals arg1="${db.oracle}" arg2="true" />
+	 <then>
+	 	<concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+	 		<filelist dir="moduls/oracle" 	files="appmodule.xml"/>
+	 	</concat>
+	</then>
+  	</if>
+
+	<concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+		<filelist dir="${etc.approlsac}" files="03.application.securityrole.xml"/>
+		<filelist dir="${etc.approlsac}" files="04.application.end.xml"/>
+	</concat>
+	
+    <replace file="${output.dir}/application.xml">
+        <replacefilter token="@context.back@" value="${context.back}"/>
+		<replacefilter token="@context.back2@" value="${context.back2}"/>
+        <replacefilter token="@context.ws@" value="${context.ws}"/>
+        <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
+    </replace>
+
+ </target>
 
 	
   <!-- ================================================================== -->
@@ -259,15 +331,12 @@
 
 	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
-        <!-- application.xml  -->
-       <copy file="${etc.approlsac}/application.xml" todir="${output.dir}" overwrite="true"/>
-        <replace file="${output.dir}/application.xml">
-            <replacefilter token="@context.back@" value="${context.back}"/>
-			<replacefilter token="@context.back2@" value="${context.back2}"/>
-            <replacefilter token="@context.ws@" value="${context.ws}"/>
-            <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
-        </replace>
 
+		<condition property="db.oracle" value="true">
+		  		<contains string="${hibernate.dialect}" substring="oracle" casesensitive="false"/>
+		</condition>
+		
+		<antcall target="make.application.xml"/>
 
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
@@ -280,6 +349,7 @@
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
 			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
+			
 			<fileset dir="${moduls.dir}">
 				<include name="${prefix.modul}-utils.jar" />
 				<include name="extractor.jar" />
@@ -292,16 +362,9 @@
 				<include name="${prefix.modul}-back.war" />
 				<include name="${prefix.modul}-ws.war" />
 				<include name="traspasboib.war" />
+				<include name="${prefix.modul}-oracle.jar" if="db.oracle"/>
 			</fileset>
 			
-			<!-- No incluimos los .jar externos, solo para stand alone-->
-			<!--
-			<fileset dir="${lib}">
-				<include name="boib.jar" />
-				<include name="micromodel.jar" />
-				<include name="sac-micropersistence.jar" />
-			</fileset>
-			-->
 			
 			<!-- Incluimos los .jar dependientes -->
             <fileset dir="${lib}">
@@ -309,10 +372,6 @@
                 <include name="ehcache.jar" />
             </fileset>
 			
-			<!-- Incluimos el .sar de propiedades del sistema -->						
-<!--            <fileset dir="${home}"> -->
-<!--                <include name="01${projecte.name.rolsac}.sar" /> -->
-<!--            </fileset> -->
     	</ear>
   </target>	
 	
@@ -381,6 +440,22 @@
 	  		   <propertyref name="rolsac.target"/>
 	  		</propertyset>
 	  	</ant>
+	  	
+	  	<condition property="db.oracle" value="true">
+	  		<contains string="${hibernate.dialect}" substring="oracle" casesensitive="false"/>
+	  	</condition>
+	  	
+	  	<antcall target="update.oracle"/>
+	  		
+	  	<!--
+	  	<echo>ORACLE</echo>
+		<ant dir="moduls/oracle" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
+-->
+	  	
 	  	<echo>INTEGRACION</echo>
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false">
 	  		<propertyset>
@@ -405,12 +480,16 @@
 	  		   <propertyref name="rolsac.target"/>
 	  		</propertyset>
 	  	</ant>
+	  	
 	  	<echo>TRASPAS-BOIB</echo>
 		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false">
 	  		<propertyset>
 	  		   <propertyref name="rolsac.target"/>
 	  		</propertyset>
 	  	</ant>
+
+
+	  	
 	  </target>	
  	
 	

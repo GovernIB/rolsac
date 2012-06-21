@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.persistence.util;
+package es.caib.rolsac.persistence.hibernate;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -21,7 +21,7 @@ import net.sf.hibernate.type.Type;
 public class ChainedInterceptor implements Interceptor {
 
     // Interceptors to be chained
-    private Interceptor[] interceptors;
+    protected Interceptor[] interceptors;
 
     /**
      * Constructor

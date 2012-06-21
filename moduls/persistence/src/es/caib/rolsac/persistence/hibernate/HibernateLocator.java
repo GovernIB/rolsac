@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.persistence.util;
+package es.caib.rolsac.persistence.hibernate;
 
 import java.net.URL;
 
@@ -10,7 +10,6 @@ import net.sf.hibernate.cfg.Environment;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.persistence.search.IndexerInterceptor;
-import org.ibit.rol.sac.model.types.LobCleanUpInterceptor;
 
 /**
  * TODO: Corregir double checked locking
@@ -21,7 +20,20 @@ public class HibernateLocator {
 
     private final SessionFactory sf;
 
-    private HibernateLocator() {
+    protected static Interceptor globalInterceptor;
+    
+    public static Interceptor getGlobalInterceptor() {
+		return globalInterceptor;
+	}
+
+	private HibernateLocator() {
+
+    	
+    	globalInterceptor =  new ChainedInterceptor(
+    								new Interceptor[] {
+    											new IndexerInterceptor(),
+    											new LobCleanUpInterceptor()} );
+    	
         sf = initSessionFactory();
     }
 
@@ -47,7 +59,6 @@ public class HibernateLocator {
     public static SessionFactory getSessionFactory() {
         return getInstance().sf;
     }
-
     
      
     private static SessionFactory initSessionFactory() {
@@ -59,16 +70,12 @@ public class HibernateLocator {
         try {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             URL url = cl.getResource("hibernate-rolsac.cfg.xml");
-            Interceptor interceptor =
-                    new ChainedInterceptor(
-                            new Interceptor[] {
-                                    new IndexerInterceptor(),
-                                    new LobCleanUpInterceptor() } );
-            Configuration cfg = new Configuration().configure(url).setInterceptor(interceptor);
+            Configuration cfg = new Configuration().configure(url).setInterceptor(globalInterceptor);
             return cfg.buildSessionFactory();
         } catch (HibernateException e) {
             throw new RuntimeException(e);
         }
     }
-    
+
+
 }

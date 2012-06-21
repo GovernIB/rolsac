@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.persistence.util;
+package es.caib.rolsac.persistence.hibernate;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Session;

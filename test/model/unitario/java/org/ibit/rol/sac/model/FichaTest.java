@@ -3,6 +3,7 @@ package org.ibit.rol.sac.model;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 
 public class FichaTest {
@@ -11,7 +12,8 @@ public class FichaTest {
 	public void printFicha() {
 		Ficha ficha = crearFichaConUnaMateria(123L, Materia.CE_SENSECLASSIFICAR);
 		
-		System.out.println(ficha);
+		assertTrue(ficha.toString().contains("123"));
+
 		
 	} 
 	

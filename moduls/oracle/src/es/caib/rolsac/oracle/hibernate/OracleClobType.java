@@ -1,4 +1,4 @@
-package org.ibit.rol.sac.model.types;
+package es.caib.rolsac.oracle.hibernate;
 
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.UserType;
@@ -6,6 +6,8 @@ import net.sf.hibernate.UserType;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import es.caib.rolsac.persistence.hibernate.LobCleanUpInterceptor;
 
 import java.io.IOException;
 import java.io.StringReader;
