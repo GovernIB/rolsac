@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.tipusAfectacio;
 
-public class TipusAfectacioDTO {
+import java.io.Serializable;
+
+public class TipusAfectacioDTO implements Serializable {
     
+    private static final long serialVersionUID = -6030803213788092655L;
+
     protected long id;
     
     private String nombre;

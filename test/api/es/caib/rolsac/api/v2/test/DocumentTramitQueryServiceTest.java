@@ -7,6 +7,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -25,20 +26,28 @@ public class DocumentTramitQueryServiceTest {
     public void recuperarTramit() {
         DocumentTramitCriteria criteria = new DocumentTramitCriteria();
         criteria.setId("636328");
-        DocumentTramitQueryServiceAdapter docTraAd = rolsacQS.obtenirDocumentTramit(criteria);
-        Assert.assertNotNull(docTraAd);
-        TramitQueryServiceAdapter ta = (TramitQueryServiceAdapter) docTraAd.obtenirTramit();
-        Assert.assertNotNull(ta);
+        try {
+            DocumentTramitQueryServiceAdapter docTraAd = rolsacQS.obtenirDocumentTramit(criteria);
+            Assert.assertNotNull(docTraAd);
+            TramitQueryServiceAdapter ta = (TramitQueryServiceAdapter) docTraAd.obtenirTramit();
+            Assert.assertNotNull(ta);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void recuperarArxiu() {
         DocumentTramitCriteria criteria = new DocumentTramitCriteria();
         criteria.setId("627763");
-        DocumentTramitQueryServiceAdapter docTraAd = rolsacQS.obtenirDocumentTramit(criteria);
-        Assert.assertNotNull(docTraAd);
-        ArxiuQueryServiceAdapter aa = (ArxiuQueryServiceAdapter) docTraAd.obtenirArxiu();
-        Assert.assertNotNull(aa);
+        try {
+            DocumentTramitQueryServiceAdapter docTraAd = rolsacQS.obtenirDocumentTramit(criteria);
+            Assert.assertNotNull(docTraAd);
+            ArxiuQueryServiceAdapter aa = (ArxiuQueryServiceAdapter) docTraAd.obtenirArxiu();
+            Assert.assertNotNull(aa);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
 }

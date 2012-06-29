@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class TramitDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = -3781656165736514527L;
+
     protected long id;
     private int fase;
     private Long orden;

@@ -3,22 +3,23 @@ package es.caib.rolsac.api.v2.agrupacioFetVital;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 
 public interface AgrupacioFetVitalQueryService {
 
-    PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu();
+    public PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu() throws QueryServiceException;
 
-    List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria);
+    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getFotografia();
+    public ArxiuQueryServiceAdapter getFotografia() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getIcona();
+    public ArxiuQueryServiceAdapter getIcona() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getIconaGran();
+    public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException;
     
-    int getNumFetsVitals();
+    public int getNumFetsVitals() throws QueryServiceException;
 
 }

@@ -1,10 +1,13 @@
 package es.caib.rolsac.api.v2.unitatAdministrativa;
 
+import java.io.Serializable;
+
 import es.caib.rolsac.api.v2.general.EntitatRemota;
 
-public class UnitatAdministrativaDTO extends EntitatRemota {
+public class UnitatAdministrativaDTO extends EntitatRemota implements Serializable {
 
-    
+    private static final long serialVersionUID = -4216172556734140793L;
+
     protected Long id;
     private String businessKey;
     private String claveHita;

@@ -6,6 +6,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -26,62 +27,62 @@ import es.caib.rolsac.api.v2.usuari.UsuariQueryServiceAdapter;
 
 public interface UnitatAdministrativaQueryService {
 
-    UnitatAdministrativaQueryServiceAdapter obtenirPare();
+    public UnitatAdministrativaQueryServiceAdapter obtenirPare() throws QueryServiceException;
 
-    EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial();
+    public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial() throws QueryServiceException;
 
-    TractamentQueryServiceAdapter obtenirTractament();
+    public TractamentQueryServiceAdapter obtenirTractament() throws QueryServiceException;
     
-    List<UnitatAdministrativaQueryServiceAdapter> llistarFilles(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarFilles(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
 
-    List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria);
+    public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException;
 
-    List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria);
+    public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException;
 
-    List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria);
+    public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException;
 
-    List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
 
-    List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria);
+    public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException;
 
-    List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria);
+    public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
 
-    List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria);
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
     
-    List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria);
+    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
 
-    List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria);
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
-    int getNumFilles();
+    public int getNumFilles() throws QueryServiceException;
     
-    int getNumEdificis();
+    public int getNumEdificis() throws QueryServiceException;
     
-    int getNumPersonal();
+    public int getNumPersonal() throws QueryServiceException;
     
-    int getNumNormatives();
+    public int getNumNormatives() throws QueryServiceException;
     
-    int getNumProcediments();
+    public int getNumProcediments() throws QueryServiceException;
     
-    int getNumTramits();
+    public int getNumTramits() throws QueryServiceException;
     
-    int getNumUsuaris();
+    public int getNumUsuaris() throws QueryServiceException;
     
-    int getNumFitxes();
+    public int getNumFitxes() throws QueryServiceException;
     
-    int getNumSeccions();
+    public int getNumSeccions() throws QueryServiceException;
     
-    int getNumMateries();    
+    public int getNumMateries() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirFotop();
+    public ArxiuQueryServiceAdapter obtenirFotop() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirFotog();
+    public ArxiuQueryServiceAdapter obtenirFotog() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirLogoh();
+    public ArxiuQueryServiceAdapter obtenirLogoh() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirLogov();
+    public ArxiuQueryServiceAdapter obtenirLogov() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirLogos();
+    public ArxiuQueryServiceAdapter obtenirLogos() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirLogot();
+    public ArxiuQueryServiceAdapter obtenirLogot() throws QueryServiceException;
     
 }

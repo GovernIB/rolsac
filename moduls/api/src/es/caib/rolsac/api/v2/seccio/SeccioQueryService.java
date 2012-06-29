@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.seccio;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -9,22 +10,22 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public interface SeccioQueryService {
 
-    int getNumFilles();
+    public int getNumFilles() throws QueryServiceException;
 
-    int getNumFitxes();
+    public int getNumFitxes() throws QueryServiceException;
 
-    int getNumPares();
+    public int getNumPares() throws QueryServiceException;
     
-    int getNumUnitatsAdministratives();
+    public int getNumUnitatsAdministratives() throws QueryServiceException;
 
-    List<SeccioQueryServiceAdapter> llistarPares();
+    public List<SeccioQueryServiceAdapter> llistarPares() throws QueryServiceException;
 
-    List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria);
+    public List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria) throws QueryServiceException;
 
-    List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria);
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
     
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
     
-    SeccioQueryServiceAdapter obtenirPare();
+    public SeccioQueryServiceAdapter obtenirPare() throws QueryServiceException;
 
 }

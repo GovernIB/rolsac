@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class UsuariCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = -5123488037868134748L;
+
     private String username;
     private String nombre;
     private String observaciones;

@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class FamiliaCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 4100965318007021541L;
+
     // traducciones
     private String t_nombre;
     private String t_descripcion;

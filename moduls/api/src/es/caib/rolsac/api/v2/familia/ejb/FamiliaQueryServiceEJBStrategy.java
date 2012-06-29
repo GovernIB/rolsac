@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.familia.ejb;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
@@ -16,20 +18,36 @@ public class FamiliaQueryServiceEJBStrategy implements FamiliaQueryServiceStrate
         this.familiaQueryServiceDelegate = familiaQueryServiceDelegate;
     }
 
-    public int getNumProcedimentsLocals(long id) {
-        return familiaQueryServiceDelegate.getNumProcedimentsLocals(id);
+    public int getNumProcedimentsLocals(long id) throws StrategyException {
+        try {
+            return familiaQueryServiceDelegate.getNumProcedimentsLocals(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumIcones(long id) {
-        return familiaQueryServiceDelegate.getNumIcones(id);
+    public int getNumIcones(long id) throws StrategyException {
+        try {
+            return familiaQueryServiceDelegate.getNumIcones(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) {
-        return familiaQueryServiceDelegate.llistarProcedimentsLocals(id, procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return familiaQueryServiceDelegate.llistarProcedimentsLocals(id, procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria) {
-        return familiaQueryServiceDelegate.llistarIcones(id, iconaFamiliaCriteria);
+    public List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException {
+        try {
+            return familiaQueryServiceDelegate.llistarIcones(id, iconaFamiliaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

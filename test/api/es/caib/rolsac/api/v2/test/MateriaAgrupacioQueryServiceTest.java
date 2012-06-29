@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
@@ -25,19 +26,27 @@ public class MateriaAgrupacioQueryServiceTest {
     public void obtenirMateria() {
         MateriaAgrupacioCriteria materiaAgrupacioCriteria = new MateriaAgrupacioCriteria();
         materiaAgrupacioCriteria.setId("174532");
-        MateriaAgrupacioQueryServiceAdapter materiaAgrupacio = rolsacQS.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-        Assert.assertNotNull(materiaAgrupacio);
-        MateriaQueryServiceAdapter materia = materiaAgrupacio.obtenirMateria();
-        Assert.assertTrue(materia.getNombre().equals("Dona"));        
+        try {
+            MateriaAgrupacioQueryServiceAdapter materiaAgrupacio = rolsacQS.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+            Assert.assertNotNull(materiaAgrupacio);
+            MateriaQueryServiceAdapter materia = materiaAgrupacio.obtenirMateria();
+            Assert.assertTrue(materia.getNombre().equals("Dona"));
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirAgrupacio() {
         MateriaAgrupacioCriteria materiaAgrupacioCriteria = new MateriaAgrupacioCriteria();
         materiaAgrupacioCriteria.setId("174532");
-        MateriaAgrupacioQueryServiceAdapter materiaAgrupacio = rolsacQS.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-        Assert.assertNotNull(materiaAgrupacio);
-        AgrupacioMateriaQueryServiceAdapter agrupacioMateria = materiaAgrupacio.obtenirAgrupacio();
-        Assert.assertTrue(agrupacioMateria.getNombre().equals("Cultura i societat"));      
+        try {
+            MateriaAgrupacioQueryServiceAdapter materiaAgrupacio = rolsacQS.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+            Assert.assertNotNull(materiaAgrupacio);
+            AgrupacioMateriaQueryServiceAdapter agrupacioMateria = materiaAgrupacio.obtenirAgrupacio();
+            Assert.assertTrue(agrupacioMateria.getNombre().equals("Cultura i societat"));
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 }

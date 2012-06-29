@@ -4,11 +4,12 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 
 public interface PublicObjectiuQueryService {
 
-    int getNumAgrupacions();
+    public int getNumAgrupacions() throws QueryServiceException;
 
-    List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacions(AgrupacioFetVitalCriteria agurpacioFetVitalCriteria);
+    public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacions(AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) throws QueryServiceException;
 
 }

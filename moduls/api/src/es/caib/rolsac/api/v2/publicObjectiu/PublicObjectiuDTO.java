@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.publicObjectiu;
 
-public class PublicObjectiuDTO {
+import java.io.Serializable;
+
+public class PublicObjectiuDTO implements Serializable {
+
+    private static final long serialVersionUID = 5712860584992390841L;
 
     protected long id;
     private int orden;

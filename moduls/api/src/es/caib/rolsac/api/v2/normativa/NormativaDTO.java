@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class NormativaDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = -3119622513951665699L;
+
     protected Long id;
     private long numero;
     private long registro;

@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.edifici.ejb.EdificiQueryServiceEJBStrategy;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -17,8 +18,8 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQueryService {
 
-    private static Log log = LogFactory.getLog(EdificiQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = -1487723379971783395L;
+
     EdificiQueryServiceStrategy edificiQueryServiceStrategy;
     
     public void setEdificiQueryServiceStrategy(EdificiQueryServiceStrategy edificiQueryServiceStrategy) {
@@ -29,41 +30,60 @@ public class EdificiQueryServiceAdapter extends EdificiDTO implements EdificiQue
         return edificiQueryServiceStrategy instanceof EdificiQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public EdificiQueryServiceAdapter(EdificiDTO dto) {
+    public EdificiQueryServiceAdapter(EdificiDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando EdificiQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
-    public int getNumUnitatsAdministratives() {
-        return edificiQueryServiceStrategy.getNumUnitatsAdministratives(id);
-    }
-
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        List<UnitatAdministrativaDTO> llistaDTO = edificiQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
-        List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-        for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+    public int getNumUnitatsAdministratives() throws QueryServiceException {
+        try {
+            return edificiQueryServiceStrategy.getNumUnitatsAdministratives(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public ArxiuQueryServiceAdapter obtenirFotoPequenya() {
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatAdministrativaDTO> llistaDTO = edificiQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+            for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
+        }
+    }
+
+    public ArxiuQueryServiceAdapter obtenirFotoPequenya() throws QueryServiceException {
         if (this.getFotoPequenya() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoPequenya(this.getFotoPequenya()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "foto pequenya.", e);
+        }
     }
 
-    public ArxiuQueryServiceAdapter obtenirFotoGrande() {
+    public ArxiuQueryServiceAdapter obtenirFotoGrande() throws QueryServiceException {
         if (this.getFotoGrande() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirFotoGrande(this.getFotoGrande()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "foto grande.", e);
+        }
     }
 
-    public ArxiuQueryServiceAdapter obtenirPlano() {
+    public ArxiuQueryServiceAdapter obtenirPlano() throws QueryServiceException {
         if (this.getPlano() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), edificiQueryServiceStrategy.obtenirPlano(this.getPlano()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "plano.", e);
+        }
     }
 
 }

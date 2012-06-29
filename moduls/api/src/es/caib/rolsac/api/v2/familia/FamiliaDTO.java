@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.familia;
 
-public class FamiliaDTO {
+import java.io.Serializable;
+
+public class FamiliaDTO implements Serializable {
+
+    private static final long serialVersionUID = 2119249143177742280L;
 
     protected Long id;
 

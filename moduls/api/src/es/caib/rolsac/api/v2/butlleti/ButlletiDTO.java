@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.butlleti;
 
-public class ButlletiDTO {
+import java.io.Serializable;
+
+public class ButlletiDTO implements Serializable {
+
+    private static final long serialVersionUID = -4883456388924607306L;
 
     protected Long id;
     protected String nombre;

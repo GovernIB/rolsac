@@ -1,5 +1,7 @@
 package es.caib.rolsac.api.v2.fitxaUA.ejb;
 
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceStrategy;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
@@ -13,14 +15,26 @@ public class FitxaUAQueryServiceEJBStrategy implements FitxaUAQueryServiceStrate
         this.fitxaUAQueryServiceDelegate = fitxaUAQueryServiceDelegate;
     }
     
-    public FitxaDTO obtenirFitxa(long idFitxa) {
-        return fitxaUAQueryServiceDelegate.obtenirFitxa(idFitxa);
+    public FitxaDTO obtenirFitxa(long idFitxa) throws StrategyException {
+        try {
+            return fitxaUAQueryServiceDelegate.obtenirFitxa(idFitxa);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
-    public SeccioDTO obtenirSeccio(long idSeccio) {
-        return fitxaUAQueryServiceDelegate.obtenirSeccio(idSeccio);
+    public SeccioDTO obtenirSeccio(long idSeccio) throws StrategyException {
+        try {
+            return fitxaUAQueryServiceDelegate.obtenirSeccio(idSeccio);
+        } catch (DelegateException e) {
+             throw new StrategyException(e);
+        }
     }
-    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUnitatAdministrativa) {
-        return fitxaUAQueryServiceDelegate.obtenirUnitatAdministrativa(idUnitatAdministrativa);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUnitatAdministrativa) throws StrategyException {
+        try {
+            return fitxaUAQueryServiceDelegate.obtenirUnitatAdministrativa(idUnitatAdministrativa);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 

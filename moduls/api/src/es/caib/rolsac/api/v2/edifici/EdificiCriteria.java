@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class EdificiCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 8725741289373138522L;
+
     private String direccion;
     private String codigoPostal;
     private String poblacion;

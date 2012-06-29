@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -27,20 +28,28 @@ public class UsuariQueryServiceTest {
     public void getNumUnitatsAdministratives() {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
         usuariCriteria.setId("206345");
-        UsuariQueryServiceAdapter u = rolsacQS.obtenirUsuari(usuariCriteria);
-        Assert.assertNotNull(u);
-        int numUAs = u.getNumUnitatsAdministratives();
-        Assert.assertTrue(numUAs > 0);
+        try {
+            UsuariQueryServiceAdapter u = rolsacQS.obtenirUsuari(usuariCriteria);
+            Assert.assertNotNull(u);
+            int numUAs = u.getNumUnitatsAdministratives();
+            Assert.assertTrue(numUAs > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarUnitatsAdministratives() {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
         usuariCriteria.setId("206345");
-        UsuariQueryServiceAdapter u = rolsacQS.obtenirUsuari(usuariCriteria);
-        Assert.assertNotNull(u);
-        List<UnitatAdministrativaQueryServiceAdapter> uas = u.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
-        Assert.assertTrue(uas.size() > 0);
+        try {
+            UsuariQueryServiceAdapter u = rolsacQS.obtenirUsuari(usuariCriteria);
+            Assert.assertNotNull(u);
+            List<UnitatAdministrativaQueryServiceAdapter> uas = u.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
+            Assert.assertTrue(uas.size() > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
 }

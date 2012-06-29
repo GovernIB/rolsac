@@ -5,32 +5,33 @@ import java.util.List;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface NormativaQueryServiceStrategy {
 
-    int getNumAfectades(long id);
+    public int getNumAfectades(long id) throws StrategyException;
 
-    int getNumAfectants(long id);
+    public int getNumAfectants(long id) throws StrategyException;
 
-    int getNumProcediments(long id);
+    public int getNumProcediments(long id) throws StrategyException;
     
-    ButlletiDTO obtenirButlleti(long idButlleti);
+    public ButlletiDTO obtenirButlleti(long idButlleti) throws StrategyException;
     
-    UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) throws StrategyException;
 
-    List<NormativaDTO> llistarAfectades(long id);
+    public List<NormativaDTO> llistarAfectades(long id) throws StrategyException;
 
-    List<NormativaDTO> llistarAfectants(long id);
+    public List<NormativaDTO> llistarAfectants(long id) throws StrategyException;
 
-    List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    ArxiuDTO obtenirArxiuNormativa(Long idArchivo);
+    public ArxiuDTO obtenirArxiuNormativa(Long idArchivo) throws StrategyException;
 
-    List<AfectacioDTO> llistarAfectacionsAfectants(Long id);
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws StrategyException;
 
-    List<AfectacioDTO> llistarAfectacionsAfectades(Long id);
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) throws StrategyException;
 
 }

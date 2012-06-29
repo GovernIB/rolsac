@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.espaiTerritorial;
 
-public class EspaiTerritorialDTO {
+import java.io.Serializable;
+
+public class EspaiTerritorialDTO implements Serializable {
+
+    private static final long serialVersionUID = 3604649889101253134L;
 
     protected Long id;
     private Integer nivel;

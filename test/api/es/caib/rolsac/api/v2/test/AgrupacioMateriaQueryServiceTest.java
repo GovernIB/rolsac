@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -28,30 +29,42 @@ public class AgrupacioMateriaQueryServiceTest {
     public void recuperarNumMateries() {
         AgrupacioMateriaCriteria agrupacioMateriaCriteria = new AgrupacioMateriaCriteria();
         agrupacioMateriaCriteria.setId("174504");
-        AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-        Assert.assertNotNull(agrupacioMateria);
-        int numMateries = agrupacioMateria.getNumMateries();        
-        Assert.assertTrue(numMateries == 20);
+        try {
+            AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+            Assert.assertNotNull(agrupacioMateria);
+            int numMateries = agrupacioMateria.getNumMateries();        
+            Assert.assertTrue(numMateries == 20);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void recuperarMateries() {
         AgrupacioMateriaCriteria agrupacioMateriaCriteria = new AgrupacioMateriaCriteria();
         agrupacioMateriaCriteria.setId("174535");        
-        AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-        Assert.assertNotNull(agrupacioMateria);
-        List<MateriaQueryServiceAdapter> listMateriaQueryServiceAdapter = agrupacioMateria.llistarMateries(new MateriaCriteria());        
-        Assert.assertTrue(listMateriaQueryServiceAdapter.size() == 7);
+        try {
+            AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+            Assert.assertNotNull(agrupacioMateria);
+            List<MateriaQueryServiceAdapter> listMateriaQueryServiceAdapter = agrupacioMateria.llistarMateries(new MateriaCriteria());        
+            Assert.assertTrue(listMateriaQueryServiceAdapter.size() == 7);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void recuperarSeccio(){
         AgrupacioMateriaCriteria agrupacioMateriaCriteria = new AgrupacioMateriaCriteria();
         agrupacioMateriaCriteria.setId("174561");
-        AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-        Assert.assertNotNull(agrupacioMateria);
-        SeccioQueryServiceAdapter seccio = agrupacioMateria.obtenirSeccio();
-        Assert.assertTrue(seccio.getNombre().equals("Relacions institucionals"));
+        try {
+            AgrupacioMateriaQueryServiceAdapter agrupacioMateria = rolsacQS.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+            Assert.assertNotNull(agrupacioMateria);
+            SeccioQueryServiceAdapter seccio = agrupacioMateria.obtenirSeccio();
+            Assert.assertTrue(seccio.getNombre().equals("Relacions institucionals"));
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
 }

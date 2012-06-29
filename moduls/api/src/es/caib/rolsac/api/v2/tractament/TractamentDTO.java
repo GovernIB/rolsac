@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.tractament;
 
-public class TractamentDTO {
+import java.io.Serializable;
+
+public class TractamentDTO implements Serializable {
+
+    private static final long serialVersionUID = 7785634234098837405L;
 
     protected Long id;
     private String codigoEstandar;

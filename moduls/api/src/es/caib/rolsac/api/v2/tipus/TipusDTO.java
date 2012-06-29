@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.tipus;
 
-public class TipusDTO {
+import java.io.Serializable;
+
+public class TipusDTO implements Serializable {
+
+    private static final long serialVersionUID = -742241361300097986L;
 
     protected Long id;
     private String nombre;

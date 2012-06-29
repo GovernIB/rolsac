@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class FitxaCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 7571667616018238385L;
+
     private Date fechaPublicacion;
     private Date fechaCaducidad;
     private Date fechaActualizacion;

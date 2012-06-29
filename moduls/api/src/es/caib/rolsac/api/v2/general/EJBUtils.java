@@ -60,13 +60,13 @@ public class EJBUtils {
         return arxiuDTO;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoric(Session session, UnidadAdministrativa ua) throws HibernateException {
         HistoricoUA hua;
         Query query = session.createQuery("from HistoricoUA as hua where hua.ua.id = :ua_id");
         query.setParameter("ua_id", ua.getId(), Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoUA> huas = (List<HistoricoUA>) query.list();
         if (huas.isEmpty()) {
             hua = new HistoricoUA();
@@ -84,13 +84,13 @@ public class EJBUtils {
         return hua;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoric(Session session, ProcedimientoLocal pr) throws HibernateException {
         HistoricoProcedimiento hp;
         Query query = session.createQuery("from HistoricoProcedimiento as hp where hp.procedimiento.id = :proc_id");
         query.setParameter("proc_id", pr.getId(), Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoProcedimiento> hprs = (List<HistoricoProcedimiento>) query.list();
         if (hprs.isEmpty()) {
             hp = new HistoricoProcedimiento();
@@ -110,13 +110,13 @@ public class EJBUtils {
         return hp;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoric(Session session, Normativa norm) throws HibernateException {
         HistoricoNormativa hnorm;
         Query query = session.createQuery("from HistoricoNormativa as hnorm where hnorm.normativa.id = :nor_id");
         query.setParameter("nor_id", norm.getId(), Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoNormativa> hnorms = (List<HistoricoNormativa>) query.list();
         if (hnorms.isEmpty()) {
             hnorm = new HistoricoNormativa();
@@ -132,6 +132,7 @@ public class EJBUtils {
         return hnorm;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoric(Session session, Ficha fitxa) throws HibernateException {
         HistoricoFicha hficha;
         Query query = session
@@ -139,7 +140,6 @@ public class EJBUtils {
         query.setParameter("ficha_id", fitxa.getId(), Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoFicha> hfichas = (List<HistoricoFicha>) query.list();
         if (hfichas.isEmpty()) {
             hficha = new HistoricoFicha();
@@ -155,13 +155,13 @@ public class EJBUtils {
         return hficha;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoric(Session session, Materia mat) throws HibernateException {
         HistoricoMateria hmat;
         Query query = session.createQuery("from HistoricoMateria as hmat where hmat.materia.id = :materia_id");
         query.setParameter("materia_id", mat.getId(), Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoMateria> hmats = (List<HistoricoMateria>) query.list();
         if (hmats.isEmpty()) {
             hmat = new HistoricoMateria();
@@ -177,6 +177,7 @@ public class EJBUtils {
         return hmat;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoricFitxaPerMateria(Session session, Ficha fitxa, long idmat) throws HibernateException {
         HistoricoFicha hficha;
         Query query = session.createQuery("from HistoricoFicha as hficha where hficha.ficha.id=:ficha_id and hficha.materia.id=:mat_id");
@@ -184,7 +185,6 @@ public class EJBUtils {
         query.setParameter("mat_id", idmat, Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoFicha> hfichas = (List<HistoricoFicha>) query.list();
         if (hfichas.isEmpty()) {
             hficha = new HistoricoFicha();
@@ -204,6 +204,7 @@ public class EJBUtils {
         return hficha;
     }
 
+    @SuppressWarnings("unchecked")
     public static Historico getHistoricFitxaPerUA(Session session, Ficha fitxa, long idUA) throws HibernateException {
         HistoricoFicha hficha;
         Query query = session.createQuery("from HistoricoFicha as hficha where hficha.ficha.id=:ficha_id and hficha.ua.id=:ua_id");
@@ -211,7 +212,6 @@ public class EJBUtils {
         query.setParameter("ua_id", idUA, Hibernate.LONG);
         query.setCacheable(true);
         query.setMaxResults(1);
-        @SuppressWarnings("unchecked")
         List<HistoricoFicha> hfichas = (List<HistoricoFicha>) query.list();
         if (hfichas.isEmpty()) {
             hficha = new HistoricoFicha();

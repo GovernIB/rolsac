@@ -8,6 +8,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
@@ -20,17 +23,19 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryService {
 
+    private static final long serialVersionUID = 2549215493827336923L;
+
     private TramitQueryServiceStrategy tramitQueryServiceStrategy;
 
     public void setTramitQueryServiceStrategy(TramitQueryServiceStrategy tramitQueryServiceStrategy) {
         this.tramitQueryServiceStrategy = tramitQueryServiceStrategy;
     }
 
-    public TramitQueryServiceAdapter(TramitDTO dto) {
+    public TramitQueryServiceAdapter(TramitDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
@@ -38,55 +43,87 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
         return tramitQueryServiceStrategy instanceof TramitQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public int getNumDocumentsInformatius() {
-        return tramitQueryServiceStrategy.getNumDocumentsInformatius(id);
+    public int getNumDocumentsInformatius() throws QueryServiceException {
+        try {
+            return tramitQueryServiceStrategy.getNumDocumentsInformatius(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de documentos informativos.", e);
+        }
     }
 
-    public int getNumFormularis() {
-        return tramitQueryServiceStrategy.getNumFormularis(id);
+    public int getNumFormularis() throws QueryServiceException {
+        try {
+            return tramitQueryServiceStrategy.getNumFormularis(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de formularios.", e);
+        }
     }
 
-    public int getNumTaxes() {
-        return tramitQueryServiceStrategy.getNumTaxes(id);
+    public int getNumTaxes() throws QueryServiceException {
+        try {
+            return tramitQueryServiceStrategy.getNumTaxes(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de tasas.", e);
+        }
     }
 
-    public ProcedimentQueryServiceAdapter obtenirProcediment() {
+    public ProcedimentQueryServiceAdapter obtenirProcediment() throws QueryServiceException {
         if (this.getProcedimiento() == null) {return null;}
-        ProcedimentDTO dto = tramitQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
-        return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+        try {
+            ProcedimentDTO dto = tramitQueryServiceStrategy.obtenirProcediment(this.getProcedimiento());
+            return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
+        }
     }
 
-    public UnitatAdministrativaQueryServiceAdapter obtenirOrganCompetent() {
+    public UnitatAdministrativaQueryServiceAdapter obtenirOrganCompetent() throws QueryServiceException {
         if (this.getOrganCompetent() == null) {return null;}
-        UnitatAdministrativaDTO dto = tramitQueryServiceStrategy.obtenirOrganCompetent(this.getOrganCompetent());
-        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+        try {
+            UnitatAdministrativaDTO dto = tramitQueryServiceStrategy.obtenirOrganCompetent(this.getOrganCompetent());
+            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "organo competente.", e);
+        }
     }
 
-    public List<DocumentTramitQueryServiceAdapter> llistatDocumentsInformatius(DocumentTramitCriteria documentTramitCriteria) {
-        List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistatDocumentsInformatius(id, documentTramitCriteria);
-        List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
-        for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+    public List<DocumentTramitQueryServiceAdapter> llistatDocumentsInformatius(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
+        try {
+            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistatDocumentsInformatius(id, documentTramitCriteria);
+            List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
+            for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos informativos.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<DocumentTramitQueryServiceAdapter> llistarFormularis(DocumentTramitCriteria documentTramitCriteria) {
-        List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistarFormularis(id, documentTramitCriteria);
-        List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
-        for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+    public List<DocumentTramitQueryServiceAdapter> llistarFormularis(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
+        try {
+            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistarFormularis(id, documentTramitCriteria);
+            List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
+            for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "formularios.", e);
         }
-        return llistaQueryServiceAdapter;
     }
     
-    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) {
-        List<TaxaDTO> llistaDTO = tramitQueryServiceStrategy.llistarTaxes(id, taxaCriteria);
-        List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
-        for (TaxaDTO taxaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));
+    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException {
+        try {
+            List<TaxaDTO> llistaDTO = tramitQueryServiceStrategy.llistarTaxes(id, taxaCriteria);
+            List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
+            for (TaxaDTO taxaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tasas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
 }

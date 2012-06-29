@@ -1,9 +1,13 @@
 package es.caib.rolsac.api.v2.procediment.ejb;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -11,6 +15,7 @@ import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
+import es.caib.rolsac.api.v2.procediment.ejb.intf.ProcedimentQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
@@ -22,53 +27,118 @@ public class ProcedimentQueryServiceDelegate {
         this.procedimentQueryServiceLocator = procedimentQueryServiceLocator;
     }
  
-    public int getNumTramits(long id) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.getNumTramits(id);
+    public int getNumTramits(long id) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.getNumTramits(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.getNumNormatives(id, tipus);
+    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote  ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.getNumNormatives(id, tipus);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumMateries(long id) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.getNumMateries(id);
+    public int getNumMateries(long id) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote  ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.getNumMateries(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumDocuments(long id) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.getNumDocuments(id);
+    public int getNumDocuments(long id) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.getNumDocuments(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumFetsVitals(long id) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.getNumFetsVitals(id);
+    public int getNumFetsVitals(long id) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.getNumFetsVitals(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.llistarTramits(id, tramitCriteria);
+    @SuppressWarnings("unchecked")
+    public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarTramits(id, tramitCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.llistarNormatives(id, normativaCriteria);
+    @SuppressWarnings("unchecked")
+    public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarNormatives(id, normativaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.llistarMateries(id, materiaCriteria);
+    @SuppressWarnings("unchecked")
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarMateries(id, materiaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
  
-    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.llistarFetsVitals(id, fetVitalCriteria);
+    @SuppressWarnings("unchecked")
+    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarFetsVitals(id, fetVitalCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) {
-        ProcedimentQueryServiceEJB ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-        return ejb.llistarDocuments(id, documentCriteria);
+    @SuppressWarnings("unchecked")
+    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarDocuments(id, documentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }    
 }

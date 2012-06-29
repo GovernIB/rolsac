@@ -93,8 +93,7 @@ public class QueryBuilder {
     public Query createQuery(Session session) throws HibernateException {
         Query query = session.createQuery(getHQL());
         prepareQuery(query);
-        System.out.println(this); // TODO: delete me later.
-        log.debug(this);
+        log.info(this.toString());
         return query;
     }
 

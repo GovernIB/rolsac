@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -16,9 +17,8 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO implements EspaiTerritorialQueryService {
 
-    private static Log log = LogFactory.getLog(EspaiTerritorialQueryServiceAdapter.class);
-    
-    // @Injected
+    private static final long serialVersionUID = 2251052816040318102L;
+
     EspaiTerritorialQueryServiceStrategy espaiTerritorialQueryServiceStrategy;
     
     public void setEspaiTerritorialQueryServiceStrategy(EspaiTerritorialQueryServiceStrategy espaiTerritorialQueryServiceStrategy) {
@@ -29,54 +29,81 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
         return espaiTerritorialQueryServiceStrategy instanceof EspaiTerritorialQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public EspaiTerritorialQueryServiceAdapter(EspaiTerritorialDTO dto) {
+    public EspaiTerritorialQueryServiceAdapter(EspaiTerritorialDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando EspaiTerritorialQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
-    public int getNumFills() {
-        return espaiTerritorialQueryServiceStrategy.getNumFills(id);
+    public int getNumFills() throws QueryServiceException {
+        try {
+            return espaiTerritorialQueryServiceStrategy.getNumFills(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de edificios hijo.", e);
+        }
     }
 
-    public int getNumUnitatsAdministratives() {
-        return espaiTerritorialQueryServiceStrategy.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives() throws QueryServiceException {
+        try {
+            return espaiTerritorialQueryServiceStrategy.getNumUnitatsAdministratives(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
+        }
     }
 
-    public EspaiTerritorialQueryServiceAdapter obtenirPare() {
+    public EspaiTerritorialQueryServiceAdapter obtenirPare() throws QueryServiceException {
         if (this.getPadre() == null) {return null;}
-        return (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirPare(this.getPadre()));
-    }
-
-    public List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        List<EspaiTerritorialDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarFills(id, espaiTerritorialCriteria);
-        List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
-        for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(),espaiTerritorialDTO));
+        try {
+            return (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirPare(this.getPadre()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "edificio padre.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-            List<UnitatAdministrativaDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
-            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-            for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+    public List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
+        try {
+            List<EspaiTerritorialDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarFills(id, espaiTerritorialCriteria);
+            List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
+            for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(),espaiTerritorialDTO));
             }
             return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "edificios hijo.", e);
+        }
     }
 
-    public ArxiuQueryServiceAdapter obtenirMapa() {
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+            try {
+                List<UnitatAdministrativaDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+                List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+                for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+                    llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+                }
+                return llistaQueryServiceAdapter;
+            } catch (StrategyException e) {
+                throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
+            }
+    }
+
+    public ArxiuQueryServiceAdapter obtenirMapa() throws QueryServiceException {
         if (this.getMapa() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirMapa(this.getMapa()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirMapa(this.getMapa()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "mapa.", e);
+        }
     }
     
-    public ArxiuQueryServiceAdapter obtenirLogo() {
+    public ArxiuQueryServiceAdapter obtenirLogo() throws QueryServiceException {
         if (this.getLogo() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirLogo(this.getLogo()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), espaiTerritorialQueryServiceStrategy.obtenirLogo(this.getLogo()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "logo.", e);
+        }
     }
     
 }

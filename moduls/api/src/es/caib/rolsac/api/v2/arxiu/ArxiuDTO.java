@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.arxiu;
 
+import java.io.Serializable;
 
-public class ArxiuDTO {
+
+public class ArxiuDTO implements Serializable {
+
+    private static final long serialVersionUID = -8690224615791914641L;
 
     private long id;
     private String mime;

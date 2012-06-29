@@ -1,13 +1,14 @@
 package es.caib.rolsac.api.v2.afectacio;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioQueryServiceAdapter;
 
 public interface AfectacioQueryService {
 
-    NormativaQueryServiceAdapter obtenirAfectant();
+    public NormativaQueryServiceAdapter obtenirAfectant() throws QueryServiceException;
     
-    NormativaQueryServiceAdapter obtenirNormativa();
+    public NormativaQueryServiceAdapter obtenirNormativa() throws QueryServiceException;
     
-    TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio();
+    public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio() throws QueryServiceException;
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
@@ -11,20 +12,20 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public interface TramitQueryService {
 
-    int getNumDocumentsInformatius();
+    public int getNumDocumentsInformatius() throws QueryServiceException;
 
-    int getNumFormularis();
+    public int getNumFormularis() throws QueryServiceException;
 
-    int getNumTaxes();
+    public int getNumTaxes() throws QueryServiceException;
 
-    ProcedimentQueryServiceAdapter obtenirProcediment();
+    public ProcedimentQueryServiceAdapter obtenirProcediment() throws QueryServiceException;
 
-    UnitatAdministrativaQueryServiceAdapter obtenirOrganCompetent();
+    public UnitatAdministrativaQueryServiceAdapter obtenirOrganCompetent() throws QueryServiceException;
 
-    List<DocumentTramitQueryServiceAdapter> llistatDocumentsInformatius(DocumentTramitCriteria documentTramitCriteria);
+    public List<DocumentTramitQueryServiceAdapter> llistatDocumentsInformatius(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
 
-    List<DocumentTramitQueryServiceAdapter> llistarFormularis(DocumentTramitCriteria documentTramitCriteria);
+    public List<DocumentTramitQueryServiceAdapter> llistarFormularis(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException;
 
-    List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria);
+    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException;
 
 }

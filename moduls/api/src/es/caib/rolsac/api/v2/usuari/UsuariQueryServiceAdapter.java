@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -14,17 +17,19 @@ import es.caib.rolsac.api.v2.usuari.ejb.UsuariQueryServiceEJBStrategy;
 
 public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryService {
 
+    private static final long serialVersionUID = -1735455660872334975L;
+
     private UsuariQueryServiceStrategy usuariQueryServiceStrategy;
 
     public void setUsuariQueryServiceStrategy(UsuariQueryServiceStrategy usuariQueryServiceStrategy) {
         this.usuariQueryServiceStrategy = usuariQueryServiceStrategy;
     }
 
-    public UsuariQueryServiceAdapter(UsuariDTO dto) {
+    public UsuariQueryServiceAdapter(UsuariDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
@@ -32,17 +37,25 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
         return usuariQueryServiceStrategy instanceof UsuariQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public int getNumUnitatsAdministratives() {
-        return usuariQueryServiceStrategy.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives() throws QueryServiceException {
+        try {
+            return usuariQueryServiceStrategy.getNumUnitatsAdministratives(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
+        }
     }
 
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
-        List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-        for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-            llistaUAQueryService.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+            for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+                llistaUAQueryService.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            }
+            return llistaUAQueryService;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
         }
-        return llistaUAQueryService;
     }
 
 }

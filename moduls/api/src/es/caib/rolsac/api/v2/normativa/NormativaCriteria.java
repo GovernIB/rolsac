@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class NormativaCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 1930472039717697492L;
+
     private String numero;
     private String registro;
     private String ley;

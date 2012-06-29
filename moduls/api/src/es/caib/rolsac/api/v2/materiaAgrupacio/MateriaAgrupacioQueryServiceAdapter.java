@@ -1,10 +1,11 @@
 package es.caib.rolsac.api.v2.materiaAgrupacio;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
@@ -12,20 +13,19 @@ import es.caib.rolsac.api.v2.materiaAgrupacio.ejb.MateriaAgrupacioQueryServiceEJ
 
 public class MateriaAgrupacioQueryServiceAdapter extends MateriaAgrupacioDTO implements MateriaAgrupacioQueryService {
 
-    private static Log log = LogFactory.getLog(MateriaAgrupacioQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = 7026670225281721790L;
+
     private MateriaAgrupacioQueryServiceStrategy materiaAgrupacioQueryServiceStrategy;
     
     public void setMateriaAgrupacioQueryServiceStrategy(MateriaAgrupacioQueryServiceStrategy materiaAgrupacioQueryServiceStrategy) {
         this.materiaAgrupacioQueryServiceStrategy = materiaAgrupacioQueryServiceStrategy;
     }
 
-    public MateriaAgrupacioQueryServiceAdapter(MateriaAgrupacioDTO dto) {
+    public MateriaAgrupacioQueryServiceAdapter(MateriaAgrupacioDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando MateriaAgrupacioQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
@@ -33,14 +33,22 @@ public class MateriaAgrupacioQueryServiceAdapter extends MateriaAgrupacioDTO imp
         return materiaAgrupacioQueryServiceStrategy instanceof MateriaAgrupacioQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public MateriaQueryServiceAdapter obtenirMateria() {
+    public MateriaQueryServiceAdapter obtenirMateria() throws QueryServiceException {
         if (this.getMateria() == null) {return null;}
-        return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        try {
+            return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirMateria(this.getMateria()));
+        } catch (StrategyException e) {
+             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
+        }
     }
 
-    public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacio() {
+    public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacio() throws QueryServiceException {
         if (this.getAgrupacion() == null) {return null;}
-        return (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirAgrupacioMateria(this.getAgrupacion()));
+        try {
+            return (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), materiaAgrupacioQueryServiceStrategy.obtenirAgrupacioMateria(this.getAgrupacion()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion.", e);
+        }
     }
 
 }

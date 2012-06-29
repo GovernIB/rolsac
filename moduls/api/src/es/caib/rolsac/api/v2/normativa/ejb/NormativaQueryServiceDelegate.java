@@ -1,11 +1,16 @@
 package es.caib.rolsac.api.v2.normativa.ejb;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
+import es.caib.rolsac.api.v2.normativa.ejb.intf.NormativaQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
@@ -18,59 +23,130 @@ public class NormativaQueryServiceDelegate {
         this.normativaQueryServiceLocator = normativaQueryServiceLocator;
     }
 
-    public ButlletiDTO obtenirButlleti(long idButlleti) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();        
-        return ejb.obtenirButlleti(idButlleti);
+    public ButlletiDTO obtenirButlleti(long idButlleti) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.obtenirButlleti(idButlleti);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }      
     }
 
-    public List<NormativaDTO> llistarAfectades(long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.llistarAfectades(id);
+    @SuppressWarnings("unchecked")
+    public List<NormativaDTO> llistarAfectades(long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.llistarAfectades(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumAfectades(long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.getNumAfectades(id);
+    public int getNumAfectades(long id) throws DelegateException {
+        try  {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.getNumAfectades(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.llistarProcediments(id, procedimentCriteria);
+    @SuppressWarnings("unchecked")
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.llistarProcediments(id, procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<NormativaDTO> llistarAfectants(long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.llistarAfectants(id);
+    @SuppressWarnings("unchecked")
+    public List<NormativaDTO> llistarAfectants(long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.llistarAfectants(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumAfectants(long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.getNumAfectants(id);
+    public int getNumAfectants(long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.getNumAfectants(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public int getNumProcediments(long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.getNumProcediments(id);
+    public int getNumProcediments(long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.getNumProcediments(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.obtenirUnitatAdministrativa(idUniAdm);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.obtenirUnitatAdministrativa(idUniAdm);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public ArxiuDTO obtenirArxiuNormativa(long idArchivo) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.obtenirArxiuNormativa(idArchivo);
+    public ArxiuDTO obtenirArxiuNormativa(long idArchivo) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.obtenirArxiuNormativa(idArchivo);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.llistarAfectacionsAfectants(id);
+    @SuppressWarnings("unchecked")
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.llistarAfectacionsAfectants(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
-        NormativaQueryServiceEJB ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
-        return ejb.llistarAfectacionsAfectades(id);
+    @SuppressWarnings("unchecked")
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) throws DelegateException {
+        try {
+            NormativaQueryServiceEJBRemote ejb = normativaQueryServiceLocator.getNormativaQueryServiceEJB();
+            return ejb.llistarAfectacionsAfectades(id);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
 }

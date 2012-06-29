@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
@@ -19,9 +20,8 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryService {
 
-    private static Log log = LogFactory.getLog(SeccioQueryServiceAdapter.class);
-    
-    // @Injected
+    private static final long serialVersionUID = -2467698240719109343L;
+
     private SeccioQueryServiceStrategy seccioQueryServiceStrategy;
     
     public void setSeccioQueryServiceStrategy(SeccioQueryServiceStrategy seccioQueryServiceStrategy) {
@@ -32,77 +32,111 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
         return seccioQueryServiceStrategy instanceof SeccioQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public SeccioQueryServiceAdapter(SeccioDTO dto) {
+    public SeccioQueryServiceAdapter(SeccioDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando SeccioQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
     
-    public int getNumFilles() {
-        return seccioQueryServiceStrategy.getNumFilles(id);
+    public int getNumFilles() throws QueryServiceException {
+        try {
+            return seccioQueryServiceStrategy.getNumFilles(id);
+        } catch (StrategyException e) {
+             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones hijas.", e);
+        }
     }
 
-    public int getNumFitxes() {
-        return seccioQueryServiceStrategy.getNumFitxes(id);
+    public int getNumFitxes() throws QueryServiceException {
+        try {
+            return seccioQueryServiceStrategy.getNumFitxes(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de fichas.", e);
+        }
     }
 
     /**
-     * Llama a llistarPares y devuelve el tamaño de la lista. No es mas eficiente que ejecutar un .size()
+     * Llama a llistarPares y devuelve el tamanyo de la lista. No es mas eficiente que ejecutar un .size()
      * a nivel de cliente.
+     * @throws QueryServiceException 
      */
-    public int getNumPares() {
-        return seccioQueryServiceStrategy.getNumPares(id);
+    public int getNumPares() throws QueryServiceException {
+        try {
+            return seccioQueryServiceStrategy.getNumPares(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones padre.", e);
+        }
     }
 
-    public int getNumUnitatsAdministratives() {
-        return seccioQueryServiceStrategy.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives() throws QueryServiceException {
+        try {
+            return seccioQueryServiceStrategy.getNumUnitatsAdministratives(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
+        }
     }
     
-    public List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria) {
-        List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarFilles(id, seccioCriteria);
-        List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
-        for (SeccioDTO seccioDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+    public List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria) throws QueryServiceException {
+        try {
+            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarFilles(id, seccioCriteria);
+            List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
+            for (SeccioDTO seccioDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones hijas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) {
-        List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(id, fitxaCriteria);
-        List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
-        for (FitxaDTO fitxaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try{ 
+            List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(id, fitxaCriteria);
+            List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
+            for (FitxaDTO fitxaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    /**
-     * Ejecuta recursivamente obtenirPare() hasta llegar a la seccion raiz, construyendo la lista a devolver por el camino.
-     */
-    public List<SeccioQueryServiceAdapter> llistarPares() {
-        List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarPares(id);
-        List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
-        for (SeccioDTO seccioDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+    // Ejecuta recursivamente obtenirPare() hasta llegar a la seccion raiz, construyendo la lista a devolver por el camino.
+    public List<SeccioQueryServiceAdapter> llistarPares() throws QueryServiceException {
+        try {
+            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarPares(id);
+            List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
+            for (SeccioDTO seccioDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones padre.", e);
         }
-        return llistaQueryServiceAdapter;
     }
     
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
-        List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-        for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+            for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public SeccioQueryServiceAdapter obtenirPare() {
+    public SeccioQueryServiceAdapter obtenirPare() throws QueryServiceException {
         if (this.getPadre() == null) {return null;}
-        return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioQueryServiceStrategy.obtenirPare(this.getPadre()));
+        try {
+            return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioQueryServiceStrategy.obtenirPare(this.getPadre()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion padre.", e);
+        }
     }
     
 }

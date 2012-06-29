@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.seccio;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -9,22 +10,22 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface SeccioQueryServiceStrategy {
 
-    int getNumFilles(long id);
+    public int getNumFilles(long id) throws StrategyException;
 
-    int getNumFitxes(long id);
+    public int getNumFitxes(long id) throws StrategyException;
 
-    int getNumPares(long id);
+    public int getNumPares(long id) throws StrategyException;
 
-    int getNumUnitatsAdministratives(long id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException;
 
-    List<SeccioDTO> llistarPares(long id);    
+    public List<SeccioDTO> llistarPares(long id) throws StrategyException;
 
-    List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria);
+    public List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria) throws StrategyException;
 
-    List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria);
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
     
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    SeccioDTO obtenirPare(Long padre);
+    public SeccioDTO obtenirPare(Long padre) throws StrategyException;
     
 }

@@ -4,6 +4,8 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiQueryServiceStrategy;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
@@ -15,26 +17,44 @@ public class EdificiQueryServiceEJBStrategy implements EdificiQueryServiceStrate
         this.edificiQueryServiceDelegate = edificiQueryServiceDelegate;
     }
 
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        return edificiQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+        try {
+            return edificiQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumUnitatsAdministratives(long id) {
-        return edificiQueryServiceDelegate.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException {
+        try {
+            return edificiQueryServiceDelegate.getNumUnitatsAdministratives(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirFotoPequenya(Long idFotoPequenya) {
-        return edificiQueryServiceDelegate.obtenirFotoPequenya(idFotoPequenya);
+    public ArxiuDTO obtenirFotoPequenya(Long idFotoPequenya) throws StrategyException {
+        try {
+            return edificiQueryServiceDelegate.obtenirFotoPequenya(idFotoPequenya);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirFotoGrande(Long idFotoGrande) {
-        return edificiQueryServiceDelegate.obtenirFotoGrande(idFotoGrande);
+    public ArxiuDTO obtenirFotoGrande(Long idFotoGrande) throws StrategyException {
+        try {
+            return edificiQueryServiceDelegate.obtenirFotoGrande(idFotoGrande);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirPlano(Long idPlano) {
-        return edificiQueryServiceDelegate.obtenirPlano(idPlano);
+    public ArxiuDTO obtenirPlano(Long idPlano) throws StrategyException {
+        try {
+            return edificiQueryServiceDelegate.obtenirPlano(idPlano);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
-
 
 }

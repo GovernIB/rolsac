@@ -1,21 +1,20 @@
 package es.caib.rolsac.api.v2.tractament;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
-import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 
 public class TractamentQueryServiceAdapter extends TractamentDTO implements TractamentQueryService {
 
-    private static Log log = LogFactory.getLog(FormulariQueryServiceAdapter.class);
+    private static final long serialVersionUID = -2436577076981294154L;
+
     
-    public TractamentQueryServiceAdapter(TractamentDTO dto) {
+    public TractamentQueryServiceAdapter(TractamentDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando TractamentQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 

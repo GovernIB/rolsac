@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -27,25 +28,33 @@ public class ButlletiQueryServiceTest {
     public void getNumNormatives() {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setId("21");
-        ButlletiQueryServiceAdapter ba = rolsacQS.obtenirButlleti(butlletiCriteria);
-        Assert.assertNotNull(ba);
-        int numNormatives = ba.getNumNormatives();
-        int numNormativesLocals = ba.getNumNormativesLocals();
-        int numNormativesexternes = ba.getNumNormativesExternes();
-        Assert.assertTrue(numNormatives > 0);
-        Assert.assertTrue(numNormatives == numNormativesLocals + numNormativesexternes);
+        try {
+            ButlletiQueryServiceAdapter ba = rolsacQS.obtenirButlleti(butlletiCriteria);
+            Assert.assertNotNull(ba);
+            int numNormatives = ba.getNumNormatives();
+            int numNormativesLocals = ba.getNumNormativesLocals();
+            int numNormativesexternes = ba.getNumNormativesExternes();
+            Assert.assertTrue(numNormatives > 0);
+            Assert.assertTrue(numNormatives == numNormativesLocals + numNormativesexternes);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarNormatives() {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setId("21");
-        ButlletiQueryServiceAdapter ba = rolsacQS.obtenirButlleti(butlletiCriteria);
-        Assert.assertNotNull(ba);
-        NormativaCriteria nc = new NormativaCriteria();
-        nc.setIncluirExternas(true);
-        List<NormativaQueryServiceAdapter> normativesService = ba.llistarNormatives(nc);
-        Assert.assertTrue(normativesService.size() > 0);
+        try {
+            ButlletiQueryServiceAdapter ba = rolsacQS.obtenirButlleti(butlletiCriteria);
+            Assert.assertNotNull(ba);
+            NormativaCriteria nc = new NormativaCriteria();
+            nc.setIncluirExternas(true);
+            List<NormativaQueryServiceAdapter> normativesService = ba.llistarNormatives(nc);
+            Assert.assertTrue(normativesService.size() > 0);
+        } catch (QueryServiceException e) {
+             Assert.fail(e.toString());
+        }
     }
 
 }

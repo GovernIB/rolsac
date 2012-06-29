@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class FitxaDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = -5876647056488405964L;
+
     protected Long id;
     private Date fechaPublicacion;
     private Date fechaCaducidad;

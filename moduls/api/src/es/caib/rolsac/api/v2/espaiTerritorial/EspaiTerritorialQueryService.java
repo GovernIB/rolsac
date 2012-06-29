@@ -3,23 +3,24 @@ package es.caib.rolsac.api.v2.espaiTerritorial;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface EspaiTerritorialQueryService {
 
-    int getNumFills();
+    public int getNumFills() throws QueryServiceException;
 
-    int getNumUnitatsAdministratives();
+    public int getNumUnitatsAdministratives() throws QueryServiceException;
 
-    EspaiTerritorialQueryServiceAdapter obtenirPare();
+    public EspaiTerritorialQueryServiceAdapter obtenirPare() throws QueryServiceException;
 
-    List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria);
+    public List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
 
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativa);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativa) throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirMapa();
+    public ArxiuQueryServiceAdapter obtenirMapa() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirLogo();
+    public ArxiuQueryServiceAdapter obtenirLogo() throws QueryServiceException;
 
 }

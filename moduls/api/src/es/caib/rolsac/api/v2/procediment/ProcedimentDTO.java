@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class ProcedimentDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = 8141854682354603049L;
+
     protected Long id;
     
     protected Long familia;
@@ -32,7 +34,7 @@ public class ProcedimentDTO extends EntitatRemota {
     protected Long orden3;
     protected String responsable;
 
-    // Camps de la traducció (TraduccionProcedimientoLocal)
+    // Camps de la traduccio (TraduccionProcedimientoLocal)
     protected String nombre;
     protected String resolucion;
     protected String notificacion;

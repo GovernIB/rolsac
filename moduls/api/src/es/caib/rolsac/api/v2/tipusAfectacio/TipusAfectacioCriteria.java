@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class TipusAfectacioCriteria extends BasicCriteria {
     
+    private static final long serialVersionUID = 8667843456946406670L;
+
     private String t_nombre;
 
     /**

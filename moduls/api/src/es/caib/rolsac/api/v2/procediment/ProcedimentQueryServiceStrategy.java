@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -16,24 +17,24 @@ import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public interface ProcedimentQueryServiceStrategy {
 
-    int getNumTramits(long id);
+    public int getNumTramits(long id) throws StrategyException;
 
-    int getNumNormatives(long id, TIPUS_NORMATIVA tipus);
+    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) throws StrategyException;
 
-    int getNumMateries(long id);
+    public int getNumMateries(long id) throws StrategyException;
 
-    int getNumDocuments(long id);
+    public int getNumDocuments(long id) throws StrategyException;
 
-    int getNumFetsVitals(long id);
+    public int getNumFetsVitals(long id) throws StrategyException;
 
-    List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria);
+    public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws StrategyException;
 
-    List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria);
+    public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws StrategyException;
 
-    List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria);
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException;
 
-    List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetsVitalsCriteria);
+    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetsVitalsCriteria) throws StrategyException;
 
-    List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria);
+    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) throws StrategyException;
 
 }

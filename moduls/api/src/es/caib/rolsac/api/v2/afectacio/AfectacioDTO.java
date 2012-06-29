@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.afectacio;
 
-public class AfectacioDTO {
+import java.io.Serializable;
+
+public class AfectacioDTO implements Serializable {
     
+    private static final long serialVersionUID = 7012338603153711147L;
+
     private long afectante;
     private long normativa;
     private long tipoAfectacion;

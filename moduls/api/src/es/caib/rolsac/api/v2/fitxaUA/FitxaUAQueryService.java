@@ -1,15 +1,16 @@
 package es.caib.rolsac.api.v2.fitxaUA;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface FitxaUAQueryService {
 
-    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa();
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException;
 
-    FitxaQueryServiceAdapter obtenirFitxa();
+    public FitxaQueryServiceAdapter obtenirFitxa() throws QueryServiceException;
 
-    SeccioQueryServiceAdapter obtenirSeccio();
+    public SeccioQueryServiceAdapter obtenirSeccio() throws QueryServiceException;
 
 }

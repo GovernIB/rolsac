@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
@@ -29,89 +30,125 @@ public class SeccioQueryServiceTest {
     public void obtenirNumFilles() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("52");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        int numelements = seccio.getNumFilles();        
-        Assert.assertTrue(numelements == 19);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            int numelements = seccio.getNumFilles();        
+            Assert.assertTrue(numelements == 19);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirNumFitxes() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("148347");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        int numelements = seccio.getNumFitxes();        
-        Assert.assertTrue(numelements == 11);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            int numelements = seccio.getNumFitxes();        
+            Assert.assertTrue(numelements == 11);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirNumPares() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("171256");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        int numelements = seccio.getNumPares();        
-        Assert.assertTrue(numelements == 0);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            int numelements = seccio.getNumPares();        
+            Assert.assertTrue(numelements == 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirNumUnitatsAdministratives() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("252709");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        int numelements = seccio.getNumUnitatsAdministratives();        
-        Assert.assertTrue(numelements == 10);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            int numelements = seccio.getNumUnitatsAdministratives();        
+            Assert.assertTrue(numelements == 10);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarFilles() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("92");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarFilles(new SeccioCriteria());
-        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 4);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarFilles(new SeccioCriteria());
+            Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 4);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarFitxes() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("171215");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(new FitxaCriteria());        
-        Assert.assertTrue(listFitxaQueryServiceAdapter.size() == 4);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = seccio.llistarFitxes(new FitxaCriteria());        
+            Assert.assertTrue(listFitxaQueryServiceAdapter.size() == 4);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test
     public void llistarPares() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("631907");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarPares();
-        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 1);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = seccio.llistarPares();
+            Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 1);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test
     public void obtenirPare() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("198742");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        SeccioQueryServiceAdapter seccioQueryServiceAdapter = seccio.obtenirPare();
-        Assert.assertNotNull(seccioQueryServiceAdapter);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            SeccioQueryServiceAdapter seccioQueryServiceAdapter = seccio.obtenirPare();
+            Assert.assertNotNull(seccioQueryServiceAdapter);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarUnitatsAdministratives() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("171214");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
-        Assert.assertNotNull(seccio);
-        List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
-        Assert.assertTrue(listUaQueryServiceAdapter.size() == 2);
+        try {
+            SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+            Assert.assertNotNull(seccio);
+            List<UnitatAdministrativaQueryServiceAdapter> listUaQueryServiceAdapter = seccio.llistarUnitatsAdministratives(new UnitatAdministrativaCriteria());
+            Assert.assertTrue(listUaQueryServiceAdapter.size() == 2);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 }

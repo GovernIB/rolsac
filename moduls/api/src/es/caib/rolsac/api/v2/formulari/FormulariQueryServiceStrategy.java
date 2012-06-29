@@ -1,15 +1,16 @@
 package es.caib.rolsac.api.v2.formulari;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 
 public interface FormulariQueryServiceStrategy {
 
-    ArxiuDTO obtenirArchivo(Long idArchivo);
+    public ArxiuDTO obtenirArchivo(Long idArchivo) throws StrategyException;
 
-    ArxiuDTO obtenirManual(Long idManual);
+    public ArxiuDTO obtenirManual(Long idManual) throws StrategyException;
 
-    TramitDTO obtenirTramit(Long idTramit);
+    public TramitDTO obtenirTramit(Long idTramit) throws StrategyException;
 
 }

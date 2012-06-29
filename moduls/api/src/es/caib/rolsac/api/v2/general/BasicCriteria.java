@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.general;
 
-public abstract class BasicCriteria {
+import java.io.Serializable;
 
+public abstract class BasicCriteria implements Serializable {
+
+    private static final long serialVersionUID = -6057984265599944708L;
+    
     private String id;
     private String inici;
     private String tamany;

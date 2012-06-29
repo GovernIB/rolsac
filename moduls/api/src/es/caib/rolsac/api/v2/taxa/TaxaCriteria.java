@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class TaxaCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 9195538151902286606L;
+    
     private String orden;
     private String tramit;
 

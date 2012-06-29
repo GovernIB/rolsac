@@ -3,6 +3,9 @@ package es.caib.rolsac.api.v2.rolsac.ejb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -68,6 +71,7 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
@@ -90,7 +94,6 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentUtils;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
-import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -110,8 +113,22 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 import es.caib.rolsac.api.v2.usuari.UsuariCriteria;
 import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
+/**
+ * SessionBean para consultas de ROLSAC.
+ *
+ * @ejb.bean
+ *  name="sac/api/RolsacQueryServiceEJB"
+ *  jndi-name="es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB"
+ *  type="Stateless"
+ *  view-type="remote"
+ *  transaction-type="Container"
+ *
+ * @ejb.transaction type="Required"
+ */
 @SuppressWarnings("deprecation")
-public class RolsacQueryServiceEJB {
+public class RolsacQueryServiceEJB extends HibernateEJB {
+
+    private static final long serialVersionUID = 6406577402253277346L;
 
     private static Log log = LogFactory.getLog(RolsacQueryServiceEJB.class);
 
@@ -178,10 +195,26 @@ public class RolsacQueryServiceEJB {
     private static final String HQL_UNITAT_MATERIA_CLASS = "UnidadMateria";
     private static final String HQL_UNITAT_MATERIA_ALIAS = "um";
 
+    /**
+     * @ejb.create-method
+     * @ejb.permission unchecked="true"
+     */
+    public void ejbCreate() throws CreateException {
+        super.ejbCreate();
+    }
+    
+    /**
+     * Obtiene un procedimiento.
+     * @param procedimentCriteria
+     * @return ProcedimentDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         ProcedimentDTO procedimentDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
@@ -200,11 +233,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             ProcedimientoLocal procedimentLocal = (ProcedimientoLocal) query.uniqueResult();
-            sessio.close();
-
             if (procedimentLocal != null) {
                 procedimentDTO = (ProcedimentDTO) BasicUtils.entityToDTO(
                         ProcedimentDTO.class, 
@@ -213,31 +244,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return procedimentDTO;
     }
 
+    /**
+     * Obtiene procedimientos.
+     * @param procedimentCriteria
+     * @return List<ProcedimentDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) {
         List<ProcedimentDTO> procedimentDTOList = new ArrayList<ProcedimentDTO>();
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
@@ -257,13 +290,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
-            sessio.close();
-
             for (ProcedimientoLocal procediment : procedimentsResult) {
                 procedimentDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(
                         ProcedimentDTO.class, 
@@ -272,31 +301,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return procedimentDTOList;
     }
 
+    /**
+     * Obtiene una materia.
+     * @param materiaCriteria
+     * @return MateriaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) {
         List<CriteriaObject> criteris;
         MateriaDTO materiaDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -314,41 +344,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Materia materia = (Materia) query.uniqueResult();
-            sessio.close();
-
             if (materia != null) {
                 materiaDTO = (MateriaDTO) BasicUtils.entityToDTO(MateriaDTO.class, materia, materiaCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return materiaDTO;
     }
     
+    /**
+     * Obtiene materias.
+     * @param materiaCriteria
+     * @return List<MateriaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) {
         List<CriteriaObject> criteris;
         List<MateriaDTO> materiaDTOList = new ArrayList<MateriaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -366,12 +396,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Materia> materiaResult = (List<Materia>) query.list();
-            sessio.close();
-
             for (Materia materia: materiaResult) {
                 materiaDTOList.add((MateriaDTO) BasicUtils.entityToDTO(
                         MateriaDTO.class, 
@@ -380,30 +407,31 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return materiaDTOList;
     }
     
+    /**
+     * Obtiene un tramite.
+     * @param tramiteCriteria
+     * @return TramiteDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) {
         List<CriteriaObject> criteris;
         TramitDTO tramitDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -421,11 +449,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Tramite tramit = (Tramite) query.uniqueResult();
-            sessio.close();
-
             if (tramit != null) {
                 tramitDTO = (TramitDTO) BasicUtils.entityToDTO(
                         TramitDTO.class, 
@@ -434,31 +460,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tramitDTO;
     }
     
+    /**
+     * Obtiene tramites.
+     * @param tramiteCriteria
+     * @return List<TramiteDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<TramitDTO> llistarTramit(TramitCriteria tramitCriteria) {
         List<TramitDTO> tramitDTOList = new ArrayList<TramitDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -476,12 +504,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Tramite> tramitsResult = (List<Tramite>) query.list();
-            sessio.close();
-
             for (Tramite tramit: tramitsResult) {
                 tramitDTOList.add((TramitDTO) BasicUtils.entityToDTO(
                         TramitDTO.class, 
@@ -490,31 +515,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tramitDTOList;
     }
     
+    /**
+     * Obtiene una unidad administrativa.
+     * @param uaCriteria
+     * @return UnitatAdministrativaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria uaCriteria) {
         List<CriteriaObject> criteris;
         UnitatAdministrativaDTO uaDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -532,11 +558,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             UnidadAdministrativa ua = (UnidadAdministrativa) query.uniqueResult();
-            sessio.close();
-
             if (ua != null) {
                 uaDTO = (UnitatAdministrativaDTO) BasicUtils.entityToDTO(
                         UnitatAdministrativaDTO.class, 
@@ -545,31 +569,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return uaDTO;
     }
 
+    /**
+     * Obtiene unidades administrativas.
+     * @param uaCriteria
+     * @return List<UnitatAdministrativaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria uaCriteria) {
         List<UnitatAdministrativaDTO> uaDTOList = new ArrayList<UnitatAdministrativaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -587,12 +613,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<UnidadAdministrativa> uaResult = (List<UnidadAdministrativa>) query.list();
-            sessio.close();
-
             for (UnidadAdministrativa ua: uaResult) {
                 uaDTOList.add((UnitatAdministrativaDTO) BasicUtils.entityToDTO(
                         UnitatAdministrativaDTO.class, 
@@ -601,31 +624,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return uaDTOList;
     }    
     
+    /**
+     * Obtiene un hecho vital.
+     * @param fetVitalCriteria
+     * @return FetVitalDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) {
         List<CriteriaObject> criteris;
         FetVitalDTO fetVitalDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -643,11 +667,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             HechoVital fetVital = (HechoVital) query.uniqueResult();
-            sessio.close();
-
             if (fetVital != null) {
                 fetVitalDTO = (FetVitalDTO) BasicUtils.entityToDTO(
                         FetVitalDTO.class, 
@@ -656,31 +678,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fetVitalDTO;
     }
     
+    /**
+     * Obtiene hechos vitales.
+     * @param fetVitalCriteria
+     * @return FetVitalDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) {
         List<CriteriaObject> criteris;
         List<FetVitalDTO> fetVitalDTOList = new ArrayList<FetVitalDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -698,43 +722,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<HechoVital> fvResult = (List<HechoVital>) query.list();
-            sessio.close();
-
             for (HechoVital fv: fvResult) {
                 fetVitalDTOList.add((FetVitalDTO) BasicUtils.entityToDTO(
                         FetVitalDTO.class, fv, fetVitalCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fetVitalDTOList;
     }
 
+    /**
+     * Obtiene una ficha.
+     * @param fitxaCriteria
+     * @return FitxaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) {
         List<CriteriaObject> criteris;
         FitxaDTO fitxaDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -752,41 +774,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Ficha fitxa = (Ficha) query.uniqueResult();
-            sessio.close();
-
             if (fitxa != null) {
                 fitxaDTO = (FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class, fitxa, fitxaCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fitxaDTO;
     }
     
+    /**
+     * Obtiene fichas.
+     * @param fitxaCriteria
+     * @return List<FitxaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) {
         List<FitxaDTO> fitxaDTOList = new ArrayList<FitxaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -804,12 +826,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Ficha> fitxaResult = (List<Ficha>) query.list();
-            sessio.close();
-
             for (Ficha ficha: fitxaResult) {
                 fitxaDTOList.add((FitxaDTO) BasicUtils.entityToDTO(
                         FitxaDTO.class, 
@@ -818,31 +837,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fitxaDTOList;
     }
     
+    /**
+     * Obtiene un documento tramite.
+     * @param documentTramitCriteria
+     * @return DocumentTramitDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {        
         DocumentTramitDTO docTramitDTO = null;
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(
@@ -860,11 +880,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             DocumentTramit docTramit = (DocumentTramit) query.uniqueResult();
-            sessio.close();
-
             if (docTramit != null) {
                 docTramitDTO = (DocumentTramitDTO) BasicUtils.entityToDTO(
                         DocumentTramitDTO.class,
@@ -872,28 +890,34 @@ public class RolsacQueryServiceEJB {
                         documentTramitCriteria.getIdioma());
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
     
         return docTramitDTO;
     }
     
+    /**
+     * Obtiene documentos tramite.
+     * @param documentTramitCriteria
+     * @return List<DocumentTramitDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {        
         List<DocumentTramitDTO> documentsTramitDTOList = new ArrayList<DocumentTramitDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(
@@ -911,12 +935,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<DocumentTramit> documentTramitsResult = (List<DocumentTramit>) query.list();
-            sessio.close();
-
             for (DocumentTramit documentTramit : documentTramitsResult) {
                 documentsTramitDTOList.add((DocumentTramitDTO) BasicUtils.entityToDTO(
                         DocumentTramitDTO.class,
@@ -924,28 +945,33 @@ public class RolsacQueryServiceEJB {
                         documentTramitCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
     
         return documentsTramitDTOList;
     }
     
+    /**
+     * Obtiene una normativa.
+     * @param normativaCriteria
+     * @return NormativaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) {
         NormativaDTO normativaDTO = null;
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         
         boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
@@ -957,10 +983,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-            
             if (normativaLocal != null) {
                 normativaDTO = (NormativaDTO) BasicUtils.entityToDTO(
                         NormativaDTO.class, 
@@ -972,7 +997,7 @@ public class RolsacQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
                 qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
                 
                 if (normativaExterna != null) {
@@ -982,36 +1007,35 @@ public class RolsacQueryServiceEJB {
                             normativaCriteria.getIdioma());
                 }
             }
-            
-            sessio.close();
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTO;
     }
     
+    /**
+     * Obtiene normativas.
+     * @param normativaCriteria
+     * @return List<NormativaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) {
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         
         boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
@@ -1023,8 +1047,8 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
             
             List<NormativaExterna> normativasExternasResult = null;
@@ -1034,12 +1058,9 @@ public class RolsacQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
                 qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 normativasExternasResult = (List<NormativaExterna>) query.list();
             }
-
-            sessio.close();
-
             NormativaDTO dto;
             for (NormativaLocal normativa : normativasLocalesResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class, normativa, normativaCriteria.getIdioma());
@@ -1055,31 +1076,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTOList;
     }
 
+    /**
+     * Obtiene un miembro de personal.
+     * @param personalCriteria
+     * @return PersonalDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) {
         List<CriteriaObject> criteris;
         PersonalDTO personalDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(PersonalCriteria.class, HQL_PERSONAL_ALIAS, personalCriteria);
@@ -1089,11 +1111,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_PERSONAL_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Personal personal = (Personal) query.uniqueResult();
-            sessio.close();
-
             if (personal != null) {
                 personalDTO = (PersonalDTO) BasicUtils.entityToDTO(
                         PersonalDTO.class, 
@@ -1102,31 +1122,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return personalDTO;
     }
 
+    /**
+     * Obtiene lista de personal.
+     * @param personalCriteria
+     * @return List<PersonalDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) {
         List<CriteriaObject> criteris;
         List<PersonalDTO> personalDTOList = new ArrayList<PersonalDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(PersonalCriteria.class, HQL_PERSONAL_ALIAS, personalCriteria);
@@ -1136,12 +1158,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_PERSONAL_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Personal> personalResult = (List<Personal>) query.list();
-            sessio.close();
-
             for (Personal personal: personalResult) {
                 personalDTOList.add((PersonalDTO) BasicUtils.entityToDTO(
                         PersonalDTO.class, 
@@ -1150,31 +1169,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return personalDTOList;
     }
     
+    /**
+     * Obtiene un usuario.
+     * @param usuariCriteria
+     * @return UsuariDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) {
         List<CriteriaObject> criteris;
         UsuariDTO usuariDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(UsuariCriteria.class, HQL_USUARI_ALIAS, usuariCriteria);
@@ -1184,11 +1204,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_USUARI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Usuario usuari = (Usuario) query.uniqueResult();
-            sessio.close();
-
             if (usuari != null) {
                 usuariDTO = (UsuariDTO) BasicUtils.entityToDTO(
                         UsuariDTO.class, 
@@ -1197,31 +1215,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return usuariDTO;
     }
     
+    /**
+     * Obtiene usuarios.
+     * @param usuariCriteria
+     * @return List<UsuariDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) {
         List<CriteriaObject> criteris;
         List<UsuariDTO> usuariDTOList = new ArrayList<UsuariDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(UsuariCriteria.class, HQL_USUARI_ALIAS, usuariCriteria);
@@ -1231,12 +1251,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_USUARI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Usuario> usuariResult = (List<Usuario>) query.list();
-            sessio.close();
-
             for (Usuario usuari : usuariResult) {
                 usuariDTOList.add((UsuariDTO) BasicUtils.entityToDTO(
                         UsuariDTO.class, 
@@ -1245,31 +1262,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return usuariDTOList;
     }
     
+    /**
+     * Obtiene una tasa.
+     * @param taxaCriteria
+     * @return TaxaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) {
-        TaxaDTO taxeaDTO = null;
+        TaxaDTO taxaDTO = null;
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
             try {            
                 criteris = BasicUtils.parseCriterias(
@@ -1287,33 +1305,37 @@ public class RolsacQueryServiceEJB {
                         HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
 
-                sessio = HibernateUtils.getSessionFactory().openSession();
-                Query query = qb.createQuery(sessio);
+                session = getSession();
+                Query query = qb.createQuery(session);
                 Taxa taxa = (Taxa) query.uniqueResult();
-                sessio.close();
-
                 if (taxa != null) {
-                    taxeaDTO = (TaxaDTO) BasicUtils.entityToDTO(TaxaDTO.class,  taxa, taxaCriteria.getIdioma());
+                    taxaDTO = (TaxaDTO) BasicUtils.entityToDTO(TaxaDTO.class,  taxa, taxaCriteria.getIdioma());
                 }
             } catch (HibernateException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } catch (CriteriaObjectParseException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } catch (QueryBuilderException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } finally {
-                if (sessio != null && sessio.isOpen()) {
-                    try {
-                        sessio.close();
-                    } catch (HibernateException e) {
-                        e.printStackTrace();
-                    }
-                }
+                close(session);
             }
         
-            return taxeaDTO;
+            return taxaDTO;
     }
     
+    /**
+     * Obtiene tasas.
+     * @param taxaCriteria
+     * @return List<TaxaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) {
         List<TaxaDTO> taxesDTOList = new ArrayList<TaxaDTO>();
         List<CriteriaObject> criteris;
@@ -1335,38 +1357,40 @@ public class RolsacQueryServiceEJB {
                         HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
 
-                sessio = HibernateUtils.getSessionFactory().openSession();
+                sessio = getSession();
                 Query query = qb.createQuery(sessio);
-                @SuppressWarnings("unchecked")
                 List<Taxa> taxesResult = (List<Taxa>) query.list();
-                sessio.close();
-
                 for (Taxa taxa : taxesResult) {
                     taxesDTOList.add((TaxaDTO) BasicUtils.entityToDTO(TaxaDTO.class,  taxa, taxaCriteria.getIdioma()));
                 }
             } catch (HibernateException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } catch (CriteriaObjectParseException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } catch (QueryBuilderException e) {
-                e.printStackTrace();
+                log.error(e);
+                throw new EJBException(e);
             } finally {
-                if (sessio != null && sessio.isOpen()) {
-                    try {
-                        sessio.close();
-                    } catch (HibernateException e) {
-                        e.printStackTrace();
-                    }
-                }
+                close(sessio);
             }
         
             return taxesDTOList;
     }
     
+    /**
+     * Obtiene una agrupacion hecho vital.
+     * @param afvCriteria
+     * @return AgrupacioFetVitalDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria afvCriteria) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         AgrupacioFetVitalDTO afvDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1384,11 +1408,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             AgrupacionHechoVital afv = (AgrupacionHechoVital) query.uniqueResult();
-            sessio.close();
-
             if (afv != null) {
                 afvDTO = (AgrupacioFetVitalDTO) BasicUtils.entityToDTO(
                         AgrupacioFetVitalDTO.class, 
@@ -1397,31 +1419,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return afvDTO;
     }
     
+    /**
+     * Obtiene agrupaciones hecho vital.
+     * @param afvCriteria
+     * @return List<AgrupacioFetVitalDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria afvCriteria) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         List<AgrupacioFetVitalDTO> afvDTOList = new ArrayList<AgrupacioFetVitalDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1439,12 +1463,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<AgrupacionHechoVital> afvResult = (List<AgrupacionHechoVital>) query.list();
-            sessio.close();
-            
             for (AgrupacionHechoVital afv: afvResult) {
                 afvDTOList.add((AgrupacioFetVitalDTO) BasicUtils.entityToDTO(
                         AgrupacioFetVitalDTO.class, 
@@ -1453,31 +1474,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return afvDTOList;
     }
     
+    /**
+     * Obtiene una agrupacion materia.
+     * @param amCriteria
+     * @return AgrupacioMateriaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria amCriteria) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         AgrupacioMateriaDTO afvDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1495,11 +1517,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             AgrupacionMateria am = (AgrupacionMateria) query.uniqueResult();
-            sessio.close();
-
             if (am != null) {
                 afvDTO = (AgrupacioMateriaDTO) BasicUtils.entityToDTO(
                         AgrupacioMateriaDTO.class, 
@@ -1508,31 +1528,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return afvDTO;
     }
     
+    /**
+     * Obtiene agrupaciones materia.
+     * @param amCriteria
+     * @return List<AgrupacioMateriaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria amCriteria) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         List<AgrupacioMateriaDTO> amDTOList = new ArrayList<AgrupacioMateriaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1550,12 +1572,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<AgrupacionMateria> amResult = (List<AgrupacionMateria>) query.list();
-            sessio.close();
-
             for (AgrupacionMateria am: amResult) {
                 amDTOList.add((AgrupacioMateriaDTO) BasicUtils.entityToDTO(
                         AgrupacioMateriaDTO.class, 
@@ -1564,31 +1583,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return amDTOList;
     }
     
+    /**
+     * Obtiene un boletin.
+     * @param butlletiCriteria
+     * @return ButlletiDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) {
         List<CriteriaObject> criteris;
         ButlletiDTO butlletiDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(ButlletiCriteria.class, HQL_BUTLLETI_ALIAS, butlletiCriteria);
@@ -1598,11 +1618,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_BUTLLETI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Boletin butlleti = (Boletin) query.uniqueResult();
-            sessio.close();
-
             if (butlleti != null) {
                 butlletiDTO = (ButlletiDTO) BasicUtils.entityToDTO(
                         ButlletiDTO.class, 
@@ -1611,31 +1629,33 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return butlletiDTO;
     }
     
+    /**
+     * Obtiene lista de boletines.
+     * @param butlletiCriteria
+     * @return List<ButlletiDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) {
         List<CriteriaObject> criteris;
         List<ButlletiDTO> butlletiDTOList = new ArrayList<ButlletiDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(ButlletiCriteria.class, HQL_BUTLLETI_ALIAS, butlletiCriteria);
@@ -1645,12 +1665,9 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_BUTLLETI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Boletin> butlletiResult = (List<Boletin>) query.list();
-            sessio.close();
-
             for (Boletin boletin: butlletiResult) {
                 butlletiDTOList.add((ButlletiDTO) BasicUtils.entityToDTO(
                         ButlletiDTO.class, 
@@ -1659,31 +1676,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return butlletiDTOList;
     }
 
+    /**
+     * Obtiene un documento.
+     * @param documentCriteria
+     * @return DocumentDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public DocumentDTO obtenirDocument(DocumentCriteria docCriteria) {
         List<CriteriaObject> criteris;
         DocumentDTO docDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1701,37 +1719,37 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Documento doc = (Documento) query.uniqueResult();
-            sessio.close();
-
             if (doc != null) {
                 docDTO = (DocumentDTO) BasicUtils.entityToDTO(DocumentDTO.class, doc, docCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return docDTO;
     }
     
+    /**
+     * Obtiene lista de documentos.
+     * @param documentCriteria
+     * @return List<DocumentDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<DocumentDTO> llistarDocuments(DocumentCriteria docCriteria) {
         List<CriteriaObject> criteris;
         List<DocumentDTO> docDTOList = new ArrayList<DocumentDTO>();
@@ -1753,42 +1771,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            sessio = getSession();
             Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
             List<Documento> docResult = (List<Documento>) query.list();
-            sessio.close();
-
             for (Documento doc: docResult) {
                 docDTOList.add((DocumentDTO) BasicUtils.entityToDTO(DocumentDTO.class, doc, docCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(sessio);
         }
 
         return docDTOList;
     }
 
+    /**
+     * Obtiene un edificio.
+     * @param edificiCriteria
+     * @return EdificiDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) {
         List<CriteriaObject> criteris;
         EdificiDTO edificiDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1806,37 +1822,37 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Edificio edifici = (Edificio) query.uniqueResult();
-            sessio.close();
-            
             if (edifici != null) {
                 edificiDTO = (EdificiDTO) BasicUtils.entityToDTO(EdificiDTO.class, edifici, edificiCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return edificiDTO;
     }
     
+    /**
+     * Obtiene edificios.
+     * @param edificiCriteria
+     * @return List<EdificiDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) {
         List<CriteriaObject> criteris;
         List<EdificiDTO> edificisDTOList = new ArrayList<EdificiDTO>();
@@ -1858,12 +1874,9 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            sessio = getSession();
             Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
             List<Edificio> edificiResult = (List<Edificio>) query.list();
-            sessio.close();
-            
             for (Edificio ed: edificiResult) {
                 edificisDTOList.add((EdificiDTO) BasicUtils.entityToDTO(
                         EdificiDTO.class, 
@@ -1872,31 +1885,32 @@ public class RolsacQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(sessio);
         }
 
         return edificisDTOList;
     }
     
+    /**
+     * Obtiene un enlace.
+     * @param enllacCriteria
+     * @return EnllacDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) {
         List<CriteriaObject> criteris;
         EnllacDTO enllacDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -1914,37 +1928,37 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Enlace enllac = (Enlace) query.uniqueResult();
-            sessio.close();
-            
             if (enllac != null) {
                 enllacDTO = (EnllacDTO) BasicUtils.entityToDTO(EnllacDTO.class, enllac, enllacCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return enllacDTO;
     }
     
+    /**
+     * Obtiene lista de enlaces.
+     * @param enllacCriteria
+     * @return List<EnllacDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) {
         List<CriteriaObject> criteris;
         List<EnllacDTO> enllacDTOList = new ArrayList<EnllacDTO>();
@@ -1966,37 +1980,36 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            sessio = getSession();
             Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
             List<Enlace> enllacResult = (List<Enlace>) query.list();
-            sessio.close();
-            
             for (Enlace e: enllacResult) {
                 enllacDTOList.add((EnllacDTO) BasicUtils.entityToDTO(EnllacDTO.class, e, enllacCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(sessio);
         }
 
         return enllacDTOList;
     }
+    
+    /**
+     * Obtiene un espacio territorial.
+     * @param etCriteria
+     * @return EspaiTerritorialDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria etCriteria) {
         List<CriteriaObject> criteris;
         EspaiTerritorialDTO etDTO = null;
@@ -2018,42 +2031,42 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            sessio = getSession();
             Query query = qb.createQuery(sessio);
             EspacioTerritorial et = (EspacioTerritorial) query.uniqueResult();
-            sessio.close();
-            
             if (et != null) {
                 etDTO = (EspaiTerritorialDTO) BasicUtils.entityToDTO(
                         EspaiTerritorialDTO.class, et, etCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(sessio);
         }
 
         return etDTO;
     }
     
+    /**
+     * Obtiene espacios territoriales.
+     * @param etCriteria
+     * @return List<EspaiTerritorialDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria etCriteria) {
         List<CriteriaObject> criteris;
         List<EspaiTerritorialDTO> etDTOList = new ArrayList<EspaiTerritorialDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2071,43 +2084,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<EspacioTerritorial> etResult = (List<EspacioTerritorial>) query.list();
-            sessio.close();
-            
             for (EspacioTerritorial e: etResult) {
                 etDTOList.add((EspaiTerritorialDTO) BasicUtils.entityToDTO(
                         EspaiTerritorialDTO.class, e, etCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return etDTOList;
     }
     
+    /**
+     * Obtiene una familia.
+     * @param familiaCriteria
+     * @return FamiliaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) {
         List<CriteriaObject> criteris;
         FamiliaDTO familiaDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2125,41 +2136,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Familia familia = (Familia) query.uniqueResult();
-            sessio.close();
-            
             if (familia != null) {
                 familiaDTO = (FamiliaDTO) BasicUtils.entityToDTO(FamiliaDTO.class, familia, familiaCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return familiaDTO;
     }
     
+    /**
+     * Obtiene familias.
+     * @param familiaCriteria
+     * @return List<FamiliaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) {
         List<CriteriaObject> criteris;
         List<FamiliaDTO> familiaDTOList = new ArrayList<FamiliaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2177,42 +2188,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Familia> familiaResult = (List<Familia>) query.list();
-            sessio.close();
-            
             for (Familia f: familiaResult) {
                 familiaDTOList.add((FamiliaDTO) BasicUtils.entityToDTO(FamiliaDTO.class, f, familiaCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return familiaDTOList;
     }
     
+    /**
+     * Obtiene publico objetivo.
+     * @param publicObjectiuCriteria
+     * @return PublicObjectiuDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) {
         List<CriteriaObject> criteris;
         PublicObjectiuDTO publicObjectiuDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2230,41 +2239,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             PublicoObjetivo publicoObjetivo = (PublicoObjetivo) query.uniqueResult();
-            sessio.close();
-            
             if (publicoObjetivo != null) {
                 publicObjectiuDTO = (PublicObjectiuDTO) BasicUtils.entityToDTO(PublicObjectiuDTO.class, publicoObjetivo, publicObjectiuCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return publicObjectiuDTO;
     }
 
+    /**
+     * Obtiene publicos objetivo.
+     * @param publicObjectiuCriteria
+     * @return List<PublicObjectiuDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria poCriteria) {
         List<CriteriaObject> criteris;
         List<PublicObjectiuDTO> poDTOList = new ArrayList<PublicObjectiuDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2282,43 +2291,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<PublicoObjetivo> poResult = (List<PublicoObjetivo>) query.list();
-            sessio.close();
-            
             for (PublicoObjetivo po: poResult) {
                 poDTOList.add((PublicObjectiuDTO) BasicUtils.entityToDTO(
                         PublicObjectiuDTO.class, po, poCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return poDTOList;
     }
     
+    /**
+     * Obtiene ficha UA.
+     * @param fuaCriteria
+     * @return FitxaUADTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fuaCriteria) {
         List<CriteriaObject> criteris;
         FitxaUADTO fuaDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FITXA_UA_ALIAS, fuaCriteria);
@@ -2328,41 +2335,41 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_FITXA_UA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             FichaUA fua = (FichaUA) query.uniqueResult();
-            sessio.close();
-
             if (fua != null) {
                 fuaDTO = (FitxaUADTO) BasicUtils.entityToDTO(FitxaUADTO.class, fua, fuaCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fuaDTO;
     }
     
+    /**
+     * Obtiene lista de fichas UA.
+     * @param fuaCriteria
+     * @return List<FitxaUADTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fuaCriteria) {
         List<CriteriaObject> criteris;
         List<FitxaUADTO> fuaDTOList = new ArrayList<FitxaUADTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(FitxaUACriteria.class, HQL_FITXA_UA_ALIAS, fuaCriteria);
@@ -2372,42 +2379,40 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_FITXA_UA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<FichaUA> fuaResult = (List<FichaUA>) query.list();
-            sessio.close();
-
             for (FichaUA fua: fuaResult) {
                 fuaDTOList.add((FitxaUADTO) BasicUtils.entityToDTO(FitxaUADTO.class, fua, fuaCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fuaDTOList;
     }
     
+    /**
+     * Obtiene un formulario.
+     * @param formCriteria
+     * @return formulariDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public FormulariDTO obtenirFormulari(FormulariCriteria formCriteria) {
         List<CriteriaObject> criteris;
         FormulariDTO formDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(FormulariCriteria.class, HQL_FORMULARI_ALIAS, formCriteria);
@@ -2417,41 +2422,41 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_FORMULARI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Formulario form = (Formulario) query.uniqueResult();
-            sessio.close();
-
             if (form != null) {
                 formDTO = (FormulariDTO) BasicUtils.entityToDTO(FormulariDTO.class, form, formCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return formDTO;
     }
     
+    /**
+     * Obtiene formularios.
+     * @param formCriteria
+     * @return List<formulariDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FormulariDTO> llistarFormularis(FormulariCriteria formCriteria) {
         List<CriteriaObject> criteris;
         List<FormulariDTO> formDTOList = new ArrayList<FormulariDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(FormulariCriteria.class, HQL_FORMULARI_ALIAS, formCriteria);
@@ -2461,42 +2466,40 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_FORMULARI_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Formulario> formResult = (List<Formulario>) query.list();
-            sessio.close();
-
             for (Formulario form: formResult) {
                 formDTOList.add((FormulariDTO) BasicUtils.entityToDTO(FormulariDTO.class, form, formCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return formDTOList;
     }
     
+    /**
+     * Obtiene un icono familia.
+     * @param ifCriteria
+     * @return IconaFamiliaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria ifCriteria) {
         List<CriteriaObject> criteris;
         IconaFamiliaDTO ifDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(IconaFamiliaCriteria.class, HQL_ICONA_FAMILIA_ALIAS, ifCriteria);
@@ -2506,41 +2509,41 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_ICONA_FAMILIA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             IconoFamilia icoFam = (IconoFamilia) query.uniqueResult();
-            sessio.close();
-
             if (icoFam != null) {
                 ifDTO = (IconaFamiliaDTO) BasicUtils.entityToDTO(IconaFamiliaDTO.class, icoFam, ifCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return ifDTO;
     }
 
+    /**
+     * Obtiene lista de iconos familia.
+     * @param ifCriteria
+     * @return List<IconaFamiliaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria ifCriteria) {
         List<CriteriaObject> criteris;
         List<IconaFamiliaDTO> ifDTOList = new ArrayList<IconaFamiliaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(IconaFamiliaCriteria.class, HQL_ICONA_FAMILIA_ALIAS, ifCriteria);
@@ -2550,42 +2553,40 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_ICONA_FAMILIA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<IconoFamilia> ifResult = (List<IconoFamilia>) query.list();
-            sessio.close();
-
             for (IconoFamilia iFam: ifResult) {
                 ifDTOList.add((IconaFamiliaDTO) BasicUtils.entityToDTO(IconaFamiliaDTO.class, iFam, ifCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return ifDTOList;
     }
     
+    /**
+     * Obtiene un icono materia.
+     * @param imCriteria
+     * @return IconaMateriaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria imCriteria) {
         List<CriteriaObject> criteris;
         IconaMateriaDTO imDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(IconaMateriaCriteria.class, HQL_ICONA_MATERIA_ALIAS, imCriteria);
@@ -2595,41 +2596,41 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_ICONA_MATERIA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             IconoMateria icoMat = (IconoMateria) query.uniqueResult();
-            sessio.close();
-
             if (icoMat != null) {
                 imDTO = (IconaMateriaDTO) BasicUtils.entityToDTO(IconaMateriaDTO.class, icoMat, imCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return imDTO;
     }
 
+    /**
+     * Obtiene iconos materia.
+     * @param imCriteria
+     * @return List<IconaMateriaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria imCriteria) {
         List<CriteriaObject> criteris;
         List<IconaMateriaDTO> imDTOList = new ArrayList<IconaMateriaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(IconaMateriaCriteria.class, HQL_ICONA_MATERIA_ALIAS, imCriteria);
@@ -2639,42 +2640,40 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_ICONA_MATERIA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<IconoMateria> imResult = (List<IconoMateria>) query.list();
-            sessio.close();
-
             for (IconoMateria iMat: imResult) {
                 imDTOList.add((IconaMateriaDTO) BasicUtils.entityToDTO(IconaMateriaDTO.class, iMat, imCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return imDTOList;
     }
     
+    /**
+     * Obtiene una materia agrupacion.
+     * @param maCriteria
+     * @return MateriaAgrupacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria maCriteria) {
         List<CriteriaObject> criteris;
         MateriaAgrupacioDTO imDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(MateriaAgrupacioCriteria.class, HQL_MATERIA_AGRUPACIO_ALIAS, maCriteria);
@@ -2684,41 +2683,41 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_MATERIA_AGRUPACIO_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             MateriaAgrupacionM ma = (MateriaAgrupacionM) query.uniqueResult();
-            sessio.close();
-
             if (ma != null) {
                 imDTO = (MateriaAgrupacioDTO) BasicUtils.entityToDTO(MateriaAgrupacioDTO.class, ma, maCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return imDTO;
     }
     
+    /**
+     * Obtiene lista de materias agrupacion.
+     * @param maCriteria
+     * @return List<MateriaAgrupacioDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria maCriteria) {
         List<CriteriaObject> criteris;
         List<MateriaAgrupacioDTO> imDTOList = new ArrayList<MateriaAgrupacioDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(MateriaAgrupacioCriteria.class, HQL_MATERIA_AGRUPACIO_ALIAS, maCriteria);
@@ -2728,42 +2727,40 @@ public class RolsacQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_MATERIA_AGRUPACIO_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<MateriaAgrupacionM> maResult = (List<MateriaAgrupacionM>) query.list();
-            sessio.close();
-
             for (MateriaAgrupacionM ma: maResult) {
                 imDTOList.add((MateriaAgrupacioDTO) BasicUtils.entityToDTO(MateriaAgrupacioDTO.class, ma, maCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return imDTOList;
     }
     
+    /**
+     * Obtiene un perfil.
+     * @param perfilCriteria
+     * @return PerfilDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) {
         List<CriteriaObject> criteris;
         PerfilDTO perfilDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2782,41 +2779,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             PerfilCiudadano perfil = (PerfilCiudadano) query.uniqueResult();
-            sessio.close();
-
             if (perfil != null) {
                 perfilDTO = (PerfilDTO) BasicUtils.entityToDTO(PerfilDTO.class, perfil, perfilCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return perfilDTO;
     }
     
+    /**
+     * Obtiene perfiles.
+     * @param perfilCriteria
+     * @return List<PerfilDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) {
         List<CriteriaObject> criteris;
         List<PerfilDTO> perfilDTOList = new ArrayList<PerfilDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2835,42 +2832,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<PerfilCiudadano> perfilResult = (List<PerfilCiudadano>) query.list();
-            sessio.close();
-
             for (PerfilCiudadano p: perfilResult) {
                 perfilDTOList.add((PerfilDTO) BasicUtils.entityToDTO(PerfilDTO.class, p, perfilCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return perfilDTOList;
     }
 
+    /**
+     * Obtiene una seccion.
+     * @param seccioCriteria
+     * @return SeccioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) {
         List<CriteriaObject> criteris;
         SeccioDTO seccioDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2889,41 +2884,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Seccion seccio = (Seccion) query.uniqueResult();
-            sessio.close();
-
             if (seccio != null) {
                 seccioDTO = (SeccioDTO) BasicUtils.entityToDTO(SeccioDTO.class, seccio, seccioCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return seccioDTO;
     }
     
+    /**
+     * Obtiene secciones.
+     * @param seccioCriteria
+     * @return List<SeccioDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) {
         List<CriteriaObject> criteris;
         List<SeccioDTO> seccioDTOList = new ArrayList<SeccioDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2942,42 +2937,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Seccion> seccioResult = (List<Seccion>) query.list();
-            sessio.close();
-
             for (Seccion s: seccioResult) {
                 seccioDTOList.add((SeccioDTO) BasicUtils.entityToDTO(SeccioDTO.class, s, seccioCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return seccioDTOList;
     }
     
+    /**
+     * Obtiene una unidad materia.
+     * @param umCriteria
+     * @return UnitatMateriaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria umCriteria) {
         List<CriteriaObject> criteris;
         UnitatMateriaDTO umDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -2996,41 +2989,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             UnidadMateria um = (UnidadMateria) query.uniqueResult();
-            sessio.close();
-
             if (um != null) {
                 umDTO = (UnitatMateriaDTO) BasicUtils.entityToDTO(UnitatMateriaDTO.class, um, umCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return umDTO;
     }
     
+    /**
+     * Obtiene unidades materia.
+     * @param umCriteria
+     * @return List<UnitatMateriaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria umCriteria) {
         List<CriteriaObject> criteris;
         List<UnitatMateriaDTO> umDTOList = new ArrayList<UnitatMateriaDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -3049,42 +3042,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<UnidadMateria> umResult = (List<UnidadMateria>) query.list();
-            sessio.close();
-
             for (UnidadMateria um: umResult) {
                 umDTOList.add((UnitatMateriaDTO) BasicUtils.entityToDTO(UnitatMateriaDTO.class, um, umCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return umDTOList;
     }
 
+    /**
+     * Obtiene un tipo.
+     * @param tipusCriteria
+     * @return TipusDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) {
         List<CriteriaObject> criteris;
         TipusDTO tipusDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -3103,41 +3094,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             Tipo tipus = (Tipo) query.uniqueResult();
-            sessio.close();
-
             if (tipus != null) {
                 tipusDTO = (TipusDTO) BasicUtils.entityToDTO(TipusDTO.class, tipus, tipusCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tipusDTO;
     }
 
+    /**
+     * Obtiene tipos.
+     * @param tipusCriteria
+     * @return List<TipusDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
         List<CriteriaObject> criteris;
         List<TipusDTO> tipusDTOList = new ArrayList<TipusDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -3156,42 +3147,40 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Tipo> tipusResult = (List<Tipo>) query.list();
-            sessio.close();
-
             for (Tipo t: tipusResult) {
                 tipusDTOList.add((TipusDTO) BasicUtils.entityToDTO(TipusDTO.class, t, tipusCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tipusDTOList;
     }
 
+    /**
+     * Obtiene un tipo afectacion.
+     * @param tipusAfectacioCriteria
+     * @return TipusAfectacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
         List<CriteriaObject> criteris;
         TipusAfectacioDTO tipusAfectacioDTO = null;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -3210,41 +3199,41 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             TipoAfectacion tipusAfectacio = (TipoAfectacion) query.uniqueResult();
-            sessio.close();
-
             if (tipusAfectacio != null) {
                 tipusAfectacioDTO = (TipusAfectacioDTO) BasicUtils.entityToDTO(TipusAfectacioDTO.class, tipusAfectacio, tipusAfectacioCriteria.getIdioma());
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tipusAfectacioDTO;
     }
 
+    /**
+     * Obtiene tipos afectacion.
+     * @param tipusAfectacioCriteria
+     * @return List<TipusAfectacioDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
         List<CriteriaObject> criteris;
         List<TipusAfectacioDTO> tipusAfectacioDTOList = new ArrayList<TipusAfectacioDTO>();
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(
@@ -3263,33 +3252,23 @@ public class RolsacQueryServiceEJB {
                     HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<TipoAfectacion> tipoAfectacionResult = (List<TipoAfectacion>) query.list();
-            sessio.close();
-
             for (TipoAfectacion t: tipoAfectacionResult) {
                 tipusAfectacioDTOList.add((TipusAfectacioDTO) BasicUtils.entityToDTO(TipusAfectacioDTO.class, t, tipusAfectacioCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
+            throw new EJBException(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tipusAfectacioDTOList;

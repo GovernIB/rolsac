@@ -5,6 +5,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
@@ -13,26 +14,26 @@ public interface NormativaQueryService {
     
     public static enum TIPUS_NORMATIVA {TOTES, LOCAL, EXTERNA};
 
-    int getNumAfectades();
+    public int getNumAfectades() throws QueryServiceException;
 
-    int getNumAfectants();
+    public int getNumAfectants() throws QueryServiceException;
 
-    int getNumProcediments();
+    public int getNumProcediments() throws QueryServiceException;
     
-    List<NormativaQueryServiceAdapter> llistarAfectades();
+    public List<NormativaQueryServiceAdapter> llistarAfectades() throws QueryServiceException;
 
-    List<NormativaQueryServiceAdapter> llistarAfectants();
+    public List<NormativaQueryServiceAdapter> llistarAfectants() throws QueryServiceException;
 
-    List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
     
-    ButlletiQueryServiceAdapter obtenirButlleti();
+    public ButlletiQueryServiceAdapter obtenirButlleti() throws QueryServiceException;
     
-    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa();
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirArxiuNormativa();
+    public ArxiuQueryServiceAdapter obtenirArxiuNormativa() throws QueryServiceException;
     
-    List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades();
+    public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades() throws QueryServiceException;
     
-    List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectants();
+    public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectants() throws QueryServiceException;
 
 }

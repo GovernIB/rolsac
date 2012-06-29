@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class UnitatAdministrativaCriteria extends BasicCriteria {
     
+    private static final long serialVersionUID = -4290174733916243998L;
+
     private String businessKey;
     private String claveHita;
     private String dominio;

@@ -1,7 +1,7 @@
 package es.caib.rolsac.api.v2.general;
 
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class BeanUtils {
 
@@ -9,7 +9,7 @@ public class BeanUtils {
     
     private static final String ADAPTER_INFIX = "QueryService";
     private static final String ADAPTER_SUFIX = "Adapter";
-    private static final String SPRING_XML_CONFIG = "moduls\\api\\etc\\spring.cfg.xml";
+    private static final String SPRING_CONTEXT_CLASSPATH = "classpath*:es/caib/rolsac/api/v2/resources/sac-api-context.xml";
     private static ApplicationContext ctx;
     
     private BeanUtils() {
@@ -17,7 +17,7 @@ public class BeanUtils {
     
     public static ApplicationContext getApplicationContextInstance() {
         if (ctx == null) {
-            ctx = new FileSystemXmlApplicationContext(SPRING_XML_CONFIG);
+            ctx = new ClassPathXmlApplicationContext(SPRING_CONTEXT_CLASSPATH);
         }
         return ctx;
     }

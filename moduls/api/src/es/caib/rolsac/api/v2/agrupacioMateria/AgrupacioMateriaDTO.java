@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.agrupacioMateria;
 
+import java.io.Serializable;
 
-public class AgrupacioMateriaDTO {
+
+public class AgrupacioMateriaDTO implements Serializable {
+
+    private static final long serialVersionUID = 6053806004180184040L;
 
     protected Long id;
     private String codigoEstandar;

@@ -2,15 +2,18 @@ package es.caib.rolsac.api.v2.personal;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.personal.ejb.PersonalQueryServiceEJBStrategy;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public class PersonalQueryServiceAdapter extends PersonalDTO implements PersonalQueryService {
+
+    private static final long serialVersionUID = -7266758574463322225L;
 
     private PersonalQueryServiceStrategy personalQueryServiceStrategy;
 
@@ -18,11 +21,11 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
         this.personalQueryServiceStrategy = personalQueryServiceStrategy;
     }
 
-    public PersonalQueryServiceAdapter(PersonalDTO dto) {
+    public PersonalQueryServiceAdapter(PersonalDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
@@ -30,10 +33,14 @@ public class PersonalQueryServiceAdapter extends PersonalDTO implements Personal
         return personalQueryServiceStrategy instanceof PersonalQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public UnitatAdministrativaQueryService obtenirUnitatAdministrativa() {
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException {
         if (this.getUnidadAdministrativa() == null) {return null;}
-        UnitatAdministrativaDTO dto = personalQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
-        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+        try {
+            UnitatAdministrativaDTO dto = personalQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa());
+            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
+        }
     }
 
 }

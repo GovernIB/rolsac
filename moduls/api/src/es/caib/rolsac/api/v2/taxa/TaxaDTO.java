@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.taxa;
 
-public class TaxaDTO {
+import java.io.Serializable;
+
+public class TaxaDTO implements Serializable {
+
+    private static final long serialVersionUID = 3743152064919483470L;
 
     protected long id;
     private Long orden;

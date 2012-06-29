@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class DocumentDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = -3372793759825704926L;
+
     protected Long id;
     private Long orden;
 

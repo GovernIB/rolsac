@@ -5,6 +5,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
@@ -18,32 +19,32 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaQueryServiceAdapter;
 
 public interface MateriaQueryService {
 
-    int getNumFitxes();
+    public int getNumFitxes() throws QueryServiceException;
 
-    int getNumAgrupacioMateries();
+    public int getNumAgrupacioMateries() throws QueryServiceException;
 
-    int getNumProcedimentsLocals();
+    public int getNumProcedimentsLocals() throws QueryServiceException;
 
-    int getNumUnitatsMateries();
+    public int getNumUnitatsMateries() throws QueryServiceException;
 
-    int getNumIcones();
+    public int getNumIcones() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getFotografia();
+    public ArxiuQueryServiceAdapter getFotografia() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getIcona();
+    public ArxiuQueryServiceAdapter getIcona() throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter getIconaGran();
+    public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException;
 
-    List<ProcedimentQueryServiceAdapter> llistarProcedimentsLocals(ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentQueryServiceAdapter> llistarProcedimentsLocals(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
 
-    List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria);
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException;
 
-    List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacioMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria);
+    public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacioMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException;
 
-    List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateria(UnitatMateriaCriteria unitatMateriaCriteria);
+    public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException;
     
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
 
-    List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria);
+    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException;
 
 }

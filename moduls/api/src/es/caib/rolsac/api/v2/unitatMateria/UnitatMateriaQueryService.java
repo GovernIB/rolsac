@@ -1,12 +1,13 @@
 package es.caib.rolsac.api.v2.unitatMateria;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface UnitatMateriaQueryService {
 
-    UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa();
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException;
 
-    MateriaQueryServiceAdapter obtenirMateria();
+    public MateriaQueryServiceAdapter obtenirMateria() throws QueryServiceException;
 
 }

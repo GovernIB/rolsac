@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
@@ -31,60 +32,84 @@ public class FetVitalQueryServiceTest {
     public void llistarFitxes() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("220");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = fetVital.llistarFitxes(new FitxaCriteria());        
-        Assert.assertTrue(listFitxaQueryServiceAdapter.size() == 3);
+        try {
+            FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            List<FitxaQueryServiceAdapter> listFitxaQueryServiceAdapter = fetVital.llistarFitxes(new FitxaCriteria());        
+            Assert.assertTrue(listFitxaQueryServiceAdapter.size() == 3);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarProcedimentsLocals() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("226");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        List<ProcedimentQueryServiceAdapter> listProcedimentQueryServiceAdapter = fetVital.llistarProcedimentsLocals(new ProcedimentCriteria());
-        Assert.assertTrue(listProcedimentQueryServiceAdapter.size() == 2);
+        try {
+            FetVitalQueryServiceAdapter  fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            List<ProcedimentQueryServiceAdapter> listProcedimentQueryServiceAdapter = fetVital.llistarProcedimentsLocals(new ProcedimentCriteria());
+            Assert.assertTrue(listProcedimentQueryServiceAdapter.size() == 2);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test
     public void llistarFetsVitalsAgrupacionsFV() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("234");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        List<AgrupacioFetVitalQueryServiceAdapter> listAgrupacioFetVitalQueryServiceAdapter = fetVital.llistarFetsVitalsAgrupacionsFV(new AgrupacioFetVitalCriteria());
-        Assert.assertTrue(listAgrupacioFetVitalQueryServiceAdapter.size() == 3);
+        try {
+            FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            List<AgrupacioFetVitalQueryServiceAdapter> listAgrupacioFetVitalQueryServiceAdapter = fetVital.llistarFetsVitalsAgrupacionsFV(new AgrupacioFetVitalCriteria());
+            Assert.assertTrue(listAgrupacioFetVitalQueryServiceAdapter.size() == 3);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     } 
     
     @Test
     public void getNumProcedimentsLocals() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("221");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        int numProcediments = fetVital.getNumProcedimentsLocals();        
-        Assert.assertTrue(numProcediments == 1);
+        try {
+            FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            int numProcediments = fetVital.getNumProcedimentsLocals();        
+            Assert.assertTrue(numProcediments == 1);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void getNumFitxes() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("221");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        int numFitxes = fetVital.getNumFitxes();        
-        Assert.assertTrue(numFitxes == 3);
+        try {
+            FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            int numFitxes = fetVital.getNumFitxes();        
+            Assert.assertTrue(numFitxes == 3);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void getNumFetsVitalsAgrupacionsFV() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("243");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
-        Assert.assertNotNull(fetVital);
-        int numAgrupacionsFetsVitals = fetVital.getNumFetsVitalsAgrupacionsFV();        
-        Assert.assertTrue(numAgrupacionsFetsVitals == 2);
+        try {
+            FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+            Assert.assertNotNull(fetVital);
+            int numAgrupacionsFetsVitals = fetVital.getNumFetsVitalsAgrupacionsFV();        
+            Assert.assertTrue(numAgrupacionsFetsVitals == 2);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
 }

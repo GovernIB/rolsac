@@ -1,6 +1,8 @@
 package es.caib.rolsac.api.v2.afectacio.ejb;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceStrategy;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
 
@@ -12,16 +14,28 @@ public class AfectacioQueryServiceEJBStrategy implements AfectacioQueryServiceSt
         this.afectacioQueryServiceDelegate = afectacioQueryServiceDelegate;
     }
 
-    public NormativaDTO obtenirAfectant(long idAfectant) {
-        return afectacioQueryServiceDelegate.obtenirAfectant(idAfectant);
+    public NormativaDTO obtenirAfectant(long idAfectant) throws StrategyException {
+        try {
+            return afectacioQueryServiceDelegate.obtenirAfectant(idAfectant);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public NormativaDTO obtenirNormativa(long idNormativa) {
-        return afectacioQueryServiceDelegate.obtenirNormativa(idNormativa);
+    public NormativaDTO obtenirNormativa(long idNormativa) throws StrategyException {
+        try {
+            return afectacioQueryServiceDelegate.obtenirNormativa(idNormativa);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio) {
-        return afectacioQueryServiceDelegate.obtenirTipusAfectacio(idTipusAfectacio);
+    public TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio) throws StrategyException {
+        try {
+            return afectacioQueryServiceDelegate.obtenirTipusAfectacio(idTipusAfectacio);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

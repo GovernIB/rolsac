@@ -20,6 +20,8 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -69,73 +71,137 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy {
 
     private RolsacQueryServiceDelegate rolsacQueryServiceDelegate;
-    
+
     public void setRolsacQueryServiceDelegate(RolsacQueryServiceDelegate rolsacQueryServiceDelegate) {
         this.rolsacQueryServiceDelegate = rolsacQueryServiceDelegate;
     }
 
-    public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) {
-        return rolsacQueryServiceDelegate.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+    public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) {
-        return rolsacQueryServiceDelegate.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
+    public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+    public AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) {
-        return rolsacQueryServiceDelegate.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
+    public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) {
-        return rolsacQueryServiceDelegate.obtenirButlleti(butlletiCriteria);
+    public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirButlleti(butlletiCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) {
-        return rolsacQueryServiceDelegate.llistarButlletins(butlletiCriteria);
+    public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarButlletins(butlletiCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) {
-        return rolsacQueryServiceDelegate.obtenirDocument(documentCriteria);
+    public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirDocument(documentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) {
-        return rolsacQueryServiceDelegate.llistarDocuments(documentCriteria);
+    public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarDocuments(documentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        return rolsacQueryServiceDelegate.obtenirDocumentTramit(documentTramitCriteria);
+    public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirDocumentTramit(documentTramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        return rolsacQueryServiceDelegate.llistarDocumentTramit(documentTramitCriteria);
+    public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarDocumentTramit(documentTramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) {
-        return rolsacQueryServiceDelegate.obtenirEdifici(edificiCriteria);
+    public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirEdifici(edificiCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) {
-        return rolsacQueryServiceDelegate.llistarEdificis(edificiCriteria);
+    public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarEdificis(edificiCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) {
-        return rolsacQueryServiceDelegate.obtenirEnllac(enllacCriteria);
+    public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirEnllac(enllacCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) {
-        return rolsacQueryServiceDelegate.llistarEnllacos(enllacCriteria);
+    public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarEnllacos(enllacCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        return rolsacQueryServiceDelegate.obtenirEspaiTerritorial(espaiTerritorialCriteria);
+    public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirEspaiTerritorial(espaiTerritorialCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        return rolsacQueryServiceDelegate.llistarEspaisTerritorials(espaiTerritorialCriteria);
+    public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarEspaisTerritorials(espaiTerritorialCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
     public EstadisticaDTO obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) {
@@ -148,181 +214,356 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
         return null;
     }
 
-    public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirFamilia(familiaCriteria);
+    public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirFamilia(familiaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) {
-        return rolsacQueryServiceDelegate.llistarFamilies(familiaCriteria);
+    public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarFamilies(familiaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) {
-        return rolsacQueryServiceDelegate.obtenirFetVital(fetVitalCriteria);
+    public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirFetVital(fetVitalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) {
-        return rolsacQueryServiceDelegate.llistarFetsVitals(fetVitalCriteria);
+    public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarFetsVitals(fetVitalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirFitxa(fitxaCriteria);
+    public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirFitxa(fitxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) {
-        return rolsacQueryServiceDelegate.llistarFitxes(fitxaCriteria);
+    public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarFitxes(fitxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) {
-        return rolsacQueryServiceDelegate.obtenirFitxaUA(fitxaUACriteria);
+    public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirFitxaUA(fitxaUACriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) {
-        return rolsacQueryServiceDelegate.llistarFitxesUA(fitxaUACriteria);
+    public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarFitxesUA(fitxaUACriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria) {
-        return rolsacQueryServiceDelegate.obtenirFormulari(formulariCriteria);
+    public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirFormulari(formulariCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) {
-        return rolsacQueryServiceDelegate.llistarFormularis(formulariCriteria);
+    public List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarFormularis(formulariCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirIconaFamilia(iconaFamiliaCriteria);
+    public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirIconaFamilia(iconaFamiliaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) {
-        return rolsacQueryServiceDelegate.llistarIconesFamilies(iconaFamiliaCriteria);
+    public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarIconesFamilies(iconaFamiliaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirIconaMateria(iconaMateriaCriteria);
+    public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirIconaMateria(iconaMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) {
-        return rolsacQueryServiceDelegate.llistarIconesMateries(iconaMateriaCriteria);
+    public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarIconesMateries(iconaMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirMateria(materiaCriteria);
+    public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirMateria(materiaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) {
-        return rolsacQueryServiceDelegate.llistarMateries(materiaCriteria);
+    public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarMateries(materiaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) {
-        return rolsacQueryServiceDelegate.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+    public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) {
-        return rolsacQueryServiceDelegate.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
+    public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirNormativa(normativaCriteria);
+    public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirNormativa(normativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) {
-        return rolsacQueryServiceDelegate.llistarNormatives(normativaCriteria);
+    public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarNormatives(normativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) {
-        return rolsacQueryServiceDelegate.obtenirPerfil(perfilCriteria);
+    public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirPerfil(perfilCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) {
-        return rolsacQueryServiceDelegate.llistarPerfils(perfilCriteria);
+    public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarPerfils(perfilCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) {
-         return rolsacQueryServiceDelegate.obtenirPersonal(personalCriteria);
+    public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirPersonal(personalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) {
-        return rolsacQueryServiceDelegate.llistarPersonal(personalCriteria);
+    public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarPersonal(personalCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) {
-        return rolsacQueryServiceDelegate.obtenirProcediment(procedimentCriteria);
+    public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirProcediment(procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) {
-        return rolsacQueryServiceDelegate.llistarProcediments(procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarProcediments(procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) {
-        return rolsacQueryServiceDelegate.obtenirPublicObjectiu(publicObjectiuCriteria);
-    }
-    
-    public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) {
-        return rolsacQueryServiceDelegate.llistarPublicsObjectius(publicObjectiuCriteria);
-    }
-
-    public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) {
-        return rolsacQueryServiceDelegate.obtenirSeccio(seccioCriteria);
+    public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirPublicObjectiu(publicObjectiuCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) {
-        return rolsacQueryServiceDelegate.llistarSeccions(seccioCriteria);
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarPublicsObjectius(publicObjectiuCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirTaxa(taxaCriteria);
+    public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirSeccio(seccioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) {
-        return rolsacQueryServiceDelegate.llistarTaxes(taxaCriteria);
+    public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarSeccions(seccioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) {
-        return rolsacQueryServiceDelegate.obtenirTramit(tramitCriteria);
+    public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirTaxa(taxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) {
-        return rolsacQueryServiceDelegate.llistarTramits(tramitCriteria);
+    public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarTaxes(taxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+    public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirTramit(tramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        return rolsacQueryServiceDelegate.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
+    public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarTramits(tramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) {
-        return rolsacQueryServiceDelegate.obtenirUnitatMateria(unitatMateriaCriteria);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) {
-        return rolsacQueryServiceDelegate.llistarUnitatsMateries(unitatMateriaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) {
-        return rolsacQueryServiceDelegate.obtenirUsuari(usuariCriteria);
+    public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirUnitatMateria(unitatMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) {
-        return rolsacQueryServiceDelegate.llistarUsuaris(usuariCriteria);
+    public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarUnitatsMateries(unitatMateriaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) {
-        return rolsacQueryServiceDelegate.obtenirTipus(tipusCriteria);
+    public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirUsuari(usuariCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
-        return rolsacQueryServiceDelegate.llistarTipus(tipusCriteria);
+    public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarUsuaris(usuariCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
-        return rolsacQueryServiceDelegate.obtenirTipusAfectacio(tipusAfectacioCriteria);
+    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirTipus(tipusCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
-        return rolsacQueryServiceDelegate.llistarTipusAfectacio(tipusAfectacioCriteria);
+    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarTipus(tipusCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarTipusAfectacio(tipusAfectacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

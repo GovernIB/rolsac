@@ -2,14 +2,14 @@ package es.caib.rolsac.api.v2.usuari;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface UsuariQueryService {
 
-    int getNumUnitatsAdministratives();
+    public int getNumUnitatsAdministratives() throws QueryServiceException;
 
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
 
 }

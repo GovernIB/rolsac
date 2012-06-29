@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
@@ -14,6 +12,9 @@ import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
@@ -29,8 +30,8 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryService {
 
-    private static Log log = LogFactory.getLog(FitxaQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = 5648702326587801581L;
+
     private FitxaQueryServiceStrategy fitxaQueryServiceStrategy;
 
     public void setFitxaQueryServiceStrategy(FitxaQueryServiceStrategy fitxaQueryServiceStrategy) {
@@ -41,93 +42,144 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
         return fitxaQueryServiceStrategy instanceof FitxaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public FitxaQueryServiceAdapter(FitxaDTO dto) {
+    public FitxaQueryServiceAdapter(FitxaDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando FitxaQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
-    public int getNumDocuments() {
-        return fitxaQueryServiceStrategy.getNumDocuments(id);
+    public int getNumDocuments() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumDocuments(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de documentos.", e);
+        }
     }
 
-    public int getNumEnllacos() {
-        return fitxaQueryServiceStrategy.getNumEnllacos(id);
+    public int getNumEnllacos() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumEnllacos(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de enlaces.", e);
+        }
     }
 
-    public int getNumFetsVitals() {
-        return fitxaQueryServiceStrategy.getNumFetsVitals(id);
+    public int getNumFetsVitals() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumFetsVitals(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de hechos vitales.", e);
+        }
     }
 
-    public int getNumUnitatsAdministratives() {
-        return fitxaQueryServiceStrategy.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumUnitatsAdministratives(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
+        }
     }
 
-    public int getNumSeccions() {
-        return fitxaQueryServiceStrategy.getNumSeccions(id);
+    public int getNumSeccions() throws QueryServiceException {
+        try {
+            return fitxaQueryServiceStrategy.getNumSeccions(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de seccions.", e);
+        }
     }
     
-    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) {
-        List<EnllacDTO> llistaDTO = fitxaQueryServiceStrategy.llistarEnllacos(id, enllacCriteria);
-        List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
-        for (EnllacDTO enllacDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO));
+    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException {
+        try {
+            List<EnllacDTO> llistaDTO = fitxaQueryServiceStrategy.llistarEnllacos(id, enllacCriteria);
+            List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
+            for (EnllacDTO enllacDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "enlaces.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        List<UnitatAdministrativaDTO> llistaDTO = fitxaQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
-        List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-        for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatAdministrativaDTO> llistaDTO = fitxaQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+            for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) {
-        List<SeccioDTO> llistaDTO = fitxaQueryServiceStrategy.llistarSeccions(id, seccioCriteria);
-        List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
-        for (SeccioDTO seccioDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException {
+        try {
+            List<SeccioDTO> llistaDTO = fitxaQueryServiceStrategy.llistarSeccions(id, seccioCriteria);
+            List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
+            for (SeccioDTO seccioDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
         }
-        return llistaQueryServiceAdapter;
     }
     
-    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) {
-        List<DocumentDTO> llistaDTO = fitxaQueryServiceStrategy.llistarDocuments(id, documentCriteria);
-        List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
-        for (DocumentDTO documentDTO : llistaDTO) {            
-            llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException {
+        try {
+            List<DocumentDTO> llistaDTO = fitxaQueryServiceStrategy.llistarDocuments(id, documentCriteria);
+            List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
+            for (DocumentDTO documentDTO : llistaDTO) {            
+                llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCritera) {
-        List<FetVitalDTO> llistaDTO = fitxaQueryServiceStrategy.llistarFetsVitals(id, fetVitalCritera);
-        List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
-        for (FetVitalDTO fetVitalDTO : llistaDTO) {            
-            llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCritera) throws QueryServiceException {
+        try {
+            List<FetVitalDTO> llistaDTO = fitxaQueryServiceStrategy.llistarFetsVitals(id, fetVitalCritera);
+            List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
+            for (FetVitalDTO fetVitalDTO : llistaDTO) {            
+                llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hechos vitales.", e);
         }
-        return llistaQueryServiceAdapter;
     }
     
-    public ArxiuQueryServiceAdapter obtenirIcona() {
+    public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException {
         if (this.getIcono() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirIcona(this.getIcono()));
+        } catch (StrategyException e) {
+             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono.", e);
+        }
     }
 
-    public ArxiuQueryServiceAdapter obtenirImatge() {
+    public ArxiuQueryServiceAdapter obtenirImatge() throws QueryServiceException {
         if (this.getImagen() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirImatge(this.getImagen()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirImatge(this.getImagen()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "imagen.", e);
+        }
     }
 
-    public ArxiuQueryServiceAdapter obtenirBaner() {
+    public ArxiuQueryServiceAdapter obtenirBaner() throws QueryServiceException {
         if (this.getBaner() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirBaner(this.getBaner()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), fitxaQueryServiceStrategy.obtenirBaner(this.getBaner()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "baner.", e);
+        }
     }
 
 }

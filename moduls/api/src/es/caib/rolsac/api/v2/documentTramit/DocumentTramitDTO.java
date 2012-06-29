@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.documentTramit;
 
-public class DocumentTramitDTO {
+import java.io.Serializable;
+
+public class DocumentTramitDTO implements Serializable {
+
+    private static final long serialVersionUID = -7206301442580838503L;
 
     protected Long id;
     private Long tramit;

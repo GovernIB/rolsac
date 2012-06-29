@@ -5,6 +5,8 @@ import java.util.List;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -23,48 +25,92 @@ public class NormativaQueryServiceEJBStrategy implements NormativaQueryServiceSt
         normativaQueryServiceDelegate = new NormativaQueryServiceDelegate();
     }
 
-    public ButlletiDTO obtenirButlleti(long idButlleti) {
-        return normativaQueryServiceDelegate.obtenirButlleti(idButlleti);
+    public ButlletiDTO obtenirButlleti(long idButlleti) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.obtenirButlleti(idButlleti);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<NormativaDTO> llistarAfectades(long id) {        
-        return normativaQueryServiceDelegate.llistarAfectades(id);
+    public List<NormativaDTO> llistarAfectades(long id) throws StrategyException {        
+        try {
+            return normativaQueryServiceDelegate.llistarAfectades(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<NormativaDTO> llistarAfectants(long id) {
-        return normativaQueryServiceDelegate.llistarAfectants(id);
+    public List<NormativaDTO> llistarAfectants(long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.llistarAfectants(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) {
-        return normativaQueryServiceDelegate.llistarProcediments(id, procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.llistarProcediments(id, procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumAfectades(long id) {
-        return normativaQueryServiceDelegate.getNumAfectades(id);
+    public int getNumAfectades(long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.getNumAfectades(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumAfectants(long id) {
-        return normativaQueryServiceDelegate.getNumAfectants(id);
+    public int getNumAfectants(long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.getNumAfectants(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumProcediments(long id) {
-        return normativaQueryServiceDelegate.getNumProcediments(id);
+    public int getNumProcediments(long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.getNumProcediments(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) {
-        return normativaQueryServiceDelegate.obtenirUnitatAdministrativa(idUniAdm);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.obtenirUnitatAdministrativa(idUniAdm);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirArxiuNormativa(Long idArchivo) {
-        return normativaQueryServiceDelegate.obtenirArxiuNormativa(idArchivo);
+    public ArxiuDTO obtenirArxiuNormativa(Long idArchivo) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.obtenirArxiuNormativa(idArchivo);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
-        return normativaQueryServiceDelegate.llistarAfectacionsAfectants(id);
+    public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.llistarAfectacionsAfectants(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
-        return normativaQueryServiceDelegate.llistarAfectacionsAfectades(id);
+    public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) throws StrategyException {
+        try {
+            return normativaQueryServiceDelegate.llistarAfectacionsAfectades(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

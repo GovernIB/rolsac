@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class ProcedimentCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 5629848386269559723L;
+
     // camps normals
     private String signatura;
     private Date fechaCaducidad;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -15,29 +16,28 @@ import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
 public interface ProcedimentQueryService {
 
-    // Test
-    int getNumTramits();
+    public int getNumTramits() throws QueryServiceException;
 
-    int getNumNormatives();
+    public int getNumNormatives() throws QueryServiceException;
     
-    int getNumNormativesLocals();
+    public int getNumNormativesLocals() throws QueryServiceException;
     
-    int getNumNormativesExternes();
+    public int getNumNormativesExternes() throws QueryServiceException;
 
-    int getNumMateries();
+    public int getNumMateries() throws QueryServiceException;
 
-    int getNumDocuments();
+    public int getNumDocuments() throws QueryServiceException;
 
-    int getNumFetsVitals();
+    public int getNumFetsVitals() throws QueryServiceException;
 
-    List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria);
+    public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException;
 
-    List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria);
+    public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException;
 
-    List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria);
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
-    List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetsVitalsCriteria);
+    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetsVitalsCriteria) throws QueryServiceException;
 
-    List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria);
+    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException;
 
 }

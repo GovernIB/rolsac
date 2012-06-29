@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
@@ -27,20 +28,28 @@ public class PublicObjectiuQueryServiceTest {
     public void getNumTramits() {
         PublicObjectiuCriteria poCriteria = new PublicObjectiuCriteria();
         poCriteria.setId("200");
-        PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
-        Assert.assertNotNull(po);
-        int numAgrupacions = po.getNumAgrupacions();        
-        Assert.assertTrue(numAgrupacions > 0);
+        try {
+            PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
+            Assert.assertNotNull(po);
+            int numAgrupacions = po.getNumAgrupacions();        
+            Assert.assertTrue(numAgrupacions > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarTramits() {
         PublicObjectiuCriteria poCriteria = new PublicObjectiuCriteria();
         poCriteria.setId("200");
-        PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
-        Assert.assertNotNull(po);
-        List<AgrupacioFetVitalQueryServiceAdapter> agrupacions = po.llistarAgrupacions(new AgrupacioFetVitalCriteria());
-        Assert.assertTrue(agrupacions.size() > 0);
+        try {
+            PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(poCriteria);
+            Assert.assertNotNull(po);
+            List<AgrupacioFetVitalQueryServiceAdapter> agrupacions = po.llistarAgrupacions(new AgrupacioFetVitalCriteria());
+            Assert.assertTrue(agrupacions.size() > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
 }

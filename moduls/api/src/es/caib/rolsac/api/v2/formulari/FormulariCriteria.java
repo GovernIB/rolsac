@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class FormulariCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = -4255727252667126060L;
+
     private String nombre;
     private String url;
     private String urlManual;

@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.perfil;
 
-public class PerfilDTO {
+import java.io.Serializable;
+
+public class PerfilDTO implements Serializable {
+
+    private static final long serialVersionUID = -6785991404231347176L;
 
     protected Long id;
     protected String codigoEstandard;

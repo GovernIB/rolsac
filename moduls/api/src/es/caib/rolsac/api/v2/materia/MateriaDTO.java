@@ -1,8 +1,10 @@
 package es.caib.rolsac.api.v2.materia;
 
+import java.io.Serializable;
 
+public class MateriaDTO implements Serializable {
 
-public class MateriaDTO {
+    private static final long serialVersionUID = 8716696613156892999L;
 
     protected long id;
     private String codiHita;

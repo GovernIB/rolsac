@@ -1,9 +1,10 @@
 package es.caib.rolsac.api.v2.personal;
 
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryService;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public interface PersonalQueryService {
 
-    UnitatAdministrativaQueryService obtenirUnitatAdministrativa();
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException;
 
 }

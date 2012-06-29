@@ -1,20 +1,20 @@
 package es.caib.rolsac.api.v2.enllac;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.enllac.ejb.EnllacQueryServiceEJBStrategy;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
-import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
 public class EnllacQueryServiceAdapter extends EnllacDTO implements EnllacQueryService {
 
-private static Log log = LogFactory.getLog(UnitatAdministrativaQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = 6411086726548025434L;
+
     private EnllacQueryServiceStrategy enllacQueryServiceStrategy;
 
     public void setEnllacQueryServiceStrategy(EnllacQueryServiceStrategy enllacQueryServiceStrategy) {
@@ -25,23 +25,30 @@ private static Log log = LogFactory.getLog(UnitatAdministrativaQueryServiceAdapt
         return enllacQueryServiceStrategy instanceof EnllacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
 
-    public EnllacQueryServiceAdapter(EnllacDTO dto) {    
+    public EnllacQueryServiceAdapter(EnllacDTO dto) throws QueryServiceException {    
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando EnllacQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
-    public FitxaQueryServiceAdapter obtenirFitxa() {
+    public FitxaQueryServiceAdapter obtenirFitxa() throws QueryServiceException {
         if (this.getFicha() == null) {return null;}
-        return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), enllacQueryServiceStrategy.obtenirFitxa(this.getFicha()));
+        try {
+            return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), enllacQueryServiceStrategy.obtenirFitxa(this.getFicha()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
+        }
     }
 
-    public ProcedimentQueryServiceAdapter obtenirProcediment() {
+    public ProcedimentQueryServiceAdapter obtenirProcediment() throws QueryServiceException {
         if (this.getProcedimiento() == null) {return null;}
-        return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), enllacQueryServiceStrategy.obtenirProcediment(this.getProcedimiento()));
+        try {
+            return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), enllacQueryServiceStrategy.obtenirProcediment(this.getProcedimiento()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
+        }
     }
 
 }

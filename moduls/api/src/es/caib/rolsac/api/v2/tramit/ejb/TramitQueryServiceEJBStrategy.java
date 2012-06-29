@@ -4,6 +4,8 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
@@ -18,37 +20,68 @@ public class TramitQueryServiceEJBStrategy implements TramitQueryServiceStrategy
         this.tramitQueryServiceDelegate = tramitQueryServiceDelegate;
     }
 
-    public int getNumDocumentsInformatius(long id) {
-        return tramitQueryServiceDelegate.getNumDocumentsInformatius(id); 
+    public int getNumDocumentsInformatius(long id) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.getNumDocumentsInformatius(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        } 
     }
 
-    public int getNumFormularis(long id) {
-        return tramitQueryServiceDelegate.getNumFormularis(id);
+    public int getNumFormularis(long id) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.getNumFormularis(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumTaxes(long id) {
-        return tramitQueryServiceDelegate.getNumTaxes(id);
+    public int getNumTaxes(long id) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.getNumTaxes(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
     
-    public ProcedimentDTO obtenirProcediment(long idProc) {
-        return tramitQueryServiceDelegate.obtenirProcediment(idProc);
+    public ProcedimentDTO obtenirProcediment(long idProc) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.obtenirProcediment(idProc);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public UnitatAdministrativaDTO obtenirOrganCompetent(long idUa) {
-        return tramitQueryServiceDelegate.obtenirOrganCompetent(idUa);
+    public UnitatAdministrativaDTO obtenirOrganCompetent(long idUa) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.obtenirOrganCompetent(idUa);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<DocumentTramitDTO> llistatDocumentsInformatius(long id,
-            DocumentTramitCriteria documentTramitCriteria) {
-        return tramitQueryServiceDelegate.llistatDocumentsInformatius(id, documentTramitCriteria);
+    public List<DocumentTramitDTO> llistatDocumentsInformatius(long id, DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.llistatDocumentsInformatius(id, documentTramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
     
-    public List<DocumentTramitDTO> llistarFormularis(long id, DocumentTramitCriteria documentTramitCriteria) {
-        return tramitQueryServiceDelegate.llistarFormularis(id, documentTramitCriteria);
+    public List<DocumentTramitDTO> llistarFormularis(long id, DocumentTramitCriteria documentTramitCriteria) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.llistarFormularis(id, documentTramitCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<TaxaDTO> llistarTaxes(long id, TaxaCriteria taxaCriteria) {
-        return tramitQueryServiceDelegate.llistarTaxes(id, taxaCriteria);
+    public List<TaxaDTO> llistarTaxes(long id, TaxaCriteria taxaCriteria) throws StrategyException {
+        try {
+            return tramitQueryServiceDelegate.llistarTaxes(id, taxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

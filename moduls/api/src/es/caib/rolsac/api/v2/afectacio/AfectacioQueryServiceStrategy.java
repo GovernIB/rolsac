@@ -1,15 +1,16 @@
 package es.caib.rolsac.api.v2.afectacio;
 
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO;
 
 
 public interface AfectacioQueryServiceStrategy {
     
-    NormativaDTO obtenirAfectant(long idAfectant);
+    public NormativaDTO obtenirAfectant(long idAfectant) throws StrategyException;
     
-    NormativaDTO obtenirNormativa(long idNormativa);
+    public NormativaDTO obtenirNormativa(long idNormativa) throws StrategyException;
     
-    TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio);
+    public TipusAfectacioDTO obtenirTipusAfectacio(long idTipusAfectacio) throws StrategyException;
 
 }

@@ -2,15 +2,16 @@ package es.caib.rolsac.api.v2.agrupacioMateria;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
 
 public interface AgrupacioMateriaQueryService {
 
-    SeccioQueryServiceAdapter obtenirSeccio();
+    public SeccioQueryServiceAdapter obtenirSeccio() throws QueryServiceException;
 
-    List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria);
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException;
 
-    int getNumMateries();
+    public int getNumMateries() throws QueryServiceException;
 }

@@ -1,9 +1,13 @@
 package es.caib.rolsac.api.v2.general;
 
+import java.io.Serializable;
+
 /**
- * Classe estesa per aquelles entitats que contenen informació d'entitat remota (DocumentDTO, NormativaDTO, etc)
+ * Classe estesa per aquelles entitats que contenen informacio d'entitat remota (DocumentDTO, NormativaDTO, etc)
  */
-public abstract class EntitatRemota {
+public abstract class EntitatRemota implements Serializable {
+
+    private static final long serialVersionUID = 4876890000595499133L;
 
     private Long idExterno;
     private Long administracionRemota;

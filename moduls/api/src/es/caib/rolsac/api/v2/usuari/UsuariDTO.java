@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.usuari;
 
-public class UsuariDTO {
+import java.io.Serializable;
+
+public class UsuariDTO implements Serializable {
+
+    private static final long serialVersionUID = -966624381484319840L;
 
     protected Long id;
 

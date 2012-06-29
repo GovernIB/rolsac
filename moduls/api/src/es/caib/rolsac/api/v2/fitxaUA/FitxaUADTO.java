@@ -1,7 +1,10 @@
 package es.caib.rolsac.api.v2.fitxaUA;
 
+import java.io.Serializable;
 
-public class FitxaUADTO {
+public class FitxaUADTO implements Serializable {
+
+    private static final long serialVersionUID = 8883851866586100772L;
 
     protected Long id;
     private Long unidadAdministrativa;

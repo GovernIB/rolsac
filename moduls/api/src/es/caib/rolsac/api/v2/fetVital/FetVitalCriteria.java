@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class FetVitalCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 1815187755863474971L;
+
     private String orden;
     private String codigoEstandar;
     

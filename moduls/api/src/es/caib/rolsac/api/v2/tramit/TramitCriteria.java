@@ -6,6 +6,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class TramitCriteria extends BasicCriteria {
     
+    private static final long serialVersionUID = -298160906972914271L;
+
     private String fase;
     private String orden;
     private String versio;

@@ -2,6 +2,7 @@ package es.caib.rolsac.api.v2.familia;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -9,12 +10,12 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 public interface FamiliaQueryServiceStrategy {
 
-    int getNumProcedimentsLocals(long id);
+    public int getNumProcedimentsLocals(long id) throws StrategyException;
 
-    int getNumIcones(long id);
+    public int getNumIcones(long id) throws StrategyException;
 
-    List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria);
+    public List<IconaFamiliaDTO> llistarIcones(long id, IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException;
 
 }

@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class TractamentCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = -5893947759159245588L;
+
     private String codigoEstandar;
 
     // TraduccioTractament

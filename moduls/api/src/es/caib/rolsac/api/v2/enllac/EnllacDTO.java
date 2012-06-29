@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.enllac;
 
-public class EnllacDTO {
+import java.io.Serializable;
+
+public class EnllacDTO implements Serializable {
+
+    private static final long serialVersionUID = -2599255082804121567L;
 
     protected Long id;
     private Long ficha;

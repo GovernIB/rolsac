@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.EntitatRemota;
 
 public class EdificiDTO extends EntitatRemota {
 
+    private static final long serialVersionUID = -4411519320993555579L;
+
     protected long id;
 
     private String direccion;

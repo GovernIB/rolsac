@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.procediment.ejb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.CreateException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -22,6 +24,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalProcedimentCriteria;
 import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -32,48 +35,66 @@ import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByProcedimientoCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.query.FromClause;
-import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
-
+/**
+ * SessionBean para consultas de procedimientos.
+ *
+ * @ejb.bean
+ *  name="sac/api/ProcedimentQueryServiceEJB"
+ *  jndi-name="es.caib.rolsac.api.v2.procediment.ejb.ProcedimentQueryServiceEJB"
+ *  type="Stateless"
+ *  view-type="remote"
+ *  transaction-type="Container"
+ *
+ * @ejb.transaction type="Required"
+ */
 @SuppressWarnings("deprecation")
-public class ProcedimentQueryServiceEJB {
+public class ProcedimentQueryServiceEJB extends HibernateEJB {
+
+    private static final long serialVersionUID = 3727131208139935651L;
 
     private static Log log = LogFactory.getLog(ProcedimentQueryServiceEJB.class);
     
     private static final String HQL_PROCEDIMIENTO_CLASS = "ProcedimientoLocal";
     private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
-    
     private static final String HQL_TRAMITES_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".tramites";
     private static final String HQL_TRAMITES_ALIAS = "t";
-    
     private static final String HQL_NORMATIVAS_LOCAL_CLASS = "NormativaLocal";
     private static final String HQL_NORMATIVAS_EXTERNA_CLASS = "NormativaExterna";
     private static final String HQL_NORMATIVAS_ALIAS = "n";
-    
     private static final String HQL_MATERIAS_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".materias";
     private static final String HQL_MATERIAS_ALIAS = "m";
-    
     private static final String HQL_HECHOS_VITALES_PROCEDIMIENTO_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".hechosVitalesProcedimientos";
     private static final String HQL_HECHOS_VITALES_PROCEDIMIENTO_ALIAS = "hp";
     private static final String HQL_HECHOS_VITALES_CLASS = HQL_HECHOS_VITALES_PROCEDIMIENTO_ALIAS + ".hechoVital";
     private static final String HQL_HECHOS_VITALES_ALIAS = "h";
-    
     private static final String HQL_DOCUMENTOS_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".documentos";
     private static final String HQL_DOCUMENTOS_ALIAS = "d";
-    
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
-    
-    public ProcedimentQueryServiceEJB() {
+
+    /**
+     * @ejb.create-method
+     * @ejb.permission unchecked="true"
+     */
+    public void ejbCreate() throws CreateException {
+        super.ejbCreate();
     }
-
+    
+    /**
+     * Obtiene el numero de tramites del procedimiento.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */    
     public int getNumTramits(long id) {
-
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
 
         try {
@@ -89,41 +110,44 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             numResultats  = ((Integer) query.uniqueResult()).intValue();
-            sessio.close();
-            
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return numResultats;
-
     }
 
+    /**
+     * Obtiene el numero de normativas del procedimiento.
+     * @param id
+     * @param tipus
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
+        
+        log.info("\t\tgetNumNormativas EJB\n");
+        System.out.print("\t\tgetNumNormativas EJB\n");
+        
         List<CriteriaObject> criteris;
-        Session sessio = null;    
+        Session session = null;    
         QueryBuilder qb = null;
         Query query = null;
         int numResultats = 0;
         
         try {
-            
-            sessio = HibernateUtils.getSessionFactory().openSession(); 
+            session = getSession(); 
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVAS_ALIAS, new NormativaCriteria());
             CriteriaObject normativaByProcCO = new NormativaByProcedimientoCriteria("p");
             normativaByProcCO.parseCriteria(String.valueOf(id));
@@ -135,49 +159,42 @@ public class ProcedimentQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);                            
-                query = qb.createQuery(sessio);
-                numResultats = ((Integer) query.uniqueResult()).intValue();
+                query = qb.createQuery(session);
+                numResultats = (Integer) query.uniqueResult();
             }
-            
             if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
                 qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
-                numResultats += ((Integer) query.uniqueResult()).intValue();
+                query = qb.createQuery(session);
+                numResultats += (Integer) query.uniqueResult();
             }
-
-            sessio.close();
-
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
 
+    /**
+     * Obtiene el numero de materias del procedimiento.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumMateries(long id) {
-        
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
 
         try {            
@@ -193,33 +210,33 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             numResultats  = ((Integer) query.uniqueResult()).intValue();
-            sessio.close();
-
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
 
+    /**
+     * Obtiene el numero de documentos del procedimiento.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumDocuments(long id) {
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
 
         try {            
@@ -235,34 +252,33 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             numResultats  = ((Integer) query.uniqueResult()).intValue();
-            sessio.close();
-
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
 
+    /**
+     * Obtiene el numero de hechos vitales del procedimiento.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumFetsVitals(long id) {
-        
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
 
         try {            
@@ -278,34 +294,36 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             numResultats  = ((Integer) query.uniqueResult()).intValue();
-            sessio.close();
-
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
     
+    /**
+     * Obtiene listado de tramites del procedimiento.
+     * @param id
+     * @param tramitCriteria
+     * @return List<TramitDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) {
         List<TramitDTO> tramitsDTOList = new ArrayList<TramitDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {
             criteris = BasicUtils.parseCriterias(TramitCriteria.class, HQL_TRAMITES_ALIAS, HQL_TRADUCCIONES_ALIAS, tramitCriteria);
@@ -320,40 +338,39 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Tramite> tramitesResult = (List<Tramite>) query.list();
-            sessio.close();
-
             for (Tramite tramite : tramitesResult) {
                 tramitsDTOList.add((TramitDTO) BasicUtils.entityToDTO(TramitDTO.class,  tramite, tramitCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return tramitsDTOList;
     }
     
+    /**
+     * Obtiene listado de normativas del procedimiento.
+     * @param id
+     * @param normativaCriteria
+     * @return List<NormativaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) {
-
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
 
@@ -369,10 +386,9 @@ public class ProcedimentQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
-            
             List<NormativaExterna> normativasExternasResult = null;
             if (incluirExternas) {
                 criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVAS_ALIAS, HQL_TRADUCCIONES_ALIAS, normativaCriteria);
@@ -382,11 +398,9 @@ public class ProcedimentQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
                 qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 normativasExternasResult = (List<NormativaExterna>) query.list();
             }
-
-            sessio.close();
 
             NormativaDTO dto;
             for (NormativaLocal normativa : normativasLocalesResult) {
@@ -403,31 +417,31 @@ public class ProcedimentQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTOList;
     }
     
+    /**
+     * Obtiene listado de materias del procedimiento.
+     * @param id
+     * @param materiaCriteria
+     * @return List<MateriaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) {
         List<MateriaDTO> materiesDTOList = new ArrayList<MateriaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(MateriaCriteria.class, HQL_MATERIAS_ALIAS, HQL_TRADUCCIONES_ALIAS, materiaCriteria);
@@ -442,39 +456,41 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Materia> materiesResult = (List<Materia>) query.list();
-            sessio.close();
 
             for (Materia materia : materiesResult) {
                 materiesDTOList.add((MateriaDTO) BasicUtils.entityToDTO(MateriaDTO.class,  materia, materiaCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return materiesDTOList;
     }
     
+    /**
+     * Obtiene listado de hechos vitales del procedimiento.
+     * @param id
+     * @param fetVitalCriteria
+     * @return List<FetVitalDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria) {
 
         List<FetVitalDTO> fetsVitalsDTOList = new ArrayList<FetVitalDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(FetVitalCriteria.class, HQL_HECHOS_VITALES_ALIAS, HQL_TRADUCCIONES_ALIAS, fetVitalCriteria);
@@ -490,38 +506,40 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<HechoVital> fetsVitalsResult = (List<HechoVital>) query.list();
-            sessio.close();
 
             for (HechoVital fetVital : fetsVitalsResult) {
                 fetsVitalsDTOList.add((FetVitalDTO) BasicUtils.entityToDTO(FetVitalDTO.class,  fetVital, fetVitalCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return fetsVitalsDTOList;
     }
 
+    /**
+     * Obtiene listado de documentos del procedimiento.
+     * @param id
+     * @param documentoCriteria
+     * @return List<DocumentDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) {
         List<DocumentDTO> documentsDTOList = new ArrayList<DocumentDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(DocumentCriteria.class, HQL_DOCUMENTOS_ALIAS, HQL_TRADUCCIONES_ALIAS, documentCriteria);
@@ -536,29 +554,20 @@ public class ProcedimentQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<Documento> documentosResult = (List<Documento>) query.list();
-            sessio.close();
-
             for (Documento document : documentosResult) {
                 documentsDTOList.add((DocumentDTO) BasicUtils.entityToDTO(DocumentDTO.class,  document, documentCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return documentsDTOList;

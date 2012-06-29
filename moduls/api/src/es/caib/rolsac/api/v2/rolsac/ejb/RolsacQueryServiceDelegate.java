@@ -1,5 +1,6 @@
 package es.caib.rolsac.api.v2.rolsac.ejb;
 
+import java.rmi.RemoteException;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
@@ -18,6 +19,9 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.LocatorException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -46,6 +50,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
+import es.caib.rolsac.api.v2.rolsac.ejb.intf.RolsacQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
@@ -71,304 +76,695 @@ public class RolsacQueryServiceDelegate {
         this.rolsacQueryServiceLocator = rolsacQueryServiceLocator;
     }
 
-    public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirProcediment(procedimentCriteria);
+    public ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirProcediment(procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarProcediments(procedimentCriteria);
+    @SuppressWarnings("unchecked")
+    public List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarProcediments(procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirMateria(materiaCriteria);
+    
+    public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirMateria(materiaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarMateries(materiaCriteria);
+    @SuppressWarnings("unchecked")
+    public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarMateries(materiaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirTramit(tramitCriteria);
+    public TramitDTO obtenirTramit(TramitCriteria tramitCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirTramit(tramitCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarTramit(tramitCriteria);
+    @SuppressWarnings("unchecked")
+    public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarTramit(tramitCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria uaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirUnitatAdministrativa(uaCriteria);
+    public UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria uaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirUnitatAdministrativa(uaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria uaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarUnitatsAdministratives(uaCriteria);
-    }
-    
-    public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirFetVital(fetVitalCriteria);
-    }
-    
-    public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarFetsVitals(fetVitalCriteria);
-    }
-    
-    public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirFitxa(fitxaCriteria);
-    }
-    
-    public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarFitxes(fitxaCriteria);
-    }
-    
-    public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirNormativa(normativaCriteria);
-    }
-    
-    public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarNormatives(normativaCriteria);
-    }
-    
-    public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirPersonal(personalCriteria);
-    }
-    
-    public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarPersonal(personalCriteria);
-    }
-    
-    public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirDocumentTramit(documentTramitCriteria);
-    }
-    
-    public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarDocumentTramit(documentTramitCriteria);
-    }
-    
-    public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirUsuari(usuariCriteria);
-    }
-    
-    public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarUsuaris(usuariCriteria);
-    }
-    
-    public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirTaxa(taxaCriteria);
-    }
-    
-    public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarTaxes(taxaCriteria);
+    @SuppressWarnings("unchecked")
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria uaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarUnitatsAdministratives(uaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria afvCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirAgrupacioFetVital(afvCriteria);
+    public FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirFetVital(fetVitalCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria afvCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarAgrupacionsFetsVitals(afvCriteria);
+    @SuppressWarnings("unchecked")
+    public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarFetsVitals(fetVitalCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirFitxa(fitxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarFitxes(fitxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirNormativa(normativaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarNormatives(normativaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirPersonal(personalCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarPersonal(personalCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirDocumentTramit(documentTramitCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarDocumentTramit(documentTramitCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirUsuari(usuariCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarUsuaris(usuariCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirTaxa(taxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarTaxes(taxaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria amCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirAgrupacioMateria(amCriteria);
+    public AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria afvCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirAgrupacioFetVital(afvCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria amCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarAgrupacionsMateries(amCriteria);
+    @SuppressWarnings("unchecked")
+    public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria afvCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarAgrupacionsFetsVitals(afvCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
+    public AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria amCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirAgrupacioMateria(amCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirButlleti(butlletiCriteria);
+    @SuppressWarnings("unchecked")
+    public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria amCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarAgrupacionsMateries(amCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarButlletins(butlletiCriteria);
+    public ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirButlleti(butlletiCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public DocumentDTO obtenirDocument(DocumentCriteria docCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirDocument(docCriteria);
+    @SuppressWarnings("unchecked")
+    public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarButlletins(butlletiCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<DocumentDTO> llistarDocuments(DocumentCriteria docCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarDocuments(docCriteria);
+    public DocumentDTO obtenirDocument(DocumentCriteria docCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirDocument(docCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirEdifici(edificiCriteria);
+    @SuppressWarnings("unchecked")
+    public List<DocumentDTO> llistarDocuments(DocumentCriteria docCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarDocuments(docCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarEdificis(edificiCriteria);
+    public EdificiDTO obtenirEdifici(EdificiCriteria edificiCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirEdifici(edificiCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirEnllac(enllacCriteria);
+    @SuppressWarnings("unchecked")
+    public List<EdificiDTO> llistarEdificis(EdificiCriteria edificiCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarEdificis(edificiCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarEnllacos(enllacCriteria);
+    public EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirEnllac(enllacCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria etCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirEspaiTerritorial(etCriteria);
+    @SuppressWarnings("unchecked")
+    public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarEnllacos(enllacCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria etCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarEspaisTerritorials(etCriteria);
+    public EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria etCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirEspaiTerritorial(etCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirFamilia(familiaCriteria);
+    @SuppressWarnings("unchecked")
+    public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria etCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarEspaisTerritorials(etCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarFamilies(familiaCriteria);
+    public FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirFamilia(familiaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirPublicObjectiu(publicObjectiuCriteria);
+    @SuppressWarnings("unchecked")
+    public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarFamilies(familiaCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarPublicsObjectius(publicObjectiuCriteria);
+    public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirPublicObjectiu(publicObjectiuCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarPublicsObjectius(publicObjectiuCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
    
-    public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirFitxaUA(fitxaUACriteria);
+    public FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirFitxaUA(fitxaUACriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarFitxesUA(fitxaUACriteria);
+    @SuppressWarnings("unchecked")
+    public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarFitxesUA(fitxaUACriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirFormulari(formulariCriteria);
+    public FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirFormulari(formulariCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarFormularis(formulariCriteria);
+    @SuppressWarnings("unchecked")
+    public List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarFormularis(formulariCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria ifCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirIconaFamilia(ifCriteria);
+    public IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria ifCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirIconaFamilia(ifCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria ifCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarIconesFamilies(ifCriteria);
+    @SuppressWarnings("unchecked")
+    public List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria ifCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarIconesFamilies(ifCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria imCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirIconaMateria(imCriteria);
+    public IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria imCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirIconaMateria(imCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria imCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarIconesMateries(imCriteria);
+    @SuppressWarnings("unchecked")
+    public List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria imCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarIconesMateries(imCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria maCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirMateriaAgrupacio(maCriteria);
+    public MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria maCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirMateriaAgrupacio(maCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria maCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarMateriesAgrupacions(maCriteria);
+    @SuppressWarnings("unchecked")
+    public List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria maCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarMateriesAgrupacions(maCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirPerfil(perfilCriteria);
+    public PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirPerfil(perfilCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarPerfils(perfilCriteria);
+    @SuppressWarnings("unchecked")
+    public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarPerfils(perfilCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirSeccio(seccioCriteria);
+    public SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirSeccio(seccioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarSeccions(seccioCriteria);
+    @SuppressWarnings("unchecked")
+    public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarSeccions(seccioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria umCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirUnitatMateria(umCriteria);
+    public UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria umCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirUnitatMateria(umCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria umCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarUnitatsMateries(umCriteria);
+    @SuppressWarnings("unchecked")
+    public List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria umCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarUnitatsMateries(umCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirTipus(tipusCriteria);
+    public TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirTipus(tipusCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarTipus(tipusCriteria);
+    @SuppressWarnings("unchecked")
+    public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarTipus(tipusCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.obtenirTipusAfectacio(tipusAfectacioCriteria);
+    public TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
-        RolsacQueryServiceEJB ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
-        return ejb.llistarTipusAfectacio(tipusAfectacioCriteria);
+    @SuppressWarnings("unchecked")
+    public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarTipusAfectacio(tipusAfectacioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
 }

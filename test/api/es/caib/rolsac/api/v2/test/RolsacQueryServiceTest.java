@@ -25,6 +25,7 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -92,7 +93,12 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId(procedimentId);
         procedimentCriteria.setTamany("10");
-        ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        ProcedimentQueryServiceAdapter procediment = null;
+        try {
+            procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(procediment);
         Assert.assertEquals(Long.parseLong(procedimentId), procediment.getId().longValue());
     }
@@ -105,7 +111,12 @@ public class RolsacQueryServiceTest {
         final String procedimentId = "9070";
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId(procedimentId);
-        ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        ProcedimentQueryServiceAdapter procediment = null;
+        try {
+            procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(procediment);
         Assert.assertEquals(Long.parseLong(procedimentId), procediment.getId().longValue());
     }
@@ -117,7 +128,12 @@ public class RolsacQueryServiceTest {
     public void obtenirProcedimentNoExistent() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setId("-1");
-        ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        ProcedimentQueryServiceAdapter procediment = null;
+        try {
+            procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNull(procediment);
     }
 
@@ -131,7 +147,12 @@ public class RolsacQueryServiceTest {
         procedimentCriteria.setInici("5");
         procedimentCriteria.setTamany("10");
         procedimentCriteria.setOrdenacio("fechaCaducidad asc"); 
-        List<ProcedimentQueryServiceAdapter> procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(procediments.size() <= 10);
     }
 
@@ -144,7 +165,12 @@ public class RolsacQueryServiceTest {
         procedimentCriteria.setIdioma("ca");
         procedimentCriteria.setT_nombre("%test%");
         procedimentCriteria.setTamany("10");
-        List<ProcedimentQueryServiceAdapter> procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(procediments.size() > 0);
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertTrue(pa.getNombre().toLowerCase().contains("test"));
@@ -161,7 +187,12 @@ public class RolsacQueryServiceTest {
         Date date = c.getTime();
         procedimentCriteria.setFechaActualizacion(date);
         procedimentCriteria.setTamany("10");
-        List<ProcedimentQueryServiceAdapter> procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(procediments.size() > 0);
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertEquals(
@@ -179,7 +210,12 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setActiu(true);
         procedimentCriteria.setTamany("10");
-        List<ProcedimentQueryServiceAdapter> procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertEquals(procediments.size(), 10);
     }
     
@@ -191,7 +227,12 @@ public class RolsacQueryServiceTest {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         procedimentCriteria.setActiu(false);
         procedimentCriteria.setTamany("10");
-        List<ProcedimentQueryServiceAdapter> procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        List<ProcedimentQueryServiceAdapter> procediments = null;
+        try {
+            procediments = rolsacQS.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertEquals(procediments.size(), 10);
     }
 
@@ -204,7 +245,12 @@ public class RolsacQueryServiceTest {
         materiaCriteria.setDestacada(false);
         materiaCriteria.setId("5521");
         materiaCriteria.setCodigoEstandar("AGRICULTURA");
-        MateriaQueryServiceAdapter materia = rolsacQS.obtenirMateria(materiaCriteria);
+        MateriaQueryServiceAdapter materia = null;
+        try {
+            materia = rolsacQS.obtenirMateria(materiaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNull(materia);
     }
     
@@ -216,7 +262,12 @@ public class RolsacQueryServiceTest {
         MateriaCriteria materiaCriteria = new MateriaCriteria();
         materiaCriteria.setT_nombre("%recerca%");
         materiaCriteria.setTamany("10");
-        List<MateriaQueryServiceAdapter> materies = rolsacQS.llistarMateries(materiaCriteria);
+        List<MateriaQueryServiceAdapter> materies = null;
+        try {
+            materies = rolsacQS.llistarMateries(materiaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(materies.size() > 0);
         Assert.assertTrue(materies.size() <= 10);
         for (MateriaQueryServiceAdapter m: materies) {
@@ -229,11 +280,17 @@ public class RolsacQueryServiceTest {
      */
     @Test
     public void recuperarUnitatAdministrativa() {
-       UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
-       unitatAdministrativaCriteria.setResponsable("Francisca Reus Beltran");
-       UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-       Assert.assertNotNull(unitatAdministrativa);
+        UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
+        unitatAdministrativaCriteria.setResponsable("Francisca Reus Beltran");
+        UnitatAdministrativaQueryServiceAdapter unitatAdministrativa = null;
+        try {
+            unitatAdministrativa = rolsacQS.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertNotNull(unitatAdministrativa);
     }
+    
     /**
      * Cas d'us: Recupera tramit.
      */
@@ -241,7 +298,12 @@ public class RolsacQueryServiceTest {
     public void recuperarTramit() {
         TramitCriteria tramitCriteria = new TramitCriteria();
         tramitCriteria.setId("624493");
-        TramitQueryServiceAdapter tramit = rolsacQS.obtenirTramit(tramitCriteria);
+        TramitQueryServiceAdapter tramit = null;
+        try {
+            tramit = rolsacQS.obtenirTramit(tramitCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(tramit);
     }
     
@@ -253,7 +315,12 @@ public class RolsacQueryServiceTest {
         TramitCriteria tramitCriteria = new TramitCriteria();
         tramitCriteria.setT_nombre("%sol·licitud%");
         tramitCriteria.setTamany("10");
-        List<TramitQueryServiceAdapter> tramits = rolsacQS.llistarTramits(tramitCriteria);
+        List<TramitQueryServiceAdapter> tramits = null;
+        try {
+            tramits = rolsacQS.llistarTramits(tramitCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(tramits.size() > 0);
         Assert.assertTrue(tramits.size() <= 10);
         for (TramitQueryServiceAdapter t: tramits) {
@@ -268,7 +335,12 @@ public class RolsacQueryServiceTest {
     public void recuperarUA() {
         UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
         uaCriteria.setId("1");
-        UnitatAdministrativaQueryServiceAdapter ua = rolsacQS.obtenirUnitatAdministrativa(uaCriteria);
+        UnitatAdministrativaQueryServiceAdapter ua = null;
+        try {
+            ua = rolsacQS.obtenirUnitatAdministrativa(uaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(ua);
     }
     
@@ -280,7 +352,12 @@ public class RolsacQueryServiceTest {
         UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
         uaCriteria.setT_nombre("%balears%");
         uaCriteria.setTamany("10");
-        List<UnitatAdministrativaQueryServiceAdapter> uas = rolsacQS.llistarUnitatsAdministratives(uaCriteria);
+        List<UnitatAdministrativaQueryServiceAdapter> uas = null;
+        try {
+            uas = rolsacQS.llistarUnitatsAdministratives(uaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(uas.size() > 0);
         Assert.assertTrue(uas.size() <= 10);
         for (UnitatAdministrativaQueryServiceAdapter ua: uas) {
@@ -295,7 +372,12 @@ public class RolsacQueryServiceTest {
     public void obtenirFetVital() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setId("236");
-        FetVitalQueryServiceAdapter fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+        FetVitalQueryServiceAdapter fetVital = null;
+        try {
+            fetVital = rolsacQS.obtenirFetVital(fetVitalCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(fetVital);
         Assert.assertTrue(fetVital.getCodigoEstandar().equals("EDUCACPRIM"));
         Assert.assertTrue(fetVital.getNombre().contains("ria (6-12)"));
@@ -308,7 +390,12 @@ public class RolsacQueryServiceTest {
     public void llistarFetsVitals() {
         FetVitalCriteria fetVitalCriteria = new FetVitalCriteria();
         fetVitalCriteria.setT_palabrasclave("%matrimoni%");
-        List<FetVitalQueryServiceAdapter> fetsVitals = rolsacQS.llistarFetsVitals(fetVitalCriteria);
+        List<FetVitalQueryServiceAdapter> fetsVitals = null;
+        try {
+            fetsVitals = rolsacQS.llistarFetsVitals(fetVitalCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(fetsVitals.size() > 0);
         for (FetVitalQueryServiceAdapter fv: fetsVitals) {
             Assert.assertTrue(fv.getPalabrasclave().toLowerCase().contains("matrimoni"));
@@ -322,7 +409,12 @@ public class RolsacQueryServiceTest {
     public void recuperarFitxa() {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
         fitxaCriteria.setId("206971");
-        FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
+        FitxaQueryServiceAdapter fitxa = null;
+        try {
+            fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(fitxa);
     }
         
@@ -334,7 +426,12 @@ public class RolsacQueryServiceTest {
         FitxaCriteria fitxaCriteria = new FitxaCriteria();
         fitxaCriteria.setT_titulo("%associacio%");
         fitxaCriteria.setTamany("10");
-        List<FitxaQueryServiceAdapter> fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+        List<FitxaQueryServiceAdapter> fitxes = null;
+        try {
+            fitxes = rolsacQS.llistarFitxes(fitxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(fitxes.size() > 0);
         Assert.assertTrue(fitxes.size() <= 10);
         for (FitxaQueryServiceAdapter f: fitxes) {
@@ -351,7 +448,12 @@ public class RolsacQueryServiceTest {
         normativaCriteria.setId("75074"); // local
 //        normativaCriteria.setIncluirExternas(true);
 //        normativaCriteria.setId("74965"); // externa
-        NormativaQueryServiceAdapter normativa = rolsacQS.obtenirNormativa(normativaCriteria);
+        NormativaQueryServiceAdapter normativa = null;
+        try {
+            normativa = rolsacQS.obtenirNormativa(normativaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(normativa);
     }
     
@@ -363,7 +465,12 @@ public class RolsacQueryServiceTest {
         NormativaCriteria normativaCriteria = new NormativaCriteria();
         normativaCriteria.setT_titulo("%decret%");
         normativaCriteria.setTamany("10");
-        List<NormativaQueryServiceAdapter> normatives = rolsacQS.llistarNormatives(normativaCriteria);
+        List<NormativaQueryServiceAdapter> normatives = null;
+        try {
+            normatives = rolsacQS.llistarNormatives(normativaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(normatives.size() > 0);
         Assert.assertTrue(normatives.size() <= 10);
         for (NormativaQueryServiceAdapter n: normatives) {
@@ -378,7 +485,12 @@ public class RolsacQueryServiceTest {
     public void recuperarPersona() {
         PersonalCriteria personalCriteria = new PersonalCriteria();
         personalCriteria.setUsername("u83269");
-        PersonalQueryServiceAdapter personal = rolsacQS.obtenirPersonal(personalCriteria);
+        PersonalQueryServiceAdapter personal = null;
+        try {
+            personal = rolsacQS.obtenirPersonal(personalCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(personal);
     }
     
@@ -390,10 +502,14 @@ public class RolsacQueryServiceTest {
         PersonalCriteria personalCriteria = new PersonalCriteria();
         personalCriteria.setNombre("%maria%");
         personalCriteria.setTamany("5");
-        List<PersonalQueryServiceAdapter> personal = rolsacQS.llistarPersonal(personalCriteria);
-        Assert.assertTrue(personal.size() > 0);
-        Assert.assertTrue(personal.size() <= 5);
-        for (PersonalQueryServiceAdapter p: personal) {
+        List<PersonalQueryServiceAdapter> personal = null;
+        try {
+            personal = rolsacQS.llistarPersonal(personalCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+        Assert.assertTrue(personal.size() > 0 && personal.size() <= 5);
+        for (PersonalQueryServiceAdapter p : personal) {
             Assert.assertTrue(p.getNombre().toLowerCase().contains("maria"));
         }
     }
@@ -405,7 +521,12 @@ public class RolsacQueryServiceTest {
     public void obtenirDocumentTramit() {
         DocumentTramitCriteria documentTramitCriteria = new DocumentTramitCriteria();
         documentTramitCriteria.setId("636328");
-        DocumentTramitQueryServiceAdapter docTramit = rolsacQS.obtenirDocumentTramit(documentTramitCriteria);
+        DocumentTramitQueryServiceAdapter docTramit = null;
+        try {
+            docTramit = rolsacQS.obtenirDocumentTramit(documentTramitCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(docTramit);
     }
     
@@ -417,7 +538,12 @@ public class RolsacQueryServiceTest {
         DocumentTramitCriteria documentTramitCriteria = new DocumentTramitCriteria();
         documentTramitCriteria.setT_titulo("%talles%");
         documentTramitCriteria.setTamany("10");
-        List<DocumentTramitQueryServiceAdapter> documentsTramit = rolsacQS.llistarDocumentTramit(documentTramitCriteria);
+        List<DocumentTramitQueryServiceAdapter> documentsTramit = null;
+        try {
+            documentsTramit = rolsacQS.llistarDocumentTramit(documentTramitCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(documentsTramit.size() > 0);
         for (DocumentTramitQueryServiceAdapter d: documentsTramit) {
             Assert.assertTrue(d.getTitulo().toLowerCase().contains("talles"));
@@ -431,7 +557,12 @@ public class RolsacQueryServiceTest {
     public void recuperarUsuari() {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
         usuariCriteria.setUsername("e37336797t");
-        UsuariQueryServiceAdapter usuari = rolsacQS.obtenirUsuari(usuariCriteria);
+        UsuariQueryServiceAdapter usuari = null;
+        try {
+            usuari = rolsacQS.obtenirUsuari(usuariCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(usuari);
     }
     
@@ -443,7 +574,12 @@ public class RolsacQueryServiceTest {
         UsuariCriteria usuariCriteria = new UsuariCriteria();
         usuariCriteria.setNombre("%antonio%");
         usuariCriteria.setTamany("5");
-        List<UsuariQueryServiceAdapter> usuaris = rolsacQS.llistarUsuaris(usuariCriteria);
+        List<UsuariQueryServiceAdapter> usuaris = null;
+        try {
+            usuaris = rolsacQS.llistarUsuaris(usuariCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(usuaris.size() > 0);
         for (UsuariQueryServiceAdapter u: usuaris) {
             Assert.assertTrue(u.getNombre().toLowerCase().contains("antonio"));
@@ -457,7 +593,12 @@ public class RolsacQueryServiceTest {
     public void recuperarTaxa() {
         TaxaCriteria taxaCriteria = new TaxaCriteria();
         taxaCriteria.setId("637066");
-        TaxaQueryServiceAdapter taxa = rolsacQS.obtenirTaxa(taxaCriteria);
+        TaxaQueryServiceAdapter taxa = null;
+        try {
+            taxa = rolsacQS.obtenirTaxa(taxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(taxa);
     }
     
@@ -469,7 +610,12 @@ public class RolsacQueryServiceTest {
         TaxaCriteria taxaCriteria = new TaxaCriteria();
         taxaCriteria.setT_descripcio("%euros%");
         taxaCriteria.setTamany("5");
-        List<TaxaQueryServiceAdapter> taxes = rolsacQS.llistarTaxes(taxaCriteria);
+        List<TaxaQueryServiceAdapter> taxes = null;
+        try {
+            taxes = rolsacQS.llistarTaxes(taxaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(taxes.size() > 0);
         for (TaxaQueryServiceAdapter t: taxes) {
             Assert.assertTrue(t.getDescripcio().toLowerCase().contains("euros"));
@@ -483,7 +629,12 @@ public class RolsacQueryServiceTest {
     public void recuperarAgrupacioFetVital() {
         AgrupacioFetVitalCriteria afvCriteria = new AgrupacioFetVitalCriteria();
         afvCriteria.setId("210");
-        AgrupacioFetVitalQueryServiceAdapter afv = rolsacQS.obtenirAgrupacioFetVital(afvCriteria);
+        AgrupacioFetVitalQueryServiceAdapter afv = null;
+        try {
+            afv = rolsacQS.obtenirAgrupacioFetVital(afvCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(afv);
     }
     
@@ -495,7 +646,12 @@ public class RolsacQueryServiceTest {
         AgrupacioFetVitalCriteria afvCriteria = new AgrupacioFetVitalCriteria();
         afvCriteria.setT_palabrasclave("%prova%");
         afvCriteria.setTamany("5");
-        List<AgrupacioFetVitalQueryServiceAdapter> afvs = rolsacQS.llistarAgrupacionsFetsVitals(afvCriteria);
+        List<AgrupacioFetVitalQueryServiceAdapter> afvs = null;
+        try {
+            afvs = rolsacQS.llistarAgrupacionsFetsVitals(afvCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(afvs.size() > 0);
         for (AgrupacioFetVitalQueryServiceAdapter afv: afvs) {
             Assert.assertTrue(afv.getPalabrasclave().toLowerCase().contains("prova"));
@@ -509,7 +665,12 @@ public class RolsacQueryServiceTest {
     public void recuperarAgrupacioMateria() {
         AgrupacioMateriaCriteria amCriteria = new AgrupacioMateriaCriteria();
         amCriteria.setId("635712");
-        AgrupacioMateriaQueryServiceAdapter am = rolsacQS.obtenirAgrupacioMateria(amCriteria);
+        AgrupacioMateriaQueryServiceAdapter am = null;
+        try {
+            am = rolsacQS.obtenirAgrupacioMateria(amCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(am);
     }
     
@@ -521,7 +682,12 @@ public class RolsacQueryServiceTest {
         AgrupacioMateriaCriteria amCriteria = new AgrupacioMateriaCriteria();
         amCriteria.setT_nombre("%cultura%");
         amCriteria.setTamany("5");
-        List<AgrupacioMateriaQueryServiceAdapter> ams = rolsacQS.llistarAgrupacionsMateries(amCriteria);
+        List<AgrupacioMateriaQueryServiceAdapter> ams = null;
+        try {
+            ams = rolsacQS.llistarAgrupacionsMateries(amCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(ams.size() > 0);
         for (AgrupacioMateriaQueryServiceAdapter am: ams) {
             Assert.assertTrue(am.getNombre().toLowerCase().contains("cultura"));
@@ -535,7 +701,12 @@ public class RolsacQueryServiceTest {
     public void recuperarButlleti() {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setId("1");
-        ButlletiQueryServiceAdapter am = rolsacQS.obtenirButlleti(butlletiCriteria);
+        ButlletiQueryServiceAdapter am = null;
+        try {
+            am = rolsacQS.obtenirButlleti(butlletiCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(am);
     }
     
@@ -546,7 +717,12 @@ public class RolsacQueryServiceTest {
     public void recuperarButlletins() {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setEnlace("%caib%");
-        List<ButlletiQueryServiceAdapter> butlletins = rolsacQS.llistarButlletins(butlletiCriteria);
+        List<ButlletiQueryServiceAdapter> butlletins = null;
+        try {
+            butlletins = rolsacQS.llistarButlletins(butlletiCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(butlletins.size() > 0);
         for (ButlletiQueryServiceAdapter b: butlletins) {
             Assert.assertTrue(b.getEnlace().toLowerCase().contains("caib"));
@@ -560,7 +736,12 @@ public class RolsacQueryServiceTest {
     public void recuperarDocument() {
         DocumentCriteria docCriteria = new DocumentCriteria();
         docCriteria.setId("241559");
-        DocumentQueryServiceAdapter doc = rolsacQS.obtenirDocument(docCriteria);
+        DocumentQueryServiceAdapter doc = null;
+        try {
+            doc = rolsacQS.obtenirDocument(docCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(doc);
     }
     
@@ -572,7 +753,12 @@ public class RolsacQueryServiceTest {
         DocumentCriteria docCriteria = new DocumentCriteria();
         docCriteria.setT_titulo("%decret%");
         docCriteria.setTamany("5");
-        List<DocumentQueryServiceAdapter> docs = rolsacQS.llistarDocuments(docCriteria);
+        List<DocumentQueryServiceAdapter> docs = null;
+        try {
+            docs = rolsacQS.llistarDocuments(docCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(docs.size() > 0);
         for (DocumentQueryServiceAdapter doc: docs) {
             Assert.assertTrue(doc.getTitulo().toLowerCase().contains("decret"));
@@ -586,7 +772,12 @@ public class RolsacQueryServiceTest {
     public void recuperarEdifici() {
         EdificiCriteria edificiCriteria = new EdificiCriteria();
         edificiCriteria.setId("81");
-        EdificiQueryServiceAdapter doc = rolsacQS.obtenirEdifici(edificiCriteria);
+        EdificiQueryServiceAdapter doc = null;
+        try {
+            doc = rolsacQS.obtenirEdifici(edificiCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(doc);
     }
     
@@ -598,7 +789,12 @@ public class RolsacQueryServiceTest {
         EdificiCriteria edificiCriteria = new EdificiCriteria();
         edificiCriteria.setDireccion("%pl%");
         edificiCriteria.setTamany("5");
-        List<EdificiQueryServiceAdapter> edificis = rolsacQS.llistarEdificis(edificiCriteria);
+        List<EdificiQueryServiceAdapter> edificis = null;
+        try {
+            edificis = rolsacQS.llistarEdificis(edificiCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(edificis.size() > 0);
         for (EdificiQueryServiceAdapter edifici: edificis) {
             Assert.assertTrue(edifici.getDireccion().toLowerCase().contains("pl"));
@@ -612,7 +808,12 @@ public class RolsacQueryServiceTest {
     public void recuperarEnllac() {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
         enllacCriteria.setId("633923");
-        EnllacQueryServiceAdapter doc = rolsacQS.obtenirEnllac(enllacCriteria);
+        EnllacQueryServiceAdapter doc = null;
+        try {
+            doc = rolsacQS.obtenirEnllac(enllacCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(doc);
     }
     
@@ -624,7 +825,12 @@ public class RolsacQueryServiceTest {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
         enllacCriteria.setT_enlace("%caib%");
         enllacCriteria.setTamany("5");
-        List<EnllacQueryServiceAdapter> enllacos = rolsacQS.llistarEnllacos(enllacCriteria);
+        List<EnllacQueryServiceAdapter> enllacos = null;
+        try {
+            enllacos = rolsacQS.llistarEnllacos(enllacCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(enllacos.size() > 0);
         for (EnllacQueryServiceAdapter enllac: enllacos) {
             Assert.assertTrue(enllac.getEnlace().toLowerCase().contains("caib"));
@@ -638,7 +844,12 @@ public class RolsacQueryServiceTest {
     public void recuperarEspaiTerritorial() {
         EspaiTerritorialCriteria etCriteria = new EspaiTerritorialCriteria();
         etCriteria.setId("633281");
-        EspaiTerritorialQueryServiceAdapter et = rolsacQS.obtenirEspaiTerritorial(etCriteria);
+        EspaiTerritorialQueryServiceAdapter et = null;
+        try {
+            et = rolsacQS.obtenirEspaiTerritorial(etCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(et);
     }
     
@@ -650,7 +861,12 @@ public class RolsacQueryServiceTest {
         EspaiTerritorialCriteria etCriteria = new EspaiTerritorialCriteria();
         etCriteria.setT_nombre("%mallorca%");
         etCriteria.setTamany("5");
-        List<EspaiTerritorialQueryServiceAdapter> ets = rolsacQS.llistarEspaisTerritorials(etCriteria);
+        List<EspaiTerritorialQueryServiceAdapter> ets = null;
+        try {
+            ets = rolsacQS.llistarEspaisTerritorials(etCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(ets.size() > 0);
         for (EspaiTerritorialQueryServiceAdapter et: ets) {
             Assert.assertTrue(et.getNombre().toLowerCase().contains("mallorca"));
@@ -664,7 +880,12 @@ public class RolsacQueryServiceTest {
     public void recuperarPublicObjectiu() {
         PublicObjectiuCriteria publicObjectiuCriteria = new PublicObjectiuCriteria();
         publicObjectiuCriteria.setId("200");
-        PublicObjectiuQueryServiceAdapter po = rolsacQS.obtenirPublicObjectiu(publicObjectiuCriteria);
+        PublicObjectiuQueryServiceAdapter po = null;
+        try {
+            po = rolsacQS.obtenirPublicObjectiu(publicObjectiuCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(po);
     }
     
@@ -675,7 +896,12 @@ public class RolsacQueryServiceTest {
     public void recuperarPublicsObjectius() {
         PublicObjectiuCriteria publicObjectiuCriteria = new PublicObjectiuCriteria();
         publicObjectiuCriteria.setT_titulo("%persones%");
-        List<PublicObjectiuQueryServiceAdapter> pos = rolsacQS.llistarPublicsObjectius(publicObjectiuCriteria);
+        List<PublicObjectiuQueryServiceAdapter> pos = null;
+        try {
+            pos = rolsacQS.llistarPublicsObjectius(publicObjectiuCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(pos.size() > 0);
         for (PublicObjectiuQueryServiceAdapter po: pos) {
             Assert.assertTrue(po.getTitulo().toLowerCase().contains("persones"));
@@ -689,7 +915,12 @@ public class RolsacQueryServiceTest {
     public void recuperarTipusAfectacio() {
         TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();
         tipusAfectacioCriteria.setId("2");
-        TipusAfectacioQueryServiceAdapter ta = rolsacQS.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        TipusAfectacioQueryServiceAdapter ta = null;
+        try {
+            ta = rolsacQS.obtenirTipusAfectacio(tipusAfectacioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(ta);
     }
     
@@ -699,7 +930,12 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTipusAfectacions() {
         TipusAfectacioCriteria tipusAfectacioCriteria = new TipusAfectacioCriteria();        
-        List<TipusAfectacioQueryServiceAdapter> tas = rolsacQS.llistarTipusAfectacio(tipusAfectacioCriteria);
+        List<TipusAfectacioQueryServiceAdapter> tas = null;
+        try {
+            tas = rolsacQS.llistarTipusAfectacio(tipusAfectacioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(tas.size() > 0);        
     }
     
@@ -710,7 +946,12 @@ public class RolsacQueryServiceTest {
     public void recuperarFamilia() {
         FamiliaCriteria familiaCriteria = new FamiliaCriteria();
         familiaCriteria.setId("1");
-        FamiliaQueryServiceAdapter familia = rolsacQS.obtenirFamilia(familiaCriteria);
+        FamiliaQueryServiceAdapter familia = null;
+        try {
+            familia = rolsacQS.obtenirFamilia(familiaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(familia);
     }
     
@@ -722,7 +963,12 @@ public class RolsacQueryServiceTest {
         FamiliaCriteria familiaCriteria = new FamiliaCriteria();
         familiaCriteria.setT_nombre("%test%");
         familiaCriteria.setTamany("5");
-        List<FamiliaQueryServiceAdapter> families = rolsacQS.llistarFamilies(familiaCriteria);
+        List<FamiliaQueryServiceAdapter> families = null;
+        try {
+            families = rolsacQS.llistarFamilies(familiaCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(families.size() > 0);
         for (FamiliaQueryServiceAdapter f: families) {
             Assert.assertTrue(f.getNombre().toLowerCase().contains("test"));
@@ -736,7 +982,12 @@ public class RolsacQueryServiceTest {
     public void recuperarFitxaUA() {
         FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
         fitxaUACriteria.setId("186414");
-        FitxaUAQueryServiceAdapter fitxa = rolsacQS.obtenirFitxaUA(fitxaUACriteria);
+        FitxaUAQueryServiceAdapter fitxa = null;
+        try {
+            fitxa = rolsacQS.obtenirFitxaUA(fitxaUACriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(fitxa);
     }
 
@@ -748,7 +999,12 @@ public class RolsacQueryServiceTest {
         FitxaUACriteria fitxaUACriteria = new FitxaUACriteria();
         fitxaUACriteria.setOrden("1");
         fitxaUACriteria.setTamany("5");
-        List<FitxaUAQueryServiceAdapter> fitxesUA = rolsacQS.llistarFitxesUA(fitxaUACriteria);
+        List<FitxaUAQueryServiceAdapter> fitxesUA = null;
+        try {
+            fitxesUA = rolsacQS.llistarFitxesUA(fitxaUACriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(fitxesUA.size() > 0);
         for (FitxaUAQueryServiceAdapter fua: fitxesUA) {
             Assert.assertTrue(fua.getOrden() == 1);
@@ -762,7 +1018,12 @@ public class RolsacQueryServiceTest {
     public void recuperarFormulari() {
         FormulariCriteria formulariCriteria = new FormulariCriteria();
         formulariCriteria.setId("205938");
-        FormulariQueryServiceAdapter form = rolsacQS.obtenirFormulari(formulariCriteria);
+        FormulariQueryServiceAdapter form = null;
+        try {
+            form = rolsacQS.obtenirFormulari(formulariCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(form);
     }
     
@@ -774,7 +1035,12 @@ public class RolsacQueryServiceTest {
         FormulariCriteria formulariCriteria = new FormulariCriteria();
         formulariCriteria.setNombre("%Instancia%");
         formulariCriteria.setTamany("5");
-        List<FormulariQueryServiceAdapter> forms = rolsacQS.llistarFormularis(formulariCriteria);
+        List<FormulariQueryServiceAdapter> forms = null;
+        try {
+            forms = rolsacQS.llistarFormularis(formulariCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(forms.size() > 0);
         for (FormulariQueryServiceAdapter f: forms) {
             Assert.assertTrue(f.getNombre().toLowerCase().contains("instancia"));
@@ -788,7 +1054,12 @@ public class RolsacQueryServiceTest {
     public void recuperarIconaFamilia() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
         ifCriteria.setId("635257");
-        IconaFamiliaQueryServiceAdapter iFam = rolsacQS.obtenirIconaFamilia(ifCriteria);
+        IconaFamiliaQueryServiceAdapter iFam = null;
+        try {
+            iFam = rolsacQS.obtenirIconaFamilia(ifCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(iFam);
     }
     
@@ -799,7 +1070,12 @@ public class RolsacQueryServiceTest {
     public void recuperarIconesFamilies() {
         IconaFamiliaCriteria ifCriteria = new IconaFamiliaCriteria();
         ifCriteria.setTamany("3");
-        List<IconaFamiliaQueryServiceAdapter> iFams = rolsacQS.llistarIconesFamilies(ifCriteria);
+        List<IconaFamiliaQueryServiceAdapter> iFams = null;
+        try {
+            iFams = rolsacQS.llistarIconesFamilies(ifCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(iFams.size() <= 3);
     }
 
@@ -810,7 +1086,12 @@ public class RolsacQueryServiceTest {
     public void recuperarIconaMateria() {
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setId("635655");
-        IconaMateriaQueryServiceAdapter iMat = rolsacQS.obtenirIconaMateria(imCriteria);
+        IconaMateriaQueryServiceAdapter iMat = null;
+        try {
+            iMat = rolsacQS.obtenirIconaMateria(imCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(iMat);
     }
     
@@ -821,7 +1102,12 @@ public class RolsacQueryServiceTest {
     public void recuperarIconesMateries() {
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setTamany("3");
-        List<IconaMateriaQueryServiceAdapter> iMats = rolsacQS.llistarIconesMateries(imCriteria);
+        List<IconaMateriaQueryServiceAdapter> iMats = null;
+        try {
+            iMats = rolsacQS.llistarIconesMateries(imCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(iMats.size() <= 3);
     }
 
@@ -832,7 +1118,12 @@ public class RolsacQueryServiceTest {
     public void recuperarMateriaAgrupacio() {
         MateriaAgrupacioCriteria maCriteria = new MateriaAgrupacioCriteria();
         maCriteria.setId("635948");
-        MateriaAgrupacioQueryServiceAdapter ma = rolsacQS.obtenirMateriaAgrupacio(maCriteria);
+        MateriaAgrupacioQueryServiceAdapter ma = null;
+        try {
+            ma = rolsacQS.obtenirMateriaAgrupacio(maCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(ma);
     }
     
@@ -844,7 +1135,12 @@ public class RolsacQueryServiceTest {
         MateriaAgrupacioCriteria maCriteria = new MateriaAgrupacioCriteria();
         maCriteria.setOrden("3");
         maCriteria.setTamany("3");
-        List<MateriaAgrupacioQueryServiceAdapter> mas = rolsacQS.llistarMateriesAgrupacions(maCriteria);
+        List<MateriaAgrupacioQueryServiceAdapter> mas = null;
+        try {
+            mas = rolsacQS.llistarMateriesAgrupacions(maCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(mas.size() > 0);
         for (MateriaAgrupacioQueryServiceAdapter ma: mas) {
             Assert.assertTrue(ma.getOrden() == 3);
@@ -858,7 +1154,12 @@ public class RolsacQueryServiceTest {
     public void recuperarPerfil() {
         PerfilCriteria perfilCriteria = new PerfilCriteria();
         perfilCriteria.setId("634701");
-        PerfilQueryServiceAdapter perfil = rolsacQS.obtenirPerfil(perfilCriteria);
+        PerfilQueryServiceAdapter perfil = null;
+        try {
+            perfil = rolsacQS.obtenirPerfil(perfilCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(perfil);
     }
     
@@ -869,7 +1170,12 @@ public class RolsacQueryServiceTest {
     public void recuperarPerfils() {
         PerfilCriteria perfilCriteria = new PerfilCriteria();
         perfilCriteria.setPathIconografia("%prova%");
-        List<PerfilQueryServiceAdapter> perfils = rolsacQS.llistarPerfils(perfilCriteria);
+        List<PerfilQueryServiceAdapter> perfils = null;
+        try {
+            perfils = rolsacQS.llistarPerfils(perfilCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(perfils.size() > 0);
         for (PerfilQueryServiceAdapter p: perfils) {
             Assert.assertTrue(p.getPathIconografia().toLowerCase().contains("prova"));
@@ -883,7 +1189,12 @@ public class RolsacQueryServiceTest {
     public void recuperarSeccio() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setId("631907");
-        SeccioQueryServiceAdapter seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+        SeccioQueryServiceAdapter seccio = null;
+        try {
+            seccio = rolsacQS.obtenirSeccio(seccioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(seccio);
     }
     
@@ -894,7 +1205,12 @@ public class RolsacQueryServiceTest {
     public void recuperarSeccions() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setT_nombre("%irlanda%");
-        List<SeccioQueryServiceAdapter> seccions = rolsacQS.llistarSeccions(seccioCriteria);
+        List<SeccioQueryServiceAdapter> seccions = null;
+        try {
+            seccions = rolsacQS.llistarSeccions(seccioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(seccions.size() > 0);
         for (SeccioQueryServiceAdapter s: seccions) {
             Assert.assertTrue(s.getNombre().toLowerCase().contains("irlanda"));
@@ -908,7 +1224,12 @@ public class RolsacQueryServiceTest {
     public void obtenirSeccionsArrel() {
         SeccioCriteria seccioCriteria = new SeccioCriteria();
         seccioCriteria.setArrel(true);
-        List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = rolsacQS.llistarSeccions(seccioCriteria);
+        List<SeccioQueryServiceAdapter> listSeccioQueryServiceAdapter = null;
+        try {
+            listSeccioQueryServiceAdapter = rolsacQS.llistarSeccions(seccioCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 11);
     }
     
@@ -919,7 +1240,12 @@ public class RolsacQueryServiceTest {
     public void recuperarUnitatMateria() {
         UnitatMateriaCriteria umCriteria = new UnitatMateriaCriteria();
         umCriteria.setId("621236");
-        UnitatMateriaQueryServiceAdapter um = rolsacQS.obtenirUnitatMateria(umCriteria);
+        UnitatMateriaQueryServiceAdapter um = null;
+        try {
+            um = rolsacQS.obtenirUnitatMateria(umCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertNotNull(um);
     }
     
@@ -931,7 +1257,12 @@ public class RolsacQueryServiceTest {
         UnitatMateriaCriteria umCriteria = new UnitatMateriaCriteria();
         umCriteria.setUnidadPrincipal("S");
         umCriteria.setTamany("5");
-        List<UnitatMateriaQueryServiceAdapter> ums = rolsacQS.llistarUnitatsMateries(umCriteria);
+        List<UnitatMateriaQueryServiceAdapter> ums = null;
+        try {
+            ums = rolsacQS.llistarUnitatsMateries(umCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(ums.size() > 0);
         for (UnitatMateriaQueryServiceAdapter um: ums) {
             Assert.assertTrue(um.getUnidadPrincipal().equalsIgnoreCase("s"));
@@ -945,7 +1276,12 @@ public class RolsacQueryServiceTest {
     public void recuperarUnTipusNormativa() {
         TipusCriteria tnCriteria = new TipusCriteria();
         tnCriteria.setId("11");
-        TipusQueryServiceAdapter tn = rolsacQS.obtenirTipus(tnCriteria);
+        TipusQueryServiceAdapter tn = null;
+        try {
+            tn = rolsacQS.obtenirTipus(tnCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(tn.getNombre().equals("Resolució"));
     }
     
@@ -957,7 +1293,12 @@ public class RolsacQueryServiceTest {
         TipusCriteria tnsCriteria = new TipusCriteria();
         tnsCriteria.setTamany("5");
         tnsCriteria.setT_nombre("%Llei%");
-        List<TipusQueryServiceAdapter> tns = rolsacQS.llistarTipus(tnsCriteria);
+        List<TipusQueryServiceAdapter> tns = null;
+        try {
+            tns = rolsacQS.llistarTipus(tnsCriteria);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
         Assert.assertTrue(tns.size() == 3);
     }
     

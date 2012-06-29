@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.normativa.ejb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.CreateException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -20,6 +22,7 @@ import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.EJBUtils;
+import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -27,14 +30,27 @@ import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
-import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
-public class NormativaQueryServiceEJB {
+/**
+ * SessionBean para consultas de normativas.
+ *
+ * @ejb.bean
+ *  name="sac/api/NormativaQueryServiceEJB"
+ *  jndi-name="es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJB"
+ *  type="Stateless"
+ *  view-type="remote"
+ *  transaction-type="Container"
+ *
+ * @ejb.transaction type="Required"
+ */
+public class NormativaQueryServiceEJB extends HibernateEJB {
+
+    private static final long serialVersionUID = -5411864487528239486L;
 
     private static Log log = LogFactory.getLog(NormativaQueryServiceEJB.class);
 
@@ -42,12 +58,26 @@ public class NormativaQueryServiceEJB {
     private static final String HQL_NORMATIVA_LOCAL_CLASS = "NormativaLocal";
     private static final String HQL_NORMATIVA_EXTERNA_CLASS = "NormativaExterna";    
     private static final String HQL_NORMATIVA_ALIAS = "n";
-        
     private static final String HQL_PROCEDIMIENTOS_LOCALES_CLASS = HQL_NORMATIVA_ALIAS + ".procedimientos";
     private static final String HQL_PROCEDIMIENTOS_LOCALES_ALIAS = "p";
-    
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
-    
+
+    /**
+     * @ejb.create-method
+     * @ejb.permission unchecked="true"
+     */
+    public void ejbCreate() throws CreateException {
+        super.ejbCreate();
+    }
+
+    /**
+     * Obtiene el boletin.
+     * @param idButlleti
+     * @return ButlletiDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public ButlletiDTO obtenirButlleti(long idButlleti) {
         ButlletiCriteria butlletiCriteria = new ButlletiCriteria();
         butlletiCriteria.setId(String.valueOf(idButlleti));
@@ -55,192 +85,172 @@ public class NormativaQueryServiceEJB {
         return ejb.obtenirButlleti(butlletiCriteria);        
     }
 
+    /**
+     * Obtiene lista de normativas afectadas.
+     * @param id
+     * @return List<NormativaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarAfectades(long id) {
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
-        Session sessio = null;
+        Session session = null;
         NormativaDTO dto;
-
         try {
-
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            session = getSession();
             
-            Query query = sessio.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
             query.setParameter("ca", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
             
             List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
-
             for (NormativaLocal normativa : normativaLocalResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
                 dto.setLocal(true);
                 normativaDTOList.add(dto);
             }
 
-            query = sessio.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
+            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
             query.setParameter("ca", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
             List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
-            
             for (NormativaExterna normativa : normativaExternaResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
                 dto.setLocal(false);
                 normativaDTOList.add(dto);
             }
-
-            sessio.close();
-
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTOList;
     }
 
+    /**
+     * Obtiene numero de normativas afectadas.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumAfectades(long id) {
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
-
         try {
-
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            session = getSession();
             
-            Query query = sessio.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");            
+            Query query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");            
             query.setParameter("id", id);
-            
             numResultats = ((Integer) query.uniqueResult()).intValue();                    
 
-
-            query = sessio.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");
+            query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");
             query.setParameter("id", id);
-
             numResultats += ((Integer) query.uniqueResult()).intValue();
-
-            sessio.close();
-
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
     
+    /**
+     * Obtiene lista de normativas afectantes.
+     * @param id
+     * @return List<NormativaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarAfectants(long id) {
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
-        Session sessio = null;
+        Session session = null;
         NormativaDTO dto;
-
         try {
-
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            session = getSession();
             
-            Query query = sessio.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
             query.setParameter("ca", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
-            
-            List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
 
+            List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
             for (NormativaLocal normativa : normativaLocalResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
                 dto.setLocal(true);
                 normativaDTOList.add(dto);
             }
 
-            query = sessio.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
+            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
             query.setParameter("ca", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
             List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
-            
             for (NormativaExterna normativa : normativaExternaResult) {
                 dto = (NormativaDTO) BasicUtils.entityToDTO(NormativaDTO.class,  normativa, BasicUtils.getDefaultLanguage());
                 dto.setLocal(false);
                 normativaDTOList.add(dto);
             }
-
-            sessio.close();
-
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTOList;
     }
     
+    /**
+     * Obtiene numero de normativas afectantes.
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumAfectants(long id) {
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
-
         try {
-
-            sessio = HibernateUtils.getSessionFactory().openSession();
+            session = getSession();
             
-            Query query = sessio.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
+            Query query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaLocal AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
             query.setParameter("id", id);
-            
             numResultats = ((Integer) query.uniqueResult()).intValue();                    
 
-
-            query = sessio.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
+            query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
             query.setParameter("id", id);
-
             numResultats += ((Integer) query.uniqueResult()).intValue();
-
-            sessio.close();
-
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
     
+    /**
+     * Obtiene lista de procedimientos
+     * @param id
+     * @param procedimentCriteria
+     * @return List<ProcedimentDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) {
         List<ProcedimentDTO> procedimentsDTOList = new ArrayList<ProcedimentDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
 
         try {            
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTOS_LOCALES_ALIAS, HQL_TRADUCCIONES_ALIAS, procedimentCriteria);
@@ -255,41 +265,37 @@ public class NormativaQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, nc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
-            @SuppressWarnings("unchecked")
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
-
             for (ProcedimientoLocal procediment : procedimentsResult) {
                 procedimentsDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class,  procediment, procedimentCriteria.getIdioma()));
             }
-            
-            sessio.close();
-            
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return procedimentsDTOList;
     }
 
+    /**
+     * Obtiene el numero de procedimientos
+     * @param id
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public int getNumProcediments(long id) {
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         int numResultats = 0;
-
         try {
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTOS_LOCALES_ALIAS, new ProcedimentCriteria());
             List<FromClause> entities = new ArrayList<FromClause>();
@@ -303,30 +309,30 @@ public class NormativaQueryServiceEJB {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, nc);
             qb.extendCriteriaObjects(criteris);
 
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             numResultats  = ((Integer) query.uniqueResult()).intValue();
-            sessio.close();
-            
         } catch (HibernateException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (CriteriaObjectParseException e) {
-            e.printStackTrace();
+            log.error(e);
         } catch (QueryBuilderException e) {
-            e.printStackTrace();
+            log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
 
+    /**
+     * Obtiene la unidad administrativa
+     * @param idUniAdm
+     * @return UnitatAdministrativaDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     public UnitatAdministrativaDTO obtenirUnitatAdministrativa(long idUniAdm) {
         UnitatAdministrativaCriteria unitatAdministrativaCriteria = new UnitatAdministrativaCriteria();
         unitatAdministrativaCriteria.setId(String.valueOf(idUniAdm));
@@ -334,16 +340,32 @@ public class NormativaQueryServiceEJB {
         return ejb.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
     }
 
-    public ArxiuDTO obtenirArxiuNormativa(long idArchivo) {
-        return EJBUtils.getArxiuDTO(idArchivo);
+    /**
+     * Obtiene el archivo de la normativa
+     * @param idArxiu
+     * @return ArxiuDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ArxiuDTO obtenirArxiuNormativa(long idArxiu) {
+        return EJBUtils.getArxiuDTO(idArxiu);
     }
 
+    /**
+     * Obtiene la lista de afectaciones afectantes.
+     * @param id
+     * @return AfectacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<AfectacioDTO> llistarAfectacionsAfectants(Long id) {
         List<AfectacioDTO> afectacioDTOList = new ArrayList<AfectacioDTO>();
         List<Afectacion> afectants = null;
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         
         NormativaCriteria normativaCriteria = new NormativaCriteria(); 
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
@@ -356,10 +378,9 @@ public class NormativaQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-            
             if (normativaLocal != null) {
                 afectants = new ArrayList<Afectacion>(normativaLocal.getAfectantes());
             } else {
@@ -368,51 +389,46 @@ public class NormativaQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
                 qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
-                
                 if (normativaExterna != null) {
                     afectants = new ArrayList<Afectacion>(normativaExterna.getAfectantes());
                 }
             }
-                        
+            
             for (Afectacion afec: afectants){
                 afectacioDTOList.add((AfectacioDTO) BasicUtils.entityToDTO(AfectacioDTO.class,  afec, normativaCriteria.getIdioma()));
             }
-            
-            sessio.close();
-            
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                }
-            }
+            close(session);
         }
 
         return afectacioDTOList;
     }
 
+    /**
+     * Obtiene la lista de afectaciones afectadas.
+     * @param id
+     * @return AfectacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
     @SuppressWarnings("unchecked")
     public List<AfectacioDTO> llistarAfectacionsAfectades(Long id) {
         List<AfectacioDTO> afectacioDTOList = new ArrayList<AfectacioDTO>();
         List<Afectacion> afectades = null;
         List<CriteriaObject> criteris;
-        Session sessio = null;
-        
+        Session session = null;
         NormativaCriteria normativaCriteria = new NormativaCriteria(); 
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
         normativaCriteria.setId(String.valueOf(id));       
-
         try {
             criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVA_ALIAS, normativaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
@@ -420,10 +436,9 @@ public class NormativaQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             NormativaLocal normativaLocal = (NormativaLocal) query.uniqueResult();
-            
             if (normativaLocal != null) {
                 afectades = new ArrayList<Afectacion>(normativaLocal.getAfectadas());
             } else {
@@ -432,9 +447,8 @@ public class NormativaQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
                 qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 NormativaExterna normativaExterna = (NormativaExterna) query.uniqueResult();
-                
                 if (normativaExterna != null) {
                     afectades = new ArrayList<Afectacion>(normativaExterna.getAfectadas());
                 }
@@ -443,24 +457,14 @@ public class NormativaQueryServiceEJB {
             for (Afectacion afec: afectades){
                 afectacioDTOList.add((AfectacioDTO) BasicUtils.entityToDTO(AfectacioDTO.class,  afec, normativaCriteria.getIdioma()));
             }
-            
-            sessio.close();
-            
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                }
-            }
+            close(session);
         }
 
         return afectacioDTOList;

@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.documentTramit.ejb;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitQueryServiceStrategy;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class DocumentTramitQueryServiceEJBStrategy implements DocumentTramitQueryServiceStrategy {
@@ -12,12 +14,20 @@ public class DocumentTramitQueryServiceEJBStrategy implements DocumentTramitQuer
         this.documentTramitQueryServiceDelegate = documentTramitQueryServiceDelegate;
     }
 
-    public TramitDTO obtenirTramit(long idTramit) {
-        return documentTramitQueryServiceDelegate.obtenirTramit(idTramit);
+    public TramitDTO obtenirTramit(long idTramit) throws StrategyException {
+        try {
+            return documentTramitQueryServiceDelegate.obtenirTramit(idTramit);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirArxiu(long idArxiu) {
-        return documentTramitQueryServiceDelegate.obtenirArxiu(idArxiu);
+    public ArxiuDTO obtenirArxiu(long idArxiu) throws StrategyException {
+        try {
+            return documentTramitQueryServiceDelegate.obtenirArxiu(idArxiu);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

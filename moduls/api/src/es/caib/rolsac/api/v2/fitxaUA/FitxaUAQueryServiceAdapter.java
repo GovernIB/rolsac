@@ -1,9 +1,10 @@
 package es.caib.rolsac.api.v2.fitxaUA;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxaUA.ejb.FitxaUAQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.general.BeanUtils;
@@ -13,8 +14,8 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQueryService {
 
-    private static Log log = LogFactory.getLog(FitxaUAQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = -3653784030169097078L;
+
     FitxaUAQueryServiceStrategy fitxaUAQueryServiceStrategy;    
     
     public void setFitxaUAQueryServiceStrategy(FitxaUAQueryServiceStrategy fitxaUAQueryServiceStrategy) {
@@ -25,28 +26,39 @@ public class FitxaUAQueryServiceAdapter extends FitxaUADTO implements FitxaUAQue
         return fitxaUAQueryServiceStrategy instanceof FitxaUAQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public FitxaUAQueryServiceAdapter(FitxaUADTO dto) {        
+    public FitxaUAQueryServiceAdapter(FitxaUADTO dto) throws QueryServiceException {        
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando FitxaUAQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
-    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() {
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa() throws QueryServiceException {
         if (this.getUnidadAdministrativa() == null) {return null;}
-        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa()));
+        try {
+            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirUnitatAdministrativa(this.getUnidadAdministrativa()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
+        }
     }
 
-    public FitxaQueryServiceAdapter obtenirFitxa() {
+    public FitxaQueryServiceAdapter obtenirFitxa() throws QueryServiceException {
         if (this.getFicha()== null) {return null;}
-        return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirFitxa(this.getFicha()));
+        try {
+            return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaUAQueryServiceStrategy.obtenirFitxa(this.getFicha()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
+        }
     }
 
-    public SeccioQueryServiceAdapter obtenirSeccio() {
+    public SeccioQueryServiceAdapter obtenirSeccio() throws QueryServiceException {
         if (this.getSeccion() == null) {return null;}
-        return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), fitxaUAQueryServiceStrategy.obtenirSeccio(this.getSeccion()));
+        try {
+            return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), fitxaUAQueryServiceStrategy.obtenirSeccio(this.getSeccion()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion.", e);
+        }
     }
 
 }

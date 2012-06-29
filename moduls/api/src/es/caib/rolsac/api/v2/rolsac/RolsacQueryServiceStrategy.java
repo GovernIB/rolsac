@@ -20,6 +20,7 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -67,128 +68,128 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public interface RolsacQueryServiceStrategy {
 
-    AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria);
+    AgrupacioFetVitalDTO obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;
 
-    List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria);
+    List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws StrategyException;
 
-    AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria);
+    AgrupacioMateriaDTO obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException;
 
-    List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria);
+    List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException;
 
-    ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria);
+    ButlletiDTO obtenirButlleti(ButlletiCriteria butlletiCriteria) throws StrategyException;
 
-    List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria);
+    List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws StrategyException;
 
-    DocumentDTO obtenirDocument(DocumentCriteria documentCriteria);
+    DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException;
 
-    List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria);
+    List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) throws StrategyException;
 
-    DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria);
+    DocumentTramitDTO obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws StrategyException;
 
-    List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria docuemntTramitCriteria);
+    List<DocumentTramitDTO> llistarDocumentTramit(DocumentTramitCriteria docuemntTramitCriteria) throws StrategyException;
 
-    EdificiDTO obtenirEdifici(EdificiCriteria edificiTramit);
+    EdificiDTO obtenirEdifici(EdificiCriteria edificiTramit) throws StrategyException;
 
-    List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit);
+    List<EdificiDTO> llistarEdificis(EdificiCriteria edificiTramit) throws StrategyException;
 
-    EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria);
+    EnllacDTO obtenirEnllac(EnllacCriteria enllacCriteria) throws StrategyException;
 
-    List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria);
+    List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria) throws StrategyException;
 
-    EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria);
+    EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
 
-    List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria);
+    List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
 
-    EstadisticaDTO obtenirEstadistica(EstadisticaCriteria estadisticaCriteria);
+    EstadisticaDTO obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) throws StrategyException;
 
-    List<EstadisticaDTO> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria);
+    List<EstadisticaDTO> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) throws StrategyException;
 
-    FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria);
+    FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws StrategyException;
 
-    List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria);
+    List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException;
 
-    FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria);
+    FetVitalDTO obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws StrategyException;
 
-    List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria);
+    List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws StrategyException;
 
-    FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria);
+    FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) throws StrategyException;
 
-    List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria);
+    List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) throws StrategyException;
 
-    FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria);
+    FitxaUADTO obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws StrategyException;
 
-    List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria);
+    List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws StrategyException;
 
-    FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria);
+    FormulariDTO obtenirFormulari(FormulariCriteria formulariCriteria) throws StrategyException;
 
-    List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria);
+    List<FormulariDTO> llistarFormularis(FormulariCriteria formulariCriteria) throws StrategyException;
 
-    IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria iconaCriteria);
+    IconaFamiliaDTO obtenirIconaFamilia(IconaFamiliaCriteria iconaCriteria) throws StrategyException;
 
-    List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria);
+    List<IconaFamiliaDTO> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) throws StrategyException;
 
-    IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria);
+    IconaMateriaDTO obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException;
 
-    List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria);
+    List<IconaMateriaDTO> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException;
 
-    MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria);
+    MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) throws StrategyException;
 
-    List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria);
+    List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria) throws StrategyException;
 
-    MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria);
+    MateriaAgrupacioDTO obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws StrategyException;
 
-    List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria);
+    List<MateriaAgrupacioDTO> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws StrategyException;
 
-    NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria);
+    NormativaDTO obtenirNormativa(NormativaCriteria normativaCriteria) throws StrategyException;
 
-    List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria);
+    List<NormativaDTO> llistarNormatives(NormativaCriteria normativaCriteria) throws StrategyException;
 
-    PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria);
+    PerfilDTO obtenirPerfil(PerfilCriteria perfilCriteria) throws StrategyException;
 
-    List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria);
+    List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria) throws StrategyException;
 
-    PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria);
+    PersonalDTO obtenirPersonal(PersonalCriteria personalCriteria) throws StrategyException;
 
-    List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria);
+    List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria) throws StrategyException;
 
-    ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria);
+    ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria);
+    List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria);
+    PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException;
 
-    List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria);
+    List<PublicObjectiuDTO> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException;
 
-    SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria);
+    SeccioDTO obtenirSeccio(SeccioCriteria seccioCriteria) throws StrategyException;
 
-    List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria);
+    List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria) throws StrategyException;
 
-    TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria);
+    TaxaDTO obtenirTaxa(TaxaCriteria taxaCriteria) throws StrategyException;
 
-    List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria);
+    List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria) throws StrategyException;
 
-    TramitDTO obtenirTramit(TramitCriteria tramitCriteria);
+    TramitDTO obtenirTramit(TramitCriteria tramitCriteria) throws StrategyException;
 
-    List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria);
+    List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria) throws StrategyException;
 
-    UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    UnitatAdministrativaDTO obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria);
+    UnitatMateriaDTO obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException;
 
-    List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria);
+    List<UnitatMateriaDTO> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException;
 
-    UsuariDTO obtenirUsuari(UsuariCriteria ususariCriteria);
+    UsuariDTO obtenirUsuari(UsuariCriteria ususariCriteria) throws StrategyException;
 
-    List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria);
+    List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria) throws StrategyException;
 
-    TipusDTO obtenirTipus(TipusCriteria tipusCriteria);
+    TipusDTO obtenirTipus(TipusCriteria tipusCriteria) throws StrategyException;
 
-    List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria);
+    List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria) throws StrategyException;
 
-    TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
+    TipusAfectacioDTO obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException;
 
-    List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria);
+    List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException;
 
 }

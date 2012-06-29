@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.iconaMateria;
 
-public class IconaMateriaDTO {
+import java.io.Serializable;
+
+public class IconaMateriaDTO implements Serializable {
+
+    private static final long serialVersionUID = -8957618695801686076L;
 
     protected Long id;
     protected Long materia;

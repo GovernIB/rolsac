@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.seccio.ejb;
 
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -18,40 +20,76 @@ public class SeccioQueryServiceEJBStrategy implements SeccioQueryServiceStrategy
         this.seccioQueryServiceDelegate = seccioQueryServiceDelegate;
     }
 
-    public int getNumFilles(long id) {
-        return seccioQueryServiceDelegate.getNumFilles(id);
+    public int getNumFilles(long id) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.getNumFilles(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumFitxes(long id) {
-        return seccioQueryServiceDelegate.getNumFitxes(id);
+    public int getNumFitxes(long id) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.getNumFitxes(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumPares(long id) {
-        return seccioQueryServiceDelegate.getNumPares(id);
+    public int getNumPares(long id) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.getNumPares(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumUnitatsAdministratives(long id) {
-        return seccioQueryServiceDelegate.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.getNumUnitatsAdministratives(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<SeccioDTO> llistarPares(long id) {
-        return seccioQueryServiceDelegate.llistarPares(id);
+    public List<SeccioDTO> llistarPares(long id) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.llistarPares(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria) {
-        return seccioQueryServiceDelegate.llistarFilles(id, seccioCriteria);
+    public List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.llistarFilles(id, seccioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
-        return seccioQueryServiceDelegate.llistarFitxes(id, fitxaCriteria);
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.llistarFitxes(id, fitxaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        return seccioQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public SeccioDTO obtenirPare(Long padre) {
-        return seccioQueryServiceDelegate.obtenirPare(padre);
+    public SeccioDTO obtenirPare(Long padre) throws StrategyException {
+        try {
+            return seccioQueryServiceDelegate.obtenirPare(padre);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
 }

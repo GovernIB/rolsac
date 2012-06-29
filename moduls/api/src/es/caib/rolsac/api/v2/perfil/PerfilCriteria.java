@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class PerfilCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 7133943457466755207L;
+
     private String codigoEstandard;
     private String pathIconografia;
 

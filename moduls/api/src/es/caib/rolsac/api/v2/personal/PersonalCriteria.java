@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class PersonalCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 6373552059123956676L;
+
     private String username;
     private String nombre;
     private String funciones;

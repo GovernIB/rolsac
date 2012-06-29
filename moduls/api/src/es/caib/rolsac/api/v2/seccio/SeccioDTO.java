@@ -1,7 +1,11 @@
 package es.caib.rolsac.api.v2.seccio;
 
+import java.io.Serializable;
 
-public class SeccioDTO {
+
+public class SeccioDTO implements Serializable {
+
+    private static final long serialVersionUID = -6012419865025755856L;
 
     protected long id;
     private Long padre;

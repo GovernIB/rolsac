@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
@@ -25,19 +26,28 @@ public class EnllacQueryServiceTest {
     public void obtenirFitxa() {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
         enllacCriteria.setId("570970");
-        EnllacQueryServiceAdapter enllac = rolsacQS.obtenirEnllac(enllacCriteria);
-        Assert.assertNotNull(enllac);
-        FitxaQueryServiceAdapter fitxa = enllac.obtenirFitxa();      
-        Assert.assertTrue(fitxa.getId() == 25471);
+        try {
+            EnllacQueryServiceAdapter enllac = rolsacQS.obtenirEnllac(enllacCriteria);
+            Assert.assertNotNull(enllac);
+            FitxaQueryServiceAdapter fitxa = enllac.obtenirFitxa();      
+            Assert.assertTrue(fitxa.getId() == 25471);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirProcediment() {
         EnllacCriteria enllacCriteria = new EnllacCriteria();
         enllacCriteria.setId("570970");
-        EnllacQueryServiceAdapter enllac = rolsacQS.obtenirEnllac(enllacCriteria);
-        Assert.assertNotNull(enllac);
-        ProcedimentQueryServiceAdapter procediment = enllac.obtenirProcediment();
-        Assert.assertNull(procediment);
+        try {
+            EnllacQueryServiceAdapter enllac = rolsacQS.obtenirEnllac(enllacCriteria);
+            Assert.assertNotNull(enllac);
+            ProcedimentQueryServiceAdapter procediment = enllac.obtenirProcediment();
+            Assert.assertNull(procediment);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
+    
 }

@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.butlleti.ejb;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.CreateException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -13,6 +15,7 @@ import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 
 import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -20,11 +23,24 @@ import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByButlletiCriteria;
 import es.caib.rolsac.api.v2.query.FromClause;
-import es.caib.rolsac.api.v2.query.HibernateUtils;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
 
-public class ButlletiQueryServiceEJB {
+/**
+ * SessionBean para consultas de boletines.
+ *
+ * @ejb.bean
+ *  name="sac/api/ButlletiQueryServiceEJB"
+ *  jndi-name="es.caib.rolsac.api.v2.butlleti.ejb.ButlletiQueryServiceEJB"
+ *  type="Stateless"
+ *  view-type="remote"
+ *  transaction-type="Container"
+ *
+ * @ejb.transaction type="Required"
+ */
+public class ButlletiQueryServiceEJB extends HibernateEJB {
+
+    private static final long serialVersionUID = -6284803742651680522L;
 
     private static Log log = LogFactory.getLog(ButlletiQueryServiceEJB.class);
     
@@ -34,69 +50,82 @@ public class ButlletiQueryServiceEJB {
     private static final String HQL_NORMATIVAS_ALIAS = "n";
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
     
+    /**
+     * @ejb.create-method
+     * @ejb.permission unchecked="true"
+     */
+    public void ejbCreate() throws CreateException {
+        super.ejbCreate();
+    }
+    
+    /**
+     * Obtiene el numero de normativas del boletin.
+     * @param id
+     * @param tipus
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */  
     public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
-        Session sessio = null;    
+        Session session = null;    
         QueryBuilder qb = null;
         Query query = null;
         int numResultats = 0;
         
         try {
-            sessio = HibernateUtils.getSessionFactory().openSession(); 
+            session = getSession(); 
 //            criteris = BasicUtils.parseCriterias(NormativaCriteria.class, HQL_NORMATIVAS_ALIAS, new NormativaCriteria());
             CriteriaObject normativaByButlletiCO = new NormativaByButlletiCriteria(HQL_BUTLLETI_ALIAS);
             normativaByButlletiCO.parseCriteria(String.valueOf(id));
             criteris.add(normativaByButlletiCO);
             List<FromClause> entities = new ArrayList<FromClause>();
-            
+
             if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.LOCAL){
                 entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".boletin", HQL_BUTLLETI_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);                            
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 numResultats = (Integer) query.uniqueResult();
             }
-            
             if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".boletin", HQL_BUTLLETI_ALIAS));            
                 qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, null, null, true);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 numResultats += (Integer) query.uniqueResult();
             }
-
-            sessio.close();
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return numResultats;
     }
     
+    /**
+     * Obtiene el listado de normativas del boletin.
+     * @param id
+     * @param normativaCriteria
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */  
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) {
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
-        Session sessio = null;
+        Session session = null;
         boolean incluirExternas = (normativaCriteria.getIncluirExternas() == null)? false : normativaCriteria.getIncluirExternas();
         normativaCriteria.setIncluirExternas(null); // Para evitar que se parsee como los demas criterias
 
@@ -112,8 +141,8 @@ public class ButlletiQueryServiceEJB {
             QueryBuilder qb = new QueryBuilder("n", entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
-            sessio = HibernateUtils.getSessionFactory().openSession();
-            Query query = qb.createQuery(sessio);
+            session = getSession();
+            Query query = qb.createQuery(session);
             List<NormativaLocal> normativasLocalesResult = (List<NormativaLocal>) query.list();
             List<NormativaExterna> normativasExternasResult = null;
             if (incluirExternas) {
@@ -124,10 +153,9 @@ public class ButlletiQueryServiceEJB {
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".boletin", HQL_BUTLLETI_ALIAS));            
                 qb = new QueryBuilder(HQL_NORMATIVAS_ALIAS, entities, normativaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
                 qb.extendCriteriaObjects(criteris);
-                query = qb.createQuery(sessio);
+                query = qb.createQuery(session);
                 normativasExternasResult = (List<NormativaExterna>) query.list();
             }
-            sessio.close();
 
             NormativaDTO dto;
             for (NormativaLocal normativa : normativasLocalesResult) {
@@ -144,22 +172,12 @@ public class ButlletiQueryServiceEJB {
             }
         } catch (HibernateException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (CriteriaObjectParseException e) {
             log.error(e);
-            e.printStackTrace();
         } catch (QueryBuilderException e) {
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (sessio != null && sessio.isOpen()) {
-                try {
-                    sessio.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace(); // TODO: delete me.
-                }
-            }
+            close(session);
         }
 
         return normativaDTOList;

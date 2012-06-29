@@ -7,6 +7,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -16,30 +17,30 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface FitxaQueryServiceStrategy {
 
-    int getNumDocuments(long id);
+    public int getNumDocuments(long id) throws StrategyException;
 
-    int getNumEnllacos(long id);
+    public int getNumEnllacos(long id) throws StrategyException;
 
-    int getNumFetsVitals(long id);
+    public int getNumFetsVitals(long id) throws StrategyException;
 
-    int getNumUnitatsAdministratives(long id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException;
     
-    int getNumSeccions(long id);
+    public int getNumSeccions(long id) throws StrategyException;
     
-    List<EnllacDTO> llistarEnllacos(long id, EnllacCriteria enllacCriteria);
+    public List<EnllacDTO> llistarEnllacos(long id, EnllacCriteria enllacCriteria) throws StrategyException;
 
-    List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria);
+    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) throws StrategyException;
 
-    List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCritera);
+    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCritera) throws StrategyException;
 
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria);
+    public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException;
 
-    ArxiuDTO obtenirIcona(Long icono);
+    public ArxiuDTO obtenirIcona(Long icono) throws StrategyException;
 
-    ArxiuDTO obtenirImatge(Long imagen);
+    public ArxiuDTO obtenirImatge(Long imagen) throws StrategyException;
 
-    ArxiuDTO obtenirBaner(Long baner);
+    public ArxiuDTO obtenirBaner(Long baner) throws StrategyException;
 
 }

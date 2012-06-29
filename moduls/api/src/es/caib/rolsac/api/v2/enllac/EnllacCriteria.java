@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class EnllacCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 449769212331134907L;
+
     private String orden;
 
     // traducciones

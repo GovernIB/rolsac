@@ -1,10 +1,11 @@
 package es.caib.rolsac.api.v2.formulari;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.formulari.ejb.FormulariQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
@@ -12,20 +13,19 @@ import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
 public class FormulariQueryServiceAdapter extends FormulariDTO implements FormulariQueryService {
 
-    private static Log log = LogFactory.getLog(FormulariQueryServiceAdapter.class);
-    
+    private static final long serialVersionUID = 1747992039044768431L;
+
     FormulariQueryServiceStrategy formulariQueryServiceStrategy;
     
     public void setFormulariQueryServiceStrategy(FormulariQueryServiceStrategy formulariQueryServiceStrategy) {
         this.formulariQueryServiceStrategy = formulariQueryServiceStrategy;
     }
 
-    public FormulariQueryServiceAdapter(FormulariDTO dto) {
+    public FormulariQueryServiceAdapter(FormulariDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
-            log.error("Error instanciando FormulariQueryServiceAdapter.", e);
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
 
@@ -33,19 +33,31 @@ public class FormulariQueryServiceAdapter extends FormulariDTO implements Formul
         return formulariQueryServiceStrategy instanceof FormulariQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public ArxiuQueryServiceAdapter obtenirArchivo() {
+    public ArxiuQueryServiceAdapter obtenirArchivo() throws QueryServiceException {
         if (this.getArchivo() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirArchivo(this.getArchivo()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "archivo.", e);
+        }
     }
     
-    public ArxiuQueryServiceAdapter obtenirManual() {
+    public ArxiuQueryServiceAdapter obtenirManual() throws QueryServiceException {
         if (this.getManual() == null) {return null;}
-        return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
+        try {
+            return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), formulariQueryServiceStrategy.obtenirManual(this.getManual()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "manual.", e);
+        }
     }
     
-    public TramitQueryServiceAdapter obtenirTramit() {
+    public TramitQueryServiceAdapter obtenirTramit() throws QueryServiceException {
         if (this.getTramite() == null) {return null;}
-        return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));        
+        try {
+            return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), formulariQueryServiceStrategy.obtenirTramit(this.getTramite()));
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
+        }        
     }
 
 }

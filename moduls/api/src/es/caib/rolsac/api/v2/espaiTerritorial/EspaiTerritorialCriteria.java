@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class EspaiTerritorialCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 255251695282245600L;
+    
     private String nivel; // Integer
     private String coordenadas;
 

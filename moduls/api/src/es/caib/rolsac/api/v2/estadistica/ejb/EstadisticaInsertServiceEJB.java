@@ -17,15 +17,16 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.persistence.util.PeriodoUtil;
 
 import es.caib.rolsac.api.v2.general.EJBUtils;
+import es.caib.rolsac.api.v2.general.PeriodoUtil;
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
 public class EstadisticaInsertServiceEJB {
 
     private static Log log = LogFactory.getLog(EstadisticaInsertServiceEJB.class);
 
+    @SuppressWarnings("unchecked")
     private void grabarEstadistica(Session session, Historico historico, Periodo periodo) throws HibernateException {
         Query query = session.createQuery("from Estadistica as est where est.historico = :historico "
                 + "and est.fecha between :fecha_inicio and :fecha_fin");
@@ -35,13 +36,6 @@ public class EstadisticaInsertServiceEJB {
         query.setMaxResults(1);
         query.setCacheable(true);
         
-//        System.out.println("GrabarEstadistica HQL: " + query.getQueryString());
-//        System.out.println("GrabarEstadistica HQL parameters: ");
-//        System.out.println("\tHistorico: " + historico.getId());
-//        System.out.println("\tInicio: " + periodo.getFechaInicio());
-//        System.out.println("\tFin: " + periodo.getFechaFin());
-        
-        @SuppressWarnings("unchecked")
         List<Estadistica> result = (List<Estadistica>) query.list();
         if (result.isEmpty()) {
             Estadistica estadistica = new Estadistica();
@@ -49,7 +43,6 @@ public class EstadisticaInsertServiceEJB {
             estadistica.setContador(1);
             estadistica.setHistorico(historico);
             session.saveOrUpdate(estadistica);
-//            System.out.println("Estadistica gravada: " + estadistica.getId());
         } else {
             Estadistica estadistica = result.get(0);
             estadistica.setContador(estadistica.getContador() + 1);
@@ -145,8 +138,8 @@ public class EstadisticaInsertServiceEJB {
                 session = HibernateUtils.getSessionFactory().openSession();
                 tx = session.beginTransaction();
                 Ficha ficha = (Ficha) session.load(Ficha.class, fitxaId);
-                @SuppressWarnings("unused")
-                UnidadAdministrativa unidad = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, uaId);
+                // Provocar excepcion si no existe la UA.
+                session.load(UnidadAdministrativa.class, uaId);
                 Historico historico = EJBUtils.getHistoricFitxaPerUA(session, ficha, uaId);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();

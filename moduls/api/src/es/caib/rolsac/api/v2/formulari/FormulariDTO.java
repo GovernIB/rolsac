@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.formulari;
 
-public class FormulariDTO {
+import java.io.Serializable;
+
+public class FormulariDTO implements Serializable {
+
+    private static final long serialVersionUID = -8379706035358866465L;
 
     protected Long id;
     protected String nombre;

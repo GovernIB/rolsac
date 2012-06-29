@@ -1,9 +1,11 @@
 package es.caib.rolsac.api.v2.fetVital;
 
+import java.io.Serializable;
 
-
-public class FetVitalDTO {
+public class FetVitalDTO implements Serializable {
     
+    private static final long serialVersionUID = 8927551632923256635L;
+
     protected long id;
     private int orden;
     private Long icono;

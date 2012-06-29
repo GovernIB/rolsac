@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
@@ -30,69 +31,96 @@ public class AgrupacioFetVitalQueryServiceTest {
     public void adapterTest() {
         AgrupacioFetVitalDTO dto = new AgrupacioFetVitalDTO();
         dto.setId(211);
-        AgrupacioFetVitalQueryServiceAdapter adapter = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter(
-                "agrupacioFetVital", STRATEGY.EJB, dto);
-        int numfetsVitals = adapter.getNumFetsVitals();
-        Assert.assertTrue(numfetsVitals > 0);
+        AgrupacioFetVitalQueryServiceAdapter adapter = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", STRATEGY.EJB, dto);
+        try {
+            int numfetsVitals = adapter.getNumFetsVitals();
+            Assert.assertTrue(numfetsVitals > 0);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void getNumFetsVitals() {
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setId("211");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        int numFetsVitals = agrupacioFetVital.getNumFetsVitals();
-        Assert.assertTrue(numFetsVitals == 5);
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            int numFetsVitals = agrupacioFetVital.getNumFetsVitals();
+            Assert.assertTrue(numFetsVitals == 5);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void llistarFetsVitals() {
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setId("210");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        List<FetVitalQueryServiceAdapter> listFetVitalQueryServiceAdapter = agrupacioFetVital.llistarFetsVitals(new FetVitalCriteria());
-        Assert.assertTrue(listFetVitalQueryServiceAdapter.size() == 8);
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            List<FetVitalQueryServiceAdapter> listFetVitalQueryServiceAdapter = agrupacioFetVital.llistarFetsVitals(new FetVitalCriteria());
+            Assert.assertTrue(listFetVitalQueryServiceAdapter.size() == 8);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void getFotografia(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setId("635670");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        ArxiuQueryServiceAdapter fotografia = agrupacioFetVital.getFotografia();
-        Assert.assertNotNull(fotografia);
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            ArxiuQueryServiceAdapter fotografia = agrupacioFetVital.getFotografia();
+            Assert.assertNotNull(fotografia);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test
     public void getIcona(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setId("634786");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        ArxiuQueryServiceAdapter icona = agrupacioFetVital.getIcona();
-        Assert.assertNotNull(icona);
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            ArxiuQueryServiceAdapter icona = agrupacioFetVital.getIcona();
+            Assert.assertNotNull(icona);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void getIconaGran(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setId("634790");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        ArxiuQueryServiceAdapter iconaGran = agrupacioFetVital.getIconaGran();
-        Assert.assertNotNull(iconaGran);
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            ArxiuQueryServiceAdapter iconaGran = agrupacioFetVital.getIconaGran();
+            Assert.assertNotNull(iconaGran);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirPublicObjectiu(){
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
         agrupacioFetVitalCriteria.setT_nombre("Conviure en família");
-        AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        Assert.assertNotNull(agrupacioFetVital);
-        PublicObjectiuQueryServiceAdapter publicObjectiu = agrupacioFetVital.obtenirPublicObjectiu();
-        Assert.assertTrue(publicObjectiu.getCodigoEstandar().equals("PERSONES"));
+        try {
+            AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            Assert.assertNotNull(agrupacioFetVital);
+            PublicObjectiuQueryServiceAdapter publicObjectiu = agrupacioFetVital.obtenirPublicObjectiu();
+            Assert.assertTrue(publicObjectiu.getCodigoEstandar().equals("PERSONES"));
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 }

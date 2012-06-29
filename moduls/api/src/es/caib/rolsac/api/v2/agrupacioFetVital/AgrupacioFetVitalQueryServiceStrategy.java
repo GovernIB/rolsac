@@ -3,22 +3,23 @@ package es.caib.rolsac.api.v2.agrupacioFetVital;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 
 public interface AgrupacioFetVitalQueryServiceStrategy {
 
-    PublicObjectiuDTO obtenirPublicObjectiu(long idPublic);
+    public PublicObjectiuDTO obtenirPublicObjectiu(long idPublic) throws StrategyException;
 
-    List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria);
+    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCriteria) throws StrategyException;
    
-    ArxiuDTO getFotografia(long idFoto);
+    public ArxiuDTO getFotografia(long idFoto) throws StrategyException;
     
-    ArxiuDTO getIcona(long idIcona);
+    public ArxiuDTO getIcona(long idIcona) throws StrategyException;
     
-    ArxiuDTO getIconaGran(long idIconaGran);
+    public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException;
     
-    int getNumFetsVitals(long id);
+    public int getNumFetsVitals(long id) throws StrategyException; 
     
 }

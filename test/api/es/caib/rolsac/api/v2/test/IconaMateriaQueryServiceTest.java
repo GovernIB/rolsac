@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
@@ -26,30 +27,42 @@ public class IconaMateriaQueryServiceTest {
     public void obtenirMateria(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setId("635655");
-        IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
-        Assert.assertNotNull(ima);
-        MateriaQueryServiceAdapter materia = ima.obtenirMateria();
-        Assert.assertNotNull(materia);
+        try {
+            IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
+            Assert.assertNotNull(ima);
+            MateriaQueryServiceAdapter materia = ima.obtenirMateria();
+            Assert.assertNotNull(materia);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     @Test
     public void obtenirPerfil(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setId("635655");
-        IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
-        Assert.assertNotNull(ima);
-        PerfilQueryServiceAdapter perfil = ima.obtenirPerfil();
-        Assert.assertNotNull(perfil);
+        try {
+            IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
+            Assert.assertNotNull(ima);
+            PerfilQueryServiceAdapter perfil = ima.obtenirPerfil();
+            Assert.assertNotNull(perfil);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     @Test
     public void obtenirIcona(){
         IconaMateriaCriteria imCriteria = new IconaMateriaCriteria();
         imCriteria.setId("635655");
-        IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
-        Assert.assertNotNull(ima);
-        ArxiuQueryServiceAdapter icona = ima.obtenirIcona();
-        Assert.assertNotNull(icona);
+        try {
+            IconaMateriaQueryServiceAdapter ima = rolsacQS.obtenirIconaMateria(imCriteria);
+            Assert.assertNotNull(ima);
+            ArxiuQueryServiceAdapter icona = ima.obtenirIcona();
+            Assert.assertNotNull(icona);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
 }

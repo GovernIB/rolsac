@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
@@ -17,17 +20,19 @@ import es.caib.rolsac.api.v2.perfil.ejb.PerfilQueryServiceEJBStrategy;
 
 public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryService {
 
+    private static final long serialVersionUID = -34492244035570364L;
+
     private PerfilQueryServiceStrategy perfilQueryServiceStrategy;
 
     public void setPerfilQueryServiceStrategy(PerfilQueryServiceStrategy perfilQueryServiceStrategy) {
         this.perfilQueryServiceStrategy = perfilQueryServiceStrategy;
     }
 
-    public PerfilQueryServiceAdapter(PerfilDTO dto) {
+    public PerfilQueryServiceAdapter(PerfilDTO dto) throws QueryServiceException {
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
-            e.printStackTrace(); // FIXME: log.error...
+            throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
     
@@ -35,29 +40,45 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
         return perfilQueryServiceStrategy instanceof PerfilQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
 
-    public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) {
-        List<IconaFamiliaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesFamilia(id, iconaFamiliaCriteria);
-        List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
-        for (IconaFamiliaDTO iDTO : llistaDTO) {
-            icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO));
+    public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
+        try {
+            List<IconaFamiliaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesFamilia(id, iconaFamiliaCriteria);
+            List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
+            for (IconaFamiliaDTO iDTO : llistaDTO) {
+                icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO));
+            }
+            return icones;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos familia.", e);
         }
-        return icones;
     }
 
-    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateria(IconaMateriaCriteria iconaMateriaCriteria) {
-        List<IconaMateriaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesMateria(id, iconaMateriaCriteria);
-        List<IconaMateriaQueryServiceAdapter> icones = new ArrayList<IconaMateriaQueryServiceAdapter>();
-        for (IconaMateriaDTO iDTO : llistaDTO) {
-            icones.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO));
+    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateria(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
+        try {
+            List<IconaMateriaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesMateria(id, iconaMateriaCriteria);
+            List<IconaMateriaQueryServiceAdapter> icones = new ArrayList<IconaMateriaQueryServiceAdapter>();
+            for (IconaMateriaDTO iDTO : llistaDTO) {
+                icones.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO));
+            }
+            return icones;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos materia.", e);
         }
-        return icones;
     }
 
-    public int getNumIconesFamilia() {
-        return perfilQueryServiceStrategy.getNumIconesFamilia(id);
+    public int getNumIconesFamilia() throws QueryServiceException {
+        try {
+            return perfilQueryServiceStrategy.getNumIconesFamilia(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos familia.", e);
+        }
     }
 
-    public int getNumIconesMateria() {
-        return perfilQueryServiceStrategy.getNumIconesMateria(id);
+    public int getNumIconesMateria() throws QueryServiceException {
+        try {
+            return perfilQueryServiceStrategy.getNumIconesMateria(id);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos materias.", e);
+        }
     }
 }

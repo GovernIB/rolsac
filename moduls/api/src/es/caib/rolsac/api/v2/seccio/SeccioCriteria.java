@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class SeccioCriteria extends BasicCriteria {
     
+    private static final long serialVersionUID = -4009078388162237079L;
+
     private String codigoEstandard;
     private String perfil;
     private String orden; // int

@@ -29,6 +29,9 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
 import es.caib.rolsac.api.v2.estadistica.EstadisticaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
@@ -111,439 +114,678 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         return rolsacQueryServiceStrategy instanceof RolsacQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
-    public ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) {
-        ProcedimentDTO dto = rolsacQueryServiceStrategy.obtenirProcediment(procedimentCriteria);
-        return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
-    }
-
-    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) {
-        List<ProcedimentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarProcediments(procedimentCriteria);
-        List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
-        for (ProcedimentDTO procedimentDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
+    public ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
+        try {
+            ProcedimentDTO dto = rolsacQueryServiceStrategy.obtenirProcediment(procedimentCriteria);
+            return (ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "procedimiento.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(
-            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) {
-        AgrupacioFetVitalDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
-        return (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), dto);
-    }
-
-    public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(
-            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) {
-        List<AgrupacioFetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
-        List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
-        for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO));
+    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
+        try {
+            List<ProcedimentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarProcediments(procedimentCriteria);
+            List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
+            for (ProcedimentDTO procedimentDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) {
-        AgrupacioMateriaDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
-        return (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), dto);
-    }
-
-    public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) {
-        List<AgrupacioMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
-        List<AgrupacioMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioMateriaQueryServiceAdapter>();
-        for (AgrupacioMateriaDTO amDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), amDTO));
+    public AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
+        try {
+            AgrupacioFetVitalDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
+            return (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion hecho vital.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public ButlletiQueryServiceAdapter obtenirButlleti(ButlletiCriteria butlletiCriteria) {
-        ButlletiDTO dto = rolsacQueryServiceStrategy.obtenirButlleti(butlletiCriteria);
-        return (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), dto);
-    }
-
-    public List<ButlletiQueryServiceAdapter> llistarButlletins(ButlletiCriteria butlletiCriteria) {
-        List<ButlletiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarButlletins(butlletiCriteria);
-        List<ButlletiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ButlletiQueryServiceAdapter>();
-        for (ButlletiDTO butlletiDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), butlletiDTO));
+    public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacionsFetsVitals(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
+        try {
+            List<AgrupacioFetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
+            List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
+            for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones hecho vital.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public DocumentQueryServiceAdapter obtenirDocument(DocumentCriteria documentCriteria) {
-        DocumentDTO dto = rolsacQueryServiceStrategy.obtenirDocument(documentCriteria);
-        return (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), dto);
-    }
-
-    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) {
-        List<DocumentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocuments(documentCriteria);
-        List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
-        for (DocumentDTO documentDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+    public AgrupacioMateriaQueryServiceAdapter obtenirAgrupacioMateria(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
+        try {
+            AgrupacioMateriaDTO dto = rolsacQueryServiceStrategy.obtenirAgrupacioMateria(agrupacioMateriaCriteria);
+            return (AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
         }
-        return llistaQueryServiceAdapter;
+        
     }
 
-    public DocumentTramitQueryServiceAdapter obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        DocumentTramitDTO dto = rolsacQueryServiceStrategy.obtenirDocumentTramit(documentTramitCriteria);
-        return (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), dto);
-    }
-
-    public List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) {
-        List<DocumentTramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentTramit(documentTramitCriteria);
-        List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
-        for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+    public List<AgrupacioMateriaQueryServiceAdapter> llistarAgrupacionsMateries(AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws QueryServiceException {
+        try {
+            List<AgrupacioMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
+            List<AgrupacioMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioMateriaQueryServiceAdapter>();
+            for (AgrupacioMateriaDTO amDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((AgrupacioMateriaQueryServiceAdapter) BeanUtils.getAdapter("agrupacioMateria", getStrategy(), amDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiCriteria) {
-        EdificiDTO dto = rolsacQueryServiceStrategy.obtenirEdifici(edificiCriteria);
-        return (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), dto);
-    }
-
-    public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) {
-        List<EdificiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEdificis(edificiCriteria);
-        List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
-        for (EdificiDTO edificiDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), edificiDTO));
+    public ButlletiQueryServiceAdapter obtenirButlleti(ButlletiCriteria butlletiCriteria) throws QueryServiceException {
+        try {
+            ButlletiDTO dto = rolsacQueryServiceStrategy.obtenirButlleti(butlletiCriteria);
+            return (ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) {
-        EnllacDTO dto = rolsacQueryServiceStrategy.obtenirEnllac(enllacCriteria);
-        return (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), dto);
-    }
-
-    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) {
-        List<EnllacDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEnllacos(enllacCriteria);
-        List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
-        for (EnllacDTO enllacDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO));
+    public List<ButlletiQueryServiceAdapter> llistarButlletins(ButlletiCriteria butlletiCriteria) throws QueryServiceException {
+        try {
+            List<ButlletiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarButlletins(butlletiCriteria);
+            List<ButlletiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ButlletiQueryServiceAdapter>();
+            for (ButlletiDTO butlletiDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((ButlletiQueryServiceAdapter) BeanUtils.getAdapter("butlleti", getStrategy(), butlletiDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        EspaiTerritorialDTO dto = rolsacQueryServiceStrategy.obtenirEspaiTerritorial(espaiTerritorialCriteria);
-        return (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), dto);
-    }
-
-    public List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(
-            EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        List<EspaiTerritorialDTO> llistaDTO = rolsacQueryServiceStrategy
-                .llistarEspaisTerritorials(espaiTerritorialCriteria);
-        List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
-        for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialDTO));
+    public DocumentQueryServiceAdapter obtenirDocument(DocumentCriteria documentCriteria) throws QueryServiceException {
+        try {
+            DocumentDTO dto = rolsacQueryServiceStrategy.obtenirDocument(documentCriteria);
+            return (DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "boletin.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public EstadisticaQueryServiceAdapter obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) {
+    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException {
+        try {
+            List<DocumentDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocuments(documentCriteria);
+            List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
+            for (DocumentDTO documentDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "boletines.", e);
+        }
+    }
+
+    public DocumentTramitQueryServiceAdapter obtenirDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
+        try {
+            DocumentTramitDTO dto = rolsacQueryServiceStrategy.obtenirDocumentTramit(documentTramitCriteria);
+            return (DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "documento tramite.", e);
+        }
+    }
+
+    public List<DocumentTramitQueryServiceAdapter> llistarDocumentTramit(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
+        try {
+            List<DocumentTramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarDocumentTramit(documentTramitCriteria);
+            List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
+            for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "documentos tramite.", e);
+        }
+    }
+
+    public EdificiQueryServiceAdapter obtenirEdifici(EdificiCriteria edificiCriteria) throws QueryServiceException {
+        try {
+            EdificiDTO dto = rolsacQueryServiceStrategy.obtenirEdifici(edificiCriteria);
+            return (EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "edificio.", e);
+        }
+    }
+
+    public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException {
+        try {
+            List<EdificiDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEdificis(edificiCriteria);
+            List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
+            for (EdificiDTO edificiDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), edificiDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "edificios.", e);
+        }
+    }
+
+    public EnllacQueryServiceAdapter obtenirEnllac(EnllacCriteria enllacCriteria) throws QueryServiceException {
+        try {
+            EnllacDTO dto = rolsacQueryServiceStrategy.obtenirEnllac(enllacCriteria);
+            return (EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "enlace.", e);
+        }
+    }
+
+    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException {
+        try {
+            List<EnllacDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEnllacos(enllacCriteria);
+            List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
+            for (EnllacDTO enllacDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "enlaces.", e);
+        }
+    }
+
+    public EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
+        try {
+            EspaiTerritorialDTO dto = rolsacQueryServiceStrategy.obtenirEspaiTerritorial(espaiTerritorialCriteria);
+            return (EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "espacio territorial.", e);
+        }
+    }
+
+    public List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
+        try {
+            List<EspaiTerritorialDTO> llistaDTO = rolsacQueryServiceStrategy.llistarEspaisTerritorials(espaiTerritorialCriteria);
+            List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
+            for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(), espaiTerritorialDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "espacios territoriales.", e);
+        }
+    }
+
+    public EstadisticaQueryServiceAdapter obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException {
         // TODO: De momento no se sabe si es necesario.
         return null;
     }
 
-    public List<EstadisticaQueryServiceAdapter> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) {
+    public List<EstadisticaQueryServiceAdapter> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException {
         // TODO: De momento no se sabe si es necesario.
         return null;
     }
 
-    public FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) {
-        FamiliaDTO dto = rolsacQueryServiceStrategy.obtenirFamilia(familiaCriteria);
-        return (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), dto);
-    }
-
-    public List<FamiliaQueryServiceAdapter> llistarFamilies(FamiliaCriteria familiaCriteria) {
-        List<FamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFamilies(familiaCriteria);
-        List<FamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FamiliaQueryServiceAdapter>();
-        for (FamiliaDTO familiaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), familiaDTO));
+    public FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException {
+        try {
+            FamiliaDTO dto = rolsacQueryServiceStrategy.obtenirFamilia(familiaCriteria);
+            return (FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "familia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) {
-        FetVitalDTO dto = rolsacQueryServiceStrategy.obtenirFetVital(fetVitalCriteria);
-        return (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), dto);
-    }
-
-    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) {
-        List<FetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFetsVitals(fetVitalCriteria);
-        List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
-        for (FetVitalDTO fetVitalDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+    public List<FamiliaQueryServiceAdapter> llistarFamilies(FamiliaCriteria familiaCriteria) throws QueryServiceException {
+        try {
+            List<FamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFamilies(familiaCriteria);
+            List<FamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FamiliaQueryServiceAdapter>();
+            for (FamiliaDTO familiaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FamiliaQueryServiceAdapter) BeanUtils.getAdapter("familia", getStrategy(), familiaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "familias.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public FitxaQueryServiceAdapter obtenirFitxa(FitxaCriteria fitxaCriteria) {
-        FitxaDTO dto = rolsacQueryServiceStrategy.obtenirFitxa(fitxaCriteria);
-        return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
-    }
-
-    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) {
-        List<FitxaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxes(fitxaCriteria);
-        List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
-        for (FitxaDTO fitxaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+    public FetVitalQueryServiceAdapter obtenirFetVital(FetVitalCriteria fetVitalCriteria) throws QueryServiceException {
+        try {
+            FetVitalDTO dto = rolsacQueryServiceStrategy.obtenirFetVital(fetVitalCriteria);
+            return (FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "hecho vital.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) {
-        FitxaUADTO dto = rolsacQueryServiceStrategy.obtenirFitxaUA(fitxaUACriteria);
-        return (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), dto);
-    }
-
-    public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) {
-        List<FitxaUADTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxesUA(fitxaUACriteria);
-        List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
-        for (FitxaUADTO fitxaUADTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), fitxaUADTO));
+    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException {
+        try {
+            List<FetVitalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFetsVitals(fetVitalCriteria);
+            List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
+            for (FetVitalDTO fetVitalDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hechos vitales.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public FormulariQueryServiceAdapter obtenirFormulari(FormulariCriteria formulariCriteria) {
-        FormulariDTO dto = rolsacQueryServiceStrategy.obtenirFormulari(formulariCriteria);
-        return (FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), dto);
-    }
-
-    public List<FormulariQueryServiceAdapter> llistarFormularis(FormulariCriteria formulariCriteria) {
-        List<FormulariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFormularis(formulariCriteria);
-        List<FormulariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FormulariQueryServiceAdapter>();
-        for (FormulariDTO formDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), formDTO));
+    public FitxaQueryServiceAdapter obtenirFitxa(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try {
+            FitxaDTO dto = rolsacQueryServiceStrategy.obtenirFitxa(fitxaCriteria);
+            return (FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "ficha.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) {
-        IconaFamiliaDTO dto = rolsacQueryServiceStrategy.obtenirIconaFamilia(iconaFamiliaCriteria);
-        return (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), dto);
-    }
-
-    public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) {
-        List<IconaFamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesFamilies(iconaFamiliaCriteria);
-        List<IconaFamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaFamiliaQueryServiceAdapter>();
-        for (IconaFamiliaDTO ifDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), ifDTO));
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try {
+            List<FitxaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxes(fitxaCriteria);
+            List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
+            for (FitxaDTO fitxaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public IconaMateriaQueryServiceAdapter obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) {
-        IconaMateriaDTO dto = rolsacQueryServiceStrategy.obtenirIconaMateria(iconaMateriaCriteria);
-        return (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), dto);
-    }
-
-    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) {
-        List<IconaMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesMateries(iconaMateriaCriteria);
-        List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();
-        for (IconaMateriaDTO imDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), imDTO));
+    public FitxaUAQueryServiceAdapter obtenirFitxaUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
+        try {
+            FitxaUADTO dto = rolsacQueryServiceStrategy.obtenirFitxaUA(fitxaUACriteria);
+            return (FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "fichaUA.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public MateriaQueryServiceAdapter obtenirMateria(MateriaCriteria materiaCriteria) {
-        MateriaDTO dto = rolsacQueryServiceStrategy.obtenirMateria(materiaCriteria);
-        return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), dto);
-    }
-
-    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) {
-        List<MateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateries(materiaCriteria);
-        List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
-        for (MateriaDTO materiaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
+    public List<FitxaUAQueryServiceAdapter> llistarFitxesUA(FitxaUACriteria fitxaUACriteria) throws QueryServiceException {
+        try {
+            List<FitxaUADTO> llistaDTO = rolsacQueryServiceStrategy.llistarFitxesUA(fitxaUACriteria);
+            List<FitxaUAQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaUAQueryServiceAdapter>();
+            for (FitxaUADTO fitxaUADTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FitxaUAQueryServiceAdapter) BeanUtils.getAdapter("fitxaUA", getStrategy(), fitxaUADTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichasUA.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) {
-        MateriaAgrupacioDTO dto = rolsacQueryServiceStrategy.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
-        return (MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), dto);
-    }
-
-    public List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) {
-        List<MateriaAgrupacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
-        List<MateriaAgrupacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaAgrupacioQueryServiceAdapter>();
-        for (MateriaAgrupacioDTO maDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), maDTO));
+    public FormulariQueryServiceAdapter obtenirFormulari(FormulariCriteria formulariCriteria) throws QueryServiceException {
+        try {
+            FormulariDTO dto = rolsacQueryServiceStrategy.obtenirFormulari(formulariCriteria);
+            return (FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "formulario.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public NormativaQueryServiceAdapter obtenirNormativa(NormativaCriteria normativaCriteria) {
-        NormativaDTO dto = rolsacQueryServiceStrategy.obtenirNormativa(normativaCriteria);
-        return (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), dto);
-    }
-
-    public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) {
-        List<NormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarNormatives(normativaCriteria);
-        List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
-        for (NormativaDTO normativaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
+    public List<FormulariQueryServiceAdapter> llistarFormularis(FormulariCriteria formulariCriteria) throws QueryServiceException {
+        try {
+            List<FormulariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarFormularis(formulariCriteria);
+            List<FormulariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FormulariQueryServiceAdapter>();
+            for (FormulariDTO formDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((FormulariQueryServiceAdapter) BeanUtils.getAdapter("formulari", getStrategy(), formDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "formularios.", e);
         }
-        return llistaQueryServiceAdapter;
+        
     }
 
-    public PerfilQueryServiceAdapter obtenirPerfil(PerfilCriteria perfilCriteria) {
-        PerfilDTO dto = rolsacQueryServiceStrategy.obtenirPerfil(perfilCriteria);
-        return (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), dto);
-    }
-
-    public List<PerfilQueryServiceAdapter> llistarPerfils(PerfilCriteria perfilCriteria) {
-        List<PerfilDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPerfils(perfilCriteria);
-        List<PerfilQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PerfilQueryServiceAdapter>();
-        for (PerfilDTO perfilDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), perfilDTO));
+    public IconaFamiliaQueryServiceAdapter obtenirIconaFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
+        try {
+            IconaFamiliaDTO dto = rolsacQueryServiceStrategy.obtenirIconaFamilia(iconaFamiliaCriteria);
+            return (IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono familia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public PersonalQueryServiceAdapter obtenirPersonal(PersonalCriteria personalCriteria) {
-        PersonalDTO dto = rolsacQueryServiceStrategy.obtenirPersonal(personalCriteria);
-        return (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), dto);
-    }
-
-    public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) {
-        List<PersonalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPersonal(personalCriteria);
-        List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
-        for (PersonalDTO personalDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), personalDTO));
+    public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilies(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
+        try {
+            List<IconaFamiliaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesFamilies(iconaFamiliaCriteria);
+            List<IconaFamiliaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaFamiliaQueryServiceAdapter>();
+            for (IconaFamiliaDTO ifDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), ifDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos familia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) {
-        PublicObjectiuDTO dto = rolsacQueryServiceStrategy.obtenirPublicObjectiu(publicObjectiuCriteria);
-        return (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), dto);
-    }
-
-    public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) {
-        List<PublicObjectiuDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPublicsObjectius(publicObjectiuCriteria);
-        List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
-        for (PublicObjectiuDTO poDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO));
+    public IconaMateriaQueryServiceAdapter obtenirIconaMateria(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
+        try {
+            IconaMateriaDTO dto = rolsacQueryServiceStrategy.obtenirIconaMateria(iconaMateriaCriteria);
+            return (IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "icono materia.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria){
-        TipusAfectacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusAfectacio(tipusAfectacioCriteria);
-        return (TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), dto); 
+    public List<IconaMateriaQueryServiceAdapter> llistarIconesMateries(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
+        try {
+            List<IconaMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarIconesMateries(iconaMateriaCriteria);
+            List<IconaMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IconaMateriaQueryServiceAdapter>();
+            for (IconaMateriaDTO imDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), imDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "iconos materia.", e);
+        }
+    }
+
+    public MateriaQueryServiceAdapter obtenirMateria(MateriaCriteria materiaCriteria) throws QueryServiceException {
+        try {
+            MateriaDTO dto = rolsacQueryServiceStrategy.obtenirMateria(materiaCriteria);
+            return (MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "materia.", e);
+        }
+    }
+
+    public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
+        try {
+            List<MateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateries(materiaCriteria);
+            List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
+            for (MateriaDTO materiaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "materias.", e);
+        }
+    }
+
+    public MateriaAgrupacioQueryServiceAdapter obtenirMateriaAgrupacio(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
+        try {
+            MateriaAgrupacioDTO dto = rolsacQueryServiceStrategy.obtenirMateriaAgrupacio(materiaAgrupacioCriteria);
+            return (MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "agrupacion materia.", e);
+        }
+    }
+
+    public List<MateriaAgrupacioQueryServiceAdapter> llistarMateriesAgrupacions(MateriaAgrupacioCriteria materiaAgrupacioCriteria) throws QueryServiceException {
+        try {
+            List<MateriaAgrupacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
+            List<MateriaAgrupacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaAgrupacioQueryServiceAdapter>();
+            for (MateriaAgrupacioDTO maDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((MateriaAgrupacioQueryServiceAdapter) BeanUtils.getAdapter("materiaAgrupacio", getStrategy(), maDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones materia.", e);
+        }
+    }
+
+    public NormativaQueryServiceAdapter obtenirNormativa(NormativaCriteria normativaCriteria) throws QueryServiceException {
+        try {
+            NormativaDTO dto = rolsacQueryServiceStrategy.obtenirNormativa(normativaCriteria);
+            return (NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "normativa.", e);
+        }
+    }
+
+    public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException {
+        try {
+            List<NormativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarNormatives(normativaCriteria);
+            List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
+            for (NormativaDTO normativaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "normativas.", e);
+        }
+    }
+
+    public PerfilQueryServiceAdapter obtenirPerfil(PerfilCriteria perfilCriteria) throws QueryServiceException {
+        try {
+            PerfilDTO dto = rolsacQueryServiceStrategy.obtenirPerfil(perfilCriteria);
+            return (PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "perfil.", e);
+        }
+    }
+
+    public List<PerfilQueryServiceAdapter> llistarPerfils(PerfilCriteria perfilCriteria) throws QueryServiceException {
+        try {
+            List<PerfilDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPerfils(perfilCriteria);
+            List<PerfilQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PerfilQueryServiceAdapter>();
+            for (PerfilDTO perfilDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((PerfilQueryServiceAdapter) BeanUtils.getAdapter("perfil", getStrategy(), perfilDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "perfiles.", e);
+        }
+    }
+
+    public PersonalQueryServiceAdapter obtenirPersonal(PersonalCriteria personalCriteria) throws QueryServiceException {
+        try {
+            PersonalDTO dto = rolsacQueryServiceStrategy.obtenirPersonal(personalCriteria);
+            return (PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "personal.", e);
+        }
+    }
+
+    public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException {
+        try {
+            List<PersonalDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPersonal(personalCriteria);
+            List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
+            for (PersonalDTO personalDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), personalDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "personal.", e);
+        }
+    }
+
+    public PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException {
+        try {
+            PublicObjectiuDTO dto = rolsacQueryServiceStrategy.obtenirPublicObjectiu(publicObjectiuCriteria);
+            return (PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "publico objetivo.", e);
+        }
+    }
+
+    public List<PublicObjectiuQueryServiceAdapter> llistarPublicsObjectius(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException {
+        try {
+            List<PublicObjectiuDTO> llistaDTO = rolsacQueryServiceStrategy.llistarPublicsObjectius(publicObjectiuCriteria);
+            List<PublicObjectiuQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PublicObjectiuQueryServiceAdapter>();
+            for (PublicObjectiuDTO poDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((PublicObjectiuQueryServiceAdapter) BeanUtils.getAdapter("publicObjectiu", getStrategy(), poDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "publico objetivo.", e);
+        }
+    }
+
+    public TipusAfectacioQueryServiceAdapter obtenirTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException{
+        try {
+            TipusAfectacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusAfectacio(tipusAfectacioCriteria);
+            return (TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo afectacion.", e);
+        }
     }
     
-    public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) {
-        List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusAfectacio(tipusAfectacioCriteria);
-        List<TipusAfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusAfectacioQueryServiceAdapter>();
-        for (TipusAfectacioDTO taDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), taDTO));
+    public List<TipusAfectacioQueryServiceAdapter> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws QueryServiceException {
+        try {
+            List<TipusAfectacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusAfectacio(tipusAfectacioCriteria);
+            List<TipusAfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusAfectacioQueryServiceAdapter>();
+            for (TipusAfectacioDTO taDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((TipusAfectacioQueryServiceAdapter) BeanUtils.getAdapter("tipusAfectacio", getStrategy(), taDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos de afectaciones.", e);
         }
-        return llistaQueryServiceAdapter;
     }
     
-    public SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) {
-        SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
-        return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
-    }
-
-    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) {
-        List<SeccioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarSeccions(seccioCriteria);
-        List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
-        for (SeccioDTO poDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), poDTO));
+    public SeccioQueryServiceAdapter obtenirSeccio(SeccioCriteria seccioCriteria) throws QueryServiceException {
+        try {
+            SeccioDTO dto = rolsacQueryServiceStrategy.obtenirSeccio(seccioCriteria);
+            return (SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "seccion.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public TaxaQueryServiceAdapter obtenirTaxa(TaxaCriteria taxaCriteria) {
-        TaxaDTO dto = rolsacQueryServiceStrategy.obtenirTaxa(taxaCriteria);
-        return (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), dto);
-    }
-
-    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) {
-        List<TaxaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTaxes(taxaCriteria);
-        List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
-        for (TaxaDTO taxaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));
+    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException {
+        try {
+            List<SeccioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarSeccions(seccioCriteria);
+            List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
+            for (SeccioDTO poDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), poDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "secciones.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) {
-        TipusDTO dto = rolsacQueryServiceStrategy.obtenirTipus(tipusCriteria);
-        return (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), dto);
-    }
-
-    public List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) {
-        List<TipusDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipus(tipusCriteria);
-        List<TipusQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusQueryServiceAdapter>();
-        for (TipusDTO tipusDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), tipusDTO));
+    public TaxaQueryServiceAdapter obtenirTaxa(TaxaCriteria taxaCriteria) throws QueryServiceException {
+        try {
+            TaxaDTO dto = rolsacQueryServiceStrategy.obtenirTaxa(taxaCriteria);
+            return (TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tasa.", e);
         }
-        return llistaQueryServiceAdapter;
+    }
+
+    public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException {
+        List<TaxaDTO> llistaDTO;
+        try {
+            llistaDTO = rolsacQueryServiceStrategy.llistarTaxes(taxaCriteria);
+            List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
+            for (TaxaDTO taxaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tasas.", e);
+        }
+    }
+
+    public TipusQueryServiceAdapter obtenirTipus(TipusCriteria tipusCriteria) throws QueryServiceException {
+        try {
+            TipusDTO dto = rolsacQueryServiceStrategy.obtenirTipus(tipusCriteria);
+            return (TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tipo.", e);
+        }
+    }
+
+    public List<TipusQueryServiceAdapter> llistarTipus(TipusCriteria tipusCriteria) throws QueryServiceException {
+        try {
+            List<TipusDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipus(tipusCriteria);
+            List<TipusQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TipusQueryServiceAdapter>();
+            for (TipusDTO tipusDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((TipusQueryServiceAdapter) BeanUtils.getAdapter("tipus", getStrategy(), tipusDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tipos.", e);
+        }
     }
     
-    public TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) {
-        TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
-        return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), dto);
-    }
-
-    public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) {
-        List<TramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTramits(tramitCriteria);
-        List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
-        for (TramitDTO tramitDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO));
+    public TramitQueryServiceAdapter obtenirTramit(TramitCriteria tramitCriteria) throws QueryServiceException {
+        try {
+            TramitDTO dto = rolsacQueryServiceStrategy.obtenirTramit(tramitCriteria);
+            return (TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        UnitatAdministrativaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
-        return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
-    }
-
-    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        List<UnitatAdministrativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
-        List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
-        for (UnitatAdministrativaDTO uaDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), uaDTO));
+    public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException {
+        try {
+            List<TramitDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTramits(tramitCriteria);
+            List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
+            for (TramitDTO tramitDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "tramites.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) {
-        UnitatMateriaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatMateria(unitatMateriaCriteria);
-        return (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), dto);
-    }
-
-    public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) {
-        List<UnitatMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsMateries(unitatMateriaCriteria);
-        List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
-        for (UnitatMateriaDTO umDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), umDTO));
+    public UnitatAdministrativaQueryServiceAdapter obtenirUnitatAdministrativa(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            UnitatAdministrativaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatAdministrativa(unitatAdministrativaCriteria);
+            return (UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad administrativa.", e);
         }
-        return llistaQueryServiceAdapter;
     }
 
-    public UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) {
-        UsuariDTO dto = rolsacQueryServiceStrategy.obtenirUsuari(usuariCriteria);
-        return (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), dto);
-    }
-
-    public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) {
-        List<UsuariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUsuaris(usuariCriteria);
-        List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
-        for (UsuariDTO uDTO : llistaDTO) {
-            llistaQueryServiceAdapter.add((UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), uDTO));
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatAdministrativaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
+            List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
+            for (UnitatAdministrativaDTO uaDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), uaDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades administrativas.", e);
         }
-        return llistaQueryServiceAdapter;
+    }
+
+    public UnitatMateriaQueryServiceAdapter obtenirUnitatMateria(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
+        try {
+            UnitatMateriaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatMateria(unitatMateriaCriteria);
+            return (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), dto);
+        } catch (StrategyException e) {
+            e.printStackTrace();
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad materia.", e);
+        }
+    }
+
+    public List<UnitatMateriaQueryServiceAdapter> llistarUnitatsMateries(UnitatMateriaCriteria unitatMateriaCriteria) throws QueryServiceException {
+        try {
+            List<UnitatMateriaDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUnitatsMateries(unitatMateriaCriteria);
+            List<UnitatMateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatMateriaQueryServiceAdapter>();
+            for (UnitatMateriaDTO umDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), umDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "unidades materia.", e);
+        }
+    }
+
+    public UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria usuariCriteria) throws QueryServiceException {
+        try {
+            UsuariDTO dto = rolsacQueryServiceStrategy.obtenirUsuari(usuariCriteria);
+            return (UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), dto);
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "usuario.", e);
+        }
+    }
+
+    public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException {
+        try {
+            List<UsuariDTO> llistaDTO = rolsacQueryServiceStrategy.llistarUsuaris(usuariCriteria);
+            List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
+            for (UsuariDTO uDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), uDTO));
+            }
+            return llistaQueryServiceAdapter;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
+        }
     }
 
 }

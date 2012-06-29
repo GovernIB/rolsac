@@ -7,6 +7,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
@@ -16,30 +17,30 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServi
 
 public interface FitxaQueryService {
 
-    int getNumDocuments();
+    public int getNumDocuments() throws QueryServiceException;
 
-    int getNumEnllacos();
+    public int getNumEnllacos() throws QueryServiceException;
 
-    int getNumFetsVitals();
+    public int getNumFetsVitals() throws QueryServiceException;
 
-    int getNumUnitatsAdministratives();
+    public int getNumUnitatsAdministratives() throws QueryServiceException;
 
-    int getNumSeccions();
+    public int getNumSeccions() throws QueryServiceException;
     
-    List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria);
+    public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException;
 
-    List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException;
 
-    List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria);
+    public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException;
 
-    List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCritera);
+    public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCritera) throws QueryServiceException;
     
-    List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria);
+    public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException;
     
-    ArxiuQueryServiceAdapter obtenirIcona();
+    public ArxiuQueryServiceAdapter obtenirIcona() throws QueryServiceException;
 
-    ArxiuQueryServiceAdapter obtenirImatge();
+    public ArxiuQueryServiceAdapter obtenirImatge() throws QueryServiceException;
 
-    ArxiuQueryServiceAdapter obtenirBaner();
+    public ArxiuQueryServiceAdapter obtenirBaner() throws QueryServiceException;
 
 }

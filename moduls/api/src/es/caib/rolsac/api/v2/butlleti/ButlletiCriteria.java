@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class ButlletiCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = -6994218885332566220L;
+
     private String nombre;
     private String enlace;
 

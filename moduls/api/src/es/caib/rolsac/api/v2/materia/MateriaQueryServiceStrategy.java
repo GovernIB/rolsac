@@ -5,6 +5,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
@@ -18,32 +19,32 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 
 public interface MateriaQueryServiceStrategy {
     
-    ArxiuDTO getFotografia(long idFoto);
+    public ArxiuDTO getFotografia(long idFoto) throws StrategyException;
     
-    ArxiuDTO getIcona(long idIcona);
+    public ArxiuDTO getIcona(long idIcona) throws StrategyException;
     
-    ArxiuDTO getIconaGran(long idIconaGran);
+    public ArxiuDTO getIconaGran(long idIconaGran) throws StrategyException;
     
-    int getNumFitxes(long id);
+    public int getNumFitxes(long id) throws StrategyException;
 
-    int getNumAgrupacioMateries(long id);
+    public int getNumAgrupacioMateries(long id) throws StrategyException;
 
-    int getNumProcedimentsLocals(long id);
+    public int getNumProcedimentsLocals(long id) throws StrategyException;
 
-    int getNumUnitatsMateries(long id);
+    public int getNumUnitatsMateries(long id) throws StrategyException;
 
-    int getNumIcones(long id);
+    public int getNumIcones(long id) throws StrategyException;
 
-    List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria);
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
 
-    List<AgrupacioMateriaDTO> llistarAgrupacioMateries(long id, AgrupacioMateriaCriteria agrupacioMateriaCriteria);
+    public List<AgrupacioMateriaDTO> llistarAgrupacioMateries(long id, AgrupacioMateriaCriteria agrupacioMateriaCriteria) throws StrategyException;
 
-    List<IconaMateriaDTO> llistarIconesMateries(long id, IconaMateriaCriteria iconaMateriaCriteria);
+    public List<IconaMateriaDTO> llistarIconesMateries(long id, IconaMateriaCriteria iconaMateriaCriteria) throws StrategyException;
 
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria); 
+    public List<UnitatMateriaDTO> llistarUnitatsMateria(long id, UnitatMateriaCriteria unitatMateriaCriteria) throws StrategyException;
 
 }

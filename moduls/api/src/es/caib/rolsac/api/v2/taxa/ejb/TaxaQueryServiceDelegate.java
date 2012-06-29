@@ -1,5 +1,11 @@
 package es.caib.rolsac.api.v2.taxa.ejb;
 
+import java.rmi.RemoteException;
+
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.LocatorException;
+import es.caib.rolsac.api.v2.taxa.ejb.intf.TaxaQueryServiceEJBRemote;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class TaxaQueryServiceDelegate {
@@ -10,9 +16,15 @@ public class TaxaQueryServiceDelegate {
         this.taxaQueryServiceLocator = taxaQueryServiceLocator;
     }
         
-    public TramitDTO obtenirTramit(long idTramit) {
-        TaxaQueryServiceEJB ejb = taxaQueryServiceLocator.getTaxaQueryServiceEJB();
-        return ejb.obtenirTramit(idTramit);
+    public TramitDTO obtenirTramit(long idTramit) throws DelegateException {
+        try {
+            TaxaQueryServiceEJBRemote ejb = taxaQueryServiceLocator.getTaxaQueryServiceEJB();
+            return ejb.obtenirTramit(idTramit);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
 

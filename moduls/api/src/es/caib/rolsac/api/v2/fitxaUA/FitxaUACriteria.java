@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class FitxaUACriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = 6921952097292354896L;
+
     private String orden;
     private String ordenseccion;
 

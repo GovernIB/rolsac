@@ -1,9 +1,10 @@
 package es.caib.rolsac.api.v2.taxa;
 
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public interface TaxaQueryServiceStrategy {
 
-    TramitDTO obtenirTramit(long idTramit);
+    public TramitDTO obtenirTramit(long idTramit) throws StrategyException;
 
 }

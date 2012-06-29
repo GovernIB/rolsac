@@ -4,6 +4,8 @@ import es.caib.rolsac.api.v2.general.BasicCriteria;
 
 public class UnitatMateriaCriteria extends BasicCriteria {
 
+    private static final long serialVersionUID = -5804324638930046053L;
+
     private String unidadPrincipal;
 
     // TraduccioUnitatMateria

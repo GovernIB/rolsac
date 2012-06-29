@@ -13,6 +13,7 @@
 	<classpathentry kind="src" path="moduls/utils/src"/>
 	<classpathentry kind="src" path="moduls/api/src"/>
 	<classpathentry kind="src" path="test/api"/>
+	<classpathentry kind="src" path="output/api/gen-src"/>
 	<classpathentry kind="lib" path="output/moduls/model.jar"/>
 	<classpathentry kind="lib" path="lib/boib.jar"/>
 	<classpathentry kind="lib" path="lib/cglib2.jar"/>

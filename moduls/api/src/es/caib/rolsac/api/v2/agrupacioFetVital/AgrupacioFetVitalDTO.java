@@ -1,8 +1,12 @@
 package es.caib.rolsac.api.v2.agrupacioFetVital;
 
+import java.io.Serializable;
 
-public class AgrupacioFetVitalDTO {
+
+public class AgrupacioFetVitalDTO implements Serializable {
     
+    private static final long serialVersionUID = 1293918957324592014L;
+
     protected long id;
     private Long foto;
     private Long iconoGrande;

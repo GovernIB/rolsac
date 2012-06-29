@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
@@ -24,10 +25,14 @@ public class PersonalQueryServiceTest {
     public void recuperarFitxa() {
         PersonalCriteria criteria = new PersonalCriteria();
         criteria.setId("276400");
-        PersonalQueryServiceAdapter pa = rolsacQS.obtenirPersonal(criteria);
-        Assert.assertNotNull(pa);
-        UnitatAdministrativaQueryServiceAdapter uaa = (UnitatAdministrativaQueryServiceAdapter) pa.obtenirUnitatAdministrativa();
-        Assert.assertNotNull(uaa);
+        try {
+            PersonalQueryServiceAdapter pa = rolsacQS.obtenirPersonal(criteria);
+            Assert.assertNotNull(pa);
+            UnitatAdministrativaQueryServiceAdapter uaa = (UnitatAdministrativaQueryServiceAdapter) pa.obtenirUnitatAdministrativa();
+            Assert.assertNotNull(uaa);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
 }

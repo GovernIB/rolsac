@@ -3,20 +3,20 @@ package es.caib.rolsac.api.v2.edifici;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public interface EdificiQueryServiceStrategy {
 
-    List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
-            UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    int getNumUnitatsAdministratives(long id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException;
 
-    ArxiuDTO obtenirFotoPequenya(Long idFotoPequenya);
+    public ArxiuDTO obtenirFotoPequenya(Long idFotoPequenya) throws StrategyException;
 
-    ArxiuDTO obtenirFotoGrande(Long idFotoGrande);
+    public ArxiuDTO obtenirFotoGrande(Long idFotoGrande) throws StrategyException;
 
-    ArxiuDTO obtenirPlano(Long idPlano);
+    public ArxiuDTO obtenirPlano(Long idPlano) throws StrategyException;
 
 }

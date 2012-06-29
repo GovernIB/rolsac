@@ -6,6 +6,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -26,62 +27,62 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 
 public interface UnitatAdministrativaQueryServiceStrategy {
 
-    UnitatAdministrativaDTO obtenirPare(long idPare);
+    public UnitatAdministrativaDTO obtenirPare(long idPare) throws StrategyException;
 
-    EspaiTerritorialDTO obtenirEspaiTerritorial(long idEt);
+    public EspaiTerritorialDTO obtenirEspaiTerritorial(long idEt) throws StrategyException;
 
-    TractamentDTO obtenirTractament(long idTract);
+    public TractamentDTO obtenirTractament(long idTract) throws StrategyException;
 
-    List<UnitatAdministrativaDTO> llistarFilles(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarFilles(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
 
-    List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria);
+    public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException;
 
-    List<PersonalDTO> llistarPersonal(long id, PersonalCriteria personalCriteria);
+    public List<PersonalDTO> llistarPersonal(long id, PersonalCriteria personalCriteria) throws StrategyException;
 
-    List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria);
+    public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws StrategyException;
 
-    List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria);
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
-    List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria);
+    public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws StrategyException;
 
-    List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria);
+    public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria) throws StrategyException;
 
-    List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria);
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException;
     
-    List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria);
+    public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException;
 
-    List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria);
+    public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException;
 
-    ArxiuDTO obtenirFotop(Long fotop);
+    public ArxiuDTO obtenirFotop(Long fotop) throws StrategyException;
 
-    ArxiuDTO obtenirFotog(Long fotog);
+    public ArxiuDTO obtenirFotog(Long fotog) throws StrategyException;
 
-    ArxiuDTO obtenirLogoh(Long logoh);
+    public ArxiuDTO obtenirLogoh(Long logoh) throws StrategyException;
 
-    ArxiuDTO obtenirLogov(Long logov);
+    public ArxiuDTO obtenirLogov(Long logov) throws StrategyException;
 
-    ArxiuDTO obtenirLogos(Long logos);
+    public ArxiuDTO obtenirLogos(Long logos) throws StrategyException;
 
-    ArxiuDTO obtenirLogot(Long logot);
+    public ArxiuDTO obtenirLogot(Long logot) throws StrategyException;
 
-    int getNumFilles(Long id);
+    public int getNumFilles(Long id) throws StrategyException;
 
-    int getNumEdificis(Long id);
+    public int getNumEdificis(Long id) throws StrategyException;
 
-    int getNumPersonal(Long id);
+    public int getNumPersonal(Long id) throws StrategyException;
 
-    int getNumNormatives(Long id);
+    public int getNumNormatives(Long id) throws StrategyException;
 
-    int getNumProcediments(Long id);
+    public int getNumProcediments(Long id) throws StrategyException;
 
-    int getNumTramits(Long id);
+    public int getNumTramits(Long id) throws StrategyException;
 
-    int getNumUsuaris(Long id);
+    public int getNumUsuaris(Long id) throws StrategyException;
 
-    int getNumFitxes(Long id);
+    public int getNumFitxes(Long id) throws StrategyException;
 
-    int getNumSeccions(Long id);
+    public int getNumSeccions(Long id) throws StrategyException;
 
-    int getNumMateries(Long id);
+    public int getNumMateries(Long id) throws StrategyException;
 
 }

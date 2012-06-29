@@ -7,6 +7,8 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceStrategy;
@@ -23,55 +25,107 @@ public class FitxaQueryServiceEJBStrategy implements FitxaQueryServiceStrategy {
         this.fitxaQueryServiceDelegate = fitxaQueryServiceDelegate;
     }
     
-    public List<EnllacDTO> llistarEnllacos(long id, EnllacCriteria enllacCriteria) {
-        return fitxaQueryServiceDelegate.llistarEnllacos(id, enllacCriteria);
+    public List<EnllacDTO> llistarEnllacos(long id, EnllacCriteria enllacCriteria) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarEnllacos(id, enllacCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) {
-        return fitxaQueryServiceDelegate.llistarDocuments(id, documentCriteria);
+    public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarDocuments(id, documentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCritera) {
-        return fitxaQueryServiceDelegate.llistarFetsVitals(id, fetVitalCritera);
+    public List<FetVitalDTO> llistarFetsVitals(long id, FetVitalCriteria fetVitalCritera) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarFetsVitals(id, fetVitalCritera);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        return fitxaQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+    public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) {
-        return fitxaQueryServiceDelegate.llistarSeccions(id, seccioCriteria);
+    public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarSeccions(id, seccioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
     
-    public int getNumDocuments(long id) {
-        return fitxaQueryServiceDelegate.getNumDocuments(id);
+    public int getNumDocuments(long id) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.getNumDocuments(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumEnllacos(long id) {
-        return fitxaQueryServiceDelegate.getNumEnllacos(id);
+    public int getNumEnllacos(long id) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.getNumEnllacos(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumFetsVitals(long id) {
-        return fitxaQueryServiceDelegate.getNumFetsVitals(id);
+    public int getNumFetsVitals(long id) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.getNumFetsVitals(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumUnitatsAdministratives(long id) {
-        return fitxaQueryServiceDelegate.getNumUnitatsAdministratives(id);
+    public int getNumUnitatsAdministratives(long id) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.getNumUnitatsAdministratives(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public int getNumSeccions(long id) {
-        return fitxaQueryServiceDelegate.getNumSeccions(id);
+    public int getNumSeccions(long id) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.getNumSeccions(id);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirIcona(Long icono) {
-        return fitxaQueryServiceDelegate.obtenirIcona(icono);
+    public ArxiuDTO obtenirIcona(Long icono) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.obtenirIcona(icono);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirImatge(Long imagen) {
-        return fitxaQueryServiceDelegate.obtenirImatge(imagen);
+    public ArxiuDTO obtenirImatge(Long imagen) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.obtenirImatge(imagen);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 
-    public ArxiuDTO obtenirBaner(Long baner) {
-        return fitxaQueryServiceDelegate.obtenirBaner(baner);
+    public ArxiuDTO obtenirBaner(Long baner) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.obtenirBaner(baner);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
     }
 }
