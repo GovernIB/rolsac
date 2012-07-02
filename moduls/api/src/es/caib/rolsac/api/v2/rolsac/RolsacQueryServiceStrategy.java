@@ -18,8 +18,6 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
@@ -99,10 +97,6 @@ public interface RolsacQueryServiceStrategy {
     EspaiTerritorialDTO obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
 
     List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
-
-    EstadisticaDTO obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) throws StrategyException;
-
-    List<EstadisticaDTO> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) throws StrategyException;
 
     FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws StrategyException;
 

@@ -2,6 +2,8 @@ package es.caib.rolsac.api.v2.estadistica.ejb;
 
 import java.util.List;
 
+import javax.ejb.CreateException;
+
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -18,14 +20,36 @@ import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
-import es.caib.rolsac.api.v2.general.EJBUtils;
+import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.PeriodoUtil;
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
-public class EstadisticaInsertServiceEJB {
+/**
+ * SessionBean para insertar estadisticas.
+ *
+ * @ejb.bean
+ *  name="sac/api/EstadisticaInsertServiceEJB"
+ *  jndi-name="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceEJB"
+ *  type="Stateless"
+ *  view-type="remote"
+ *  transaction-type="Container"
+ *
+ * @ejb.transaction type="Required"
+ */
+public class EstadisticaInsertServiceEJB extends HibernateEJB {
+
+    private static final long serialVersionUID = 7551100216138115056L;
 
     private static Log log = LogFactory.getLog(EstadisticaInsertServiceEJB.class);
 
+    /**
+     * @ejb.create-method
+     * @ejb.permission unchecked="true"
+     */
+    public void ejbCreate() throws CreateException {
+        super.ejbCreate();
+    }
+    
     @SuppressWarnings("unchecked")
     private void grabarEstadistica(Session session, Historico historico, Periodo periodo) throws HibernateException {
         Query query = session.createQuery("from Estadistica as est where est.historico = :historico "
@@ -50,6 +74,14 @@ public class EstadisticaInsertServiceEJB {
         session.flush();
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una ficha.
+     * @param fitxaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */  
     public boolean gravarEstadisticaFitxa(long fitxaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -57,10 +89,10 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (fitxaId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 Ficha ficha = (Ficha) session.load(Ficha.class, fitxaId);
-                Historico historico = EJBUtils.getHistoric(session, ficha);
+                Historico historico = getHistoric(session, ficha);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -71,24 +103,24 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una ficha por materia.
+     * @param fitxaId
+     * @param materiaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaFitxaPerMateria(long fitxaId, long materiaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -96,10 +128,10 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (fitxaId > 0 && materiaId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 Ficha ficha = (Ficha) session.load(Ficha.class, fitxaId);
-                Historico historico = EJBUtils.getHistoricFitxaPerMateria(session, ficha, materiaId);
+                Historico historico = getHistoricFitxaPerMateria(session, ficha, materiaId);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -110,24 +142,24 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una ficha por UA.
+     * @param fitxaId
+     * @param uaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaFitxaPerUA(long fitxaId, long uaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -135,12 +167,12 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (fitxaId > 0 && uaId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 Ficha ficha = (Ficha) session.load(Ficha.class, fitxaId);
                 // Provocar excepcion si no existe la UA.
                 session.load(UnidadAdministrativa.class, uaId);
-                Historico historico = EJBUtils.getHistoricFitxaPerUA(session, ficha, uaId);
+                Historico historico = getHistoricFitxaPerUA(session, ficha, uaId);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -151,24 +183,23 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una materia.
+     * @param materiaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaMateria(long materiaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -176,10 +207,10 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (materiaId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 Materia materia = (Materia) session.load(Materia.class, materiaId);
-                Historico historico = EJBUtils.getHistoric(session, materia);
+                Historico historico = getHistoric(session, materia);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -190,24 +221,23 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una normativa.
+     * @param normativaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaNormativa(long normativaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -218,7 +248,7 @@ public class EstadisticaInsertServiceEJB {
                 session = HibernateUtils.getSessionFactory().openSession();
                 tx = session.beginTransaction();
                 Normativa normativa = (Normativa) session.load(Normativa.class, normativaId);
-                Historico historico = EJBUtils.getHistoric(session, normativa);
+                Historico historico = getHistoric(session, normativa);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -229,24 +259,23 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para un procediment.
+     * @param procedimentId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaProcediment(Long procedimentId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -254,10 +283,10 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (procedimentId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 ProcedimientoLocal procediment = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, procedimentId);
-                Historico historico = EJBUtils.getHistoric(session, procediment);
+                Historico historico = getHistoric(session, procediment);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -268,24 +297,23 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }
 
+    /**
+     * Crea o actualiza una Estadistica para una UA.
+     * @param uaId
+     * @return boolean
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */ 
     public boolean gravarEstadisticaUnitatAdministrativa(long uaId) {
         boolean estadisticaGravada = false;
         Session session = null;
@@ -293,10 +321,10 @@ public class EstadisticaInsertServiceEJB {
         try {
             if (uaId > 0) {
                 Periodo periodo = PeriodoUtil.crearPeriodoMes();
-                session = HibernateUtils.getSessionFactory().openSession();
+                session = getSession();
                 tx = session.beginTransaction();
                 UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, uaId);
-                Historico historico = EJBUtils.getHistoric(session, ua);
+                Historico historico = getHistoric(session, ua);
                 grabarEstadistica(session, historico, periodo);
                 tx.commit();
                 estadisticaGravada = true;
@@ -307,20 +335,11 @@ public class EstadisticaInsertServiceEJB {
                     tx.rollback();
                 } catch (HibernateException e1) {
                     log.error(e);
-                    e1.printStackTrace();
                 }
             }
             log.error(e);
-            e.printStackTrace();
         } finally {
-            if (session != null && session.isOpen()) {
-                try {
-                    session.close();
-                } catch (HibernateException e) {
-                    log.error(e);
-                    e.printStackTrace();
-                }
-            }
+            close(session);
         }
         return estadisticaGravada;
     }

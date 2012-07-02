@@ -18,8 +18,6 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -147,16 +145,6 @@ public class RolsacQueryServiceWebServiceStrategy implements RolsacQueryServiceS
     }
 
     public List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public EstadisticaDTO obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<EstadisticaDTO> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) {
         // TODO Auto-generated method stub
         return null;
     }

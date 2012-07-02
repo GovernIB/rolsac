@@ -3,7 +3,6 @@ package es.caib.rolsac.api.v2.iconaMateria.ejb;
 import javax.ejb.CreateException;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
@@ -74,7 +73,7 @@ public class IconaMateriaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirIcona(long id) {
-        return EJBUtils.getArxiuDTO(id);
+        return getArxiuDTO(id);
     }
 
 }

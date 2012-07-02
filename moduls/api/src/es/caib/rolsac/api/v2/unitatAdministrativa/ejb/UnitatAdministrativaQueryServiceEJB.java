@@ -34,7 +34,6 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -678,7 +677,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirFotop(Long fotop) {
-        return EJBUtils.getArxiuDTO(fotop);
+        return getArxiuDTO(fotop);
     }
 
     /**
@@ -690,7 +689,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirFotog(Long fotog) {
-        return EJBUtils.getArxiuDTO(fotog);
+        return getArxiuDTO(fotog);
     }
 
     /**
@@ -702,7 +701,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirLogoh(Long logoh) {
-        return EJBUtils.getArxiuDTO(logoh);
+        return getArxiuDTO(logoh);
     }
 
     /**
@@ -714,7 +713,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirLogov(Long logov) {
-        return EJBUtils.getArxiuDTO(logov);
+        return getArxiuDTO(logov);
     }
 
     /**
@@ -726,7 +725,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirLogos(Long logos) {
-        return EJBUtils.getArxiuDTO(logos);
+        return getArxiuDTO(logos);
     }
 
     /**
@@ -738,7 +737,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirLogot(Long logot) {
-        return EJBUtils.getArxiuDTO(logot);
+        return getArxiuDTO(logot);
     }
 
     /**

@@ -18,7 +18,6 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -266,7 +265,7 @@ public class EspaiTerritorialQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirMapa(Long idMapa) {
-        return EJBUtils.getArxiuDTO(idMapa);
+        return getArxiuDTO(idMapa);
     }
 
     /**
@@ -278,7 +277,7 @@ public class EspaiTerritorialQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirLogo(Long idLogo) {
-        return EJBUtils.getArxiuDTO(idLogo);
+        return getArxiuDTO(idLogo);
     }
 
 }

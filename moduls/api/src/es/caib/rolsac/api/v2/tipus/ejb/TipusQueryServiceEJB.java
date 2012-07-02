@@ -69,8 +69,8 @@ public class TipusQueryServiceEJB extends HibernateEJB {
      */
     public int getNumNormatives(Long id, TIPUS_NORMATIVA tipus) {
         
-        System.out.println("\n\t\tHOLA\n");
-        log.error("\n\t\tHOLA\n");
+        System.out.println("\n\t\tNumNormativas\n");
+        log.error("\n\t\tNumNormativas\n");
         
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;    
@@ -125,6 +125,10 @@ public class TipusQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(Long id, NormativaCriteria normativaCriteria) {
+        
+        System.out.println("\n\t\tLlistaNormativas\n");
+        log.error("\n\t\tLlistaNormativas\n");
+        
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;

@@ -16,7 +16,6 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -158,7 +157,7 @@ public class EdificiQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirFotoPequenya(Long idFotoPequenya) {
-        return EJBUtils.getArxiuDTO(idFotoPequenya);
+        return getArxiuDTO(idFotoPequenya);
     }
 
     /**
@@ -170,7 +169,7 @@ public class EdificiQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirFotoGrande(Long idFotoGrande) {
-        return EJBUtils.getArxiuDTO(idFotoGrande);
+        return getArxiuDTO(idFotoGrande);
     }
 
     /**
@@ -182,7 +181,7 @@ public class EdificiQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirPlano(Long idPlano) {
-       return EJBUtils.getArxiuDTO(idPlano);
+       return getArxiuDTO(idPlano);
     }
 
 }

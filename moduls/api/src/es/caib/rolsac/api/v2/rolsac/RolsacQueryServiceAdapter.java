@@ -27,8 +27,6 @@ import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -311,16 +309,6 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "espacios territoriales.", e);
         }
-    }
-
-    public EstadisticaQueryServiceAdapter obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException {
-        // TODO: De momento no se sabe si es necesario.
-        return null;
-    }
-
-    public List<EstadisticaQueryServiceAdapter> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException {
-        // TODO: De momento no se sabe si es necesario.
-        return null;
     }
 
     public FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException {

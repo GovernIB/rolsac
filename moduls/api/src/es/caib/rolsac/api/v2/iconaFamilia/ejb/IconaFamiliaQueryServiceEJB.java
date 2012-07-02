@@ -5,7 +5,6 @@ import javax.ejb.CreateException;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
@@ -74,7 +73,7 @@ public class IconaFamiliaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirIcona(long id) {
-        return EJBUtils.getArxiuDTO(id);
+        return getArxiuDTO(id);
     }
     
 }

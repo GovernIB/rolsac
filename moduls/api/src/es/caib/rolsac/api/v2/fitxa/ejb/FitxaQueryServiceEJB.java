@@ -29,7 +29,6 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -540,7 +539,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirIcona(Long icono) {
-        return EJBUtils.getArxiuDTO(icono);
+        return getArxiuDTO(icono);
     }
 
     /**
@@ -552,7 +551,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirImatge(Long imagen) {
-        return EJBUtils.getArxiuDTO(imagen);
+        return getArxiuDTO(imagen);
     }
 
     /**
@@ -564,7 +563,7 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirBaner(Long baner) {
-        return EJBUtils.getArxiuDTO(baner);
+        return getArxiuDTO(baner);
     }
     
 }

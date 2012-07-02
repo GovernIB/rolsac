@@ -18,8 +18,6 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaCriteria;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
@@ -99,10 +97,6 @@ public interface RolsacQueryService {
     EspaiTerritorialQueryServiceAdapter obtenirEspaiTerritorial(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
 
     List<EspaiTerritorialQueryServiceAdapter> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException;
-
-    EstadisticaQueryServiceAdapter obtenirEstadistica(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException;
-
-    List<EstadisticaQueryServiceAdapter> llistarEstadistiques(EstadisticaCriteria estadisticaCriteria) throws QueryServiceException;
 
     FamiliaQueryServiceAdapter obtenirFamilia(FamiliaCriteria familiaCriteria) throws QueryServiceException;
 

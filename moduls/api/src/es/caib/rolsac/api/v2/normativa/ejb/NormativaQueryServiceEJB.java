@@ -21,7 +21,6 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -349,7 +348,7 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO obtenirArxiuNormativa(long idArxiu) {
-        return EJBUtils.getArxiuDTO(idArxiu);
+        return getArxiuDTO(idArxiu);
     }
 
     /**

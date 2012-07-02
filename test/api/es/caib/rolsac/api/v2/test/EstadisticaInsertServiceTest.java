@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import es.caib.rolsac.api.v2.estadistica.EstadisticaInsertService;
+import es.caib.rolsac.api.v2.exception.InsertServiceException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 
 public class EstadisticaInsertServiceTest {
@@ -21,7 +22,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void grabarEstadisticaFitxa() {
-        Assert.assertTrue(service.gravarEstadisticaFitxa(206971));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaFitxa(206971));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -29,7 +34,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void grabarEstadisticaFitxaNoExisteix() {
-        Assert.assertFalse(service.gravarEstadisticaFitxa(999999));
+        try {
+            Assert.assertFalse(service.gravarEstadisticaFitxa(999999));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -37,7 +46,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaFitxaPerMateria() {
-        Assert.assertTrue(service.gravarEstadisticaFitxaPerMateria(206971, 635622));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaFitxaPerMateria(206971, 635622));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
 
     /**
@@ -45,7 +58,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaFitxaPerUA() {
-        Assert.assertTrue(service.gravarEstadisticaFitxaPerUA(206971, 1));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaFitxaPerUA(206971, 1));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -53,7 +70,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaMateria() {
-        Assert.assertTrue(service.gravarEstadisticaMateria(635622));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaMateria(635622));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -61,7 +82,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaNormativa() {
-        Assert.assertTrue(service.gravarEstadisticaNormativa(74965));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaNormativa(74965));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -69,7 +94,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaProcediment() {
-        Assert.assertTrue(service.gravarEstadisticaProcediment(460464));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaProcediment(460464));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
     /**
@@ -77,7 +106,11 @@ public class EstadisticaInsertServiceTest {
      */
     @Test
     public void gravarEstadisticaUnitatAdministrativa() {
-        Assert.assertTrue(service.gravarEstadisticaUnitatAdministrativa(1));
+        try {
+            Assert.assertTrue(service.gravarEstadisticaUnitatAdministrativa(1));
+        } catch (InsertServiceException e) {
+            Assert.fail(e.toString());
+        }
     }
     
 }

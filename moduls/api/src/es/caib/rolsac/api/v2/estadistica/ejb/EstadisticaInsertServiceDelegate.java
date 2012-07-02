@@ -1,5 +1,12 @@
 package es.caib.rolsac.api.v2.estadistica.ejb;
 
+import java.rmi.RemoteException;
+
+import es.caib.rolsac.api.v2.estadistica.ejb.intf.EstadisticaInsertServiceEJBRemote;
+import es.caib.rolsac.api.v2.exception.DelegateException;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
+import es.caib.rolsac.api.v2.exception.LocatorException;
+
 public class EstadisticaInsertServiceDelegate {
     
     private EstadisticaInsertServiceEJBLocator estadisticaInsertServiceLocator;
@@ -8,39 +15,82 @@ public class EstadisticaInsertServiceDelegate {
         this.estadisticaInsertServiceLocator = locator;
     }
 
-    public boolean gravarEstadisticaFitxa(long fitxaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaFitxa(fitxaId);
+    public boolean gravarEstadisticaFitxa(long fitxaId) throws DelegateException {
+        EstadisticaInsertServiceEJBRemote ejb;
+        try {
+            ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaFitxa(fitxaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public boolean gravarEstadisticaFitxaPerMateria(long fitxaId, long materiaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaFitxaPerMateria(fitxaId, materiaId);
+    public boolean gravarEstadisticaFitxaPerMateria(long fitxaId, long materiaId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaFitxaPerMateria(fitxaId, materiaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public boolean gravarEstadisticaFitxaPerUA(long fitxaId, long uaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaFitxaPerUA(fitxaId, uaId);
+    public boolean gravarEstadisticaFitxaPerUA(long fitxaId, long uaId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaFitxaPerUA(fitxaId, uaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public boolean gravarEstadisticaMateria(long materiaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaMateria(materiaId);
+    public boolean gravarEstadisticaMateria(long materiaId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaMateria(materiaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public boolean gravarEstadisticaNormativa(long normativaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaNormativa(normativaId);
+    public boolean gravarEstadisticaNormativa(long normativaId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaNormativa(normativaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
 
-    public boolean gravarEstadisticaProcediment(long procedimentId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaProcediment(procedimentId);
+    public boolean gravarEstadisticaProcediment(long procedimentId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaProcediment(procedimentId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
-    public boolean gravarEstadisticaUnitatAdministrativa(long uaId) {
-        EstadisticaInsertServiceEJB ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServieceEJB();
-        return ejb.gravarEstadisticaUnitatAdministrativa(uaId);
+    public boolean gravarEstadisticaUnitatAdministrativa(long uaId) throws DelegateException {
+        try {
+            EstadisticaInsertServiceEJBRemote ejb = estadisticaInsertServiceLocator.getEstadisticaInsertServiceEJB();
+            return ejb.gravarEstadisticaUnitatAdministrativa(uaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
     }
     
 }

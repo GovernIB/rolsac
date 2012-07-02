@@ -3,7 +3,6 @@ package es.caib.rolsac.api.v2.documentTramit.ejb;
 import javax.ejb.CreateException;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.rolsac.ejb.RolsacQueryServiceEJB;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
@@ -57,7 +56,7 @@ public class DocumentTramitQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */  
     public ArxiuDTO obtenirArxiu(long idArxiu) {
-        return EJBUtils.getArxiuDTO(idArxiu);
+        return getArxiuDTO(idArxiu);
     }
     
 }

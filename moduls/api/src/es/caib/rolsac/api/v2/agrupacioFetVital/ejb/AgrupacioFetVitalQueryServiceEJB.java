@@ -19,7 +19,6 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
-import es.caib.rolsac.api.v2.general.EJBUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
@@ -76,7 +75,7 @@ public class AgrupacioFetVitalQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */ 
     public ArxiuDTO getFotografia(long idFoto) {
-        return EJBUtils.getArxiuDTO(idFoto);
+        return getArxiuDTO(idFoto);
     }
     
     /**
@@ -88,7 +87,7 @@ public class AgrupacioFetVitalQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO getIcona(long idIcona) {
-        return EJBUtils.getArxiuDTO(idIcona);
+        return getArxiuDTO(idIcona);
     }
     
     /**
@@ -100,7 +99,7 @@ public class AgrupacioFetVitalQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ArxiuDTO getIconaGran(long idIconaGran) {
-        return EJBUtils.getArxiuDTO(idIconaGran);
+        return getArxiuDTO(idIconaGran);
     }
 
     /**
