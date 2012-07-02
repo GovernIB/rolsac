@@ -135,11 +135,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
-        
-        log.info("\t\tgetNumNormativas EJB\n");
-        System.out.print("\t\tgetNumNormativas EJB\n");
-        
+    public int getNumNormatives(long id, long tipus) {
         List<CriteriaObject> criteris;
         Session session = null;    
         QueryBuilder qb = null;
@@ -154,7 +150,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
             criteris.add(normativaByProcCO);
             List<FromClause> entities = new ArrayList<FromClause>();
             
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.LOCAL){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.LOCAL.ordinal()){
                 entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
@@ -162,7 +158,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
                 query = qb.createQuery(session);
                 numResultats = (Integer) query.uniqueResult();
             }
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.EXTERNA.ordinal()){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".procedimientos", HQL_PROCEDIMIENTO_ALIAS));            

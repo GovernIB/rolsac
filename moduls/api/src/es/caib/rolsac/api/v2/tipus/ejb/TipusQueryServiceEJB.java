@@ -67,11 +67,7 @@ public class TipusQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public int getNumNormatives(Long id, TIPUS_NORMATIVA tipus) {
-        
-        System.out.println("\n\t\tNumNormativas\n");
-        log.error("\n\t\tNumNormativas\n");
-        
+    public int getNumNormatives(long id, long tipus) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;    
         QueryBuilder qb = null;
@@ -84,7 +80,7 @@ public class TipusQueryServiceEJB extends HibernateEJB {
             criteris.add(normativaByTipusCO);
             List<FromClause> entities = new ArrayList<FromClause>();
             
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.LOCAL){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.LOCAL.ordinal()){
                 entities.add(new FromClause(HQL_NORMATIVA_LOCAL_CLASS, HQL_NORMATIVA_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVA_ALIAS + ".tipo", HQL_TIPUS_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
@@ -92,7 +88,7 @@ public class TipusQueryServiceEJB extends HibernateEJB {
                 query = qb.createQuery(session);
                 numResultats = (Integer) query.uniqueResult();
             }
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.EXTERNA.ordinal()){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVA_EXTERNA_CLASS, HQL_NORMATIVA_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVA_ALIAS + ".tipo", HQL_TIPUS_ALIAS));            
@@ -125,10 +121,6 @@ public class TipusQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<NormativaDTO> llistarNormatives(Long id, NormativaCriteria normativaCriteria) {
-        
-        System.out.println("\n\t\tLlistaNormativas\n");
-        log.error("\n\t\tLlistaNormativas\n");
-        
         List<NormativaDTO> normativaDTOList = new ArrayList<NormativaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;

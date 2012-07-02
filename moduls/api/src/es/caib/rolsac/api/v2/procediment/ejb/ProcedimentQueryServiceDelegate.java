@@ -41,7 +41,7 @@ public class ProcedimentQueryServiceDelegate {
     public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) throws DelegateException {
         try {
             ProcedimentQueryServiceEJBRemote  ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
-            return ejb.getNumNormatives(id, tipus);
+            return ejb.getNumNormatives(id, tipus.ordinal());
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

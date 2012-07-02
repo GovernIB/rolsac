@@ -34,7 +34,7 @@ public class TipusQueryServiceDelegate {
     public int getNumNormatives(Long id, TIPUS_NORMATIVA totes) throws DelegateException {
         try {
             TipusQueryServiceEJBRemote ejb = tipusQueryServiceLocator.getTipusQueryServiceEJB();
-            return ejb.getNumNormatives(id, totes);
+            return ejb.getNumNormatives(id, totes.ordinal());
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

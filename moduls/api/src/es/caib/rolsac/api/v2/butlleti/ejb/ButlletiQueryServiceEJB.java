@@ -67,7 +67,7 @@ public class ButlletiQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */  
-    public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) {
+    public int getNumNormatives(long id, long tipus) {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;    
         QueryBuilder qb = null;
@@ -82,7 +82,7 @@ public class ButlletiQueryServiceEJB extends HibernateEJB {
             criteris.add(normativaByButlletiCO);
             List<FromClause> entities = new ArrayList<FromClause>();
 
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.LOCAL){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.LOCAL.ordinal()){
                 entities.add(new FromClause(HQL_NORMATIVAS_LOCAL_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".boletin", HQL_BUTLLETI_ALIAS));            
                 qb = new QueryBuilder("n", entities, null, null, true);
@@ -90,7 +90,7 @@ public class ButlletiQueryServiceEJB extends HibernateEJB {
                 query = qb.createQuery(session);
                 numResultats = (Integer) query.uniqueResult();
             }
-            if (tipus == TIPUS_NORMATIVA.TOTES || tipus == TIPUS_NORMATIVA.EXTERNA){
+            if (tipus == TIPUS_NORMATIVA.TOTES.ordinal() || tipus == TIPUS_NORMATIVA.EXTERNA.ordinal()){
                 entities = new ArrayList<FromClause>();
                 entities.add(new FromClause(HQL_NORMATIVAS_EXTERNA_CLASS, HQL_NORMATIVAS_ALIAS));
                 entities.add(new FromClause(HQL_NORMATIVAS_ALIAS + ".boletin", HQL_BUTLLETI_ALIAS));            
