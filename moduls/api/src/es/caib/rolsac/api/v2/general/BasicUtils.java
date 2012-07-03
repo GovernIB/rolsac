@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,31 +22,28 @@ import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 
 public class BasicUtils {
-    
+
     private static Log log = LogFactory.getLog(BasicUtils.class);
-    
-    private BasicUtils(){
+
+    private BasicUtils() {
     }
-    
+
     public static List<CriteriaObject> parseCriterias(Class<?> criteriaClass, String entityAlias,
             BasicCriteria basicCriteria) throws CriteriaObjectParseException {
         return parseCriterias(criteriaClass, entityAlias, "", basicCriteria);
     }
-    
+
     /**
-     * Use case:
-     * if (procedimentCriteria.getTaxa() != null) {
-     *     ProcedimentByTaxaCriteria criteria = new ProcedimentByTaxaCriteria(entityAlias); // i18nALias si es traducible
-     *     criteria.parseCriteria(booleanToString(procedimentCriteria.getTaxa()));
-     *     criteriaObjects.add(criteria);
-     * }
+     * Use case: if (procedimentCriteria.getTaxa() != null) { ProcedimentByTaxaCriteria criteria = new
+     * ProcedimentByTaxaCriteria(entityAlias); // i18nALias si es traducible
+     * criteria.parseCriteria(booleanToString(procedimentCriteria.getTaxa())); criteriaObjects.add(criteria); }
      */
     public static List<CriteriaObject> parseCriterias(Class<?> criteriaClass, String entityAlias, String i18nAlias,
             BasicCriteria basicCriteria) throws CriteriaObjectParseException {
         List<CriteriaObject> criteriaObjects = new ArrayList<CriteriaObject>();
-        
-        parseBasicCriteria(entityAlias, i18nAlias, criteriaObjects, basicCriteria); 
-        
+
+        parseBasicCriteria(entityAlias, i18nAlias, criteriaObjects, basicCriteria);
+
         Method[] methods = criteriaClass.getDeclaredMethods();
         Method m = null;
         for (int i = 0; i < methods.length; i++) {
@@ -58,19 +54,20 @@ public class BasicUtils {
                     if (value != null) {
                         CriteriaObject co = getParsedCriteria(m, value, criteriaClass, entityAlias, i18nAlias,
                                 basicCriteria);
-                        if (co != null) {criteriaObjects.add(co);}
+                        if (co != null) {
+                            criteriaObjects.add(co);
+                        }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();  // TODO: delete me.
-                throw new CriteriaObjectParseException("Error parseando " + m.getName() + "de la clase " +
-                        criteriaClass + ".", e);
+                throw new CriteriaObjectParseException("Error parseando " + m.getName() + "de la clase "
+                        + criteriaClass + ".", e);
             }
         }
-        
+
         return criteriaObjects;
     }
-    
+
     private static CriteriaObject getParsedCriteria(Method getter, Object value, Class<?> criteriaClass,
             String entityAlias, String i18nAlias, BasicCriteria basicCriteria) throws ClassNotFoundException,
             IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException,
@@ -82,56 +79,57 @@ public class BasicUtils {
         if (getter.getName().startsWith("getT_")) {
             fieldName = getter.getName().substring(5);
             alias = i18nAlias;
-        } else if(getter.getName().startsWith("is")){
+        } else if (getter.getName().startsWith("is")) {
             fieldName = getter.getName().substring(2);
             alias = entityAlias;
         } else {
             fieldName = getter.getName().substring(3);
             alias = entityAlias;
         }
-        
-        /* Obtener la clase CriteriaObject especifica.
-         * Nota: Los criterias objects se encuentran en packages del tipo 
+
+        /*
+         * Obtener la clase CriteriaObject especifica. Nota: Los criterias objects se encuentran en packages del tipo
          * "es.caib.rolsac.api.v2.fetVital.co.FetVitalByCodigoEstandarCriteria".
          */
         StringBuilder concreteCriteriaClassName = new StringBuilder();
         String[] packageWords = criteriaClass.getName().split("\\.");
-        String[] classWords = packageWords[packageWords.length - 1].split("(?=\\p{Lu})"); // split by unicode capital letter.
+        String[] classWords = packageWords[packageWords.length - 1].split("(?=\\p{Lu})"); // split by unicode capital
+                                                                                          // letter.
         for (int i = 0; i < (packageWords.length - 1); i++) {
             concreteCriteriaClassName.append(packageWords[i]).append(".");
         }
         concreteCriteriaClassName.append("co.");
-        for (int i = 1; i < classWords.length -1; i++) {
+        for (int i = 1; i < classWords.length - 1; i++) {
             concreteCriteriaClassName.append(classWords[i]);
         }
         concreteCriteriaClassName.append("By").append(StringUtils.capitalize(fieldName)).append("Criteria");
 
         // Instanciar nuevo objeto CriteriaObject de la clase especifica.
-        Class<?> concreteCriteriaClass = Class.forName(concreteCriteriaClassName.toString());            
+        Class<?> concreteCriteriaClass = Class.forName(concreteCriteriaClassName.toString());
         Constructor<?> ct = concreteCriteriaClass.getConstructors()[0];
         CriteriaObject concreteCriteria = (CriteriaObject) ct.newInstance(alias);
-        
+
         if (concreteCriteria != null) {
             // Obtener el metodo de parseo para el campo
             Method parser = concreteCriteriaClass.getMethod("parseCriteria", String.class);
-            
+
             // Ejecutar el parseo con el valor pasado a String
             String stringValue;
             if (Boolean.class.equals(value.getClass())) {
                 stringValue = booleanToString((Boolean) value);
-            } else if (Date.class.equals(value.getClass())){
+            } else if (Date.class.equals(value.getClass())) {
                 stringValue = ByDateCriteria.DATE_CRITERIA_FORMATTER.format(value);
             } else {
                 stringValue = String.valueOf(value);
-            }        
+            }
             parser.invoke(concreteCriteria, stringValue);
         }
-        
+
         return concreteCriteria;
     }
-    
-    private static void parseBasicCriteria(String entityAlias, String i18nAlias,
-            List<CriteriaObject> criteriaObjects, BasicCriteria basicCriteria) throws CriteriaObjectParseException {
+
+    private static void parseBasicCriteria(String entityAlias, String i18nAlias, List<CriteriaObject> criteriaObjects,
+            BasicCriteria basicCriteria) throws CriteriaObjectParseException {
         if (basicCriteria.getId() != null) {
             BasicByIdCriteria criteria = new BasicByIdCriteria(entityAlias);
             criteria.parseCriteria(basicCriteria.getId());
@@ -160,10 +158,12 @@ public class BasicUtils {
     public static Object entityToDTO(Class<?> dtoClass, Object entity) {
         return entityToDTO(dtoClass, entity, null);
     }
-    
+
     public static Object entityToDTO(Class<?> dtoClass, Object entity, String lang) {
-        if (entity == null) {return null;}
-        
+        if (entity == null) {
+            return null;
+        }
+
         Constructor<?> dtoConstructor = dtoClass.getConstructors()[0];
         Object dto = null;
         try {
@@ -177,10 +177,9 @@ public class BasicUtils {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // TODO: delete me.
             log.error("Error al crear " + dtoClass + " a partir de " + entity.getClass() + ".", e);
         }
-        
+
         return dto;
     }
 
@@ -190,12 +189,12 @@ public class BasicUtils {
 
         String property = StringUtils.uncapitalize(setter.getName().substring(3));
         Object value = null;
-        
-        /* Primero se busca la propiedad en la traduccion. 
-         * Nota 1: Las traducciones no tienen booleanos (no hay getters que empiecen por isXxx).
-         * Nota 2: Se busca primero en la traduccion porque en Documento y DocumentTramit existe una propiedad con el
-         * mismo nombre en la clase y en la traduccion. La propiedad de la clase ya no se usa, por lo que tiene 
-         * prioridad el getter de la traduccion. 
+
+        /*
+         * Primero se busca la propiedad en la traduccion. Nota 1: Las traducciones no tienen booleanos (no hay getters
+         * que empiecen por isXxx). Nota 2: Se busca primero en la traduccion porque en Documento y DocumentTramit
+         * existe una propiedad con el mismo nombre en la clase y en la traduccion. La propiedad de la clase ya no se
+         * usa, por lo que tiene prioridad el getter de la traduccion.
          */
         Method i18nGetter = null;
         try {
@@ -211,8 +210,9 @@ public class BasicUtils {
                 i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
                 value = i18nGetter.invoke(trad);
             }
-        } catch (NoSuchMethodException e) {}
-        
+        } catch (NoSuchMethodException e) {
+        }
+
         // Si no se ha encontrado la propiedad en la traduccion, buscamos en la entidad.
         if (value == null) {
             // Obtener el valor de la propiedad a traves del getter de entity.
@@ -225,7 +225,8 @@ public class BasicUtils {
                 try {
                     entityGetter = entity.getClass().getMethod("is" + StringUtils.capitalize(property));
                     value = entityGetter.invoke(entity);
-                } catch (NoSuchMethodException eIs) {}
+                } catch (NoSuchMethodException eIs) {
+                }
             }
         }
 
@@ -234,9 +235,10 @@ public class BasicUtils {
             try {
                 Method idGetter = value.getClass().getMethod("getId");
                 value = idGetter.invoke(value);
-            } catch (NoSuchMethodException e) {}
+            } catch (NoSuchMethodException e) {
+            }
         }
-        
+
         // Llamar al setter
         if (value != null) {
             // Parsear el valor segun el tipo de la propiedad del dto.
@@ -244,32 +246,33 @@ public class BasicUtils {
             Class<?>[] valueClasses = new Class[1];
             if (propertyClass.equals(Boolean.class) || propertyClass.equals(boolean.class)) {
                 // En las entidades hay booleanos de tipo String y de tipo Boolean.
-                if (!(value.getClass().equals(Boolean.class) || value.getClass().equals(boolean.class))) { 
-                    value = stringToBoolean((String) value); 
+                if (!(value.getClass().equals(Boolean.class) || value.getClass().equals(boolean.class))) {
+                    value = stringToBoolean((String) value);
                 }
                 valueClasses[0] = boolean.class;
             } else if (Date.class.equals(propertyClass)) {
-                value = (Date) value;  // Para evitar problemas con java.sql.Timestamp.
+                value = (Date) value; // Para evitar problemas con java.sql.Timestamp.
                 valueClasses[0] = Date.class;
             } else {
                 valueClasses[0] = value.getClass();
             }
-            
-            /* Ejecutar el setter de la propiedad del dto con el valor obtenido de la propiedad de entity. Se usa el
-             * metodo menos restrictivo de BeanUtils en vez del propio de Java debido a un bug relacionado con tipos 
+
+            /*
+             * Ejecutar el setter de la propiedad del dto con el valor obtenido de la propiedad de entity. Se usa el
+             * metodo menos restrictivo de BeanUtils en vez del propio de Java debido a un bug relacionado con tipos
              * primitivos: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6176992.
              */
             // Method dtoSetter = dto.getClass().getMethod("set" + StringUtils.capitalize(property), valueClasses[0]);
-            Method dtoSetter = MethodUtils.getMatchingAccessibleMethod(
-                    dto.getClass(), 
-                    "set" + StringUtils.capitalize(property), 
-                    valueClasses);
+            Method dtoSetter = MethodUtils.getMatchingAccessibleMethod(dto.getClass(),
+                    "set" + StringUtils.capitalize(property), valueClasses);
             dtoSetter.invoke(dto, value);
         }
     }
-    
+
     public static String booleanToString(Boolean value) {
-        if (value == null) {return null;}
+        if (value == null) {
+            return null;
+        }
         return value ? "1" : "0";
     }
 
@@ -277,24 +280,13 @@ public class BasicUtils {
         return StringUtils.isBlank(value) || value.equals("0") ? false : true;
     }
 
-    // TODO: get default language from some properties file.
     public static String getDefaultLanguage() {
-        return "ca";
+        String defaultLanguage = System.getProperty("es.caib.rolsac.api.v2.idiomaPerDefecte");
+        if (StringUtils.isBlank(defaultLanguage)) {
+            log.error("No hay definido un idioma por defecto en el sistema. Se va a usar 'ca' como idioma.");
+            defaultLanguage = "ca";
+        }
+        return defaultLanguage;
     }
 
-    public static Date getNextDay() {
-        return getNextDay(new Date());
-    }
-    
-    public static Date getNextDay(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, 1);
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-    
 }

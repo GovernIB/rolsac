@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.PeriodoUtil;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
 
@@ -172,7 +172,7 @@ public class QueryBuilder {
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
         case EQ_DATE:
-            Date nextDay = BasicUtils.getNextDay((Date) r.getValue());
+            Date nextDay = PeriodoUtil.getNextDay((Date) r.getValue());
             where += "(" + field + " >= :" + r.getParameter() + " AND " + field + " < :" + r.getParameter() + "_)";
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             namedParameters.put(r.getParameter() + "_", nextDay);

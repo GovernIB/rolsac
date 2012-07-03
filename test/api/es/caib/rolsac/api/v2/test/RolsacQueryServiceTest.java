@@ -85,25 +85,6 @@ public class RolsacQueryServiceTest {
     }
 
     /**
-     * Cas d'us: Proves temporals.
-     */
-//    @Test
-    public void prova() {
-        final String procedimentId = "9070";
-        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        procedimentCriteria.setId(procedimentId);
-        procedimentCriteria.setTamany("10");
-        ProcedimentQueryServiceAdapter procediment = null;
-        try {
-            procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
-        } catch (QueryServiceException e) {
-            Assert.fail(e.toString());
-        }
-        Assert.assertNotNull(procediment);
-        Assert.assertEquals(Long.parseLong(procedimentId), procediment.getId().longValue());
-    }
-    
-    /**
      * Cas d'us: Es recupera 1 procediment que existeix.
      */
     @Test

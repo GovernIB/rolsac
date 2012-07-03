@@ -221,11 +221,11 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
-                    HQL_TRADUCCIONES_ALIAS, procedimentCriteria));
+                    HQL_TRADUCCIONES_ALIAS,
+                    procedimentCriteria));
 
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS,HQL_PROCEDIMIENTO_ALIAS));
-            
             QueryBuilder qb = new QueryBuilder(
                     HQL_PROCEDIMIENTO_ALIAS, 
                     entities, 

@@ -7,6 +7,7 @@ import java.util.List;
 import org.ibit.rol.sac.model.Validacion;
 
 import es.caib.rolsac.api.v2.general.BasicUtils;
+import es.caib.rolsac.api.v2.general.PeriodoUtil;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.Restriction;
@@ -47,7 +48,7 @@ public class ProcedimentByActivoCriteria implements CriteriaObject {
      * @param qb
      */
     private void addProcedimientosActivos(QueryBuilder qb) {
-        Date fecha = BasicUtils.getNextDay();
+        Date fecha = PeriodoUtil.getNextDay();
         
         qb.openParenthesis(LOGIC.AND);
         
@@ -80,7 +81,7 @@ public class ProcedimentByActivoCriteria implements CriteriaObject {
      * @param qb
      */
     private void addProcedimientosCaducados(QueryBuilder qb) {
-        Date fecha = BasicUtils.getNextDay();
+        Date fecha = PeriodoUtil.getNextDay();
         
         qb.openParenthesis(LOGIC.AND);
         

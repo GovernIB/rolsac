@@ -31,6 +31,10 @@
 	   es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxa.do
 	   es.caib.rolsac.previsualitzacio.ua.url=http://www.caib.es/govern/organigrama/area.do
 	   
+	   <!-- API -->
+       es.caib.rolsac.api.v2.idiomaPerDefecte=ca
+       <!-- es.caib.rolsac.api.v2.urlFitxers=TODO -->
+	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
       	es.indra.caib.rolsac.servidor=sdesweblin1.caib.es

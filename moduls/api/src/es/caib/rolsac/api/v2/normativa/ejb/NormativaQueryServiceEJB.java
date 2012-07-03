@@ -100,8 +100,8 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
-            query.setParameter("ca", BasicUtils.getDefaultLanguage());
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
             
             List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
@@ -111,8 +111,8 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
                 normativaDTOList.add(dto);
             }
 
-            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
-            query.setParameter("ca", BasicUtils.getDefaultLanguage());
+            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
             List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
@@ -176,8 +176,8 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         try {
             session = getSession();
             
-            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
-            query.setParameter("ca", BasicUtils.getDefaultLanguage());
+            Query query = session.createQuery("SELECT DISTINCT nafec FROM NormativaLocal AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
             List<NormativaLocal> normativaLocalResult = (List<NormativaLocal>) query.list();                    
@@ -187,8 +187,8 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
                 normativaDTOList.add(dto);
             }
 
-            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :ca and n.id = :id ");
-            query.setParameter("ca", BasicUtils.getDefaultLanguage());
+            query = session.createQuery("SELECT DISTINCT nafec FROM NormativaExterna AS n, n.traducciones AS trad LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE INDEX(trad) = :idioma and n.id = :id ");
+            query.setParameter("idioma", BasicUtils.getDefaultLanguage());
             query.setParameter("id", id);
 
             List<NormativaExterna> normativaExternaResult = (List<NormativaExterna>) query.list();
