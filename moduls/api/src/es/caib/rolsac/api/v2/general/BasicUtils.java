@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Traduccion;
 
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.general.co.BasicByIdCriteria;
 import es.caib.rolsac.api.v2.general.co.BasicByIniciCriteria;
 import es.caib.rolsac.api.v2.general.co.BasicByOrdenacioCriteria;
@@ -283,7 +284,7 @@ public class BasicUtils {
     public static String getDefaultLanguage() {
         String defaultLanguage = System.getProperty("es.caib.rolsac.api.v2.idiomaPerDefecte");
         if (StringUtils.isBlank(defaultLanguage)) {
-            log.error("No hay definido un idioma por defecto en el sistema. Se va a usar 'ca' como idioma.");
+            log.error(ExceptionMessages.CONFIG_DEFAULT_LANG);
             defaultLanguage = "ca";
         }
         return defaultLanguage;

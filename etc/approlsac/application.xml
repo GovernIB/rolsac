@@ -50,6 +50,12 @@
             	<context-root>traspasboib</context-root>
         		</web>
     		</module>
+    		<module>
+                <web>
+                <web-uri>@prefix.modul@-api-arxiuServlet.war</web-uri>
+                <context-root>apiArxiuServlet</context-root>
+                </web>
+            </module>
 
 	<security-role>
         <description>Administrador del cercador del BOIB</description>

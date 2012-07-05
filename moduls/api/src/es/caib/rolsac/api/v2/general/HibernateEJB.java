@@ -14,6 +14,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
@@ -35,6 +36,7 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.query.HibernateUtils;
 
 /**
@@ -119,6 +121,11 @@ public abstract class HibernateEJB implements SessionBean {
             query.setParameter("code", idFile);
             Archivo archivo = (Archivo) query.uniqueResult();
             arxiuDTO = (ArxiuDTO) BasicUtils.entityToDTO(ArxiuDTO.class, archivo, null);
+            String url = System.getProperty("es.caib.rolsac.api.v2.urlArxius");
+            if (StringUtils.isBlank(url)) {
+                log.error(ExceptionMessages.CONFIG_ARXIU_URL);
+            }
+            arxiuDTO.setUrl(url + idFile);
         } catch (HibernateException e) {
             log.error(e);
         } finally {

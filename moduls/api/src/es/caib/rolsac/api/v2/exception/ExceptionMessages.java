@@ -19,4 +19,8 @@ public class ExceptionMessages {
     public static final String OBJECT_GETTER = "Error obteniendo ";
     public static final String LIST_GETTER = OBJECT_GETTER + "listado de ";
 
+    // Config
+    public static final String CONFIG_ARXIU_URL = "No esta definida la propiedad de la url para archivos.";
+    public static final String CONFIG_DEFAULT_LANG = "No hay definido un idioma por defecto en el sistema. Se va a usar 'ca' como idioma.";
+    
 }

@@ -45,6 +45,7 @@ public class DocumentTramitQueryServiceTest {
             Assert.assertNotNull(docTraAd);
             ArxiuQueryServiceAdapter aa = (ArxiuQueryServiceAdapter) docTraAd.obtenirArxiu();
             Assert.assertNotNull(aa);
+            System.out.println("URL: " + aa.getUrl());
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

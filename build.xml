@@ -255,7 +255,7 @@
 				<include name="${prefix.modul}-persistence-client.jar" />
 				<include name="${prefix.modul}-back2-persistence.jar" />
                 <include name="${prefix.modul}-api.jar" />
-				<!--include name="${prefix.modul}-api-client.jar" /-->
+				<include name="${prefix.modul}-api-arxiuServlet.war" />
 				<include name="${prefix.modul}-back2.war" />
 				<include name="${prefix.modul}-back.war" />
 				<include name="${prefix.modul}-ws.war" />

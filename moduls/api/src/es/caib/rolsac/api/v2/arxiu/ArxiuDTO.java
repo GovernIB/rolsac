@@ -12,6 +12,7 @@ public class ArxiuDTO implements Serializable {
     private String nombre;
     private long peso;
     
+    private String url;
     
     /**
      * @return the id
@@ -62,4 +63,18 @@ public class ArxiuDTO implements Serializable {
         this.peso = peso;
     }
 	
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
 }
