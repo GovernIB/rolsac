@@ -16,9 +16,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.HistoricoNormativa;
 import org.ibit.rol.sac.model.HistoricoProcedimiento;
+import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
@@ -120,26 +123,29 @@ public class QuadreControlController extends PantallaBaseController {
 			GregorianCalendar dataActualFi = new GregorianCalendar();
 			dataActualFi.add(Calendar.DATE, -7);
 
-			
-			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS,llistaUnitatAdministrativaId);
+			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS, llistaUnitatAdministrativaId);
 			
 			String idioma = request.getLocale().getLanguage();
 			
 			if (idioma != null && !"".equals(idioma)){			
     			for (Object element: llistaCanvis.values()){
     			    if(element instanceof HistoricoFicha){
-    			        //Ficha
-    			        ((HistoricoFicha) element).setNombre(((TraduccionFicha)((HistoricoFicha) element).getFicha().getTraduccion(idioma)).getTitulo());
-    			    } else 
-    			        if (element instanceof HistoricoProcedimiento){
-    			        //Procedimiento
-    			        ((HistoricoProcedimiento) element).setNombre(((TraduccionProcedimiento)((HistoricoProcedimiento) element).getProcedimiento().getTraduccion(idioma)).getNombre());
+    			        Ficha fitxa = ((HistoricoFicha) element).getFicha();
+    			        if (fitxa != null) {
+    			            ((HistoricoFicha) element).setNombre(((TraduccionFicha) fitxa.getTraduccion(idioma)).getTitulo());
+    			        }
+    			    } else if (element instanceof HistoricoProcedimiento){
+    			        ProcedimientoLocal procediment = ((HistoricoProcedimiento) element).getProcedimiento();
+    			        if (procediment != null) {
+    			            ((HistoricoProcedimiento) element).setNombre(((TraduccionProcedimiento) procediment.getTraduccion(idioma)).getNombre());
+    			        }
     			    } else {
-    			        //Normativa    			        
-    			        ((HistoricoNormativa) element).setNombre(((TraduccionNormativa)((HistoricoNormativa) element).getNormativa().getTraduccion(idioma)).getTitulo());
+    			        Normativa normativa = ((HistoricoNormativa) element).getNormativa();
+    			        if (normativa != null) {
+    			            ((HistoricoNormativa) element).setNombre(((TraduccionNormativa) normativa.getTraduccion(idioma)).getTitulo());
+    			        }
     			    }    			       			    
     			}
-			
 			}
 
 			model.put("darreresModificacions", llistaCanvis);
