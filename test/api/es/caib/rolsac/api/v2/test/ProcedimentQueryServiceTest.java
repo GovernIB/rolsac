@@ -56,7 +56,6 @@ public class ProcedimentQueryServiceTest {
             int numNormatives = procediment.getNumNormatives();
             Assert.assertTrue(numNormatives == 3);
         } catch (QueryServiceException e) {
-            e.printStackTrace();
             Assert.fail(e.toString());
         }
     }

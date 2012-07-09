@@ -736,7 +736,6 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             UnitatMateriaDTO dto = rolsacQueryServiceStrategy.obtenirUnitatMateria(unitatMateriaCriteria);
             return (UnitatMateriaQueryServiceAdapter) BeanUtils.getAdapter("unitatMateria", getStrategy(), dto);
         } catch (StrategyException e) {
-            e.printStackTrace();
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "unidad materia.", e);
         }
     }
