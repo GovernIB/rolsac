@@ -15,3 +15,13 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * loginThradGrpup.jmx: test per fer login una vegada. Després del login es carrega la pantalla de quadre de control.
 
 * seleccionarUAThreadGroup: test per seleccionar la unitat administrativa amb id 1 "Govern de les Illes Balears".
+
+* llistarProcedimentsThreadGroup.jmx: test per mostrar el llistat de procediments.
+
+* cercaProcedimentsThreadGroup.jmx: test per fer una cerca de procediments amb alguns filtres.
+
+* cercaProcedimentsAmbUAsThreadGroup.jmx: test per fer una cerca de procediments amb alguns filtres, incloent la cerca a les UAs filles.
+
+* crearProcedimentThreadGroup.jmx: test per crear un nou procediment.
+
+* modificarProcedimentThreadGroup.kmx: test per modificar un procediment.
