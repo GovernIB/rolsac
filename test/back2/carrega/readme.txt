@@ -12,9 +12,14 @@ A la pantalla del pla de test s'han d'adaptar les variables d'usuari a l'entorn 
 Els següents tests estan configurats amb un usuari que fa una petició. Augmentar el nombre segons les necessitats de cada execució. 
 -----------------------------------------------------------------------------------------------------------------------------------
 
-* loginThradGrpup.jmx: test per fer login una vegada. Després del login es carrega la pantalla de quadre de control.
+--- Generals ---
+
+* loginThreadGrpup.jmx: test per fer login una vegada. Després del login es carrega la pantalla de quadre de control.
 
 * seleccionarUAThreadGroup: test per seleccionar la unitat administrativa amb id 1 "Govern de les Illes Balears".
+
+
+--- Procediments ---
 
 * llistarProcedimentsThreadGroup.jmx: test per mostrar el llistat de procediments.
 
@@ -25,3 +30,10 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * crearProcedimentThreadGroup.jmx: test per crear un nou procediment.
 
 * modificarProcedimentThreadGroup.kmx: test per modificar un procediment.
+
+
+--- UAs ---
+
+* crearUAThreadGroup.jmx: test per crear una nova UA.
+
+* modificarUAThreadGroup.jmx: test per modificar una UA.
