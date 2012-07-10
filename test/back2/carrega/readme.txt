@@ -37,3 +37,14 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * crearUAThreadGroup.jmx: test per crear una nova UA.
 
 * modificarUAThreadGroup.jmx: test per modificar una UA.
+
+
+--- Personal ---
+
+* llistarPersonalThreadGroup.jmx: test per mostrar el llistat de personal.
+
+* cercaPersonalThreadGroup.jmx: test per fer una cerca de personal.
+
+* crearPersonalThreadGroup.jmx: test per crear personal.
+
+* modificarPersonalThreadGroup.jmx: test per modificar personal.
