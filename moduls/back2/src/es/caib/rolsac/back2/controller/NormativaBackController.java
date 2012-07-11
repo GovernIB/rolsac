@@ -582,7 +582,7 @@ public class NormativaBackController extends PantallaBaseController {
 
         		//Archivo
         		FileItem fileItem = ficherosForm.get("item_arxiu_" + idioma);
-        		if ( fileItem.getSize() > 0 ) {
+        		if (fileItem != null && fileItem.getSize() > 0 ) {
         			traNorm.setArchivo(UploadUtil.obtenerArchivo(traNorm.getArchivo(), fileItem));
         		} else
         		//borrar fichero si se solicita
