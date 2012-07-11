@@ -48,3 +48,14 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * crearPersonalThreadGroup.jmx: test per crear personal.
 
 * modificarPersonalThreadGroup.jmx: test per modificar personal.
+
+
+--- Fitxa ---
+
+* llistarFitxesThreadGroup.jmx: test per mostrar el llistat de fitxes.
+
+* cercaFitxesThreadGroup.jmx: test per fer una cerca de fitxes.
+
+* crearFitxaThreadGroup.jmx: test per crear una fitxa.
+
+* modificarFitxaThreadGroup.jmx: test per modificar una fitxa.
