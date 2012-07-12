@@ -59,3 +59,14 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * crearFitxaThreadGroup.jmx: test per crear una fitxa.
 
 * modificarFitxaThreadGroup.jmx: test per modificar una fitxa.
+
+
+--- Normativa ---
+
+* llistarNormativesThreadGroup.jmx: test per mostrar el llistat de normatives.
+
+* cercaNormativesThreadGroup.jmx: test per fer una cerca de normatives.
+
+* crearNormativaThreadGroup.jmx: test per crear una normatvia.
+
+* modificarNormativaThreadGroup.jmx: test per modificar una normatvia.
