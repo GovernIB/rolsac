@@ -70,3 +70,25 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 * crearNormativaThreadGroup.jmx: test per crear una normatvia.
 
 * modificarNormativaThreadGroup.jmx: test per modificar una normatvia.
+
+
+--- Usuaris ---
+
+* llistarUsuarisThreadGroup.jmx: test per mostrar el llistat de usuaris.
+
+* cercaUsuarisThreadGroup.jmx: test per fer una cerca de usuaris.
+
+* crearUsuariThreadGroup.jmx: test per crear un usuari.
+
+* modificarUsuariThreadGroup.jmx: test per modificar un usuari.
+
+
+--- Fets vitals ---
+
+* llistarFetsVitalsThreadGroup.jmx: test per mostrar el llistat de fets vitals.
+
+* pujarFetVitalThreadGroup.jmx: test per pujar un de fets vital.
+
+* crearFetVitalThreadGroup.jmx: test per crear un fet vital.
+
+* modificarFetVitalThreadGroup.jmx: test per modificar un fet vital.
