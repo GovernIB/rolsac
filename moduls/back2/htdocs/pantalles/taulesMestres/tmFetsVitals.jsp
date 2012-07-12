@@ -1068,7 +1068,7 @@
             <div class="dades"></div>                       
             <input type="hidden" value="0" class="pagPagina" />
             <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="titol" class="ordreCamp" />             
+            <input type="hidden" value="id" class="ordreCamp" />             
         </div>
     </div>        
     
