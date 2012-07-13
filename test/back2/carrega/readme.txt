@@ -87,8 +87,28 @@ Els següents tests estan configurats amb un usuari que fa una petició. Augmentar
 
 * llistarFetsVitalsThreadGroup.jmx: test per mostrar el llistat de fets vitals.
 
-* pujarFetVitalThreadGroup.jmx: test per pujar un de fets vital.
+* pujarFetVitalThreadGroup.jmx: test per pujar un de fet vital.
 
 * crearFetVitalThreadGroup.jmx: test per crear un fet vital.
 
 * modificarFetVitalThreadGroup.jmx: test per modificar un fet vital.
+
+
+--- Seccions ---
+
+* llistarSeccionsThreadGroup.jmx: test per mostrar el llistat de seccions.
+
+* pujarSeccionThreadGroup.jmx: test per pujar una secció.
+
+* crearSeccioThreadGroup.jmx: test per crear una secció.
+
+* modificarSeccioThreadGroup.jmx: test per modificar una secció.
+
+
+--- Espais territorials ---
+
+* llistarEspaisTerritorialsThreadGroup.jmx: test per mostrar el llistat de espais territorials.
+
+* crearEspaiTerritorialThreadGroup.jmx: test per crear un espai territorial.
+
+* modificarEspaiTerritorialThreadGroup.jmx: test per modificar un espai territorial.
