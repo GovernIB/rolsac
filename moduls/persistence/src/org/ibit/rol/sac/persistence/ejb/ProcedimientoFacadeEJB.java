@@ -1731,8 +1731,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             List result = new ArrayList();
             HechoVital hecho = (HechoVital) session.load(HechoVital.class, hecho_id);
             for (Iterator iterator = hecho.getHechosVitalesProcedimientos().iterator(); iterator.hasNext();) {
-                ProcedimientoLocal procedimiento = ((HechoVitalProcedimiento) iterator.next()).getProcedimiento();
-                result.add(procedimiento);
+                HechoVitalProcedimiento hvp = (HechoVitalProcedimiento) iterator.next();
+                if (hvp != null) {
+                    result.add(hvp.getProcedimiento());
+                }
             }
             //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
             Collections.sort(result, new ProcedimientoLocal());
