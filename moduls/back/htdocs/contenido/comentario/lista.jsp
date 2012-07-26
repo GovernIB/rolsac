@@ -19,7 +19,7 @@
         Comentarios
     </div>
     <logic:empty name="comentarios">
-        <br /><h2><bean:message key="ficha.relacion.vacio" /></h2><br />
+        <br /><h2><bean:message key="comentarios.vacio" /></h2><br />
     </logic:empty>
     <logic:notEmpty name="comentarios">
         <logic:iterate id="comentario" name="comentarios" type="org.ibit.rol.sac.model.Comentario" >

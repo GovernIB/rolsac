@@ -16,7 +16,7 @@
         <property name="canalEnvio"  length="1" column="SEN_CANAL"/>        
         <property name="asunto"  length="500" column="SEN_ASUNTO"/>                
         <property name="titulo"  length="100" column="SEN_TITULO"/>                
-        <property name="contenidoHtml" column="SEN_HTML" type="org.ibit.rol.sac.model.types.StringClobType" />
+        <property name="contenidoHtml" column="SEN_HTML" type="@clob.type@" />
         <property name="tipo"  length="1" column="SEN_TIPO"/>                
         <property name="seccion"  column="SEN_IDSECC"/>                
         <property name="estado"  length="1" column="SEN_ESTADO"/>                

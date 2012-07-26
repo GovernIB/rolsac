@@ -27,7 +27,10 @@
         <fileset dir="${lib.dir}">
             <include name="cglib2.jar"/>
             <include name="commons-logging.jar"/>
+            <include name="juddi-proxy.jar"/>
+            <!--include name="axis.jar"/-->
             <include name="jaxrpc.jar"/>
+        	<include name="struts.jar"/>  <!-- vuds -->
         	<include name="servlet-api.jar"/>   <!-- vuds -->
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
@@ -42,12 +45,6 @@
     	<fileset dir="${lib.dir}/axis-1.4">
     	    <include name="**/*.jar" />
     	 </fileset>
-		<!-- agarcia: librerias comunes en 00librerias -->
-		<fileset dir="${lib.dir}/webcaib">
-		    <!--include name="axis.jar"/-->
-		    <include name="juddi-proxy.jar"/>
-			<include name="struts.jar"/>  <!-- vuds -->
-		</fileset>
     </path>
 
     <target name="prepare">
@@ -102,8 +99,8 @@
         	   <exclude name="commons-logging-1.1.1.jar"/>
 			</lib>
 
-        	<lib dir="${lib.dir}/webcaib">
-				<include name="commons-collections-3.2.1.jar"/>
+        	<lib dir="${lib.dir}">
+            	<include name="commons-collections.jar"/>
         	</lib>
 
         	<lib dir="${lib.dir}/jboss">
@@ -138,7 +135,5 @@
 	<property name="module.classes"  location="${jar.classes}"/>
 	
 	<import file="../build_test.xml"/>
-	<import file="../build_sonar.xml"/>
-
 	
 </project>

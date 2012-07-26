@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
+<title>TestRolsac_consultarProcedimentComplet_es</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestRolsac_consultarProcedimentComplet_es</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/sacback/contenido/procedimiento/editar.do?action=Seleccionar&amp;idSelect=372989</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>372989</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertValue</td>
+	<td>name=traducciones[0].nombre</td>
+	<td>Ajudes per a l'abandonament definitiu de vinyes per l'any 2009</td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Lista de Documentos Relacionados </td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td>Annex II. Sol.licitud de pagament</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Sin documentos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Sin clasificar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Sin normativas</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Sin trámites</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

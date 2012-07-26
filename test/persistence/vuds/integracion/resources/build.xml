@@ -6,7 +6,7 @@
 	<property name="home" value="."/>
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
-	<property file="${home}/default.properties"/>
+	<property file="${home}/config.properties"/>
 	<property name="doc" value="${home}/doc"/>
 	<property name="components" value="${home}/moduls"/>
 	<property name="etc" value="${home}/etc"/>

@@ -95,13 +95,27 @@ public class Documento extends Traducible implements Indexable {
 	@Override
 	public String toString() {
 
-		long fichaid=ficha==null?-1:ficha.getId();
-		long procid=procedimiento==null?-1:procedimiento.getId();
+		String nomDoc = obtenirNomDocument();
 
-		return "Documento [archivo=..." +", ficha=" + fichaid + 
-		", id="+ id + ", orden=" + orden + ", " +
-		"procedimiento=" + procid + "]";
+		String idActuacio=null;
+		
+		if(null!= ficha) {
+			idActuacio="ficha=" + ficha.getId();
+		} else 
+		if (null!=procedimiento) {
+			idActuacio="procedimiento=" + procedimiento.getId() ;
+		}
+		
+		return "Documento [nom=" + nomDoc +", id="+ id + ", orden=" + orden + 
+		", "+idActuacio + "]";
 	}
 
+	private String obtenirNomDocument() {
+		TraduccionDocumento tradoc = (TraduccionDocumento)getTraduccion("ca");
+		if(null==tradoc) 
+			return null;
+		return tradoc.getTitulo();
+		
+	}
 
 }

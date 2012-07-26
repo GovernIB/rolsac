@@ -10,16 +10,14 @@
     <path id="db.classpath">
         <fileset dir="${lib}">
     		<include name="hibernate2.jar"/>
+        	<include name="dom4j.jar"/>
+        	<include name="odmg.jar"/>
         	<include name="cglib2.jar"/>
         	<include name="commons-logging.jar"/>        	
+        	<include name="commons-collections.jar"/>
+        	<include name="lucene-caib.jar"/>
         	<include name="ojdbc14.jar"/>
         </fileset>
-	    <fileset dir="${lib}/webcaib">
-			<include name="commons-collections-3.2.1.jar"/>
-			<include name="dom4j.jar"/>
-			<include name="lucene-caib.jar"/>
-			<include name="odmg.jar"/>
-	    </fileset>
         <fileset dir="${moduls.dir}" includes="model.jar"/>
     </path>
 
@@ -31,7 +29,7 @@
             classpathref="db.classpath"/>
 
         <schemaexport
-        	properties="${basedir}/default.properties"
+        	properties="${basedir}/config.properties"
             quiet="no"
             text="yes"
             delimiter=";"
@@ -49,7 +47,7 @@
 				classname="net.sf.hibernate.tool.hbm2ddl.SchemaUpdateTask"
 				classpathref="db.classpath"/>
 			<schemaupdate
-				properties="${basedir}/default.properties"
+				properties="${basedir}/config.properties"
 				text="yes"
 				quiet="no">
 

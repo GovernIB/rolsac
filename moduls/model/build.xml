@@ -2,14 +2,16 @@
 
 <project name="sac.model" default="main" basedir=".">
 
+	
+    <property file="${basedir}/build.properties"/>
+
     <property name="modul" value="model"/>
     <property name="package" value="org.ibit.rol.sac.model"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
-	<property file="${home.dir}/default.properties"/>
-    <property file="${basedir}/build.properties"/>
+	<property file="${home.dir}/config.properties"/>
 	
     <property name="output.dir" location="${home.dir}/output"/>
     <property name="modul.output.dir" location="${output.dir}/${modul}"/>
@@ -34,22 +36,20 @@
             <include name="extractor.jar"/>
         </fileset>
         <fileset dir="${lib.dir}">
+            <include name="commons-beanutils.jar"/>
             <include name="commons-logging.jar"/>
+            <include name="commons-lang-2.1.jar"/>
             <include name="hibernate2.jar"/>
-		    <include name="ojdbc14.jar"/>
-			<include name="jaxrpc.jar"/>
+        	<include name="lucene-caib.jar"/>        	
+        </fileset>
+        <fileset dir="${lib.dir}">
+            <include name="ojdbc14.jar"/>
+        	<!--include name="axis.jar"/-->
+        	<include name="jaxrpc.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis-1.4">
     	     <include name="**/*.jar" />
     	 </fileset>
-		<!-- agarcia: librerias comunes en 00librerias -->
-		<fileset dir="${lib.dir}/webcaib">
-			<!--include name="axis.jar"/-->
-			<include name="commons-beanutils-1.8.3.jar"/>
-		    <include name="commons-lang-2.1.jar"/>
-			<include name="lucene-caib.jar"/>        	
-		</fileset>
-
     </path>
 
     <target name="prepare">
@@ -69,6 +69,8 @@
 		
 		<replace dir="${jar.gen.etc}" includes="**/*.hbm.xml">			
 			<replacefilter token="RSC_" value="${db.prefix}"/>
+			<replacefilter token="@blob.type@" value="${blob.type}"/>
+			<replacefilter token="@clob.type@" value="${clob.type}"/>
 		</replace>
 		
     	<replace file="${jar.gen.etc}/url.properties">
@@ -130,6 +132,5 @@
 	<property name="module.classes"  location="${jar.classes}"/>
 
 	<import file="../build_test.xml"/>
-	<import file="../build_sonar.xml"/>
 	
 </project>

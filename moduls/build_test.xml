@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project name="test" basedir=".">
-
+	
 	<property name="test.unitario.src.dir" location="${home.dir}/test/${modul}/unitario/java"/>
 	<property name="test.unitario.etc.dir" location="${home.dir}/test/${modul}/unitario/resources"/>
 	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
 	<property name="test.integracion.etc.dir" location="${home.dir}/test/${modul}/integracion/resources"/>
     <property name="test.lib.dir" location="${home.dir}/test/lib"/>
-    <property name="test.classes" location="${modul.output.dir}/test/classes"/>
+    <property name="test.classes" location="${output.dir}/test/classes"/>
 	<property name="test.unitario.resources" location="${modul.output.dir}/test/unitario/resources"/>
 	<property name="test.integracion.resources" location="${modul.output.dir}/test/integracion/resources"/>
     <property name="lib.dir" location="${home.dir}/lib"/>
 
     <target name="prepare.test">
+    	<delete dir="${module.classes}"/>
     	<mkdir dir="${test.classes}"/>
     	<mkdir dir="${test.unitario.resources}"/>
     	<copy todir="${test.unitario.resources}" overwrite="true">
@@ -36,10 +37,7 @@
 		<fileset dir="${output.dir}/moduls">
 		    <include name="test_utils.jar"/>
 		</fileset>
-		<fileset dir="${lib.dir}">
-			<include name="org.springframework.**.jar"/>
-		</fileset>
-	</path>	
+	</path>	 
 
 	
 	<path id="test.unitario.classpath">
