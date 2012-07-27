@@ -32,26 +32,7 @@
 	<td>Listado de Fichas</td>
 	<td></td>
 </tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>xpath=(//input[@name='action'])[3]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Modificación Ficha </td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Datos de la Ficha</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>Comentarios </td>
-	<td></td>
-</tr>
+
 </tbody></table>
 </body>
 </html>

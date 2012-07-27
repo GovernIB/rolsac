@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
-<title>TestRolsac_altaProcediment_InsertaMateria</title>
+<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
+<title>TestRolsac_altaProcediment</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestRolsac_altaProcediment_InsertaMateria</td></tr>
+<tr><td rowspan="1" colspan="3">TestRolsac_altaProcediment</td></tr>
 </thead><tbody>
 <tr>
 	<td>clickAndWait</td>
@@ -151,68 +151,7 @@
 	<td>//div[@id='ccontingut']/div[4]/h2</td>
 	<td>Sin clasificar</td>
 </tr>
-<!---- verificar que al insertar una materia apareix la materia-->
-<tr>
-	<td>click</td>
-	<td>//div[@id='ccontingut']/center[4]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForPopUp</td>
-	<td>Seleccionar</td>
-	<td>30000</td>
-</tr>
-<tr>
-	<td>selectWindow</td>
-	<td>name=Seleccionar</td>
-	<td></td>
-</tr>
-<tr>
-	<td>storeText</td>
-	<td>elemento</td>
-	<td>materias</td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>${materias}</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextNotPresent</td>
-	<td>Sense classificar </td>
-	<td></td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>elemento</td>
-	<td>label=Cultura</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//input[@value='Seleccionar']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>selectWindow</td>
-	<td>title=SAC</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Cultura</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertText</td>
-	<td>link=Cultura</td>
-	<td>Cultura</td>
-</tr>
-<tr>
-	<td>assertTextNotPresent</td>
-	<td>sin clasificar</td>
-	<td></td>
-</tr>
-<!---- verificar que s'esborra el procediment creat-->
+<!---- esborrar procediment creat-->
 <tr>
 	<td>storeText</td>
 	<td>//div[@id='ccontingut']/div[1]/h2</td>
@@ -288,7 +227,6 @@
 	<td>Se ha realizado la baja correctamente</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

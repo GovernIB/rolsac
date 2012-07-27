@@ -4,46 +4,28 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
-<title>TestRolsac_listarUsuariosUA</title>
+<title>TestRolsac_consultarCampProcedimentLlarg</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestRolsac_listarUsuariosUA</td></tr>
+<tr><td rowspan="1" colspan="3">TestRolsac_consultarCampProcedimentLlarg</td></tr>
 </thead><tbody>
+<!---- es selecciona el tramit 605875-->
 <tr>
 	<td>open</td>
-	<td>sacback/organigrama/unidad/editar.do?espera=si&amp;idUA=374&amp;action=Seleccionar</td>
+	<td>/sacback/contenido/tramite/seleccionar.do?action=Seleccionar&amp;idSelect=605875&amp;titol=tramite.modificacion</td>
 	<td></td>
 </tr>
+<!---- es comproba que  es llegeix tot el camp requisits d'aquest tramit  (30000 caracters)-->
 <tr>
-	<td>click</td>
-	<td>link=Nuevo Registro</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForPopUp</td>
-	<td>Seleccionar</td>
-	<td>30000</td>
-</tr>
-<tr>
-	<td>selectWindow</td>
-	<td>title=SAC Unidad - Usuario</td>
+	<td>assertTextPresent</td>
+	<td>Enterprise JavaBeans (EJB) is a managed, server-side component architecture for modular construction of enterprise applications.</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertTextPresent</td>
-	<td>soyOperador</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>soySuper</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertTextPresent</td>
-	<td>soyAdmin</td>
+	<td>&quot;Working with Message-Driven Beans&quot; from EJB3 in Action, Second Edition</td>
 	<td></td>
 </tr>
 </tbody></table>

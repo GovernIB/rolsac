@@ -3,33 +3,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="selenium.base" href="" />
-<title>TestRolsac_altaFicha</title>
+<link rel="selenium.base" href="http://epreinf45.caib.es:8080/sacback" />
+<title>TestRolsac_perfilUsuario</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">TestRolsac_altaFicha</td></tr>
+<tr><td rowspan="1" colspan="3">TestRolsac_perfilUsuario</td></tr>
 </thead><tbody>
-<!---- insertar ficha basica-->
+<!---- verificar que falta camp perfil-->
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Fichas Informativas</td>
+	<td>link=Usuarios</td>
 	<td></td>
 </tr>
 <tr>
-	<td>select</td>
-	<td>validacion</td>
-	<td>label=Público</td>
+	<td>type</td>
+	<td>name=username</td>
+	<td>usuarioProva4</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>titulo</td>
-	<td>prova ficha</td>
+	<td>name=password</td>
+	<td>usuarioProva4</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=nombre</td>
+	<td>usuarioProva4</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>El campo Perfil es obligatorio.</td>
+	<td></td>
+</tr>
+<!---- verificar alta amb camp perfil-->
+<tr>
+	<td>select</td>
+	<td>name=perfil</td>
+	<td>label=Administrador</td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>action</td>
+	<td>name=action</td>
 	<td></td>
 </tr>
 <tr>
@@ -42,30 +63,25 @@
 	<td>Se ha realizado el alta correctamente</td>
 	<td></td>
 </tr>
+<!---- borrar usuari temporal-->
 <tr>
-	<td>assertTextPresent</td>
-	<td>Sin clasificar</td>
+	<td>clickAndWait</td>
+	<td>link=Usuarios</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertValue</td>
-	<td>responsable</td>
-	<td></td>
+	<td>type</td>
+	<td>name=username</td>
+	<td>usuarioProva4</td>
 </tr>
 <tr>
-	<td>assertValue</td>
-	<td>url</td>
+	<td>clickAndWait</td>
+	<td>//input[@name='action' and @value='Búsqueda']</td>
 	<td></td>
 </tr>
-<!---- esborrar ficha-->
 <tr>
 	<td>click</td>
 	<td>//input[@name='action' and @value='Eliminar']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>assertConfirmation</td>
-	<td>¿Desea dar de baja el registro actual?</td>
 	<td></td>
 </tr>
 <tr>
