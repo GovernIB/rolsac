@@ -33,5 +33,8 @@ i crear barreges de tests amb jmeter (anar a jmeter Archivo>Mezclar) . Així qued
   Llegeix les variables d'usuari:
   	- usuari
 	- contrasenya
+	
+  * webcaib-buscarBoibsEntre2anys.jmx: test de carrega que llista els boibs entre un any inici i final. Agafa
+  diferents valors del fitxer buscadorboib-anyIniciFinal.csv 
   
   
