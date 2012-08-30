@@ -1,0 +1,108 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from TramitQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="TramitWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/TramitWS"/>
+      <parameter name="wsdlServiceElement" value="TramitQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="https://localhost:8443/sacws-api/services/TramitWS,http://procediment.v2.api.rolsac.caib.es,http://taxa.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://documentTramit.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="TramitWS"/>
+      <parameter name="className" value="localhost.sacws_api.services.TramitWS.TramitWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="TramitQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="obtenirProcediment" qname="operNS:obtenirProcediment" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="obtenirProcedimentReturn" returnType="rtns:ProcedimentDTO" xmlns:rtns="http://procediment.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarTaxes" qname="operNS:llistarTaxes" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="llistarTaxesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/TramitWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:TaxaCriteria" xmlns:tns="http://taxa.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarFormularis" qname="operNS:llistarFormularis" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="llistarFormularisReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/TramitWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:DocumentTramitCriteria" xmlns:tns="http://documentTramit.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="getNumDocumentsInformatius" qname="operNS:getNumDocumentsInformatius" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="getNumDocumentsInformatiusReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumFormularis" qname="operNS:getNumFormularis" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="getNumFormularisReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumTaxes" qname="operNS:getNumTaxes" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="getNumTaxesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirOrganCompetent" qname="operNS:obtenirOrganCompetent" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="obtenirOrganCompetentReturn" returnType="rtns:UnitatAdministrativaDTO" xmlns:rtns="http://unitatAdministrativa.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistatDocumentsInformatius" qname="operNS:llistatDocumentsInformatius" xmlns:operNS="http://intf.ejb.tramit.v2.api.rolsac.caib.es" returnQName="llistatDocumentsInformatiusReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/TramitWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:DocumentTramitCriteria" xmlns:tns="http://documentTramit.v2.api.rolsac.caib.es"/>
+      </operation>
+      <parameter name="allowedMethods" value="getNumDocumentsInformatius obtenirProcediment llistatDocumentsInformatius obtenirOrganCompetent getNumTaxes llistarFormularis getNumFormularis llistarTaxes"/>
+
+      <typeMapping
+        xmlns:ns="http://taxa.v2.api.rolsac.caib.es"
+        qname="ns:TaxaCriteria"
+        type="java:es.caib.rolsac.api.v2.taxa.TaxaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/TramitWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentDTO"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:DocumentTramitCriteria"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaDTO"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

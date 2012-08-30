@@ -13,8 +13,6 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapte
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
-import es.caib.rolsac.api.v2.general.BeanUtils;
-import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -40,7 +38,7 @@ public class UnitatAdministrativaQueryServiceTest {
 
     @Before
     public void setup() {        
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = TestUtils.getRolsacQueryService();
     }
 
     @Test

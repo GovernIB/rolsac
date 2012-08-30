@@ -1,26 +1,94 @@
+/**
+ * TipusAfectacioCriteria.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
 package es.caib.rolsac.api.v2.tipusAfectacio;
 
-import es.caib.rolsac.api.v2.general.BasicCriteria;
+public class TipusAfectacioCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  implements java.io.Serializable {
+    public TipusAfectacioCriteria() {
+    }
 
-public class TipusAfectacioCriteria extends BasicCriteria {
-    
-    private static final long serialVersionUID = 8667843456946406670L;
+    public TipusAfectacioCriteria(
+           java.lang.String id,
+           java.lang.String idioma,
+           java.lang.String inici,
+           java.lang.String ordenacio,
+           java.lang.String tamany) {
+        super(
+            id,
+            idioma,
+            inici,
+            ordenacio,
+            tamany);
+    }
 
-    private String t_nombre;
+    private java.lang.Object __equalsCalc = null;
+    public synchronized boolean equals(java.lang.Object obj) {
+        if (!(obj instanceof TipusAfectacioCriteria)) return false;
+        TipusAfectacioCriteria other = (TipusAfectacioCriteria) obj;
+        if (obj == null) return false;
+        if (this == obj) return true;
+        if (__equalsCalc != null) {
+            return (__equalsCalc == obj);
+        }
+        __equalsCalc = obj;
+        boolean _equals;
+        _equals = super.equals(obj);
+        __equalsCalc = null;
+        return _equals;
+    }
 
-    /**
-     * @return the t_nombre
-     */
-    public String getT_nombre() {
-        return t_nombre;
+    private boolean __hashCodeCalc = false;
+    public synchronized int hashCode() {
+        if (__hashCodeCalc) {
+            return 0;
+        }
+        __hashCodeCalc = true;
+        int _hashCode = super.hashCode();
+        __hashCodeCalc = false;
+        return _hashCode;
+    }
+
+    // Type metadata
+    private static org.apache.axis.description.TypeDesc typeDesc =
+        new org.apache.axis.description.TypeDesc(TipusAfectacioCriteria.class, true);
+
+    static {
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://tipusAfectacio.v2.api.rolsac.caib.es", "TipusAfectacioCriteria"));
     }
 
     /**
-     * @param t_nombre the t_nombre to set
+     * Return type metadata object
      */
-    public void setT_nombre(String t_nombre) {
-        this.t_nombre = t_nombre;
+    public static org.apache.axis.description.TypeDesc getTypeDesc() {
+        return typeDesc;
     }
-    
-    
+
+    /**
+     * Get Custom Serializer
+     */
+    public static org.apache.axis.encoding.Serializer getSerializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanSerializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
+    /**
+     * Get Custom Deserializer
+     */
+    public static org.apache.axis.encoding.Deserializer getDeserializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanDeserializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
 }

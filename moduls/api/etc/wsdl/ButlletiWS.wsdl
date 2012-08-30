@@ -1,0 +1,148 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/ButlletiWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/ButlletiWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://localhost:8443/sacws-api/services/ButlletiWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://normativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="NormativaCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="numero" nillable="true" type="xsd:string" />
+							<element name="registro" nillable="true" type="xsd:string" />
+							<element name="ley" nillable="true" type="xsd:string" />
+							<element name="fecha" nillable="true" type="xsd:dateTime" />
+							<element name="fechaBoletin" nillable="true" type="xsd:dateTime" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+							<element name="codiVuds" nillable="true" type="xsd:string" />
+							<element name="descCodiVuds" nillable="true" type="xsd:string" />
+							<element name="t_seccion" nillable="true" type="xsd:string" />							
+							<element name="t_apartado" nillable="true" type="xsd:string" />
+							<element name="t_paginaInicial" nillable="true" type="xsd:string" />
+							<element name="t_paginaFinal" nillable="true" type="xsd:string" />
+							<element name="t_titulo" nillable="true" type="xsd:string" />
+							<element name="t_enlace" nillable="true" type="xsd:string" />
+							<element name="t_observaciones" nillable="true" type="xsd:string" />
+							<element name="t_responsable" nillable="true" type="xsd:string" />
+							<element name="incluirExternas" nillable="true" type="xsd:boolean" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/ButlletiWS">
+			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="llistarNormativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:NormativaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumNormativesResponse">
+		<wsdl:part name="getNumNormativesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumNormativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarNormativesResponse">
+		<wsdl:part name="llistarNormativesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:portType name="ButlletiQueryServiceEJBRemote">
+		<wsdl:operation name="llistarNormatives"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarNormativesRequest" name="llistarNormativesRequest" />
+			<wsdl:output message="impl:llistarNormativesResponse"
+				name="llistarNormativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumNormatives" parameterOrder="in0 in1">
+			<wsdl:input message="impl:getNumNormativesRequest" name="getNumNormativesRequest" />
+			<wsdl:output message="impl:getNumNormativesResponse"
+				name="getNumNormativesResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ButlletiWSSoapBinding" type="impl:ButlletiQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="llistarNormatives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarNormativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.butlleti.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarNormativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/ButlletiWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumNormatives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumNormativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.butlleti.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumNormativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/ButlletiWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ButlletiQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:ButlletiWSSoapBinding" name="ButlletiWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/ButlletiWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

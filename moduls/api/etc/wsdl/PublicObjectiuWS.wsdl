@@ -1,0 +1,138 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/PublicObjectiuWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/PublicObjectiuWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://agrupacioFetVital.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://agrupacioFetVital.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="AgrupacioFetVitalCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_palabrasclave" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS" />
+			<import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="llistarAgrupacionsResponse">
+		<wsdl:part name="llistarAgrupacionsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumAgrupacionsResponse">
+		<wsdl:part name="getNumAgrupacionsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumAgrupacionsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAgrupacionsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:AgrupacioFetVitalCriteria" />
+	</wsdl:message>
+	<wsdl:portType name="PublicObjectiuQueryServiceEJBRemote">
+		<wsdl:operation name="getNumAgrupacions"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumAgrupacionsRequest" name="getNumAgrupacionsRequest" />
+			<wsdl:output message="impl:getNumAgrupacionsResponse"
+				name="getNumAgrupacionsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarAgrupacions"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarAgrupacionsRequest" name="llistarAgrupacionsRequest" />
+			<wsdl:output message="impl:llistarAgrupacionsResponse"
+				name="llistarAgrupacionsResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PublicObjectiuWSSoapBinding"
+		type="impl:PublicObjectiuQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getNumAgrupacions">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumAgrupacionsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumAgrupacionsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarAgrupacions">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarAgrupacionsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarAgrupacionsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/PublicObjectiuWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PublicObjectiuQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:PublicObjectiuWSSoapBinding" name="PublicObjectiuWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/PublicObjectiuWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

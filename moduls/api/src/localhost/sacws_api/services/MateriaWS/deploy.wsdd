@@ -1,0 +1,145 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MateriaQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="MateriaWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/MateriaWS"/>
+      <parameter name="wsdlServiceElement" value="MateriaQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://procediment.v2.api.rolsac.caib.es,http://fitxa.v2.api.rolsac.caib.es,http://agrupacioMateria.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/MateriaWS,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://unitatMateria.v2.api.rolsac.caib.es,http://iconaMateria.v2.api.rolsac.caib.es,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="MateriaWS"/>
+      <parameter name="className" value="localhost.sacws_api.services.MateriaWS.MateriaWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="MateriaQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="llistarUnitatsAdministratives" qname="operNS:llistarUnitatsAdministratives" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarUnitatsAdministrativesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:UnitatAdministrativaCriteria" xmlns:tns="http://unitatAdministrativa.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarFitxes" qname="operNS:llistarFitxes" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarFitxesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:FitxaCriteria" xmlns:tns="http://fitxa.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarIconesMateries" qname="operNS:llistarIconesMateries" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarIconesMateriesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:IconaMateriaCriteria" xmlns:tns="http://iconaMateria.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarProcedimentsLocals" qname="operNS:llistarProcedimentsLocals" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarProcedimentsLocalsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="getNumFitxes" qname="operNS:getNumFitxes" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getNumFitxesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumProcedimentsLocals" qname="operNS:getNumProcedimentsLocals" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getNumProcedimentsLocalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getFotografia" qname="operNS:getFotografia" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getFotografiaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getIcona" qname="operNS:getIcona" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getIconaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getIconaGran" qname="operNS:getIconaGran" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getIconaGranReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumAgrupacioMateries" qname="operNS:getNumAgrupacioMateries" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getNumAgrupacioMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumUnitatsMateries" qname="operNS:getNumUnitatsMateries" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getNumUnitatsMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumIcones" qname="operNS:getNumIcones" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="getNumIconesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarAgrupacioMateries" qname="operNS:llistarAgrupacioMateries" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarAgrupacioMateriesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:AgrupacioMateriaCriteria" xmlns:tns="http://agrupacioMateria.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="llistarUnitatsMateria" qname="operNS:llistarUnitatsMateria" xmlns:operNS="http://intf.ejb.materia.v2.api.rolsac.caib.es" returnQName="llistarUnitatsMateriaReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/MateriaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:UnitatMateriaCriteria" xmlns:tns="http://unitatMateria.v2.api.rolsac.caib.es"/>
+      </operation>
+      <parameter name="allowedMethods" value="getNumUnitatsMateries getNumFitxes getNumProcedimentsLocals llistarIconesMateries llistarUnitatsAdministratives getIconaGran llistarUnitatsMateria getIcona getFotografia llistarFitxes llistarProcedimentsLocals getNumAgrupacioMateries llistarAgrupacioMateries getNumIcones"/>
+
+      <typeMapping
+        xmlns:ns="http://agrupacioMateria.v2.api.rolsac.caib.es"
+        qname="ns:AgrupacioMateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://iconaMateria.v2.api.rolsac.caib.es"
+        qname="ns:IconaMateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentCriteria"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
+        qname="ns:FitxaCriteria"
+        type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatMateria.v2.api.rolsac.caib.es"
+        qname="ns:UnitatMateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/MateriaWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

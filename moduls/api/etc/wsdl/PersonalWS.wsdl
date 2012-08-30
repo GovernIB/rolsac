@@ -1,0 +1,103 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/PersonalWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/PersonalWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://localhost:8443/sacws-api/services/PersonalWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="EntitatRemota">
+				<sequence>
+					<element name="administracionRemota" nillable="true" type="xsd:long" />
+					<element name="idExterno" nillable="true" type="xsd:long" />
+					<element name="urlRemota" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="UnitatAdministrativaDTO">
+				<complexContent>
+					<extension base="tns2:EntitatRemota">
+						<sequence>
+							<element name="abreviatura" nillable="true" type="xsd:string" />
+							<element name="businessKey" nillable="true" type="xsd:string" />
+							<element name="claveHita" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="dominio" nillable="true" type="xsd:string" />
+							<element name="email" nillable="true" type="xsd:string" />
+							<element name="espacioTerrit" nillable="true" type="xsd:long" />
+							<element name="fax" nillable="true" type="xsd:string" />
+							<element name="fotog" nillable="true" type="xsd:long" />
+							<element name="fotop" nillable="true" type="xsd:long" />
+							<element name="id" nillable="true" type="xsd:long" />
+							<element name="logoh" nillable="true" type="xsd:long" />
+							<element name="logos" nillable="true" type="xsd:long" />
+							<element name="logot" nillable="true" type="xsd:long" />
+							<element name="logov" nillable="true" type="xsd:long" />
+							<element name="nombre" nillable="true" type="xsd:string" />
+							<element name="numfoto1" nillable="true" type="xsd:int" />
+							<element name="numfoto2" nillable="true" type="xsd:int" />
+							<element name="numfoto3" nillable="true" type="xsd:int" />
+							<element name="numfoto4" nillable="true" type="xsd:int" />
+							<element name="orden" type="xsd:long" />
+							<element name="padre" nillable="true" type="xsd:long" />
+							<element name="presentacion" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="sexoResponsable" nillable="true" type="xsd:int" />
+							<element name="telefono" nillable="true" type="xsd:string" />
+							<element name="tratamiento" nillable="true" type="xsd:long" />
+							<element name="url" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:int" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="obtenirUnitatAdministrativaResponse">
+		<wsdl:part name="obtenirUnitatAdministrativaReturn" type="tns1:UnitatAdministrativaDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirUnitatAdministrativaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:portType name="PersonalQueryServiceEJBRemote">
+		<wsdl:operation name="obtenirUnitatAdministrativa"
+			parameterOrder="in0">
+			<wsdl:input message="impl:obtenirUnitatAdministrativaRequest"
+				name="obtenirUnitatAdministrativaRequest" />
+			<wsdl:output message="impl:obtenirUnitatAdministrativaResponse"
+				name="obtenirUnitatAdministrativaResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="PersonalWSSoapBinding" type="impl:PersonalQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="obtenirUnitatAdministrativa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirUnitatAdministrativaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.personal.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirUnitatAdministrativaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/PersonalWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="PersonalQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:PersonalWSSoapBinding" name="PersonalWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/PersonalWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

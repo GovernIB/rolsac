@@ -1,7 +1,6 @@
 package es.caib.rolsac.api.v2.test;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -36,8 +35,6 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUAQueryServiceAdapter;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
-import es.caib.rolsac.api.v2.general.BeanUtils;
-import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.general.co.ByDateCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
@@ -81,7 +78,7 @@ public class RolsacQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = TestUtils.getRolsacQueryService();
     }
 
     /**
@@ -165,8 +162,7 @@ public class RolsacQueryServiceTest {
     public void recuperarProcedimentsPerDataActualitzacio() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         Calendar c = new GregorianCalendar(2005, 6, 4);
-        Date date = c.getTime();
-        procedimentCriteria.setFechaActualizacion(date);
+        procedimentCriteria.setFechaActualizacion(c);
         procedimentCriteria.setTamany("10");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
@@ -178,7 +174,7 @@ public class RolsacQueryServiceTest {
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertEquals(
                     ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion()),
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(date)
+                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c.getTime())
             );
         }
     }

@@ -52,7 +52,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public int getNumDocuments() throws QueryServiceException {
         try {
-            return fitxaQueryServiceStrategy.getNumDocuments(id);
+            return fitxaQueryServiceStrategy.getNumDocuments(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de documentos.", e);
         }
@@ -60,7 +60,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public int getNumEnllacos() throws QueryServiceException {
         try {
-            return fitxaQueryServiceStrategy.getNumEnllacos(id);
+            return fitxaQueryServiceStrategy.getNumEnllacos(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de enlaces.", e);
         }
@@ -68,7 +68,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public int getNumFetsVitals() throws QueryServiceException {
         try {
-            return fitxaQueryServiceStrategy.getNumFetsVitals(id);
+            return fitxaQueryServiceStrategy.getNumFetsVitals(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de hechos vitales.", e);
         }
@@ -76,7 +76,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public int getNumUnitatsAdministratives() throws QueryServiceException {
         try {
-            return fitxaQueryServiceStrategy.getNumUnitatsAdministratives(id);
+            return fitxaQueryServiceStrategy.getNumUnitatsAdministratives(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
         }
@@ -84,7 +84,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public int getNumSeccions() throws QueryServiceException {
         try {
-            return fitxaQueryServiceStrategy.getNumSeccions(id);
+            return fitxaQueryServiceStrategy.getNumSeccions(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de seccions.", e);
         }
@@ -92,7 +92,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
     
     public List<EnllacQueryServiceAdapter> llistarEnllacos(EnllacCriteria enllacCriteria) throws QueryServiceException {
         try {
-            List<EnllacDTO> llistaDTO = fitxaQueryServiceStrategy.llistarEnllacos(id, enllacCriteria);
+            List<EnllacDTO> llistaDTO = fitxaQueryServiceStrategy.llistarEnllacos(getId(), enllacCriteria);
             List<EnllacQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EnllacQueryServiceAdapter>();
             for (EnllacDTO enllacDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((EnllacQueryServiceAdapter) BeanUtils.getAdapter("enllac", getStrategy(), enllacDTO));
@@ -105,7 +105,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
         try {
-            List<UnitatAdministrativaDTO> llistaDTO = fitxaQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaDTO> llistaDTO = fitxaQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
@@ -118,7 +118,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException {
         try {
-            List<SeccioDTO> llistaDTO = fitxaQueryServiceStrategy.llistarSeccions(id, seccioCriteria);
+            List<SeccioDTO> llistaDTO = fitxaQueryServiceStrategy.llistarSeccions(getId(), seccioCriteria);
             List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
             for (SeccioDTO seccioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
@@ -131,7 +131,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
     
     public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException {
         try {
-            List<DocumentDTO> llistaDTO = fitxaQueryServiceStrategy.llistarDocuments(id, documentCriteria);
+            List<DocumentDTO> llistaDTO = fitxaQueryServiceStrategy.llistarDocuments(getId(), documentCriteria);
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {            
                 llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));
@@ -144,7 +144,7 @@ public class FitxaQueryServiceAdapter extends FitxaDTO implements FitxaQueryServ
 
     public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCritera) throws QueryServiceException {
         try {
-            List<FetVitalDTO> llistaDTO = fitxaQueryServiceStrategy.llistarFetsVitals(id, fetVitalCritera);
+            List<FetVitalDTO> llistaDTO = fitxaQueryServiceStrategy.llistarFetsVitals(getId(), fetVitalCritera);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {            
                 llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));

@@ -24,7 +24,7 @@ public class AgrupacioFetVitalQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = TestUtils.getRolsacQueryService();
     }
     
     @Test

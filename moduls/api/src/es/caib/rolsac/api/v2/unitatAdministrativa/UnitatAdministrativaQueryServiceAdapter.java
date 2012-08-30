@@ -95,7 +95,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<UnitatAdministrativaQueryServiceAdapter> llistarFilles(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
         try {
-            List<UnitatAdministrativaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFilles(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFilles(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));
@@ -108,7 +108,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException {
         try {
-            List<EdificiDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarEdificis(id, edificiCriteria);
+            List<EdificiDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarEdificis(getId(), edificiCriteria);
             List<EdificiQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EdificiQueryServiceAdapter>();
             for (EdificiDTO edificiDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((EdificiQueryServiceAdapter) BeanUtils.getAdapter("edifici", getStrategy(), edificiDTO));
@@ -121,7 +121,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<PersonalQueryServiceAdapter> llistarPersonal(PersonalCriteria personalCriteria) throws QueryServiceException {
         try {
-            List<PersonalDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarPersonal(id, personalCriteria);
+            List<PersonalDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarPersonal(getId(), personalCriteria);
             List<PersonalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<PersonalQueryServiceAdapter>();
             for (PersonalDTO personalDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((PersonalQueryServiceAdapter) BeanUtils.getAdapter("personal", getStrategy(), personalDTO));
@@ -134,7 +134,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException {
         try {
-            List<NormativaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarNormatives(id, normativaCriteria);
+            List<NormativaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
@@ -147,7 +147,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
-            List<ProcedimentDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarProcediments(id, procedimentCriteria);
+            List<ProcedimentDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarProcediments(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
@@ -160,7 +160,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException {
         try {
-            List<TramitDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarTramits(id, tramitCriteria);
+            List<TramitDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarTramits(getId(), tramitCriteria);
             List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
             for (TramitDTO tramitDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO));
@@ -173,7 +173,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException {
         try {
-            List<UsuariDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarUsuaris(id, usuariCriteria);
+            List<UsuariDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarUsuaris(getId(), usuariCriteria);
             List<UsuariQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UsuariQueryServiceAdapter>();
             for (UsuariDTO usuariDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((UsuariQueryServiceAdapter) BeanUtils.getAdapter("usuari", getStrategy(), usuariDTO));
@@ -186,7 +186,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
         try {
-            List<FitxaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFitxes(id, fitxaCriteria);
+            List<FitxaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
@@ -199,7 +199,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public List<SeccioQueryServiceAdapter> llistarSeccions(SeccioCriteria seccioCriteria) throws QueryServiceException {
         try {
-            List<SeccioDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarSeccions(id, seccioCriteria);
+            List<SeccioDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarSeccions(getId(), seccioCriteria);
             List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
             for (SeccioDTO seccioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
@@ -212,7 +212,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
     
     public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
         try {
-            List<MateriaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarMateries(id, materiaCriteria);
+            List<MateriaDTO> llistaDTO = unitatAdministrativaQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
@@ -225,7 +225,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumFilles() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumFilles(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumFilles(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de hijas.", e);
         }
@@ -233,7 +233,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumEdificis() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumEdificis(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumEdificis(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de edificios.", e);
         }
@@ -241,7 +241,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumPersonal() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumPersonal(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumPersonal(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de personal.", e);
         }
@@ -249,7 +249,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumNormatives() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumNormatives(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumNormatives(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas.", e);
         }
@@ -257,7 +257,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumProcediments() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumProcediments(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumProcediments(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
@@ -265,7 +265,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumTramits() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumTramits(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumTramits(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de tramites.", e);
         }
@@ -273,7 +273,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumUsuaris() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumUsuaris(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumUsuaris(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de usuarios.", e);
         }
@@ -281,7 +281,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumFitxes() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumFitxes(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumFitxes(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de fichas.", e);
         }
@@ -289,7 +289,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
 
     public int getNumSeccions() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumSeccions(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumSeccions(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones.", e);
         }
@@ -297,7 +297,7 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
     
     public int getNumMateries() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.getNumMateries(id);
+            return unitatAdministrativaQueryServiceStrategy.getNumMateries(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de materias.", e);
         }

@@ -58,7 +58,7 @@
         update.model      : actualitza el model de dades
 	    update.persistence: actualitza la capa de persistencia
     	update.api        : actualitza la API
-        update.XDOCLET    : update.extractor + update.model + update.persistence + update.api
+        update.XDOCLET    : update.extractor + update.model + update.persistence
 		
 	    update.integracion: actualitza la capa d'integració
 	    update.back       : actualitza el mòdul web legacy de backoffice
@@ -167,10 +167,6 @@
 	<target name="update.persistence" description="Actualizar la capa de persistencia">
 		<ant dir="moduls/persistence" target="main" inheritall="false"/>
 	</target>
-	
-	<target name="update.api" description="Actualizar la API">
-        <ant dir="moduls/api" target="main" inheritall="false"/>
-    </target>
 
 	<target name="update.integracion" description="Actualizar la capa de integracion">
 		<ant dir="moduls/integracion" target="main" inheritall="false"/>
@@ -187,19 +183,27 @@
 	<target name="update.ws" description="Actualitar el mdulo web de webservices">
 		<ant dir="moduls/ws" target="main" inheritall="false"/>
 	</target>
-
+	
 	<!--Traspas boib afegit marilen-->
     <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
 		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
 	</target>
 
+	<!-- API Rolsac -->
 
+    <target name="update.apiws" description="Actualitar el modulo web de webservices">
+        <ant dir="moduls/apiws" target="main" inheritall="false"/>
+    </target>
+	
+	<target name="update.api" description="Actualizar la API">
+        <ant dir="moduls/api" target="main" inheritall="false"/>
+    </target>    		
 
 	  <!-- ================================================================== -->
 	  <!-- test.unitario    Executa els tests unitaris                        -->
 	  <!-- ================================================================== -->
-
-
+	
+	
 	  <target name="test.unitario">
 	  		<ant dir="test/common" target="main" inheritall="false"/>
 			<ant dir="moduls/extractor" target="test.unitario" inheritall="false"/>
@@ -215,14 +219,10 @@
 			<ant dir="moduls/traspas-boib" target="test" inheritall="false"/>
 		-->
 	  </target>	
-	 	
-
-
 	
   <!-- ================================================================== -->
   <!-- assemble                                                                                                                      -->
   <!-- ================================================================== -->
-
 
 	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac.">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
@@ -245,7 +245,7 @@
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
-			<!-- Incluimos los .war y .jar generados con la aplicacion para rolsac-->
+			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
 			<fileset dir="${moduls.dir}">
 				<include name="${prefix.modul}-utils.jar" />
 				<include name="extractor.jar" />
@@ -253,13 +253,15 @@
 				<include name="integracion.war" />
 				<include name="${prefix.modul}-persistence.jar" />				
 				<include name="${prefix.modul}-persistence-client.jar" />
-				<include name="${prefix.modul}-back2-persistence.jar" />
-                <include name="${prefix.modul}-api.jar" />
-				<include name="${prefix.modul}-api-arxiuServlet.war" />
+				<include name="${prefix.modul}-back2-persistence.jar" />				
 				<include name="${prefix.modul}-back2.war" />
 				<include name="${prefix.modul}-back.war" />
 				<include name="${prefix.modul}-ws.war" />
-				<include name="traspasboib.war" />
+				<include name="${prefix.modul}-api.jar" />				
+				<include name="${prefix.modul}-api-client.jar" />				
+				<include name="${prefix.modul}-apiws.war" />
+				<include name="${prefix.modul}-api-arxiuServlet.war" />
+				<include name="traspasboib.war" />				
 			</fileset>
 			
 			<!-- No incluimos los .jar externos, solo para stand alone-->
@@ -319,8 +321,6 @@
 		<ant dir="moduls/model" target="${task}" inheritall="false"/>
 	  	<echo>PERSISTENCE</echo>
 	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
-	  	<echo>API</echo>
-        <ant dir="moduls/api" target="${task}" inheritall="false"/>
 	  	<echo>INTEGRACION</echo>
 	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
 	  	<echo>WS</echo>
@@ -331,6 +331,10 @@
 		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
 	  	<echo>TRASPAS-BOIB</echo>
 		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
+        <echo>APIWS</echo>
+        <ant dir="moduls/apiws" target="${task}" inheritall="false"/>
+	    <echo>API</echo>
+	    <ant dir="moduls/api" target="${task}" inheritall="false"/>
 	  </target>	
  	
 	

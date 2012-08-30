@@ -1,0 +1,69 @@
+<!-- a barebone jboss.net/axis client configuration which includes some basic typemappings related to jboss.
+ Se han cambiado los des/serializadores de jboss-client por unos propios que implementan las interfaces de axis.-->
+
+<deployment name="JBoss.net"
+  targetNameSpace="http://net.jboss.org/client"
+  xmlns:jbnet="http://net.jboss.org/client"
+  xmlns:jmx="http://net.jboss.org/jmx"
+  xmlns="http://xml.apache.org/axis/wsdd/"
+  xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <transport name="http" pivot="java:org.apache.axis.transport.http.HTTPSender"/>
+  <transport name="local" pivot="java:org.apache.axis.transport.local.LocalSender"/>
+  <transport name="java" pivot="java:org.apache.axis.transport.java.JavaSender"/>
+
+  <typeMapping qname="jmx:AttributeType"
+    type="java:javax.management.Attribute"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisAttributeSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisAttributeDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:MBeanAttributeInfo"
+    type="java:javax.management.MBeanAttributeInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanAttributeInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanAttributeInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+   <typeMapping qname="jmx:MBeanConstructorInfo"
+    type="java:javax.management.MBeanConstructorInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanConstructorInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanConstructorInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            
+  <typeMapping qname="jmx:MBeanInfo"
+    type="java:javax.management.MBeanInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:MBeanNotificationInfo"
+    type="java:javax.management.MBeanNotificationInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanNotificationInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanNotificationInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:MBeanOperationInfo"
+    type="java:javax.management.MBeanOperationInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanOperationInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanOperationInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:MBeanParameterInfo"
+    type="java:javax.management.MBeanParameterInfo"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanParameterInfoSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisMBeanParameterInfoDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:ObjectInstance"
+    type="java:javax.management.ObjectInstance"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisObjectInstanceSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisObjectInstanceDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+  <typeMapping qname="jmx:ObjectNameType"
+    type="java:javax.management.ObjectName"
+    serializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisObjectNameSerFactory"
+    deserializer="es.caib.rolsac.api.v2.axis.serializerFactories.AxisObjectNameDeserFactory"
+    encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+    
+</deployment>

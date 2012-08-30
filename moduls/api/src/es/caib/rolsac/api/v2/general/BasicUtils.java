@@ -3,7 +3,10 @@ package es.caib.rolsac.api.v2.general;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +16,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Traduccion;
 
-import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.general.co.BasicByIdCriteria;
 import es.caib.rolsac.api.v2.general.co.BasicByIniciCriteria;
 import es.caib.rolsac.api.v2.general.co.BasicByOrdenacioCriteria;
@@ -25,7 +27,10 @@ import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
 public class BasicUtils {
 
     private static Log log = LogFactory.getLog(BasicUtils.class);
-
+    
+    private static String[] GETTERS_INVALIDS = {"getSerializer","getDeserializer", "getTypeDesc"};
+    private static String[] SETTERS_INVALIDS = {"setSerializer", "setDeserializer", "setTypeDesc"};    
+    
     private BasicUtils() {
     }
 
@@ -50,7 +55,9 @@ public class BasicUtils {
         for (int i = 0; i < methods.length; i++) {
             try {
                 m = methods[i];
-                if (m.getName().startsWith("get") || m.getName().startsWith("is")) {
+                if ( (m.getName().startsWith("get") || m.getName().startsWith("is")) &&                		                		
+                		!Arrays.asList(GETTERS_INVALIDS).contains( m.getName() ) ) {
+                	
                     Object value = m.invoke(basicCriteria);
                     if (value != null) {
                         CriteriaObject co = getParsedCriteria(m, value, criteriaClass, entityAlias, i18nAlias,
@@ -165,15 +172,31 @@ public class BasicUtils {
             return null;
         }
 
-        Constructor<?> dtoConstructor = dtoClass.getConstructors()[0];
+        Constructor<?> dtoConstructor = null;
+         
+		try {
+	        // Para asegurarnos de que es devuelto el constructor por defecto, ya que AXIS genera objetos 
+	        // DTO con un constructor mas
+			dtoConstructor = dtoClass.getConstructor( (Class[]) null  );
+		} catch (SecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NoSuchMethodException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}                    	
+        
         Object dto = null;
+                
         try {
             dto = dtoConstructor.newInstance();
             Method[] dtoMethods = dtoClass.getMethods();
             Method method;
+                        
             for (int i = 0; i < dtoMethods.length; i++) {
                 method = dtoMethods[i];
-                if (method.getName().startsWith("set")) {
+                if (method.getName().startsWith("set") &&
+                		!Arrays.asList(SETTERS_INVALIDS).contains(method.getName()) ) {
                     copyProperty(entity, dto, method, lang);
                 }
             }
@@ -254,6 +277,12 @@ public class BasicUtils {
             } else if (Date.class.equals(propertyClass)) {
                 value = (Date) value; // Para evitar problemas con java.sql.Timestamp.
                 valueClasses[0] = Date.class;
+            } else if (Calendar.class.equals(propertyClass)) {
+            	// Para evitar problemas con los DTO generados por WSDL
+            	Long tmpValue = ((Timestamp)value).getTime();
+            	value = Calendar.getInstance(); 
+            	((Calendar) value).setTimeInMillis( tmpValue );            	
+            	valueClasses[0] = Calendar.class;  
             } else {
                 valueClasses[0] = value.getClass();
             }
@@ -284,7 +313,7 @@ public class BasicUtils {
     public static String getDefaultLanguage() {
         String defaultLanguage = System.getProperty("es.caib.rolsac.api.v2.idiomaPerDefecte");
         if (StringUtils.isBlank(defaultLanguage)) {
-            log.error(ExceptionMessages.CONFIG_DEFAULT_LANG);
+            log.error("No hay definido un idioma por defecto en el sistema. Se va a usar 'ca' como idioma.");
             defaultLanguage = "ca";
         }
         return defaultLanguage;

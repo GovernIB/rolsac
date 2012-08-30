@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryService;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -33,7 +34,7 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
     }
     
     private STRATEGY getStrategy() {
-        return documentTramitQueryServiceStrategy instanceof DocumentTramitQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return documentTramitQueryServiceStrategy instanceof DocumentTramitQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public TramitQueryService obtenirTramit() throws QueryServiceException {

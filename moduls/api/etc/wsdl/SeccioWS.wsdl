@@ -1,0 +1,368 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/SeccioWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/SeccioWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://seccio.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://fitxa.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://localhost:8443/sacws-api/services/SeccioWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="UnitatAdministrativaCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="businessKey" nillable="true" type="xsd:string" />
+							<element name="claveHita" nillable="true" type="xsd:string" />
+							<element name="dominio" nillable="true" type="xsd:string" />
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="telefono" nillable="true" type="xsd:string" />
+							<element name="fax" nillable="true" type="xsd:string" />
+							<element name="email" nillable="true" type="xsd:string" />
+							<element name="sexoResponsable" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_presentacion" nillable="true" type="xsd:string" />
+							<element name="t_abreviatura" nillable="true" type="xsd:string" />							
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/SeccioWS">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="SeccioDTO">
+				<sequence>
+					<element name="codigoEstandard" nillable="true" type="xsd:string" />
+					<element name="descripcion" nillable="true" type="xsd:string" />
+					<element name="id" type="xsd:long" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="orden" type="xsd:int" />
+					<element name="padre" nillable="true" type="xsd:long" />
+					<element name="perfil" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+			<complexType name="SeccioCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="codigoEstandard" nillable="true" type="xsd:string" />
+							<element name="perfil" nillable="true" type="xsd:string" />							
+							<element name="orden" nillable="true" type="xsd:string" />							
+							<element name="arrel" nillable="true" type="xsd:boolean" />							
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://fitxa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="FitxaCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="fechaActualizacion" nillable="true"
+								type="xsd:dateTime" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+							<element name="foro_tema" nillable="true" type="xsd:string" />
+							<element name="info" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="t_descAbr" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+							<element name="t_titulo" nillable="true" type="xsd:string" />
+							<element name="t_url" nillable="true" type="xsd:string" />
+							<element name="urlForo" nillable="true" type="xsd:string" />
+							<element name="urlVideo" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="llistarUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:UnitatAdministrativaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarUnitatsAdministrativesResponse">
+		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesResponse">
+		<wsdl:part name="getNumUnitatsAdministrativesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumParesResponse">
+		<wsdl:part name="getNumParesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPareResponse">
+		<wsdl:part name="obtenirPareReturn" type="tns3:SeccioDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPareRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarFitxesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns4:FitxaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarParesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumParesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarParesResponse">
+		<wsdl:part name="llistarParesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarFillesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns3:SeccioCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumFillesResponse">
+		<wsdl:part name="getNumFillesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarFillesResponse">
+		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumFitxesResponse">
+		<wsdl:part name="getNumFitxesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarFitxesResponse">
+		<wsdl:part name="llistarFitxesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumFitxesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumFillesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:portType name="SeccioQueryServiceEJBRemote">
+		<wsdl:operation name="getNumUnitatsAdministratives"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumUnitatsAdministrativesRequest"
+				name="getNumUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:getNumUnitatsAdministrativesResponse"
+				name="getNumUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarUnitatsAdministrativesRequest"
+				name="llistarUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:llistarUnitatsAdministrativesResponse"
+				name="llistarUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPare" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirPareRequest" name="obtenirPareRequest" />
+			<wsdl:output message="impl:obtenirPareResponse" name="obtenirPareResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarFitxes" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarFitxesRequest" name="llistarFitxesRequest" />
+			<wsdl:output message="impl:llistarFitxesResponse" name="llistarFitxesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumFitxes" parameterOrder="in0">
+			<wsdl:input message="impl:getNumFitxesRequest" name="getNumFitxesRequest" />
+			<wsdl:output message="impl:getNumFitxesResponse" name="getNumFitxesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarFilles" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarFillesRequest" name="llistarFillesRequest" />
+			<wsdl:output message="impl:llistarFillesResponse" name="llistarFillesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumFilles" parameterOrder="in0">
+			<wsdl:input message="impl:getNumFillesRequest" name="getNumFillesRequest" />
+			<wsdl:output message="impl:getNumFillesResponse" name="getNumFillesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumPares" parameterOrder="in0">
+			<wsdl:input message="impl:getNumParesRequest" name="getNumParesRequest" />
+			<wsdl:output message="impl:getNumParesResponse" name="getNumParesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarPares" parameterOrder="in0">
+			<wsdl:input message="impl:llistarParesRequest" name="llistarParesRequest" />
+			<wsdl:output message="impl:llistarParesResponse" name="llistarParesResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="SeccioWSSoapBinding" type="impl:SeccioQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getNumUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPare">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirPareRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirPareResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarFitxes">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarFitxesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarFitxesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumFitxes">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumFitxesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumFitxesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarFilles">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarFillesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarFillesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumFilles">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumFillesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumFillesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumPares">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumParesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumParesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarPares">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarParesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.seccio.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarParesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="SeccioQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:SeccioWSSoapBinding" name="SeccioWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/SeccioWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

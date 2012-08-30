@@ -1,0 +1,497 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/NormativaWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/NormativaWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://butlleti.v2.api.rolsac.caib.es" xmlns:tns5="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/NormativaWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+			<complexType abstract="true" name="EntitatRemota">
+				<sequence>
+					<element name="administracionRemota" nillable="true" type="xsd:long" />
+					<element name="idExterno" nillable="true" type="xsd:long" />
+					<element name="urlRemota" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://procediment.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ProcedimentCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="actiu" nillable="true" type="xsd:boolean" />
+							<element name="fechaActualizacion" nillable="true"
+								type="xsd:dateTime" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+							<element name="indicador" nillable="true" type="xsd:boolean" />
+							<element name="info" nillable="true" type="xsd:string" />
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="orden2" nillable="true" type="xsd:string" />
+							<element name="orden3" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="signatura" nillable="true" type="xsd:string" />
+							<element name="t_destinatarios" nillable="true" type="xsd:string" />
+							<element name="t_lugar" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_notificacion" nillable="true" type="xsd:string" />
+							<element name="t_observaciones" nillable="true" type="xsd:string" />
+							<element name="t_plazos" nillable="true" type="xsd:string" />
+							<element name="t_recursos" nillable="true" type="xsd:string" />
+							<element name="t_requisitos" nillable="true" type="xsd:string" />
+							<element name="t_resolucion" nillable="true" type="xsd:string" />
+							<element name="t_resultat" nillable="true" type="xsd:string" />
+							<element name="t_resumen" nillable="true" type="xsd:string" />
+							<element name="t_silencio" nillable="true" type="xsd:string" />
+							<element name="taxa" nillable="true" type="xsd:boolean" />
+							<element name="tramite" nillable="true" type="xsd:string" />
+							<element name="url" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+							<element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
+							<element name="version" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/NormativaWS">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="UnitatAdministrativaDTO">
+				<complexContent>
+					<extension base="tns2:EntitatRemota">
+						<sequence>
+							<element name="abreviatura" nillable="true" type="xsd:string" />
+							<element name="businessKey" nillable="true" type="xsd:string" />
+							<element name="claveHita" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="dominio" nillable="true" type="xsd:string" />
+							<element name="email" nillable="true" type="xsd:string" />
+							<element name="espacioTerrit" nillable="true" type="xsd:long" />
+							<element name="fax" nillable="true" type="xsd:string" />
+							<element name="fotog" nillable="true" type="xsd:long" />
+							<element name="fotop" nillable="true" type="xsd:long" />
+							<element name="id" nillable="true" type="xsd:long" />
+							<element name="logoh" nillable="true" type="xsd:long" />
+							<element name="logos" nillable="true" type="xsd:long" />
+							<element name="logot" nillable="true" type="xsd:long" />
+							<element name="logov" nillable="true" type="xsd:long" />
+							<element name="nombre" nillable="true" type="xsd:string" />
+							<element name="numfoto1" nillable="true" type="xsd:int" />
+							<element name="numfoto2" nillable="true" type="xsd:int" />
+							<element name="numfoto3" nillable="true" type="xsd:int" />
+							<element name="numfoto4" nillable="true" type="xsd:int" />
+							<element name="orden" type="xsd:long" />
+							<element name="padre" nillable="true" type="xsd:long" />
+							<element name="presentacion" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="sexoResponsable" nillable="true" type="xsd:int" />
+							<element name="telefono" nillable="true" type="xsd:string" />
+							<element name="tratamiento" nillable="true" type="xsd:long" />
+							<element name="url" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:int" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://butlleti.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ButlletiDTO">
+				<sequence>
+					<element name="enlace" nillable="true" type="xsd:string" />
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArxiuDTO">
+				<sequence>
+					<element name="id" type="xsd:long" />
+					<element name="mime" nillable="true" type="xsd:string" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="peso" type="xsd:long" />
+					<element name="url" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		
+		<!-- DTO necesario pero no generado por Axis xxxx-->
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://afectacio.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/NormativaWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="AfectacioDTO">
+				<sequence>
+					<element name="afectante" type="xsd:long" />
+					<element name="normativa" type="xsd:long" />
+					<element name="tipoAfectacion" type="xsd:long" />
+				</sequence>
+			</complexType>
+		</schema>
+		
+	</wsdl:types>
+	<wsdl:message name="llistarAfectadesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectacionsAfectadesResponse">
+		<wsdl:part name="llistarAfectacionsAfectadesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarProcedimentsResponse">
+		<wsdl:part name="llistarProcedimentsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="obtenirUnitatAdministrativaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumAfectadesResponse">
+		<wsdl:part name="getNumAfectadesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="obtenirButlletiResponse">
+		<wsdl:part name="obtenirButlletiReturn" type="tns4:ButlletiDTO" />
+	</wsdl:message>
+	<wsdl:message name="getNumAfectantsResponse">
+		<wsdl:part name="getNumAfectantsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarProcedimentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:ProcedimentCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectacionsAfectadesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumAfectadesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectantsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuNormativaResponse">
+		<wsdl:part name="obtenirArxiuNormativaReturn" type="tns5:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="getNumProcedimentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectacionsAfectantsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectacionsAfectantsResponse">
+		<wsdl:part name="llistarAfectacionsAfectantsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumAfectantsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectantsResponse">
+		<wsdl:part name="llistarAfectantsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="obtenirUnitatAdministrativaResponse">
+		<wsdl:part name="obtenirUnitatAdministrativaReturn" type="tns3:UnitatAdministrativaDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirButlletiRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumProcedimentsResponse">
+		<wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuNormativaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarAfectadesResponse">
+		<wsdl:part name="llistarAfectadesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:portType name="NormativaQueryServiceEJBRemote">
+		<wsdl:operation name="llistarProcediments"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarProcedimentsRequest"
+				name="llistarProcedimentsRequest" />
+			<wsdl:output message="impl:llistarProcedimentsResponse"
+				name="llistarProcedimentsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirUnitatAdministrativa"
+			parameterOrder="in0">
+			<wsdl:input message="impl:obtenirUnitatAdministrativaRequest"
+				name="obtenirUnitatAdministrativaRequest" />
+			<wsdl:output message="impl:obtenirUnitatAdministrativaResponse"
+				name="obtenirUnitatAdministrativaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirButlleti" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirButlletiRequest" name="obtenirButlletiRequest" />
+			<wsdl:output message="impl:obtenirButlletiResponse" name="obtenirButlletiResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumProcediments"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumProcedimentsRequest" name="getNumProcedimentsRequest" />
+			<wsdl:output message="impl:getNumProcedimentsResponse"
+				name="getNumProcedimentsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectades" parameterOrder="in0">
+			<wsdl:input message="impl:llistarAfectadesRequest" name="llistarAfectadesRequest" />
+			<wsdl:output message="impl:llistarAfectadesResponse"
+				name="llistarAfectadesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumAfectades" parameterOrder="in0">
+			<wsdl:input message="impl:getNumAfectadesRequest" name="getNumAfectadesRequest" />
+			<wsdl:output message="impl:getNumAfectadesResponse" name="getNumAfectadesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectants" parameterOrder="in0">
+			<wsdl:input message="impl:llistarAfectantsRequest" name="llistarAfectantsRequest" />
+			<wsdl:output message="impl:llistarAfectantsResponse"
+				name="llistarAfectantsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumAfectants" parameterOrder="in0">
+			<wsdl:input message="impl:getNumAfectantsRequest" name="getNumAfectantsRequest" />
+			<wsdl:output message="impl:getNumAfectantsResponse" name="getNumAfectantsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArxiuNormativa"
+			parameterOrder="in0">
+			<wsdl:input message="impl:obtenirArxiuNormativaRequest"
+				name="obtenirArxiuNormativaRequest" />
+			<wsdl:output message="impl:obtenirArxiuNormativaResponse"
+				name="obtenirArxiuNormativaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectacionsAfectants"
+			parameterOrder="in0">
+			<wsdl:input message="impl:llistarAfectacionsAfectantsRequest"
+				name="llistarAfectacionsAfectantsRequest" />
+			<wsdl:output message="impl:llistarAfectacionsAfectantsResponse"
+				name="llistarAfectacionsAfectantsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectacionsAfectades"
+			parameterOrder="in0">
+			<wsdl:input message="impl:llistarAfectacionsAfectadesRequest"
+				name="llistarAfectacionsAfectadesRequest" />
+			<wsdl:output message="impl:llistarAfectacionsAfectadesResponse"
+				name="llistarAfectacionsAfectadesResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="NormativaWSSoapBinding" type="impl:NormativaQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="llistarProcediments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarProcedimentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarProcedimentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirUnitatAdministrativa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirUnitatAdministrativaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirUnitatAdministrativaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirButlleti">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirButlletiRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirButlletiResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumProcediments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumProcedimentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumProcedimentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectades">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarAfectadesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarAfectadesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumAfectades">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumAfectadesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumAfectadesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectants">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarAfectantsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarAfectantsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumAfectants">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumAfectantsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumAfectantsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArxiuNormativa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirArxiuNormativaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirArxiuNormativaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectacionsAfectants">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarAfectacionsAfectantsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarAfectacionsAfectantsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarAfectacionsAfectades">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarAfectacionsAfectadesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.normativa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarAfectacionsAfectadesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/NormativaWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="NormativaQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:NormativaWSSoapBinding" name="NormativaWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/NormativaWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,136 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/DocumentTramitWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/DocumentTramitWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://tramit.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/DocumentTramitWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="EntitatRemota">
+				<sequence>
+					<element name="administracionRemota" nillable="true" type="xsd:long" />
+					<element name="idExterno" nillable="true" type="xsd:long" />
+					<element name="urlRemota" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://tramit.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="TramitDTO">
+				<complexContent>
+					<extension base="tns2:EntitatRemota">
+						<sequence>
+							<element name="codiVuds" nillable="true" type="xsd:string" />
+							<element name="dataActualitzacio" nillable="true" type="xsd:dateTime" />
+							<element name="dataActualitzacioVuds" nillable="true"
+								type="xsd:string" />
+							<element name="dataCaducitat" nillable="true" type="xsd:dateTime" />
+							<element name="dataPublicacio" nillable="true" type="xsd:dateTime" />
+							<element name="descCodiVuds" nillable="true" type="xsd:string" />
+							<element name="descripcion" nillable="true" type="xsd:string" />
+							<element name="documentacion" nillable="true" type="xsd:string" />
+							<element name="fase" type="xsd:int" />
+							<element name="id" type="xsd:long" />
+							<element name="idTraTel" nillable="true" type="xsd:string" />
+							<element name="lugar" nillable="true" type="xsd:string" />
+							<element name="nombre" nillable="true" type="xsd:string" />
+							<element name="observaciones" nillable="true" type="xsd:string" />
+							<element name="orden" nillable="true" type="xsd:long" />
+							<element name="organCompetent" nillable="true" type="xsd:long" />
+							<element name="plazos" nillable="true" type="xsd:string" />
+							<element name="procedimiento" nillable="true" type="xsd:long" />
+							<element name="requisits" nillable="true" type="xsd:string" />
+							<element name="urlExterna" nillable="true" type="xsd:string" />
+							<element name="validacio" nillable="true" type="xsd:long" />
+							<element name="versio" nillable="true" type="xsd:int" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArxiuDTO">
+				<sequence>
+					<element name="id" type="xsd:long" />
+					<element name="mime" nillable="true" type="xsd:string" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="peso" type="xsd:long" />
+					<element name="url" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="obtenirTramitRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirArxiuResponse">
+		<wsdl:part name="obtenirArxiuReturn" type="tns3:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirTramitResponse">
+		<wsdl:part name="obtenirTramitReturn" type="tns1:TramitDTO" />
+	</wsdl:message>
+	<wsdl:portType name="DocumentTramitQueryServiceEJBRemote">
+		<wsdl:operation name="obtenirTramit" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirTramitRequest" name="obtenirTramitRequest" />
+			<wsdl:output message="impl:obtenirTramitResponse" name="obtenirTramitResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArxiu" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirArxiuRequest" name="obtenirArxiuRequest" />
+			<wsdl:output message="impl:obtenirArxiuResponse" name="obtenirArxiuResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="DocumentTramitWSSoapBinding"
+		type="impl:DocumentTramitQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="obtenirTramit">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirTramitRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirTramitResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/DocumentTramitWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirArxiu">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirArxiuRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirArxiuResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/DocumentTramitWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="DocumentTramitQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:DocumentTramitWSSoapBinding" name="DocumentTramitWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/DocumentTramitWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

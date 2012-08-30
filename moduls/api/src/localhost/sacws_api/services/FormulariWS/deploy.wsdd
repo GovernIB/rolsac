@@ -1,0 +1,59 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from FormulariQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="FormulariWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/FormulariWS"/>
+      <parameter name="wsdlServiceElement" value="FormulariQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="http://tramit.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="FormulariWS"/>
+      <parameter name="className" value="localhost.sacws_api.services.FormulariWS.FormulariWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="FormulariQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="obtenirTramit" qname="operNS:obtenirTramit" xmlns:operNS="http://intf.ejb.formulari.v2.api.rolsac.caib.es" returnQName="obtenirTramitReturn" returnType="rtns:TramitDTO" xmlns:rtns="http://tramit.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirArchivo" qname="operNS:obtenirArchivo" xmlns:operNS="http://intf.ejb.formulari.v2.api.rolsac.caib.es" returnQName="obtenirArchivoReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="obtenirManual" qname="operNS:obtenirManual" xmlns:operNS="http://intf.ejb.formulari.v2.api.rolsac.caib.es" returnQName="obtenirManualReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="obtenirArchivo obtenirTramit obtenirManual"/>
+
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
+        qname="ns:TramitDTO"
+        type="java:es.caib.rolsac.api.v2.tramit.TramitDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

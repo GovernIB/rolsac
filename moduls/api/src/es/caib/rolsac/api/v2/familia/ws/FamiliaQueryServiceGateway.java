@@ -1,5 +1,82 @@
 package es.caib.rolsac.api.v2.familia.ws;
 
-public class FamiliaQueryServiceGateway {
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import localhost.sacws_api.services.FamiliaWS.FamiliaWSSoapBindingStub;
+
+import org.apache.axis.AxisFault;
+
+import es.caib.rolsac.api.v2.general.DTOUtil;
+import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
+import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
+import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+
+public class FamiliaQueryServiceGateway {
+	
+	FamiliaWSSoapBindingStub stub;
+
+	public FamiliaQueryServiceGateway() {
+
+		try {
+			stub = new FamiliaWSSoapBindingStub(new URL(
+					"https://localhost:8443/sacws-api/services/FamiliaWS"),
+					null);
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+	public int getNumProcedimentsLocals(long id) throws RemoteException {
+		return stub.getNumProcedimentsLocals(id);
+	}
+
+	public int getNumIcones(long id) throws RemoteException {
+		return stub.getNumIcones(id);
+	}
+	
+	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
+			ProcedimentCriteria procedimentCriteria) throws RemoteException {
+		
+		Object[] tmpLlista = null;
+		List<ProcedimentDTO> llistaMateries = null;
+		
+		tmpLlista = stub.llistarProcedimentsLocals(id, procedimentCriteria);
+		llistaMateries = new ArrayList<ProcedimentDTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			ProcedimentDTO pdto = (ProcedimentDTO) DTOUtil.object2DTO(o, ProcedimentDTO.class);
+			llistaMateries.add(pdto);
+		}
+		
+		return llistaMateries;
+
+	}
+
+	public List<IconaFamiliaDTO> llistarIcones(long id,
+			IconaFamiliaCriteria iconaFamiliaCriteria) throws RemoteException {
+
+		Object[] tmpLlista = null;
+		List<IconaFamiliaDTO> llistaIcones = null;
+		
+		tmpLlista = stub.llistarIcones(id, iconaFamiliaCriteria);
+		llistaIcones = new ArrayList<IconaFamiliaDTO>( Arrays.asList(tmpLlista).size() );
+			
+		for ( Object o : tmpLlista ) {
+			IconaFamiliaDTO ifdto = (IconaFamiliaDTO) DTOUtil.object2DTO(o, IconaFamiliaDTO.class);
+			llistaIcones.add(ifdto);
+		}
+		
+		return llistaIcones;		
+		
+	}
 }

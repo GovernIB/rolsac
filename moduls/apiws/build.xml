@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="apiws" default="main" basedir=".">
+
+
+    <property name="modul" value="apiws"/>
+    <!--property name="package" value="es.caib.rolsac.api.ws"/-->
+
+    <property name="home.dir" location="${basedir}/../.."/>
+    <property file="${home.dir}/build.${user.name}.properties" />
+    <property file="${home.dir}/build.${rolsac.target}.properties"/>
+    <property file="${home.dir}/default.properties"/>
+    <property file="${basedir}/build.properties"/>
+
+    <property name="output.dir" location="${home.dir}/output"/>
+    <property name="modul.output.dir" location="${output.dir}/${modul}"/>	
+
+    <property name="lib.dir" location="${home.dir}/lib"/>
+    <property name="etc.dir" location="${home.dir}/etc"/>
+    <property name="xdoclet.dir" location="${lib.dir}/xdoclet123"/>
+    <property name="jasper.dir" location="${lib.dir}/jasper"/>
+	<property name="axis.dir" location="${lib.dir}/axis-1.4"/>
+	
+    <property name="web.src" location="${basedir}/src"/>
+    <property name="web.etc" location="${basedir}/etc"/>
+    <property name="web.doc" location="${basedir}/doc"/>
+    <property name="web.htdocs" location="${basedir}/htdocs"/>
+
+    <property name="web.resources" location="${web.etc}/"/>
+    <property name="web.merge.web" location="${web.etc}/merge"/>
+    <property name="web.merge.jboss" location="${web.etc}/merge/jboss"/>
+
+    <property name="web.gen.src" location="${modul.output.dir}/gen-src"/>
+    <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
+    <property name="web.classes" location="${modul.output.dir}/classes"/>
+
+    <property name="doc" location="${output.dir}/doc"/>
+    <property name="web.product" location="${output.dir}/moduls"/>
+	
+    <path id="web.class.path">
+        <fileset dir="${lib.dir}">
+            <include name="servlet-api.jar"/>
+            <include name="commons-logging.jar"/>
+        </fileset>
+        
+        <fileset dir="${lib.dir}/webcaib">
+            <include name="commons-collections-3.2.1.jar"/>   	
+        </fileset>
+    </path>
+
+    <path id="doclet.class.path">
+        <fileset dir="${xdoclet.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <path refid="web.class.path"/>
+    </path>
+	
+    <!-- Crea tots els directoris de treball necessaris -->
+    <target name="prepare">
+        <mkdir dir="${web.gen.src}"/>
+        <mkdir dir="${web.gen.etc}"/>       
+        <mkdir dir="${web.classes}"/>
+    </target>
+	
+    <target name="init">
+        <taskdef
+            name="webdoclet"
+            classname="xdoclet.modules.web.WebDocletTask"
+            classpathref="doclet.class.path"
+            />
+        <tstamp>
+            <format property="TODAY" pattern="dd-MM-yy"/>
+        </tstamp>
+        <fail unless="ws.auth.domain" message="La propiedad ws.auth.domain no está definida en los archivos properties"/>
+    </target>
+
+    <target name="web.gen.all" depends="prepare,init">
+
+        <webdoclet
+            destdir="${web.gen.src}"
+            excludedtags="@version,@author"
+            force="false"
+            verbose="true"
+            >
+            <fileset dir="${web.merge.web}">
+                <include name="**/*.java"/>
+            </fileset>
+        	
+            <deploymentdescriptor
+                destdir="${web.gen.etc}"
+                servletspec="2.3"
+                sessiontimeout="60"
+                xmlencoding="UTF-8"
+                validatexml="true"
+                mergedir="${web.merge.web}"
+                >
+                <welcomefile file="/test.jsp"/>
+            </deploymentdescriptor>
+
+            <jbosswebxml
+                destdir="${web.gen.etc}"
+                version="${jboss.version}"
+                xmlencoding="UTF-8"
+                validatexml="true"
+                securityDomain="${ws.auth.domain}"
+                />
+
+        </webdoclet>
+
+        <replace file="${web.gen.etc}/web.xml">
+            <replacefilter token="@role.system@" value="${role.system}"/>
+            <replacefilter token="@role.admin@" value="${role.admin}"/>
+            <replacefilter token="@role.super@" value="${role.super}"/>
+            <replacefilter token="@role.oper@" value="${role.oper}"/>
+        </replace>
+
+    </target>
+
+
+
+    <target name="ws.war">
+        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
+            basedir="${web.htdocs}"
+            webxml="${web.gen.etc}/web.xml"
+            excludes="WEB-INF/**">
+            <manifest>
+                <attribute name="Created-By" value="Fundació IBIT"/>
+            </manifest>
+
+            <classes dir="${web.classes}"/>
+            <classes dir="${web.resources}" includes="*.properties"/>
+
+            <webinf dir="${web.etc}" includes="*.wsdd"/>
+            <webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml,webinc.xml"/>
+        </war>
+    </target>
+
+    <target name="main" depends="web.gen.all, ws.war" description="Construeye el war"/>
+
+    <import file="../build_sonar.xml"/>
+
+    
+</project>

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.espaiTerritorial.ejb.EspaiTerritorialQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -26,7 +27,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
     }
 
     private STRATEGY getStrategy() {
-        return espaiTerritorialQueryServiceStrategy instanceof EspaiTerritorialQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return espaiTerritorialQueryServiceStrategy instanceof EspaiTerritorialQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public EspaiTerritorialQueryServiceAdapter(EspaiTerritorialDTO dto) throws QueryServiceException {
@@ -39,7 +40,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
 
     public int getNumFills() throws QueryServiceException {
         try {
-            return espaiTerritorialQueryServiceStrategy.getNumFills(id);
+            return espaiTerritorialQueryServiceStrategy.getNumFills(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de edificios hijo.", e);
         }
@@ -47,7 +48,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
 
     public int getNumUnitatsAdministratives() throws QueryServiceException {
         try {
-            return espaiTerritorialQueryServiceStrategy.getNumUnitatsAdministratives(id);
+            return espaiTerritorialQueryServiceStrategy.getNumUnitatsAdministratives(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
         }
@@ -64,7 +65,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
 
     public List<EspaiTerritorialQueryServiceAdapter> llistarFills(EspaiTerritorialCriteria espaiTerritorialCriteria) throws QueryServiceException {
         try {
-            List<EspaiTerritorialDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarFills(id, espaiTerritorialCriteria);
+            List<EspaiTerritorialDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarFills(getId(), espaiTerritorialCriteria);
             List<EspaiTerritorialQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<EspaiTerritorialQueryServiceAdapter>();
             for (EspaiTerritorialDTO espaiTerritorialDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((EspaiTerritorialQueryServiceAdapter) BeanUtils.getAdapter("espaiTerritorial", getStrategy(),espaiTerritorialDTO));
@@ -77,7 +78,7 @@ public class EspaiTerritorialQueryServiceAdapter extends EspaiTerritorialDTO imp
 
     public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
             try {
-                List<UnitatAdministrativaDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+                List<UnitatAdministrativaDTO> llistaDTO = espaiTerritorialQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
                 List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
                 for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                     llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));

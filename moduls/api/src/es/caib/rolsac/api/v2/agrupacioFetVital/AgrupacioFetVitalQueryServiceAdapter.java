@@ -83,7 +83,7 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
 
     public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetVitalCriteria) throws QueryServiceException {
         try {
-            List<FetVitalDTO> llistaDTO = agrupacioFetVitalQueryServiceStrategy.llistarFetsVitals(id, fetVitalCriteria);
+            List<FetVitalDTO> llistaDTO = agrupacioFetVitalQueryServiceStrategy.llistarFetsVitals(getId(), fetVitalCriteria);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
@@ -96,7 +96,7 @@ public class AgrupacioFetVitalQueryServiceAdapter extends AgrupacioFetVitalDTO i
 
     public int getNumFetsVitals() throws QueryServiceException {       
         try {
-            return agrupacioFetVitalQueryServiceStrategy.getNumFetsVitals(id);
+            return agrupacioFetVitalQueryServiceStrategy.getNumFetsVitals(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(e);
         }

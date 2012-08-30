@@ -56,7 +56,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public int getNumTramits() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumTramits(id);
+            return procedimentQueryServiceStrategy.getNumTramits(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de tramites.", e);
         }
@@ -64,7 +64,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public int getNumNormatives() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.TOTES);
+            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas.", e);
         }
@@ -72,7 +72,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     
     public int getNumNormativesLocals() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.LOCAL);
+            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.LOCAL);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas locales.", e);
         }
@@ -80,7 +80,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     
     public int getNumNormativesExternes() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.EXTERNA);
+            return procedimentQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.EXTERNA);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas externas.", e);
         }
@@ -88,7 +88,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     
     public int getNumMateries() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumMateries(id);
+            return procedimentQueryServiceStrategy.getNumMateries(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de materias.", e);
         }
@@ -96,7 +96,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public int getNumDocuments() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumDocuments(id);
+            return procedimentQueryServiceStrategy.getNumDocuments(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de documentos.", e);
         }
@@ -104,7 +104,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public int getNumFetsVitals() throws QueryServiceException {
         try {
-            return procedimentQueryServiceStrategy.getNumFetsVitals(id);
+            return procedimentQueryServiceStrategy.getNumFetsVitals(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de hechos vitales.", e);
         }
@@ -112,7 +112,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public List<TramitQueryServiceAdapter> llistarTramits(TramitCriteria tramitCriteria) throws QueryServiceException {
         try {
-            List<TramitDTO> llistaDTO = procedimentQueryServiceStrategy.llistarTramits(id, tramitCriteria);
+            List<TramitDTO> llistaDTO = procedimentQueryServiceStrategy.llistarTramits(getId(), tramitCriteria);
             List<TramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TramitQueryServiceAdapter>();
             for (TramitDTO tramitDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((TramitQueryServiceAdapter) BeanUtils.getAdapter("tramit", getStrategy(), tramitDTO));
@@ -125,7 +125,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
         try {
-            List<MateriaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarMateries(id, materiaCriteria);
+            List<MateriaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
@@ -138,7 +138,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException {
         try {
-            List<NormativaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarNormatives(id, normativaCriteria);
+            List<NormativaDTO> llistaDTO = procedimentQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
@@ -151,7 +151,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
 
     public List<FetVitalQueryServiceAdapter> llistarFetsVitals(FetVitalCriteria fetsVitalsCriteria) throws QueryServiceException {
         try {
-            List<FetVitalDTO> llistaDTO = procedimentQueryServiceStrategy.llistarFetsVitals(id, fetsVitalsCriteria);
+            List<FetVitalDTO> llistaDTO = procedimentQueryServiceStrategy.llistarFetsVitals(getId(), fetsVitalsCriteria);
             List<FetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FetVitalQueryServiceAdapter>();
             for (FetVitalDTO fetVitalDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FetVitalQueryServiceAdapter) BeanUtils.getAdapter("fetVital", getStrategy(), fetVitalDTO));
@@ -164,7 +164,7 @@ public class ProcedimentQueryServiceAdapter extends ProcedimentDTO implements Pr
     
     public List<DocumentQueryServiceAdapter> llistarDocuments(DocumentCriteria documentCriteria) throws QueryServiceException {
         try {
-            List<DocumentDTO> llistaDTO = procedimentQueryServiceStrategy.llistarDocuments(id, documentCriteria);
+            List<DocumentDTO> llistaDTO = procedimentQueryServiceStrategy.llistarDocuments(getId(), documentCriteria);
             List<DocumentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentQueryServiceAdapter>();
             for (DocumentDTO documentDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((DocumentQueryServiceAdapter) BeanUtils.getAdapter("document", getStrategy(), documentDTO));

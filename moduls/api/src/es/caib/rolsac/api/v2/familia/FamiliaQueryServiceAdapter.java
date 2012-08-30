@@ -42,7 +42,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
     
     public int getNumProcedimentsLocals() throws QueryServiceException {
         try {
-            return familiaQueryServiceStrategy.getNumProcedimentsLocals(id);
+            return familiaQueryServiceStrategy.getNumProcedimentsLocals(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
@@ -50,7 +50,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
 
     public int getNumIcones() throws QueryServiceException {
         try {
-            return familiaQueryServiceStrategy.getNumIcones(id);
+            return familiaQueryServiceStrategy.getNumIcones(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos.", e);
         }
@@ -58,7 +58,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
 
     public List<ProcedimentQueryServiceAdapter> llistarProcedimentsLocals(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
-            List<ProcedimentDTO> llistaDTO = familiaQueryServiceStrategy.llistarProcedimentsLocals(id, procedimentCriteria);
+            List<ProcedimentDTO> llistaDTO = familiaQueryServiceStrategy.llistarProcedimentsLocals(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> procs = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO pDTO : llistaDTO) {
                 procs.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), pDTO));
@@ -71,7 +71,7 @@ public class FamiliaQueryServiceAdapter extends FamiliaDTO implements FamiliaQue
 
     public List<IconaFamiliaQueryServiceAdapter> llistarIcones(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
         try {
-            List<IconaFamiliaDTO> llistaDTO = familiaQueryServiceStrategy.llistarIcones(id, iconaFamiliaCriteria);
+            List<IconaFamiliaDTO> llistaDTO = familiaQueryServiceStrategy.llistarIcones(getId(), iconaFamiliaCriteria);
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO pDTO : llistaDTO) {
                 icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), pDTO));

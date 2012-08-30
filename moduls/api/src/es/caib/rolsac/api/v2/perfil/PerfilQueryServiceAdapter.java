@@ -42,7 +42,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
 
     public List<IconaFamiliaQueryServiceAdapter> llistarIconesFamilia(IconaFamiliaCriteria iconaFamiliaCriteria) throws QueryServiceException {
         try {
-            List<IconaFamiliaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesFamilia(id, iconaFamiliaCriteria);
+            List<IconaFamiliaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesFamilia(getId(), iconaFamiliaCriteria);
             List<IconaFamiliaQueryServiceAdapter> icones = new ArrayList<IconaFamiliaQueryServiceAdapter>();
             for (IconaFamiliaDTO iDTO : llistaDTO) {
                 icones.add((IconaFamiliaQueryServiceAdapter) BeanUtils.getAdapter("iconaFamilia", getStrategy(), iDTO));
@@ -55,7 +55,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
 
     public List<IconaMateriaQueryServiceAdapter> llistarIconesMateria(IconaMateriaCriteria iconaMateriaCriteria) throws QueryServiceException {
         try {
-            List<IconaMateriaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesMateria(id, iconaMateriaCriteria);
+            List<IconaMateriaDTO> llistaDTO = perfilQueryServiceStrategy.llistarIconesMateria(getId(), iconaMateriaCriteria);
             List<IconaMateriaQueryServiceAdapter> icones = new ArrayList<IconaMateriaQueryServiceAdapter>();
             for (IconaMateriaDTO iDTO : llistaDTO) {
                 icones.add((IconaMateriaQueryServiceAdapter) BeanUtils.getAdapter("iconaMateria", getStrategy(), iDTO));
@@ -68,7 +68,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
 
     public int getNumIconesFamilia() throws QueryServiceException {
         try {
-            return perfilQueryServiceStrategy.getNumIconesFamilia(id);
+            return perfilQueryServiceStrategy.getNumIconesFamilia(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos familia.", e);
         }
@@ -76,7 +76,7 @@ public class PerfilQueryServiceAdapter extends PerfilDTO implements PerfilQueryS
 
     public int getNumIconesMateria() throws QueryServiceException {
         try {
-            return perfilQueryServiceStrategy.getNumIconesMateria(id);
+            return perfilQueryServiceStrategy.getNumIconesMateria(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de iconos materias.", e);
         }

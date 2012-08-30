@@ -14,6 +14,7 @@ public class DestinatariQueryServiceAdapter extends DestinatariDTO implements De
         try {
             PropertyUtils.copyProperties(this, dto);
         } catch (Exception e) {
+            e.printStackTrace(); // FIXME: log.error...
             log.error("Error instanciando DestinatariQueryServiceAdapter.", e);
         }
     }

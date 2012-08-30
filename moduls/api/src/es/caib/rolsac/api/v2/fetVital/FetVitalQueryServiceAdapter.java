@@ -13,6 +13,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
+import es.caib.rolsac.api.v2.fetVital.ejb.FetVitalQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
@@ -41,12 +42,12 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
     }
 
     private STRATEGY getStrategy() {
-        return fetVitalQueryServiceStrategy instanceof FetVitalQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return fetVitalQueryServiceStrategy instanceof FetVitalQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public int getNumFitxes() throws QueryServiceException {
         try {
-            return fetVitalQueryServiceStrategy.getNumFitxes(id);
+            return fetVitalQueryServiceStrategy.getNumFitxes(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de fichas.", e);
         }
@@ -54,7 +55,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
 
     public int getNumProcedimentsLocals() throws QueryServiceException {
         try {
-            return fetVitalQueryServiceStrategy.getNumProcedimentsLocals(id);
+            return fetVitalQueryServiceStrategy.getNumProcedimentsLocals(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
@@ -62,7 +63,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
 
     public int getNumFetsVitalsAgrupacionsFV() throws QueryServiceException {
         try {
-            return fetVitalQueryServiceStrategy.getNumFetsVitalsAgrupacionsFV(id);
+            return fetVitalQueryServiceStrategy.getNumFetsVitalsAgrupacionsFV(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de agrupaciones.", e);
         }
@@ -70,7 +71,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
 
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
         try {
-            List<FitxaDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFitxes(id, fitxaCriteria);
+            List<FitxaDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
@@ -83,7 +84,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
 
     public List<ProcedimentQueryServiceAdapter> llistarProcedimentsLocals(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
-            List<ProcedimentDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarProcedimentsLocals(id, procedimentCriteria);
+            List<ProcedimentDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarProcedimentsLocals(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
@@ -96,7 +97,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
 
     public List<AgrupacioFetVitalQueryServiceAdapter> llistarFetsVitalsAgrupacionsFV(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
         try {
-            List<AgrupacioFetVitalDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFetsVitalsAgrupacionsFV(id, agrupacioFetVitalCriteria);
+            List<AgrupacioFetVitalDTO> llistaDTO = fetVitalQueryServiceStrategy.llistarFetsVitalsAgrupacionsFV(getId(), agrupacioFetVitalCriteria);
             List<AgrupacioFetVitalQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO agrupacioFetVitalDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), agrupacioFetVitalDTO));
@@ -118,7 +119,8 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
     }
 
     public ArxiuQueryServiceAdapter getIcona() throws QueryServiceException {
-        if (this.getIcona() == null) {return null;}
+        if (this.getIcono() == null) {return null;}
+        
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getIcona(this.getIcono());
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);
@@ -128,7 +130,7 @@ public class FetVitalQueryServiceAdapter extends FetVitalDTO implements FetVital
     }
 
     public ArxiuQueryServiceAdapter getIconaGran() throws QueryServiceException {
-        if (this.getIconaGran() == null) {return null;}
+        if (this.getIconoGrande() == null) {return null;}
         try {
             ArxiuDTO dto = (ArxiuDTO) fetVitalQueryServiceStrategy.getIconaGran(this.getIconoGrande());
             return (ArxiuQueryServiceAdapter) BeanUtils.getAdapter("arxiu", getStrategy(), dto);

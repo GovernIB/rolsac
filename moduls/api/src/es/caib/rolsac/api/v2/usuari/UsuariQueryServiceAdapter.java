@@ -39,7 +39,7 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
     
     public int getNumUnitatsAdministratives() throws QueryServiceException {
         try {
-            return usuariQueryServiceStrategy.getNumUnitatsAdministratives(id);
+            return usuariQueryServiceStrategy.getNumUnitatsAdministratives(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
         }
@@ -47,7 +47,7 @@ public class UsuariQueryServiceAdapter extends UsuariDTO implements UsuariQueryS
 
     public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
         try {
-            List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaDTO> llistaDTO = usuariQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaUAQueryService = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 llistaUAQueryService.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));

@@ -185,5 +185,6 @@ public interface RolsacQueryService {
     UsuariQueryServiceAdapter obtenirUsuari(UsuariCriteria ususariCriteria) throws QueryServiceException;
 
     List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
-
+    
+    //AfectacioQueryServiceAdapter obtenirAfectacio(AfectacioCriteria afectacioCriteria) throws QueryServiceException;
 }

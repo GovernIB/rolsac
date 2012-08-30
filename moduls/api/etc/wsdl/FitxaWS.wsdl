@@ -1,0 +1,523 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/FitxaWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/FitxaWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://fetVital.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://document.v2.api.rolsac.caib.es" xmlns:tns5="http://enllac.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://seccio.v2.api.rolsac.caib.es" xmlns:tns7="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/FitxaWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="UnitatAdministrativaCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="businessKey" nillable="true" type="xsd:string" />
+							<element name="claveHita" nillable="true" type="xsd:string" />
+							<element name="dominio" nillable="true" type="xsd:string" />
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="telefono" nillable="true" type="xsd:string" />
+							<element name="fax" nillable="true" type="xsd:string" />
+							<element name="email" nillable="true" type="xsd:string" />
+							<element name="sexoResponsable" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_presentacion" nillable="true" type="xsd:string" />
+							<element name="t_abreviatura" nillable="true" type="xsd:string" />							
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/FitxaWS">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://fetVital.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="FetVitalCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />						
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+							<element name="t_palabrasclave" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://document.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="DocumentCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="t_titulo" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://enllac.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="EnllacCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="t_titulo" nillable="true" type="xsd:string" />
+							<element name="t_enlace" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="SeccioCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="codigoEstandard" nillable="true" type="xsd:string" />
+							<element name="perfil" nillable="true" type="xsd:string" />							
+							<element name="orden" nillable="true" type="xsd:string" />							
+							<element name="arrel" nillable="true" type="xsd:boolean" />							
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="https://localhost:8443/sacws-api/services/FitxaWS" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArxiuDTO">
+				<sequence>
+					<element name="id" type="xsd:long" />
+					<element name="mime" nillable="true" type="xsd:string" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="peso" type="xsd:long" />
+					<element name="url" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="getNumSeccionsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirIconaResponse">
+		<wsdl:part name="obtenirIconaReturn" type="tns7:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirIconaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarSeccionsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns6:SeccioCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarEnllacosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns5:EnllacCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumFetsVitalsResponse">
+		<wsdl:part name="getNumFetsVitalsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarSeccionsResponse">
+		<wsdl:part name="llistarSeccionsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarFetsVitalsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns3:FetVitalCriteria" />
+	</wsdl:message>
+	<wsdl:message name="llistarFetsVitalsResponse">
+		<wsdl:part name="llistarFetsVitalsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarUnitatsAdministrativesResponse">
+		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="getNumSeccionsResponse">
+		<wsdl:part name="getNumSeccionsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumFetsVitalsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesResponse">
+		<wsdl:part name="getNumUnitatsAdministrativesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="obtenirBanerRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsResponse">
+		<wsdl:part name="getNumDocumentsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="getNumDocumentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirImatgeRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="getNumEnllacosRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarEnllacosResponse">
+		<wsdl:part name="llistarEnllacosReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="llistarDocumentsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns4:DocumentCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumEnllacosResponse">
+		<wsdl:part name="getNumEnllacosReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:UnitatAdministrativaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="obtenirImatgeResponse">
+		<wsdl:part name="obtenirImatgeReturn" type="tns7:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="obtenirBanerResponse">
+		<wsdl:part name="obtenirBanerReturn" type="tns7:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="llistarDocumentsResponse">
+		<wsdl:part name="llistarDocumentsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:portType name="FitxaQueryServiceEJBRemote">
+		<wsdl:operation name="getNumUnitatsAdministratives"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumUnitatsAdministrativesRequest"
+				name="getNumUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:getNumUnitatsAdministrativesResponse"
+				name="getNumUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarUnitatsAdministrativesRequest"
+				name="llistarUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:llistarUnitatsAdministrativesResponse"
+				name="llistarUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarFetsVitals"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarFetsVitalsRequest" name="llistarFetsVitalsRequest" />
+			<wsdl:output message="impl:llistarFetsVitalsResponse"
+				name="llistarFetsVitalsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocuments" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarDocumentsRequest" name="llistarDocumentsRequest" />
+			<wsdl:output message="impl:llistarDocumentsResponse"
+				name="llistarDocumentsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarEnllacos" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarEnllacosRequest" name="llistarEnllacosRequest" />
+			<wsdl:output message="impl:llistarEnllacosResponse" name="llistarEnllacosResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarSeccions" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarSeccionsRequest" name="llistarSeccionsRequest" />
+			<wsdl:output message="impl:llistarSeccionsResponse" name="llistarSeccionsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirIcona" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirIconaRequest" name="obtenirIconaRequest" />
+			<wsdl:output message="impl:obtenirIconaResponse" name="obtenirIconaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumFetsVitals" parameterOrder="in0">
+			<wsdl:input message="impl:getNumFetsVitalsRequest" name="getNumFetsVitalsRequest" />
+			<wsdl:output message="impl:getNumFetsVitalsResponse"
+				name="getNumFetsVitalsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumSeccions" parameterOrder="in0">
+			<wsdl:input message="impl:getNumSeccionsRequest" name="getNumSeccionsRequest" />
+			<wsdl:output message="impl:getNumSeccionsResponse" name="getNumSeccionsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocuments" parameterOrder="in0">
+			<wsdl:input message="impl:getNumDocumentsRequest" name="getNumDocumentsRequest" />
+			<wsdl:output message="impl:getNumDocumentsResponse" name="getNumDocumentsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumEnllacos" parameterOrder="in0">
+			<wsdl:input message="impl:getNumEnllacosRequest" name="getNumEnllacosRequest" />
+			<wsdl:output message="impl:getNumEnllacosResponse" name="getNumEnllacosResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirImatge" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirImatgeRequest" name="obtenirImatgeRequest" />
+			<wsdl:output message="impl:obtenirImatgeResponse" name="obtenirImatgeResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirBaner" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirBanerRequest" name="obtenirBanerRequest" />
+			<wsdl:output message="impl:obtenirBanerResponse" name="obtenirBanerResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="FitxaWSSoapBinding" type="impl:FitxaQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getNumUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarFetsVitals">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarFetsVitalsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarFetsVitalsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarEnllacos">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarEnllacosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarEnllacosResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarSeccions">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarSeccionsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarSeccionsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirIcona">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirIconaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirIconaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumFetsVitals">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumFetsVitalsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumFetsVitalsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumSeccions">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumSeccionsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumSeccionsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumEnllacos">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumEnllacosRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumEnllacosResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirImatge">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirImatgeRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirImatgeResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirBaner">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirBanerRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirBanerResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/FitxaWS" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="FitxaQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:FitxaWSSoapBinding" name="FitxaWS">
+			<wsdlsoap:address location="https://localhost:8443/sacws-api/services/FitxaWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

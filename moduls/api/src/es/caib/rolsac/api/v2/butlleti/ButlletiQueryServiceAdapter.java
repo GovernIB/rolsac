@@ -40,7 +40,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
     
     public int getNumNormatives() throws QueryServiceException {
         try {
-            return butlletiQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.TOTES);
+            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.TOTES);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas.", e);
         }
@@ -48,7 +48,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
 
     public int getNumNormativesLocals() throws QueryServiceException {
         try {
-            return butlletiQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.LOCAL);
+            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.LOCAL);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas locales.", e);
         }
@@ -56,7 +56,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
 
     public int getNumNormativesExternes() throws QueryServiceException {
         try {
-            return butlletiQueryServiceStrategy.getNumNormatives(id, TIPUS_NORMATIVA.EXTERNA);
+            return butlletiQueryServiceStrategy.getNumNormatives(getId(), TIPUS_NORMATIVA.EXTERNA);
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas externas.", e);
         }
@@ -64,7 +64,7 @@ public class ButlletiQueryServiceAdapter extends ButlletiDTO implements Butlleti
 
     public List<NormativaQueryServiceAdapter> llistarNormatives(NormativaCriteria normativaCriteria) throws QueryServiceException {
         try {
-            List<NormativaDTO> llistaDTO = butlletiQueryServiceStrategy.llistarNormatives(id, normativaCriteria);
+            List<NormativaDTO> llistaDTO = butlletiQueryServiceStrategy.llistarNormatives(getId(), normativaCriteria);
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));

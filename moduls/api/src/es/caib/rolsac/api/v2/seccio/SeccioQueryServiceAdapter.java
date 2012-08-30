@@ -42,7 +42,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
     
     public int getNumFilles() throws QueryServiceException {
         try {
-            return seccioQueryServiceStrategy.getNumFilles(id);
+            return seccioQueryServiceStrategy.getNumFilles(getId());
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones hijas.", e);
         }
@@ -50,7 +50,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
 
     public int getNumFitxes() throws QueryServiceException {
         try {
-            return seccioQueryServiceStrategy.getNumFitxes(id);
+            return seccioQueryServiceStrategy.getNumFitxes(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de fichas.", e);
         }
@@ -63,7 +63,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
      */
     public int getNumPares() throws QueryServiceException {
         try {
-            return seccioQueryServiceStrategy.getNumPares(id);
+            return seccioQueryServiceStrategy.getNumPares(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de secciones padre.", e);
         }
@@ -71,7 +71,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
 
     public int getNumUnitatsAdministratives() throws QueryServiceException {
         try {
-            return seccioQueryServiceStrategy.getNumUnitatsAdministratives(id);
+            return seccioQueryServiceStrategy.getNumUnitatsAdministratives(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de unidades administrativas.", e);
         }
@@ -79,7 +79,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
     
     public List<SeccioQueryServiceAdapter> llistarFilles(SeccioCriteria seccioCriteria) throws QueryServiceException {
         try {
-            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarFilles(id, seccioCriteria);
+            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarFilles(getId(), seccioCriteria);
             List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
             for (SeccioDTO seccioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
@@ -92,7 +92,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
 
     public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
         try{ 
-            List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(id, fitxaCriteria);
+            List<FitxaDTO> llistaDTO = seccioQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
             List<FitxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<FitxaQueryServiceAdapter>();
             for (FitxaDTO fitxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
@@ -106,7 +106,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
     // Ejecuta recursivamente obtenirPare() hasta llegar a la seccion raiz, construyendo la lista a devolver por el camino.
     public List<SeccioQueryServiceAdapter> llistarPares() throws QueryServiceException {
         try {
-            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarPares(id);
+            List<SeccioDTO> llistaDTO = seccioQueryServiceStrategy.llistarPares(getId());
             List<SeccioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<SeccioQueryServiceAdapter>();
             for (SeccioDTO seccioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((SeccioQueryServiceAdapter) BeanUtils.getAdapter("seccio", getStrategy(), seccioDTO));
@@ -119,7 +119,7 @@ public class SeccioQueryServiceAdapter extends SeccioDTO implements SeccioQueryS
     
     public List<UnitatAdministrativaQueryServiceAdapter> llistarUnitatsAdministratives(UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws QueryServiceException {
         try {
-            List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
+            List<UnitatAdministrativaDTO> llistaDTO = seccioQueryServiceStrategy.llistarUnitatsAdministratives(getId(), unitatAdministrativaCriteria);
             List<UnitatAdministrativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<UnitatAdministrativaQueryServiceAdapter>();
             for (UnitatAdministrativaDTO unitatAdministrativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((UnitatAdministrativaQueryServiceAdapter) BeanUtils.getAdapter("unitatAdministrativa", getStrategy(), unitatAdministrativaDTO));

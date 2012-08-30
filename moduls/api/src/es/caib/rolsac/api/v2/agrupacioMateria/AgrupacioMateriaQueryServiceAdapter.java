@@ -52,7 +52,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
 
     public List<MateriaQueryServiceAdapter> llistarMateries(MateriaCriteria materiaCriteria) throws QueryServiceException {
         try {
-            List<MateriaDTO> llistaDTO = agrupacioMateriaQueryServiceStrategy.llistarMateries(id, materiaCriteria);
+            List<MateriaDTO> llistaDTO = agrupacioMateriaQueryServiceStrategy.llistarMateries(getId(), materiaCriteria);
             List<MateriaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<MateriaQueryServiceAdapter>();
             for (MateriaDTO materiaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((MateriaQueryServiceAdapter) BeanUtils.getAdapter("materia", getStrategy(), materiaDTO));
@@ -65,7 +65,7 @@ public class AgrupacioMateriaQueryServiceAdapter extends AgrupacioMateriaDTO imp
 
     public int getNumMateries() throws QueryServiceException {        
         try {
-            return agrupacioMateriaQueryServiceStrategy.getNumMateries(id);
+            return agrupacioMateriaQueryServiceStrategy.getNumMateries(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de materias.", e);
         }

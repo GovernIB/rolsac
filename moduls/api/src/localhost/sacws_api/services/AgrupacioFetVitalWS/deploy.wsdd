@@ -1,0 +1,84 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from AgrupacioFetVitalQueryServiceEJBRemoteService WSDL service -->
+
+  <service name="AgrupacioFetVitalWS" provider="java:RPC" style="rpc" use="encoded">
+      <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/AgrupacioFetVitalWS"/>
+      <parameter name="wsdlServiceElement" value="AgrupacioFetVitalQueryServiceEJBRemoteService"/>
+      <parameter name="schemaUnqualified" value="https://localhost:8443/sacws-api/services/AgrupacioFetVitalWS,http://fetVital.v2.api.rolsac.caib.es,http://publicObjectiu.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="wsdlServicePort" value="AgrupacioFetVitalWS"/>
+      <parameter name="className" value="localhost.sacws_api.services.AgrupacioFetVitalWS.AgrupacioFetVitalWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="AgrupacioFetVitalQueryServiceEJBRemote"/>
+      <parameter name="typeMappingVersion" value="1.1"/>
+      <operation name="llistarFetsVitals" qname="operNS:llistarFetsVitals" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="llistarFetsVitalsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/AgrupacioFetVitalWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:FetVitalCriteria" xmlns:tns="http://fetVital.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="obtenirPublicObjectiu" qname="operNS:obtenirPublicObjectiu" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="obtenirPublicObjectiuReturn" returnType="rtns:PublicObjectiuDTO" xmlns:rtns="http://publicObjectiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getFotografia" qname="operNS:getFotografia" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="getFotografiaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getIcona" qname="operNS:getIcona" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="getIconaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getIconaGran" qname="operNS:getIconaGran" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="getIconaGranReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="getNumFetsVitals" qname="operNS:getNumFetsVitals" xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es" returnQName="getNumFetsVitalsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="getIconaGran getIcona getFotografia getNumFetsVitals obtenirPublicObjectiu llistarFetsVitals"/>
+
+      <typeMapping
+        xmlns:ns="http://publicObjectiu.v2.api.rolsac.caib.es"
+        qname="ns:PublicObjectiuDTO"
+        type="java:es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/AgrupacioFetVitalWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://fetVital.v2.api.rolsac.caib.es"
+        qname="ns:FetVitalCriteria"
+        type="java:es.caib.rolsac.api.v2.fetVital.FetVitalCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+  </service>
+</deployment>

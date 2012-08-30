@@ -1,80 +1,255 @@
+/**
+ * ArxiuDTO.java
+ *
+ * This file was auto-generated from WSDL
+ * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
+ */
+
 package es.caib.rolsac.api.v2.arxiu;
 
-import java.io.Serializable;
-
-
-public class ArxiuDTO implements Serializable {
-
-    private static final long serialVersionUID = -8690224615791914641L;
-
+public class ArxiuDTO  implements java.io.Serializable {
     private long id;
-    private String mime;
-    private String nombre;
+
+    private java.lang.String mime;
+
+    private java.lang.String nombre;
+
     private long peso;
-    
-    private String url;
-    
+
+    private java.lang.String url;
+
+    public ArxiuDTO() {
+    }
+
+    public ArxiuDTO(
+           long id,
+           java.lang.String mime,
+           java.lang.String nombre,
+           long peso,
+           java.lang.String url) {
+           this.id = id;
+           this.mime = mime;
+           this.nombre = nombre;
+           this.peso = peso;
+           this.url = url;
+    }
+
+
     /**
-     * @return the id
+     * Gets the id value for this ArxiuDTO.
+     * 
+     * @return id
      */
     public long getId() {
         return id;
     }
+
+
     /**
-     * @param id the id to set
+     * Sets the id value for this ArxiuDTO.
+     * 
+     * @param id
      */
     public void setId(long id) {
         this.id = id;
     }
+
+
     /**
-     * @return the mime
+     * Gets the mime value for this ArxiuDTO.
+     * 
+     * @return mime
      */
-    public String getMime() {
+    public java.lang.String getMime() {
         return mime;
     }
+
+
     /**
-     * @param mime the mime to set
+     * Sets the mime value for this ArxiuDTO.
+     * 
+     * @param mime
      */
-    public void setMime(String mime) {
+    public void setMime(java.lang.String mime) {
         this.mime = mime;
     }
+
+
     /**
-     * @return the nombre
+     * Gets the nombre value for this ArxiuDTO.
+     * 
+     * @return nombre
      */
-    public String getNombre() {
+    public java.lang.String getNombre() {
         return nombre;
     }
+
+
     /**
-     * @param nombre the nombre to set
+     * Sets the nombre value for this ArxiuDTO.
+     * 
+     * @param nombre
      */
-    public void setNombre(String nombre) {
+    public void setNombre(java.lang.String nombre) {
         this.nombre = nombre;
     }
+
+
     /**
-     * @return the peso
+     * Gets the peso value for this ArxiuDTO.
+     * 
+     * @return peso
      */
     public long getPeso() {
         return peso;
     }
+
+
     /**
-     * @param peso the peso to set
+     * Sets the peso value for this ArxiuDTO.
+     * 
+     * @param peso
      */
     public void setPeso(long peso) {
         this.peso = peso;
     }
-	
+
+
     /**
-     * @return the url
+     * Gets the url value for this ArxiuDTO.
+     * 
+     * @return url
      */
-    public String getUrl() {
+    public java.lang.String getUrl() {
         return url;
     }
 
+
     /**
-     * @param url the url to set
+     * Sets the url value for this ArxiuDTO.
+     * 
+     * @param url
      */
-    public void setUrl(String url) {
+    public void setUrl(java.lang.String url) {
         this.url = url;
     }
-    
+
+    private java.lang.Object __equalsCalc = null;
+    public synchronized boolean equals(java.lang.Object obj) {
+        if (!(obj instanceof ArxiuDTO)) return false;
+        ArxiuDTO other = (ArxiuDTO) obj;
+        if (obj == null) return false;
+        if (this == obj) return true;
+        if (__equalsCalc != null) {
+            return (__equalsCalc == obj);
+        }
+        __equalsCalc = obj;
+        boolean _equals;
+        _equals = true && 
+            this.id == other.getId() &&
+            ((this.mime==null && other.getMime()==null) || 
+             (this.mime!=null &&
+              this.mime.equals(other.getMime()))) &&
+            ((this.nombre==null && other.getNombre()==null) || 
+             (this.nombre!=null &&
+              this.nombre.equals(other.getNombre()))) &&
+            this.peso == other.getPeso() &&
+            ((this.url==null && other.getUrl()==null) || 
+             (this.url!=null &&
+              this.url.equals(other.getUrl())));
+        __equalsCalc = null;
+        return _equals;
+    }
+
+    private boolean __hashCodeCalc = false;
+    public synchronized int hashCode() {
+        if (__hashCodeCalc) {
+            return 0;
+        }
+        __hashCodeCalc = true;
+        int _hashCode = 1;
+        _hashCode += new Long(getId()).hashCode();
+        if (getMime() != null) {
+            _hashCode += getMime().hashCode();
+        }
+        if (getNombre() != null) {
+            _hashCode += getNombre().hashCode();
+        }
+        _hashCode += new Long(getPeso()).hashCode();
+        if (getUrl() != null) {
+            _hashCode += getUrl().hashCode();
+        }
+        __hashCodeCalc = false;
+        return _hashCode;
+    }
+
+    // Type metadata
+    private static org.apache.axis.description.TypeDesc typeDesc =
+        new org.apache.axis.description.TypeDesc(ArxiuDTO.class, true);
+
+    static {
+        typeDesc.setXmlType(new javax.xml.namespace.QName("http://arxiu.v2.api.rolsac.caib.es", "ArxiuDTO"));
+        org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("id");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "id"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("mime");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "mime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("nombre");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "nombre"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("peso");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "peso"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("url");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "url"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+    }
+
+    /**
+     * Return type metadata object
+     */
+    public static org.apache.axis.description.TypeDesc getTypeDesc() {
+        return typeDesc;
+    }
+
+    /**
+     * Get Custom Serializer
+     */
+    public static org.apache.axis.encoding.Serializer getSerializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanSerializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
+    /**
+     * Get Custom Deserializer
+     */
+    public static org.apache.axis.encoding.Deserializer getDeserializer(
+           java.lang.String mechType, 
+           java.lang.Class _javaType,  
+           javax.xml.namespace.QName _xmlType) {
+        return 
+          new  org.apache.axis.encoding.ser.BeanDeserializer(
+            _javaType, _xmlType, typeDesc);
+    }
+
 }

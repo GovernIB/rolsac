@@ -18,6 +18,7 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
 import es.caib.rolsac.api.v2.taxa.TaxaDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.tramit.ejb.TramitQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaQueryServiceAdapter;
 
@@ -40,12 +41,12 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
     }
 
     private STRATEGY getStrategy() {
-        return tramitQueryServiceStrategy instanceof TramitQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return tramitQueryServiceStrategy instanceof TramitQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public int getNumDocumentsInformatius() throws QueryServiceException {
         try {
-            return tramitQueryServiceStrategy.getNumDocumentsInformatius(id);
+            return tramitQueryServiceStrategy.getNumDocumentsInformatius(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de documentos informativos.", e);
         }
@@ -53,7 +54,7 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
 
     public int getNumFormularis() throws QueryServiceException {
         try {
-            return tramitQueryServiceStrategy.getNumFormularis(id);
+            return tramitQueryServiceStrategy.getNumFormularis(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de formularios.", e);
         }
@@ -61,7 +62,7 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
 
     public int getNumTaxes() throws QueryServiceException {
         try {
-            return tramitQueryServiceStrategy.getNumTaxes(id);
+            return tramitQueryServiceStrategy.getNumTaxes(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de tasas.", e);
         }
@@ -89,7 +90,7 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
 
     public List<DocumentTramitQueryServiceAdapter> llistatDocumentsInformatius(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
         try {
-            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistatDocumentsInformatius(id, documentTramitCriteria);
+            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistatDocumentsInformatius(getId(), documentTramitCriteria);
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
@@ -102,7 +103,7 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
 
     public List<DocumentTramitQueryServiceAdapter> llistarFormularis(DocumentTramitCriteria documentTramitCriteria) throws QueryServiceException {
         try {
-            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistarFormularis(id, documentTramitCriteria);
+            List<DocumentTramitDTO> llistaDTO = tramitQueryServiceStrategy.llistarFormularis(getId(), documentTramitCriteria);
             List<DocumentTramitQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<DocumentTramitQueryServiceAdapter>();
             for (DocumentTramitDTO documentTramitDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((DocumentTramitQueryServiceAdapter) BeanUtils.getAdapter("documentTramit", getStrategy(), documentTramitDTO));
@@ -115,7 +116,7 @@ public class TramitQueryServiceAdapter extends TramitDTO implements TramitQueryS
     
     public List<TaxaQueryServiceAdapter> llistarTaxes(TaxaCriteria taxaCriteria) throws QueryServiceException {
         try {
-            List<TaxaDTO> llistaDTO = tramitQueryServiceStrategy.llistarTaxes(id, taxaCriteria);
+            List<TaxaDTO> llistaDTO = tramitQueryServiceStrategy.llistarTaxes(getId(), taxaCriteria);
             List<TaxaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<TaxaQueryServiceAdapter>();
             for (TaxaDTO taxaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((TaxaQueryServiceAdapter) BeanUtils.getAdapter("taxa", getStrategy(), taxaDTO));

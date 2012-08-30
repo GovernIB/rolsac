@@ -79,7 +79,7 @@
 	<classpathentry kind="lib" path="lib/webcaib/lucene-spellchecker-2.2.0.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/rome-1.0RC2.jar"/>
 	<classpathentry kind="lib" path="lib/jena-2.6.4.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
 	<classpathentry kind="lib" path="lib/jasper/ant.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/commons-el.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/jasper-compiler.jar"/>
@@ -88,7 +88,6 @@
 	<classpathentry kind="lib" path="lib/jasper/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/xml-apis.jar"/>
-	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-apache-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-ejb-module-1.2.3.jar"/>
@@ -100,11 +99,16 @@
 	<classpathentry kind="lib" path="lib/jstl/jstl.jar"/>
 	<classpathentry kind="lib" path="lib/jstl/standard.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-all-1.8.5.jar"/>
-	<classpathentry kind="lib" path="lib/webcaib/axis.jar"/>
 	<classpathentry kind="lib" path="lib/micromodel.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/struts.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/ehcache.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4/axis-ws4ee.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4/saaj.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/webcaib/commons-discovery-0.5.jar"/>
+	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

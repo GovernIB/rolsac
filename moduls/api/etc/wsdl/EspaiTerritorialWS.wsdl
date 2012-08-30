@@ -1,0 +1,330 @@
+<wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
+	xmlns:impl="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+	xmlns:intf="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://espaiTerritorial.v2.api.rolsac.caib.es"
+	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:tns4="http://arxiu.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS">
+	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
+		PDT) -->
+	<wsdl:types>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://general.v2.api.rolsac.caib.es">
+			<import
+				namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType abstract="true" name="BasicCriteria">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:string" />
+					<element name="idioma" nillable="true" type="xsd:string" />
+					<element name="inici" nillable="true" type="xsd:string" />
+					<element name="ordenacio" nillable="true" type="xsd:string" />
+					<element name="tamany" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://espaiTerritorial.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import
+				namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="EspaiTerritorialCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="nivel" nillable="true" type="xsd:string" />
+							<element name="coordenadas" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+						</sequence>					
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="EspaiTerritorialDTO">
+				<sequence>
+					<element name="coordenadas" nillable="true" type="xsd:string" />
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="logo" nillable="true" type="xsd:long" />
+					<element name="mapa" nillable="true" type="xsd:long" />
+					<element name="nivel" nillable="true" type="xsd:int" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="padre" nillable="true" type="xsd:long" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArrayOf_xsd_anyType">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="xsd:anyType[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://xml.apache.org/xml-soap">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import
+				namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="Vector">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item"
+						type="xsd:anyType" />
+				</sequence>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import
+				namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="UnitatAdministrativaCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="businessKey" nillable="true" type="xsd:string" />
+							<element name="claveHita" nillable="true" type="xsd:string" />
+							<element name="dominio" nillable="true" type="xsd:string" />
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="validacion" nillable="true" type="xsd:string" />
+							<element name="responsable" nillable="true" type="xsd:string" />
+							<element name="telefono" nillable="true" type="xsd:string" />
+							<element name="fax" nillable="true" type="xsd:string" />
+							<element name="email" nillable="true" type="xsd:string" />
+							<element name="sexoResponsable" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_presentacion" nillable="true" type="xsd:string" />
+							<element name="t_abreviatura" nillable="true" type="xsd:string" />							
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+		</schema>
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import
+				namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="ArxiuDTO">
+				<sequence>
+					<element name="id" type="xsd:long" />
+					<element name="mime" nillable="true" type="xsd:string" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+					<element name="peso" type="xsd:long" />
+					<element name="url" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="llistarUnitatsAdministrativesResponse">
+		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="obtenirMapaRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="llistarUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns3:UnitatAdministrativaCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesResponse">
+		<wsdl:part name="getNumUnitatsAdministrativesReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="llistarFillsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+		<wsdl:part name="in1" type="tns1:EspaiTerritorialCriteria" />
+	</wsdl:message>
+	<wsdl:message name="getNumFillsResponse">
+		<wsdl:part name="getNumFillsReturn" type="xsd:int" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPareResponse">
+		<wsdl:part name="obtenirPareReturn" type="tns1:EspaiTerritorialDTO" />
+	</wsdl:message>
+	<wsdl:message name="llistarFillsResponse">
+		<wsdl:part name="llistarFillsReturn" type="impl:ArrayOf_xsd_anyType" />
+	</wsdl:message>
+	<wsdl:message name="obtenirPareRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirMapaResponse">
+		<wsdl:part name="obtenirMapaReturn" type="tns4:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="getNumUnitatsAdministrativesRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirLogoResponse">
+		<wsdl:part name="obtenirLogoReturn" type="tns4:ArxiuDTO" />
+	</wsdl:message>
+	<wsdl:message name="getNumFillsRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:message name="obtenirLogoRequest">
+		<wsdl:part name="in0" type="xsd:long" />
+	</wsdl:message>
+	<wsdl:portType name="EspaiTerritorialQueryServiceEJBRemote">
+		<wsdl:operation name="getNumFills" parameterOrder="in0">
+			<wsdl:input message="impl:getNumFillsRequest" name="getNumFillsRequest" />
+			<wsdl:output message="impl:getNumFillsResponse" name="getNumFillsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="getNumUnitatsAdministratives"
+			parameterOrder="in0">
+			<wsdl:input message="impl:getNumUnitatsAdministrativesRequest"
+				name="getNumUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:getNumUnitatsAdministrativesResponse"
+				name="getNumUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarFills" parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarFillsRequest" name="llistarFillsRequest" />
+			<wsdl:output message="impl:llistarFillsResponse" name="llistarFillsResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives"
+			parameterOrder="in0 in1">
+			<wsdl:input message="impl:llistarUnitatsAdministrativesRequest"
+				name="llistarUnitatsAdministrativesRequest" />
+			<wsdl:output message="impl:llistarUnitatsAdministrativesResponse"
+				name="llistarUnitatsAdministrativesResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPare" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirPareRequest" name="obtenirPareRequest" />
+			<wsdl:output message="impl:obtenirPareResponse" name="obtenirPareResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirMapa" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirMapaRequest" name="obtenirMapaRequest" />
+			<wsdl:output message="impl:obtenirMapaResponse" name="obtenirMapaResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="obtenirLogo" parameterOrder="in0">
+			<wsdl:input message="impl:obtenirLogoRequest" name="obtenirLogoRequest" />
+			<wsdl:output message="impl:obtenirLogoResponse" name="obtenirLogoResponse" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="EspaiTerritorialWSSoapBinding"
+		type="impl:EspaiTerritorialQueryServiceEJBRemote">
+		<wsdlsoap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getNumFills">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumFillsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumFillsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getNumUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="getNumUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="getNumUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarFills">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarFillsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarFillsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="llistarUnitatsAdministratives">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarUnitatsAdministrativesRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarUnitatsAdministrativesResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirPare">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirPareRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirPareResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirMapa">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirMapaRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirMapaResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="obtenirLogo">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirLogoRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es"
+					use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirLogoResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+					use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="EspaiTerritorialQueryServiceEJBRemoteService">
+		<wsdl:port binding="impl:EspaiTerritorialWSSoapBinding"
+			name="EspaiTerritorialWS">
+			<wsdlsoap:address
+				location="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

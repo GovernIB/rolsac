@@ -39,7 +39,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
     
     public int getNumAgrupacions() throws QueryServiceException {
         try {
-            return publicObjectiuQueryServiceStrategy.getNumAgrupacions(id);
+            return publicObjectiuQueryServiceStrategy.getNumAgrupacions(getId());
         } catch (StrategyException e) {
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de agrupaciones.", e);
         }
@@ -47,7 +47,7 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
 
     public List<AgrupacioFetVitalQueryServiceAdapter> llistarAgrupacions(AgrupacioFetVitalCriteria agurpacioFetVitalCriteria) throws QueryServiceException {
         try {
-            List<AgrupacioFetVitalDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarAgrupacions(id, agurpacioFetVitalCriteria);
+            List<AgrupacioFetVitalDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarAgrupacions(getId(), agurpacioFetVitalCriteria);
             List<AgrupacioFetVitalQueryServiceAdapter> llistaAgrupacions = new ArrayList<AgrupacioFetVitalQueryServiceAdapter>();
             for (AgrupacioFetVitalDTO afvDTO : llistaDTO) {
                 llistaAgrupacions.add((AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", getStrategy(), afvDTO));

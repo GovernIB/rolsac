@@ -5,6 +5,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryService;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.document.ejb.DocumentQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -36,7 +37,7 @@ public class DocumentQueryServiceAdapter extends DocumentDTO implements Document
     }
 
     private STRATEGY getStrategy() {
-        return documentQueryServiceStrategy instanceof DocumentQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return documentQueryServiceStrategy instanceof DocumentQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
 
     public FitxaQueryService obtenirFitxa() throws QueryServiceException {

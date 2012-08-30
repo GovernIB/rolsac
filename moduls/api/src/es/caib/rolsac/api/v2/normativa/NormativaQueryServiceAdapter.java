@@ -15,6 +15,7 @@ import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.normativa.ejb.NormativaQueryServiceEJBStrategy;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
@@ -40,7 +41,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     }
 
     private STRATEGY getStrategy() {
-        return normativaQueryServiceStrategy instanceof NormativaQueryServiceStrategy ? STRATEGY.EJB : STRATEGY.WS;
+        return normativaQueryServiceStrategy instanceof NormativaQueryServiceEJBStrategy ? STRATEGY.EJB : STRATEGY.WS;
     }
     
     public ArxiuQueryServiceAdapter obtenirArxiuNormativa() throws QueryServiceException{
@@ -55,7 +56,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     
     public int getNumAfectades() throws QueryServiceException {
         try {
-            return normativaQueryServiceStrategy.getNumAfectades(id);
+            return normativaQueryServiceStrategy.getNumAfectades(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas afectadas.", e);
         }
@@ -63,7 +64,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
 
     public int getNumAfectants() throws QueryServiceException {
         try {
-            return normativaQueryServiceStrategy.getNumAfectants(id);
+            return normativaQueryServiceStrategy.getNumAfectants(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de normativas afectantes.", e);
         }
@@ -71,7 +72,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
 
     public int getNumProcediments() throws QueryServiceException {
         try {
-            return normativaQueryServiceStrategy.getNumProcediments(id);
+            return normativaQueryServiceStrategy.getNumProcediments(getId());
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "numero de procedimientos.", e);
         }
@@ -79,7 +80,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
 
     public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectades() throws QueryServiceException{
         try {
-            List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectades(id);
+            List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectades(getId());
             List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
             for (AfectacioDTO afectacioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO));
@@ -92,7 +93,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     
     public List<NormativaQueryServiceAdapter> llistarAfectades() throws QueryServiceException {
         try {
-            List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectades(id);
+            List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectades(getId());
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
@@ -105,7 +106,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
 
     public List<AfectacioQueryServiceAdapter> llistarAfectacionsAfectants() throws QueryServiceException{
         try {
-            List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectants(id);
+            List<AfectacioDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectacionsAfectants(getId());
             List<AfectacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<AfectacioQueryServiceAdapter>();
             for (AfectacioDTO afectacioDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((AfectacioQueryServiceAdapter) BeanUtils.getAdapter("afectacio", getStrategy(), afectacioDTO));
@@ -118,7 +119,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
     
     public List<NormativaQueryServiceAdapter> llistarAfectants() throws QueryServiceException {
         try {
-            List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectants(id);
+            List<NormativaDTO> llistaDTO = normativaQueryServiceStrategy.llistarAfectants(getId());
             List<NormativaQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<NormativaQueryServiceAdapter>();
             for (NormativaDTO normativaDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((NormativaQueryServiceAdapter) BeanUtils.getAdapter("normativa", getStrategy(), normativaDTO));
@@ -131,7 +132,7 @@ public class NormativaQueryServiceAdapter extends NormativaDTO implements Normat
 
     public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
         try {
-            List<ProcedimentDTO> llistaDTO = normativaQueryServiceStrategy.llistarProcediments(id, procedimentCriteria);
+            List<ProcedimentDTO> llistaDTO = normativaQueryServiceStrategy.llistarProcediments(getId(), procedimentCriteria);
             List<ProcedimentQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<ProcedimentQueryServiceAdapter>();
             for (ProcedimentDTO procedimentDTO : llistaDTO) {
                 llistaQueryServiceAdapter.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procedimentDTO));
