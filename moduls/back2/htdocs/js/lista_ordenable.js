@@ -174,7 +174,7 @@ function ListaOrdenable(){
 		var id = jQuery(item).find("input." + params.nombre + "_id:first").val();						
 		jQuery(params.nodoDestino).find("input[name=" + params.nombre + "_id_" + id + "]").parents("li").remove();				
 	}
-		
+
 	/**
 	 * Agrega un item a la lista.
 	 *
