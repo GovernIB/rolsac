@@ -33,18 +33,25 @@
     <property name="web.gen.src" location="${modul.output.dir}/gen-src"/>
     <property name="web.gen.etc" location="${modul.output.dir}/gen-etc"/>
     <property name="web.classes" location="${modul.output.dir}/classes"/>
+	<property name="web.lib" location="${modul.output.dir}/lib"/>
 
     <property name="doc" location="${output.dir}/doc"/>
     <property name="web.product" location="${output.dir}/moduls"/>
 	
+
     <path id="web.class.path">
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
             <include name="commons-logging.jar"/>
+        	<include name="hibernate2.jar"/>
         </fileset>
         
         <fileset dir="${lib.dir}/webcaib">
             <include name="commons-collections-3.2.1.jar"/>   	
+        </fileset>
+    	
+    	<fileset dir="${web.product}">
+    		<include name="model.jar"/>
         </fileset>
     </path>
 
@@ -55,11 +62,20 @@
         <path refid="web.class.path"/>
     </path>
 	
+	<!-- Netetja tots els directoris de treball del necessaris -->
+    <target name="clean">
+    	<delete dir="${web.gen.src}" failonerror="false" />
+        <delete dir="${web.gen.etc}" failonerror="false" />
+        <delete dir="${web.classes}" failonerror="false" />
+    	<delete dir="${web.lib}" failonerror="false" />
+    </target>
+	
     <!-- Crea tots els directoris de treball necessaris -->
     <target name="prepare">
         <mkdir dir="${web.gen.src}"/>
         <mkdir dir="${web.gen.etc}"/>       
         <mkdir dir="${web.classes}"/>
+    	<mkdir dir="${web.lib}"/>
     </target>
 	
     <target name="init">
@@ -75,7 +91,6 @@
     </target>
 
     <target name="web.gen.all" depends="prepare,init">
-
         <webdoclet
             destdir="${web.gen.src}"
             excludedtags="@version,@author"
@@ -113,32 +128,53 @@
             <replacefilter token="@role.super@" value="${role.super}"/>
             <replacefilter token="@role.oper@" value="${role.oper}"/>
         </replace>
-
     </target>
 
+	<target name="compile" depends="web.gen.all">
+        <javac destdir="${web.classes}"
+            classpathref="web.class.path"
+        	srcdir="${home.dir}/moduls/api/src"
+        	includes="**/ArxiuServlet.java, **/HibernateUtils.java"
+            debug="${javac.debug}"
+            deprecation="${javac.deprecation}"
+            optimize="${javac.optimize}"
+            encoding="${javac.encoding}"
+        	>
+        </javac>
+    </target>
 
-
-    <target name="ws.war">
+    <target name="ws.war" depends="compile">
+    	<copy todir="${web.classes}" file="${home.dir}/moduls/api/etc/hibernate.cfg.xml" overwrite="true" flatten="true"/>
+    	<copy todir="${web.lib}" overwrite="true" flatten="true">
+            <fileset dir="${home.dir}">
+                <include name="lib/hibernate2.jar"/>
+                <include name="lib/commons-logging.jar"/>
+                <include name="**/model.jar"/>
+            </fileset>
+        </copy>
+    	
         <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
         <war warfile="${web.product}/${prefix.modul}-${modul}.war"
-            basedir="${web.htdocs}"
-            webxml="${web.gen.etc}/web.xml"
-            excludes="WEB-INF/**">
+                basedir="${web.htdocs}"
+                webxml="${web.gen.etc}/web.xml"
+                excludes="WEB-INF/**">
             <manifest>
-                <attribute name="Created-By" value="Fundació IBIT"/>
+                <attribute name="Created-By" value="UTE"/>
             </manifest>
 
             <classes dir="${web.classes}"/>
             <classes dir="${web.resources}" includes="*.properties"/>
 
+        	<lib dir="${web.lib}"/>
+            	
             <webinf dir="${web.etc}" includes="*.wsdd"/>
             <webinf dir="${web.gen.etc}" includes="*.xml" excludes="web.xml,webinc.xml"/>
         </war>
     </target>
 
-    <target name="main" depends="web.gen.all, ws.war" description="Construeye el war"/>
+	
+    <target name="main" depends="ws.war" description="Construeye el war"/>
 
     <import file="../build_sonar.xml"/>
-
     
 </project>

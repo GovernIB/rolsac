@@ -24,10 +24,10 @@ public class HibernateUtils {
         if (sessionFactory == null) {
             ClassLoader cl = Thread.currentThread().getContextClassLoader();
             URL url = cl.getResource("hibernate.cfg.xml");
-            File f = new File(HB_MAPPING);
             try {
                 // TODO: HibernateLocator configura un interceptor y una property. Revisarlo mas tarde.
                 if (url == null) {
+                    File f = new File(HB_MAPPING);
                     sessionFactory = new Configuration().configure(f).buildSessionFactory();
                 } else {
                     sessionFactory = new Configuration().configure(url).buildSessionFactory();

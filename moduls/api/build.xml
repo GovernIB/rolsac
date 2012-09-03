@@ -29,7 +29,6 @@
     <property name="jar.doc.api" location="${doc}/api/${modul}"/>
     <property name="jar.product" location="${output.dir}/moduls"/>	
 
-	<property name="arxiu.web-inf" location="${modul.output.dir}/WEB-INF"/>
 	
 	<!-- ROLSAC ORIGINAL -->
 
@@ -63,7 +62,6 @@
             <include name="ejb-2_0.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="commons-logging.jar"/>
-        	<include name="servlet-api.jar"/> <!-- arxiu servlet war -->
         </fileset>
         <fileset dir="${ejb.product}">
             <include name="sac.jar"/>        	
@@ -143,7 +141,6 @@
         <delete dir="${ejb.gen.etc}" failonerror="false" />
         <delete dir="${ejb.classes}" failonerror="false" />
         <delete dir="${ejb.doc.api}" failonerror="false" />
-    	<delete dir="${arxiu.web-inf}" failonerror="false" />
     </target>
 	
     <!-- Crea tots els directoris de treball necessaris -->
@@ -154,9 +151,6 @@
         <mkdir dir="${ejb.doc.api}"/>
         <mkdir dir="${ejb.product}"/>
     	
-    	<mkdir dir="${arxiu.web-inf}"/>
-        <mkdir dir="${arxiu.web-inf}/lib"/>
-        <mkdir dir="${arxiu.web-inf}/classes"/>
     <!-- FIN TAREAS ROLSAC ORIGINAL -->	
     	
     	<mkdir dir="${jar.gen.etc}"/>
@@ -252,6 +246,7 @@
         <javac
             destdir="${ejb.classes}"
             classpathref="ejb.class.path"
+        	excludes="**/ArxiuServlet.java"
             debug="${javac.debug}"
             deprecation="${javac.deprecation}"
             optimize="${javac.optimize}"
@@ -289,35 +284,6 @@
         </jar>
     </target>			
 	
-	<!-- Arxiu servlet -->
-	<target name="arxiuServlet.war" depends="ejb.compile">
-        <copy todir="${arxiu.web-inf}/classes" file="${ejb.gen.etc}/hibernate.cfg.xml" overwrite="true" flatten="true"/>
-        <copy todir="${arxiu.web-inf}/classes" overwrite="true">
-            <fileset dir="${ejb.classes}">
-                <include name="**/ArxiuServlet.class"/>
-                <include name="**/HibernateUtils.class"/>
-            </fileset>
-        </copy>
-        
-        <copy todir="${arxiu.web-inf}/lib" overwrite="true" flatten="true">
-            <fileset dir="${home.dir}">
-                <include name="lib/hibernate2.jar"/>
-                <include name="lib/commons-logging.jar"/>
-                <!--include name="**/cglib2.jar"/-->
-                <include name="**/model.jar"/>
-            </fileset>
-        </copy>
-
-        <war destfile="${ejb.product}/sac-${modul}-arxiuServlet.war" webxml="${ejb.etc}/web.xml">
-            <classes dir="${arxiu.web-inf}/classes" />
-            <lib dir="${arxiu.web-inf}/lib" />
-            <webinf dir="${ejb.etc}" includes="jboss-web.xml" />
-            <manifest>
-                <attribute name="Created-By" value="UTE"/>
-            </manifest>
-        </war>
-    </target>
-		
 <!--	
 	<target name="jar.gen.all" depends="ejb.client">
 		<copy file="${jar.etc}/hibernate.cfg.xml" todir="${jar.gen.etc}" overwrite="true"/>
@@ -339,7 +305,7 @@
     </target>
 	
 	<!-- <target name="main" depends="jar.jar" description="Construye el jar"/> -->
-	<target name="main" depends="ejb.client, ejb.server, arxiuServlet.war" description="Construye el jar"/>	
+	<target name="main" depends="ejb.client, ejb.server" description="Construye el jar"/>	
 
 	<target name="module.package" depends="ejb.client, ejb.server"/>
 	<path id="module.classpath" refid="jar.class.path"/>

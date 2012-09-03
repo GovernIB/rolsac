@@ -53,12 +53,6 @@
             </module>
             <module>
                 <web>
-                <web-uri>@prefix.modul@-api-arxiuServlet.war</web-uri>
-                <context-root>apiArxiuServlet</context-root>
-                </web>
-            </module>
-            <module>
-                <web>
                 <web-uri>@prefix.modul@-apiws.war</web-uri>
                 <context-root>@context.ws@-api</context-root>
                 </web>

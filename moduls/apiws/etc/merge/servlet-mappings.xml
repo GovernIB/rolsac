@@ -33,3 +33,8 @@
     <url-pattern>/servlet/AdminServlet</url-pattern>
 </servlet-mapping>
 -->
+
+<servlet-mapping>
+    <servlet-name>apiArxiuServlet</servlet-name>
+    <url-pattern>/arxiu/*</url-pattern>
+</servlet-mapping> 
