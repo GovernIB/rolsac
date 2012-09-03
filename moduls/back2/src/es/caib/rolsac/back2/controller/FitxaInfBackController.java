@@ -527,10 +527,10 @@ public class FitxaInfBackController extends PantallaBaseController {
     		
             
             // Comprovam camps obligatoris 
-    		
-            UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-            String titolCatala = valoresForm.get("item_titol_ca");           
-            if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
+    		String titolCatala = valoresForm.get("item_titol_ca");
+//            UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+//            if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
+    		if (titolCatala == null || "".equals(titolCatala)) {
             	error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
                 result = new IdNomDTO(-3l, error);
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
