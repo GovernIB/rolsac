@@ -782,7 +782,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend>ESTADï¿½STIQUES</legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -807,18 +807,18 @@
                                 <thead>
                                     <th class="usuario"><div>USUARI</div></th>
                                     <th class="fecha"><div>DATA</div></th>
-                                    <th class="operacion"><div>OPERACIÓ</div></th>
+                                    <th class="operacion"><div>OPERACIï¿½</div></th>
                                 </thead>                    
                                 <tbody>
                                     <tr>
                                         <td class="usuario"><div>rsanz</div></td>
                                         <td class="fecha"><div>16/01/2012</div></td>
-                                        <td class="operacion"><div>Modificació</div></td>
+                                        <td class="operacion"><div>Modificaciï¿½</div></td>
                                     </tr>
                                     <tr>
                                         <td class="usuario"><div>jfernandez</div></td>
                                         <td class="fecha"><div>16/01/2012</div></td>
-                                        <td class="operacion"><div>Modificació</div></td>
+                                        <td class="operacion"><div>Modificaciï¿½</div></td>
                                     </tr>
                                     <tr>
                                         <td class="usuario"><div>flopez</div></td>
@@ -893,7 +893,7 @@
             <div class="modul" id="modulRelacioOrganica">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>RELACIÓ ORGÀNICA</legend>
+                    <legend><spring:message code='txt.relacioOrganica'/></legend>
                     <div class="modul_continguts mostrat">
                     
                         <div class="fila">
@@ -1326,68 +1326,6 @@
             </div>
         </div>
         <!-- seleccionats -->
-    
-    
-    <%-- 
-    <div id="escriptori_edificis">              
-        <h2>Gestió dels edificis relacionats</h2>                   
-        <div class="botonera dalt">
-            <ul>
-                <li>
-                    <a href="javascript:;" class="btn torna"><span><span>Torna al detall</span></span></a>
-                </li>
-            </ul>
-        </div>                  
-        <!-- llistat -->
-        <div class="escriptori_items_llistat">                      
-            <!-- cercador -->
-            <div class="escriptori_items_cercador">                     
-                <h3>Cercador</h3>                               
-                <div class="fila">                                  
-                    <div class="element t18">                               
-                        <div class="etiqueta"><label for="cerca_edificis_adresa">Adreça</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_adresa" name="cerca_edificis_adresa" type="text" class="adresa" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t7">                                
-                        <div class="etiqueta"><label for="cerca_edificis_cp">Codi postal</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_cp" name="cerca_edificis_cp" type="text" class="cp" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t12">                               
-                        <div class="etiqueta"><label for="cerca_edificis_poblacio">Població</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_poblacio" name="cerca_edificis_poblacio" type="text" class="poblacio" />
-                        </div>                                  
-                    </div>                              
-                </div>                          
-                <div class="botonera">
-                    <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span></span></a>
-                </div>                      
-            </div>
-            <!-- /cercador -->                      
-            <div class="dades"></div>                       
-            <input type="hidden" value="0" class="pagPagina" />
-            <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="adresa" class="ordreCamp" />                    
-        </div>
-        <!-- /llistat -->
-        
-        <!-- seleccionats -->
-        <div class="escriptori_items_seleccionats">
-            <h3>Edificis seleccionats</h3>                      
-            <p class="botonera">
-                <a href="javascript:;" class="btn finalitza important"><span><span>Finalitza</span></span></a>
-            </p>                        
-            <div class="dades">                     
-                <p class="info">No hi ha cap edifici.</p>                           
-            </div>                  
-        </div>
-        <!-- seleccionats -->
-        --%>                                
-    
     </div>
     <!-- /escriptori_edificis -->
     
@@ -1438,7 +1376,7 @@
         var txtMostremAl = " al ";
         var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
         var txtNoHiHaUnitats = txtNoHiHa + " " + txtUnitats.toLowerCase();
-        var txtNoHiHaFitxes = "Aquesta secció no té fitxes";
+        var txtNoHiHaFitxes = "Aquesta secciï¿½ no tï¿½ fitxes";
         var txtCarregantUnitats = txtCarregant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         var txtOrdenats = "<spring:message code='txt.ordenats'/>";
         var txtAscendentment = "<spring:message code='txt.ascendent'/>";
@@ -1451,11 +1389,11 @@
         var txtCercantUnitats = txtCercant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         // paginacio
         var txtTrobat = "S'ha trobat";
-        var txtSeguents = "Següents";
+        var txtSeguents = "Segï¿½ents";
         var txtAnteriors = "Anteriors";
         var txtInici = "Inici";
         var txtFinal = "Final";
-        var txtPagines = "Pàgines";
+        var txtPagines = "Pï¿½gines";
         var txtCercant = "<spring:message code='txt.cercant'/>";    
         var txtCercantUnitatsAnteriors = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantUnitatsSeguents = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;       
@@ -1469,7 +1407,7 @@
         
         // detall
         var txtCarregantDetall = txtCarregant + " detall de l "+ txtUnitat.toLowerCase() + ". " + txtEspere;
-        var txtEdificiEliminar = "Està segur de voler eliminar aquesta " + txtUnitat.toLowerCase() + "?";
+        var txtEdificiEliminar = "Estï¿½ segur de voler eliminar aquesta " + txtUnitat.toLowerCase() + "?";
         var txtEnviantDades = "Enviant dades al servidor. " + txtEspere;        
         var txtMostra = "Mostra";
         var txtAmaga = "<spring:message code='txt.amaga'/>";
@@ -1481,25 +1419,25 @@
         var txtElimina = "Elimina";
         var txtHiHa = "Hi ha";
         var txtNoHiHa = "No hi ha";
-        var txtItems = "Ítems";
+        var txtItems = "ï¿½tems";
         var txtCarregantItems = "Carregant " + txtItems.toLowerCase();
         var txtCercantItems = "Cercant " + txtItems.toLowerCase();
         var txtCercantItemsAnteriors = "Cercant " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantItemsSeguents = "Cercant " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
         // modul materies
-        var txtMateria = "matèria";
-        var txtMateries = "matèries";
+        var txtMateria = "matï¿½ria";
+        var txtMateries = "matï¿½ries";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
         var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries + " " + txtSeleccionades.toLowerCase();
         
         // modul seccions
-        var txtSeccio = "secció";
+        var txtSeccio = "secciï¿½";
         var txtSeccions = "seccions";
         var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions;
         var txtFitxa = "fitxa";
         var txtFitxes = "fitxes";        
         var txtNoHiHaFitxes = txtNoHiHa + " " + txtFitxes;
-        var txtPublicacio = "publicació";
+        var txtPublicacio = "publicaciï¿½";
         var txtCaducitat = "caducitat";
         var txtOrdre = "ordre";
         var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona' />";
@@ -1510,22 +1448,22 @@
         // modul edificis
         var txtEdifici = "Edifici";
         var txtEdificis = "Edificis";
-        var txtAdresa = "Adreça";
+        var txtAdresa = "Adreï¿½a";
         var txtCodiPostal = "Codi Postal";
-        var txtPoblacio = "Població";
+        var txtPoblacio = "Poblaciï¿½";
         var txtNoHiHaEdificis = txtNoHiHa + " " + txtEdificis.toLowerCase();
         var txtNoHiHaEdificisSeleccionats = "No hi ha " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
         // error conexio
         var txtCalcularTotal = "Calcular el total";
-        var txtAjaxError = "S'ha produït un error de conexió.";
+        var txtAjaxError = "S'ha produï¿½t un error de conexiï¿½.";
         var txtIntenteho = "Intente-ho de nou en uns minuts.";
-        var txtConexionIntentar = "Intentar conexió en";
+        var txtConexionIntentar = "Intentar conexiï¿½ en";
         var txtSegon = "segon";
         var txtSegons = "segons";
         var txtConectar = "Conectar ara";
-        var txtFuncions = "Les funcions de l'aplicació s'han deshabilitat";
-        var txtFuncionsFins = "fins que no es restableixi la comunicació";
+        var txtFuncions = "Les funcions de l'aplicaciï¿½ s'han deshabilitat";
+        var txtFuncionsFins = "fins que no es restableixi la comunicaciï¿½";
 
         var txtCampObligatori = "Es un camp obligatori";
 

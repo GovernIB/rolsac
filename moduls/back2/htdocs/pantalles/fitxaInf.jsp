@@ -133,7 +133,7 @@
    var txtMateria = "<spring:message code='txt.materia'/>";
    var txtMateries = "<spring:message code='txt.materies'/>";
    var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
-   var txtNoHiHaMateriesSeleccionades = "No hi ha materies seleccionades";
+   var txtNoHiHaMateriesSeleccionades = "<spring:message code='txt.noHiHaMateriaRelacionada'/>";
    
    // modul fets vitals
    var txtFet = "<spring:message code='txt.fet_vital'/>";
@@ -155,7 +155,7 @@
    var txtEnllassos = "<spring:message code='txt.enllassos'/>";
    var txtNoHiHaEnllassos = "<spring:message code='txt.no_hi_ha_cap'/> " + txtEnllas.toLowerCase();
    var txtNoHiHaEnllassosSeleccionats = "<spring:message code='txt.no_hi_ha'/> " + txtEnllassos.toLowerCase() + " " + txtSeleccionats.toLowerCase();
-   var txtErrorRelacioBuida = "Les relacions han de contenir una secció i una UA obligatoriament. Per favor, revisi la relació que vol establir.";
+   var txtErrorRelacioBuida = "Les relacions han de contenir una secciï¿½ i una UA obligatoriament. Per favor, revisi la relaciï¿½ que vol establir.";
    
    // suggeriments
    var suggeriments = "";
@@ -305,7 +305,7 @@
                         </div>
                     </div>
                     <div class="busquedaAvanzada">
-                        <h2>CERCADOR AVANÇAT</h2>                        
+                        <h2>CERCADOR AVANï¿½AT</h2>                        
                         <div class="fila">
                         <%--
                             <div class="element t25">
@@ -862,7 +862,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend>ESTADï¿½STIQUES</legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -887,18 +887,18 @@
                             <thead>
                                 <th class="usuario"><div>USUARI</div></th>
                                 <th class="fecha"><div>DATA</div></th>
-                                <th class="operacion"><div>OPERACIÓ</div></th>
+                                <th class="operacion"><div>OPERACIï¿½</div></th>
                             </thead>                    
                             <tbody>
                                 <tr>
                                     <td class="usuario"><div>rsanz</div></td>
                                     <td class="fecha"><div>16/01/2012</div></td>
-                                    <td class="operacion"><div>Modificació</div></td>
+                                    <td class="operacion"><div>Modificaciï¿½</div></td>
                                 </tr>
                                 <tr>
                                     <td class="usuario"><div>jfernandez</div></td>
                                     <td class="fecha"><div>16/01/2012</div></td>
-                                    <td class="operacion"><div>Modificació</div></td>
+                                    <td class="operacion"><div>Modificaciï¿½</div></td>
                                 </tr>
                                 <tr>
                                     <td class="usuario"><div>flopez</div></td>
@@ -920,7 +920,7 @@
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
-                    <legend>Publicació</legend>
+                    <legend>Publicaciï¿½</legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">
@@ -1177,7 +1177,7 @@
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='fitxes.enllasos_relacionats'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
-                        <!-- modulEnllaços -->
+                        <!-- modulEnllaï¿½os -->
                         <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
                         <div class="modulEnllassos multilang">
                             

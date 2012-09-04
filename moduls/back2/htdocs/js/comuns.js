@@ -24,7 +24,7 @@ $(document).ready(function(){
 	cap_elm.find("div.aplicacio strong").attr('role', 'banner').end().find("ul.opcions").attr('role', 'navigation');
 	//menu_contingut_elm.find("a, span.text").css({"border-radius": ".5em", "-moz-border-radius": ".5em", "-webkit-border-radius": ".5em"});
 	
-	// dsanchez: Ahora todos los submenús tienen "colita".
+	// dsanchez: Ahora todos los submenï¿½s tienen "colita".
 	//menu_contingut_elm.find("li.seleccionat").append("<span class=\"cueta\">&nbsp;</span>");
 	
 	continguts_elm.attr('role', 'content');
@@ -50,7 +50,7 @@ $(document).ready(function(){
 		Formulari_focus.activar();
 	}
 	
-	// enllaços
+	// enllaï¿½os
 	As.iniciar("body");
 	F5.activar();
 	
@@ -86,7 +86,7 @@ var TaulesMestre = {
 		
 		/*elm_pos_T = taules_mestre_btn.offset().top;
 		elm_pos_L = taules_mestre_btn.offset().left;*/
-		// dsanchez: Restamos 3 píxels por cuestiones de diseño.
+		// dsanchez: Restamos 3 pï¿½xels por cuestiones de diseï¿½o.
 		elm_H = taules_mestre_btn.outerHeight()-5;
 				
 		//taulesMestre_elm.css({ top: elm_pos_T + elm_H + "px", left: elm_pos_L + "px" }).slideToggle(300, function() {
@@ -1068,7 +1068,7 @@ function marcarOpcionSelect(select, id){
 	}
 }
 
-//Not null. Si el valor es null devuelve cadena vacía, de lo contrario devuelve el valor
+//Not null. Si el valor es null devuelve cadena vacï¿½a, de lo contrario devuelve el valor
 function nn(valor) {
 	if (valor == "null" || valor == null)
 		return "";
@@ -1178,7 +1178,7 @@ function pintarArchivo(campo, datos) {
 		$("#grup_" + campo + " input").show();
 		$("#grup_" + campo + " label.eliminar").show();
 		
-		// Añadimos thumbnail
+		// Aï¿½adimos thumbnail
 		$("#" + campo).closest(".fila").find(".thumbnail").append("<img width='50px' height='50px' src='" + pagArrel + datos[campo + "_enllas_arxiu"] + "' />");		
 	} else {
 		$("#grup_" + campo + " span").show();
@@ -1207,7 +1207,7 @@ function pintarArchivoMultiidioma(campo, idioma, datos) {
 		$("#grup_" + campo + "_" + idioma + " input").show();
 		$("#grup_" + campo + "_" + idioma + " label.eliminar").show();
 		
-		// Añadimos thumbnail
+		// Aï¿½adimos thumbnail
 		$("#" + campo + "_" + idioma).closest(".fila").find(".thumbnail").append("<img src='" + pagArrel + datos[idioma][campo + "_enllas_arxiu"] + "' />");
 	} else {
 		$("#grup_" + campo + "_" + idioma + " span").show();
