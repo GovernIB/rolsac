@@ -1,10 +1,10 @@
 package org.ibit.rol.sac.model;
 
 public class HechoVitalProcedimiento implements ValueObject, Comparable<HechoVitalProcedimiento> {
+    
+    private static final long serialVersionUID = -4753725381929109536L;
 
-	private static final long serialVersionUID = -8443729848093068327L;
-
-	public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -36,7 +36,6 @@ public class HechoVitalProcedimiento implements ValueObject, Comparable<HechoVit
         this.orden = orden;
     }
     
-
 	public int compareTo(HechoVitalProcedimiento hvp) {
     	if (hvp == null || this.orden > hvp.getOrden()){
     		return 1;
@@ -46,7 +45,6 @@ public class HechoVitalProcedimiento implements ValueObject, Comparable<HechoVit
     		return 0;
     	}
 	}
-
 
     private Long id;
     private HechoVital hechoVital = null;

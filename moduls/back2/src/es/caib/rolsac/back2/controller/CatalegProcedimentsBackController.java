@@ -754,7 +754,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
             	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
 
-            	// Eliminamos los hechos vital procedimiento existentes
+            	// Eliminamos los hecho vital procedimiento existentes
             	List<Long> hvpIds = new LinkedList<Long>();
             	if (procediment.getHechosVitalesProcedimientos() != null) {
                 	for (HechoVitalProcedimiento hvp: procediment.getHechosVitalesProcedimientos()) {

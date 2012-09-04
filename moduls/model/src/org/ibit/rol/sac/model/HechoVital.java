@@ -77,12 +77,14 @@ public class HechoVital extends Traducible {
     }
 
     public void removeHechoVitalProcedimiento(HechoVitalProcedimiento hechovp){
-        int ind = hechosVitalesProcedimientos.indexOf(hechovp);
-        hechosVitalesProcedimientos.remove(ind);
-        for (int i = ind; i < hechosVitalesProcedimientos.size(); i++) {
-            HechoVitalProcedimiento hvp = (HechoVitalProcedimiento) hechosVitalesProcedimientos.get(i);
-            if (hvp != null) {
-            	hvp.setOrden(i);
+        int index = hechosVitalesProcedimientos.indexOf(hechovp);
+        if (index > -1) {
+            hechosVitalesProcedimientos.remove(index);
+            for (int i = index; i < hechosVitalesProcedimientos.size(); i++) {
+                HechoVitalProcedimiento hvp = (HechoVitalProcedimiento) hechosVitalesProcedimientos.get(i);
+                if (hvp != null) {
+                	hvp.setOrden(i);
+                }
             }
         }
     }
@@ -120,7 +122,5 @@ public class HechoVital extends Traducible {
         hechova.setHechoVital(null);
         hechosVitalesAgrupacionHV.remove(hechova);
     }
-    
-
 
 }
