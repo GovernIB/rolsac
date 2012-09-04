@@ -63,7 +63,7 @@ function CModulSeccio() {
 	
     if ( modul_seccions_elm.size() == 1 ) {
 
-		modul_seccions_elm.find("a.gestiona").bind("click", function(){	
+		modul_seccions_elm.find("a.gestiona").unbind("click").bind("click", function(){	
 			that.gestionaSeccio();
 		});
 		
@@ -147,7 +147,7 @@ function CModulSeccio() {
 		} 
 		
 		// En el cas de les fitxes, "nodoOrigen" varia en funcio de quina seccio 
-		// s'esta  gestionant		
+		// s'estaï¿½ gestionant		
 		paramsFicha = {
 				nombre: "fitxa",
 				nodoOrigen: "",
@@ -169,7 +169,7 @@ function CModulSeccio() {
 				if (llistaFitxes != null)
 					texteFitxes = " (" + llistaFitxes.length  + " " + ( llistaFitxes.length > 1 ? txtFitxes : txtFitxa ) + ")";
 				
-				// crearem una llista per a cada enllass de seccio, que contindra les fitxes que te assignades
+				// crearem una llista per a cada enllass de seccio, que contindraï¿½les fitxes que te assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\">";
                 codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
                 codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
