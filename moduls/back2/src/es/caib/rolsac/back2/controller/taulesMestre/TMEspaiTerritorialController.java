@@ -374,7 +374,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
         	
 	        // Mapa
             fileItem = ficherosForm.get("item_mapa");
-    		if (fileItem.getSize() > 0) {
+    		if (fileItem != null && fileItem.getSize() > 0) {
     			espacio.setMapa(UploadUtil.obtenerArchivo(espacio.getMapa(), fileItem));
     		} else if (valoresForm.get("item_mapa_delete") != null && !"".equals(valoresForm.get("item_mapa_delete"))){
     			espacio.setMapa(null);
@@ -384,7 +384,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
     		
             // Logo
     		fileItem = ficherosForm.get("item_logo");
-    		if (fileItem.getSize() > 0) {
+    		if (fileItem != null && fileItem.getSize() > 0) {
     			espacio.setLogo(UploadUtil.obtenerArchivo(espacio.getLogo(), fileItem));
     		} else if (valoresForm.get("item_logo_delete") != null && !"".equals(valoresForm.get("item_logo_delete"))){
     			espacio.setLogo(null);

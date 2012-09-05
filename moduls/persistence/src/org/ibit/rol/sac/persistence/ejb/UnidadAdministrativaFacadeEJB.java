@@ -77,12 +77,12 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  */
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
-    /** Nom pel govern de les illes a la taula d'unitats orgàniques */
+    /** Nom pel govern de les illes a la taula d'unitats orgï¿½niques */
     public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";    
     private static String idioma_per_defecte ="ca";
     
     /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -408,7 +408,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Busca todas las Unidades Administrativas que cumplen los criterios de búsqueda
+     * Busca todas las Unidades Administrativas que cumplen los criterios de bï¿½squeda
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -503,7 +503,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Obtiene la información general de una Unidad Administrativa
+     * Obtiene la informaciï¿½n general de una Unidad Administrativa
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -588,11 +588,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 }
                 return ua;
             } else {
-                throw new SecurityException("La unitat administrativa no és publica con id "+ua.getId() );
+                throw new SecurityException("La unitat administrativa no ï¿½s publica con id "+ua.getId() );
             }
 
         } catch (HibernateException he) {
-            throw new EJBException("No s' ha trobat la unitat administrativa sol·licitada",he);
+            throw new EJBException("No s' ha trobat la unitat administrativa solï¿½licitada",he);
         } finally {
             close(session);
         }
@@ -639,7 +639,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             }
 
         } catch (HibernateException he) {
-            throw new EJBException("No s' ha trobat la unitat administrativa sol·licitada",he);
+            throw new EJBException("No s' ha trobat la unitat administrativa solï¿½licitada",he);
         } finally {
             close(session);
         }
@@ -946,7 +946,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * añade un nuevo edificio a la unidad administrativa
+     * aï¿½ade un nuevo edificio a la unidad administrativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
@@ -1004,7 +1004,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
     /**
-     * Descripción: Autorización eliminar Unidad Administrativa.Devuleve true si tiene acceso.
+     * Descripciï¿½n: Autorizaciï¿½n eliminar Unidad Administrativa.Devuleve true si tiene acceso.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.organigrama}"
      */
@@ -1030,7 +1030,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
     
     /**
-     * Descripción: Eliminar una unidad administrativa. Se podra eliminar la UA, 
+     * Descripciï¿½n: Eliminar una unidad administrativa. Se podra eliminar la UA, 
      * si no tiene elementos relacionados (Procedimientos,Normativas,etc.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.organigrama}"
@@ -1045,11 +1045,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         	Boolean isRaiz = ua.isRaiz();
 
         	if (!isRaiz) {
-        		// Si no és arrel, el pot borrar només si té accés a l'antecesor. 
+        		// Si no ï¿½s arrel, el pot borrar nomï¿½s si tï¿½ accï¿½s a l'antecesor. 
         		if (!autorizarEliminarUA(ua.getPadre().getId()))
         			throw new SecurityException("No tiene acceso al antecesor de la unidad.");
         	} else {
-        		// Si és arrel, només si és ADMIN o SYSTEM i té accés a l'unitat.
+        		// Si ï¿½s arrel, nomï¿½s si ï¿½s ADMIN o SYSTEM i tï¿½ accï¿½s a l'unitat.
     			if (!userIsAdmin() || !autorizarEliminarUA(ua.getId()))
     				throw new SecurityException("No tiene acceso a la unidad.");
         	}
@@ -1090,7 +1090,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             session.flush();
             }
         } catch (HibernateException he) {
-            throw new EJBException("El sistema está actualizando los datos, espere unos minutos.");
+            throw new EJBException("El sistema estï¿½ actualizando los datos, espere unos minutos.");
         } finally {
             close(session);
         }
@@ -1528,8 +1528,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.permission unchecked="true"
      *
      * @param idEspacio id del espacio territorial del que queremos obtener una determinada UA
-     * @para tipo tipo de búsqueda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
-     * @para UAOpcionales. En el caso de tipo = CONSELL o GOV, puede haber múltipes UA para un determinado espacio territorial,
+     * @para tipo tipo de bï¿½squeda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
+     * @para UAOpcionales. En el caso de tipo = CONSELL o GOV, puede haber mï¿½ltipes UA para un determinado espacio territorial,
      *                     en esta lista estan las opciones a filtrar.
      * @return la {@link UnidadAdministrativa} deseada
      */
@@ -1817,7 +1817,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
 	
     /**
-     * Añade la ua al indice en todos los idiomas
+     * Aï¿½ade la ua al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1913,7 +1913,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
 	
     /* ================================================ */
-    /* ==  MÉTODOS PRIVADOS  ========================== */
+    /* ==  Mï¿½TODOS PRIVADOS  ========================== */
     /* ================================================ */
 
     private int numUnidadesRaiz(Session session) throws HibernateException {
@@ -1922,7 +1922,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Construye el query de búsqueda segun los parámetros
+     * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
@@ -2215,8 +2215,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      */
     @SuppressWarnings("unchecked")
 	private void buscarProcedimientosUARecur(Session session, final String busqueda, final String idioma ,final Date dataInici, final Date dataFi,final UnidadAdministrativa unidad, final List<ProcedimientoLocal> procs) throws HibernateException{
-        System.out.println("1ejb unidad administrativa fecha Inicio: "+dataInici);
-    	System.out.println("1ejb unidad administrativa fecha Fin: "+dataFi);
+        log.debug("1ejb unidad administrativa fecha Inicio: "+dataInici);
+        log.debug("1ejb unidad administrativa fecha Fin: "+dataFi);
     	//Navegacion por el arbol de hijos
     	for (UnidadAdministrativa hijo : unidad.getHijos()) {
     		Hibernate.initialize(hijo.getHijos());
@@ -2262,8 +2262,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      */
     @SuppressWarnings("unchecked")
     private void buscarProcedimientosUA(Session session , final String busqueda, final String idioma,final Date dataInici,final Date dataFi, final AdministracionRemota admin, final List<ProcedimientoLocal> procs) throws HibernateException{
-        System.out.println("2ejb unidad administrativa fecha Inicio: "+dataInici);
-    	System.out.println("2ejb unidad administrativa fecha Fin: "+dataFi);
+        log.debug("2ejb unidad administrativa fecha Inicio: "+dataInici);
+        log.debug("2ejb unidad administrativa fecha Fin: "+dataFi);
     	String sQuery="";
     	if(dataInici!=null && dataFi!=null ){
     		sQuery="Select DISTINCT proc From ProcedimientoRemoto as proc, proc.traducciones as trad " +
@@ -2867,7 +2867,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
     /**
      * WEBCAIB.
-     * Obtiene el código perteneciente al Govern.
+     * Obtiene el cï¿½digo perteneciente al Govern.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -2911,7 +2911,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
     /**
      * WEBCAIB.
-     * Obtiene el código perteneciente al Govern.
+     * Obtiene el cï¿½digo perteneciente al Govern.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -2944,7 +2944,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		
     /**
      * WEBCAIB.
-     * Devuelve una lista de los centros de una unidad administrativa a partir de su código.
+     * Devuelve una lista de los centros de una unidad administrativa a partir de su cï¿½digo.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -3010,7 +3010,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
     /**
      * WEBCAIB.
-     * Obtiene la lista de unidades administrativas el código de materia indicado
+     * Obtiene la lista de unidades administrativas el cï¿½digo de materia indicado
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -3023,7 +3023,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		
 		try {
 
-			//Obtenemos primero la lista de unidades en el idioma por defecto por código y materia
+			//Obtenemos primero la lista de unidades en el idioma por defecto por cï¿½digo y materia
 			Query query = session.createQuery("select uad.id from UnidadAdministrativa as uad " +
 					"join uad.traducciones as tra " +
 					"join uad.unidadesMaterias as uma " +					
@@ -3078,8 +3078,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
     /**
      * WEBCAIB.
-     * Obtiene información de código, nombre y tipo de las unidades orgánicas dependientes
-     * de la que se pasa por parámetro en el idioma especificado.
+     * Obtiene informaciï¿½n de cï¿½digo, nombre y tipo de las unidades orgï¿½nicas dependientes
+     * de la que se pasa por parï¿½metro en el idioma especificado.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true" 
@@ -3256,12 +3256,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			uoModel.setFoto_g( uad.getFotog() != null ? uad.getFotog().getId().intValue() : 0 );
 			uoModel.setFoto_p( uad.getFotop() != null ? uad.getFotop().getId().intValue() : 0 );
 						
-			//Campos de traducción unidad administrativa
+			//Campos de traducciï¿½n unidad administrativa
 			uoModel.setNom( initTab( traduccionUA.getNombre() != null ? traduccionUA.getNombre() : traduccionUADef.getNombre() ) );
 			uoModel.setAbreviatura( traduccionUA.getAbreviatura() != null ? traduccionUA.getAbreviatura() : traduccionUADef.getAbreviatura() );
 			uoModel.setInfo( traduccionUA.getPresentacion() != null ? traduccionUA.getPresentacion() : traduccionUADef.getPresentacion() );
 			
-			//Campos de traducción tratamiento
+			//Campos de traducciï¿½n tratamiento
 			if ( uoModel.getSexe() == 1 ) {
 				uoModel.setTitolResponsable( traduccionTratamiento.getCargoM() != null ? traduccionTratamiento.getCargoM() : traduccionTratamientoDef.getCargoM() );
 				uoModel.setTractamentResponsable( traduccionTratamiento.getTratamientoM() != null ? traduccionTratamiento.getTratamientoM() : traduccionTratamientoDef.getTratamientoM());
@@ -3280,7 +3280,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	}	
 		
 	//////////////////////////
-	//Métodos privados WEBCAIB
+	//Mï¿½todos privados WEBCAIB
 	//////////////////////////	
 	private Long getCodiTractament() {
 		
@@ -3323,8 +3323,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                {" Amb ", " amb "},
                {" Que ", " que "},
                {" Per ", " per "},
-               {"l.L"  , "l·l"},
-               {"l·L"  , "l·l"}
+               {"l.L"  , "lï¿½l"},
+               {"lï¿½L"  , "lï¿½l"}
                 };
 		
 		

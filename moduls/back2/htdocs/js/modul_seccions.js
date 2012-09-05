@@ -63,7 +63,7 @@ function CModulSeccio() {
 	
     if ( modul_seccions_elm.size() == 1 ) {
 
-		modul_seccions_elm.find("a.gestiona").bind("click", function(){	
+		modul_seccions_elm.find("a.gestiona").unbind("click").bind("click", function(){	
 			that.gestionaSeccio();
 		});
 		

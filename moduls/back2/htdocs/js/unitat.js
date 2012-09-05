@@ -217,9 +217,12 @@ function CDetall(soloFicha){
 	// Método sobreescrito.
 	this.carregar = function(itemID) {
 			
-		if (itemID == undefined){
+	    if (itemID == undefined) {
+            itemID = itemAEditar();
+        }
+	    if (itemID == 0 || itemID == "0"){
 			itemID = $("#item_id").val();
-		}				
+		}
 		
 		escriptori_detall_elm.find("a.elimina").show();
 				

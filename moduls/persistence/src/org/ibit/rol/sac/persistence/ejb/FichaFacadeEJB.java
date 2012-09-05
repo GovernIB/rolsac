@@ -1873,11 +1873,11 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		
 	    	
 	    } catch (MalformedURLException e) {
-	      System.out.println("La URL no es vï¿½lida: "+ laurl+ " "+e);
-	      contenidos_web.put(laurl, new String("La URL no es vï¿½lida"));
+            log.error("La URL no es vÃ¡lida: " + laurl + " " + e);
+            contenidos_web.put(laurl, new String("La URL no es vÃ¡lida"));
 	    } catch (IOException e) {
-	      System.out.println("No puedo conectar con "+ laurl+ " "+e);
-	      contenidos_web.put(laurl, new String("No puedo conectar"));
+	        log.error("No puedo conectar con "+ laurl+ " "+e);
+	        contenidos_web.put(laurl, new String("No puedo conectar"));
 	    }
 	    
 	}
@@ -2308,7 +2308,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	}
 		
 	 /**
-     * Crea las relaciones sección-ficha de una unidad administrativa 
+     * Crea las relaciones secciï¿½n-ficha de una unidad administrativa 
      * 
      * @param ua Unidad administrativa a actualizar  
      * @param listaSeccionesFicha Estructura que contiene las nuevas "secciones-fichas"  
@@ -2323,7 +2323,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			listaFUAOrigen = new HashSet<FichaUA>();
 		}
 		
-		// Construir una lista con la información de las distintas secciones		
+		// Construir una lista con la informaciï¿½n de las distintas secciones		
 		Set<SimpleSeccion> listaSimpleSeccion = new HashSet<SimpleSeccion>();
 		
 		for ( FichaUA fichaUA : listaFUAOrigen ) {
@@ -2334,8 +2334,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		List<SimpleFichaUA> listaSimpleFichaUA = new ArrayList<SimpleFichaUA>();
 		List<SimpleFichaUA> listaSimpleFichaUAIgnorar = new ArrayList<SimpleFichaUA>();
 				
-		// Crea una lista seccionID + fichaID + orden sección. El orden
-		// será el mismo en el cual vienen los datos
+		// Crea una lista seccionID + fichaID + orden secciï¿½n. El orden
+		// serï¿½ el mismo en el cual vienen los datos
 		int i = 0;
 		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
 			
@@ -2356,7 +2356,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			i++;			
 		}
 		
-		// Detectar las fichas ua a borrar (el orden también se tiene en cuenta)
+		// Detectar las fichas ua a borrar (el orden tambiï¿½n se tiene en cuenta)
 		for (FichaUA fUA : listaFUAOrigen ) {
 						
 			boolean encontrada = false;
@@ -2380,7 +2380,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				listaFUABorrar.add( fUA.getId() );
 		}	
 		
-		//Crear sólo las que no existían antes
+		//Crear sï¿½lo las que no existï¿½an antes
 		List<SimpleFichaUA> listaNuevas = new ArrayList<SimpleFichaUA>();
 		for (SimpleFichaUA fichaUA : listaSimpleFichaUA) {
 			if (!listaSimpleFichaUAIgnorar.contains( fichaUA)) { // || fichaUA.isCambioOrden(listaSimpleSeccion)) {
@@ -2405,7 +2405,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			for ( Long idBorrar : listaBorrar ) {
 
 	            if (!getAccesoManager().tieneAccesoFichaUnidad(idBorrar))
-	                throw new SecurityException("No tiene acceso a la relación");
+	                throw new SecurityException("No tiene acceso a la relaciï¿½n");
 				
                 FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idBorrar);
                 //final Long idFicha = fichaUA.getFicha().getId();
@@ -2456,7 +2456,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            Seccion seccion = (Seccion) session.load(Seccion.class, simpleFichaUA.getIdSeccion() );
 	            
 	            if (!getAccesoManager().tieneAccesoSeccion( simpleFichaUA.getIdSeccion() )) 
-	                throw new SecurityException("No tiene acceso a la sección");
+	                throw new SecurityException("No tiene acceso a la secciï¿½n");
 
 	            // Cuando se anyade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
 	            fichaUA.setSeccion(seccion);	            
@@ -2522,8 +2522,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				   getIdFicha().equals( ((SimpleFichaUA) o).getIdFicha() );
 		}
 		
-		// Busca la sección en la lista pasada por parámetro y devuelve true o false 
-		// en función de si ha cambiado el orden o no.
+		// Busca la secciï¿½n en la lista pasada por parï¿½metro y devuelve true o false 
+		// en funciï¿½n de si ha cambiado el orden o no.
 //		public boolean isCambioOrden( Set<SimpleSeccion> listaSecciones ) {
 //			
 //			boolean esCambioOrden = false;

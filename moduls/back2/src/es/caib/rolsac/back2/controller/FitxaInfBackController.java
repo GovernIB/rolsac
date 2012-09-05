@@ -527,10 +527,10 @@ public class FitxaInfBackController extends PantallaBaseController {
     		
             
             // Comprovam camps obligatoris 
-    		
-            UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-            String titolCatala = valoresForm.get("item_titol_ca");           
-            if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
+    		String titolCatala = valoresForm.get("item_titol_ca");
+//            UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+//            if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
+    		if (titolCatala == null || "".equals(titolCatala)) {
             	error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
                 result = new IdNomDTO(-3l, error);
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -630,7 +630,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             
             // Icona
     		FileItem fileIcona = ficherosForm.get("item_icona");
-    		if ( fileIcona.getSize() > 0 ) {
+    		if (fileIcona != null && fileIcona.getSize() > 0 ) {
     			fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
     		} else
     		// borrar fichero si se solicita
@@ -640,7 +640,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             
     		// Banner
     		FileItem fileBanner = ficherosForm.get("item_banner");
-    		if ( fileBanner.getSize() > 0 ) {
+    		if (fileBanner != null && fileBanner.getSize() > 0 ) {
     			fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
     		} else
     		// borrar fichero si se solicita
@@ -650,7 +650,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     		
     		// Imatge
     		FileItem fileImatge = ficherosForm.get("item_imatge");
-    		if ( fileImatge.getSize() > 0 ) {
+    		if (fileImatge != null && fileImatge.getSize() > 0 ) {
     			fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
     		} else
     		//borrar fichero si se solicita

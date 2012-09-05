@@ -1016,7 +1016,7 @@ function CDetall(){
 	
 	this.elimina = function() {
 												
-		dataVars = "accio=eliminar&id=" + Llistat.itemID;
+		dataVars = "accio=eliminar&id=" + $("#item_id").val(); // Llistat.itemID;
 				
 		// ajax
 		$.ajax({

@@ -300,21 +300,21 @@ public class TMFetsVitalsController extends PantallaBaseController {
                 
                 // Archivos
                 fileItem = ficherosForm.get("item_distribucio_" + idioma);
-                if (fileItem.getSize() > 0) {
+                if (fileItem != null && fileItem.getSize() > 0) {
                     traFV.setDistribComp(UploadUtil.obtenerArchivo(traFV.getDistribComp(), fileItem));
                 } else if (valoresForm.get("item_distribucio_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_distribucio_" + idioma + "_delete"))){
                     traFV.setDistribComp(null);
                 }
                 
                 fileItem = ficherosForm.get("item_normativa_" + idioma);
-                if (fileItem.getSize() > 0) {
+                if (fileItem != null &&fileItem.getSize() > 0) {
                     traFV.setNormativa(UploadUtil.obtenerArchivo(traFV.getNormativa(), fileItem));
                 } else if (valoresForm.get("item_normativa_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_normativa_" + idioma + "_delete"))){
                     traFV.setNormativa(null);
                 }
                 
                 fileItem = ficherosForm.get("item_contingut_" + idioma);
-                if (fileItem.getSize() > 0) {
+                if (fileItem != null &&fileItem.getSize() > 0) {
                     traFV.setContenido(UploadUtil.obtenerArchivo(traFV.getContenido(), fileItem));
                 } else if (valoresForm.get("item_contingut_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_contingut_" + idioma + "_delete"))){
                     traFV.setContenido(null);
@@ -327,7 +327,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
             
             // Foto
             fileItem = ficherosForm.get("item_foto");
-            if (fileItem.getSize() > 0) {
+            if (fileItem != null &&fileItem.getSize() > 0) {
                 fetVital.setFoto(UploadUtil.obtenerArchivo(fetVital.getFoto(), fileItem));
             } else if (valoresForm.get("item_foto_delete") != null && !"".equals(valoresForm.get("item_foto_delete"))){
                 fetVital.setFoto(null);
@@ -335,7 +335,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
             
             // Icona
             fileItem = ficherosForm.get("item_icona");
-            if (fileItem.getSize() > 0) {
+            if (fileItem != null &&fileItem.getSize() > 0) {
                 fetVital.setIcono(UploadUtil.obtenerArchivo(fetVital.getIcono(), fileItem));
             } else if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))){
                 fetVital.setIcono(null);
@@ -343,7 +343,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
             
             // Icona gran
             fileItem = ficherosForm.get("item_icona_gran");
-            if (fileItem.getSize() > 0) {
+            if (fileItem != null &&fileItem.getSize() > 0) {
                 fetVital.setIconoGrande(UploadUtil.obtenerArchivo(fetVital.getIconoGrande(), fileItem));
             } else if (valoresForm.get("item_icona_gran_delete") != null && !"".equals(valoresForm.get("item_icona_gran_delete"))){
                 fetVital.setIconoGrande(null);

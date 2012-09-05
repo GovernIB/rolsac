@@ -133,7 +133,7 @@
    var txtMateria = "<spring:message code='txt.materia'/>";
    var txtMateries = "<spring:message code='txt.materies'/>";
    var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
-   var txtNoHiHaMateriesSeleccionades = "No hi ha materies seleccionades";
+   var txtNoHiHaMateriesSeleccionades = "<spring:message code='txt.noHiHaMateriaRelacionada'/>";
    
    // modul fets vitals
    var txtFet = "<spring:message code='txt.fet_vital'/>";

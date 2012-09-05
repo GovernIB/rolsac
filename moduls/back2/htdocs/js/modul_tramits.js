@@ -36,7 +36,7 @@ $(document).ready(function() {
 		EscriptoriTramit.iniciar();
 	}
 	
-	// Evento para el botónn de volver al detalle    
+	// Evento para el botón de volver al detalle    
     $("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
     
     // Evento para el botón de guardar
@@ -99,7 +99,7 @@ function CModulTramit(){
 			multilang: false
 			});
 		
-		// one al botÃ³ de gestionar
+		// one al botó de gestionar
 		modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); } );		
 	}	
     
@@ -182,6 +182,12 @@ function CModulTramit(){
 		return listaTramites;
 	}
     
+    // Actualiza el nombre.
+    this.actualitzaNomTramit = function(tramit) {
+        var tramitInput = jQuery("#tramit_nom_" + tramit.id)
+        tramitInput.val("<a href='#' class='tramit_id'>" + tramit.nom + "</a>");
+        tramitInput.next().children().first().text(tramit.nom);         
+    }
 };
 
 function CEscriptoriTramit(){	
@@ -217,20 +223,18 @@ function CEscriptoriTramit(){
         // Coger el id del procedimiento o de la ficha (depende del mantenimiento/jsp en el que estemos).
         var procId = $("#procId");
         if (procId.length > 0) {
-        	procId.val($("#item_id").val());
+            procId.val($("#item_id").val());
         } else {
-        	$("#fitxaId").val($("#item_id").val());
+            $("#fitxaId").val($("#item_id").val());
         }
-        		
-        // Si existe idTramit es que estamos editando un trámite.
-		var idTramit = $("#id_tramit_actual").val();
-		var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
-						"&" + ModulFormularisTramit.listarFormularios() + 
-						"&" + ModulTaxesTramit.listarTasas();			
-		
+                
+        var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
+                        "&" + ModulFormularisTramit.listarFormularios() + 
+                        "&" + ModulTaxesTramit.listarTasas();           
+        
         //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
         $("#formTramits").ajaxSubmit({
-        	type: "POST",
+            type: "POST",
             url: pagGuardarTramit + paramsUrl,                       
             dataType: 'json',               
             beforeSubmit: function() {
@@ -240,23 +244,26 @@ function CEscriptoriTramit(){
                 
                 if (data.id < 0) {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
-                } else {                   	
-                	
-                	var textoAccion = idTramit != "" ? txtTramitModificatCorrecte : txtTramitCreatCorrecte ;
-                    Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: textoAccion });
+                } else {        
+                    var idTramit = $("#id_tramit_actual").val();                    
+                    if (idTramit != "" && idTramit != undefined) {
+                        Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTramitModificatCorrecte});
+                        ModulTramit.actualitzaNomTramit(data);
+                    } else {
+                        Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTramitCreatCorrecte});
+                        var idTramit = "nou_tramit_" + data.id;
+                        ModulTramit.agregaItem({
+                            id:  data.id, 
+                            nom: "<a href='#' class='tramit_id' id='" + idTramit + "'>" + data.nom + "</a>",                                                                   
+                            orden: 0
+                        });
+                        // Asignamos la función de edición al nuevo enlace creado
+                        nouTramit = $("#" + idTramit).parent().parent();
+                        nouTramit.unbind("click").bind("click", function() {that.editarTramit(nouTramit)});
+                        
+                        that.contaSeleccionats();
+                    }
                     
-                    // Actualizamos la lista con el item añadido
-                    ModulTramit.agregaItem({
-	            		id:  data.id, 
-	            		nom: "<a href='#' class='tramit_id' id='nou_tramit'>" + data.nom + "</a>",	            			            			            	
-	            		orden: 0
-	            	});
-                  
-                    // Asignamos la función de edición al nuevo enlace creado
-                    nouTramit = $("#nou_tramit").parent().parent();
-                    nouTramit.unbind("click").bind("click", function() { that.editarTramit(nouTramit)});
-                    
-                    that.contaSeleccionats();
                     that.torna();
                 }
             }
@@ -276,7 +283,7 @@ function CEscriptoriTramit(){
 	        
 	        dataVars = "id=" + idTramit + "&idProcediment=" + idProcediment;
 	        
-	        //Enviamos el formulario mediante el mÃ©todo ajaxSubmit del plugin $.form
+	        //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
 	        $.ajax({
 	        	type: "POST",        	
 	            url: pagEsborrarTramit,

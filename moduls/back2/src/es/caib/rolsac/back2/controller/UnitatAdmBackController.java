@@ -102,30 +102,24 @@ public class UnitatAdmBackController extends PantallaBaseController {
             llistaMateries = materiaDelegate.listarMaterias();	    	            
             
             for(Materia materia : llistaMateries){                
-                llistaMateriesDTO.add(new IdNomDTO(  materia.getId(), 
-                                                                 materia.getNombreMateria(request.getLocale().getLanguage())
-                                                                       ));                
-               }
+                llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(request.getLocale().getLanguage())));                
+            }
             
             llistaTractaments = tratamientoDelegate.listarTratamientos();
             
             for(Tratamiento tractament : llistaTractaments){                
-                llistaTractamentsDTO.add(new IdNomDTO(  tractament.getId(), 
-                                                                   tractament.getNombreTratamiento(request.getLocale().getLanguage())
-                                                                       ));                
-               }                       
+                llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(request.getLocale().getLanguage())));                
+            }                       
             
             llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
             
             for(EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial){                
-                llistaEspaiTerritorialDTO.add(new IdNomDTO(  espaiTerritorial.getId(), 
-                                                                   espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())
-                                                                       ));                
-               }                       
+                llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())));                
+            }                       
             
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
-            	log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));//TODO:mensajes de error
+            	log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
             } else {
                 //model.put("error", "altres");
             	log.error(ExceptionUtils.getStackTrace(dEx));
@@ -147,7 +141,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         model.put("llistaTractaments", llistaTractamentsDTO);
         model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
 
-        model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION) );
+        model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
         
 		loadIndexModel (model, request);
 		return "index";
@@ -162,9 +156,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    
 	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
 
-	    if (request.getParameter("id") == null || "".equals(request.getParameter("id"))) {
+	    if (request.getParameter("id") == null || "".equals(request.getParameter("id")) || "0".equals(request.getParameter("id"))) {
 	    	try {
-	    		
 		    	if (unitatDelegate.autorizarCrearUA()) {
 		    		resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
 		    	} else {
@@ -270,7 +263,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
             }           
 
             if (uni.getTratamiento() != null) {
-                //resultats.put("item_tractament", ((TraduccionTratamiento)uni.getTratamiento().getTraduccion("ca")).getTipo());//TODO:idioma por defecto
                 resultats.put("item_tractament", uni.getTratamiento().getId());
             }
             
@@ -502,7 +494,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			
 			//FotoPetita
     		FileItem fileFotoPetita = ficherosForm.get("item_responsable_foto_petita");
-    		if ( fileFotoPetita.getSize() > 0 ) {
+    		if ( fileFotoPetita != null && fileFotoPetita.getSize() > 0 ) {
     			unitatAdministrativa.setFotop(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotop(), fileFotoPetita));
     		} else
     		//borrar fichero si se solicita
@@ -511,7 +503,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		}
     		//FotoGran
     		FileItem fileFotoGran = ficherosForm.get("item_responsable_foto_gran");
-    		if ( fileFotoGran.getSize() > 0 ) {
+    		if ( fileFotoGran != null && fileFotoGran.getSize() > 0 ) {
     			unitatAdministrativa.setFotog(UploadUtil.obtenerArchivo(unitatAdministrativa.getFotog(), fileFotoGran));
     		} else
     		//borrar fichero si se solicita
@@ -533,7 +525,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			//Logotipos
 			//LogoHoritzontal
     		FileItem fileLogoHoritzontal = ficherosForm.get("item_logo_horizontal");
-    		if ( fileLogoHoritzontal.getSize() > 0 ) {
+    		if ( fileLogoHoritzontal != null && fileLogoHoritzontal.getSize() > 0 ) {
     			unitatAdministrativa.setLogoh(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogoh(), fileLogoHoritzontal));
     		} else
     		//borrar fichero si se solicita
@@ -542,7 +534,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		}
     		//LogoVertical
     		FileItem fileLogoVertical = ficherosForm.get("item_logo_vertical");
-    		if ( fileLogoVertical.getSize() > 0 ) {
+    		if ( fileLogoVertical != null && fileLogoVertical.getSize() > 0 ) {
     			unitatAdministrativa.setLogov(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogov(), fileLogoVertical));
     		} else
     		//borrar fichero si se solicita
@@ -551,7 +543,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		}
     		//LogoSalutacioHoritzontal
     		FileItem fileLogoSalutacioHoritzontal = ficherosForm.get("item_logo_salutacio_horizontal");
-    		if ( fileLogoSalutacioHoritzontal.getSize() > 0 ) {
+    		if ( fileLogoSalutacioHoritzontal != null && fileLogoSalutacioHoritzontal.getSize() > 0 ) {
     			unitatAdministrativa.setLogos(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogos(), fileLogoSalutacioHoritzontal));
     		} else
     		//borrar fichero si se solicita
@@ -560,7 +552,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		}
     		//LogoSalutacioVertical
     		FileItem fileLogoSalutacioVertical = ficherosForm.get("item_logo_salutacio_vertical");
-    		if ( fileLogoSalutacioVertical.getSize() > 0 ) {
+    		if ( fileLogoSalutacioVertical != null && fileLogoSalutacioVertical.getSize() > 0 ) {
     			unitatAdministrativa.setLogot(UploadUtil.obtenerArchivo(unitatAdministrativa.getLogot(), fileLogoSalutacioVertical));
     		} else
     		//borrar fichero si se solicita

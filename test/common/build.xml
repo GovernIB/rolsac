@@ -38,6 +38,7 @@
             <include name="extractor.jar"/>
         </fileset>
         <fileset dir="${lib.dir}">
+		    <include name="ojdbc14.jar"/>
 			<include name="jaxrpc.jar"/>
             <include name="commons-logging.jar"/>
             <include name="hibernate2.jar"/>

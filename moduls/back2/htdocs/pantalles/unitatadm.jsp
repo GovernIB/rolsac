@@ -893,7 +893,7 @@
             <div class="modul" id="modulRelacioOrganica">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>RELACIÓ ORGÀNICA</legend>
+                    <legend><spring:message code='txt.relacioOrganica'/></legend>
                     <div class="modul_continguts mostrat">
                     
                         <div class="fila">
@@ -1326,68 +1326,6 @@
             </div>
         </div>
         <!-- seleccionats -->
-    
-    
-    <%-- 
-    <div id="escriptori_edificis">              
-        <h2>Gestió dels edificis relacionats</h2>                   
-        <div class="botonera dalt">
-            <ul>
-                <li>
-                    <a href="javascript:;" class="btn torna"><span><span>Torna al detall</span></span></a>
-                </li>
-            </ul>
-        </div>                  
-        <!-- llistat -->
-        <div class="escriptori_items_llistat">                      
-            <!-- cercador -->
-            <div class="escriptori_items_cercador">                     
-                <h3>Cercador</h3>                               
-                <div class="fila">                                  
-                    <div class="element t18">                               
-                        <div class="etiqueta"><label for="cerca_edificis_adresa">Adreça</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_adresa" name="cerca_edificis_adresa" type="text" class="adresa" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t7">                                
-                        <div class="etiqueta"><label for="cerca_edificis_cp">Codi postal</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_cp" name="cerca_edificis_cp" type="text" class="cp" />
-                        </div>                                  
-                    </div>                              
-                    <div class="element t12">                               
-                        <div class="etiqueta"><label for="cerca_edificis_poblacio">Població</label></div>
-                        <div class="control">
-                            <input id="cerca_edificis_poblacio" name="cerca_edificis_poblacio" type="text" class="poblacio" />
-                        </div>                                  
-                    </div>                              
-                </div>                          
-                <div class="botonera">
-                    <a href="javascript:;" class="btn consulta"><span><span>Cerca!</span></span></a>
-                </div>                      
-            </div>
-            <!-- /cercador -->                      
-            <div class="dades"></div>                       
-            <input type="hidden" value="0" class="pagPagina" />
-            <input type="hidden" value="DESC" class="ordreTipus" />
-            <input type="hidden" value="adresa" class="ordreCamp" />                    
-        </div>
-        <!-- /llistat -->
-        
-        <!-- seleccionats -->
-        <div class="escriptori_items_seleccionats">
-            <h3>Edificis seleccionats</h3>                      
-            <p class="botonera">
-                <a href="javascript:;" class="btn finalitza important"><span><span>Finalitza</span></span></a>
-            </p>                        
-            <div class="dades">                     
-                <p class="info">No hi ha cap edifici.</p>                           
-            </div>                  
-        </div>
-        <!-- seleccionats -->
-        --%>                                
-    
     </div>
     <!-- /escriptori_edificis -->
     
