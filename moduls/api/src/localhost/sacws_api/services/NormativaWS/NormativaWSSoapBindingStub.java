@@ -129,8 +129,8 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.setName("llistarAfectacionsAfectants");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"), long.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/NormativaWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/NormativaWS", "ArrayOfAfectacioDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.afectacio.AfectacioDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarAfectacionsAfectantsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -145,8 +145,8 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
         oper.setName("llistarAfectacionsAfectades");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"), long.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/NormativaWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/NormativaWS", "ArrayOfAfectacioDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.afectacio.AfectacioDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarAfectacionsAfectadesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -237,6 +237,15 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
             cls = java.lang.Object[].class;
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "anyType");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/NormativaWS", "ArrayOfAfectacioDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.afectacio.AfectacioDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://afectacio.v2.api.rolsac.caib.es", "AfectacioDTO");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
@@ -587,7 +596,7 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public java.lang.Object[] llistarAfectacionsAfectants(long in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.afectacio.AfectacioDTO[] llistarAfectacionsAfectants(long in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -608,9 +617,9 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.afectacio.AfectacioDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.afectacio.AfectacioDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.afectacio.AfectacioDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -618,7 +627,7 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
 }
     }
 
-    public java.lang.Object[] llistarAfectacionsAfectades(long in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.afectacio.AfectacioDTO[] llistarAfectacionsAfectades(long in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -639,9 +648,9 @@ public class NormativaWSSoapBindingStub extends org.apache.axis.client.Stub impl
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.afectacio.AfectacioDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.afectacio.AfectacioDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.afectacio.AfectacioDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

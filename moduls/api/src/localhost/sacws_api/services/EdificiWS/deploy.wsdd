@@ -15,7 +15,7 @@
   <service name="EdificiWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/EdificiWS"/>
       <parameter name="wsdlServiceElement" value="EdificiQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="https://localhost:8443/sacws-api/services/EdificiWS,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://arxiu.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/EdificiWS"/>
       <parameter name="wsdlServicePort" value="EdificiWS"/>
       <parameter name="className" value="localhost.sacws_api.services.EdificiWS.EdificiWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="EdificiQueryServiceEJBRemote"/>
@@ -36,12 +36,12 @@
       <operation name="obtenirPlano" qname="operNS:obtenirPlano" xmlns:operNS="http://intf.ejb.edifici.v2.api.rolsac.caib.es" returnQName="obtenirPlanoReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="obtenirFotoGrande llistarUnitatsAdministratives getNumUnitatsAdministratives obtenirPlano obtenirFotoPequenya"/>
+      <parameter name="allowedMethods" value="obtenirPlano obtenirFotoGrande llistarUnitatsAdministratives getNumUnitatsAdministratives obtenirFotoPequenya"/>
 
       <typeMapping
-        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-        qname="ns:UnitatAdministrativaCriteria"
-        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -54,17 +54,17 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

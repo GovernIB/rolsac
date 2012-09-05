@@ -75,6 +75,13 @@
 					</restriction>
 				</complexContent>
 			</complexType>
+			<complexType name="ArrayOfEspaiTerritorialDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:EspaiTerritorialDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
@@ -167,9 +174,16 @@
 	<wsdl:message name="obtenirPareResponse">
 		<wsdl:part name="obtenirPareReturn" type="tns1:EspaiTerritorialDTO" />
 	</wsdl:message>
+	<!-- 
 	<wsdl:message name="llistarFillsResponse">
 		<wsdl:part name="llistarFillsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+	-->
+	<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->
+	<wsdl:message name="llistarFillsResponse">
+		<wsdl:part name="llistarFillsReturn" type="impl:ArrayOfEspaiTerritorialDTO" />
+	</wsdl:message>
+	<!-- -->	
 	<wsdl:message name="obtenirPareRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>

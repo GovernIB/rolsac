@@ -161,9 +161,9 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarProcedimentsPerDataActualitzacio() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
-        Calendar c = new GregorianCalendar(2005, 6, 4);
+        Calendar c = new GregorianCalendar(2012, 4, 16);
         procedimentCriteria.setFechaActualizacion(c);
-        procedimentCriteria.setTamany("10");
+        procedimentCriteria.setTamany("1");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
             procediments = rolsacQS.llistarProcediments(procedimentCriteria);
@@ -173,7 +173,7 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(procediments.size() > 0);
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertEquals(
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion()),
+                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion().getTime()),
                     ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c.getTime())
             );
         }
@@ -1207,7 +1207,7 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 11);
+        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 12);
     }
     
     /**

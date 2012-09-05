@@ -179,7 +179,7 @@ public class EspaiTerritorialQueryServiceEJB extends HibernateEJB {
             List<EspacioTerritorial> espaiTerritorialResult = (List<EspacioTerritorial>) query.list();
 
             for (EspacioTerritorial espaiTerritorial : espaiTerritorialResult) {
-                espaiTerritorialDTO.add((EspaiTerritorialDTO) BasicUtils.entityToDTO(EspaiTerritorialDTO.class,  espaiTerritorial, espaiTerritorialCriteria.getIdioma()));
+            	espaiTerritorialDTO.add((EspaiTerritorialDTO) BasicUtils.entityToDTO(EspaiTerritorialDTO.class,  espaiTerritorial, espaiTerritorialCriteria.getIdioma()));
             }
         } catch (HibernateException e) {
             log.error(e);

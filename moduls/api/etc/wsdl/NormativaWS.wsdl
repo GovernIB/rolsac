@@ -4,6 +4,7 @@
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://butlleti.v2.api.rolsac.caib.es" xmlns:tns5="http://arxiu.v2.api.rolsac.caib.es"
+	xmlns:tns6="http://afectacio.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/NormativaWS">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
@@ -83,6 +84,7 @@
 				</complexContent>
 			</complexType>
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="https://localhost:8443/sacws-api/services/NormativaWS">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
@@ -99,7 +101,19 @@
 					</restriction>
 				</complexContent>
 			</complexType>
+			
+			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->			
+			<complexType name="ArrayOfAfectacioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns6:AfectacioDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			<!--  -->			
+			
 		</schema>
+		
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
@@ -200,7 +214,6 @@
 			</complexType>
 		</schema>
 		
-		<!-- DTO necesario pero no generado por Axis xxxx-->
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://afectacio.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
@@ -224,7 +237,7 @@
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="llistarAfectacionsAfectadesResponse">
-		<wsdl:part name="llistarAfectacionsAfectadesReturn" type="impl:ArrayOf_xsd_anyType" />
+		<wsdl:part name="llistarAfectacionsAfectadesReturn" type="impl:ArrayOfAfectacioDTO" />
 	</wsdl:message>
 	<wsdl:message name="llistarProcedimentsResponse">
 		<wsdl:part name="llistarProcedimentsReturn" type="impl:ArrayOf_xsd_anyType" />
@@ -264,7 +277,7 @@
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="llistarAfectacionsAfectantsResponse">
-		<wsdl:part name="llistarAfectacionsAfectantsReturn" type="impl:ArrayOf_xsd_anyType" />
+		<wsdl:part name="llistarAfectacionsAfectantsReturn" type="impl:ArrayOfAfectacioDTO" />
 	</wsdl:message>
 	<wsdl:message name="getNumAfectantsRequest">
 		<wsdl:part name="in0" type="xsd:long" />

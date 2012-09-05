@@ -26,17 +26,17 @@
       <parameter name="allowedMethods" value="obtenirTramit"/>
 
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:EntitatRemota"
-        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+        xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
+        qname="ns:TramitDTO"
+        type="java:es.caib.rolsac.api.v2.tramit.TramitDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
-        qname="ns:TramitDTO"
-        type="java:es.caib.rolsac.api.v2.tramit.TramitDTO"
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

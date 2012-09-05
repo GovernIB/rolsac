@@ -115,38 +115,13 @@ public class NormativaQueryServiceGateway {
 
 	public List<AfectacioDTO> llistarAfectacionsAfectants(Long id)
 			throws RemoteException {
-
-		Object[] tmpLlista = null;
-		List<AfectacioDTO> llistaAfectacionsAfectants = null;
-		
-		tmpLlista = stub.llistarAfectacionsAfectants(id.longValue());
-		llistaAfectacionsAfectants = new ArrayList<AfectacioDTO>( Arrays.asList(tmpLlista).size() );
-			
-		for ( Object o : tmpLlista ) {
-			AfectacioDTO adto = (AfectacioDTO) DTOUtil.object2DTO(o, AfectacioDTO.class);
-			llistaAfectacionsAfectants.add(adto);
-		}
-		
-		return llistaAfectacionsAfectants;		
+		return Arrays.asList(stub.llistarAfectacionsAfectants(id)); 
 		
 	}
 
 	public List<AfectacioDTO> llistarAfectacionsAfectades(Long id)
 			throws RemoteException {
-		
-		Object[] tmpLlista = null;
-		List<AfectacioDTO> llistaAfectacionsAfectades = null;
-		
-		tmpLlista = stub.llistarAfectacionsAfectades(id.longValue());
-		llistaAfectacionsAfectades = new ArrayList<AfectacioDTO>( Arrays.asList(tmpLlista).size() );
-			
-		for ( Object o : tmpLlista ) {
-			AfectacioDTO adto = (AfectacioDTO) DTOUtil.object2DTO(o, AfectacioDTO.class);
-			llistaAfectacionsAfectades.add(adto);
-		}
-		
-		return llistaAfectacionsAfectades;		
-
+		return Arrays.asList(stub.llistarAfectacionsAfectades(id));
 	}
 
 }

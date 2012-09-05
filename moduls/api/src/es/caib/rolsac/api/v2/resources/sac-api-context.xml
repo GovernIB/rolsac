@@ -274,6 +274,7 @@
 
 
     <!-- EstadisticaInsertService beans -->
+    <!-- EJB -->
     <bean id="estadisticaInsertServiceEJBAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter">
         <property name="estadisticaInsertServiceStrategy" ref="estadisticaInsertServiceEJBStrategy" />
     </bean>
@@ -287,6 +288,18 @@
     </bean>
 
     <bean id="estadisticaInsertServiceEJBLocator" class="es.caib.rolsac.api.v2.estadistica.ejb.EstadisticaInsertServiceEJBLocator" />
+    
+    <!-- WS -->
+    <bean id="estadisticaInsertServiceWSAdapter" class="es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter" scope="prototype">
+        <property name="estadisticaInsertServiceStrategy" ref="estadisticaInsertServiceWSStrategy" />
+    </bean>
+
+    <bean id="estadisticaInsertServiceWSStrategy" class="es.caib.rolsac.api.v2.estadistica.ws.EstadisticaInsertServiceWSStrategy">
+        <property name="gateway" ref="gatewayEstadistica" />
+    </bean>
+
+	<bean id="gatewayEstadistica" class="es.caib.rolsac.api.v2.estadistica.ws.EstadisticaInsertServiceGateway" />	        
+    
     <!-- EstadisticaInsertService beans -->
     
 

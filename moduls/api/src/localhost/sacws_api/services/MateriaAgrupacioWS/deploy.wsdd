@@ -15,7 +15,7 @@
   <service name="MateriaAgrupacioWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/MateriaAgrupacioWS"/>
       <parameter name="wsdlServiceElement" value="MateriaAgrupacioQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://agrupacioMateria.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://materia.v2.api.rolsac.caib.es,http://agrupacioMateria.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="MateriaAgrupacioWS"/>
       <parameter name="className" value="localhost.sacws_api.services.MateriaAgrupacioWS.MateriaAgrupacioWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="MateriaAgrupacioQueryServiceEJBRemote"/>
@@ -29,17 +29,17 @@
       <parameter name="allowedMethods" value="obtenirMateria obtenirAgrupacioMateria"/>
 
       <typeMapping
-        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
-        qname="ns:MateriaDTO"
-        type="java:es.caib.rolsac.api.v2.materia.MateriaDTO"
+        xmlns:ns="http://agrupacioMateria.v2.api.rolsac.caib.es"
+        qname="ns:AgrupacioMateriaDTO"
+        type="java:es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://agrupacioMateria.v2.api.rolsac.caib.es"
-        qname="ns:AgrupacioMateriaDTO"
-        type="java:es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO"
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaDTO"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

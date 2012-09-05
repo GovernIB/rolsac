@@ -15,7 +15,7 @@
   <service name="DocumentTramitWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/DocumentTramitWS"/>
       <parameter name="wsdlServiceElement" value="DocumentTramitQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://tramit.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://tramit.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="DocumentTramitWS"/>
       <parameter name="className" value="localhost.sacws_api.services.DocumentTramitWS.DocumentTramitWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="DocumentTramitQueryServiceEJBRemote"/>
@@ -29,9 +29,9 @@
       <parameter name="allowedMethods" value="obtenirTramit obtenirArxiu"/>
 
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:EntitatRemota"
-        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -45,9 +45,9 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

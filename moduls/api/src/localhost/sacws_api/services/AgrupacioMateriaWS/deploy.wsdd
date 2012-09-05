@@ -15,7 +15,7 @@
   <service name="AgrupacioMateriaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/AgrupacioMateriaWS"/>
       <parameter name="wsdlServiceElement" value="AgrupacioMateriaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://seccio.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/AgrupacioMateriaWS,http://materia.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://xml.apache.org/xml-soap,http://materia.v2.api.rolsac.caib.es,http://seccio.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/AgrupacioMateriaWS"/>
       <parameter name="wsdlServicePort" value="AgrupacioMateriaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.AgrupacioMateriaWS.AgrupacioMateriaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="AgrupacioMateriaQueryServiceEJBRemote"/>
@@ -30,23 +30,8 @@
       <operation name="getNumMateries" qname="operNS:getNumMateries" xmlns:operNS="http://intf.ejb.agrupacioMateria.v2.api.rolsac.caib.es" returnQName="getNumMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="obtenirSeccio getNumMateries llistarMateries"/>
+      <parameter name="allowedMethods" value="getNumMateries obtenirSeccio llistarMateries"/>
 
-      <arrayMapping
-        xmlns:ns="https://localhost:8443/sacws-api/services/AgrupacioMateriaWS"
-        qname="ns:ArrayOf_xsd_anyType"
-        type="java:java.lang.Object[]"
-        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
       <typeMapping
         xmlns:ns="http://seccio.v2.api.rolsac.caib.es"
         qname="ns:SeccioDTO"
@@ -55,10 +40,25 @@
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/AgrupacioMateriaWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
       <typeMapping
         xmlns:ns="http://materia.v2.api.rolsac.caib.es"
         qname="ns:MateriaCriteria"
         type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

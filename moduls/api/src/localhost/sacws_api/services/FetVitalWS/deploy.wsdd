@@ -15,7 +15,7 @@
   <service name="FetVitalWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/FetVitalWS"/>
       <parameter name="wsdlServiceElement" value="FetVitalQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://procediment.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/FetVitalWS,http://agrupacioFetVital.v2.api.rolsac.caib.es,http://fitxa.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://agrupacioFetVital.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://fitxa.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://procediment.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/FetVitalWS,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="FetVitalWS"/>
       <parameter name="className" value="localhost.sacws_api.services.FetVitalWS.FetVitalWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="FetVitalQueryServiceEJBRemote"/>
@@ -50,28 +50,12 @@
       <operation name="getIconaGran" qname="operNS:getIconaGran" xmlns:operNS="http://intf.ejb.fetVital.v2.api.rolsac.caib.es" returnQName="getIconaGranReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="getIconaGran getNumFetsVitalsAgrupacionsFV getIcona llistarFetsVitalsAgrupacionsFV getFotografia llistarProcedimentsLocals llistarFitxes getNumProcedimentsLocals getNumFitxes"/>
+      <parameter name="allowedMethods" value="getNumFetsVitalsAgrupacionsFV getIconaGran llistarFitxes getIcona getNumFitxes getNumProcedimentsLocals llistarFetsVitalsAgrupacionsFV llistarProcedimentsLocals getFotografia"/>
 
       <typeMapping
-        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
-        qname="ns:ProcedimentCriteria"
-        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://agrupacioFetVital.v2.api.rolsac.caib.es"
-        qname="ns:AgrupacioFetVitalCriteria"
-        type="java:es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
-        qname="ns:FitxaCriteria"
-        type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -84,17 +68,33 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        xmlns:ns="http://agrupacioFetVital.v2.api.rolsac.caib.es"
+        qname="ns:AgrupacioFetVitalCriteria"
+        type="java:es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentCriteria"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
+        qname="ns:FitxaCriteria"
+        type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

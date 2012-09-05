@@ -195,8 +195,8 @@ public class UnitatAdministrativaWSSoapBindingStub extends org.apache.axis.clien
         oper.addParameter(param);
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in1"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://unitatAdministrativa.v2.api.rolsac.caib.es", "UnitatAdministrativaCriteria"), es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/UnitatAdministrativaWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/UnitatAdministrativaWS", "ArrayOfUnitatAdministrativaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFillesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -522,6 +522,15 @@ public class UnitatAdministrativaWSSoapBindingStub extends org.apache.axis.clien
             cls = java.lang.Object[].class;
             cachedSerClasses.add(cls);
             qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "anyType");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/UnitatAdministrativaWS", "ArrayOfUnitatAdministrativaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://unitatAdministrativa.v2.api.rolsac.caib.es", "UnitatAdministrativaDTO");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
@@ -996,7 +1005,7 @@ public class UnitatAdministrativaWSSoapBindingStub extends org.apache.axis.clien
 }
     }
 
-    public java.lang.Object[] llistarFilles(long in0, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in1) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[] llistarFilles(long in0, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in1) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1017,9 +1026,9 @@ public class UnitatAdministrativaWSSoapBindingStub extends org.apache.axis.clien
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

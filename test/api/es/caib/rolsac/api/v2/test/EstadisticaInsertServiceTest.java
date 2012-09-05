@@ -14,7 +14,8 @@ public class EstadisticaInsertServiceTest {
 
     @Before
     public void setup() {
-        service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceEJBAdapter");
+        //service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceEJBAdapter");
+    	service = (EstadisticaInsertService) BeanUtils.getBean("estadisticaInsertServiceWSAdapter");
     }
 
     /**

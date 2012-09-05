@@ -15,7 +15,7 @@
   <service name="IconaFamiliaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/IconaFamiliaWS"/>
       <parameter name="wsdlServiceElement" value="IconaFamiliaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://perfil.v2.api.rolsac.caib.es,http://familia.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://arxiu.v2.api.rolsac.caib.es,http://perfil.v2.api.rolsac.caib.es,http://familia.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="IconaFamiliaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.IconaFamiliaWS.IconaFamiliaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="IconaFamiliaQueryServiceEJBRemote"/>
@@ -29,16 +29,8 @@
       <operation name="obtenirIcona" qname="operNS:obtenirIcona" xmlns:operNS="http://intf.ejb.iconaFamilia.v2.api.rolsac.caib.es" returnQName="obtenirIconaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="obtenirFamilia obtenirPerfil obtenirIcona"/>
+      <parameter name="allowedMethods" value="obtenirPerfil obtenirFamilia obtenirIcona"/>
 
-      <typeMapping
-        xmlns:ns="http://familia.v2.api.rolsac.caib.es"
-        qname="ns:FamiliaDTO"
-        type="java:es.caib.rolsac.api.v2.familia.FamiliaDTO"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
       <typeMapping
         xmlns:ns="http://perfil.v2.api.rolsac.caib.es"
         qname="ns:PerfilDTO"
@@ -51,6 +43,14 @@
         xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
         qname="ns:ArxiuDTO"
         type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://familia.v2.api.rolsac.caib.es"
+        qname="ns:FamiliaDTO"
+        type="java:es.caib.rolsac.api.v2.familia.FamiliaDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

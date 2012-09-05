@@ -32,8 +32,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarUnitatsAdministratives");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://unitatAdministrativa.v2.api.rolsac.caib.es", "UnitatAdministrativaCriteria"), es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUnitatAdministrativaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarUnitatsAdministrativesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -65,8 +65,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarProcediments");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://procediment.v2.api.rolsac.caib.es", "ProcedimentCriteria"), es.caib.rolsac.api.v2.procediment.ProcedimentCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfProcedimentDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.procediment.ProcedimentDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarProcedimentsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -87,8 +87,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarMateries");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://materia.v2.api.rolsac.caib.es", "MateriaCriteria"), es.caib.rolsac.api.v2.materia.MateriaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfMateriaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.materia.MateriaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarMateriesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -109,8 +109,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarTramit");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://tramit.v2.api.rolsac.caib.es", "TramitCriteria"), es.caib.rolsac.api.v2.tramit.TramitCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTramitDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.tramit.TramitDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarTramitReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -147,8 +147,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarFetsVitals");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://fetVital.v2.api.rolsac.caib.es", "FetVitalCriteria"), es.caib.rolsac.api.v2.fetVital.FetVitalCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFetVitalDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.fetVital.FetVitalDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFetsVitalsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -169,8 +169,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarFitxes");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://fitxa.v2.api.rolsac.caib.es", "FitxaCriteria"), es.caib.rolsac.api.v2.fitxa.FitxaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFitxaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.fitxa.FitxaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFitxesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -191,8 +191,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarDocumentTramit");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "DocumentTramitCriteria"), es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfDocumentTramitDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarDocumentTramitReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -213,8 +213,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarNormatives");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://normativa.v2.api.rolsac.caib.es", "NormativaCriteria"), es.caib.rolsac.api.v2.normativa.NormativaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfNormativaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.normativa.NormativaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarNormativesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -235,8 +235,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarPersonal");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://personal.v2.api.rolsac.caib.es", "PersonalCriteria"), es.caib.rolsac.api.v2.personal.PersonalCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPersonalDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.personal.PersonalDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarPersonalReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -262,8 +262,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarUsuaris");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://usuari.v2.api.rolsac.caib.es", "UsuariCriteria"), es.caib.rolsac.api.v2.usuari.UsuariCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUsuariDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.usuari.UsuariDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarUsuarisReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -284,8 +284,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarTaxes");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://taxa.v2.api.rolsac.caib.es", "TaxaCriteria"), es.caib.rolsac.api.v2.taxa.TaxaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTaxaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.taxa.TaxaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarTaxesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -306,8 +306,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarAgrupacionsFetsVitals");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://agrupacioFetVital.v2.api.rolsac.caib.es", "AgrupacioFetVitalCriteria"), es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfAgrupacioFetVitalDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarAgrupacionsFetsVitalsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -328,8 +328,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarAgrupacionsMateries");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://agrupacioMateria.v2.api.rolsac.caib.es", "AgrupacioMateriaCriteria"), es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfAgrupacioMateriaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarAgrupacionsMateriesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -350,8 +350,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarButlletins");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://butlleti.v2.api.rolsac.caib.es", "ButlletiCriteria"), es.caib.rolsac.api.v2.butlleti.ButlletiCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfButlletiDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.butlleti.ButlletiDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarButlletinsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -377,8 +377,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarDocuments");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://document.v2.api.rolsac.caib.es", "DocumentCriteria"), es.caib.rolsac.api.v2.document.DocumentCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfDocumentDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.document.DocumentDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarDocumentsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -399,8 +399,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarEdificis");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://edifici.v2.api.rolsac.caib.es", "EdificiCriteria"), es.caib.rolsac.api.v2.edifici.EdificiCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEdificiDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.edifici.EdificiDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarEdificisReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -421,8 +421,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarEnllacos");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://enllac.v2.api.rolsac.caib.es", "EnllacCriteria"), es.caib.rolsac.api.v2.enllac.EnllacCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEnllacDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.enllac.EnllacDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarEnllacosReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -432,8 +432,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarEspaisTerritorials");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://espaiTerritorial.v2.api.rolsac.caib.es", "EspaiTerritorialCriteria"), es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEspaiTerritorialDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarEspaisTerritorialsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -454,8 +454,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarFamilies");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://familia.v2.api.rolsac.caib.es", "FamiliaCriteria"), es.caib.rolsac.api.v2.familia.FamiliaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFamiliaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.familia.FamiliaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFamiliesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -476,8 +476,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarPublicsObjectius");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://publicObjectiu.v2.api.rolsac.caib.es", "PublicObjectiuCriteria"), es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPublicObjetiuDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarPublicsObjectiusReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -503,8 +503,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarFitxesUA");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://fitxaUA.v2.api.rolsac.caib.es", "FitxaUACriteria"), es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFitxaUADTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFitxesUAReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -525,8 +525,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarFormularis");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://formulari.v2.api.rolsac.caib.es", "FormulariCriteria"), es.caib.rolsac.api.v2.formulari.FormulariCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFormulariDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.formulari.FormulariDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarFormularisReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -547,8 +547,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarIconesFamilies");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://iconaFamilia.v2.api.rolsac.caib.es", "IconaFamiliaCriteria"), es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfIconaFamiliaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarIconesFamiliesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -569,8 +569,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarIconesMateries");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://iconaMateria.v2.api.rolsac.caib.es", "IconaMateriaCriteria"), es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfIconaMateriaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarIconesMateriesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -591,8 +591,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarMateriesAgrupacions");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://materiaAgrupacio.v2.api.rolsac.caib.es", "MateriaAgrupacioCriteria"), es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfMateriaAgrupacioDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarMateriesAgrupacionsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -618,8 +618,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarPerfils");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://perfil.v2.api.rolsac.caib.es", "PerfilCriteria"), es.caib.rolsac.api.v2.perfil.PerfilCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPerfilDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.perfil.PerfilDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarPerfilsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -640,8 +640,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarSeccions");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://seccio.v2.api.rolsac.caib.es", "SeccioCriteria"), es.caib.rolsac.api.v2.seccio.SeccioCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfSeccioDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.seccio.SeccioDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarSeccionsReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -662,8 +662,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarUnitatsMateries");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://unitatMateria.v2.api.rolsac.caib.es", "UnitatMateriaCriteria"), es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUnitatMateriaDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarUnitatsMateriesReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -684,8 +684,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarTipus");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://tipus.v2.api.rolsac.caib.es", "TipusCriteria"), es.caib.rolsac.api.v2.tipus.TipusCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTipusDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.tipus.TipusDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarTipusReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -706,8 +706,8 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         oper.setName("llistarTipusAfectacio");
         param = new org.apache.axis.description.ParameterDesc(new javax.xml.namespace.QName("", "in0"), org.apache.axis.description.ParameterDesc.IN, new javax.xml.namespace.QName("http://tipusAfectacio.v2.api.rolsac.caib.es", "TipusAfectacioCriteria"), es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria.class, false, false);
         oper.addParameter(param);
-        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType"));
-        oper.setReturnClass(java.lang.Object[].class);
+        oper.setReturnType(new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTipusAfectacioDTO"));
+        oper.setReturnClass(es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[].class);
         oper.setReturnQName(new javax.xml.namespace.QName("", "llistarTipusAfectacioReturn"));
         oper.setStyle(org.apache.axis.constants.Style.RPC);
         oper.setUse(org.apache.axis.constants.Use.ENCODED);
@@ -1178,11 +1178,272 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
-            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOf_xsd_anyType");
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfAgrupacioFetVitalDTO");
             cachedSerQNames.add(qName);
-            cls = java.lang.Object[].class;
+            cls = es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[].class;
             cachedSerClasses.add(cls);
-            qName = new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "anyType");
+            qName = new javax.xml.namespace.QName("http://agrupacioFetVital.v2.api.rolsac.caib.es", "AgrupacioFetVitalDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfAgrupacioMateriaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://agrupacioMateria.v2.api.rolsac.caib.es", "AgrupacioMateriaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfButlletiDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.butlleti.ButlletiDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://butlleti.v2.api.rolsac.caib.es", "ButlletiDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfDocumentDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.document.DocumentDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://document.v2.api.rolsac.caib.es", "DocumentDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfDocumentTramitDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://documentTramit.v2.api.rolsac.caib.es", "DocumentTramitDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEdificiDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.edifici.EdificiDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://edifici.v2.api.rolsac.caib.es", "EdificiDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEnllacDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.enllac.EnllacDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://enllac.v2.api.rolsac.caib.es", "EnllacDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfEspaiTerritorialDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://espaiTerritorial.v2.api.rolsac.caib.es", "EspaiTerritorialDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFamiliaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.familia.FamiliaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://familia.v2.api.rolsac.caib.es", "FamiliaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFetVitalDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.fetVital.FetVitalDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://fetVital.v2.api.rolsac.caib.es", "FetVitalDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFitxaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.fitxa.FitxaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://fitxa.v2.api.rolsac.caib.es", "FitxaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFitxaUADTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://fitxaUA.v2.api.rolsac.caib.es", "FitxaUADTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfFormulariDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.formulari.FormulariDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://formulari.v2.api.rolsac.caib.es", "FormulariDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfIconaFamiliaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://iconaFamilia.v2.api.rolsac.caib.es", "IconaFamiliaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfIconaMateriaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://iconaMateria.v2.api.rolsac.caib.es", "IconaMateriaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfMateriaAgrupacioDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://materiaAgrupacio.v2.api.rolsac.caib.es", "MateriaAgrupacioDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfMateriaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.materia.MateriaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://materia.v2.api.rolsac.caib.es", "MateriaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfNormativaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.normativa.NormativaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://normativa.v2.api.rolsac.caib.es", "NormativaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPerfilDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.perfil.PerfilDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://perfil.v2.api.rolsac.caib.es", "PerfilDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPersonalDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.personal.PersonalDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://personal.v2.api.rolsac.caib.es", "PersonalDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfProcedimentDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.procediment.ProcedimentDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://procediment.v2.api.rolsac.caib.es", "ProcedimentDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfPublicObjetiuDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://publicObjectiu.v2.api.rolsac.caib.es", "PublicObjectiuDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfSeccioDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.seccio.SeccioDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://seccio.v2.api.rolsac.caib.es", "SeccioDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTaxaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.taxa.TaxaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://taxa.v2.api.rolsac.caib.es", "TaxaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTipusAfectacioDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://tipusAfectacio.v2.api.rolsac.caib.es", "TipusAfectacioDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTipusDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.tipus.TipusDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://tipus.v2.api.rolsac.caib.es", "TipusDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfTramitDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.tramit.TramitDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://tramit.v2.api.rolsac.caib.es", "TramitDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUnitatAdministrativaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://unitatAdministrativa.v2.api.rolsac.caib.es", "UnitatAdministrativaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUnitatMateriaDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://unitatMateria.v2.api.rolsac.caib.es", "UnitatMateriaDTO");
+            qName2 = null;
+            cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
+            cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
+
+            qName = new javax.xml.namespace.QName("https://localhost:8443/sacws-api/services/RolsacWS", "ArrayOfUsuariDTO");
+            cachedSerQNames.add(qName);
+            cls = es.caib.rolsac.api.v2.usuari.UsuariDTO[].class;
+            cachedSerClasses.add(cls);
+            qName = new javax.xml.namespace.QName("http://usuari.v2.api.rolsac.caib.es", "UsuariDTO");
             qName2 = null;
             cachedSerFactories.add(new org.apache.axis.encoding.ser.ArraySerializerFactory(qName, qName2));
             cachedDeserFactories.add(new org.apache.axis.encoding.ser.ArrayDeserializerFactory());
@@ -1254,7 +1515,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         }
     }
 
-    public java.lang.Object[] llistarUnitatsAdministratives(es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[] llistarUnitatsAdministratives(es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1275,9 +1536,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1347,7 +1608,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarProcediments(es.caib.rolsac.api.v2.procediment.ProcedimentCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.procediment.ProcedimentDTO[] llistarProcediments(es.caib.rolsac.api.v2.procediment.ProcedimentCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1368,9 +1629,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.procediment.ProcedimentDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.procediment.ProcedimentDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.procediment.ProcedimentDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1409,7 +1670,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarMateries(es.caib.rolsac.api.v2.materia.MateriaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.materia.MateriaDTO[] llistarMateries(es.caib.rolsac.api.v2.materia.MateriaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1430,9 +1691,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.materia.MateriaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.materia.MateriaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.materia.MateriaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1471,7 +1732,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarTramit(es.caib.rolsac.api.v2.tramit.TramitCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.tramit.TramitDTO[] llistarTramit(es.caib.rolsac.api.v2.tramit.TramitCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1492,9 +1753,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.tramit.TramitDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.tramit.TramitDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.tramit.TramitDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1564,7 +1825,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarFetsVitals(es.caib.rolsac.api.v2.fetVital.FetVitalCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.fetVital.FetVitalDTO[] llistarFetsVitals(es.caib.rolsac.api.v2.fetVital.FetVitalCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1585,9 +1846,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.fetVital.FetVitalDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.fetVital.FetVitalDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.fetVital.FetVitalDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1626,7 +1887,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarFitxes(es.caib.rolsac.api.v2.fitxa.FitxaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.fitxa.FitxaDTO[] llistarFitxes(es.caib.rolsac.api.v2.fitxa.FitxaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1647,9 +1908,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.fitxa.FitxaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.fitxa.FitxaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.fitxa.FitxaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1688,7 +1949,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarDocumentTramit(es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[] llistarDocumentTramit(es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1709,9 +1970,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1750,7 +2011,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarNormatives(es.caib.rolsac.api.v2.normativa.NormativaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.normativa.NormativaDTO[] llistarNormatives(es.caib.rolsac.api.v2.normativa.NormativaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1771,9 +2032,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.normativa.NormativaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.normativa.NormativaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.normativa.NormativaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1812,7 +2073,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarPersonal(es.caib.rolsac.api.v2.personal.PersonalCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.personal.PersonalDTO[] llistarPersonal(es.caib.rolsac.api.v2.personal.PersonalCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1833,9 +2094,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.personal.PersonalDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.personal.PersonalDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.personal.PersonalDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1874,7 +2135,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarUsuaris(es.caib.rolsac.api.v2.usuari.UsuariCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.usuari.UsuariDTO[] llistarUsuaris(es.caib.rolsac.api.v2.usuari.UsuariCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1895,9 +2156,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.usuari.UsuariDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.usuari.UsuariDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.usuari.UsuariDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1936,7 +2197,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarTaxes(es.caib.rolsac.api.v2.taxa.TaxaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.taxa.TaxaDTO[] llistarTaxes(es.caib.rolsac.api.v2.taxa.TaxaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -1957,9 +2218,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.taxa.TaxaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.taxa.TaxaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.taxa.TaxaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -1998,7 +2259,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarAgrupacionsFetsVitals(es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[] llistarAgrupacionsFetsVitals(es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2019,9 +2280,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2060,7 +2321,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarAgrupacionsMateries(es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[] llistarAgrupacionsMateries(es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2081,9 +2342,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2122,7 +2383,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarButlletins(es.caib.rolsac.api.v2.butlleti.ButlletiCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.butlleti.ButlletiDTO[] llistarButlletins(es.caib.rolsac.api.v2.butlleti.ButlletiCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2143,9 +2404,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.butlleti.ButlletiDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.butlleti.ButlletiDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.butlleti.ButlletiDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2184,7 +2445,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarDocuments(es.caib.rolsac.api.v2.document.DocumentCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.document.DocumentDTO[] llistarDocuments(es.caib.rolsac.api.v2.document.DocumentCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2205,9 +2466,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.document.DocumentDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.document.DocumentDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.document.DocumentDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2246,7 +2507,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarEdificis(es.caib.rolsac.api.v2.edifici.EdificiCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.edifici.EdificiDTO[] llistarEdificis(es.caib.rolsac.api.v2.edifici.EdificiCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2267,9 +2528,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.edifici.EdificiDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.edifici.EdificiDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.edifici.EdificiDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2308,7 +2569,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarEnllacos(es.caib.rolsac.api.v2.enllac.EnllacCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.enllac.EnllacDTO[] llistarEnllacos(es.caib.rolsac.api.v2.enllac.EnllacCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2329,9 +2590,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.enllac.EnllacDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.enllac.EnllacDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.enllac.EnllacDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2339,7 +2600,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarEspaisTerritorials(es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[] llistarEspaisTerritorials(es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2360,9 +2621,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2401,7 +2662,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarFamilies(es.caib.rolsac.api.v2.familia.FamiliaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.familia.FamiliaDTO[] llistarFamilies(es.caib.rolsac.api.v2.familia.FamiliaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2422,9 +2683,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.familia.FamiliaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.familia.FamiliaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.familia.FamiliaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2463,7 +2724,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarPublicsObjectius(es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[] llistarPublicsObjectius(es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2484,9 +2745,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2525,7 +2786,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarFitxesUA(es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[] llistarFitxesUA(es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2546,9 +2807,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2587,7 +2848,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarFormularis(es.caib.rolsac.api.v2.formulari.FormulariCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.formulari.FormulariDTO[] llistarFormularis(es.caib.rolsac.api.v2.formulari.FormulariCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2608,9 +2869,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.formulari.FormulariDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.formulari.FormulariDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.formulari.FormulariDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2649,7 +2910,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarIconesFamilies(es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[] llistarIconesFamilies(es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2670,9 +2931,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2711,7 +2972,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarIconesMateries(es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[] llistarIconesMateries(es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2732,9 +2993,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2773,7 +3034,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarMateriesAgrupacions(es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[] llistarMateriesAgrupacions(es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2794,9 +3055,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2835,7 +3096,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarPerfils(es.caib.rolsac.api.v2.perfil.PerfilCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.perfil.PerfilDTO[] llistarPerfils(es.caib.rolsac.api.v2.perfil.PerfilCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2856,9 +3117,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.perfil.PerfilDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.perfil.PerfilDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.perfil.PerfilDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2897,7 +3158,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarSeccions(es.caib.rolsac.api.v2.seccio.SeccioCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.seccio.SeccioDTO[] llistarSeccions(es.caib.rolsac.api.v2.seccio.SeccioCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2918,9 +3179,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.seccio.SeccioDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.seccio.SeccioDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.seccio.SeccioDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -2959,7 +3220,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarUnitatsMateries(es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[] llistarUnitatsMateries(es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -2980,9 +3241,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -3021,7 +3282,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarTipus(es.caib.rolsac.api.v2.tipus.TipusCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.tipus.TipusDTO[] llistarTipus(es.caib.rolsac.api.v2.tipus.TipusCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -3042,9 +3303,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.tipus.TipusDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.tipus.TipusDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.tipus.TipusDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -3083,7 +3344,7 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
 }
     }
 
-    public java.lang.Object[] llistarTipusAfectacio(es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria in0) throws java.rmi.RemoteException {
+    public es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[] llistarTipusAfectacio(es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioCriteria in0) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -3104,9 +3365,9 @@ public class RolsacWSSoapBindingStub extends org.apache.axis.client.Stub impleme
         else {
             extractAttachments(_call);
             try {
-                return (java.lang.Object[]) _resp;
+                return (es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[]) _resp;
             } catch (java.lang.Exception _exception) {
-                return (java.lang.Object[]) org.apache.axis.utils.JavaUtils.convert(_resp, java.lang.Object[].class);
+                return (es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[]) org.apache.axis.utils.JavaUtils.convert(_resp, es.caib.rolsac.api.v2.tipusAfectacio.TipusAfectacioDTO[].class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

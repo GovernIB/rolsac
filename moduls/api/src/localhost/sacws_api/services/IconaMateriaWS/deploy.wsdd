@@ -15,7 +15,7 @@
   <service name="IconaMateriaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/IconaMateriaWS"/>
       <parameter name="wsdlServiceElement" value="IconaMateriaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://perfil.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://arxiu.v2.api.rolsac.caib.es,http://perfil.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="IconaMateriaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.IconaMateriaWS.IconaMateriaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="IconaMateriaQueryServiceEJBRemote"/>
@@ -29,16 +29,8 @@
       <operation name="obtenirIcona" qname="operNS:obtenirIcona" xmlns:operNS="http://intf.ejb.iconaMateria.v2.api.rolsac.caib.es" returnQName="obtenirIconaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="obtenirMateria obtenirPerfil obtenirIcona"/>
+      <parameter name="allowedMethods" value="obtenirPerfil obtenirMateria obtenirIcona"/>
 
-      <typeMapping
-        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
-        qname="ns:MateriaDTO"
-        type="java:es.caib.rolsac.api.v2.materia.MateriaDTO"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
       <typeMapping
         xmlns:ns="http://perfil.v2.api.rolsac.caib.es"
         qname="ns:PerfilDTO"
@@ -51,6 +43,14 @@
         xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
         qname="ns:ArxiuDTO"
         type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaDTO"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

@@ -15,7 +15,7 @@
   <service name="NormativaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/NormativaWS"/>
       <parameter name="wsdlServiceElement" value="NormativaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://procediment.v2.api.rolsac.caib.es,http://butlleti.v2.api.rolsac.caib.es,http://afectacio.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/NormativaWS,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://afectacio.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://unitatAdministrativa.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/NormativaWS,http://procediment.v2.api.rolsac.caib.es,http://butlleti.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="NormativaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.NormativaWS.NormativaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="NormativaQueryServiceEJBRemote"/>
@@ -48,26 +48,18 @@
       <operation name="obtenirArxiuNormativa" qname="operNS:obtenirArxiuNormativa" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es" returnQName="obtenirArxiuNormativaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <operation name="llistarAfectacionsAfectants" qname="operNS:llistarAfectacionsAfectants" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es" returnQName="llistarAfectacionsAfectantsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/NormativaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      <operation name="llistarAfectacionsAfectants" qname="operNS:llistarAfectacionsAfectants" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es" returnQName="llistarAfectacionsAfectantsReturn" returnType="rtns:ArrayOfAfectacioDTO" xmlns:rtns="https://localhost:8443/sacws-api/services/NormativaWS" returnItemType="tns2:AfectacioDTO" xmlns:tns2="http://afectacio.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <operation name="llistarAfectacionsAfectades" qname="operNS:llistarAfectacionsAfectades" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es" returnQName="llistarAfectacionsAfectadesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/NormativaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      <operation name="llistarAfectacionsAfectades" qname="operNS:llistarAfectacionsAfectades" xmlns:operNS="http://intf.ejb.normativa.v2.api.rolsac.caib.es" returnQName="llistarAfectacionsAfectadesReturn" returnType="rtns:ArrayOfAfectacioDTO" xmlns:rtns="https://localhost:8443/sacws-api/services/NormativaWS" returnItemType="tns2:AfectacioDTO" xmlns:tns2="http://afectacio.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="getNumAfectades obtenirUnitatAdministrativa getNumAfectants getNumProcediments obtenirArxiuNormativa llistarAfectants obtenirButlleti llistarAfectacionsAfectades llistarAfectacionsAfectants llistarAfectades llistarProcediments"/>
+      <parameter name="allowedMethods" value="llistarAfectades llistarAfectacionsAfectants obtenirUnitatAdministrativa llistarProcediments obtenirButlleti getNumProcediments obtenirArxiuNormativa llistarAfectants getNumAfectades llistarAfectacionsAfectades getNumAfectants"/>
 
       <typeMapping
-        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
-        qname="ns:ProcedimentCriteria"
-        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://afectacio.v2.api.rolsac.caib.es"
-        qname="ns:AfectacioDTO"
-        type="java:es.caib.rolsac.api.v2.afectacio.AfectacioDTO"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -80,18 +72,17 @@
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
-      <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:EntitatRemota"
-        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/NormativaWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
         xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -104,17 +95,33 @@
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
+      <typeMapping
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentCriteria"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
       <arrayMapping
         xmlns:ns="https://localhost:8443/sacws-api/services/NormativaWS"
-        qname="ns:ArrayOf_xsd_anyType"
-        type="java:java.lang.Object[]"
-        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        qname="ns:ArrayOfAfectacioDTO"
+        type="java:es.caib.rolsac.api.v2.afectacio.AfectacioDTO[]"
+        innerType="cmp-ns:AfectacioDTO" xmlns:cmp-ns="http://afectacio.v2.api.rolsac.caib.es"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://afectacio.v2.api.rolsac.caib.es"
+        qname="ns:AfectacioDTO"
+        type="java:es.caib.rolsac.api.v2.afectacio.AfectacioDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

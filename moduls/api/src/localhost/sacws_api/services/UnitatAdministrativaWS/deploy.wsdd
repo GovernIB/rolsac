@@ -15,7 +15,7 @@
   <service name="UnitatAdministrativaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"/>
       <parameter name="wsdlServiceElement" value="UnitatAdministrativaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://usuari.v2.api.rolsac.caib.es,http://seccio.v2.api.rolsac.caib.es,http://tractament.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://espaiTerritorial.v2.api.rolsac.caib.es,http://normativa.v2.api.rolsac.caib.es,http://personal.v2.api.rolsac.caib.es,http://procediment.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/UnitatAdministrativaWS,http://fitxa.v2.api.rolsac.caib.es,http://tramit.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es,http://edifici.v2.api.rolsac.caib.es,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://espaiTerritorial.v2.api.rolsac.caib.es,http://personal.v2.api.rolsac.caib.es,http://fitxa.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://procediment.v2.api.rolsac.caib.es,http://edifici.v2.api.rolsac.caib.es,http://materia.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/UnitatAdministrativaWS,http://tractament.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://normativa.v2.api.rolsac.caib.es,http://tramit.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://usuari.v2.api.rolsac.caib.es,http://seccio.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="UnitatAdministrativaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.UnitatAdministrativaWS.UnitatAdministrativaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="UnitatAdministrativaQueryServiceEJBRemote"/>
@@ -67,7 +67,7 @@
       <operation name="obtenirTractament" qname="operNS:obtenirTractament" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="obtenirTractamentReturn" returnType="rtns:TractamentDTO" xmlns:rtns="http://tractament.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <operation name="llistarFilles" qname="operNS:llistarFilles" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="llistarFillesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      <operation name="llistarFilles" qname="operNS:llistarFilles" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="llistarFillesReturn" returnType="rtns:ArrayOfUnitatAdministrativaDTO" xmlns:rtns="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" returnItemType="tns2:UnitatAdministrativaDTO" xmlns:tns2="http://unitatAdministrativa.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="in1" type="tns:UnitatAdministrativaCriteria" xmlns:tns="http://unitatAdministrativa.v2.api.rolsac.caib.es"/>
       </operation>
@@ -117,67 +117,19 @@
       <operation name="getNumMateries" qname="operNS:getNumMateries" xmlns:operNS="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es" returnQName="getNumMateriesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="getNumTramits obtenirPare llistarNormatives llistarSeccions llistarPersonal getNumFilles llistarFitxes obtenirFotog obtenirLogoh llistarProcediments obtenirLogov getNumProcediments obtenirTractament getNumFitxes getNumNormatives llistarTramits llistarUsuaris obtenirLogot llistarFilles obtenirEspaiTerritorial getNumMateries llistarEdificis llistarMateries getNumEdificis getNumPersonal getNumSeccions getNumUsuaris obtenirFotop obtenirLogos"/>
+      <parameter name="allowedMethods" value="getNumPersonal obtenirEspaiTerritorial obtenirTractament llistarProcediments llistarFilles getNumTramits llistarNormatives getNumMateries getNumProcediments llistarMateries getNumEdificis llistarEdificis getNumFilles getNumNormatives obtenirFotog obtenirLogov llistarPersonal llistarSeccions obtenirFotop llistarTramits obtenirLogos obtenirLogot getNumSeccions obtenirLogoh llistarFitxes obtenirPare getNumFitxes getNumUsuaris llistarUsuaris"/>
 
       <arrayMapping
         xmlns:ns="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
-        qname="ns:ArrayOf_xsd_anyType"
-        type="java:java.lang.Object[]"
-        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://espaiTerritorial.v2.api.rolsac.caib.es"
-        qname="ns:EspaiTerritorialDTO"
-        type="java:es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
-        qname="ns:FitxaCriteria"
-        type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        qname="ns:ArrayOfUnitatAdministrativaDTO"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[]"
+        innerType="cmp-ns:UnitatAdministrativaDTO" xmlns:cmp-ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
         xmlns:ns="http://usuari.v2.api.rolsac.caib.es"
         qname="ns:UsuariCriteria"
         type="java:es.caib.rolsac.api.v2.usuari.UsuariCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://personal.v2.api.rolsac.caib.es"
-        qname="ns:PersonalCriteria"
-        type="java:es.caib.rolsac.api.v2.personal.PersonalCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://seccio.v2.api.rolsac.caib.es"
-        qname="ns:SeccioCriteria"
-        type="java:es.caib.rolsac.api.v2.seccio.SeccioCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://edifici.v2.api.rolsac.caib.es"
-        qname="ns:EdificiCriteria"
-        type="java:es.caib.rolsac.api.v2.edifici.EdificiCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -191,33 +143,9 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
-        qname="ns:ProcedimentCriteria"
-        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
-        qname="ns:MateriaCriteria"
-        type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
-        qname="ns:TramitCriteria"
-        type="java:es.caib.rolsac.api.v2.tramit.TramitCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://tractament.v2.api.rolsac.caib.es"
-        qname="ns:TractamentDTO"
-        type="java:es.caib.rolsac.api.v2.tractament.TractamentDTO"
+        xmlns:ns="http://seccio.v2.api.rolsac.caib.es"
+        qname="ns:SeccioCriteria"
+        type="java:es.caib.rolsac.api.v2.seccio.SeccioCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -231,9 +159,17 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-        qname="ns:UnitatAdministrativaCriteria"
-        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        xmlns:ns="http://espaiTerritorial.v2.api.rolsac.caib.es"
+        qname="ns:EspaiTerritorialDTO"
+        type="java:es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://normativa.v2.api.rolsac.caib.es"
+        qname="ns:NormativaCriteria"
+        type="java:es.caib.rolsac.api.v2.normativa.NormativaCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -247,9 +183,80 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://normativa.v2.api.rolsac.caib.es"
-        qname="ns:NormativaCriteria"
-        type="java:es.caib.rolsac.api.v2.normativa.NormativaCriteria"
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentCriteria"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://tractament.v2.api.rolsac.caib.es"
+        qname="ns:TractamentDTO"
+        type="java:es.caib.rolsac.api.v2.tractament.TractamentDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
+        qname="ns:TramitCriteria"
+        type="java:es.caib.rolsac.api.v2.tramit.TramitCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://edifici.v2.api.rolsac.caib.es"
+        qname="ns:EdificiCriteria"
+        type="java:es.caib.rolsac.api.v2.edifici.EdificiCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://personal.v2.api.rolsac.caib.es"
+        qname="ns:PersonalCriteria"
+        type="java:es.caib.rolsac.api.v2.personal.PersonalCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
+        qname="ns:FitxaCriteria"
+        type="java:es.caib.rolsac.api.v2.fitxa.FitxaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://materia.v2.api.rolsac.caib.es"
+        qname="ns:MateriaCriteria"
+        type="java:es.caib.rolsac.api.v2.materia.MateriaCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

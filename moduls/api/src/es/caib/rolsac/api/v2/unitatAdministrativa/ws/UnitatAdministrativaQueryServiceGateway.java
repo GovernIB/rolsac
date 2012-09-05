@@ -148,20 +148,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
 			throws RemoteException {
 
-		Object[] tmpLlista = null;
-		List<UnitatAdministrativaDTO> llistaFilles = null;
-
-		tmpLlista = stub.llistarFilles(id, unitatAdministrativaCriteria);
-		llistaFilles = new ArrayList<UnitatAdministrativaDTO>(Arrays.asList(
-				tmpLlista).size());
-
-		for (Object o : tmpLlista) {
-			UnitatAdministrativaDTO uadto = (UnitatAdministrativaDTO) DTOUtil
-					.object2DTO(o, UnitatAdministrativaDTO.class);
-			llistaFilles.add(uadto);
-		}
-
-		return llistaFilles;
+		return Arrays.asList( stub.llistarFilles(id, unitatAdministrativaCriteria));
 	}
 
 	public List<EdificiDTO> llistarEdificis(long id,

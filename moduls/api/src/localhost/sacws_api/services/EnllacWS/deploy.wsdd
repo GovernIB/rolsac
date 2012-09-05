@@ -15,7 +15,7 @@
   <service name="EnllacWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/EnllacWS"/>
       <parameter name="wsdlServiceElement" value="EnllacQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://procediment.v2.api.rolsac.caib.es,http://fitxa.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://fitxa.v2.api.rolsac.caib.es,http://procediment.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="EnllacWS"/>
       <parameter name="className" value="localhost.sacws_api.services.EnllacWS.EnllacWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="EnllacQueryServiceEJBRemote"/>
@@ -29,6 +29,14 @@
       <parameter name="allowedMethods" value="obtenirProcediment obtenirFitxa"/>
 
       <typeMapping
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentDTO"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
         xmlns:ns="http://fitxa.v2.api.rolsac.caib.es"
         qname="ns:FitxaDTO"
         type="java:es.caib.rolsac.api.v2.fitxa.FitxaDTO"
@@ -40,14 +48,6 @@
         xmlns:ns="http://general.v2.api.rolsac.caib.es"
         qname="ns:EntitatRemota"
         type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
-        qname="ns:ProcedimentDTO"
-        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

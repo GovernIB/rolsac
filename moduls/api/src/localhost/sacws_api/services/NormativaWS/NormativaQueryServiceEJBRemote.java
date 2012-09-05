@@ -17,6 +17,6 @@ public interface NormativaQueryServiceEJBRemote extends java.rmi.Remote {
     public java.lang.Object[] llistarAfectants(long in0) throws java.rmi.RemoteException;
     public int getNumAfectants(long in0) throws java.rmi.RemoteException;
     public es.caib.rolsac.api.v2.arxiu.ArxiuDTO obtenirArxiuNormativa(long in0) throws java.rmi.RemoteException;
-    public java.lang.Object[] llistarAfectacionsAfectants(long in0) throws java.rmi.RemoteException;
-    public java.lang.Object[] llistarAfectacionsAfectades(long in0) throws java.rmi.RemoteException;
+    public es.caib.rolsac.api.v2.afectacio.AfectacioDTO[] llistarAfectacionsAfectants(long in0) throws java.rmi.RemoteException;
+    public es.caib.rolsac.api.v2.afectacio.AfectacioDTO[] llistarAfectacionsAfectades(long in0) throws java.rmi.RemoteException;
 }

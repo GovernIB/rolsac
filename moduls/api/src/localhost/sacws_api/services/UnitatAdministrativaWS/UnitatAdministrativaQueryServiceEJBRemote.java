@@ -21,7 +21,7 @@ public interface UnitatAdministrativaQueryServiceEJBRemote extends java.rmi.Remo
     public int getNumFitxes(long in0) throws java.rmi.RemoteException;
     public int getNumNormatives(long in0) throws java.rmi.RemoteException;
     public es.caib.rolsac.api.v2.tractament.TractamentDTO obtenirTractament(long in0) throws java.rmi.RemoteException;
-    public java.lang.Object[] llistarFilles(long in0, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in1) throws java.rmi.RemoteException;
+    public es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO[] llistarFilles(long in0, es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria in1) throws java.rmi.RemoteException;
     public java.lang.Object[] llistarTramits(long in0, es.caib.rolsac.api.v2.tramit.TramitCriteria in1) throws java.rmi.RemoteException;
     public es.caib.rolsac.api.v2.arxiu.ArxiuDTO obtenirFotop(long in0) throws java.rmi.RemoteException;
     public es.caib.rolsac.api.v2.arxiu.ArxiuDTO obtenirFotog(long in0) throws java.rmi.RemoteException;

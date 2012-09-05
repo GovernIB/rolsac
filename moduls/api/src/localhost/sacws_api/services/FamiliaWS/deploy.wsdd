@@ -15,7 +15,7 @@
   <service name="FamiliaWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/FamiliaWS"/>
       <parameter name="wsdlServiceElement" value="FamiliaQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://procediment.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/FamiliaWS,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://iconaFamilia.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://xml.apache.org/xml-soap,http://procediment.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/FamiliaWS,http://iconaFamilia.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="FamiliaWS"/>
       <parameter name="className" value="localhost.sacws_api.services.FamiliaWS.FamiliaWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="FamiliaQueryServiceEJBRemote"/>
@@ -34,16 +34,8 @@
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="in1" type="tns:IconaFamiliaCriteria" xmlns:tns="http://iconaFamilia.v2.api.rolsac.caib.es"/>
       </operation>
-      <parameter name="allowedMethods" value="llistarProcedimentsLocals getNumProcedimentsLocals getNumIcones llistarIcones"/>
+      <parameter name="allowedMethods" value="llistarIcones getNumIcones getNumProcedimentsLocals llistarProcedimentsLocals"/>
 
-      <typeMapping
-        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
-        qname="ns:ProcedimentCriteria"
-        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
       <arrayMapping
         xmlns:ns="https://localhost:8443/sacws-api/services/FamiliaWS"
         qname="ns:ArrayOf_xsd_anyType"
@@ -52,17 +44,25 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es"
+        qname="ns:IconaFamiliaCriteria"
+        type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://iconaFamilia.v2.api.rolsac.caib.es"
-        qname="ns:IconaFamiliaCriteria"
-        type="java:es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria"
+        xmlns:ns="http://procediment.v2.api.rolsac.caib.es"
+        qname="ns:ProcedimentCriteria"
+        type="java:es.caib.rolsac.api.v2.procediment.ProcedimentCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

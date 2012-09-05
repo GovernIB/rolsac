@@ -64,18 +64,11 @@ public class EspaiTerritorialQueryServiceGateway {
 			EspaiTerritorialCriteria espaiTerritorialCriteria)
 			throws RemoteException {
 
-    	Object[] tmpLlista = null;
-    	List<EspaiTerritorialDTO> llistaEspaisTerritorials = null;
-    	
-		tmpLlista = stub.llistarFills(id, espaiTerritorialCriteria);
-		llistaEspaisTerritorials = new ArrayList<EspaiTerritorialDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) {
-			EspaiTerritorialDTO etdto = (EspaiTerritorialDTO) DTOUtil.object2DTO(o, EspaiTerritorialDTO.class);
-			llistaEspaisTerritorials.add(etdto);
-		}
-    	
-		return llistaEspaisTerritorials;
+		// La definició d'aquest mètode al wsdl es diferent a la genèrica 
+		// per tal d'evitar un ArrayStoreException. Per això no cal fer el 
+		// pas de conversió des de "Object" a "xxxDTO" com a la resta de 
+		// mètodes "llistarXxx"
+		return Arrays.asList( stub.llistarFills(id, espaiTerritorialCriteria)  );
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,

@@ -59,37 +59,12 @@ public class SeccioQueryServiceGateway {
 	}
 	
 	public List<SeccioDTO> llistarPares(long id) throws RemoteException {
-		
-		Object[] tmpLlista = null;
-		List<SeccioDTO> llistaSeccions = null;
-		
-		tmpLlista = stub.llistarPares(id);
-		llistaSeccions = new ArrayList<SeccioDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			SeccioDTO sdto = (SeccioDTO) DTOUtil.object2DTO(o, SeccioDTO.class);							
-			llistaSeccions.add( sdto );
-		}
-			
-		return llistaSeccions;		
+		return Arrays.asList(stub.llistarPares(id));
 	}
 
 	public List<SeccioDTO> llistarFilles(long id, SeccioCriteria seccioCriteria)
 			throws RemoteException {
-		
-		Object[] tmpLlista = null;
-		List<SeccioDTO> llistaFilles = null;
-		
-		tmpLlista = stub.llistarFilles(id, seccioCriteria);
-		llistaFilles = new ArrayList<SeccioDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			SeccioDTO sdto = (SeccioDTO) DTOUtil.object2DTO(o, SeccioDTO.class);							
-			llistaFilles.add( sdto );
-		}
-			
-		return llistaFilles;		
-		
+		return Arrays.asList(stub.llistarPares(id));		
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)

@@ -344,15 +344,15 @@
 	                     verbose="true"
 	    				 serverside="true">
 	    </axis-wsdl2java>    	
-    	    	
+
 	    <axis-wsdl2java url="${ws.etc.wsdl}/EspaiTerritorialWS.wsdl"
 	                     output="${jar.src}"
 	                     typemappingversion="1.1"
 	                     testcase="false"
 	                     verbose="true"
 	    				 serverside="true">
-	    </axis-wsdl2java>    	    	
-    	
+	    </axis-wsdl2java>
+    	    
 	    <axis-wsdl2java url="${ws.etc.wsdl}/EnllacWS.wsdl"
 	                     output="${jar.src}"
 	                     typemappingversion="1.1"
@@ -570,6 +570,14 @@
 	    	verbose="true"
 	    	serverside="true">	    	
 		</axis-wsdl2java>	
+
+		<axis-wsdl2java url="${ws.etc.wsdl}/EstadisticaWS.wsdl"
+	        output="${jar.src}"
+	        typemappingversion="1.1"
+		    testcase="false"
+	    	verbose="true"
+	    	serverside="true">	    	
+		</axis-wsdl2java>	
     	
-    </target>
+    </target>    
 </project>

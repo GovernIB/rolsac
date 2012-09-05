@@ -15,7 +15,7 @@
   <service name="FormulariWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/FormulariWS"/>
       <parameter name="wsdlServiceElement" value="FormulariQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://tramit.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://tramit.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="FormulariWS"/>
       <parameter name="className" value="localhost.sacws_api.services.FormulariWS.FormulariWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="FormulariQueryServiceEJBRemote"/>
@@ -29,12 +29,12 @@
       <operation name="obtenirManual" qname="operNS:obtenirManual" xmlns:operNS="http://intf.ejb.formulari.v2.api.rolsac.caib.es" returnQName="obtenirManualReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="obtenirArchivo obtenirTramit obtenirManual"/>
+      <parameter name="allowedMethods" value="obtenirTramit obtenirManual obtenirArchivo"/>
 
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:EntitatRemota"
-        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -48,9 +48,9 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:EntitatRemota"
+        type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

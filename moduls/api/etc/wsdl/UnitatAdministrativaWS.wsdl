@@ -243,6 +243,16 @@
 					</restriction>
 				</complexContent>
 			</complexType>
+			
+			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->
+			<complexType name="ArrayOfUnitatAdministrativaDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns1:UnitatAdministrativaDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			<!--  -->			
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
@@ -253,8 +263,7 @@
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+			<import namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -776,7 +785,7 @@
 		<wsdl:part name="in1" type="tns9:UsuariCriteria" />
 	</wsdl:message>
 	<wsdl:message name="llistarFillesResponse">
-		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOf_xsd_anyType" />
+		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
 	</wsdl:message>
 	<wsdl:message name="obtenirLogosRequest">
 		<wsdl:part name="in0" type="xsd:long" />

@@ -15,7 +15,7 @@
   <service name="EspaiTerritorialWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"/>
       <parameter name="wsdlServiceElement" value="EspaiTerritorialQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/EspaiTerritorialWS,http://unitatAdministrativa.v2.api.rolsac.caib.es,http://espaiTerritorial.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://espaiTerritorial.v2.api.rolsac.caib.es,http://arxiu.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://unitatAdministrativa.v2.api.rolsac.caib.es,https://localhost:8443/sacws-api/services/EspaiTerritorialWS,http://general.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="EspaiTerritorialWS"/>
       <parameter name="className" value="localhost.sacws_api.services.EspaiTerritorialWS.EspaiTerritorialWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="EspaiTerritorialQueryServiceEJBRemote"/>
@@ -26,7 +26,7 @@
       <operation name="getNumUnitatsAdministratives" qname="operNS:getNumUnitatsAdministratives" xmlns:operNS="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es" returnQName="getNumUnitatsAdministrativesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <operation name="llistarFills" qname="operNS:llistarFills" xmlns:operNS="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es" returnQName="llistarFillsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+      <operation name="llistarFills" qname="operNS:llistarFills" xmlns:operNS="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es" returnQName="llistarFillsReturn" returnType="rtns:ArrayOfEspaiTerritorialDTO" xmlns:rtns="https://localhost:8443/sacws-api/services/EspaiTerritorialWS" returnItemType="tns2:EspaiTerritorialDTO" xmlns:tns2="http://espaiTerritorial.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="in1" type="tns:EspaiTerritorialCriteria" xmlns:tns="http://espaiTerritorial.v2.api.rolsac.caib.es"/>
       </operation>
@@ -43,20 +43,19 @@
       <operation name="obtenirLogo" qname="operNS:obtenirLogo" xmlns:operNS="http://intf.ejb.espaiTerritorial.v2.api.rolsac.caib.es" returnQName="obtenirLogoReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es" soapAction="" >
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
-      <parameter name="allowedMethods" value="getNumFills llistarUnitatsAdministratives getNumUnitatsAdministratives obtenirPare llistarFills obtenirLogo obtenirMapa"/>
+      <parameter name="allowedMethods" value="llistarUnitatsAdministratives getNumUnitatsAdministratives obtenirMapa obtenirLogo obtenirPare llistarFills getNumFills"/>
 
-      <typeMapping
-        xmlns:ns="http://espaiTerritorial.v2.api.rolsac.caib.es"
-        qname="ns:EspaiTerritorialDTO"
-        type="java:es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+      <arrayMapping
+        xmlns:ns="https://localhost:8443/sacws-api/services/EspaiTerritorialWS"
+        qname="ns:ArrayOfEspaiTerritorialDTO"
+        type="java:es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO[]"
+        innerType="cmp-ns:EspaiTerritorialDTO" xmlns:cmp-ns="http://espaiTerritorial.v2.api.rolsac.caib.es"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
-        qname="ns:UnitatAdministrativaCriteria"
-        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+        qname="ns:ArxiuDTO"
+        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -70,17 +69,9 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
-        qname="ns:ArxiuDTO"
-        type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+        xmlns:ns="http://espaiTerritorial.v2.api.rolsac.caib.es"
+        qname="ns:EspaiTerritorialDTO"
+        type="java:es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -90,6 +81,22 @@
         qname="ns:ArrayOf_xsd_anyType"
         type="java:java.lang.Object[]"
         innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://unitatAdministrativa.v2.api.rolsac.caib.es"
+        qname="ns:UnitatAdministrativaCriteria"
+        type="java:es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
   </service>

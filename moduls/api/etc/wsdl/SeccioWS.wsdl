@@ -73,6 +73,17 @@
 					</restriction>
 				</complexContent>
 			</complexType>
+			
+			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->			
+			<complexType name="ArrayOfSeccioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns3:SeccioDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			<!--  -->			
+			
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
@@ -97,6 +108,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			 
 			<complexType name="SeccioDTO">
 				<sequence>
 					<element name="codigoEstandard" nillable="true" type="xsd:string" />
@@ -108,6 +120,7 @@
 					<element name="perfil" nillable="true" type="xsd:string" />
 				</sequence>
 			</complexType>
+			 
 			<complexType name="SeccioCriteria">
 				<complexContent>
 					<extension base="tns2:BasicCriteria">
@@ -188,7 +201,7 @@
 		<wsdl:part name="in0" type="xsd:long" />
 	</wsdl:message>
 	<wsdl:message name="llistarParesResponse">
-		<wsdl:part name="llistarParesReturn" type="impl:ArrayOf_xsd_anyType" />
+		<wsdl:part name="llistarParesReturn" type="impl:ArrayOfSeccioDTO" />
 	</wsdl:message>
 	<wsdl:message name="llistarFillesRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -198,7 +211,7 @@
 		<wsdl:part name="getNumFillesReturn" type="xsd:int" />
 	</wsdl:message>
 	<wsdl:message name="llistarFillesResponse">
-		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOf_xsd_anyType" />
+		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOfSeccioDTO" />
 	</wsdl:message>
 	<wsdl:message name="getNumFitxesResponse">
 		<wsdl:part name="getNumFitxesReturn" type="xsd:int" />

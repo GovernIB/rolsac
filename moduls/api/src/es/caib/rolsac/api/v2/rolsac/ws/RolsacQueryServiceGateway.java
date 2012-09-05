@@ -379,270 +379,104 @@ public class RolsacQueryServiceGateway {
 			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
 			throws QueryServiceException, RemoteException {
 
-		Object[] tmpLlista = null;
-		List<AgrupacioFetVitalDTO> llistaAgrupacionsFetsVitals = null;
-		
-		tmpLlista = stub.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria);
-		llistaAgrupacionsFetsVitals = new ArrayList<AgrupacioFetVitalDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			AgrupacioFetVitalDTO afvdto = (AgrupacioFetVitalDTO) DTOUtil.object2DTO(o, AgrupacioFetVitalDTO.class);							
-			llistaAgrupacionsFetsVitals.add( afvdto );
-		}
-		return llistaAgrupacionsFetsVitals;
+		return Arrays.asList(stub.llistarAgrupacionsFetsVitals(agrupacioFetVitalCriteria));
 	}
 
 	public List<AgrupacioMateriaDTO> llistarAgrupacionsMateries(
 			AgrupacioMateriaCriteria agrupacioMateriaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<AgrupacioMateriaDTO> llistaAgrupacionsMateries = null;
-		
-		tmpLlista = stub.llistarAgrupacionsMateries(agrupacioMateriaCriteria);
-		llistaAgrupacionsMateries = new ArrayList<AgrupacioMateriaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			AgrupacioMateriaDTO amdto = (AgrupacioMateriaDTO) DTOUtil.object2DTO(o, AgrupacioMateriaDTO.class);							
-			llistaAgrupacionsMateries.add( amdto );
-		}
-		return llistaAgrupacionsMateries;
+		return Arrays.asList(stub.llistarAgrupacionsMateries(agrupacioMateriaCriteria));
 	}
 
 	public List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<ButlletiDTO> llistaButlletins = null;
-		
-		tmpLlista = stub.llistarButlletins(butlletiCriteria);
-		llistaButlletins = new ArrayList<ButlletiDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			ButlletiDTO bdto = (ButlletiDTO) DTOUtil.object2DTO(o, ButlletiDTO.class);							
-			llistaButlletins.add( bdto );
-		}
-		return llistaButlletins;
+		return Arrays.asList(stub.llistarButlletins(butlletiCriteria));
 	}
 
 	public List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria)
 			throws QueryServiceException, RemoteException {
 
-		Object[] tmpLlista = null;
-		List<DocumentDTO> llistaDocuments = null;
-		
-		tmpLlista = stub.llistarDocuments(documentCriteria);
-		llistaDocuments = new ArrayList<DocumentDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			DocumentDTO ddto = (DocumentDTO) DTOUtil.object2DTO(o, DocumentDTO.class);							
-			llistaDocuments.add( ddto );
-		}
-		return llistaDocuments;
-		
+		return Arrays.asList(stub.llistarDocuments(documentCriteria));
 	}
 
 	public List<DocumentTramitDTO> llistarDocumentTramit(
 			DocumentTramitCriteria documentTramitCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<DocumentTramitDTO> llistaDocumentsTramits = null;
-		
-		tmpLlista = stub.llistarDocumentTramit(documentTramitCriteria);
-		llistaDocumentsTramits = new ArrayList<DocumentTramitDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			DocumentTramitDTO dtdto = (DocumentTramitDTO) DTOUtil.object2DTO(o, DocumentTramitDTO.class);							
-			llistaDocumentsTramits.add( dtdto );
-		}
-		return llistaDocumentsTramits;
+		return Arrays.asList(stub.llistarDocumentTramit(documentTramitCriteria));
 	}
 
 	public List<EdificiDTO> llistarEdificis(EdificiCriteria edificCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<EdificiDTO> llistarEdificis = null;
-		
-		tmpLlista = stub.llistarEdificis(edificCriteria);
-		llistarEdificis = new ArrayList<EdificiDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			EdificiDTO dtdto = (EdificiDTO) DTOUtil.object2DTO(o, EdificiDTO.class);							
-			llistarEdificis.add( dtdto );
-		}
-		
-		return llistarEdificis;
+		return Arrays.asList(stub.llistarEdificis(edificCriteria));
 	}
 
 	public List<EnllacDTO> llistarEnllacos(EnllacCriteria enllacCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<EnllacDTO> llistaEnllacos = null;
 		
-		tmpLlista = stub.llistarEnllacos(enllacCriteria);
-		llistaEnllacos = new ArrayList<EnllacDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			EnllacDTO dtdto = (EnllacDTO) DTOUtil.object2DTO(o, EnllacDTO.class);							
-			llistaEnllacos.add( dtdto );
-		}
-		
-		return llistaEnllacos;
+		return Arrays.asList(stub.llistarEnllacos(enllacCriteria));
 	}
 
 	public List<EspaiTerritorialDTO> llistarEspaisTerritorials(
 			EspaiTerritorialCriteria espaiTerritorialCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<EspaiTerritorialDTO> llistaEspaisTerritorials = null;
 		
-		tmpLlista = stub.llistarEspaisTerritorials(espaiTerritorialCriteria);
-		llistaEspaisTerritorials = new ArrayList<EspaiTerritorialDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			EspaiTerritorialDTO etdto = (EspaiTerritorialDTO) DTOUtil.object2DTO(o, EspaiTerritorialDTO.class);							
-			llistaEspaisTerritorials.add( etdto );
-		}
-		
-		return llistaEspaisTerritorials;		
+		return Arrays.asList(stub.llistarEspaisTerritorials(espaiTerritorialCriteria));
 	}
 
 	public List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<FamiliaDTO> llistaFamilies = null;
-		
-		tmpLlista = stub.llistarFamilies(familiaCriteria);
-		llistaFamilies = new ArrayList<FamiliaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			FamiliaDTO fdto = (FamiliaDTO) DTOUtil.object2DTO(o, FamiliaDTO.class);							
-			llistaFamilies.add( fdto );
-		}
-		
-		return llistaFamilies;		
+		return Arrays.asList(stub.llistarFamilies(familiaCriteria));
 	}
 
 	public List<FetVitalDTO> llistarFetsVitals(FetVitalCriteria fetVitalCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<FetVitalDTO> llistaFamilies = null;
 		
-		tmpLlista = stub.llistarFetsVitals(fetVitalCriteria);
-		llistaFamilies = new ArrayList<FetVitalDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			FetVitalDTO fdto = (FetVitalDTO) DTOUtil.object2DTO(o, FamiliaDTO.class);							
-			llistaFamilies.add( fdto );
-		}
-		
-		return llistaFamilies;		
+		return Arrays.asList(stub.llistarFetsVitals(fetVitalCriteria));
 	}
 
 	public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<FitxaDTO> llistaFitxes = null;
 		
-		tmpLlista = stub.llistarFitxes(fitxaCriteria);
-		llistaFitxes = new ArrayList<FitxaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			FitxaDTO fdto = (FitxaDTO) DTOUtil.object2DTO(o, FitxaDTO.class);							
-			llistaFitxes.add( fdto );
-		}
-		
-		return llistaFitxes;		
+		return Arrays.asList(stub.llistarFitxes(fitxaCriteria));
 	}
 
 	public List<FitxaUADTO> llistarFitxesUA(FitxaUACriteria fitxaUACriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<FitxaUADTO> llistaFitxesUA = null;
-		
-		tmpLlista = stub.llistarFitxesUA(fitxaUACriteria);
-		llistaFitxesUA = new ArrayList<FitxaUADTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			FitxaUADTO fuadto = (FitxaUADTO) DTOUtil.object2DTO(o, FitxaUADTO.class);							
-			llistaFitxesUA.add( fuadto );
-		}
-		
-		return llistaFitxesUA;		
+	
+		return Arrays.asList(stub.llistarFitxesUA(fitxaUACriteria));
 	}
 
 	public List<FormulariDTO> llistarFormularis(
 			FormulariCriteria formulariCriteria) throws QueryServiceException,
 			RemoteException {
-		Object[] tmpLlista = null;
-		List<FormulariDTO> llistaFormularis = null;
 		
-		tmpLlista = stub.llistarFormularis(formulariCriteria);
-		llistaFormularis = new ArrayList<FormulariDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			FormulariDTO fdto = (FormulariDTO) DTOUtil.object2DTO(o, FormulariDTO.class);							
-			llistaFormularis.add( fdto );
-		}
-		
-		return llistaFormularis;		
+		return Arrays.asList(stub.llistarFormularis(formulariCriteria));
 	}
 
 	public List<IconaFamiliaDTO> llistarIconesFamilies(
 			IconaFamiliaCriteria iconaFamiliaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<IconaFamiliaDTO> llistaIconesFamilies = null;
-		
-		tmpLlista = stub.llistarIconesFamilies(iconaFamiliaCriteria);
-		llistaIconesFamilies = new ArrayList<IconaFamiliaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			IconaFamiliaDTO fdto = (IconaFamiliaDTO) DTOUtil.object2DTO(o, IconaFamiliaDTO.class);							
-			llistaIconesFamilies.add( fdto );
-		}
-		
-		return llistaIconesFamilies;		
+		return Arrays.asList(stub.llistarIconesFamilies(iconaFamiliaCriteria));
 	}
 
 	public List<IconaMateriaDTO> llistarIconesMateries(
 			IconaMateriaCriteria iconaMateriaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<IconaMateriaDTO> llistaIconesMateries = null;
-		
-		tmpLlista = stub.llistarIconesMateries(iconaMateriaCriteria);
-		llistaIconesMateries = new ArrayList<IconaMateriaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			IconaMateriaDTO fdto = (IconaMateriaDTO) DTOUtil.object2DTO(o, IconaMateriaDTO.class);							
-			llistaIconesMateries.add( fdto );
-		}
-		
-		return llistaIconesMateries;		
+		return Arrays.asList(stub.llistarIconesMateries(iconaMateriaCriteria));
 		
 	}
 
 	public List<MateriaDTO> llistarMateries(MateriaCriteria materiaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<MateriaDTO> llistaMateries = null;
-		
-		tmpLlista = stub.llistarMateries(materiaCriteria);
-		llistaMateries = new ArrayList<MateriaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			MateriaDTO mdto = (MateriaDTO) DTOUtil.object2DTO(o, MateriaDTO.class);							
-			llistaMateries.add( mdto );
-		}
-		
-		return llistaMateries;		
+		return Arrays.asList(stub.llistarMateries(materiaCriteria));
 		
 	}
 
@@ -650,240 +484,91 @@ public class RolsacQueryServiceGateway {
 			MateriaAgrupacioCriteria materiaAgrupacioCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<MateriaAgrupacioDTO> llistaMateriesAgrupacions = null;
-		
-		tmpLlista = stub.llistarMateriesAgrupacions(materiaAgrupacioCriteria);
-		llistaMateriesAgrupacions = new ArrayList<MateriaAgrupacioDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			MateriaAgrupacioDTO madto = (MateriaAgrupacioDTO) DTOUtil.object2DTO(o, MateriaAgrupacioDTO.class);							
-			llistaMateriesAgrupacions.add( madto );
-		}
-		
-		return llistaMateriesAgrupacions;		
+		return Arrays.asList(stub.llistarMateriesAgrupacions(materiaAgrupacioCriteria));
 	}
 
 	public List<NormativaDTO> llistarNormatives(
 			NormativaCriteria normativaCriteria) throws QueryServiceException,
 			RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<NormativaDTO> llistaNormatives = null;
-		
-		tmpLlista = stub.llistarNormatives(normativaCriteria);
-		llistaNormatives = new ArrayList<NormativaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			NormativaDTO ndto = (NormativaDTO) DTOUtil.object2DTO(o, NormativaDTO.class);							
-			llistaNormatives.add( ndto );
-		}
-		
-		return llistaNormatives;		
+		return Arrays.asList(stub.llistarNormatives(normativaCriteria));
 	}
 
 	public List<PerfilDTO> llistarPerfils(PerfilCriteria perfilCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<PerfilDTO> llistaPerfils = null;
 		
-		tmpLlista = stub.llistarPerfils(perfilCriteria);
-		llistaPerfils = new ArrayList<PerfilDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			PerfilDTO pdto = (PerfilDTO) DTOUtil.object2DTO(o, PerfilDTO.class);							
-			llistaPerfils.add( pdto );
-		}
-		
-		return llistaPerfils;		
+		return Arrays.asList(stub.llistarPerfils(perfilCriteria));
 	}
 
 	public List<PersonalDTO> llistarPersonal(PersonalCriteria personalCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<PersonalDTO> llistaPersonal = null;
 		
-		tmpLlista = stub.llistarPersonal(personalCriteria);
-		llistaPersonal = new ArrayList<PersonalDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			PersonalDTO pdto = (PersonalDTO) DTOUtil.object2DTO(o, PersonalDTO.class);							
-			llistaPersonal.add( pdto );
-		}
-		
-		return llistaPersonal;		
+		return Arrays.asList(stub.llistarPersonal(personalCriteria));
 	}
 
 	public List<ProcedimentDTO> llistarProcediments(
 			ProcedimentCriteria procedimentCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<ProcedimentDTO> llistaProcediments = null;
 		
-		tmpLlista = stub.llistarProcediments(procedimentCriteria);
-		llistaProcediments = new ArrayList<ProcedimentDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			ProcedimentDTO pdto = (ProcedimentDTO) DTOUtil.object2DTO(o, ProcedimentDTO.class);							
-			llistaProcediments.add( pdto );
-		}
-		
-		return llistaProcediments;		
+		return Arrays.asList(stub.llistarProcediments(procedimentCriteria));	
 	}
 
 	public List<PublicObjectiuDTO> llistarPublicsObjectius(
 			PublicObjectiuCriteria publicObjectiuCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<PublicObjectiuDTO> llistaPublicsObjectius = null;
 		
-		tmpLlista = stub.llistarPublicsObjectius(publicObjectiuCriteria);
-		llistaPublicsObjectius = new ArrayList<PublicObjectiuDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			PublicObjectiuDTO podto = (PublicObjectiuDTO) DTOUtil.object2DTO(o, PublicObjectiuDTO.class);							
-			llistaPublicsObjectius.add( podto );
-		}
-		
-		return llistaPublicsObjectius;		
+		return Arrays.asList(stub.llistarPublicsObjectius(publicObjectiuCriteria));
 		
 	}
 
 	public List<SeccioDTO> llistarSeccions(SeccioCriteria seccioCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<SeccioDTO> llistaSeccions = null;
 		
-		tmpLlista = stub.llistarSeccions(seccioCriteria);
-		llistaSeccions = new ArrayList<SeccioDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			SeccioDTO sdto = (SeccioDTO) DTOUtil.object2DTO(o, SeccioDTO.class);							
-			llistaSeccions.add( sdto );
-		}
-		
-		return llistaSeccions;		
+		return Arrays.asList(stub.llistarSeccions(seccioCriteria));
 	}
 
 	public List<TaxaDTO> llistarTaxes(TaxaCriteria taxaCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<TaxaDTO> llistaTaxes = null;
 		
-		tmpLlista = stub.llistarTaxes(taxaCriteria);
-		llistaTaxes = new ArrayList<TaxaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			TaxaDTO tdto = (TaxaDTO) DTOUtil.object2DTO(o, TaxaDTO.class);							
-			llistaTaxes.add( tdto );
-		}
-		
-		return llistaTaxes;		
-
+		return Arrays.asList(stub.llistarTaxes(taxaCriteria));
 	}
 
 	public List<TramitDTO> llistarTramits(TramitCriteria tramitCriteria)
 			throws QueryServiceException, RemoteException {
-		Object[] tmpLlista = null;
-		List<TramitDTO> llistaTaxes = null;
 		
-		tmpLlista = stub.llistarTramit(tramitCriteria);
-		llistaTaxes = new ArrayList<TramitDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			TramitDTO tdto = (TramitDTO) DTOUtil.object2DTO(o, TramitDTO.class);							
-			llistaTaxes.add( tdto );
-		}
-		
-		return llistaTaxes;		
+		return Arrays.asList(stub.llistarTramit(tramitCriteria));
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;
-		
-		tmpLlista = stub.llistarUnitatsAdministratives(unitatAdministrativaCriteria);
-		llistaUnitatsAdministratives = new ArrayList<UnitatAdministrativaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			UnitatAdministrativaDTO tdto = (UnitatAdministrativaDTO) DTOUtil.object2DTO(o, UnitatAdministrativaDTO.class);							
-			llistaUnitatsAdministratives.add( tdto );
-		}
-		
-		return llistaUnitatsAdministratives;		
+		return Arrays.asList(stub.llistarUnitatsAdministratives(unitatAdministrativaCriteria));
 	}
 
 	public List<UnitatMateriaDTO> llistarUnitatsMateries(
 			UnitatMateriaCriteria unitatMateriaCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<UnitatMateriaDTO> llistaUnitatsMateries = null;
-		
-		tmpLlista = stub.llistarUnitatsMateries(unitatMateriaCriteria);
-		llistaUnitatsMateries = new ArrayList<UnitatMateriaDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			UnitatMateriaDTO umdto = (UnitatMateriaDTO) DTOUtil.object2DTO(o, UnitatMateriaDTO.class);							
-			llistaUnitatsMateries.add( umdto );
-		}
-		
-		return llistaUnitatsMateries;
+		return Arrays.asList(stub.llistarUnitatsMateries(unitatMateriaCriteria));
 	}
 
 	public List<UsuariDTO> llistarUsuaris(UsuariCriteria usuariCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<UsuariDTO> llistaUsuaris = null;
-		
-		tmpLlista = stub.llistarUsuaris(usuariCriteria);
-		llistaUsuaris = new ArrayList<UsuariDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			UsuariDTO umdto = (UsuariDTO) DTOUtil.object2DTO(o, UsuariDTO.class);							
-			llistaUsuaris.add( umdto );
-		}
-		
-		return llistaUsuaris;
+		return Arrays.asList(stub.llistarUsuaris(usuariCriteria));
 	}
 
 	public List<TipusDTO> llistarTipus(TipusCriteria tipusCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<TipusDTO> llistaTipus = null;
-		
-		tmpLlista = stub.llistarTipus(tipusCriteria);
-		llistaTipus = new ArrayList<TipusDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			TipusDTO tdto = (TipusDTO) DTOUtil.object2DTO(o, TipusDTO.class);							
-			llistaTipus.add( tdto );
-		}
-		
-		return llistaTipus;
-		
+		return Arrays.asList(stub.llistarTipus(tipusCriteria));
 	}
 
 	public List<TipusAfectacioDTO> llistarTipusAfectacio(
 			TipusAfectacioCriteria tipusAfectacioCriteria)
 			throws QueryServiceException, RemoteException {
 		
-		Object[] tmpLlista = null;
-		List<TipusAfectacioDTO> llistaTipusAfectacio = null;
-		
-		tmpLlista = stub.llistarTipusAfectacio(tipusAfectacioCriteria);
-		llistaTipusAfectacio = new ArrayList<TipusAfectacioDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) { 				
-			TipusAfectacioDTO tdto = (TipusAfectacioDTO) DTOUtil.object2DTO(o, TipusAfectacioDTO.class);							
-			llistaTipusAfectacio.add( tdto );
-		}
-		
-		return llistaTipusAfectacio;
+		return Arrays.asList(stub.llistarTipusAfectacio(tipusAfectacioCriteria));
 	}
 }

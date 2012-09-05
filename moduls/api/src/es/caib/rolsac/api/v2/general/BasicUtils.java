@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
@@ -127,6 +128,8 @@ public class BasicUtils {
                 stringValue = booleanToString((Boolean) value);
             } else if (Date.class.equals(value.getClass())) {
                 stringValue = ByDateCriteria.DATE_CRITERIA_FORMATTER.format(value);
+            } else if (Calendar.class.equals(value.getClass()) || GregorianCalendar.class.equals(value.getClass()) ) {
+            	stringValue = ByDateCriteria.DATE_CRITERIA_FORMATTER.format(((Calendar) value).getTime());
             } else {
                 stringValue = String.valueOf(value);
             }
@@ -277,7 +280,7 @@ public class BasicUtils {
             } else if (Date.class.equals(propertyClass)) {
                 value = (Date) value; // Para evitar problemas con java.sql.Timestamp.
                 valueClasses[0] = Date.class;
-            } else if (Calendar.class.equals(propertyClass)) {
+            } else if (Calendar.class.equals(propertyClass) || GregorianCalendar.class.equals(value.getClass())) {
             	// Para evitar problemas con los DTO generados por WSDL
             	Long tmpValue = ((Timestamp)value).getTime();
             	value = Calendar.getInstance(); 
