@@ -95,9 +95,46 @@
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     var txtUsernameObligatorio = "<spring:message code='usuari.formulari.username.obligatori'/>";
     var txtPasswordObligatorio = "<spring:message code='usuari.formulari.password.obligatori'/>";
+    var txtPerfilObligatorio = "<spring:message code='usuari.formulari.perfil.obligatori'/>";
 
     // dades formularis
     var FormulariDades = [
+        // username
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_username",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 100,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtUsernameObligatorio,
+                }
+        },
+        // password
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_password",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 100,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtPasswordObligatorio,
+                }
+        },
         // nom
         {
             "modo": "individual",
@@ -117,42 +154,16 @@
                     "tipus": txtNombreNoSoloNumeros
                 }
         },
-        
-        // username
+        // perfil
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_username",
+            "etiquetaValor": "item_perfil",
             "obligatori": "si",
             "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 100,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
             "error":
                 {
-                    "obligatori": txtUsernameObligatorio,
-                }
-        },
-     
-        // password
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_password",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 100,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": txtPasswordObligatorio,
+                    "obligatori": txtPerfilObligatorio
                 }
         }
     ];
