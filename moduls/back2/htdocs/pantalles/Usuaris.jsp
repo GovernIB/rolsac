@@ -95,29 +95,10 @@
     var txtNombreNoSoloNumeros = "<spring:message code='personal.formulari.nom.no_nomes_numeros'/>";
     var txtUsernameObligatorio = "<spring:message code='usuari.formulari.username.obligatori'/>";
     var txtPasswordObligatorio = "<spring:message code='usuari.formulari.password.obligatori'/>";
+    var txtPerfilObligatorio = "<spring:message code='usuari.formulari.perfil.obligatori'/>";
 
     // dades formularis
     var FormulariDades = [
-        // nom
-        {
-            "modo": "individual",
-            "etiqueta": "id",
-            "etiquetaValor": "item_nom",
-            "obligatori": "si",
-            "tipus": "alfanumeric",
-            "caracters":
-                {
-                    "maxim": 230,
-                    "mostrar": "no",
-                    "abreviat": "no"
-                },
-            "error":
-                {
-                    "obligatori": txtNombreObligatorio,
-                    "tipus": txtNombreNoSoloNumeros
-                }
-        },
-        
         // username
         {
             "modo": "individual",
@@ -136,7 +117,6 @@
                     "obligatori": txtUsernameObligatorio,
                 }
         },
-     
         // password
         {
             "modo": "individual",
@@ -153,6 +133,37 @@
             "error":
                 {
                     "obligatori": txtPasswordObligatorio,
+                }
+        },
+         // nom
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_nom",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "caracters":
+                {
+                    "maxim": 230,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+            "error":
+                {
+                    "obligatori": txtNombreObligatorio,
+                    "tipus": txtNombreNoSoloNumeros
+                }
+        },
+        // perfil
+        {
+            "modo": "individual",
+            "etiqueta": "id",
+            "etiquetaValor": "item_perfil",
+            "obligatori": "si",
+            "tipus": "alfanumeric",
+            "error":
+                {
+                    "obligatori": txtPerfilObligatorio
                 }
         }
     ];

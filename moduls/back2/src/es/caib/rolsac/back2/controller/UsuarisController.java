@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -196,6 +197,13 @@ public class UsuarisController extends PantallaBaseController {
 		String error = null;
 
 		try {
+		    if (StringUtils.isBlank(request.getParameter("item_nom")) || 
+                    StringUtils.isBlank(request.getParameter("item_username")) ||
+                    StringUtils.isBlank(request.getParameter("item_password")) ||
+                    StringUtils.isBlank(request.getParameter("item_perfil")) ) {
+                throw new Exception(messageSource.getMessage("error.falten_camps", null, request.getLocale()));
+            }
+		    
 			UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
 			Usuario usuari = new Usuario();
 			Usuario usuariOld;			
@@ -265,7 +273,9 @@ public class UsuarisController extends PantallaBaseController {
 				result = new IdNomDTO(-2l, error);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-		}
+		} catch (Exception e) {
+            result = new IdNomDTO(-3l, e.getMessage());
+        }
 
 		return result;
 	}
