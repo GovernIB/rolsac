@@ -285,7 +285,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		}
 
-		// Paràmetres ordenació
+		// Parï¿½metres ordenaciï¿½
 		String ordreCamp = request.getParameter("ordreCamp");
 		if (ordreCamp != null && !"".equals(ordreCamp)) {
 			paramMap.put("ordreCamp", ordreCamp);
@@ -442,7 +442,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	        } 
             // Fin documentos relacionados
            			
-			// Trámites relacionados
+			// Trï¿½mites relacionados
 			List<IdNomDTO> listaTramitesDTO = null;
 			
 			if ( proc.getTramites() != null ) {
@@ -458,7 +458,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} 	
 			
 			resultats.put("tramites", listaTramitesDTO);
-			//Fin trámites relacionados
+			//Fin trï¿½mites relacionados
 			
 			// Materias asociadas
             if (proc.getMaterias() != null) {             
@@ -642,6 +642,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
 				procediment.setTramites(procedimentOld.getTramites());					
 				procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+				procediment.setMaterias(procedimentOld.getMaterias());
 //				} else {
 //					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
 //					procediment.setUnidadAdministrativa(ua);
@@ -651,7 +652,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
              * En el primer caso es bastante probable que se repitan la mayoria de materias.
              */
-            if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) && isModuloModificado("modulo_materias_modificado",request)){
+            if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) && isModuloModificado("modulo_materias_modificado",request)) {
                 MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
                 Set<Materia> materiesNoves = new HashSet<Materia>();
                 String[] codisMateriaNous = request.getParameter("materies").split(",");
@@ -674,11 +675,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                     }                        
                 }
                 
-                procediment.setMaterias(materiesNoves);                                   
+                procediment.setMaterias(materiesNoves);                             
             }
             // Fin Materias
             
-            // Actualizar la lista de Trámites
+            // Actualizar la lista de Trï¿½mites
             String tramitsProcediment = request.getParameter("tramitsProcediment");
             TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
             
@@ -726,7 +727,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 	}
             	}                	                   	
             	
-            	// Actualizamos el orden de la lista de trámites
+            	// Actualizamos el orden de la lista de trï¿½mites
             	HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
             	
             	for (Tramite tramite : tramitesNuevos ) {
@@ -746,7 +747,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             
             	procediment.setTramites(null);
             }               
-            //Fin trámites
+            //Fin trï¿½mites
             
             // Hechos vitales 
             if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado",request)) {
