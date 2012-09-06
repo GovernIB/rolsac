@@ -88,7 +88,7 @@
 	
 	    assemble01ROLSAC  : construeix el ear amb tots els components existents
 	    main01ROLSAC      : construeix tota l'aplicacio
-	    makeSar           : genera el arxiu SAR per al desplegament
+	    makeSar           : genera el arxiu SAR per al desplegament (deprecated)
 	    clean             : esborra els directoris de treball
 	    deploy01ROLSAC    : copia el ear al directori de deploy
         ---------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@
   <!-- ================================================================== -->
 
 
-	<target name="assemble01ROLSAC" depends="makeSar" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
+	<target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
 		
 		<antcall target="make.application.xml"/>
