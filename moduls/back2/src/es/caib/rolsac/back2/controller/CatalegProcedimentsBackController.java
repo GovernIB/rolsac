@@ -642,6 +642,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setHechosVitalesProcedimientos(procedimentOld.getHechosVitalesProcedimientos());
 				procediment.setTramites(procedimentOld.getTramites());					
 				procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
+				procediment.setMaterias(procedimentOld.getMaterias());
 //				} else {
 //					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
 //					procediment.setUnidadAdministrativa(ua);

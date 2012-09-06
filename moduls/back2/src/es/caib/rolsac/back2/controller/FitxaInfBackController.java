@@ -143,7 +143,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 
         String lang = request.getLocale().getLanguage();
         
-		//Obtenemos la ordenación por parámetro
+		//Obtenemos la ordenaciï¿½n por parï¿½metro
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
@@ -501,7 +501,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         try {      
         	
-        	//Aqui nos llegarïa un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+        	//Aqui nos llegarï¿½a un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
     		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
@@ -587,6 +587,8 @@ public class FitxaInfBackController extends PantallaBaseController {
                 fitxa.setFichasua(fitxaOld.getFichasua());
                 fitxa.setDocumentos(fitxaOld.getDocumentos());
                 fitxa.setEnlaces(fitxaOld.getEnlaces());
+                fitxa.setMaterias(fitxaOld.getMaterias());
+                fitxa.setHechosVitales(fitxaOld.getHechosVitales());
 			} 
 			
 			if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
