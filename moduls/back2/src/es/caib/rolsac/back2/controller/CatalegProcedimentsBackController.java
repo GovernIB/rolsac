@@ -652,31 +652,35 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
              * En el primer caso es bastante probable que se repitan la mayoria de materias.
              */
-            if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies")) && isModuloModificado("modulo_materias_modificado",request)) {
-                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                Set<Materia> materiesNoves = new HashSet<Materia>();
-                String[] codisMateriaNous = request.getParameter("materies").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i < codisMateriaNous.length; i++){
-                        for (Materia materia: procedimentOld.getMaterias()){
-                            if(materia.getId().equals(Long.valueOf(codisMateriaNous[i]))) {//materia ya existente
-                                materiesNoves.add(materia);
-                                codisMateriaNous[i] = null;
-                                break;
-                            }
-                        }                            
-                    }                         
-                }                    
-                
-                for (String codiMateria: codisMateriaNous){
-                    if (codiMateria != null){
-                        materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
-                    }                        
+			if (isModuloModificado("modulo_materias_modificado", request)) {
+                if (request.getParameter("materies") != null && !"".equals(request.getParameter("materies"))) {
+                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                    Set<Materia> materiesNoves = new HashSet<Materia>();
+                    String[] codisMateriaNous = request.getParameter("materies").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i < codisMateriaNous.length; i++){
+                            for (Materia materia: procedimentOld.getMaterias()){
+                                if(materia.getId().equals(Long.valueOf(codisMateriaNous[i]))) {//materia ya existente
+                                    materiesNoves.add(materia);
+                                    codisMateriaNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiMateria: codisMateriaNous){
+                        if (codiMateria != null){
+                            materiesNoves.add(materiaDelegate.obtenerMateria(Long.valueOf(codiMateria)));
+                        }                        
+                    }
+                    
+                    procediment.setMaterias(materiesNoves);                             
+                } else {
+                    procediment.setMaterias(new HashSet<Materia>());
                 }
-                
-                procediment.setMaterias(materiesNoves);                             
-            }
+			}
             // Fin Materias
             
             // Actualizar la lista de Tr�mites

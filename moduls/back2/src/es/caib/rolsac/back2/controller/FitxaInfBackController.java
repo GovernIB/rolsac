@@ -674,70 +674,77 @@ public class FitxaInfBackController extends PantallaBaseController {
             
             //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
             //probable que se repitan la mayoria de materias.
-            if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies")) && isModuloModificado("modulo_materias_modificado", valoresForm)){
-                MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                Set<Materia> materiesNoves = new HashSet<Materia>();
-                String[] codisMateriaNous = valoresForm.get("materies").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i < codisMateriaNous.length; i++) {
-                        for (Materia materia : fitxaOld.getMaterias()) {
-                            if(materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))){//materia ya existente
-                                materiesNoves.add(materia);
-                                codisMateriaNous[i] = null;
-                                break;
-                            }
-                        }                            
-                    }                         
-                }                    
-                
-                for (String codiMateria: codisMateriaNous){
-                    if (codiMateria != null){
-                        Long codi = ParseUtil.parseLong(codiMateria);
-                        log.debug("Inici de obtenerMateria(" + codi + ")");
-                        startTrace = new Date();
-                        materiesNoves.add(materiaDelegate.obtenerMateria(codi));
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de obtenerMateria(" + codi + "): " + execTime + " milisegons.");
-                    }                        
+            if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
+                if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))){
+                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+                    Set<Materia> materiesNoves = new HashSet<Materia>();
+                    String[] codisMateriaNous = valoresForm.get("materies").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i < codisMateriaNous.length; i++) {
+                            for (Materia materia : fitxaOld.getMaterias()) {
+                                if(materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))){//materia ya existente
+                                    materiesNoves.add(materia);
+                                    codisMateriaNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiMateria: codisMateriaNous){
+                        if (codiMateria != null){
+                            Long codi = ParseUtil.parseLong(codiMateria);
+                            log.debug("Inici de obtenerMateria(" + codi + ")");
+                            startTrace = new Date();
+                            materiesNoves.add(materiaDelegate.obtenerMateria(codi));
+                            execTime = new Date().getTime() - startTrace.getTime();
+                            log.debug("Temps d'execucio de obtenerMateria(" + codi + "): " + execTime + " milisegons.");
+                        }                        
+                    }
+                    
+                  fitxa.setMaterias(materiesNoves);                                                 
+                } else {
+                    fitxa.setMaterias(new HashSet<Materia>());
                 }
-                
-              fitxa.setMaterias(materiesNoves);                                                 
             }
             
             //Fets vitals
                 
-            if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals")) && isModuloModificado("modulo_hechos_modificado", valoresForm)){
-                HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
-                Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
-                String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i<codisFetsNous.length; i++){
-                        for (HechoVital fetVital: fitxaOld.getHechosVitales()){
-                            if(fetVital.getId().equals(ParseUtil.parseLong(codisFetsNous[i]))){
-                                fetsVitalsNous.add(fetVital);
-                                codisFetsNous[i] = null;
-                                break;
-                            }
-                        }                            
-                    }                         
-                }                    
-                
-                for (String codiFetVital: codisFetsNous){
-                    if (codiFetVital != null){
-                        Long codi = ParseUtil.parseLong(codiFetVital);
-                        log.debug("Inici de obtenerHechoVital(" + codi + ")");
-                        startTrace = new Date();
-                        fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de obtenerHechoVital(" + codi + "): " + execTime + " milisegons.");
-                    }                        
+            if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
+                if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))){
+                    HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+                    Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
+                    String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
+                    
+                    if (edicion){
+                        for (int i = 0; i<codisFetsNous.length; i++){
+                            for (HechoVital fetVital: fitxaOld.getHechosVitales()){
+                                if(fetVital.getId().equals(ParseUtil.parseLong(codisFetsNous[i]))){
+                                    fetsVitalsNous.add(fetVital);
+                                    codisFetsNous[i] = null;
+                                    break;
+                                }
+                            }                            
+                        }                         
+                    }                    
+                    
+                    for (String codiFetVital: codisFetsNous){
+                        if (codiFetVital != null){
+                            Long codi = ParseUtil.parseLong(codiFetVital);
+                            log.debug("Inici de obtenerHechoVital(" + codi + ")");
+                            startTrace = new Date();
+                            fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
+                            execTime = new Date().getTime() - startTrace.getTime();
+                            log.debug("Temps d'execucio de obtenerHechoVital(" + codi + "): " + execTime + " milisegons.");
+                        }                        
+                    }
+                    
+                    fitxa.setHechosVitales(fetsVitalsNous);                                                 
+                } else {
+                    fitxa.setHechosVitales(new HashSet<HechoVital>());
                 }
-                
-                fitxa.setHechosVitales(fetsVitalsNous);                                                 
             }
-                
             
             
            // Documents
