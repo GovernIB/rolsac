@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.PersonalWS.PersonalWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
@@ -13,13 +11,17 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class PersonalQueryServiceGateway {
 
 	PersonalWSSoapBindingStub stub;
+	PersonalQueryServiceEJBRemoteServiceLocator locator;
 	
 	public PersonalQueryServiceGateway() {
 
 		try {
+			
+			locator = new PersonalQueryServiceEJBRemoteServiceLocator();
+
 			stub = new PersonalWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/PersonalWS"),
-					null);
+					locator.getPersonalWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

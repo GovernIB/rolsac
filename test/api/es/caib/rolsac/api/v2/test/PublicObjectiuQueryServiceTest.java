@@ -9,6 +9,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -19,7 +20,7 @@ public class PublicObjectiuQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
     
     @Test

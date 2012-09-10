@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.AgrupacioFetVitalWS.AgrupacioFetVitalWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -20,12 +18,16 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 public class AgrupacioFetVitalQueryServiceGateway {
 
 	AgrupacioFetVitalWSSoapBindingStub stub;
+	AgrupacioFetVitalQueryServiceEJBRemoteServiceLocator locator;
 	
 	public AgrupacioFetVitalQueryServiceGateway() {
 		try {
+			
+			locator = new AgrupacioFetVitalQueryServiceEJBRemoteServiceLocator();
+
 			stub = new AgrupacioFetVitalWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/AgrupacioFetVitalWS"),
-					null);
+					locator.getAgrupacioFetVitalWSAddress()), null);
+
 		} catch(AxisFault af) {			
 		} catch(MalformedURLException mue) {
 		}

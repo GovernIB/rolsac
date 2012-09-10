@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.MateriaAgrupacioWS.MateriaAgrupacioWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
@@ -14,13 +12,17 @@ import es.caib.rolsac.api.v2.materia.MateriaDTO;
 public class MateriaAgrupacioQueryServiceGateway {
 
 	MateriaAgrupacioWSSoapBindingStub stub;
-
+	MateriaAgrupacioQueryServiceEJBRemoteServiceLocator locator;
+	
 	public MateriaAgrupacioQueryServiceGateway() {
 
 		try {
+			
+			locator = new MateriaAgrupacioQueryServiceEJBRemoteServiceLocator();
+
 			stub = new MateriaAgrupacioWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/MateriaAgrupacioWS"),
-					null);
+					locator.getMateriaAgrupacioWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

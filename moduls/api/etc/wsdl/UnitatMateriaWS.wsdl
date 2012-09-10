@@ -1,11 +1,11 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/UnitatMateriaWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/UnitatMateriaWS"
+	xmlns:impl="http://ws.unitatMateria.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.unitatMateria.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://materia.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns3="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/UnitatMateriaWS">
+	targetNamespace="http://ws.unitatMateria.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -124,7 +124,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatMateriaWS"
+					namespace="http://ws.unitatMateria.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -137,7 +137,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirUnitatAdministrativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatMateriaWS"
+					namespace="http://ws.unitatMateria.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>

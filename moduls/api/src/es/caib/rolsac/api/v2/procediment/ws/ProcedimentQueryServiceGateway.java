@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.ProcedimentWS.ProcedimentWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
@@ -27,13 +25,17 @@ import es.caib.rolsac.api.v2.tramit.TramitDTO;
 public class ProcedimentQueryServiceGateway {
 
 	ProcedimentWSSoapBindingStub stub;
-
+	ProcedimentQueryServiceEJBRemoteServiceLocator locator;
+	
 	public ProcedimentQueryServiceGateway() {
 
 		try {
+			
+			locator = new ProcedimentQueryServiceEJBRemoteServiceLocator();
+
 			stub = new ProcedimentWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/ProcedimentWS"),
-					null);
+					locator.getProcedimentWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

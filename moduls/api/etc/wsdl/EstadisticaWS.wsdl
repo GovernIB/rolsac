@@ -1,9 +1,9 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/EstadisticaWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/EstadisticaWS"
+	xmlns:impl="http://ws.estadistica.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.estadistica.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/EstadisticaWS">
+	targetNamespace="http://ws.estadistica.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:message name="gravarEstadisticaNormativaResponse">
@@ -115,7 +115,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaFitxaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -127,7 +127,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaFitxaPerMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -139,7 +139,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaFitxaPerUAResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -151,7 +151,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -163,7 +163,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaNormativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -175,7 +175,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaProcedimentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -187,7 +187,7 @@
 			</wsdl:input>
 			<wsdl:output name="gravarEstadisticaUnitatAdministrativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EstadisticaWS"
+					namespace="http://ws.estadistica.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>

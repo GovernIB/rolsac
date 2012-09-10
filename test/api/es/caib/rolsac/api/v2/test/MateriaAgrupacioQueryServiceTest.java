@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioQueryServiceAdapter;
@@ -17,7 +18,7 @@ public class MateriaAgrupacioQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
 
     @Test

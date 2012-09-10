@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.EnllacWS.EnllacWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
@@ -15,13 +13,17 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 public class EnllacQueryServiceGateway {
 
 	EnllacWSSoapBindingStub stub;
-
+	EnllacQueryServiceEJBRemoteServiceLocator locator;
+	
 	public EnllacQueryServiceGateway() {
 
 		try {
+			
+			locator = new EnllacQueryServiceEJBRemoteServiceLocator();
+
 			stub = new EnllacWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/EnllacWS"),
-					null);
+					locator.getEnllacWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -1,16 +1,16 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/EdificiWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/EdificiWS"
+	xmlns:impl="http://ws.edifici.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.edifici.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://arxiu.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/EdificiWS">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.edifici.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="https://localhost:8443/sacws-api/services/EdificiWS" />
+			<import namespace="http://ws.edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
@@ -27,7 +27,7 @@
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
-			<import namespace="https://localhost:8443/sacws-api/services/EdificiWS" />
+			<import namespace="http://ws.edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
@@ -56,7 +56,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/EdificiWS">
+			targetNamespace="http://ws.edifici.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
@@ -72,7 +72,7 @@
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
-			<import namespace="https://localhost:8443/sacws-api/services/EdificiWS" />
+			<import namespace="http://ws.edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
@@ -86,7 +86,7 @@
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://arxiu.v2.api.rolsac.caib.es">
-			<import namespace="https://localhost:8443/sacws-api/services/EdificiWS" />
+			<import namespace="http://ws.edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
@@ -177,7 +177,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EdificiWS"
+					namespace="http://ws.edifici.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -189,7 +189,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EdificiWS"
+					namespace="http://ws.edifici.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -201,7 +201,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFotoPequenyaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EdificiWS"
+					namespace="http://ws.edifici.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -213,7 +213,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFotoGrandeResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EdificiWS"
+					namespace="http://ws.edifici.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -225,7 +225,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPlanoResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/EdificiWS"
+					namespace="http://ws.edifici.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>

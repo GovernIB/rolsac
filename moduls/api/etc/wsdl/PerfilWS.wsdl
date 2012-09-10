@@ -1,10 +1,10 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/PerfilWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/PerfilWS"
+	xmlns:impl="http://ws.perfil.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.perfil.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://iconaFamilia.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://iconaMateria.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/PerfilWS">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -12,7 +12,7 @@
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/PerfilWS" />
+			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType abstract="true" name="BasicCriteria">
@@ -29,7 +29,7 @@
 			targetNamespace="http://iconaFamilia.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/PerfilWS" />
+			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="IconaFamiliaCriteria">
@@ -41,7 +41,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/PerfilWS">
+			targetNamespace="http://ws.perfil.v2.api.rolsac.caib.es">
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
@@ -60,7 +60,7 @@
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/PerfilWS" />
+			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
@@ -73,7 +73,7 @@
 			targetNamespace="http://iconaMateria.v2.api.rolsac.caib.es">
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/PerfilWS" />
+			<import namespace="http://ws.perfil.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="IconaMateriaCriteria">
@@ -152,7 +152,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarIconesFamiliaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/PerfilWS" use="encoded" />
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarIconesMateria">
@@ -163,7 +163,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarIconesMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/PerfilWS" use="encoded" />
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumIconesFamilia">
@@ -174,7 +174,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumIconesFamiliaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/PerfilWS" use="encoded" />
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumIconesMateria">
@@ -185,7 +185,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumIconesMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/PerfilWS" use="encoded" />
+					namespace="http://ws.perfil.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

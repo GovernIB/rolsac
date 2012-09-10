@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.AgrupacioMateriaWS.AgrupacioMateriaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -19,13 +17,16 @@ import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 public class AgrupacioMateriaQueryServiceGateway {
 
 	AgrupacioMateriaWSSoapBindingStub stub;
-
+	AgrupacioMateriaQueryServiceEJBRemoteServiceLocator locator;
+	
 	public AgrupacioMateriaQueryServiceGateway() {
 
 		try {
+			locator = new AgrupacioMateriaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new AgrupacioMateriaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/AgrupacioMateriaWS"),
-					null);
+					locator.getAgrupacioMateriaWSAddress()), null);			
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,7 +38,7 @@ public class AgrupacioMateriaQueryServiceGateway {
 	
     public int getNumMateries(long id) throws RemoteException {   	
     	return stub.getNumMateries(id);
-    }    
+    }   
 	
     public SeccioDTO obtenirSeccio(long idSeccio) throws RemoteException {
     	return stub.obtenirSeccio(idSeccio);

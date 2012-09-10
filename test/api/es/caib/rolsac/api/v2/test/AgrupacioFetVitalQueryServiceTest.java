@@ -57,12 +57,12 @@ public class AgrupacioFetVitalQueryServiceTest {
     @Test
     public void llistarFetsVitals() {
         AgrupacioFetVitalCriteria agrupacioFetVitalCriteria = new AgrupacioFetVitalCriteria();
-        agrupacioFetVitalCriteria.setId("210");
+        agrupacioFetVitalCriteria.setId("211");
         try {
             AgrupacioFetVitalQueryServiceAdapter agrupacioFetVital = rolsacQS.obtenirAgrupacioFetVital(agrupacioFetVitalCriteria);
             Assert.assertNotNull(agrupacioFetVital);
             List<FetVitalQueryServiceAdapter> listFetVitalQueryServiceAdapter = agrupacioFetVital.llistarFetsVitals(new FetVitalCriteria());
-            Assert.assertTrue(listFetVitalQueryServiceAdapter.size() == 8);
+            Assert.assertTrue(listFetVitalQueryServiceAdapter.size() == 5);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

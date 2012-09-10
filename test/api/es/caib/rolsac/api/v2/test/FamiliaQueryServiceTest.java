@@ -9,6 +9,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -21,13 +22,14 @@ public class FamiliaQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
     
     @Test
     public void getNumProcedimentsLocals() {
         FamiliaCriteria fCriteria = new FamiliaCriteria();
         fCriteria.setId("1");
+        
         try {
             FamiliaQueryServiceAdapter f = rolsacQS.obtenirFamilia(fCriteria);
             Assert.assertNotNull(f);
@@ -37,7 +39,7 @@ public class FamiliaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
-    
+   
     @Test
     public void llistarProcedimentsLocals() {
         FamiliaCriteria fCriteria = new FamiliaCriteria();
@@ -78,6 +80,5 @@ public class FamiliaQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-    }
-    
+    }    
 }

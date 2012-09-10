@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.PublicObjectiuWS.PublicObjectiuWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
@@ -18,13 +16,17 @@ import es.caib.rolsac.api.v2.general.DTOUtil;
 public class PublicObjectiuQueryServiceGateway {
 
 	PublicObjectiuWSSoapBindingStub stub;
-
+	PublicObjectiuQueryServiceEJBRemoteServiceLocator locator;
+	
 	public PublicObjectiuQueryServiceGateway() {
 
 		try {
+			
+			locator = new PublicObjectiuQueryServiceEJBRemoteServiceLocator();
+
 			stub = new PublicObjectiuWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/PublicObjectiuWS"),
-					null);
+					locator.getPublicObjectiuWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.IconaFamiliaWS.IconaFamiliaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -15,13 +13,17 @@ import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 public class IconaFamiliaQueryServiceGateway {
 
 	IconaFamiliaWSSoapBindingStub stub;
+	IconaFamiliaQueryServiceEJBRemoteServiceLocator locator;
 	
 	public IconaFamiliaQueryServiceGateway() {
 
 		try {
+			
+			locator = new IconaFamiliaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new IconaFamiliaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/IconaFamiliaWS"),
-					null);
+					locator.getIconaFamiliaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,7 +31,7 @@ public class IconaFamiliaQueryServiceGateway {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 	
     public FamiliaDTO obtenirFamilia(long id) throws RemoteException {
     	return stub.obtenirFamilia(id);

@@ -1,17 +1,17 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/TramitWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/TramitWS"
+	xmlns:impl="http://ws.tramit.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.tramit.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://procediment.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://taxa.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://documentTramit.v2.api.rolsac.caib.es" xmlns:tns5="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/TramitWS">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.tramit.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -38,7 +38,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://procediment.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -91,7 +91,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://taxa.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -112,7 +112,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/TramitWS">
+			targetNamespace="http://ws.tramit.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
@@ -131,7 +131,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -147,7 +147,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://documentTramit.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -170,7 +170,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TramitWS" />
+			<import namespace="http://ws.tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -325,7 +325,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirProcedimentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarTaxes">
@@ -336,7 +336,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTaxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFormularis">
@@ -347,7 +347,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFormularisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumDocumentsInformatius">
@@ -358,7 +358,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumDocumentsInformatiusResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumFormularis">
@@ -369,7 +369,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFormularisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumTaxes">
@@ -380,7 +380,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumTaxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirOrganCompetent">
@@ -391,7 +391,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirOrganCompetentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistatDocumentsInformatius">
@@ -402,7 +402,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistatDocumentsInformatiusResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TramitWS" use="encoded" />
+					namespace="http://ws.tramit.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

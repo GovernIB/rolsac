@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.FitxaWS.FitxaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -27,12 +25,17 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class FitxaQueryServiceGateway {
 
 	FitxaWSSoapBindingStub stub;
-
+	FitxaQueryServiceEJBRemoteServiceLocator locator;
+	
 	public FitxaQueryServiceGateway() {
 
 		try {
+			
+			locator = new FitxaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new FitxaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/FitxaWS"), null);
+					locator.getFitxaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.NormativaWS.NormativaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
@@ -23,13 +21,17 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class NormativaQueryServiceGateway {
 
 	NormativaWSSoapBindingStub stub;
-
+	NormativaQueryServiceEJBRemoteServiceLocator locator;
+	
 	public NormativaQueryServiceGateway() {
 
 		try {
+			
+			locator = new NormativaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new NormativaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/NormativaWS"),
-					null);
+					locator.getNormativaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

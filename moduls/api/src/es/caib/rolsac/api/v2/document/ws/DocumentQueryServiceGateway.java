@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.DocumentWS.DocumentWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -15,13 +13,17 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 public class DocumentQueryServiceGateway {
 	
 	DocumentWSSoapBindingStub stub;
-
+	DocumentQueryServiceEJBRemoteServiceLocator locator;
+	
 	public DocumentQueryServiceGateway() {
 
 		try {
+			
+			locator = new DocumentQueryServiceEJBRemoteServiceLocator();
+
 			stub = new DocumentWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/DocumentWS"),
-					null);
+					locator.getDocumentWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

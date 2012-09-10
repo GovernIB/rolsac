@@ -1,6 +1,6 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/RolsacWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/RolsacWS"
+	xmlns:impl="http://ws.rolsac.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.rolsac.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns10="http://normativa.v2.api.rolsac.caib.es" xmlns:tns11="http://personal.v2.api.rolsac.caib.es"
 	xmlns:tns12="http://usuari.v2.api.rolsac.caib.es" xmlns:tns13="http://taxa.v2.api.rolsac.caib.es"
@@ -19,7 +19,7 @@
 	xmlns:tns6="http://tramit.v2.api.rolsac.caib.es" xmlns:tns7="http://fetVital.v2.api.rolsac.caib.es"
 	xmlns:tns8="http://fitxa.v2.api.rolsac.caib.es" xmlns:tns9="http://documentTramit.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="https://localhost:8443/sacws-api/services/RolsacWS">
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -42,7 +42,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -93,7 +93,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -171,7 +171,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/RolsacWS">
+			targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 			<import namespace="http://tipus.v2.api.rolsac.caib.es" />
 			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
 			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
@@ -475,7 +475,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -516,7 +516,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -574,7 +574,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -691,7 +691,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -756,7 +756,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
@@ -850,7 +850,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -912,7 +912,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -996,7 +996,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1056,7 +1056,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
@@ -1147,7 +1147,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1218,7 +1218,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1279,7 +1279,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1338,7 +1338,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1401,7 +1401,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1455,7 +1455,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1508,7 +1508,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1570,7 +1570,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1644,7 +1644,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1702,7 +1702,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
@@ -1755,7 +1755,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1814,7 +1814,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1870,7 +1870,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1927,7 +1927,7 @@
 			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -1978,7 +1978,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2030,7 +2030,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2082,7 +2082,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2139,7 +2139,7 @@
 			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2200,7 +2200,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2255,7 +2255,7 @@
 			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -2306,7 +2306,7 @@
 			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
 			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/RolsacWS" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
 			<import namespace="http://familia.v2.api.rolsac.caib.es" />
 			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
@@ -3033,7 +3033,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirEspaiTerritorial">
@@ -3044,7 +3044,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirEspaiTerritorialResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirProcediment">
@@ -3055,7 +3055,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirProcedimentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarProcediments">
@@ -3066,7 +3066,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarProcedimentsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirMateria">
@@ -3077,7 +3077,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarMateries">
@@ -3088,7 +3088,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirTramit">
@@ -3099,7 +3099,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirTramitResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarTramit">
@@ -3110,7 +3110,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTramitResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirUnitatAdministrativa">
@@ -3121,7 +3121,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirUnitatAdministrativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFetVital">
@@ -3132,7 +3132,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFetVitalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFetsVitals">
@@ -3143,7 +3143,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFetsVitalsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFitxa">
@@ -3154,7 +3154,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFitxaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFitxes">
@@ -3165,7 +3165,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirDocumentTramit">
@@ -3176,7 +3176,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirDocumentTramitResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarDocumentTramit">
@@ -3187,7 +3187,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarDocumentTramitResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirNormativa">
@@ -3198,7 +3198,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirNormativaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarNormatives">
@@ -3209,7 +3209,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirPersonal">
@@ -3220,7 +3220,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPersonalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarPersonal">
@@ -3231,7 +3231,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarPersonalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirUsuari">
@@ -3242,7 +3242,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirUsuariResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarUsuaris">
@@ -3253,7 +3253,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUsuarisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirTaxa">
@@ -3264,7 +3264,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirTaxaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarTaxes">
@@ -3275,7 +3275,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTaxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirAgrupacioFetVital">
@@ -3286,7 +3286,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirAgrupacioFetVitalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarAgrupacionsFetsVitals">
@@ -3297,7 +3297,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarAgrupacionsFetsVitalsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirAgrupacioMateria">
@@ -3308,7 +3308,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirAgrupacioMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarAgrupacionsMateries">
@@ -3319,7 +3319,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarAgrupacionsMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirButlleti">
@@ -3330,7 +3330,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirButlletiResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarButlletins">
@@ -3341,7 +3341,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarButlletinsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirDocument">
@@ -3352,7 +3352,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirDocumentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarDocuments">
@@ -3363,7 +3363,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarDocumentsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirEdifici">
@@ -3374,7 +3374,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirEdificiResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarEdificis">
@@ -3385,7 +3385,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarEdificisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirEnllac">
@@ -3396,7 +3396,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirEnllacResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarEnllacos">
@@ -3407,7 +3407,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarEnllacosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarEspaisTerritorials">
@@ -3418,7 +3418,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarEspaisTerritorialsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFamilia">
@@ -3429,7 +3429,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFamiliaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFamilies">
@@ -3440,7 +3440,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFamiliesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirPublicObjectiu">
@@ -3451,7 +3451,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPublicObjectiuResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarPublicsObjectius">
@@ -3462,7 +3462,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarPublicsObjectiusResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFitxaUA">
@@ -3473,7 +3473,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFitxaUAResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFitxesUA">
@@ -3484,7 +3484,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFitxesUAResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirFormulari">
@@ -3495,7 +3495,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFormulariResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFormularis">
@@ -3506,7 +3506,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFormularisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirIconaFamilia">
@@ -3517,7 +3517,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirIconaFamiliaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarIconesFamilies">
@@ -3528,7 +3528,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarIconesFamiliesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirIconaMateria">
@@ -3539,7 +3539,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirIconaMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarIconesMateries">
@@ -3550,7 +3550,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarIconesMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirMateriaAgrupacio">
@@ -3561,7 +3561,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirMateriaAgrupacioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarMateriesAgrupacions">
@@ -3572,7 +3572,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarMateriesAgrupacionsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirPerfil">
@@ -3583,7 +3583,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPerfilResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarPerfils">
@@ -3594,7 +3594,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarPerfilsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirSeccio">
@@ -3605,7 +3605,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirSeccioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarSeccions">
@@ -3616,7 +3616,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarSeccionsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirUnitatMateria">
@@ -3627,7 +3627,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirUnitatMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarUnitatsMateries">
@@ -3638,7 +3638,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirTipus">
@@ -3649,7 +3649,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirTipusResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarTipus">
@@ -3660,7 +3660,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTipusResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirTipusAfectacio">
@@ -3671,7 +3671,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirTipusAfectacioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarTipusAfectacio">
@@ -3682,7 +3682,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTipusAfectacioResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/RolsacWS" use="encoded" />
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

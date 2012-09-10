@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.FetVitalWS.FetVitalWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
@@ -23,13 +21,17 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 public class FetVitalQueryServiceGateway {
 
 	FetVitalWSSoapBindingStub stub;
-
+	FetVitalQueryServiceEJBRemoteServiceLocator locator;
+	
 	public FetVitalQueryServiceGateway() {
 
 		try {
+			
+			locator = new FetVitalQueryServiceEJBRemoteServiceLocator();
+
 			stub = new FetVitalWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/FetVitalWS"),
-					null);
+					locator.getFetVitalWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

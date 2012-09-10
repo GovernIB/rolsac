@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.SeccioWS.SeccioWSSoapBindingStub;
-
-import org.apache.axis.AxisFault;
-
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -22,21 +18,19 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class SeccioQueryServiceGateway {
 	
 	SeccioWSSoapBindingStub stub;
+	SeccioQueryServiceEJBRemoteServiceLocator locator;
 
 	public SeccioQueryServiceGateway() {
-
 		try {
+			locator = new SeccioQueryServiceEJBRemoteServiceLocator();
+
 			stub = new SeccioWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/SeccioWS"),
-					null);
-		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					locator.getSeccioWSAddress()), null);
+
+		} catch (RemoteException re) {
+		} catch (MalformedURLException mue) {
 		}
-	}	
+	}
 	
 	public int getNumFilles(long id) throws RemoteException {
 		return stub.getNumFilles(id);

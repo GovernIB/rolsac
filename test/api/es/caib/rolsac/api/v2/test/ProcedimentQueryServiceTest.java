@@ -11,6 +11,7 @@ import es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
@@ -27,7 +28,7 @@ public class ProcedimentQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
 
     @Test

@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.FitxaUAWS.FitxaUAWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
@@ -15,13 +13,17 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class FitxaUAQueryServiceGateway {
 
 	FitxaUAWSSoapBindingStub stub;
-
+	FitxaUAQueryServiceEJBRemoteServiceLocator locator;
+	
 	public FitxaUAQueryServiceGateway() {
 
 		try {
+			
+			locator = new FitxaUAQueryServiceEJBRemoteServiceLocator();
+
 			stub = new FitxaUAWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/FitxaUAWS"),
-					null);
+					locator.getFitxaUAWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,7 +31,7 @@ public class FitxaUAQueryServiceGateway {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 	
 	public FitxaDTO obtenirFitxa(long idFitxa) throws RemoteException {
 		return stub.obtenirFitxa(idFitxa);

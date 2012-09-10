@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.IconaMateriaWS.IconaMateriaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -15,13 +13,17 @@ import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 public class IconaMateriaQueryServiceGateway {
 	
 	IconaMateriaWSSoapBindingStub stub;
+	IconaMateriaQueryServiceEJBRemoteServiceLocator locator;
 	
 	public IconaMateriaQueryServiceGateway() {
 
 		try {
+			
+			locator = new IconaMateriaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new IconaMateriaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/IconaMateriaWS"),
-					null);
+					locator.getIconaMateriaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -29,7 +31,7 @@ public class IconaMateriaQueryServiceGateway {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 
     public MateriaDTO obtenirMateria(long id) throws RemoteException {
     	return stub.obtenirMateria(id);

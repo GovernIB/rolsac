@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.FamiliaWS.FamiliaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -20,13 +18,17 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 public class FamiliaQueryServiceGateway {
 	
 	FamiliaWSSoapBindingStub stub;
-
+	FamiliaQueryServiceEJBRemoteServiceLocator locator;
+	
 	public FamiliaQueryServiceGateway() {
 
 		try {
+			
+			locator = new FamiliaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new FamiliaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/FamiliaWS"),
-					null);
+					locator.getFamiliaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

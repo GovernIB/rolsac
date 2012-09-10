@@ -9,6 +9,7 @@ import org.junit.Test;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
@@ -21,7 +22,7 @@ public class SeccioQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
    
     @Test

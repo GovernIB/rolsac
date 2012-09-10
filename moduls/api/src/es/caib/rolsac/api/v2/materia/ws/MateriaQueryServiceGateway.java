@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.MateriaWS.MateriaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
@@ -29,13 +27,17 @@ import es.caib.rolsac.api.v2.unitatMateria.UnitatMateriaDTO;
 public class MateriaQueryServiceGateway {
 	
 	MateriaWSSoapBindingStub stub;
-
-	public MateriaQueryServiceGateway() {
+	MateriaQueryServiceEJBRemoteServiceLocator locator;
+	
+ 	public MateriaQueryServiceGateway() {
 
 		try {
+			
+			locator = new MateriaQueryServiceEJBRemoteServiceLocator();
+
 			stub = new MateriaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/MateriaWS"),
-					null);
+					locator.getMateriaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

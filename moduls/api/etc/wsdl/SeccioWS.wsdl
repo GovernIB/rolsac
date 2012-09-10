@@ -1,18 +1,18 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/SeccioWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/SeccioWS"
+	xmlns:impl="http://ws.seccio.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.seccio.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://seccio.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://fitxa.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/SeccioWS">
+	targetNamespace="http://ws.seccio.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://ws.seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
@@ -31,7 +31,7 @@
 			targetNamespace="http://unitatAdministrativa.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://ws.seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -59,7 +59,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/SeccioWS">
+			targetNamespace="http://ws.seccio.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -89,7 +89,7 @@
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://ws.seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -103,7 +103,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://seccio.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://ws.seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
@@ -140,7 +140,7 @@
 			targetNamespace="http://fitxa.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/SeccioWS" />
+			<import namespace="http://ws.seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -280,7 +280,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarUnitatsAdministratives">
@@ -291,7 +291,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="obtenirPare">
@@ -302,7 +302,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPareResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFitxes">
@@ -313,7 +313,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumFitxes">
@@ -324,7 +324,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarFilles">
@@ -335,7 +335,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFillesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumFilles">
@@ -346,7 +346,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFillesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumPares">
@@ -357,7 +357,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumParesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarPares">
@@ -368,7 +368,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarParesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/SeccioWS" use="encoded" />
+					namespace="http://ws.seccio.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

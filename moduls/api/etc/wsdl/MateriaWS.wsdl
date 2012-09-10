@@ -1,13 +1,13 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/MateriaWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/MateriaWS"
+	xmlns:impl="http://ws.materia.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.materia.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://fitxa.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://iconaMateria.v2.api.rolsac.caib.es" xmlns:tns5="http://procediment.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://arxiu.v2.api.rolsac.caib.es" xmlns:tns7="http://agrupacioMateria.v2.api.rolsac.caib.es"
 	xmlns:tns8="http://unitatMateria.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/MateriaWS">
+	targetNamespace="http://ws.materia.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -21,7 +21,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType abstract="true" name="BasicCriteria">
 				<sequence>
@@ -43,7 +43,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="UnitatAdministrativaCriteria">
 				<complexContent>
@@ -69,7 +69,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/MateriaWS">
+			targetNamespace="http://ws.materia.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -98,7 +98,7 @@
 			<import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
@@ -117,7 +117,7 @@
 			<import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="FitxaCriteria">
 				<complexContent>
@@ -152,7 +152,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="IconaMateriaCriteria">
 				<complexContent>
@@ -172,7 +172,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ProcedimentCriteria">
 				<complexContent>
@@ -223,7 +223,7 @@
 			<import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="ArxiuDTO">
 				<sequence>
@@ -245,7 +245,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="AgrupacioMateriaCriteria">
 				<complexContent>
@@ -268,7 +268,7 @@
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/MateriaWS" />
+			<import namespace="http://ws.materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="UnitatMateriaCriteria">
 				<complexContent>
@@ -465,7 +465,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsAdministrativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -477,7 +477,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -489,7 +489,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarIconesMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -501,7 +501,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarProcedimentsLocalsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -513,7 +513,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -525,7 +525,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumProcedimentsLocalsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -537,7 +537,7 @@
 			</wsdl:input>
 			<wsdl:output name="getFotografiaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -549,7 +549,7 @@
 			</wsdl:input>
 			<wsdl:output name="getIconaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -561,7 +561,7 @@
 			</wsdl:input>
 			<wsdl:output name="getIconaGranResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -573,7 +573,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumAgrupacioMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -585,7 +585,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumUnitatsMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -597,7 +597,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumIconesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -609,7 +609,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarAgrupacioMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -621,7 +621,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUnitatsMateriaResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/MateriaWS"
+					namespace="http://ws.materia.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>

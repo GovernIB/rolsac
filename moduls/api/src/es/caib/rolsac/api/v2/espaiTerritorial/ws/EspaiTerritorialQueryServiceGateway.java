@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.EspaiTerritorialWS.EspaiTerritorialQueryServiceEJBRemoteServiceLocator;
-import localhost.sacws_api.services.EspaiTerritorialWS.EspaiTerritorialWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -27,9 +24,11 @@ public class EspaiTerritorialQueryServiceGateway {
 	public EspaiTerritorialQueryServiceGateway() {
 
 		try {
+			
+			locator = new EspaiTerritorialQueryServiceEJBRemoteServiceLocator();
+
 			stub = new EspaiTerritorialWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/EspaiTerritorialWS"),
-					null);
+					locator.getEspaiTerritorialWSAddress()), null);
 			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block

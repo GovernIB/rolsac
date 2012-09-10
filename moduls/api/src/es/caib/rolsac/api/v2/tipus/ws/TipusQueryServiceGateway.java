@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.TipusWS.TipusWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.general.DTOUtil;
@@ -19,13 +17,17 @@ import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 public class TipusQueryServiceGateway {
 
 	TipusWSSoapBindingStub stub;
-
+	TipusQueryServiceEJBRemoteServiceLocator locator;
+	
 	public TipusQueryServiceGateway() {
 
 		try {
+			
+			locator = new TipusQueryServiceEJBRemoteServiceLocator();
+
 			stub = new TipusWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/TipusWS"),
-					null);
+					locator.getTipusWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

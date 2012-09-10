@@ -7,10 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.ButlletiWS.ButlletiWSSoapBindingStub;
-
-import org.apache.axis.AxisFault;
-
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
@@ -19,20 +15,19 @@ import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 public class ButlletiQueryServiceGateway {
 
 	ButlletiWSSoapBindingStub stub;
-	
+	ButlletiQueryServiceEJBRemoteServiceLocator locator;
+
 	public ButlletiQueryServiceGateway() {
 		try {
+			locator = new ButlletiQueryServiceEJBRemoteServiceLocator();
+
 			stub = new ButlletiWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/ButlletiWS"),
-					null);
-		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+					locator.getButlletiWSAddress()), null);
+
+		} catch (RemoteException re) {
+		} catch (MalformedURLException mue) {
 		}
-	}	
+	}
 	
 	public int getNumNormatives(long id, TIPUS_NORMATIVA tipus) throws RemoteException {
 		return stub.getNumNormatives(id, tipus.ordinal() );

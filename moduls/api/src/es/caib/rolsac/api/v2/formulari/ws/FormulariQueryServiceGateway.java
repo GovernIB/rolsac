@@ -4,8 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.FormulariWS.FormulariWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -14,13 +12,17 @@ import es.caib.rolsac.api.v2.tramit.TramitDTO;
 public class FormulariQueryServiceGateway {
 
 	FormulariWSSoapBindingStub stub;
+	FormulariQueryServiceEJBRemoteServiceLocator locator;
 	
 	public FormulariQueryServiceGateway() {
 
 		try {
+			
+			locator = new FormulariQueryServiceEJBRemoteServiceLocator();
+
 			stub = new FormulariWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/FormulariWS"),
-					null);
+					locator.getFormulariWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -28,7 +30,7 @@ public class FormulariQueryServiceGateway {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}	
+	}
 	
 	public ArxiuDTO obtenirArchivo(Long archivo) throws RemoteException {
 		return stub.obtenirArchivo(archivo);

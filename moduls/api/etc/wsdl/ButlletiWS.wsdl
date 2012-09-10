@@ -1,10 +1,9 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/ButlletiWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/ButlletiWS"
+	xmlns:impl="http://ws.butlleti.v2.api.rolsac.caib.es" xmlns:intf="http://ws.butlleti.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/ButlletiWS">
+	targetNamespace="http://ws.butlleti.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -12,7 +11,7 @@
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType abstract="true" name="BasicCriteria">
 				<sequence>
@@ -28,7 +27,7 @@
 			targetNamespace="http://normativa.v2.api.rolsac.caib.es">
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
-			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="NormativaCriteria">
 				<complexContent>
@@ -42,7 +41,7 @@
 							<element name="validacion" nillable="true" type="xsd:string" />
 							<element name="codiVuds" nillable="true" type="xsd:string" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />
-							<element name="t_seccion" nillable="true" type="xsd:string" />							
+							<element name="t_seccion" nillable="true" type="xsd:string" />
 							<element name="t_apartado" nillable="true" type="xsd:string" />
 							<element name="t_paginaInicial" nillable="true" type="xsd:string" />
 							<element name="t_paginaFinal" nillable="true" type="xsd:string" />
@@ -57,7 +56,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/ButlletiWS">
+			targetNamespace="http://ws.butlleti.v2.api.rolsac.caib.es">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
@@ -74,7 +73,7 @@
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/ButlletiWS" />
+			<import namespace="http://ws.butlleti.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
 				<sequence>
@@ -122,8 +121,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/ButlletiWS"
-					use="encoded" />
+					namespace="http://ws.butlleti.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumNormatives">
@@ -134,8 +132,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/ButlletiWS"
-					use="encoded" />
+					namespace="http://ws.butlleti.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

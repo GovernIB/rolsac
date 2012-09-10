@@ -1,17 +1,17 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/TipusWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/TipusWS"
+	xmlns:impl="http://ws.tipus.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.tipus.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://normativa.v2.api.rolsac.caib.es"
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/TipusWS">
+	targetNamespace="http://ws.tipus.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://general.v2.api.rolsac.caib.es">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TipusWS" />
+			<import namespace="http://ws.tipus.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType abstract="true" name="BasicCriteria">
@@ -26,7 +26,7 @@
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://normativa.v2.api.rolsac.caib.es">
-			<import namespace="https://localhost:8443/sacws-api/services/TipusWS" />
+			<import namespace="http://ws.tipus.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
@@ -57,7 +57,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/TipusWS">
+			targetNamespace="http://ws.tipus.v2.api.rolsac.caib.es">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://xml.apache.org/xml-soap" />
@@ -73,7 +73,7 @@
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://xml.apache.org/xml-soap">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/TipusWS" />
+			<import namespace="http://ws.tipus.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
 			<complexType name="Vector">
@@ -122,7 +122,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TipusWS" use="encoded" />
+					namespace="http://ws.tipus.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getNumNormatives">
@@ -133,7 +133,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/TipusWS" use="encoded" />
+					namespace="http://ws.tipus.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>

@@ -10,6 +10,7 @@ import es.caib.rolsac.api.v2.afectacio.AfectacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.butlleti.ButlletiQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -23,7 +24,7 @@ public class NormativaQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();       
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);       
     }
 
     @Test

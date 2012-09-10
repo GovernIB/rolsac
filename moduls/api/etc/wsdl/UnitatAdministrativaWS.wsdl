@@ -1,6 +1,6 @@
 <wsdl:definitions xmlns:apachesoap="http://xml.apache.org/xml-soap"
-	xmlns:impl="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
-	xmlns:intf="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+	xmlns:impl="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
+	xmlns:intf="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns1="http://unitatAdministrativa.v2.api.rolsac.caib.es"
 	xmlns:tns10="http://edifici.v2.api.rolsac.caib.es" xmlns:tns11="http://seccio.v2.api.rolsac.caib.es"
 	xmlns:tns12="http://tractament.v2.api.rolsac.caib.es" xmlns:tns13="http://tramit.v2.api.rolsac.caib.es"
@@ -10,7 +10,7 @@
 	xmlns:tns7="http://normativa.v2.api.rolsac.caib.es" xmlns:tns8="http://personal.v2.api.rolsac.caib.es"
 	xmlns:tns9="http://usuari.v2.api.rolsac.caib.es" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
 	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS">
+	targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
 		PDT) -->
 	<wsdl:types>
@@ -23,7 +23,7 @@
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -60,7 +60,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -139,7 +139,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -170,7 +170,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -219,7 +219,7 @@
 			</complexType>
 		</schema>
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
-			targetNamespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS">
+			targetNamespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es">
 			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
 			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
 			<import namespace="http://arxiu.v2.api.rolsac.caib.es" />
@@ -263,7 +263,7 @@
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
-			<import namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+			<import namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -289,7 +289,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -323,7 +323,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -364,7 +364,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -410,7 +410,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -448,7 +448,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -482,7 +482,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
 			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
@@ -518,7 +518,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -552,7 +552,7 @@
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -583,7 +583,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -630,7 +630,7 @@
 			<import namespace="http://general.v2.api.rolsac.caib.es" />
 			<import namespace="http://tractament.v2.api.rolsac.caib.es" />
 			<import
-				namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS" />
+				namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es" />
 			<import namespace="http://materia.v2.api.rolsac.caib.es" />
 			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
 			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
@@ -979,7 +979,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirPareResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -992,7 +992,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirEspaiTerritorialResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1005,7 +1005,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarProcedimentsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1018,7 +1018,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1031,7 +1031,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1044,7 +1044,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1057,7 +1057,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarPersonalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1070,7 +1070,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarUsuarisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1083,7 +1083,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarEdificisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1096,7 +1096,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarSeccionsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1109,7 +1109,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFitxesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1122,7 +1122,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumNormativesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1135,7 +1135,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirTractamentResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1148,7 +1148,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarFillesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1161,7 +1161,7 @@
 			</wsdl:input>
 			<wsdl:output name="llistarTramitsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1174,7 +1174,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFotopResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1187,7 +1187,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirFotogResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1200,7 +1200,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirLogohResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1213,7 +1213,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirLogovResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1226,7 +1226,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirLogosResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1239,7 +1239,7 @@
 			</wsdl:input>
 			<wsdl:output name="obtenirLogotResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1252,7 +1252,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumFillesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1265,7 +1265,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumEdificisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1278,7 +1278,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumPersonalResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1291,7 +1291,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumProcedimentsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1304,7 +1304,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumTramitsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1317,7 +1317,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumUsuarisResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1330,7 +1330,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumSeccionsResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
@@ -1343,7 +1343,7 @@
 			</wsdl:input>
 			<wsdl:output name="getNumMateriesResponse">
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="https://localhost:8443/sacws-api/services/UnitatAdministrativaWS"
+					namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
 					use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>

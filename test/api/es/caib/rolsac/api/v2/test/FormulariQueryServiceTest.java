@@ -8,6 +8,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
 
@@ -17,7 +18,7 @@ public class FormulariQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
 
     @Test

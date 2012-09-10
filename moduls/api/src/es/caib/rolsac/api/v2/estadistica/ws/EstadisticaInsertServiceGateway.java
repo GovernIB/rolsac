@@ -4,21 +4,22 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import localhost.sacws_api.services.EstadisticaWS.EstadisticaWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
-
 
 public class EstadisticaInsertServiceGateway {
 	
 	EstadisticaWSSoapBindingStub stub;
-
+	EstadisticaInsertServiceEJBRemoteServiceLocator locator;
+	
 	public EstadisticaInsertServiceGateway() {
 
 		try {
+			
+			locator = new EstadisticaInsertServiceEJBRemoteServiceLocator();
+
 			stub = new EstadisticaWSSoapBindingStub(new URL(
-					"https://localhost:8443/sacws-api/services/EstadisticaWS"),
-					null);
+					locator.getEstadisticaWSAddress()), null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

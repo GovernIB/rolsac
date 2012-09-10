@@ -13,6 +13,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceAdapter;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
@@ -23,7 +24,7 @@ public class FetVitalQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = TestUtils.getRolsacQueryService();
+        rolsacQS = TestUtils.getRolsacQueryService(STRATEGY.WS);
     }
     
     @Test

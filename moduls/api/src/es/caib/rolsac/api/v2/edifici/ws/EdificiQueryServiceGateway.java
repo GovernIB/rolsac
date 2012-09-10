@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import localhost.sacws_api.services.EdificiWS.EdificiWSSoapBindingStub;
-
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
@@ -18,22 +16,26 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class EdificiQueryServiceGateway {
     
-    EdificiWSSoapBindingStub stub;
+	EdificiWSSoapBindingStub stub;
+	EdificiQueryServiceEJBRemoteServiceLocator locator;
+	
+	public EdificiQueryServiceGateway() {
 
-    public EdificiQueryServiceGateway() {
+		try {
+			
+			locator = new EdificiQueryServiceEJBRemoteServiceLocator();
 
-        try {
-            stub = new EdificiWSSoapBindingStub(new URL(                    
-                    "https://localhost:8443/sacws-api/services/EdificiWS"),
-                    null);
-        } catch (AxisFault e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+			stub = new EdificiWSSoapBindingStub(new URL(
+					locator.getEdificiWSAddress()), null);
+			
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
     
     public int getNumUnitatsAdministratives(long id) throws RemoteException {
         return stub.getNumUnitatsAdministratives(id);
