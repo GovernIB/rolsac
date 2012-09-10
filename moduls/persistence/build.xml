@@ -84,6 +84,12 @@
 			<include name="rome-1.0RC2.jar"/>
 		</fileset>
 
+   	
+    	<!-- enric: per posar traces de transaacions  -->
+     	<fileset dir="${lib.dir}/jboss">
+     	        <include name="**/*.jar" />
+     	</fileset>
+
     </path>
 
     <path id="doclet.class.path">
