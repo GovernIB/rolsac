@@ -1,7 +1,5 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +10,6 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.UOMinModel;
-import org.ibit.rol.sac.model.webcaib.UOModel;
 
 public interface UnidadAdministrativaDelegateI {
 
@@ -542,7 +538,6 @@ public interface UnidadAdministrativaDelegateI {
     public void eliminarUaSinRelaciones(Long idUA)
     		throws DelegateException;
     
-    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadAdministrativaPM(java.lang.Long)
 	 */
@@ -551,15 +546,5 @@ public interface UnidadAdministrativaDelegateI {
 	 */
     public abstract UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) 
     		throws DelegateException;
-
-    //WEBCAIB
-    public abstract String getCodiGovernIlles() throws DelegateException; 
-	public abstract Collection unitatsOrganiquesFilles(String pare, String criteri, String idioma ) throws DelegateException;    
-    public abstract UOModel getDetails(String codi, String idioma) throws DelegateException;    
-    public abstract UOMinModel getParent(String codi, String idioma) throws DelegateException;    
-    public abstract boolean isMateriaInUo(String codi, String materia) throws DelegateException;    
-    public abstract ByteArrayOutputStream getLogo( String coduo, String logo ) throws DelegateException;    
-    public abstract Collection centres( String codi, String idioma ) throws DelegateException;    
-    public abstract Collection getUoByMateria( String pare, String materia, String  idioma ) throws DelegateException;
     
 }

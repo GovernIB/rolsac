@@ -31,49 +31,6 @@ public class ArchivoDelegate  implements StatelessDelegate {
         }
     }
 	
-	
-	/* ========================================================= */
-    /* ================= MÉTODOS DE NEGOCIO WEBCAIB ============ */
-    /* ========================================================= */	
-	
-    public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
-    	try {
-    		return getFacade().getFitxer(id);
-    	
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    	
-    }
-    
-
-    public String getMime(Long id) throws DelegateException {    
-    	try {
-    		return getFacade().getMime(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-
-    }
-    
-
-    public long getPes(Long id) throws DelegateException {       	
-    	try {
-    		return getFacade().getPes(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }    
-    
-
-    public String getNombre(Long id) throws DelegateException {
-    	try {
-    		return getFacade().getNombre(id);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }	
-	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

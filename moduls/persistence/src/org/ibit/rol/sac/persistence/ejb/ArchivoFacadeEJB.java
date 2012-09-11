@@ -1,7 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.io.ByteArrayOutputStream;
-
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -11,7 +9,6 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Archivo;
-import org.omg.CORBA_2_3.portable.OutputStream;
 
 
 
@@ -62,69 +59,4 @@ public abstract class ArchivoFacadeEJB extends HibernateEJB {
         }
     }
     
-
-
-    //WEBCAIB//
-    /**
-     * WEBCAIB.
-     * Obtiene los datos del archivo.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     * 
-     */
-    public ByteArrayOutputStream getFitxer(Long id) {
-    	Archivo tmp = obtenerArchivo(id);
-    	if (tmp.getDatos() != null) {
-    		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    		baos.write(tmp.getDatos(), 0, tmp.getDatos().length);
-    		return baos;
-    	} else
-    		return null;
-    }
-    
-    /**
-     * WEBCAIB.
-     * Obtiene el mime del archivo.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     * 
-     */
-    public String getMime(Long id) {    	
-    	Archivo tmp = obtenerArchivo(id);
-    	if (tmp.getMime() != null)
-    		return tmp.getMime();
-    	else
-    		return "text/plain";
-    }
-    
-    /**
-     * WEBCAIB.
-     * Obtiene el peso del archivo.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     * 
-     */
-    public long getPes(Long id) {    	
-    	Archivo tmp = obtenerArchivo(id);
-
-    	return tmp.getPeso() / 1024;
-    }    
-    
-    /**
-     * WEBCAIB.
-     * Obtiene el nombre del archivo.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     * 
-     */
-    public String getNombre(Long id) {
-    	Archivo tmp = obtenerArchivo(id);
-    	
-    	if (tmp.getNombre() != null)
-    		return tmp.getNombre();
-    	else
-    		return "sin_nombre";
-    }    
-    
-    //////////////////////////////////////////////////////////////////////////	
 }

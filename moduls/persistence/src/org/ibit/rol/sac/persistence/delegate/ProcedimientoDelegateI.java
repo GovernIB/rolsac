@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +7,6 @@ import java.util.Map;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.ActuacioModel;
-import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
-import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
 
 public interface ProcedimientoDelegateI {
 
@@ -125,39 +121,10 @@ public interface ProcedimientoDelegateI {
 
 	public abstract boolean autorizaModificarProcedimiento(Long idProcedimiento) throws DelegateException;
 	
-	
 	public abstract ProcedimientoLocal obtenerProcedimientoPM(Long id) throws DelegateException;
 	
-	
-	//WEBCAIB//
-	public abstract ActuacioModel getActuacio ( String code, String idioma, String previ ) throws DelegateException;
-	
-	public abstract Collection actuacionsByMateria ( Long codiMateria, String idioma ) throws DelegateException;
-	
-	public abstract Collection actuacionsByUORSS ( Long codiUO, String idioma ) throws DelegateException;
-	
-	public abstract Collection actuacionsByUO ( Long codiUO, String idioma ) throws DelegateException;
-	
-	public abstract Collection actuacionsMasVisto () throws DelegateException;
-	
-	public abstract Collection actuacionsByWord ( String words, String idioma, String solovigor ) throws DelegateException;
-	
-	public abstract Integer cuentaActuacionsByUO ( Long codiUO, String idioma ) throws DelegateException;
-	
-	public abstract Integer cuentaActuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException;
-	
-	public abstract Collection actuacionsByAvanzado ( String condi, String idioma, String uo, String solovigor, String idisel ) throws DelegateException;
-	
-	public abstract Collection actuacionsByFamilia ( Long codiFamilia, String idioma ) throws DelegateException;
-	
-	public Collection<ActuacioMinModel> actuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException;
-	
-	public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) throws DelegateException;
-	
-	
 	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException; 
-	    
-	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
-	    
+    
+	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;	
 
 }

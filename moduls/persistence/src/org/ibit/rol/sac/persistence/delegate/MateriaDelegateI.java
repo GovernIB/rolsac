@@ -63,16 +63,4 @@ public interface MateriaDelegateI {
 	public abstract Materia obtenerMateriaFichasProced(Long id)
 			throws DelegateException;
 	
-
-	//WECCAIB//	
-	public abstract MateriaModel getMateria(Long codi, String idioma)
-		throws DelegateException;
-	
-	public abstract Collection getMateries ( String idioma ) 
-		throws DelegateException;
-	
-	public abstract MateriaModel getIcones ( Long codi, Long perfil ) 
-		throws DelegateException;
-
-	
 }
