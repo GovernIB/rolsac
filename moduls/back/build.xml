@@ -8,7 +8,6 @@
     <property name="package" value="org.ibit.rol.sac.back"/>
 
     <property name="home.dir" location="${basedir}/../.."/>
-	
 	<property file="${home.dir}/build.${user.name}.properties" />
 	<property file="${home.dir}/build.${rolsac.target}.properties"/>
 	<property file="${home.dir}/default.properties"/>
@@ -46,7 +45,7 @@
 
     <property name="jar.product" location="${output.dir}/moduls"/>
 
-    <path id="web.class.path">
+	<path id="web.class.path">
         <fileset dir="${lib.dir}">
             <include name="servlet-api.jar"/>
             <include name="jsp-api.jar"/>
@@ -59,8 +58,9 @@
         	<include name="mail.jar"/>
             <include name="seyconsession-common.jar"/>        	
         	<include name="ejb-2_0.jar"/>
-        	<include name="commons-validator.jar"/> <!-- struts necessita aquesta versió del jar -->
         	<include name="boib.jar"/>
+			<include name="commons-validator.jar"/>
+		    <include name="struts.jar"/>
         </fileset>
     	<fileset dir="${lib.dir}/axis2-1.5">
     		<include name="**/*.jar" />
@@ -78,18 +78,16 @@
 		<fileset dir="${lib.dir}/webcaib">
 		     <include name="chartbuilder.jar"/>
 			 <include name="commons-lang-2.1.jar"/>
-			 <include name="commons-lang-2.1.jar"/>
 		 	 <include name="commons-collections-3.2.1.jar"/>
 		 	 <include name="commons-beanutils-1.8.3.jar"/>
-			 <include name="commons-validator-1.3.1.jar"/>
 			 <include name="dom4j.jar"/>
 			 <include name="json.jar"/>
 			 <include name="quartz-1.8.5.jar"/>
-		     <include name="struts.jar"/>
 			 <include name="lucene-caib.jar"/>
 		</fileset>
 
 	</path>
+
 
     <path id="doclet.class.path">
         <fileset dir="${xdoclet.dir}">
@@ -136,9 +134,9 @@
     </target>
 
 	 <target name="jar.jar" depends="web.compile">
-	        <delete file="${jar.product}/${prefix.modul}-${modul}.jar" quiet="yes"/>
+	        <delete file="${jar.product}/sac-${modul}.jar" quiet="yes"/>
 	        <jar
-	            jarfile="${jar.product}/${prefix.modul}-${modul}.jar"
+	            jarfile="${jar.product}/sac-${modul}.jar"
 	            basedir="${web.classes}">
 	            <manifest>
 	                <attribute name="Created-By" value="DGTIC"/>
@@ -224,8 +222,8 @@
 
     <target name="web.war" depends="jar.jar">
     	
-        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
+        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/sac-${modul}.war"
             basedir="${web.htdocs}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/**">
@@ -240,21 +238,19 @@
             <classes dir="${web.resources}" includes="*.properties"/>
         	
             <lib dir="${web.product}">
-            	<include name="${prefix.modul}-back.jar"/>
+            	<include name="sac-back.jar"/>
             </lib>
             	
-			<!-- agarcia: librerias comunes en 00librerias -->
-			<lib dir="${home.dir}/lib/webcaib">
-				 <include name="commons-lang-2.1.jar"/>
-			  	 <include name="commons-collections-3.2.1.jar"/>
-			  	 <include name="commons-beanutils-1.8.3.jar"/>
-				 <include name="commons-validator-1.3.1.jar"/>
-				 <include name="quartz-1.8.5.jar"/>
-		         <include name="struts.jar"/>
-			</lib>
         	
         	<lib dir="${lib.dir}">
+	         <include name="struts.jar"/>
+        	 <include name="commons-lang-2.4.jar"/>
+           	 <include name="commons-collections.jar"/>
+           	 <include name="commons-beanutils.jar"/>
+        	 <include name="commons-validator.jar"/>
+        	 <include name="quartz.jar"/>
         	 <include name="mail.jar"/>
+
         	 <!--include name="axis2-1.5/*jar" /-->
     		</lib>
 
@@ -298,7 +294,7 @@
 	
     <target name="web.rewar" depends="web.war">
         <unwar
-            src="${web.product}/${prefix.modul}-${modul}.war"
+            src="${web.product}/sac-${modul}.war"
             dest="${web.webapp}"
             />
         <!--
@@ -329,8 +325,8 @@
         <replace file="${web.gen.etc}/web.xml">
             <replacefilter token="&lt;!-- @jspc.mappings --&gt;" value="${jspc.mappings}"/>
         </replace>
-        <delete file="${web.product}/${prefix.modul}-${modul}.war" quiet="yes"/>
-        <war warfile="${web.product}/${prefix.modul}-${modul}.war"
+        <delete file="${web.product}/sac-${modul}.war" quiet="yes"/>
+        <war warfile="${web.product}/sac-${modul}.war"
             basedir="${web.webapp}"
             webxml="${web.gen.etc}/web.xml"
             excludes="WEB-INF/web.xml,META-INF/MANIFEST.MF">

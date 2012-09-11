@@ -3,7 +3,7 @@ package org.ibit.rol.sac.back.form;
 import org.apache.commons.validator.GenericValidator;
 import org.apache.commons.validator.ValidatorAction;
 import org.apache.commons.validator.Field;
-import org.apache.commons.validator.util.ValidatorUtils;
+import org.apache.commons.validator.ValidatorUtil;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.validator.Resources;
@@ -56,7 +56,7 @@ public class StrutsCustomValidator {
 	
 
 	private static String obtenerValorPropiedad(Object bean, String field) {
-		return ValidatorUtils.getValueAsString(bean, field);
+		return ValidatorUtil.getValueAsString(bean, field);
 	}
 
 	private static boolean noTieneValor(String value) {

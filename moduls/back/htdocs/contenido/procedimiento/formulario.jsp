@@ -693,7 +693,7 @@
             <bean:message key="procedimiento.relacion.tramites" />
         </div>
         <logic:empty name="tramiteOptions">
-            <br /><h2><bean:message key="procedimiento.relacion.vacio" /></h2><br />
+            <br /><h2><bean:message key="procedimiento.relacion.tramites.vacio" /></h2><br />
         </logic:empty>
         <logic:notEmpty name="tramiteOptions">
 		  <html:form action="/contenido/procedimiento/editar" >        <!--  action para mapear la clase java -->
@@ -748,7 +748,7 @@
             <bean:message key="procedimiento.relacion.documentos" />
         </div>
         <logic:empty name="documentoOptions">
-            <br /><h2><bean:message key="procedimiento.relacion.vacio" /></h2><br />
+            <br /><h2><bean:message key="procedimiento.relacion.docs.vacio" /></h2><br />
         </logic:empty>
         <logic:notEmpty name="documentoOptions">
 	        <html:form action="/contenido/procedimiento/editar" >        <!--  action para mapear la clase java -->
@@ -829,7 +829,7 @@
             <bean:message key="procedimiento.relacion.normativas" />
         </div>
         <logic:empty name="normativaOptions">
-            <br /><h2><bean:message key="procedimiento.relacion.vacio" /></h2><br />
+            <br /><h2><bean:message key="procedimiento.relacion.normativas.vacio" /></h2><br />
         </logic:empty>
         <logic:notEmpty name="normativaOptions">
             <logic:iterate id="normativa" name="normativaOptions">
