@@ -15,7 +15,7 @@ if (logourl != null) {
             <div class="caib_logo" <%=style%>></div>
         </div>
         <div class="aplicacio">
-            <span class="nom">Rolsac</span> <span class="versio">1.1</span>
+            <span class="nom"><spring:message code='aplicacio.nom'/></span> <span class="versio">1.1</span>
         </div>
         <div class="usuari">        
             <p>
@@ -25,10 +25,10 @@ if (logourl != null) {
         <div id="tancarAplicacio">
             <a href="javascript:;" aria-haspopup="true"><span><span><spring:message code='cap.sortir'/></span></span></a>                             
         </div>
-        <!-- dsanchez: Hay que mover el botón otra capa --> 
+        <!-- dsanchez: Hay que mover el botï¿½n otra capa --> 
         <!--
         <div>
-            <a id="cap_pestanya" href="javascript:;" title="Amagar capçalera"></a>      
+            <a id="cap_pestanya" href="javascript:;" title="Amagar capï¿½alera"></a>      
         </div> 
         -->
     </div>

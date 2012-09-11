@@ -192,7 +192,7 @@
            "error":
                {
                    "obligatori": "<spring:message code='fitxes.missatge.titol.obligatori'/>",
-                   "tipus": "El camp '<spring:message code='fitxes.missatge.titol.tipus'/>"
+                   "tipus": "<spring:message code='fitxes.missatge.titol.tipus'/>"
                }
        },
        {
@@ -239,7 +239,7 @@
             <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
         </li>
         <c:if test="${idUA > 0}">
-            <li id="btnNuevaFicha" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea  una nova fitxa</span></span></a></li>
+            <li id="btnNuevaFicha" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span><spring:message code='fitxes.crea.nova'/></span></span></a></li>
         </c:if>
     </ul>
     <div id="resultats">
@@ -256,7 +256,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>                    
+                        <h2><spring:message code='txt.OPCIONS_CERCA'/></h2>                    
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -274,7 +274,7 @@
                             </div>
                         </div>
                         <div class="element">                        
-                            <label for="cerca_estat">Visibilitat</label>                            
+                            <label for="cerca_estat"><spring:message code='txt.visibilitat'/></label>                            
 	                           <select id="cerca_estat" name="cerca_estat" class="t8">
 	                               <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
 	                               <option value="1"><spring:message code='txt.validacio.publica'/></option>
@@ -305,7 +305,7 @@
                         </div>
                     </div>
                     <div class="busquedaAvanzada">
-                        <h2>CERCADOR AVAN�AT</h2>                        
+                        <h2><spring:message code='txt.CERCADOR_AVANCAT'/></h2>                        
                         <div class="fila">
                         <%--
                             <div class="element t25">
@@ -831,7 +831,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul amagat"><spring:message code='boto.mostra'/></a>
-                    <legend>INFORMADOR</legend>
+                    <legend><spring:message code='txt.INFORMADOR'/></legend>
                     <div class="modul_continguts">
                         <div class="fila">
                             <div class="element t50p">
@@ -862,7 +862,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTAD�STIQUES</legend> 
+                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -879,7 +879,7 @@
 	        <div id="modulAuditories" class="modul auditorias">                
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>AUDITORIES</legend>
+                    <legend><spring:message code='txt.AUDITORIES'/></legend>
                     <div class="modul_continguts mostrat">
                        <p class="executant"><spring:message code='txt.carregant'/></p>
                      <%--
@@ -920,7 +920,7 @@
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
-                    <legend>Publicaci�</legend>
+                    <legend><spring:message code='txt.PUBLICACIO'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">

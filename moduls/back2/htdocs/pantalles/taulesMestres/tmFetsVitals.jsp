@@ -973,8 +973,8 @@
                             <div class="control">
                                 <select id="cerca_indicador" name="cerca_indicador" class="t8">
                                     <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
+                                    <option value="0"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
                                 </select>
                             </div>
                         </div>
@@ -987,8 +987,8 @@
                             <div class="control">
                                 <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
                                     <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
+                                    <option value="0"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
                                 </select>
                             </div>
                         </div>
@@ -999,8 +999,8 @@
                             <div class="control">
                                 <select id="cerca_taxa" name="cerca_taxa" class="t8">
                                     <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                    <option value="0">No</option>
-                                    <option value="1">Sí</option>
+                                    <option value="0"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
                                 </select>
                             </div>
                         </div>

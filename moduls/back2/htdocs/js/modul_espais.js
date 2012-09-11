@@ -92,7 +92,7 @@ function CModulEspais(){
 		codi_llistat += "</ul>";
 		
 		codi_espai_txt = (nombre_llistat == 1) ? txtEspai : txtEspais;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaEspais + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_espai_txt + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaEspais + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_espai_txt + "</strong>.";
 		
 		espais_seleccionats_elm.find("p.info").html(codi_info);
 		espais_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		

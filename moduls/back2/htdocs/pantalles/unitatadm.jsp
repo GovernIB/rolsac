@@ -782,7 +782,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTAD�STIQUES</legend> 
+                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -799,7 +799,7 @@
 		        <div id="modulAuditories" class="modul auditorias">                
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                        <legend>AUDITORIES</legend>
+                        <legend><spring:message code='txt.AUDITORIES'/></legend>
                         <div class="modul_continguts amagat">
                            <p class="executant"><spring:message code='txt.carregant'/></p>
                          <%--
@@ -893,7 +893,7 @@
             <div class="modul" id="modulRelacioOrganica">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend><spring:message code='txt.relacioOrganica'/></legend>
+                    <legend><spring:message code='txt.RELACIO_ORGANICA'/></legend>
                     <div class="modul_continguts mostrat">
                     
                         <div class="fila">
@@ -1368,104 +1368,104 @@
         var txtNo = "<spring:message code='txt.no'/>";
         var txtTrobats = "<spring:message code='txt.trobats'/>";
         var txtTrobades = "<spring:message code='txt.trobades'/>";
-        var txtUnitat = "Unitat";
-        var txtUnitats = "Unitats";
-        var txtAdministrativa = "Administrativa";
-        var txtAdministratives = "Administratives";
-        var txtMostrem = "Mostrem del ";
-        var txtMostremAl = " al ";
+        var txtUnitat = "<spring:message code='txt.unitat'/>";
+        var txtUnitats = "<spring:message code='txt.unitats'/>";
+        var txtAdministrativa = "<spring:message code='txt.administrativa'/>";
+        var txtAdministratives = "<spring:message code='txt.administratives'/>";
+        var txtMostrem = "<spring:message code='txt.mostrem'/> <spring:message code='txt.del'/> ";
+        var txtMostremAl = " <spring:message code='txt.al'/> ";
         var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
         var txtNoHiHaUnitats = txtNoHiHa + " " + txtUnitats.toLowerCase();
-        var txtNoHiHaFitxes = "Aquesta secci� no t� fitxes";
+        var txtNoHiHaFitxes = "<spring:message code='txt.seccio_sense_fitxes'/>";
         var txtCarregantUnitats = txtCarregant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         var txtOrdenats = "<spring:message code='txt.ordenats'/>";
         var txtAscendentment = "<spring:message code='txt.ascendent'/>";
         var txtDescendentment = "<spring:message code='txt.descendentment'/>";
         var txtPer = "<spring:message code='txt.per'/>";
         // taula
-        var txtNom = "Nom";
-        var txtPare = "Pare";
-        var txtCercant = "Cercant";
+        var txtNom = "<spring:message code='txt.nom'/>";
+        var txtPare = "<spring:message code='txt.pare'/>";
+        var txtCercant = "<spring:message code='txt.cercant'/>";
         var txtCercantUnitats = txtCercant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         // paginacio
-        var txtTrobat = "S'ha trobat";
-        var txtSeguents = "Seg�ents";
-        var txtAnteriors = "Anteriors";
-        var txtInici = "Inici";
-        var txtFinal = "Final";
-        var txtPagines = "P�gines";
+        var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
+        var txtSeguents = "<spring:message code='txt.seguents'/>";
+        var txtAnteriors = "<spring:message code='txt.anteriors'/>";
+        var txtInici = "<spring:message code='txt.inici'/>";
+        var txtFinal = "<spring:message code='txt.final'/>";
+        var txtPagines = "<spring:message code='txt.pagines'/>";
         var txtCercant = "<spring:message code='txt.cercant'/>";    
         var txtCercantUnitatsAnteriors = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantUnitatsSeguents = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;       
         var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
     
         // arbre
-        var txtArrel = "Arrel";
-        var txtNodesFills = "Nodes fills";
-        var txtCarregantNodes = txtCarregant + " nodes fills. " + txtEspere;
+        var txtArrel = "<spring:message code='txt.arrel'/>";
+        var txtNodesFills = "<spring:message code='txt.nodes_fills.titol'/>";
+        var txtCarregantNodes = txtCarregant + " <spring:message code='txt.nodes_fills_dot'/> " + txtEspere;
         
         
         // detall
         var txtCarregantDetall = txtCarregant + " detall de l "+ txtUnitat.toLowerCase() + ". " + txtEspere;
-        var txtEdificiEliminar = "Est� segur de voler eliminar aquesta " + txtUnitat.toLowerCase() + "?";
-        var txtEnviantDades = "Enviant dades al servidor. " + txtEspere;        
-        var txtMostra = "Mostra";
+        var txtEdificiEliminar = "<spring:message code='txt.segur_eliminar_aquesta'/> " + txtUnitat.toLowerCase() + "?";
+        var txtEnviantDades = "<spring:message code='txt.enviant_dades_servidor'/> " + txtEspere;
+        var txtMostra = "<spring:message code='txt.mostra'/>";
         var txtAmaga = "<spring:message code='txt.amaga'/>";
-        var txtCaducat = "Caducat";
+        var txtCaducat = "<spring:message code='txt.caducat'/>";
         // idioma
-        var txtDesplega = "Desplega";
-        var txtPlega = "Plega";
+        var txtDesplega = "<spring:message code='txt.desplega'/>";
+        var txtPlega = "<spring:message code='txt.plega'/>";
         // moduls
-        var txtElimina = "Elimina";
-        var txtHiHa = "Hi ha";
-        var txtNoHiHa = "No hi ha";
-        var txtItems = "�tems";
-        var txtCarregantItems = "Carregant " + txtItems.toLowerCase();
-        var txtCercantItems = "Cercant " + txtItems.toLowerCase();
-        var txtCercantItemsAnteriors = "Cercant " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
-        var txtCercantItemsSeguents = "Cercant " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
+        var txtElimina = "<spring:message code='txt.elimina'/>";
+        var txtHiHa = "<spring:message code='txt.hi_ha'/>";
+        var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
+        var txtItems = "<spring:message code='txt.items'/>";
+        var txtCarregantItems = "<spring:message code='txt.carregant'/> " + txtItems.toLowerCase();
+        var txtCercantItems = "<spring:message code='txt.cercant'/> " + txtItems.toLowerCase();
+        var txtCercantItemsAnteriors = "<spring:message code='txt.cercant'/> " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
+        var txtCercantItemsSeguents = "<spring:message code='txt.cercant'/> " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
         // modul materies
-        var txtMateria = "mat�ria";
-        var txtMateries = "mat�ries";
+        var txtMateria = "<spring:message code='txt.materia'/>";
+        var txtMateries = "<spring:message code='txt.materies'/>";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
         var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries + " " + txtSeleccionades.toLowerCase();
         
         // modul seccions
-        var txtSeccio = "secci�";
-        var txtSeccions = "seccions";
+        var txtSeccio = "<spring:message code='txt.seccio_lower'/>";
+        var txtSeccions = "<spring:message code='txt.seccions_lower'/>";
         var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions;
-        var txtFitxa = "fitxa";
-        var txtFitxes = "fitxes";        
+        var txtFitxa = "<spring:message code='txt.fitxa_lower'/>";
+        var txtFitxes = "<spring:message code='txt.fitxes_lower'/>";
         var txtNoHiHaFitxes = txtNoHiHa + " " + txtFitxes;
-        var txtPublicacio = "publicaci�";
-        var txtCaducitat = "caducitat";
-        var txtOrdre = "ordre";
-        var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona' />";
-        var txtNoHiHaSeccionsSeleccionades = "No hi ha " + txtSeccions + " " + txtSeleccionades.toLowerCase();
-        var txtNoHiHaFitxesSeleccionades = "No hi ha " + txtFitxes + " " + txtSeleccionades.toLowerCase();
-        var txtErrorSeccionsBuides = "Les seccions a guardar han de contenir calque fitxa. Esborri les seccions sense fitxes o assigni-les al menys una";
+        var txtPublicacio = "<spring:message code='txt.publicacio_lower'/>";
+        var txtCaducitat = "<spring:message code='txt.caducitat_lower'/>";
+        var txtOrdre = "<spring:message code='camp.ordre_lower'/>";
+        var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona'/>";
+        var txtNoHiHaSeccionsSeleccionades = txtNoHiHa + " " + txtSeccions + " " + txtSeleccionades.toLowerCase();
+        var txtNoHiHaFitxesSeleccionades = txtNoHiHa + " " + txtFitxes + " " + txtSeleccionades.toLowerCase();
+        var txtErrorSeccionsBuides = "<spring:message code='unitatadm.formulari.error.seccions_buides'/>";
         
         // modul edificis
-        var txtEdifici = "Edifici";
-        var txtEdificis = "Edificis";
-        var txtAdresa = "Adre�a";
-        var txtCodiPostal = "Codi Postal";
-        var txtPoblacio = "Poblaci�";
+        var txtEdifici = "<spring:message code='txt.edifici'/>";
+        var txtEdificis = "<spring:message code='txt.edificis'/>";
+        var txtAdresa = "<spring:message code='unitatadm.formulari.edificis.adreca'/>";
+        var txtCodiPostal = "<spring:message code='unitatadm.formulari.edificis.cp'/>";
+        var txtPoblacio = "<spring:message code='unitatadm.formulari.edificis.poblacio'/>";
         var txtNoHiHaEdificis = txtNoHiHa + " " + txtEdificis.toLowerCase();
-        var txtNoHiHaEdificisSeleccionats = "No hi ha " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
+        var txtNoHiHaEdificisSeleccionats = txtNoHiHa + " " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
         // error conexio
-        var txtCalcularTotal = "Calcular el total";
-        var txtAjaxError = "S'ha produ�t un error de conexi�.";
-        var txtIntenteho = "Intente-ho de nou en uns minuts.";
-        var txtConexionIntentar = "Intentar conexi� en";
-        var txtSegon = "segon";
-        var txtSegons = "segons";
-        var txtConectar = "Conectar ara";
-        var txtFuncions = "Les funcions de l'aplicaci� s'han deshabilitat";
-        var txtFuncionsFins = "fins que no es restableixi la comunicaci�";
+        var txtCalcularTotal = "<spring:message code='error.conexio.calcular_total'/>";
+        var txtAjaxError = "<spring:message code='error.conexio.ajax'/>";
+        var txtIntenteho = "<spring:message code='error.conexio.intentar_de_nou'/>";
+        var txtConexionIntentar = "<spring:message code='error.conexio.intentar_en'/>";
+        var txtSegon = "<spring:message code='error.conexio.segon'/>";
+        var txtSegons = "<spring:message code='error.conexio.segons'/>";
+        var txtConectar = "<spring:message code='error.conexio.conectar_ara'/>";
+        var txtFuncions = "<spring:message code='error.conexio.funcions'/>";
+        var txtFuncionsFins = "<spring:message code='error.conexio.fins'/>";
 
-        var txtCampObligatori = "Es un camp obligatori";
+        var txtCampObligatori = "<spring:message code='txt.es_un_camp_obligatori'/>";
 
         var txtMaxim = "<spring:message code='txt.maxim'/>";
         var txtMax = "<spring:message code='txt.max'/>";
@@ -1476,7 +1476,7 @@
         var txtDiaMal = "<spring:message code='txt.dia_mal'/>";
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
 
-        var txtItemEliminar="Eliminar item";
+        var txtItemEliminar= "<spring:message code='txt.eliminar'/> <spring:message code='txt.item'/>";
         
     </script>
     

@@ -318,7 +318,7 @@ function CEscriptoriEdifici(){
 		nombre_llistat = ModulEdifici.finalizar();
 		
 		codi_edificis_txt = (nombre_llistat == 1) ? txtEdifici : txtEdificis;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaEdificis + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_edificis_txt.toLowerCase() + "</strong>.";
 		
 		//modul_edificis_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 		modul_edificis_elm.find("p.info").html(codi_info);		

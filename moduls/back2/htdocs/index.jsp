@@ -8,8 +8,10 @@
     <title><%
 String appTitol = System.getProperty("entitat.aplicacio.titol");
 if (appTitol==null) {
-%><spring:message code='aplicacio.titol'/><% } else { 
-%><%=appTitol%><% } %></title>
+%><spring:message code='aplicacio.titol'/><% 
+} else { 
+%><%=appTitol%><% } %>
+    </title>
     <jsp:include page="layout/favicon.jsp" flush="true"/>
     <link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/comuns_amplaria1.css'/>" rel="stylesheet" type="text/css" media="screen" />  

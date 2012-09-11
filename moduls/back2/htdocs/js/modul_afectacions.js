@@ -540,7 +540,7 @@ function CEscriptoriAfectacions() {
 		nombre_llistat = ModulAfectacions.finalizar();
 		
 		codi_afectacions_txt = (nombre_llistat == 1) ? txtAfectacio : txtAfectacions;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaAfectacions + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_afectacions_txt.toLowerCase() + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaAfectacions + "." : txtHiha + " <strong>" + nombre_llistat + " " + codi_afectacions_txt.toLowerCase() + "</strong>.";
 		
 		modul_afectacions_elm.find("p.info").html(codi_info);
 		

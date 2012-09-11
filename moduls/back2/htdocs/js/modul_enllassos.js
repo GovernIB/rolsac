@@ -270,7 +270,7 @@ function CEscriptoriEnllas(){
 		nombre_llistat = ModulEnllas.finalizar();
 		
 		codi_enllassos_txt = (nombre_llistat == 1) ? txtEnllas : txtEnllassos;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaEnllassos + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_enllassos_txt.toLowerCase() + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaEnllassos + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_enllassos_txt.toLowerCase() + "</strong>.";
 		
 		//modul_enllassos_elm.find("ul").remove().end().find("p.info").html(codi_info).after(codi_llistat);
 		modul_enllassos_elm.find("p.info").html(codi_info);		

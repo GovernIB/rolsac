@@ -10,7 +10,7 @@
     var pagIndexFitxa = '<c:url value="/index/reiniciarFitxes.do" />';
     var pagIndexNormativa = '<c:url value="/index/reiniciarNormatives.do" />';
     var pagIndexProcediment = '<c:url value="/index/reiniciarProcediments.do" />';
-    var txtAmaga = "";
+    var txtAmaga = '<spring:message code="txt.amaga" />';
     var txtEnviantDades="<spring:message code='index.missatge.enviant_dades'/>" ;
 
 </script>

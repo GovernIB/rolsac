@@ -357,7 +357,7 @@ function CEscriptoriNormativa(){
 		nombre_llistat = ModulNormativa.finalizar();
 		
 		codi_normatives_txt = (nombre_llistat == 1) ? txtNormativa : txtNormatives;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaNormatives + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_normatives_txt.toLowerCase() + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaNormatives + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_normatives_txt.toLowerCase() + "</strong>.";
 		
 		modul_normatives_elm.find("p.info").html(codi_info);
 		

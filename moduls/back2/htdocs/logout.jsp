@@ -4,9 +4,8 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es">
 <head>
-   <title>ROL-SAC Sesión Finalizada</title>
+   <title><spring:message code='aplicacio.logout.sesio_finalitzada'/></title>
    <meta http-equiv="Content-type" content='text/html; charset="ISO-8859-1"' />
-   <!--link rel="stylesheet" href="css/styleA.css" type="text/css" /-->
 </head>
 <body class="ventana">
 	<center>

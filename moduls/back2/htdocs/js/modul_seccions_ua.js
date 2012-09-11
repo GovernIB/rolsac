@@ -188,7 +188,7 @@ function CEscriptoriSeccionsUA(){
 				codi_llistat += "</ul>";
 				
 				codi_seccions_txt = (nombre_llistat == 1) ? txtSeccioUA : txtSeccionsUA;
-				codi_info = (nombre_llistat == 0) ? txtNoHiHaSeccioUA + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_seccions_txt.toLowerCase() + "</strong>.";
+				codi_info = (nombre_llistat == 0) ? txtNoHiHaSeccioUA + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_seccions_txt.toLowerCase() + "</strong>.";
 								
 				modul_seccions_ua_elm.find("p.info").html(codi_info);
 				modul_seccions_ua_elm.find("div.listaOrdenable").html(codi_llistat);

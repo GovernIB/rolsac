@@ -19,7 +19,7 @@ $(document).ready(function() {
 		ModulProcediment.iniciar();
 	}
 	
-	// Evento para el botón de volver al detalle
+	// Evento para el botï¿½n de volver al detalle
 	jQuery("#btnVolverDetalle_procediment").bind("click",function(){EscriptoriProcediment.torna();});	
 	jQuery("#btnFinalizar_procediment").bind("click",function(){EscriptoriProcediment.finalizar();});
 });
@@ -59,7 +59,7 @@ function CModulProcediment(){
 			multilang: false
 		});
 		
-		// one al botó de gestionar
+		// one al botï¿½ de gestionar
 		modul_procediments_elm.find("a.gestiona").one("click", function(){ModulProcediment.gestiona();} );
 	}	
 			
@@ -200,14 +200,14 @@ function CEscriptoriProcediment(){
 				nombre: titulo,
 				idProcedimiento: procedimientoID
 			};
-			// Agrega el item, y si se ha añadido correctamente (si no existía previamente) actualiza el mensaje de items seleccionados.
+			// Agrega el item, y si se ha aï¿½adido correctamente (si no existï¿½a previamente) actualiza el mensaje de items seleccionados.
 			if( ModulProcediment.agregaItem(item)) {		
 				this.contaSeleccionats();		
 			}
 		}
 	}	
 	
-	// Cambia de página.
+	// Cambia de pï¿½gina.
 	this.cambiaPagina = function( pag ){
 		multipagina_procediment.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -311,7 +311,7 @@ function CEscriptoriProcediment(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Actualizamos el navegador multipágina.
+			// Actualizamos el navegador multipï¿½gina.
 			multipagina_procediment.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -419,7 +419,7 @@ function CEscriptoriProcediment(){
 		nombre_llistat = ModulProcediment.finalizar(true);
 		
 		codi_procediments_txt = (nombre_llistat == 1) ? txtProcediment : txtProcediments;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaProcediments + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_procediments_txt.toLowerCase() + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaProcediments + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_procediments_txt.toLowerCase() + "</strong>.";
 		
 		modul_procediments_elm.find("p.info").html(codi_info);
 		
@@ -435,13 +435,13 @@ function CEscriptoriProcediment(){
 
 		ModulProcediment.prepararListaProcedimientos(modul_procediments_elm.find(".listaOrdenable"));
 		
-		// Marcamos el formulario como modificado para habilitar el botón de guardar.
+		// Marcamos el formulario como modificado para habilitar el botï¿½n de guardar.
 		Detall.modificado();
 		
 		this.torna();
 	}
 	
-	// Método sobreescrito
+	// Mï¿½todo sobreescrito
 	this.anar = function(enlace_html) {
 				
 		num = parseInt(enlace_html,10);

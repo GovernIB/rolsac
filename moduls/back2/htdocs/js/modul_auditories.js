@@ -1,7 +1,7 @@
 /**
- * Clase que implementa la lógica del módulo de auditorías
+ * Clase que implementa la lï¿½gica del mï¿½dulo de auditorï¿½as
  * Todos los parametros son opcionales.
- * @param idModuloAuditorias = Id del div HTML de auditorías
+ * @param idModuloAuditorias = Id del div HTML de auditorï¿½as
  */
 function ModulAuditories(idModuloAuditorias){
 
@@ -13,12 +13,12 @@ function ModulAuditories(idModuloAuditorias){
 	
 	var that = this;
 	
-	// Atributo que contiene el id del elemento que se está visualizando en la ficha.
+	// Atributo que contiene el id del elemento que se estï¿½ visualizando en la ficha.
 	this.itemID;
 	
 	var moduloAuditorias_elm = jQuery(idModuloAuditorias);
 	
-	// Realizar una búsqueda
+	// Realizar una bï¿½squeda
 	this.busca = function(tipusAuditoria, itemID){		
 			
 		that.carregar(tipusAuditoria, itemID);
@@ -84,8 +84,7 @@ function ModulAuditories(idModuloAuditorias){
 			});
 		} else {
 			codi_taula_audit += '<tr>';
-			//TODO: internacionalizar
-			codi_taula_audit += ' <td colspan="3" class="usuario"><div>no hi ha auditories registrades</div></td>';
+			codi_taula_audit += ' <td colspan="3" class="usuario"><div>' + txtNoHiHaAuditoriesRegistrades + '</div></td>';
 			codi_taula_audit += '</tr>';
 		}
 		

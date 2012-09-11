@@ -20,6 +20,8 @@
     var txtCancela = '<spring:message code="aplicacio.cancela"/>';
     var txtTancarAplicacio = '<spring:message code="aplicacio.logout.pregunta"/>';    
     var txtCargandoEntidades = '<spring:message code="aplicacio.carregant_entitas"/>';
+    var txtHiha = '<spring:message code="txt.hi_ha"/>';
+    var txtNoHiHaAuditoriesRegistrades ='<spring:message code="txt.no_hi_ha_auditories_registrades"/>'; 
     
     // cap
     var txtAmagar = '<spring:message code="cap.amagar"/>';
@@ -95,7 +97,7 @@
     var txtErrorPermisos = '<spring:message code="error.permisos"/>';
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';    
         
-    // Errores de validación
+    // Errores de validaciï¿½n
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
     

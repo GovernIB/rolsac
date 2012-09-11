@@ -117,9 +117,9 @@
     var txtNoHiHaDocumentsSeleccionats = txtNoHiHaDocuments + " " + txtSeleccionats.toLowerCase();
     var txtNoHiHaTaxesSeleccionades = txtNoHiHaTaxes + " " + txtSeleccionades.toLowerCase();
     
-    var txtTramitNouProcediment = "Per a gestionar els tràmits has de guardar el procediment";
-    var txtTramit = "Tramit";
-    var txtTramits = "Tramits";
+    var txtTramitNouProcediment = "<spring:message code='txt.gestionar_tramits_guardar_procediment'/>";
+    var txtTramit = "<spring:message code='txt.tramit'/>";
+    var txtTramits = "<spring:message code='txt.tramits'/>";
     var txtTramitCreatCorrecte = "<spring:message code='txt.tramit_creat_correcte'/>";
     var txtTramitModificatCorrecte = "<spring:message code='txt.tramit_modificat_correcte'/>";
     
@@ -210,7 +210,7 @@
                 }
         },
         
-        // Forma de iniciación
+        // Forma de iniciaciï¿½n
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -236,7 +236,7 @@
                 }
         },
 
-        // Plazo máximo para resolución (Catalán)
+        // Plazo mï¿½ximo para resoluciï¿½n (Catalï¿½n)
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -255,7 +255,7 @@
                 }
         },
         
-        // Plazo máximo para la notificación (Catalán)
+        // Plazo mï¿½ximo para la notificaciï¿½n (Catalï¿½n)
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -334,7 +334,7 @@
     
     var FormulariTramits = [                            
 		{	
-			// Nom del tràmit 
+			// Nom del trï¿½mit 
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_nom_tramit_ca",
@@ -353,7 +353,7 @@
                 }			
 		},
 						
-        // Identificador tràmit telemàtic
+        // Identificador trï¿½mit telemï¿½tic
         {
             "modo": "individual",
             "etiqueta": "id",
@@ -366,9 +366,9 @@
                 }
         },
         
-        //Validació
+        //Validaciï¿½
 		{	
-			// Nom del tràmit 
+			// Nom del trï¿½mit 
             "modo": "individual",
             "etiqueta": "id",
             "etiquetaValor": "item_validacio_tramit",
@@ -427,7 +427,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>
+                        <h2>"<spring:message code='txt.OPCIONS_CERCA'/>";</h2>
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -445,7 +445,7 @@
                             </div>
                         </div>
                         <div class="element">                        
-                            <label for="cerca_estat">Visibilitat</label>                            
+                            <label for="cerca_estat">"<spring:message code='txt.visibilitat'/>";</label>                            
                             <select id="cerca_estat" name="cerca_estat" class="t8">
                                 <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                 <option value="1"><spring:message code='txt.validacio.publica'/></option>
@@ -476,7 +476,7 @@
                         </div>
                     </div>                    
                     <div class="busquedaAvanzada">
-                        <h2>CERCADOR AVANÇAT</h2>
+                        <h2>"<spring:message code='txt.CERCADOR_AVANCAT'/>";</h2>
                         <div class="fila">                                                                                    
                             <div class="element t25">
                                 <div class="etiqueta">
@@ -505,7 +505,7 @@
                         <div class="fila">
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_materia">Matèria</label>
+                                    <label for="cerca_materia">"<spring:message code='fitxes.llistat.materia'/>";</label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_materia" name="cerca_materia" class="t8">
@@ -518,7 +518,7 @@
                             </div>
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_fet_vital">Fet Vital</label>
+                                    <label for="cerca_fet_vital"><spring:message code='fitxes.llistat.fet_vital'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_fet_vital" name="cerca_fet_vital" class="t8">
@@ -564,8 +564,8 @@
                                 <div class="control">
                                     <select id="cerca_indicador" name="cerca_indicador" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0">No</option>
-                                        <option value="1">Sí</option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -576,8 +576,8 @@
                                 <div class="control">
                                     <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0">No</option>
-                                        <option value="1">Sí</option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -609,7 +609,7 @@
                                     <select id="cerca_taxa" name="cerca_taxa" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                         <option value="0">No</option>
-                                        <option value="1">Sí</option>
+                                        <option value="1">Sï¿½</option>
                                     </select>
                                 </div>
                             </div>
@@ -706,7 +706,7 @@
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">                                            
-                                                <label for="item_codigo_pro">Codi</label>
+                                                <label for="item_codigo_pro"><spring:message code='txt.codi'/>/</label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_codigo_pro" name="item_codigo_pro" type="text" value=""/>
@@ -1688,13 +1688,13 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>CANALS DE PRESENTACIÓ</legend>
+                    <legend><spring:message code='txt.CANALS_PRESENTACIO'/>/</legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
                             <div class="element t99p multilang">
                                 <div class="campoIdioma ca">
                                     <div class="etiqueta">
-                                        <label for="item_presentacio_ca">Presentació (CA)</label>
+                                        <label for="item_presentacio_ca"><spring:message code='camp.presentacio'/> (CA)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_presentacio_ca" name="item_presentacio_ca" type="text" class="nou" />
@@ -1702,7 +1702,7 @@
                                 </div>
                                 <div class="campoIdioma es">
                                     <div class="etiqueta">
-                                        <label for="item_presentacio_es">Presentació (ES)</label>
+                                        <label for="item_presentacio_es"><spring:message code='camp.presentacio'/> (ES)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_presentacio_es" name="item_presentacio_es" type="text" class="nou" />
@@ -1710,7 +1710,7 @@
                                 </div>
                                 <div class="campoIdioma en">
                                     <div class="etiqueta">
-                                        <label for="item_presentacio_en">Presentació (EN)</label>
+                                        <label for="item_presentacio_en"><spring:message code='camp.presentacio'/> (EN)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_presentacio_en" name="item_presentacio_en" type="text" class="nou" />
@@ -1718,7 +1718,7 @@
                                 </div>
                                 <div class="campoIdioma fr">
                                     <div class="etiqueta">
-                                        <label for="item_presentacio_fr">Presentació (FR)</label>
+                                        <label for="item_presentacio_fr"><spring:message code='camp.presentacio'/> (FR)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_presentacio_fr" name="item_presentacio_fr" type="text" class="nou" />
@@ -1726,7 +1726,7 @@
                                 </div>
                                 <div class="campoIdioma de">
                                     <div class="etiqueta">
-                                        <label for="item_presentacio_de">Presentació (DE)</label>
+                                        <label for="item_presentacio_de"><spring:message code='camp.presentacio'/> (DE)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_presentacio_de" name="item_presentacio_de" type="text" class="nou" />
@@ -1738,7 +1738,7 @@
                             <div class="element t50p multilang">
                                 <div class="campoIdioma ca">
                                     <div class="etiqueta">
-                                        <label for="item_lloc_ca">Lloc (CA)</label>
+                                        <label for="item_lloc_ca"><spring:message code='camp.lloc'/> (CA)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_lloc_ca" name="item_lloc_ca" type="text" class="nou" />
@@ -1746,7 +1746,7 @@
                                 </div>
                                 <div class="campoIdioma es">
                                     <div class="etiqueta">
-                                        <label for="item_lloc_es">Lloc (ES)</label>
+                                        <label for="item_lloc_es"><spring:message code='camp.lloc'/> (ES)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_lloc_es" name="item_lloc_es" type="text" class="nou" />
@@ -1754,7 +1754,7 @@
                                 </div>
                                 <div class="campoIdioma en">
                                     <div class="etiqueta">
-                                        <label for="item_lloc_en">Lloc (EN)</label>
+                                        <label for="item_lloc_en"><spring:message code='camp.lloc'/> (EN)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_lloc_en" name="item_lloc_en" type="text" class="nou" />
@@ -1762,7 +1762,7 @@
                                 </div>
                                 <div class="campoIdioma fr">
                                     <div class="etiqueta">
-                                        <label for="item_lloc_fr">Lloc (FR)</label>
+                                        <label for="item_lloc_fr"><spring:message code='camp.lloc'/> (FR)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_lloc_fr" name="item_lloc_fr" type="text" class="nou" />
@@ -1770,7 +1770,7 @@
                                 </div>
                                 <div class="campoIdioma de">
                                     <div class="etiqueta">
-                                        <label for="item_lloc_de">Lloc (DE)</label>
+                                        <label for="item_lloc_de"><spring:message code='camp.lloc'/> (DE)</label>
                                     </div>
                                     <div class="control">
                                         <input id="item_lloc_de" name="item_lloc_de" type="text" class="nou" />
@@ -1823,7 +1823,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>INFORMADORS</legend>
+                    <legend><spring:message code='txt.INFORMADORS'/></legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
                             <div class="element t99p">
@@ -1855,7 +1855,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -1872,7 +1872,7 @@
 	        <div id="modulAuditories" class="modul auditorias">                
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>AUDITORIES</legend>
+                    <legend><spring:message code='txt.AUDITORIES'/></legend>
                     <div class="modul_continguts mostrat">
                        <p class="executant"><spring:message code='txt.carregant'/></p>
                      <%--
@@ -1880,18 +1880,18 @@
                             <thead>
                                 <th class="usuario"><div>USUARI</div></th>
                                 <th class="fecha"><div>DATA</div></th>
-                                <th class="operacion"><div>OPERACIÓ</div></th>
+                                <th class="operacion"><div>OPERACIï¿½</div></th>
                             </thead>                    
                             <tbody>
                                 <tr>
                                     <td class="usuario"><div>rsanz</div></td>
                                     <td class="fecha"><div>16/01/2012</div></td>
-                                    <td class="operacion"><div>Modificació</div></td>
+                                    <td class="operacion"><div>Modificaciï¿½</div></td>
                                 </tr>
                                 <tr>
                                     <td class="usuario"><div>jfernandez</div></td>
                                     <td class="fecha"><div>16/01/2012</div></td>
-                                    <td class="operacion"><div>Modificació</div></td>
+                                    <td class="operacion"><div>Modificaciï¿½</div></td>
                                 </tr>
                                 <tr>
                                     <td class="usuario"><div>flopez</div></td>
@@ -2001,17 +2001,17 @@
                 <div class="interior">                    
                     <fieldset>                                  
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                        <legend>TRÀMITS</legend>                               
+                        <legend><spring:message code='txt.TRAMITS'/></legend>                               
                         <div class="modul_continguts mostrat">                                  
                             <!-- modulTramits -->
                             <div class="modulTramits">
                                 <div class="seleccionats">                                
                                     <div class="seleccionat">
-                                        <p class="info">No hi ha tràmits seleccionats</p>
+                                        <p class="info"><spring:message code='txt.noHiHaTramitsRelacionats'/></p>
                                         <div class="listaOrdenable"></div>
                                     </div>
                                     <div class="btnGenerico">
-                                        <a class="btn gestiona" href="javascript:;"><span><span>Gestiona tràmits</span></span></a>
+                                        <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='txt.gestiona_tramits'/></span></span></a>
                                     </div>
                                 </div>                                  
                             </div>
@@ -3247,18 +3247,18 @@
 		                		               
 	    	</div>
 	    	
-		    <!-- Menú de publicación -->
+		    <!-- Menï¿½ de publicaciï¿½n -->
 		    <div class="modulLateral menuPublicacion">
 		        <div class="modul publicacio">
 		            <fieldset>
-		                <a class="modul mostrat">Amaga</a>
-		                <legend>Publicació</legend>
+		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+		                <legend>Publicaciï¿½</legend>
 		                <div class="modul_continguts mostrat">
 		                    <!-- fila -->
 		                    <div class="fila">
 		                        <div class="element left">
 		                            <div class="etiqueta">
-		                                <label for="item_validacio_tramit">Validació</label>
+		                                <label for="item_validacio_tramit"><spring:message code='txt.validacio'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <select name="item_validacio_tramit" id="item_validacio_tramit">                                                                
@@ -3272,7 +3272,7 @@
 		                        
 		                        <div class="element right">
 		                            <div class="etiqueta">
-		                                <label for="item_moment_tramit">Moment</label>
+		                                <label for="item_moment_tramit"><spring:message code='txt.moment'/></label>
 		                            </div>
 		                            <div class="control">  
 		                                <select name="item_moment_tramit" id="item_moment_tramit">                                                                
@@ -3288,7 +3288,7 @@
 		                    <div class="fila">
 		                        <div class="element left">
 		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_publicacio">Data publicació</label>
+		                                <label for="tramit_item_data_publicacio"><spring:message code='camp.dataPublicacio'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input type="text" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
@@ -3296,7 +3296,7 @@
 		                        </div>
 		                        <div class="element right">
 		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_caducitat">Data caducitat</label>
+		                                <label for="tramit_item_data_caducitat"><spring:message code='camp.dataCaducitat'/></label>
 		                            </div>
 		                            <div class="control">
 		                                <input type="text" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
@@ -3308,13 +3308,13 @@
 		                    <div class="botonera dalt">
 		                      <ul>
 		                          <li class="btnVolver impar">
-		                              <a href="javascript:;"><span><span>Torna</span></span></a>
+		                              <a href="javascript:;"><span><span><spring:message code='boto.torna'/></span></span></a>
 		                          </li>
 		                          <li class="btnGuardar par">
-		                              <a class="btnGuardar" href="javascript:;"><span><span>Guarda</span></span></a>
+		                              <a class="btnGuardar" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a>
 		                          </li>
 		                          <li style="" class="btnEliminar impar">
-		                              <a class="btnEliminar" href="javascript:;"><span><span>Elimina</span></span></a>
+		                              <a class="btnEliminar" href="javascript:;"><span><span><spring:message code='boto.elimina'/></span></span></a>
 		                          </li>                          
 		                      </ul>
 		                    </div>
@@ -3465,7 +3465,7 @@
 	            <!-- /modul -->    
 		        	        
 		    </div>
-		    <!-- /Menú de publicación -->		    		                   
+		    <!-- /Menï¿½ de publicaciï¿½n -->		    		                   
 	</div>    
 	</form>    
 </div>                           
@@ -3496,7 +3496,7 @@
                 }
             },
             
-            { // Forma de pagament (Català)
+            { // Forma de pagament (Catalï¿½)
                 "modo": "individual",
                 "etiqueta": "id",
                 "etiquetaValor": "taxa_tramit_forma_pagament_ca",

@@ -913,7 +913,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>MULTIMÈDIA</legend>
+                    <legend><spring:message code='txt.MULTIMEDIA'/></legend>
                     <div class="modul_continguts mostrat">                        
                         <div class="fila">
                             <div class="element t50p campoImagen">
@@ -988,7 +988,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">

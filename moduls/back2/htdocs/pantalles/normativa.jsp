@@ -31,9 +31,7 @@
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
         var pagArrel = '<c:url value="/" />';        
-        var pagBOIB = "json/boibsJSON.php";
       	var pagNormativa = '<c:url value="/normativa/cercarNormatives.do" />';             
-        var pagProcediments = "json/procedimentsJSON.php";
         
         var idUaActual = '<c:out value="${idUA}" />';
         var nomUaActual = '<c:out value="${nomUA}" />';        
@@ -168,13 +166,13 @@
         var txtNormativaExterna = "<spring:message code='txt.normativa_externa'/>";
         
         // suggeriments
-        var suggeriments = [
+        /*var suggeriments = [
             {
                 etiqueta: "id",
                 etiquetaValor: "cerca_titol",
                 pagina: "json/normativesJSON_consulta.php"
             }
-        ];
+        ];*/
     -->
     </script>
     
@@ -725,7 +723,7 @@
         
         <c:if test="${traspasboib == 'Y'}">
         
-	        // Validación del formulario de búsqueda de Traspaso EBOIB
+	        // Validaciï¿½n del formulario de bï¿½squeda de Traspaso EBOIB
 	        var FormularioBusquedaTB = [{
 	            "modo": "individual",
 	            "etiqueta": "id",
@@ -802,8 +800,8 @@
                 <a id="btnNuevaFicha" href="javascript:;" class="btn nou"><span><span><spring:message code='normativa.crea_nova_normativa'/></span></span></a>
             </li>
 	        <c:if test="${traspasboib == 'Y'}">
-	            <li class="opcio nuevo"><!--  qué es L C ... -->
-	                <a id="tabTraspasBoib" href="javascript:;">Traspàs del BOIB<!-- spring:message code='contenidos.normativas.traspaso.label'/ --></a>
+	            <li class="opcio nuevo"><!--  que es L C ... -->
+	                <a id="tabTraspasBoib" href="javascript:;"><spring:message code='normativa.traspas.boib'/></a>
 	            </li>
 	        </c:if>
         </c:if>
@@ -821,7 +819,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>
+                        <h2><spring:message code='txt.OPCIONS_CERCA'/></h2>
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -1041,7 +1039,7 @@
                         <div class="fila">
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="numeroboletinTB">N. Butlletí</label>
+                                    <label for="numeroboletinTB"><spring:message code='camp.n_butlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="numeroboletinTB" name="numeroboletinTB" type="text" />
@@ -1050,7 +1048,7 @@
                             
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="numeroregistroTB">N. Registre</label>
+                                    <label for="numeroregistroTB"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
@@ -1059,7 +1057,7 @@
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="fechaTB">N. data</label>
+                                    <label for="fechaTB"><spring:message code='camp.n_data'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="fechaTB" name="fechaTB" type="text" class="data" />
@@ -1628,7 +1626,7 @@
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>DADES BUTLLETÍ</legend>
+                <legend><spring:message code='txt.DADES_BUTLLETI'/></legend>
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila">
@@ -1840,7 +1838,7 @@
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>INFORMADOR</legend>
+                <legend><spring:message code='txt.INFORMADOR'/></legend>
                 <div class="modul_continguts mostrat">
                     <div class="fila">                        
                         <div class="element t99p multilang">
@@ -1885,7 +1883,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -1902,7 +1900,7 @@
         <div id="modulAuditories" class="modul auditorias">                
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>AUDITORIES</legend>
+                <legend><spring:message code='txt.AUDITORIES'/></legend>
                 <div class="modul_continguts mostrat">
                    <p class="executant"><spring:message code='txt.carregant'/></p>
                  <%--
@@ -1910,18 +1908,18 @@
                         <thead>
                             <th class="usuario"><div>USUARI</div></th>
                             <th class="fecha"><div>DATA</div></th>
-                            <th class="operacion"><div>OPERACIÓ</div></th>
+                            <th class="operacion"><div>OPERACIï¿½</div></th>
                         </thead>                    
                         <tbody>
                             <tr>
                                 <td class="usuario"><div>rsanz</div></td>
                                 <td class="fecha"><div>16/01/2012</div></td>
-                                <td class="operacion"><div>Modificació</div></td>
+                                <td class="operacion"><div>Modificaciï¿½</div></td>
                             </tr>
                             <tr>
                                 <td class="usuario"><div>jfernandez</div></td>
                                 <td class="fecha"><div>16/01/2012</div></td>
-                                <td class="operacion"><div>Modificació</div></td>
+                                <td class="operacion"><div>Modificaciï¿½</div></td>
                             </tr>
                             <tr>
                                 <td class="usuario"><div>flopez</div></td>
@@ -1991,7 +1989,7 @@
                     <div class="fila publicacion_2campos">
                         <!-- div class="element left">
                             <div class="etiqueta">
-                                <label for="item_data_publicacio">Data publicació</label>
+                                <label for="item_data_publicacio">Data publicaciï¿½</label>
                             </div>
                             <div class="control">
                                 <input id="item_data_publicacio" name="item_data_publicacio" type="text" class="nou" />
@@ -2210,7 +2208,7 @@
         <div class="modul" id="modulRelacioOrganica">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>RELACIÓ ORGÀNICA</legend>
+                <legend><spring:message code='txt.RELACIO_ORGANICA'/></legend>
                 <div class="modul_continguts mostrat">
                     
                     <!-- fila -->
@@ -2396,7 +2394,7 @@
 <!-- escriptori_procediments -->
 <%--
 <div id="escriptori_procediments">
-    <h2>Gestió dels procediments relacionats</h2>
+    <h2>Gestiï¿½ dels procediments relacionats</h2>
     <div class="botonera dalt">
         <ul>
             <li><a href="javascript:;" class="btn torna"><span><span>Torna al detall</span></span></a></li>
@@ -2429,13 +2427,13 @@
                 <div class="element t12">
                     <div class="etiqueta">
                         <label for="cerca_procediment_finestreta">Inclou
-                            finestreta única</label>
+                            finestreta ï¿½nica</label>
                     </div>
                     <div class="control">
                         <select id="cerca_procediment_finestreta"
                             name="cerca_procediment_finestreta" class="t8">
                             <option value="0" selected="selected">No</option>
-                            <option value="1">Sí</option>
+                            <option value="1">Sï¿½</option>
                         </select>
                     </div>
                 </div>
@@ -2447,7 +2445,7 @@
                         <select id="cerca_procediment_uaFilles"
                             name="cerca_procediment_uaFilles" class="t8">
                             <option value="0" selected="selected">No</option>
-                            <option value="1">Sí</option>
+                            <option value="1">Sï¿½</option>
                         </select>
                     </div>
                 </div>

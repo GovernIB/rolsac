@@ -88,7 +88,7 @@ function CModulFetsVitals(){
 		codi_llistat += "</ul>";
 		
 		codi_fet_txt = (nombre_llistat == 1) ? txtFet : txtFets;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaFets + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_fet_txt + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaFets + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_fet_txt + "</strong>.";
                 
 		fets_seleccionats_elm.find("p.info").html(codi_info);
 		fets_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		

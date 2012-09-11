@@ -111,7 +111,7 @@ function CModulMateries(){
 		codi_llistat += "</ul>";
 		
 		codi_materia_txt = (nombre_llistat == 1) ? txtMateria : txtMateries;
-		codi_info = (nombre_llistat == 0) ? txtNoHiHaMateries + "." : "Hi ha <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
+		codi_info = (nombre_llistat == 0) ? txtNoHiHaMateries + "." : txtHiHa + " <strong>" + nombre_llistat + " " + codi_materia_txt + "</strong>.";
 		
 		materies_seleccionats_elm.find("p.info").html(codi_info);
 		materies_seleccionats_elm.find(".listaOrdenable").html(codi_llistat);		
