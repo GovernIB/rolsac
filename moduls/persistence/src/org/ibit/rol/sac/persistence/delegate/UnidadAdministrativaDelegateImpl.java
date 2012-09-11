@@ -1,8 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.io.ByteArrayOutputStream;
 import java.rmi.RemoteException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +15,6 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.UOMinModel;
-import org.ibit.rol.sac.model.webcaib.UOModel;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
@@ -1017,9 +1013,9 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 
      }
 	 
-	 	/**
+	/**
 	 * Obtiene una Unidad Administrativa {PORMAD}
-	 * */
+	 **/
     public UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) throws DelegateException {
         try {
             return getFacade().obtenerUnidadAdministrativaPM(id);
@@ -1027,71 +1023,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
             throw new DelegateException(e);
         }
     }    
-    
-    //WEBCAIB
-    public String getCodiGovernIlles() throws DelegateException {
-    	try {
-    		return getFacade().getCodiGovernIlles();
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    public Collection unitatsOrganiquesFilles(String pare, String criteri, String idioma ) throws DelegateException {
-    	try {
-    		return getFacade().unitatsOrganiquesFilles(pare, criteri, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }        
-    
-    public UOModel getDetails(String codi, String idioma) throws DelegateException {
-    	try {
-    		return getFacade().getDetails(codi, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    public UOMinModel getParent( String codi, String idioma ) throws DelegateException {
-    	try {
-    		return getFacade().getParent(codi, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    public boolean isMateriaInUo( String codi, String materia ) throws DelegateException {
-    	try {
-    		return getFacade().isMateriaInUo(codi, materia);    		
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    public ByteArrayOutputStream getLogo( String coduo, String logo ) throws DelegateException {
-    	try {
-    		return getFacade().getLogo(coduo, logo);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
-    
-    public Collection centres(String codi, String idioma ) throws DelegateException {
-    	try {
-    		return getFacade().centres(codi, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    } 
-    
-    public Collection getUoByMateria( String pare, String materia, String idioma ) throws DelegateException {
-    	try {
-    		return getFacade().getUoByMateria(pare, materia, idioma);
-    	} catch (RemoteException e) {
-    		throw new DelegateException(e);
-    	}
-    }
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

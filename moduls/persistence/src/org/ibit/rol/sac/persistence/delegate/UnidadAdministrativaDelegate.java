@@ -1,7 +1,5 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.io.ByteArrayOutputStream;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +9,6 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.UOMinModel;
-import org.ibit.rol.sac.model.webcaib.UOModel;
 
 /*
  * ejaen@dgtic  - u92770
@@ -334,38 +330,5 @@ public class UnidadAdministrativaDelegate {
     
 	public String toString() {
 		return impl.toString();
-	}
-
-	//WEBCAIB
-	public String getCodiGovernIlles() throws DelegateException {
-		return impl.getCodiGovernIlles();
-	}
-	
-	public Collection unitatsOrganiquesFilles(String pare, String criteri, String idioma ) throws DelegateException {
-		return impl.unitatsOrganiquesFilles(pare, criteri, idioma );
-	}
-
-	public UOModel getDetails(String codi, String idioma) throws DelegateException {
-		return impl.getDetails(codi, idioma);
-	}
-	
-	public UOMinModel getParent(String codi, String idioma) throws DelegateException {
-		return impl.getParent(codi, idioma);
-	}
-
-	public boolean isMateriaInUo(String codi, String materia) throws DelegateException {
-		return impl.isMateriaInUo(codi, materia);
-	}
-	
-	public ByteArrayOutputStream getLogo( String coduo, String logo ) throws DelegateException {
-		return impl.getLogo(coduo, logo);
-	}
-	
-	public Collection centres( String codi, String idioma) throws DelegateException {
-		return impl.centres(codi, idioma);
-	}
-	
-	public Collection getUoByMateria( String pare, String materia, String idioma ) throws DelegateException {
-		return impl.getUoByMateria(pare, materia, idioma);
 	}
 }

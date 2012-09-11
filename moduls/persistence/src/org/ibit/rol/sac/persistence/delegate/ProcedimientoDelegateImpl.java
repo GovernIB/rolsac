@@ -1,30 +1,24 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Validable;
-import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
-import org.ibit.rol.sac.model.webcaib.ActuacioModel;
-import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
-import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
-import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Validable;
+import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
+import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
+import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 
 /**
  * Business delegate para manipular procedimientos.
@@ -479,111 +473,6 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }
-    
-    
-
-    //WEBCAIB//
-    
-    public ActuacioModel getActuacio ( String code, String idioma, String previ ) throws DelegateException {
-        try {
-            return getFacade().getActuacio(code, idioma, previ);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }
-    
-    
-    
-    public Collection actuacionsByMateria ( Long codiMateria, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByMateria(codiMateria, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        } 
-    }
-    
-    
-    public Collection actuacionsByUORSS ( Long codiUO, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByUORSS(codiUO, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }
-    
-    
-    public Collection actuacionsByUO ( Long codiUO, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByUO(codiUO, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }    
-    
-    
-    public Collection actuacionsMasVisto () throws DelegateException {
-        try {
-            return getFacade().actuacionsMasVisto();
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }
-    
-    public Collection actuacionsByWord ( String words, String idioma, String solovigor ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByWord(words, idioma, solovigor);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        } 
-    }
-    
-    public Integer cuentaActuacionsByUO ( Long codiUO, String idioma ) throws DelegateException {
-        try {
-            return getFacade().cuentaActuacionsByUO(codiUO, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }
-    
-    public Integer cuentaActuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException {
-        try {
-            return getFacade().cuentaActuacionsByFamiliaUO(codiFamilia, coduo, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }     	
-    }
-    
-    public Collection actuacionsByAvanzado ( String condi, String idioma, String uo, String solovigor, String idisel ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByAvanzado(condi, idioma, uo, solovigor, idisel);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }     	
-    }
-    
-    public Collection actuacionsByFamilia ( Long codiFamilia, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByFamilia(codiFamilia, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }    	
-    }
-    
-    public Collection<ActuacioMinModel> actuacionsByFamiliaUO ( Long codiFamilia, Long coduo, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByFamiliaUO(codiFamilia, coduo, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        }      	
-    }
-    
-    public Collection actuacionsByFamiliaMat( Long codiFamilia, Long codiMateria, String idioma ) throws DelegateException {
-        try {
-            return getFacade().actuacionsByFamiliaMat(codiFamilia, codiMateria, idioma);
-        } catch (RemoteException e) {
-            throw new DelegateException(e);
-        } 
     }
     
     /* (non-Javadoc)

@@ -1,18 +1,16 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.persistence.intf.ArchivoFacade;
-import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
-import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
+import java.io.ByteArrayOutputStream;
+import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.io.ByteArrayOutputStream;
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.List;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.persistence.intf.ArchivoFacade;
+import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
+import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
 
 public class ArchivoDelegate  implements StatelessDelegate {
 
