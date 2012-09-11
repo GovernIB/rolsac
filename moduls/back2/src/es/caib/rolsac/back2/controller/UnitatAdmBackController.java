@@ -128,7 +128,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-        model.put("submenu_seleccionado", 2);
+        model.put("submenu_seleccionado", 1);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");
 		

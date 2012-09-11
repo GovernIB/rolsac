@@ -15,9 +15,21 @@
                     <li><a href="<c:url value="/quadreControl/quadreControl.do"/>"><spring:message code="submenu.quadre_control" /></a></li>
                 </c:otherwise>
             </c:choose>
-			
-			<c:choose>
+
+            <c:choose>
                 <c:when test="${submenu_seleccionado==1}">
+                    <li class="seleccionat">
+                        <span><spring:message code="submenu.unitatAdm" /></span>
+                        <span class="actual"></span>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li><a href="<c:url value="/unitatadm/unitatadm.do"/>"><spring:message code="submenu.unitatAdm" /></a></li>
+                </c:otherwise>
+            </c:choose>
+            			
+			<c:choose>
+                <c:when test="${submenu_seleccionado==2}">
                     <li class="seleccionat">
                         <span><spring:message code="submenu.cataleg_procediments" /></span>
                         <span class="actual"></span>
@@ -28,18 +40,6 @@
                 </c:otherwise>
             </c:choose>
             
-			<c:choose>
-                <c:when test="${submenu_seleccionado==2}">
-                    <li class="seleccionat">
-                        <span><spring:message code="submenu.unitatAdm" /></span>
-                        <span class="actual"></span>
-                    </li>
-                </c:when>
-                <c:otherwise>
-                    <li><a href="<c:url value="/unitatadm/unitatadm.do"/>"><spring:message code="submenu.unitatAdm" /></a></li>
-                </c:otherwise>
-            </c:choose>
-
             <c:choose>
                 <c:when test="${submenu_seleccionado==3}">
                     <li class="seleccionat">

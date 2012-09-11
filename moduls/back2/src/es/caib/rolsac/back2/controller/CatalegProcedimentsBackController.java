@@ -100,7 +100,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-		model.put("submenu_seleccionado", 1);
+		model.put("submenu_seleccionado", 2);
 		model.put("escriptori", "pantalles/catalegProcediments.jsp");
 		model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 		
