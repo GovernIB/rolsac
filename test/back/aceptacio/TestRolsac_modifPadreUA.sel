@@ -31,7 +31,7 @@
 <tr>
 	<td>waitForValue</td>
 	<td>traducciones[0].nombre</td>
-	<td>Curs octubre</td>
+	<td>Conselleria Juny de Benestar Social</td>
 </tr>
 <tr>
 	<td>click</td>
@@ -64,14 +64,15 @@
 	<td>title=SAC Arbol - Seccion</td>
 	<td></td>
 </tr>
+<!-- clickAndWait //div[@id='llistat']/ul/li[3]/a/img-->
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='llistat']/ul/li[3]/a/img</td>
+	<td>css=img</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Curs octubre</td>
+	<td>link=Conselleria Juny de Benestar Social</td>
 	<td></td>
 </tr>
 <tr>

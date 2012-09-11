@@ -8,21 +8,21 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_altaProcediment_InsertaMateria.sel">TestRolsac_altaProcediment_InsertaMateria</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_altaProcediment.sel">TestRolsac_altaProcediment</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_modificaTramit.sel">TestRolsac_modificaTramit</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_altaFicha.sel">TestRolsac_altaFicha</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_modificaMateriasDeFicha.sel">TestRolsac_modificaMateriasDeFicha</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_asociarEdificioAunidadAdmin">TestRolsac_asociarEdificioAunidadAdmin</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_creaTramite.sel">TestRolsac_creaTramite</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_listarUsuariosUA.sel">TestRolsac_listarUsuariosUA</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_afegeixCvResponsable.sel">TestRolsac_afegeixCvResponsable</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_buscaFicha.sel">TestRolsac_buscaFicha</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_buscaProcediment.sel">TestRolsac_buscaProcediment</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_previsuConTaxaOn.sel">TestRolsac_previsuConTaxaOn</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_perfilUsuario.sel">TestRolsac_perfilUsuario</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_traspasboib.sel">TestRolsac_traspasboib</a></td></tr>
-<tr><td><a href="../../../../../../01ROLSAC-sf-branch-1.1/test/back/aceptacio/selenium-ide/suite_proc_tramit/TestRolsac_modifPadreUA.sel">TestRolsac_modifPadreUA</a></td></tr>
+<tr><td><a href="TestRolsac_altaProcediment_InsertaMateria.sel">TestRolsac_altaProcediment_InsertaMateria</a></td></tr>
+<tr><td><a href="TestRolsac_altaProcediment.sel">TestRolsac_altaProcediment</a></td></tr>
+<tr><td><a href="TestRolsac_modificaTramit.sel">TestRolsac_modificaTramit</a></td></tr>
+<tr><td><a href="TestRolsac_altaFicha.sel">TestRolsac_altaFicha</a></td></tr>
+<tr><td><a href="TestRolsac_modificaMateriasDeFicha.sel">TestRolsac_modificaMateriasDeFicha</a></td></tr>
+<tr><td><a href="TestRolsac_asociarEdificioAunidadAdmin">TestRolsac_asociarEdificioAunidadAdmin</a></td></tr>
+<tr><td><a href="TestRolsac_creaTramite.sel">TestRolsac_creaTramite</a></td></tr>
+<tr><td><a href="TestRolsac_listarUsuariosUA.sel">TestRolsac_listarUsuariosUA</a></td></tr>
+<tr><td><a href="TestRolsac_afegeixCvResponsable.sel">TestRolsac_afegeixCvResponsable</a></td></tr>
+<tr><td><a href="TestRolsac_buscaFicha.sel">TestRolsac_buscaFicha</a></td></tr>
+<tr><td><a href="TestRolsac_buscaProcediment.sel">TestRolsac_buscaProcediment</a></td></tr>
+<tr><td><a href="TestRolsac_previsuConTaxaOn.sel">TestRolsac_previsuConTaxaOn</a></td></tr>
+<tr><td><a href="TestRolsac_perfilUsuario.sel">TestRolsac_perfilUsuario</a></td></tr>
+<tr><td><a href="TestRolsac_traspasboib.sel">TestRolsac_traspasboib</a></td></tr>
+<tr><td><a href="TestRolsac_modifPadreUA.sel">TestRolsac_modifPadreUA</a></td></tr>
 <tr><td><a href="TestRolsac_consultarProcedimentSimple_es.sel">TestRolsac_consultarProcedimentSimple_es</a></td></tr>
 <tr><td><a href="TestRolsac_consultarProcedimentComplet_es.sel">TestRolsac_consultarProcedimentComplet_es</a></td></tr>
 <tr><td><a href="Webcaib_rssRetornaProcediments.sel">Webcaib_rssRetornaProcediments</a></td></tr>

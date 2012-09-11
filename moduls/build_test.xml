@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <project name="test" basedir=".">
-
+	
 	<property name="test.unitario.src.dir" location="${home.dir}/test/${modul}/unitario/java"/>
 	<property name="test.unitario.etc.dir" location="${home.dir}/test/${modul}/unitario/resources"/>
 	<property name="test.integracion.src.dir" location="${home.dir}/test/${modul}/integracion/java"/>
@@ -33,12 +33,10 @@
 		<fileset dir="${test.lib.dir}"/>
 		<fileset dir="${test.lib.dir}/powermock-easymock"/>
 		<fileset dir="${test.lib.dir}/powermock-mockito"/>
+		<fileset dir="${test.lib.dir}/spring"/>
 		<fileset dir="${test.lib.dir}"/>
 		<fileset dir="${output.dir}/moduls">
 		    <include name="test_utils.jar"/>
-		</fileset>
-		<fileset dir="${lib.dir}/webcaib"> <!--  FIXME /webcaib es temporal -->
-			<include name="org.springframework.**.jar"/>
 		</fileset>
 	</path>	 
 
