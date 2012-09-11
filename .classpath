@@ -25,7 +25,6 @@
 	<classpathentry kind="src" path="test/back2/unitario/resources"/>
 	<classpathentry kind="src" path="test/extractor/unitario/java"/>
 	<classpathentry kind="src" path="test/extractor/unitario/resources"/>
-	<classpathentry kind="src" path="test/model/resources"/>
 	<classpathentry kind="src" path="test/traductor/resources"/>
 	<classpathentry kind="src" path="test/integracion/unitario/java"/>
 	<classpathentry kind="src" path="test/integracion/unitario/resources"/>

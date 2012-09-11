@@ -477,7 +477,7 @@
 	  <!-- ================================================================== -->
 	
 	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-	    <classpath path="${lib}/sonar-ant-task-1.2.jar" /> 
+	    <classpath path="${lib}/sonar-ant-task-1.4.jar" /> 
 	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
 	    <!-- In such case this classpath node is no more mandatory -->
 	  </taskdef>
