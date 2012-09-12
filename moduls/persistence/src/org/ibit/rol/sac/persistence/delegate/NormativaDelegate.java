@@ -209,6 +209,14 @@ public class NormativaDelegate implements StatelessDelegate {
         }
     }  
    	
+   	public int buscarNormativasActivas(List<Long> llistaUnitatAdministrativaId) throws DelegateException {
+   		try {
+   			return getFacade().buscarNormativasActivas(llistaUnitatAdministrativaId);
+   		} catch (RemoteException e) {
+   			throw new DelegateException(e);
+   		}
+   	}   	
+   	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

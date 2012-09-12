@@ -13,8 +13,6 @@ import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
 
 public class ArchivoDelegate  implements StatelessDelegate {
-
-	
         
         	
 	/* ========================================================= */

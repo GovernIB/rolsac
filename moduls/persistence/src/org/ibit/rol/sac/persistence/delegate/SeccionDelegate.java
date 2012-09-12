@@ -165,6 +165,17 @@ public class SeccionDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public void grabarSeccion(Seccion seccio, Long idPadre) throws DelegateException {
+    	try {
+    		
+    		if (seccio.getId() != null) getFacade().actualizarSeccion(seccio, idPadre);
+    		else getFacade().crearSeccion(seccio, idPadre);
+    		
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }    
 
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
