@@ -105,11 +105,11 @@
 	<classpathentry kind="lib" path="lib/webcaib/dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/odmg.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/ehcache.jar"/>
-	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis-ws4ee.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/saaj.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/webcaib/commons-discovery-0.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4/axis.jar"/>
+	<classpathentry kind="lib" path="lib/jboss/jbossall-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

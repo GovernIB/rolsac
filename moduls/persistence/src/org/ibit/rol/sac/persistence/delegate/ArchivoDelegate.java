@@ -1,21 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.persistence.intf.ArchivoFacade;
-import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
-import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
+import java.io.ByteArrayOutputStream;
+import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.io.ByteArrayOutputStream;
-import java.rmi.RemoteException;
-import java.util.Date;
-import java.util.List;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.persistence.intf.ArchivoFacade;
+import org.ibit.rol.sac.persistence.intf.ArchivoFacadeHome;
+import org.ibit.rol.sac.persistence.util.ArchivoFacadeUtil;
 
 public class ArchivoDelegate  implements StatelessDelegate {
-
 	
         
         	
@@ -30,6 +27,43 @@ public class ArchivoDelegate  implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+		
+    public ByteArrayOutputStream getFitxer(Long id) throws DelegateException {
+    	try {
+    		return getFacade().getFitxer(id);
+    	
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    	
+    }    
+
+    public String getMime(Long id) throws DelegateException {    
+    	try {
+    		return getFacade().getMime(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+
+    }
+    
+
+    public long getPes(Long id) throws DelegateException {       	
+    	try {
+    		return getFacade().getPes(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }    
+    
+
+    public String getNombre(Long id) throws DelegateException {
+    	try {
+    		return getFacade().getNombre(id);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }		
 	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

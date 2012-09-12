@@ -81,7 +81,7 @@ public class RolsacQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
     }
 
     /**
@@ -165,8 +165,8 @@ public class RolsacQueryServiceTest {
     public void recuperarProcedimentsPerDataActualitzacio() {
         ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
         Calendar c = new GregorianCalendar(2005, 6, 4);
-        Date date = c.getTime();
-        procedimentCriteria.setFechaActualizacion(date);
+        //Date date = c.getTime();
+        procedimentCriteria.setFechaActualizacion(c);
         procedimentCriteria.setTamany("10");
         List<ProcedimentQueryServiceAdapter> procediments = null;
         try {
@@ -178,7 +178,7 @@ public class RolsacQueryServiceTest {
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertEquals(
                     ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion()),
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(date)
+                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c)
             );
         }
     }
