@@ -24,14 +24,14 @@ public class AgrupacioFetVitalQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
     }
     
     @Test
     public void adapterTest() {
         AgrupacioFetVitalDTO dto = new AgrupacioFetVitalDTO();
         dto.setId(211);
-        AgrupacioFetVitalQueryServiceAdapter adapter = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", STRATEGY.EJB, dto);
+        AgrupacioFetVitalQueryServiceAdapter adapter = (AgrupacioFetVitalQueryServiceAdapter) BeanUtils.getAdapter("agrupacioFetVital", STRATEGY.WS, dto);
         try {
             int numfetsVitals = adapter.getNumFetsVitals();
             Assert.assertTrue(numfetsVitals > 0);

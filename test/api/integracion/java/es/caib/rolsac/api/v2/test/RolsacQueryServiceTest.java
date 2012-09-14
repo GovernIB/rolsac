@@ -1,7 +1,6 @@
 package es.caib.rolsac.api.v2.test;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -177,8 +176,8 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(procediments.size() > 0);
         for (ProcedimentQueryServiceAdapter pa: procediments) {
             Assert.assertEquals(
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion()),
-                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c)
+                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(pa.getFechaActualizacion().getTime()),
+                    ByDateCriteria.DATE_CRITERIA_FORMATTER.format(c.getTime())
             );
         }
     }
@@ -1211,7 +1210,7 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 11);
+        Assert.assertTrue(listSeccioQueryServiceAdapter.size() == 12);
     }
     
     /**

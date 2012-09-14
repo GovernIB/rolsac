@@ -41,7 +41,7 @@ public final class ConfiguracioServeis {
 	public static String getUrlServei(String nomServei) throws APIException {
 		
 		ResourceBundle rb = ResourceBundle.getBundle("es/caib/rolsac/api/v2/resources/sac-api");		
-		String urlPrefix = rb.getString("urlPrefix").trim();
+		String urlPrefix = rb.getString("es.caib.rolsac.api.v2.urlPrefix").trim();
 		
 		if (urlPrefix == null || "".equals(urlPrefix) )
 			throw new APIException("URL de serveis web no trobada!");

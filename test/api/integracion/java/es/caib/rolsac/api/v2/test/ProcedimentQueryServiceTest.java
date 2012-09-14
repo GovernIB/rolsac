@@ -29,7 +29,7 @@ public class ProcedimentQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
     }
 
     @Test
