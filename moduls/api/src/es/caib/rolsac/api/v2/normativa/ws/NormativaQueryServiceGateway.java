@@ -12,6 +12,8 @@ import org.apache.axis.AxisFault;
 import es.caib.rolsac.api.v2.afectacio.AfectacioDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
@@ -21,22 +23,22 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class NormativaQueryServiceGateway {
 
 	NormativaWSSoapBindingStub stub;
-	NormativaQueryServiceEJBRemoteServiceLocator locator;
 	
 	public NormativaQueryServiceGateway() {
 
 		try {
-			
-			locator = new NormativaQueryServiceEJBRemoteServiceLocator();
-
-			stub = new NormativaWSSoapBindingStub(new URL(
-					locator.getNormativaWSAddress()), null);
-			
+			stub = new NormativaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_NORMATIVA)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

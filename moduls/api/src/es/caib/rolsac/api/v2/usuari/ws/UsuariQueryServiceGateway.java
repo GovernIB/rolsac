@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.axis.AxisFault;
-
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
@@ -16,22 +16,21 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class UsuariQueryServiceGateway {
 
 	UsuariWSSoapBindingStub stub;
-	UsuariQueryServiceEJBRemoteServiceLocator locator;
 	
 	public UsuariQueryServiceGateway() {
 
 		try {
 			
-			locator = new UsuariQueryServiceEJBRemoteServiceLocator();
-
-			stub = new UsuariWSSoapBindingStub(new URL(
-					locator.getUsuariWSAddress()), null);
-			
-		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			stub = new UsuariWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_USUARI)),
+					null);
+		} catch (RemoteException re) {
+			re.printStackTrace();
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

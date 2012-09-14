@@ -6,6 +6,8 @@ import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.axis.AxisFault;
+
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
@@ -22,6 +24,7 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
@@ -33,6 +36,7 @@ import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
 import es.caib.rolsac.api.v2.formulari.FormulariDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
@@ -71,17 +75,22 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 public class RolsacQueryServiceGateway {
 
 	RolsacWSSoapBindingStub stub;
-	RolsacQueryServiceEJBRemoteServiceLocator locator;
 
 	public RolsacQueryServiceGateway() {
 		try {
-			locator = new RolsacQueryServiceEJBRemoteServiceLocator();
-
-			stub = new RolsacWSSoapBindingStub(new URL(
-					locator.getRolsacWSAddress()), null);
-
-		} catch (RemoteException re) {
-		} catch (MalformedURLException mue) {
+			stub = new RolsacWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ROLSAC)),
+					null);
+		} catch (AxisFault e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -18,7 +18,7 @@ public class BeanUtils {
     
     public static ApplicationContext getApplicationContextInstance() {
         if (ctx == null) {
-            //System.setProperty("axis.ClientConfigFile", AXIS_CLIENT_CONFIG);
+            System.setProperty("axis.ClientConfigFile", AXIS_CLIENT_CONFIG);
             ctx = new ClassPathXmlApplicationContext(SPRING_CONTEXT_CLASSPATH);
         }
         return ctx;

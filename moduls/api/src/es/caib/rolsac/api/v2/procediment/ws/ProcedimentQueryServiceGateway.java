@@ -11,8 +11,10 @@ import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
@@ -25,22 +27,22 @@ import es.caib.rolsac.api.v2.tramit.TramitDTO;
 public class ProcedimentQueryServiceGateway {
 
 	ProcedimentWSSoapBindingStub stub;
-	ProcedimentQueryServiceEJBRemoteServiceLocator locator;
 	
 	public ProcedimentQueryServiceGateway() {
 
-		try {
-			
-			locator = new ProcedimentQueryServiceEJBRemoteServiceLocator();
-
-			stub = new ProcedimentWSSoapBindingStub(new URL(
-					locator.getProcedimentWSAddress()), null);
-			
+		try {			
+			stub = new ProcedimentWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_PROCEDIMENT)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

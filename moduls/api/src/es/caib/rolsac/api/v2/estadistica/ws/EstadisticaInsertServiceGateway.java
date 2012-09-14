@@ -6,25 +6,29 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.AxisFault;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
+
 public class EstadisticaInsertServiceGateway {
 	
 	EstadisticaWSSoapBindingStub stub;
-	EstadisticaInsertServiceEJBRemoteServiceLocator locator;
 	
 	public EstadisticaInsertServiceGateway() {
 
 		try {
 			
-			locator = new EstadisticaInsertServiceEJBRemoteServiceLocator();
-
-			stub = new EstadisticaWSSoapBindingStub(new URL(
-					locator.getEstadisticaWSAddress()), null);
-			
+			stub = new EstadisticaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_ESTADISTICA)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

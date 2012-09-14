@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
@@ -18,17 +20,20 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class SeccioQueryServiceGateway {
 	
 	SeccioWSSoapBindingStub stub;
-	SeccioQueryServiceEJBRemoteServiceLocator locator;
 
 	public SeccioQueryServiceGateway() {
 		try {
-			locator = new SeccioQueryServiceEJBRemoteServiceLocator();
-
-			stub = new SeccioWSSoapBindingStub(new URL(
-					locator.getSeccioWSAddress()), null);
-
+			stub = new SeccioWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_SECCIO)),
+					null);
 		} catch (RemoteException re) {
+			re.printStackTrace();			
 		} catch (MalformedURLException mue) {
+			mue.printStackTrace();			
+		} catch (APIException e) {
+			e.printStackTrace();
 		}
 	}
 	

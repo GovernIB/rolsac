@@ -11,8 +11,10 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
@@ -35,17 +37,20 @@ import es.caib.rolsac.api.v2.usuari.UsuariDTO;
 public class UnitatAdministrativaQueryServiceGateway {
 
 	UnitatAdministrativaWSSoapBindingStub stub;
-	UnitatAdministrativaQueryServiceEJBRemoteServiceLocator locator;
 
 	public UnitatAdministrativaQueryServiceGateway() {
 		try {
-			locator = new UnitatAdministrativaQueryServiceEJBRemoteServiceLocator();
-
-			stub = new UnitatAdministrativaWSSoapBindingStub(new URL(
-					locator.getUnitatAdministrativaWSAddress()), null);
-
+			stub = new UnitatAdministrativaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_UNITAT_ADMINISTRATIVA)),
+					null);
 		} catch (RemoteException re) {
+			re.printStackTrace();
 		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} catch (APIException e) {
+			e.printStackTrace();
 		}
 	}
 

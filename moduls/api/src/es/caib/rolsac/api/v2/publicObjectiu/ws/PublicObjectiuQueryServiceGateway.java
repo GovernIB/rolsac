@@ -11,27 +11,29 @@ import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 
 public class PublicObjectiuQueryServiceGateway {
 
 	PublicObjectiuWSSoapBindingStub stub;
-	PublicObjectiuQueryServiceEJBRemoteServiceLocator locator;
 	
 	public PublicObjectiuQueryServiceGateway() {
 
 		try {
-			
-			locator = new PublicObjectiuQueryServiceEJBRemoteServiceLocator();
-
-			stub = new PublicObjectiuWSSoapBindingStub(new URL(
-					locator.getPublicObjectiuWSAddress()), null);
-			
+			stub = new PublicObjectiuWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_PUBLIC_OBJECTIU)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

@@ -4,22 +4,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class TaxaQueryServiceGateway {
 	
 	TaxaWSSoapBindingStub stub;
-	TaxaQueryServiceEJBRemoteServiceLocator locator;
 
 	public TaxaQueryServiceGateway() {
 		try {
-			locator = new TaxaQueryServiceEJBRemoteServiceLocator();
-
-			stub = new TaxaWSSoapBindingStub(new URL(
-					locator.getTaxaWSAddress()), null);
-
+			stub = new TaxaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_TAXA)),
+					null);
 		} catch (RemoteException re) {
+			re.printStackTrace();
 		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} catch (APIException e) {
+			e.printStackTrace();
 		}
 	}
 	

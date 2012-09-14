@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.axis.AxisFault;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
@@ -22,17 +24,18 @@ public class TipusQueryServiceGateway {
 	public TipusQueryServiceGateway() {
 
 		try {
-			
-			locator = new TipusQueryServiceEJBRemoteServiceLocator();
-
-			stub = new TipusWSSoapBindingStub(new URL(
-					locator.getTipusWSAddress()), null);
-			
+			stub = new TipusWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_TIPUS)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

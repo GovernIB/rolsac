@@ -7,41 +7,44 @@ import java.rmi.RemoteException;
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 public class DocumentQueryServiceGateway {
-	
+
 	DocumentWSSoapBindingStub stub;
-	DocumentQueryServiceEJBRemoteServiceLocator locator;
 	
 	public DocumentQueryServiceGateway() {
 
 		try {
-			
-			locator = new DocumentQueryServiceEJBRemoteServiceLocator();
 
-			stub = new DocumentWSSoapBindingStub(new URL(
-					locator.getDocumentWSAddress()), null);
-			
+			stub = new DocumentWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_AGRUPACIO_FET_VITAL)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (APIException e) {
+			e.printStackTrace();
 		}
 	}
-		
+
 	public FitxaDTO obtenirFitxa(long id) throws RemoteException {
-    	return stub.obtenirFitxa(id);
-    }	
-    
+		return stub.obtenirFitxa(id);
+	}
+
 	public ProcedimentDTO obtenirProcediment(long id) throws RemoteException {
-    	return stub.obtenirProcediment(id);
-    }    
+		return stub.obtenirProcediment(id);
+	}
 
 	public ArxiuDTO obtenirArxiu(long id) throws RemoteException {
-    	return stub.obtenirArxiu(id);    			
-    }
+		return stub.obtenirArxiu(id);
+	}
 }

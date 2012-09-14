@@ -1071,10 +1071,8 @@
 			value="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.intf.AgrupacioFetVitalQueryServiceEJBHome" />
 		<parameter name="remoteInterfaceName"
 			value="es.caib.rolsac.api.v2.agrupacioFetVital.ejb.intf.AgrupacioFetVitalQueryServiceEJBRemote" />
-		<parameter name="allowedMethods" value="*" />
 		<parameter name="jndiurl" value="https://localhost:8443" />
 		<parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
-		<parameter name="typeMappingVersion" value="1.1" />
 
 		<operation name="llistarFetsVitals" qname="operNS:llistarFetsVitals"
 			xmlns:operNS="http://intf.ejb.agrupacioFetVital.v2.api.rolsac.caib.es"

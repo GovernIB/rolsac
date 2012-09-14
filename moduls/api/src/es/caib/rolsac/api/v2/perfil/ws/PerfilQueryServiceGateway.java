@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.axis.AxisFault;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
@@ -18,22 +20,22 @@ import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 public class PerfilQueryServiceGateway {
 
 	PerfilWSSoapBindingStub stub;
-	PerfilQueryServiceEJBRemoteServiceLocator locator;
 	
 	public PerfilQueryServiceGateway() {
 
 		try {
-			
-			locator = new PerfilQueryServiceEJBRemoteServiceLocator();
-
-			stub = new PerfilWSSoapBindingStub(new URL(
-					locator.getPerfilWSAddress()), null);
-			
+			stub = new PerfilWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_PERFIL)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

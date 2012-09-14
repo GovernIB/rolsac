@@ -11,6 +11,8 @@ import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
@@ -20,22 +22,22 @@ import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 public class TramitQueryServiceGateway {
 
 	TramitWSSoapBindingStub stub;
-	TramitQueryServiceEJBRemoteServiceLocator locator;
 	
 	public TramitQueryServiceGateway() {
 
 		try {
-			
-			locator = new TramitQueryServiceEJBRemoteServiceLocator();
-
-			stub = new TramitWSSoapBindingStub(new URL(
-					locator.getTramitWSAddress()), null);
-			
+			stub = new TramitWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_TRAMIT)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

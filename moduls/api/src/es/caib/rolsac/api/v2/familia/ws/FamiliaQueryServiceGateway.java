@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.axis.AxisFault;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
@@ -18,22 +20,22 @@ import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 public class FamiliaQueryServiceGateway {
 	
 	FamiliaWSSoapBindingStub stub;
-	FamiliaQueryServiceEJBRemoteServiceLocator locator;
 	
 	public FamiliaQueryServiceGateway() {
 
 		try {
-			
-			locator = new FamiliaQueryServiceEJBRemoteServiceLocator();
-
-			stub = new FamiliaWSSoapBindingStub(new URL(
-					locator.getFamiliaWSAddress()), null);
-			
+			stub = new FamiliaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_FAMILIA)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

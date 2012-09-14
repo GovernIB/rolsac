@@ -4,30 +4,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 
-import org.apache.axis.AxisFault;
-
+import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class UnitatMateriaQueryServiceGateway {
 
 	UnitatMateriaWSSoapBindingStub stub;
-	UnitatMateriaQueryServiceEJBRemoteServiceLocator locator;
-	
+
 	public UnitatMateriaQueryServiceGateway() {
 
 		try {
-			
-			locator = new UnitatMateriaQueryServiceEJBRemoteServiceLocator();
-
-			stub = new UnitatMateriaWSSoapBindingStub(new URL(
-					locator.getUnitatMateriaWSAddress()), null);
-			
-		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			stub = new UnitatMateriaWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_UNITAT_MATERIA)),
+					null);
+		} catch (RemoteException re) {
+			re.printStackTrace();
+		} catch (MalformedURLException mue) {
+			mue.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}

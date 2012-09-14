@@ -6,29 +6,31 @@ import java.rmi.RemoteException;
 
 import org.apache.axis.AxisFault;
 
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaDTO;
 
 public class FitxaUAQueryServiceGateway {
 
 	FitxaUAWSSoapBindingStub stub;
-	FitxaUAQueryServiceEJBRemoteServiceLocator locator;
 	
 	public FitxaUAQueryServiceGateway() {
 
 		try {
-			
-			locator = new FitxaUAQueryServiceEJBRemoteServiceLocator();
-
-			stub = new FitxaUAWSSoapBindingStub(new URL(
-					locator.getFitxaUAWSAddress()), null);
-			
+			stub = new FitxaUAWSSoapBindingStub(
+					new URL(
+							ConfiguracioServeis
+									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_FITXA_UA)),
+					null);
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (APIException e) {
 			e.printStackTrace();
 		}
 	}
