@@ -36,3 +36,22 @@ versio 1.0.2 - 20.des.2011
 - 0000079: [nova funcionalitat] afegir codi de curriculum en UA (ejaen-dgtic) - resolved.
 - 0000190: [bug] no es poden assignar operadors a una UA (ejaen-dgtic) - resolved.
 - 0000195: [bug] Modificar metode borrarProcedimiento() per que gestioni els documents associats. (mgonzalez-ibit) - resolved.
+
+
+versio 1.0.3
+==================
+- 0000262: [refactorització] Reestructurar scripts de bbdd segons el document de qualitat en la forja (anadal-ibit) - resolved.
+- 0000250: [nova funcionalitat] Adaptar la funcionalitat de traspàs BOIB al nou eBOIB (ejaen-dgtic) - resolved.
+- 0000325: [versions] Crear el tag rolsac-1.0.3 a partir de la branca rolsac-1.0 (anadal-ibit) - resolved.
+- 0000259: [bug] Creació d'usuaris: El camp perfil ha de ser obligatori (ejaen-dgtic) - resolved.
+- 0000079: [nova funcionalitat] afegir codi de curriculum en UA (anadal-ibit) - resolved.
+- 0000235: [base de dades] mantenir coherent export en preproducció (ejaen-dgtic) - resolved.
+
+
+versio 1.0.4
+==================
+- 0000385: [construcció (build)] incloure el numero de versió en el manifest del ear (ejaen-dgtic) - resolved.
+- 0000383: [refactorització] descacoplar el codi del BinaryBlobType de la base de dades (ejaen-dgtic) - resolved.
+- 0000382: [bug] la versió 1.1.0 es bloqueja en producció (ejaen-dgtic) - resolved.
+- 0000384: [construcció (build)] Dependre de la llibreria ojdbc14.jar només si la base de dades és Oracle (ejaen-dgtic) - resolved.
+
