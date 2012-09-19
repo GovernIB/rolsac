@@ -40,6 +40,7 @@ import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
@@ -608,8 +609,10 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     public Map<Timestamp, Object> listarUltimasModificaciones(Date fechaInicio, Date fechaFin, Integer numeroRegistros, List<Long> listaUnidadAdministrativaId) {
         Session session = getSession();
         try {
-        	
+
+        	String usuari = getUsuario(session).getUsername();
         	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+        	
         	if (listaUnidadAdministrativaId.size() > 0) {
         		
         		// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
@@ -621,20 +624,26 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         		queryProcedimiento = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
             			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+            			" and a.usuario=:usuari " +
             			" and plo.unidadAdministrativa.id in (:lId) " +
             			" order by a.fecha desc");
+        		        		        		
         		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryProcedimiento.setParameter("usuari", usuari);
         		queryProcedimiento.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         		queryProcedimiento.setMaxResults(numeroRegistros);
         		
         		queryNormativa = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, NormativaLocal as nlo " +
         			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
         			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+        			" and a.usuario=:usuari " +
         			" and nlo.unidadAdministrativa.id in (:lId) " +
         			" order by a.fecha desc");
+        		
         		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+        		queryNormativa.setParameter("usuari", usuari);
         		queryNormativa.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         		queryNormativa.setMaxResults(numeroRegistros);
         		
@@ -642,12 +651,14 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
             			"where h.id=a.historico.id and h.class = HistoricoFicha " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
             			" and fua.ficha.id = fic.id and fua.unidadAdministrativa.id in (:lId) "  +
+            			" and a.usuario=:usuari " +
             			" order by a.fecha desc");
-        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
-        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
-        		queryFicha.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        		queryFicha.setMaxResults(numeroRegistros);
         		
+        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);        		
+        		queryFicha.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+        		queryFicha.setParameter("usuari", usuari);
+        		queryFicha.setMaxResults(numeroRegistros);
         		
         		Map<Timestamp, Object> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros);
         		
@@ -697,54 +708,74 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         	Query queryNormativa = null;
         	Query queryFicha = null;
         	
+        	String usuari = getUsuario(session).getUsername(); 
+        	
         	if (listaUnidadAdministrativaId.size() > 0) {
         		
         		queryProcedimiento = session.createQuery("select count(h) from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
             			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " +
+            			" and a.usuario = :usuari " +
             			" and plo.unidadAdministrativa.id in (:lId) ");
+        		
         		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
         		queryProcedimiento.setInteger("tipoOperacion", tipoOperacion);
+        		queryProcedimiento.setParameter("usuari", usuari);
         		queryProcedimiento.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         		
         		queryNormativa = session.createQuery("select count(h) from Historico as h, Auditoria as a, NormativaLocal as nlo " +
         			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
         			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " +
+        			" and a.usuario = :usuari " +
         			" and nlo.unidadAdministrativa.id in (:lId) ");
+        		
         		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
         		queryNormativa.setInteger("tipoOperacion", tipoOperacion);
+        		queryNormativa.setParameter("usuari", usuari);
         		queryNormativa.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         		
         		queryFicha = session.createQuery("select count(h) from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
             			" where h.id=a.historico.id and h.class = HistoricoFicha " +
             			" and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion " +
             			" and fua.ficha.id = fic.id " +
+            			" and a.usuario = :usuari " +
             			" and fua.unidadAdministrativa.id in (:lId) ");
+        		
         		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
         		queryFicha.setInteger("tipoOperacion", tipoOperacion);
+        		queryFicha.setParameter("usuari", usuari);
         		queryFicha.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
         		
         	} else {
         		queryProcedimiento = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
             			"where h.id=a.historico.id and h.class in (HistoricoProcedimiento) " +
+        				"and a.usuario=:usuari " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion ");
+        		
+        		queryProcedimiento.setParameter("usuari", usuari);
         		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
         		queryProcedimiento.setInteger("tipoOperacion", tipoOperacion);
             	
         		queryNormativa = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
             			"where h.id=a.historico.id and h.class in (HistoricoNormativa) " +
+            			"and a.usuario=:usuari " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion ");
+        		
+        		queryNormativa.setParameter("usuari", usuari);
         		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
         		queryNormativa.setInteger("tipoOperacion", tipoOperacion);
             	
         		queryFicha = session.createQuery("select count(h) from Historico as h, Auditoria as a " +
             			"where h.id=a.historico.id and h.class in (HistoricoFicha) " +
+            			"and a.usuario=:usuari " +
             			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion= :tipoOperacion ");
+        		
+        		queryFicha.setParameter("usuari", usuari);
         		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
         		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
             	queryFicha.setInteger("tipoOperacion", tipoOperacion);
@@ -763,8 +794,6 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
-    
     
 	/**
 	 * @param queryProcedimiento

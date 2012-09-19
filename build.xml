@@ -258,7 +258,13 @@
 				<include name="${prefix.modul}-back.war" />
 				<include name="${prefix.modul}-ws.war" />
 				<include name="${prefix.modul}-api.jar" />				
-				<include name="${prefix.modul}-api-client.jar" />				
+				
+				
+				<!-- No incluimos el jar cliente del API (comentar siguiente línea sólo 
+				     cuando esté corregido  problema al quitar este jar)	-->
+				<include name="${prefix.modul}-api-client.jar" />
+				
+				
 				<include name="${prefix.modul}-apiws.war" />
 				<include name="traspasboib.war" />				
 			</fileset>

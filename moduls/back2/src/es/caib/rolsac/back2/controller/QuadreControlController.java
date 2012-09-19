@@ -57,7 +57,7 @@ public class QuadreControlController extends PantallaBaseController {
 		dataActual.add(Calendar.DATE, +1);
 		UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
 
-		// Comprovamos si tenemos que recorrer todos los nodos
+		// Comprobamos si tenemos que recorrer todos los nodos
 		List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
 		
 		if (session.getAttribute("unidadAdministrativa") != null) {
@@ -68,12 +68,22 @@ public class QuadreControlController extends PantallaBaseController {
 			try {
 				String allNodos = request.getParameter("allUA");
 				UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
+				UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+				Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
 				
 				if (allNodos != null && !"".equals(allNodos) && unitatAdministrativa != null && unitatAdministrativa.getId() != null) {
-					llistaUnitatAdministrativaId = unitatAdministrativaDelegate.cargarArbolUnidadId(unitatAdministrativa.getId());
+					
+					// Filtrar sólo por las UAs del usuario
+					for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>) usuari.getUnidadesAdministrativas()) 
+						llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));
+					
 					model.put("allUA", "S");
 				} else {
-					llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
+					
+					// Sólo se mostrarán datos si el usuario no tiene acceso a la UA (0000405)
+					if (usuari.getUnidadesAdministrativas().contains(unitatAdministrativa) ) { 
+						llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
+					} 
 				}
 				
 			} catch (DelegateException dEx) {
@@ -94,9 +104,9 @@ public class QuadreControlController extends PantallaBaseController {
 		        
 		        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());		        		        		        
 		        
-	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()){
+	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()) {
 	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));                   
-	                }
+                }
 		        
             } catch (DelegateException dEx) {
                 if (dEx.isSecurityException()) {
@@ -107,7 +117,6 @@ public class QuadreControlController extends PantallaBaseController {
                 }
             } 
 		}
-
 		
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
@@ -188,7 +197,7 @@ public class QuadreControlController extends PantallaBaseController {
 		}
 
 		loadIndexModel (model, request);	
-		return "index";
+		return "index";		
 	}
 	
 }

@@ -74,12 +74,6 @@
     	     <include name="**/*.jar" />
     	 </fileset>
 		
-		<!-- 	 
-     	<fileset dir="${lib.dir}/axis2-1.5">
-        		<include name="**/*.jar" />
-        </fileset>
-		-->
-		
 		<!-- agarcia: librerias comunes en 00librerias -->
     	<fileset dir="${lib.dir}/webcaib">
 			<!--include name="axis.jar"/-->
@@ -113,7 +107,6 @@
             <include name="ejb-2_0.jar"/>
         </fileset>
 	</path>
-	
 	
 	<target name="init">
 		<taskdef
@@ -180,9 +173,11 @@
 			<include name="commons-discovery-0.5.jar"/>  
 			<include name="org.springframework.*"/>
 		</fileset>
+    	    	
         <fileset dir="${jar.product}">
             <include name="sac-${modul}-client.jar"/>        	
         </fileset>
+    	
     </path>			
 	
 	<!-- EJB -->	
@@ -262,7 +257,8 @@
 	<!-- EJBs (servidor) -->
     <target name="ejb.server" depends="ejb.compile">
         <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
-        <jar jarfile="${ejb.product}/sac-${modul}.jar" basedir="${ejb.classes}" excludes="**/resources/**, **/ArxiuServlet.class">
+        <jar jarfile="${ejb.product}/sac-${modul}.jar" basedir="${ejb.classes}"
+        	excludes="**/ArxiuServlet.class">
             <manifest>
                 <attribute name="Created-By" value="UTE"/>
             </manifest>
@@ -277,7 +273,7 @@
         <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
         <jar jarfile="${ejb.product}/sac-${modul}-client.jar" basedir="${ejb.classes}" 
             	includes="**/resources/, **/*.class" 
-            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/co/, **/query/">
+            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/query/">
             <manifest>
                 <attribute name="Created-By" value="UTE"/>
             </manifest>
