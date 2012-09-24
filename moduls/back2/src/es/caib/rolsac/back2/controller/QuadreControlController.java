@@ -39,6 +39,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.caib.rolsac.back2.util.Parametros;
+import es.caib.rolsac.back2.util.RolUtil;
 
 @Controller
 @RequestMapping(value = "/quadreControl/")
@@ -60,72 +61,56 @@ public class QuadreControlController extends PantallaBaseController {
 		// Comprobamos si tenemos que recorrer todos los nodos
 		List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
 		
-		if (session.getAttribute("unidadAdministrativa") != null) {
-			unitatAdministrativa = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-			model.put("idUA", unitatAdministrativa.getId());
-			model.put("nomUA",unitatAdministrativa.getNombreUnidadAdministrativa());
+		try {
 			
-			try {
+	        UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+	        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
+	        
+	        RolUtil rolUtil = new RolUtil(request);
+	        
+			boolean usuariSuper = rolUtil.userIsSuper(); 
+	        
+			if (session.getAttribute("unidadAdministrativa") != null) {
+				
+				unitatAdministrativa = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+				model.put("idUA", unitatAdministrativa.getId());
+				model.put("nomUA",unitatAdministrativa.getNombreUnidadAdministrativa());
+			
 				String allNodos = request.getParameter("allUA");
 				UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
-				UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
-				Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
 				
 				if (allNodos != null && !"".equals(allNodos) && unitatAdministrativa != null && unitatAdministrativa.getId() != null) {
 					
-					// Filtrar sólo por las UAs del usuario
-					for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>) usuari.getUnidadesAdministrativas()) 
-						llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));
+					if ( usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper )
+						llistaUnitatAdministrativaId.addAll( unitatAdministrativaDelegate.cargarArbolUnidadId(unitatAdministrativa.getId()) );
 					
 					model.put("allUA", "S");
+					
 				} else {
 					
-					// Sólo se mostrarán datos si el usuario no tiene acceso a la UA (0000405)
-					if (usuari.getUnidadesAdministrativas().contains(unitatAdministrativa) ) { 
+					// Sólo se mostrarán datos si el usuario tiene acceso a la UA o si es administrador
+					if (usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper ) { 
 						llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
 					} 
 				}
-				
-			} catch (DelegateException dEx) {
-				if (dEx.isSecurityException()) {
-					String error = messageSource.getMessage("error.permisos", null,request.getLocale());
-				} else {
-					String error = messageSource.getMessage("error.altres", null,request.getLocale());
-					log.error(ExceptionUtils.getStackTrace(dEx));
-				}
-			}
-			
-		} else {
-		    
-		    try {
+							
+			} else {
 		        
-		        UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
 		        UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		        
-		        Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());		        		        		        
-		        
-	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()) {
-	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));                   
-                }
-		        
-            } catch (DelegateException dEx) {
-                if (dEx.isSecurityException()) {
-                    String error = messageSource.getMessage("error.permisos", null,request.getLocale());
-                } else {
-                    String error = messageSource.getMessage("error.altres", null,request.getLocale());
-                    log.error(ExceptionUtils.getStackTrace(dEx));
-                }
-            } 
-		}
-		
-		model.put("menu", 0);
-		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-		model.put("submenu_seleccionado", 0);
-		model.put("titol_escriptori", messageSource.getMessage("submenu.quadre_control", null, request.getLocale()));
-		model.put("escriptori", "pantalles/quadreControl.jsp");
+		     // Filtrar sólo por las UAs del usuario
+	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()) 
+	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));
+	            
+            }
+			
+			model.put("menu", 0);
+			model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
+			model.put("submenu_seleccionado", 0);
+			model.put("titol_escriptori", messageSource.getMessage("submenu.quadre_control", null, request.getLocale()));
+			model.put("escriptori", "pantalles/quadreControl.jsp");
 				
-		// Darreres Modificacions
-		try {
+			// Darreres Modificacions
 			EstadisticaDelegate eDelegate = DelegateUtil.getEstadisticaDelegate();
 			
 			GregorianCalendar dataActualFi = new GregorianCalendar();
@@ -135,14 +120,16 @@ public class QuadreControlController extends PantallaBaseController {
 			
 			String idioma = request.getLocale().getLanguage();
 			
-			if (idioma != null && !"".equals(idioma)){			
-    			for (Object element: llistaCanvis.values()){
-    			    if(element instanceof HistoricoFicha){
+			if (idioma != null && !"".equals(idioma)) {
+				
+    			for ( Object element: llistaCanvis.values() ) {
+    				
+    			    if (element instanceof HistoricoFicha) {
     			        Ficha fitxa = ((HistoricoFicha) element).getFicha();
     			        if (fitxa != null) {
     			            ((HistoricoFicha) element).setNombre(((TraduccionFicha) fitxa.getTraduccion(idioma)).getTitulo());
     			        }
-    			    } else if (element instanceof HistoricoProcedimiento){
+    			    } else if (element instanceof HistoricoProcedimiento) {
     			        ProcedimientoLocal procediment = ((HistoricoProcedimiento) element).getProcedimiento();
     			        if (procediment != null) {
     			            ((HistoricoProcedimiento) element).setNombre(((TraduccionProcedimiento) procediment.getTraduccion(idioma)).getNombre());
@@ -158,17 +145,8 @@ public class QuadreControlController extends PantallaBaseController {
 
 			model.put("darreresModificacions", llistaCanvis);
 
-		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
-				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
-			} else {
-				String error = messageSource.getMessage("error.altres", null,request.getLocale());
-				log.error(ExceptionUtils.getStackTrace(dEx));
-			}
-		}
-				
-		// Nombre de continguts
-		try {
+			// Nombre de continguts
+
 			// Procediment
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			int procedimentActiu = procedimientoDelegate.buscarProcedimientosActivos(llistaUnitatAdministrativaId,dataActual.getTime());
@@ -191,10 +169,16 @@ public class QuadreControlController extends PantallaBaseController {
 			model.put("fitxaCaducada", fitxaCaducada);
 			model.put("fitxaTotal", fitxaActiva + fitxaCaducada);
 
-		} catch (DelegateException e) {
-			log.error(ExceptionUtils.getStackTrace(e));
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				String error = messageSource.getMessage("error.permisos", null,request.getLocale());
+				log.error(error);
+			} else {
+				//String error = messageSource.getMessage("error.altres", null,request.getLocale());
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
 		}
-
+				
 		loadIndexModel (model, request);
 		
 		return "index";		

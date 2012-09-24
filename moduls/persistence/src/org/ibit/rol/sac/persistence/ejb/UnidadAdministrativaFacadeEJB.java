@@ -1312,12 +1312,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission  unchecked="true"
      */
-    public List cargarArbolUnidadId(Long id) {
+    public List<Long> cargarArbolUnidadId(Long id) {
         Session sessio = getSession();
         try{
-            List ids = new ArrayList();
+            List<Long> ids = new ArrayList<Long>();
             ids.add(id);
-            cargarHijosUnidadId(id,ids,sessio);
+            cargarHijosUnidadId(id, ids, sessio);
             return ids;
         }catch (HibernateException he) {
             throw new EJBException(he);
