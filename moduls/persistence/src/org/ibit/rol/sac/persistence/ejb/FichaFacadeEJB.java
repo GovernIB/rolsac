@@ -2113,7 +2113,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     	}
     	return resultado;
 
-}
+    }
     
 	private static Analyzer getAnalizador(String idi) {
 		Analyzer analyzer;
@@ -2221,7 +2221,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			
         	Query query = null;
         	if (listaUnidadAdministrativaId.size() > 0) {
-        		query = session.createQuery(" select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id " +
+        		query = session.createQuery(" select count( distinct fic.id ) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id " +        	
         				" and fic.validacion = :validacion " +
         				" and (fic.fechaCaducidad >= :fecha or fic.fechaCaducidad is null) " +
         				" and (fic.fechaPublicacion <= :fecha or fic.fechaPublicacion is null) " +
@@ -2269,7 +2269,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		try {
         	Query query = null;
         	if (listaUnidadAdministrativaId.size() > 0) {
-        		query = session.createQuery("select count(*) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ( " +
+        		query = session.createQuery("select count( distinct fic.id ) from Ficha as fic, FichaUA as ficUA where fic.id = ficUA.ficha.id and ( " +        		
 	        			" ( fic.validacion != :validacion ) " +
 	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad < :fecha ) " +
 	        			" or ( fic.validacion = :validacion and fic.fechaCaducidad is null and fic.fechaPublicacion > :fecha ) " +

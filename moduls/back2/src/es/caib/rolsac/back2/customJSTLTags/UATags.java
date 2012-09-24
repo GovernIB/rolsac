@@ -31,12 +31,14 @@ public class UATags extends TagSupport {
 	/** Breadcrumbs de unidades administrativas.*/ 
  	private void crearMollapa() {
 		try {
+			
 			Locale locale = pageContext.getRequest().getLocale();
 			MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(pageContext.getServletContext());
 			
 			String mollapa = "";
 			String textoBotonCargarHijos;
 			Object reqUA = pageContext.getSession().getAttribute("unidadAdministrativa");
+			
 			if (reqUA != null) {
 				UnidadAdministrativa ua = (UnidadAdministrativa) reqUA;
 				HttpServletRequest httpRequest=(HttpServletRequest)pageContext.getRequest();
@@ -56,6 +58,7 @@ public class UATags extends TagSupport {
 			mollapa += "<li class=\"uaHijas\"><a href=\"javascript:;\" class=\"btn uaFilles\"><span><span>" + textoBotonCargarHijos + "</span></span></a></li>";
 			
             pageContext.getOut().print(mollapa);
+            
         } catch(IOException ioe) {
         	log.error(ioe);
         } catch(DelegateException de) {

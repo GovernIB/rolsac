@@ -123,7 +123,6 @@ public class QuadreControlController extends PantallaBaseController {
 		model.put("submenu_seleccionado", 0);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.quadre_control", null, request.getLocale()));
 		model.put("escriptori", "pantalles/quadreControl.jsp");
-		
 				
 		// Darreres Modificacions
 		try {
@@ -167,7 +166,7 @@ public class QuadreControlController extends PantallaBaseController {
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
 		}
-		
+				
 		// Nombre de continguts
 		try {
 			// Procediment
@@ -196,7 +195,8 @@ public class QuadreControlController extends PantallaBaseController {
 			log.error(ExceptionUtils.getStackTrace(e));
 		}
 
-		loadIndexModel (model, request);	
+		loadIndexModel (model, request);
+		
 		return "index";		
 	}
 	

@@ -4,6 +4,7 @@ $(document).ready(function() {
 	inicializarTab('#tabAlta');
 	inicializarTab('#tabBaixa');
 	inicializarTab('#tabModificacio');
+	
 	clickArbre('#allUA');
 });
 

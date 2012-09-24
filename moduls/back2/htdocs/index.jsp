@@ -31,7 +31,8 @@ if (appTitol==null) {
     <script type="text/javascript" src="<c:url value='/js/error.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/listado_base.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
-    <script type="text/javascript" src="<c:url value='/js/multipagina.js'/>"></script>    
+    <script type="text/javascript" src="<c:url value='/js/multipagina.js'/>"></script>
+    
     <jsp:include page="layout/variablesGlobalsJavascript.jsp" flush="true"/>    
 </head>
     <body>

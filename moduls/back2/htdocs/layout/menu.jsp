@@ -1,16 +1,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+
 <div id="menu">
 
     <!-- Ejemplo para consultar el permiso para saber si mostrar opciones del menu o no -->
     <!-- p>sacsystem: <%= request.isUserInRole("sacsystem")%></p -->
 
-
  	<c:set var="rolSystem"><rol:userIsSystem/></c:set>
  	<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 
-	<div id="menu_contingut">			
+	<div id="menu_contingut">
 		<ul>
             <c:choose>
                 <c:when test="${menu==0}">
