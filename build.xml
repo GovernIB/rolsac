@@ -4,6 +4,7 @@
 <project name="rolsac-1.2.0" default="main01ROLSAC">
 	
 	<property name="rolsac.target" value="${ant.project.name}"/>
+	
 	<property name="home" value="."/>
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
@@ -28,7 +29,18 @@
 
 	<property environment="env"/>
 
+	<condition property="db.oracle" value="true">
+	  		<contains string="${hibernate.dialect}" substring="oracle" casesensitive="false"/>
+	</condition>
+
 	
+	<!-- se incluyen targets de ant-contrib --> 
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${lib}/ant-contrib-0.6.jar"/>
+	  </classpath>
+	</taskdef>
 
   <!-- *******************   TASQUES GENERALS  ****************************   -->
   <!-- ====================================================================== -->
@@ -144,6 +156,8 @@
   <!-- update                                                                                                                     -->
   <!-- ================================================================== -->
   
+   <!-- enric@dgtic donat que en els update el inheritall es false, cal pasar rolsac.target explicitament -->
+	
 	<target name="update.XDOCLET" description="Actualiza los módulos que generan clases con XDOCLET.">
 		<antcall target="update.extractor"/>
 		<antcall target="update.model"/>
@@ -152,51 +166,117 @@
 	</target>
 	
 	<target name="update.utils" description="Actualizar utilidades">
-		<ant dir="moduls/utils" target="main" inheritall="false"/>
+	  	<echo>UTILS</echo>
+		<echo> ${javac.encoding} </echo>
+		<ant dir="moduls/utils" target="main" inheritall="false">
+			<propertyset>
+		   		<propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	
 	<target name="update.extractor" description="Actualizar herramientas de texto">
-		<ant dir="moduls/extractor" target="main" inheritall="false"/>
+		<echo>EXTRACTOR</echo>
+		<ant dir="moduls/extractor" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+	</ant>
 	</target>
 
 	<target name="update.model" description="Actualizar el modelo de datos">
-		<ant dir="moduls/model" target="main" inheritall="false"/>
+		<echo>MODEL</echo>
+		<ant dir="moduls/model" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.persistence" description="Actualizar la capa de persistencia">
-		<ant dir="moduls/persistence" target="main" inheritall="false"/>
+		<echo>PERSISTENCE</echo>
+		<ant dir="moduls/persistence" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.integracion" description="Actualizar la capa de integracion">
-		<ant dir="moduls/integracion" target="main" inheritall="false"/>
+		<echo>INTEGRACION</echo>
+		<ant dir="moduls/integracion" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.back" description="Actualizar el modulo web legacy de backoffice">
-		<ant dir="moduls/back" target="main" inheritall="false"/>
+		<echo>BACK</echo>
+		<ant dir="moduls/back" target="main" inheritall="false">
+			<propertyset>
+		   		<propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.back2" description="Actualizar el modulo web de backoffice">
-		<ant dir="moduls/back2" target="main" inheritall="false"/>
+		<echo>BACK2</echo>
+		<ant dir="moduls/back2" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 
 	<target name="update.ws" description="Actualitar el mdulo web de webservices">
-		<ant dir="moduls/ws" target="main" inheritall="false"/>
+		<echo>WS</echo>
+		<ant dir="moduls/ws" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
 	
 	<!--Traspas boib afegit marilen-->
     <target name="update.traspasboib" description="Actualitar el mdulo traspas-boib">
-		<ant dir="moduls/traspas-boib" target="main" inheritall="false"/>
+		<echo>TRASPASBOIB</echo>
+		<ant dir="moduls/traspas-boib" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
 	</target>
+
+	<!--Oracle afegit ejaen@dgtic -->
+    <target name="update.oracle" description="Actualitar el modulo oracle" if="db.oracle">
+    	
+	  	<echo>ORACLE</echo>
+		<ant dir="moduls/oracle" target="main" inheritall="false">
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
+		</ant>
+	</target>
+
 
 	<!-- API Rolsac -->
 
     <target name="update.apiws" description="Actualitar el modulo web de webservices">
+		<echo>APIWS</echo>
         <ant dir="moduls/apiws" target="main" inheritall="false"/>
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>
     </target>
 	
 	<target name="update.api" description="Actualizar la API">
+		<echo>API</echo>
         <ant dir="moduls/api" target="main" inheritall="false"/>
+			<propertyset>
+			   <propertyref name="rolsac.target"/>
+			</propertyset>        
     </target>    		
 
 	  <!-- ================================================================== -->
@@ -205,47 +285,99 @@
 	
 	
 	  <target name="test.unitario">
+	  	
+	  		<echo> COMMON </echo>
 	  		<ant dir="test/common" target="main" inheritall="false"/>
+	  		<echo> UTILS </echo>
+	  		<ant dir="moduls/utils" target="test.unitario" inheritall="false"/>
+	  		<echo> EXTRACTOR </echo>
 			<ant dir="moduls/extractor" target="test.unitario" inheritall="false"/>
+	  		<echo> MODEL </echo>
 			<ant dir="moduls/model" target="test.unitario" inheritall="false"/>
+	  		<echo> PERSISTENCE </echo>
 		  	<ant dir="moduls/persistence" target="test.unitario" inheritall="false"/>
+	  		<echo> INTEGRACION </echo>
 	  		<ant dir="moduls/integracion" target="test.unitario" inheritall="false"/>
+	  	
+	  		<if><equals arg1="${db.oracle}" arg2="true"/>
+	  			<then>
+	  				<echo> ORACLE </echo>
+		  			<ant dir="moduls/oracle" target="test.unitario" inheritall="false"/>
+		  		</then>
+	  		</if>
+	  		<echo> BACK </echo>
 	  		<ant dir="moduls/back" target="test.unitario" inheritall="false"/>
 	  	
-	  	<!--
-		  	<ant dir="moduls/integracion" target="test" inheritall="false"/>
-			<ant dir="moduls/ws" target="test" inheritall="false"/>
-			<ant dir="moduls/back" target="test" inheritall="false"/>
-			<ant dir="moduls/traspas-boib" target="test" inheritall="false"/>
-		-->
 	  </target>	
+
+	 	
+
+	
+  <!-- ================================================================== -->
+  <!-- Construeix el fitxer application.xml							      -->
+  <!-- ================================================================== -->
+
+ <target name="make.application.xml">
+ 	
+	<delete file="${output.dir}/application.xml"/>
+		
+	 <concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+	    <filelist dir="${etc.approlsac}" 	files="01.application.begin.xml"/>
+ 		<filelist dir="moduls/extractor" 	files="appmodule.xml"/>
+	 	<filelist dir="moduls/model" 		files="appmodule.xml"/>
+ 		<filelist dir="moduls/integracion" 	files="appmodule.xml"/>
+ 		<filelist dir="moduls/persistence" 	files="appmodule.xml"/>
+	 	<filelist dir="moduls/traspas-boib" files="appmodule.xml"/>
+	 	<filelist dir="moduls/utils" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/back" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/back2" 		files="appmodule.xml"/>
+ 	</concat>
+ 	
+ 	
+  	<if> <equals arg1="${db.oracle}" arg2="true" />
+	 <then>
+	 	<concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+	 		<filelist dir="moduls/oracle" 	files="appmodule.xml"/>
+	 	</concat>
+	</then>
+  	</if>
+
+	<concat destfile="${output.dir}/application.xml" append="true" fixlastline="true">
+		<filelist dir="${etc.approlsac}" files="02.application.securityrole.xml"/>
+		<filelist dir="${etc.approlsac}" files="03.application.end.xml"/>
+	</concat>
+	
+    <replace file="${output.dir}/application.xml">
+        <replacefilter token="@context.back@" value="${context.back}"/>
+		<replacefilter token="@context.back2@" value="${context.back2}"/>
+        <replacefilter token="@context.ws@" value="${context.ws}"/>
+        <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
+    </replace>
+
+ </target>
+
 	
   <!-- ================================================================== -->
   <!-- assemble                                                                                                                      -->
   <!-- ================================================================== -->
 
-	<target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac.">
+	<target name="assemble01ROLSAC" description="Actualiza el EAR con los componentes generados para rolsac." if="project.author">
 		<delete file="${product.dir}/01${projecte.name.rolsac}.ear" quiet="yes"/>
-        <!-- application.xml  -->
-       <copy file="${etc.approlsac}/application.xml" todir="${output.dir}" overwrite="true"/>
-        <replace file="${output.dir}/application.xml">
-            <replacefilter token="@context.back@" value="${context.back}"/>
-			<replacefilter token="@context.back2@" value="${context.back2}"/>
-            <replacefilter token="@context.ws@" value="${context.ws}"/>
-            <replacefilter token="@prefix.modul@" value="${prefix.modul}"/>
-        </replace>
-
+		
+		<antcall target="make.application.xml"/>
 
 		<ear earfile="${product.dir}/01${projecte.name.rolsac}.ear" appxml="${output.dir}/application.xml" manifest="${etc.approlsac}/manifest.mf">
 			
 			<manifest>
-				<attribute name="Generated-By" value="${rolsac.author}"/>
 				<attribute name="Version" value="${rolsac.target}"/>
+				<attribute name="Built-By" value="${project.author}"/>
+				<attribute name="Build-Jdk" value="${java.version}"/>
 			</manifest>
 	        
 			<metainf dir="${etc.jboss}" includes="jboss-app.xml"/>
 	
 			<!-- Incluimos los .war y .jar generados con la aplicacin para rolsac-->
+			
 			<fileset dir="${moduls.dir}">
 				<include name="${prefix.modul}-utils.jar" />
 				<include name="extractor.jar" />
@@ -267,6 +399,7 @@
 				
 				<include name="${prefix.modul}-apiws.war" />
 				<include name="traspasboib.war" />				
+				<include name="${prefix.modul}-oracle.jar" if="db.oracle"/>
 			</fileset>
 			
 			<!-- No incluimos los .jar externos, solo para stand alone-->
@@ -284,10 +417,6 @@
                 <include name="ehcache.jar" />
             </fileset>
 			
-			<!-- Incluimos el .sar de propiedades del sistema -->						
-<!--            <fileset dir="${home}"> -->
-<!--                <include name="01${projecte.name.rolsac}.sar" /> -->
-<!--            </fileset> -->
     	</ear>
   </target>	
 	
@@ -305,6 +434,17 @@
   
 	  <target name="main01ROLSAC" depends="prepare" description="Realiza todo el proceso de construccin de ROLSAC">
 
+	  	<fail unless="project.author" message="Et falta definir la propietat project.author"/>
+	  	<fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
+	  	
+		<echo>
+		   Version: ${rolsac.target}
+		   Author: ${project.author}
+		   Compiler: ${java.version}
+		   Ant: ${ant.home}
+		</echo>
+
+	  	
 		 <antcall target="propagate01ROLSAC">
 	          <param name="task" value="main"/>
 	       </antcall>
@@ -318,28 +458,40 @@
   <!-- ================================================================== -->
 
 	  <target name="propagate01ROLSAC">
-	  	<echo>UTILS</echo>
-		<ant dir="moduls/utils" target="${task}" inheritall="false"/>
-	  	<echo>EXTRACTOR</echo>
-		<ant dir="moduls/extractor" target="${task}" inheritall="false"/>
-	  	<echo>MODEL</echo>
-		<ant dir="moduls/model" target="${task}" inheritall="false"/>
-	  	<echo>PERSISTENCE</echo>
-	  	<ant dir="moduls/persistence" target="${task}" inheritall="false"/>
-	  	<echo>INTEGRACION</echo>
-	  	<ant dir="moduls/integracion" target="${task}" inheritall="false"/>
-	  	<echo>WS</echo>
-		<ant dir="moduls/ws" target="${task}" inheritall="false"/>
-	  	<echo>BACK</echo>
-		<ant dir="moduls/back" target="${task}" inheritall="false"/>
-	  	<echo>BACK2</echo>
-		<ant dir="moduls/back2" target="${task}" inheritall="false"/>
-	  	<echo>TRASPAS-BOIB</echo>
-		<ant dir="moduls/traspas-boib" target="${task}" inheritall="false"/>
-        <echo>APIWS</echo>
-        <ant dir="moduls/apiws" target="${task}" inheritall="false"/>
-	    <echo>API</echo>
-	    <ant dir="moduls/api" target="${task}" inheritall="false"/>
+	  	
+	  	<antcall target="update.utils"/>
+
+	  	<antcall target="update.extractor"/>
+	  	
+	  	<antcall target="update.model"/>
+		
+	  	<antcall target="update.persistence"/>
+	  	
+	  	<antcall target="update.oracle"/>
+	  		
+	  	<!--
+	  	<echo>ORACLE</echo>
+		<ant dir="moduls/oracle" target="${task}" inheritall="false">
+	  		<propertyset>
+	  		   <propertyref name="rolsac.target"/>
+	  		</propertyset>
+	  	</ant>
+-->
+
+	  	<antcall target="update.integracion"/>
+	  	
+	  	<antcall target="update.ws"/>
+	  		
+	  	<antcall target="update.back"/>
+	  	
+	  	<antcall target="update.back2"/>
+	  	
+	  	<antcall target="update.traspasboib"/>
+	  	
+	  	<antcall target="update.apiws"/>
+	  		  	
+	  	<antcall target="update.api"/>
+	  	
 	  </target>	
  	
 	
@@ -350,6 +502,9 @@
 
 	   <target name="deploy01ROLSAC" if="deploy.dir">
           <copy verbose="true" file="${product.dir}/01${projecte.name.rolsac}.ear" todir="${deploy.dir}"/>
+	   	  <echo>
+	   	  		ES RECOMANA EXECUTAR test.unitario PER COMPROBAR QUE NO S'HAGI CORROMPUT FUNCIONALITAT.
+	   	  </echo>
 	  </target>		  	
 
 	  <!-- ================================================================== -->
@@ -357,7 +512,7 @@
 	  <!-- ================================================================== -->
 	
 	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-	    <classpath path="${lib}/sonar-ant-task-1.2.jar" /> 
+	    <classpath path="${lib}/sonar-ant-task-1.4.jar" /> 
 	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
 	    <!-- In such case this classpath node is no more mandatory -->
 	  </taskdef>

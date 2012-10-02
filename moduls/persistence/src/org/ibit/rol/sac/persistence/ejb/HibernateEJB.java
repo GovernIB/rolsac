@@ -50,7 +50,11 @@ import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Personal;
-import org.ibit.rol.sac.persistence.util.HibernateLocator;
+
+import es.caib.rolsac.persistence.hibernate.HibernateLocator;
+import es.caib.rolsac.persistence.hibernate.SessionInterceptor;
+import es.caib.rolsac.persistence.hibernate.SessionInterceptorBuilder;
+
 
 
 /**
@@ -99,9 +103,28 @@ public abstract class HibernateEJB implements SessionBean {
 
     protected Session getSession() {
         try {
-            Session session = sessionFactory.openSession();
-            session.setFlushMode(FlushMode.COMMIT);
-            return session;
+        	
+        	Session session=null;
+
+        	SessionInterceptor sessionInterceptor = SessionInterceptorBuilder.build();
+        	
+
+        	if(null==sessionInterceptor) {
+        		session = sessionFactory.openSession();
+        	}
+        	else {
+        		session = sessionFactory.openSession(sessionInterceptor);
+        		sessionInterceptor.setSession(session);
+        		sessionInterceptor.setSessionContext(ctx);
+        	}
+        	
+            session.setFlushMode(FlushMode.COMMIT);  // (1)
+            
+            // (1) FIXME: ejaen@dgtic - diria que el flush mode.COMMIT  no te sentit doncs les transaccions 
+            // en rolsac son CMT, i  en el moment del commit la sessio hibernate ja l'haurà tancat el EJB
+
+            log.debug("se ha abierto la sesion: "+ session);
+            return session;	
         } catch (HibernateException e) {
             throw new EJBException(e);
         }

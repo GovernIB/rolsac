@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="" />
+<title>TestRolsac_altaProcediment_InsertaMateria</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">TestRolsac_altaProcediment_InsertaMateria</td></tr>
+</thead><tbody>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Procedimientos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>validacion</td>
+	<td>label=Público</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>validacion</td>
+	<td>label=Interno</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>validacion</td>
+	<td>label=Público</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='boton' and @value='Seleccionar' and @type='button' and @onclick='abrirUAResponsable()']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>Seleccionar</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Arbol - Seccion</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Govern de les Illes Balears</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='boton' and @value='Seleccionar' and @type='button' and @onclick=&quot;abrirDato('Familia')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>Seleccionar</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Procedimiento - POPUP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Seleccionar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='boton' and @value='Seleccionar' and @type='button' and @onclick=&quot;abrirDato('Iniciacion')&quot;]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>Seleccionar</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Procedimiento - POPUP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Seleccionar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].nombre</td>
+	<td>test procedimiento</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].resolucion</td>
+	<td>pr</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].notificacion</td>
+	<td>pn</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>traducciones[0].silencio</td>
+	<td>s</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>action</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>Se ha realizado la modificación correctamente</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Modificación Procedimiento</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='ccontingut']/div[4]/h2</td>
+	<td>Sin clasificar</td>
+</tr>
+<!-- verificar que al insertar una materia apareix la materia-->
+<tr>
+	<td>click</td>
+	<td>//div[@id='ccontingut']/center[4]/a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>Seleccionar</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Procedimiento - POPUP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>storeText</td>
+	<td>elemento</td>
+	<td>materias</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${materias}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>Sense classificar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>elemento</td>
+	<td>label=Cultura</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Seleccionar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Cultura</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>link=Cultura</td>
+	<td>Cultura</td>
+</tr>
+<tr>
+	<td>assertTextNotPresent</td>
+	<td>sin clasificar</td>
+	<td></td>
+</tr>
+<!-- verificar que s'esborra el procediment creat -->
+<tr>
+	<td>storeText</td>
+	<td>//div[@id='ccontingut']/div[1]/h2</td>
+	<td>procTitle</td>
+</tr>
+<tr>
+	<td>storeEval</td>
+	<td>storedVars[&quot;procTitle&quot;].split(&quot;)&quot;)[0].split(&quot;:&quot;)[1]</td>
+	<td>procId</td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>${procId}</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Procedimientos</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Seleccionar por código</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td></td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC Procedimiento - POPUP</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>idSelect</td>
+	<td>${procId}</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@value='Seleccionar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>title=SAC</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForValue</td>
+	<td>traducciones[0].nombre</td>
+	<td>test procedimiento</td>
+</tr>
+<tr>
+	<td>chooseOkOnNextConfirmation</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//input[@name='action' and @value='Eliminar']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForAlertPresent</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertAlert</td>
+	<td>Se ha realizado la baja correctamente</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

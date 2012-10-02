@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+
 
 <project name="01rolsac" default="usage">
 	
@@ -49,7 +49,7 @@
 		****** Tasques de preparacio :
 		prepare : fitxa l'estructura de directoris necessaria per la construccio de l'aplicacio
 	
-		****** Tasques d'actualització de components :
+		****** Tasques d'actualitzaciÃ³ de components :
 		update.XXX.jar : re-construeix el producte final (caib.ear) actualitzant nomes el component jar XXX
 		update.XXX.war : re-construeix el producte final (caib.ear) actualitzant nomes el component war XXX
 
@@ -63,7 +63,7 @@
 		doc-pdf : genera al directori ../doc un fitxer PDF amb la documentacio del projecte
 		doc-html : genera al directori ../doc/html la documentacio del projecte en format html
 		doc-print : genera al directori ../doc/print la documentacio del projecte en format html per imprimir
-		doc-api : genera la documentació javadoc pels components dins dels directori ../doc/api
+		doc-api : genera la documentaciÃ³ javadoc pels components dins dels directori ../doc/api
 	
 		****** Tasques de construccio :
 		assemble : construeix el ear amb tots els components existents

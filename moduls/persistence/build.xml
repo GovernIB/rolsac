@@ -48,10 +48,11 @@
             <include name="commons-logging.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="mail.jar"/>
-        	<include name="htmllexer.jar"/>
+        	<include name="htmllexer.jar" />
         </fileset>
         <fileset dir="${ejb.product}">
-            <include name="sac.jar"/>        	
+            <include name="sac-utils.jar"/>        	
+        	<include name="sac.jar"/>
             <include name="model.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
@@ -62,6 +63,12 @@
      	<fileset dir="${lib.dir}/axis-1.4">
         		<include name="**/*.jar" />
         </fileset>
+    	
+    	<!-- enric: per posar traces de transaacions  -->
+     	<fileset dir="${lib.dir}/jboss">
+     	        <include name="**/*.jar" />
+     	</fileset>
+    	
 		<!-- agarcia: librerias comunes en 00librerias -->
     	<fileset dir="${lib.dir}/webcaib">
 			<include name="axis.jar"/>
@@ -76,6 +83,12 @@
 			<include name="lucene-spellchecker-2.2.0.jar"/>
 			<include name="rome-1.0RC2.jar"/>
 		</fileset>
+
+   	
+    	<!-- enric: per posar traces de transaacions  -->
+     	<fileset dir="${lib.dir}/jboss">
+     	        <include name="**/*.jar" />
+     	</fileset>
 
     </path>
 
@@ -150,7 +163,7 @@
             </utilobject>
 
             <deploymentdescriptor
-                clientjar="sac-${modul}-client.jar"
+                clientjar="${prefix.modul}-${modul}-client.jar"
                 xmlencoding="UTF-8"
                 destdir="${ejb.gen.etc}"
                 validatexml="true"
@@ -205,9 +218,9 @@
 		
 	
     <target name="ejb.jar" depends="ejb.compile">
-        <delete file="${ejb.product}/sac-${modul}.jar" quiet="yes"/>
+        <delete file="${ejb.product}/${prefix.modul}-${modul}.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sac-${modul}.jar"
+            jarfile="${ejb.product}/${prefix.modul}-${modul}.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundaci� IBIT"/>
@@ -220,9 +233,9 @@
     </target>
 
     <target name="ejb.client" depends="ejb.compile">
-        <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
+        <delete file="${ejb.product}/${prefix.modul}-${modul}-client.jar" quiet="yes"/>
         <jar
-            jarfile="${ejb.product}/sac-${modul}-client.jar"
+            jarfile="${ejb.product}/${prefix.modul}-${modul}-client.jar"
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundaci� IBIT"/>
@@ -253,14 +266,13 @@
     </target>
 
     <target name="doc" depends="ejb.javadoc" description="Realiza las tareas de documentaci�n"/>
-    <target name="main" depends="ejb.jar,ejb.client" description="Construye el componente"/>
+
 
 
 	<path id="hbm2ddl.class.path">
 	        <fileset dir="${lib.dir}">
 	            <include name="hibernate2.jar"/>
-	        	<include name="ojdbc14.jar"/>
-	            <include name="commons-logging.jar"/>
+	        	<include name="commons-logging.jar"/>
 	        	<include name="cglib2.jar"/>
 	        </fileset>
 			<fileset dir="${lib.dir}/webcaib">
@@ -338,5 +350,6 @@
 	<import file="../build_test.xml"/>
 	<import file="../build_sonar.xml"/>
 
+    <target name="main" depends="ejb.jar, ejb.client" description="Construye el componente"/>
 	
 </project>

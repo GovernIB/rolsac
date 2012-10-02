@@ -59,6 +59,10 @@
 
 		es.caib.rolsac.codiEstandarSecGrupMat=GRUPMATERIES
 						
+
+
+		es.caib.rolsac.persistence.hibernate.sessionInterceptors = es.caib.rolsac.persistence.hibernate.ConnectionInfoInterceptor
+		es.caib.rolsac.persistence.hibernate.databaseConnectionInfoClass = es.caib.rolsac.oracle.OracleConnectionInfo
 				
 <!--
 es.caib.rolsac.codiEstandarUAArrel

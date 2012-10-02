@@ -89,7 +89,6 @@
 
 	
     <target name="doc" depends="jar.javadoc" description="Realiza las tareas de documentación"/>
-    <target name="main" depends="jar.jar" description="Construye el jar"/>
 
 
 	<target name="module.package" depends="jar.jar"/>
@@ -98,5 +97,8 @@
 
 	<import file="../build_test.xml"/>	
 	<import file="../build_sonar.xml"/>
+
+    <target name="main" depends="jar.jar" description="Construye el jar"/>
+
 	
 </project>

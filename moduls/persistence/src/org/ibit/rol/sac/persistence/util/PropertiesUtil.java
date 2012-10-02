@@ -1,10 +1,15 @@
 package org.ibit.rol.sac.persistence.util;
 
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Locale;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class PropertiesUtil {
+    
+    protected static Log log = LogFactory.getLog(PropertiesUtil.class);  
 	
 	private final String path;
 	
@@ -22,7 +27,7 @@ public class PropertiesUtil {
 			ResourceBundle labels = ResourceBundle.getBundle(path,currentLocale);
 			resultado = labels.getString(valor);
 		} catch (MissingResourceException e) {
-			System.out.println(e.toString());
+			log.error(e.toString());
 		}
 		return resultado;
 	}

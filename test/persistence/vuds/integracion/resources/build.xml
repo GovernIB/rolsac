@@ -4,9 +4,15 @@
 	
 	<property name="projecte" value="${ant.project.name}"/>
 	<property name="home" value="."/>
+<<<<<<< .working
 	<property file="${home}/build.${user.name}.properties" />
 	<property file="${home}/build.${rolsac.target}.properties"/>
 	<property file="${home}/default.properties"/>
+=======
+	<property file="${home}/build.${user.name}.properties" />
+	<property file="${home}/build.${rolsac.target}.properties"/>
+	<property file="${home}/config.properties"/>
+>>>>>>> .merge-right.r620
 	<property name="doc" value="${home}/doc"/>
 	<property name="components" value="${home}/moduls"/>
 	<property name="etc" value="${home}/etc"/>

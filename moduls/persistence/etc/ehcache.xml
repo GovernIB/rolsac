@@ -40,5 +40,53 @@
 	    timeToLiveSeconds="600"
 	    overflowToDisk="false"
 	/>
-    
+    <cache name="org.ibit.rol.sac.micromodel.Encuesta"
+	    maxElementsInMemory="20"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Encuesta.traducciones"
+	    maxElementsInMemory="20"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Encuesta.preguntas"
+	    maxElementsInMemory="100"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Pregunta"
+	    maxElementsInMemory="100"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Pregunta.traducciones"
+	    maxElementsInMemory="100"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Respuesta"
+	    maxElementsInMemory="300"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
+	<cache name="org.ibit.rol.sac.micromodel.Respuesta.traducciones"
+	    maxElementsInMemory="300"
+	    eternal="false"
+	    timeToIdleSeconds="240"
+	    timeToLiveSeconds="600"
+	    overflowToDisk="false"
+	/>
 </ehcache>
