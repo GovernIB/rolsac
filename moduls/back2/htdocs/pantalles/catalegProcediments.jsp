@@ -1940,6 +1940,8 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                            <!--  
                             <div class="element right">
                                 <div class="etiqueta">
                                     <label for="item_data_actualitzacio"><spring:message code='camp.dataActualitzacio'/></label>
@@ -1948,6 +1950,8 @@
                                     <input id="item_data_actualitzacio" name="item_data_actualitzacio" type="text" class="nou" readonly="readonly" />
                                 </div>
                             </div>
+                            -->
+                            
                         </div>
                         <!-- /fila -->
                         <!-- fila -->
