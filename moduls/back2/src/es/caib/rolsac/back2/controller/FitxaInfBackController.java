@@ -180,31 +180,6 @@ public class FitxaInfBackController extends PantallaBaseController {
             fetVital = Long.parseLong(request.getParameter("fetVital"));
         } catch (NumberFormatException e){}
 
-//        String url = request.getParameter("url");
-//        if (url != null && !"".equals(url)) {
-//            paramMap.put("urlForo", url.toUpperCase());
-//        }
-//        
-//        String responsable = request.getParameter("responsable");
-//        if (responsable != null && !"".equals(responsable)) {
-//            paramMap.put("responsable", responsable.toUpperCase());
-//        }
-//
-//        Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
-//        if (fechaCaducidad != null) {
-//            paramMap.put("fechaCaducidad", fechaCaducidad);
-//        }
-//             
-//        Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
-//        if (fechaPublicacion != null) {
-//            paramMap.put("fechaPublicacion", fechaPublicacion);
-//        }
-//                
-//        Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
-//        if (fechaActualizacion != null) {
-//            paramMap.put("fechaActualizacion", fechaActualizacion);
-//        }
-        
         boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
         boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
         
