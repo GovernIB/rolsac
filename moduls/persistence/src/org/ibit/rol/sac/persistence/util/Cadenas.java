@@ -1,7 +1,13 @@
 package org.ibit.rol.sac.persistence.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
+
+import org.ibit.rol.sac.model.Traduccion;
 
 public class Cadenas {
 
@@ -81,9 +87,6 @@ public class Cadenas {
 		      }
 		        
 		}	  
-	  
-	  
-
 
 		protected static void replace(String original, StringBuffer texte,
 			String patro, String canvi) {
@@ -141,4 +144,54 @@ public class Cadenas {
 		    }
 		    return stlog.toString();
 		}
+		
+	    /**
+	     * Comprueba si la cadena pasada por parámetro forma parte de alguno
+	     * de los campos multi-idioma de la clase de traducción dada.
+	     * 
+	     * @param clazz Clase que implemente Traduccion
+	     * @param cadena Cadena a buscar
+	     * @return Booleano Devuelve true si la cadena se ha encontrado en alguno de los campos.
+	     */
+	    public static boolean isCadenaEnTraduccion(Traduccion o, String cadena) {
+	    	
+	    	if (o == null) return false;
+	    	
+	    	List<Method> listaMetodos = Arrays.asList(o.getClass().getDeclaredMethods()); 
+	    	
+			try {
+	    	
+		    	for (Method m : listaMetodos ) {
+		
+		    		if (cadena != null && cadena.length() > 0 && m.getName().startsWith("get")) {
+		    			String upperCadena = cadena.toUpperCase();
+		    			String valor = ((String) m.invoke(o, (Object[]) null));
+		    			
+		    			if (valor != null) {
+		    				
+			    			if ( upperCadena.startsWith("\"") && 
+			    				 upperCadena.endsWith("\"") && 
+			    				 upperCadena.equals(valor.toUpperCase()) ) {
+			    				return true;
+			    			} else if ( valor.toUpperCase().contains(upperCadena) ) return true;
+			    			
+		    			}
+		    		}
+		    	}
+		    	
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	    	
+	    	return false;
+	    	
+	    }
+		
 }

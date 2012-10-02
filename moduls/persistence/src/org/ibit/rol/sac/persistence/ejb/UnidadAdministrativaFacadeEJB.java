@@ -196,8 +196,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
-
-    
     
     
     /**

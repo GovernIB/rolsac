@@ -353,7 +353,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				listaSecciones.add(seccionFichaDTO);
 			} 
 
-        	resultats.put("seccions", listaSecciones);
+     	resultats.put("seccions", listaSecciones);
         	
             //Materias asociadas           
             if (uni.getUnidadesMaterias() != null) {             
@@ -855,8 +855,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		}
 		
         try {
+        	
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves, null, null);           
+           
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves, null, null);
             
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());

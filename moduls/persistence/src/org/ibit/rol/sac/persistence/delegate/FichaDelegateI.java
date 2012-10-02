@@ -28,6 +28,8 @@ public interface FichaDelegateI {
 	public abstract List buscarFichas(String texto) throws DelegateException;
 	
 	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;
+	
+	public abstract List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;	
 
 	public abstract List listarFichas() throws DelegateException;
 
@@ -155,4 +157,5 @@ public interface FichaDelegateI {
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	
 	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException;
+	
 }

@@ -151,12 +151,6 @@ public class FitxaInfBackController extends PantallaBaseController {
         Long fetVital = null;
         Long materia = null;
         
-        
-//        if (session.getAttribute("unidadAdministrativa") == null) {
-//            return resultats; // Si no hay unidad administrativa se devuelve vacio
-//        } else {
-//            ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-//        }
         if (session.getAttribute("unidadAdministrativa") != null) {
         	ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
         }
@@ -164,7 +158,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         try {
             Long codi = ParseUtil.parseLong(request.getParameter("codi"));
             paramMap.put("id", codi);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
         }
         
         if (request.isUserInRole("sacoper")) {
@@ -174,7 +168,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             try {
                 Integer validacion = Integer.parseInt(estat);
                 paramMap.put("validacion", validacion);
-            } catch (NumberFormatException e){
+            } catch (NumberFormatException e) {
             }
         }
         
@@ -186,36 +180,37 @@ public class FitxaInfBackController extends PantallaBaseController {
             fetVital = Long.parseLong(request.getParameter("fetVital"));
         } catch (NumberFormatException e){}
 
-        String url = request.getParameter("url");
-        if (url != null && !"".equals(url)) {
-            paramMap.put("urlForo", url.toUpperCase());
-        }
-        
-        String responsable = request.getParameter("responsable");
-        if (responsable != null && !"".equals(responsable)) {
-            paramMap.put("responsable", responsable.toUpperCase());
-        }
-
-        Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
-        if (fechaCaducidad != null) {
-            paramMap.put("fechaCaducidad", fechaCaducidad);
-        }
-             
-        Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
-        if (fechaPublicacion != null) {
-            paramMap.put("fechaPublicacion", fechaPublicacion);
-        }
-                
-        Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
-        if (fechaActualizacion != null) {
-            paramMap.put("fechaActualizacion", fechaActualizacion);
-        }
+//        String url = request.getParameter("url");
+//        if (url != null && !"".equals(url)) {
+//            paramMap.put("urlForo", url.toUpperCase());
+//        }
+//        
+//        String responsable = request.getParameter("responsable");
+//        if (responsable != null && !"".equals(responsable)) {
+//            paramMap.put("responsable", responsable.toUpperCase());
+//        }
+//
+//        Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
+//        if (fechaCaducidad != null) {
+//            paramMap.put("fechaCaducidad", fechaCaducidad);
+//        }
+//             
+//        Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
+//        if (fechaPublicacion != null) {
+//            paramMap.put("fechaPublicacion", fechaPublicacion);
+//        }
+//                
+//        Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
+//        if (fechaActualizacion != null) {
+//            paramMap.put("fechaActualizacion", fechaActualizacion);
+//        }
         
         boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
         boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
         
         // Textes (en todos los campos todos los idiomas)
         String textes = request.getParameter("textes");
+        
         if (textes != null && !"".equals(textes)) {
             textes = textes.toUpperCase();
             if (tradMap.get("titulo") == null) {
@@ -230,8 +225,9 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves, campoOrdenacion, orden);           
-                        
+            
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves, campoOrdenacion, orden);
+            
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 

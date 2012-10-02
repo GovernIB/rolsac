@@ -32,7 +32,6 @@ public class Ficha extends Classificable implements Indexable, Validable {
 	 
 
 	//Constructores
-	
 
 	public Ficha() {
 		super();
@@ -43,8 +42,20 @@ public class Ficha extends Classificable implements Indexable, Validable {
 		this.id = id;
 	}
 	
-	// get & set
+	public Ficha(Long id, Date fechaPublicacion, Date fechaCaducidad, Date fechaActualizacion, Integer validacion ) {
+		
+		super();
+		
+		this.id = id;
+		this.fechaPublicacion    = fechaPublicacion;
+		this.fechaCaducidad     = fechaCaducidad;
+		this.fechaActualizacion = fechaActualizacion;
+		this.validacion = validacion;
+		//this.fichasua = fichasua;
+		
+	}
 	
+	// get & set
 
 	public Long getId() {
         return id;
