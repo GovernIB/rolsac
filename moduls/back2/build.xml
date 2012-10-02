@@ -109,13 +109,14 @@
 				<exclude name="boib.jar"/>
 				<exclude name="micromodel.jar"/>
 				<exclude name="sac-micropersistence.jar"/>
+				<exclude name="servlet-api.jar"/>
+	            <exclude name="jsp-api.jar"/>
 			</lib>
 
 			<!-- agarcia: librerias comunes en 00librerias -->
 			<lib dir="${home.dir}/lib/webcaib">
 				<include name="org.springframework.*.jar"/>
 			</lib>
-
 
 			<lib dir="${lib.dir}/jstl">
            		<include name="**/*.jar" />
