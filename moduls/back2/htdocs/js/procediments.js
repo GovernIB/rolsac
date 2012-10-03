@@ -482,9 +482,16 @@ function CDetall(){
 		
 		if (typeof idUAMollapa == "undefined" || idUAMollapa == null || idUAMollapa == "") {
 			$("#item_organ_responsable_id").val("");
+			
+			//test
+			$("#item_organ_id").val("");
 		} else {
 			$("#item_organ_responsable_id").val(idUAMollapa);
 			$("#item_organ_responsable").val(nomUAMollapa).change();
+			
+			//test
+			$("#item_organ_id").val(idUAMollapa);
+			$("#item_organ").val(nomUAMollapa).change();
 		}
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
