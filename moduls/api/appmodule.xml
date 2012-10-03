@@ -1,3 +1,6 @@
+           
+            <module><ejb>@prefix.modul@-api.jar</ejb></module>
+            <!-- module><ejb>@prefix.modul@-api-client.jar</ejb></module-->
             <module>
                 <web>
                 <web-uri>@prefix.modul@-apiws.war</web-uri>

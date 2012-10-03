@@ -331,6 +331,7 @@
 	 	<filelist dir="moduls/utils" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/back" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/back2" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/api"          files="appmodule.xml"/>
  	</concat>
  	
  	
@@ -394,7 +395,7 @@
 				
 				<!-- No incluimos el jar cliente del API (comentar siguiente línea sólo 
 				     cuando esté corregido  problema al quitar este jar)	-->
-				<include name="${prefix.modul}-api-client.jar" />
+				<!-- include name="${prefix.modul}-api-client.jar" / -->
 				
 				
 				<include name="${prefix.modul}-apiws.war" />
