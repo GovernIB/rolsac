@@ -1,17 +1,28 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
-
-import org.ibit.rol.sac.persistence.ejb.HibernateEJB;
-import org.ibit.rol.sac.persistence.util.RemotoUtils;
-import org.ibit.rol.sac.model.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.AdministracionRemota;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.EdificioRemoto;
+import org.ibit.rol.sac.model.FichaRemota;
+import org.ibit.rol.sac.model.NormativaExternaRemota;
+import org.ibit.rol.sac.model.ProcedimientoRemoto;
+import org.ibit.rol.sac.model.TraduccionFichaRemota;
+import org.ibit.rol.sac.model.TramiteRemoto;
+import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
+import org.ibit.rol.sac.persistence.util.RemotoUtils;
 
 /**
  * SessionBean para mantener y consultar las AdministracionRemota (PORMAD)
@@ -85,7 +96,10 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 					.load(AdministracionRemota.class, id);
 			Hibernate.initialize(administracionRemota.getLogog());
 			Hibernate.initialize(administracionRemota.getLogop());
+			Hibernate.initialize(administracionRemota.getUnidadesRemotas());
+			
 			return administracionRemota;
+			
 		} catch (HibernateException he) {
 			throw new EJBException(he);
 		} finally {

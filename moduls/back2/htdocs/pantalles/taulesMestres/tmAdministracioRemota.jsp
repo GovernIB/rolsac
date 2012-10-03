@@ -5,10 +5,12 @@
 
 <script type="text/javascript" src="<c:url value='/js/tm_administracio_remota.js'/>"></script>
 <script type="text/javascript">
+
     var pagLlistat = '<c:url value="/administracioRemota/llistat.do" />';
     var pagDetall = '<c:url value="/administracioRemota/pagDetall.do" />';
     var pagGuardar = '<c:url value="/administracioRemota/guardar.do" />';
     var pagEsborrar = '<c:url value="/administracioRemota/esborrarAdministracioRemota.do" />';
+    var pagSincronitzacio = '<c:url value="/administracioRemota/sincronitzacio.do"/>';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";
@@ -62,6 +64,8 @@
     var txtCaducat = "<spring:message code='txt.caducat'/>";
     var txtCaducitat = "<spring:message code='txt.caducitat'/>";
     var txtPublicacio = "<spring:message code='boto.publicacio'/>";
+    var txtSincronitzacioCorrecta = "<spring:message code='administracioRemota.sincronitzacio.correcta'/>";
+    var txtSincronitzacioError = "<spring:message code='administracioRemota.sincronitzacio.error'/>";
 
     //idioma
     var txtDesplega = "<spring:message code='txt.desplega'/>";
@@ -199,6 +203,7 @@
 <div id="escriptori_detall" class="escriptori_detall">
     <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
+        <input id="item_sincronitzada" name="item_sincronitzada" type="hidden" />
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>            
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">          
@@ -391,6 +396,22 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            
+            <!-- modul -->
+            <div id="modulSincronitzacio" class="modul">
+            	<fieldset>
+					<legend><spring:message code='administracioRemota.sincronitzacio'/></legend>            
+		            <div class="botonera">	            
+		                <div class="btnGenerico" style="margin-left:11px;">
+		                    <a id="btnAlta" class="btn alta" href="javascript:;"><span><span><spring:message code='boto.alta'/></span></span></a>
+		                </div>
+		                <div class="btnGenerico" style="margin-left:11px;">
+		                    <a id="btnBaixa" class="btn baja" href="javascript:;"><span><span><spring:message code='boto.baixa'/></span></span></a>
+		                </div>
+		            </div>
+				</fieldset>		            
+            </div>
+            <!-- /modul -->            
         </div>
         <!-- /modulLateral -->
     </form>

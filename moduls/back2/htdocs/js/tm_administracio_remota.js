@@ -50,6 +50,7 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
+
 function CLlistat(){
 	this.extend = ListadoBase;
 	this.extend();
@@ -75,6 +76,7 @@ function CLlistat(){
 			if (resultats_total % pag_Res > 0){
 				ultimaPag++;
 			}
+			
 			if (pag_Pag > ultimaPag) {
 				pag_Pag = ultimaPag;
 			}
@@ -194,7 +196,7 @@ function CLlistat(){
 		var modoListado = !modoBuscador;		
 		
 		dataVars = "";
-		
+				
 		// cercador
 		if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
 			pagPagina_elm = pagPagina_cercador_elm;
@@ -294,6 +296,7 @@ function CDetall(){
 		
 		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
+		
 	}
 	
 	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
@@ -332,6 +335,8 @@ function CDetall(){
 
 	this.nou = function() {
         $("#item_id").val("");
+        
+        $("#modulSincronitzacio").hide();
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou, div.fila select").val("").end().find("h2:first").text(txtNouTitol);
@@ -372,6 +377,8 @@ function CDetall(){
 		$("#item_profunditat").val(dada_node.item_profunditat);
 		$("#item_codi_estandart").val(dada_node.item_codi_estandart);
 		
+		$("#item_sincronitzada").val(dada_node.item_sincronitzada);
+		
 		//Logotipos		
 		pintarArchivo("item_logo_petit", dades);			
 		pintarArchivo("item_logo_gran", dades);
@@ -397,7 +404,53 @@ function CDetall(){
 			escriptori_contingut_elm.fadeOut(300, function() {
 				escriptori_detall_elm.fadeIn(300);				
 			});
-		}	
+		}
+		
+		// botons de sincronitzaci�		
+		var sincronitzada = $("#item_sincronitzada").val();
+		var boto = $("#btnAlta");		
+		var dataVarsSincronitzacio = "op=a";
+			
+		$("#modulSincronitzacio").show();
+
+		$("#btnAlta").show();
+		$("#btnBaixa").hide();
+
+		if ( sincronitzada == "true") {
+			
+			$("#btnAlta").hide();
+			$("#btnBaixa").show();
+			boto = $("#btnBaixa");
+			dataVarsSincronitzacio = "op=b";
+			
+		}
+		
+		dataVarsSincronitzacio += "&id=" + $("#item_id").val();
+		
+		boto.click( function() {
+			$.ajax({
+				type: "POST",
+				url: pagSincronitzacio,
+				data: dataVarsSincronitzacio,
+				dataType: "json",
+				
+				beforeSend: function() {
+					Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});										
+				},			
+								
+				error: function() {					
+					Missatge.llansar({tipus: "alerta", modo:"error", fundit:"si", titol: txtSincronitzacioError } );					
+				},
+				
+				success: function(dades) {
+					if (dades.id < 0)
+						Missatge.llansar({tipus: "alerta", modo:"error", fundit:"si", titol: dades.nom } );
+					else
+						Missatge.llansar({tipus: "alerta", modo:"correcte", fundit:"si", titol: txtSincronitzacioCorrecta } );					
+				}
+			});
+		});
+		//--------------------------------		
 	}
 	
 	this.elimina = function() {
@@ -430,5 +483,5 @@ function CDetall(){
 				}
 			}
 		});
-	}
+	}	
 };

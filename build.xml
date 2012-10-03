@@ -27,6 +27,8 @@
 
 	<property name="etc.approlsac" value="${etc}/approlsac"/>
 
+	<property name="project.author" value="UTE" />
+		
 	<property environment="env"/>
 
 	<condition property="db.oracle" value="true">

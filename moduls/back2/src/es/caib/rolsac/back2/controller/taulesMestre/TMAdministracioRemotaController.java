@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
@@ -16,6 +17,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.integracion.ws.UnidadAdminCENoEncontradaException;
+import org.ibit.rol.sac.integracion.ws.sicronizacion.CapaDeDatosException;
+import org.ibit.rol.sac.integracion.ws.sicronizacion.ComunicacionException;
+import org.ibit.rol.sac.integracion.ws.sicronizacion.SincronizacionTrabajadoException;
+import org.ibit.rol.sac.integracion.ws.sicronizacion.SincronizadorSingleton;
 import org.ibit.rol.sac.model.AdministracionRemota;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
@@ -81,8 +87,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 
 	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody
-	Map<String, Object> llistatAdministracioRemota(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistatAdministracioRemota(HttpServletRequest request) {
 
 		List<Map<String, Object>> llistaAdinistracionsRemotesDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> adRemotaDTO;
@@ -114,15 +119,14 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 	
 
 	@RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody
-	Map<String, Object> recuperaDetall(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		try {
 			Long id = new Long(request.getParameter("id"));
 
 			AdministracionRemotaDelegate adRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
 			AdministracionRemota adRemota = adRemotaDelegate.obtenerAdministracionRemota(id);
-
+						
 			resultats.put("item_id", adRemota.getId());
 			resultats.put("item_nom", adRemota.getNombre());
 			resultats.put("item_endPoint", adRemota.getEndpoint());
@@ -153,6 +157,8 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 			resultats.put("item_idRemot", adRemota.getIdRemoto());
 			resultats.put("item_responsable", adRemota.getResponsable());
 			resultats.put("item_versio_ws", adRemota.getVersion());
+			
+			resultats.put("item_sincronitzada", !adRemota.getUnidadesRemotas().isEmpty());
 
 		} catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -317,5 +323,73 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		}
 		return resultatStatus;
 	}
-	
+
+	// Mètodes de sincronització
+	@RequestMapping(value="/sincronitzacio.do", method = POST)
+	public @ResponseBody IdNomDTO sincronitzaAdministracioRemota(HttpServletRequest request, HttpServletResponse response) {
+		
+		IdNomDTO resultatStatus = new IdNomDTO();
+		
+		AdministracionRemotaDelegate administracionRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
+		
+		Long id = new Long(request.getParameter("id"));
+		String operacio = request.getParameter("op");
+
+		try {
+			
+			resultatStatus.setId(1l);
+
+			if (! SincronizadorSingleton.Estado.Parado.equals(SincronizadorSingleton.running() ) ) {
+				
+				resultatStatus.setId(-1l);
+				String error = messageSource.getMessage("administracioRemota.sincronitzacio.error.no_disponible", null,  request.getLocale());
+				resultatStatus.setNom(error);
+				
+			} else if ( id != null) {
+				AdministracionRemota administracionRemota = administracionRemotaDelegate.obtenerAdministracionRemota(id);
+				
+				SincronizadorSingleton sing = SincronizadorSingleton.getInstance();
+				
+				if ("a".equals(operacio))
+					sing.alta(administracionRemota);
+				else if ("b".equals(operacio))
+					sing.baja(administracionRemota);
+				
+				if ( administracionRemotaDelegate.isEmpty(id)) {
+					resultatStatus.setId(-1l);
+					String error = messageSource.getMessage("administracioRemota.sincronitzacio.error.ua_buida", null,  request.getLocale());
+					resultatStatus.setNom(error);
+				}
+			} 
+		} catch (DelegateException dEx) {
+			
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			
+		} catch (UnidadAdminCENoEncontradaException e) {
+			resultatStatus.setId(-3l);
+			resultatStatus.setNom("Error de sincronització: Unitat no trobada.");
+			log.error("Error de sincronització (UA no trobada): " + ExceptionUtils.getStackTrace(e));
+		} catch (SincronizacionTrabajadoException e) {
+			resultatStatus.setId(-4l);
+			resultatStatus.setNom("Error de sincronització: Sincronitzador ocupat.");
+			log.error("Error de sincronització (Sincronitzador ocupat): " + ExceptionUtils.getStackTrace(e));
+		} catch (ComunicacionException e) {
+			resultatStatus.setId(-5l);
+			resultatStatus.setNom("Error de sincronització: Ha ocorregut un error amb la comunicació.");
+			log.error("Error de comunicació: " + ExceptionUtils.getStackTrace(e));
+		} catch (CapaDeDatosException e) {
+			resultatStatus.setId(-6l);
+			resultatStatus.setNom("Error de sincronització: Ha ocorregut un error amb les dades.");
+			log.error("Error en la capa de dades: " + ExceptionUtils.getStackTrace(e));
+		}
+		
+		return resultatStatus;
+		
+	} 
 }
