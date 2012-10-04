@@ -273,7 +273,7 @@
         <delete file="${ejb.product}/sac-${modul}-client.jar" quiet="yes"/>
         <jar jarfile="${ejb.product}/sac-${modul}-client.jar" basedir="${ejb.classes}" 
             	includes="**/resources/, **/*.class" 
-            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/query/">
+            	excludes="**/*EJB.class, **/*EJBSession.class, **/EJBUtils.class, **/BasicUtils.class, **/ArxiuServlet.class, **/query/, **/co/*.class">
             <manifest>
                 <attribute name="Created-By" value="UTE"/>
             </manifest>
