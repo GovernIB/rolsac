@@ -264,7 +264,6 @@ public class NormativaBackController extends PantallaBaseController {
 		return resultats;
 	}
 
-
 	@RequestMapping(value = "/cercaBoib.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatEnviamentsBoib(HttpServletRequest request, HttpSession session)  {
 
@@ -863,7 +862,7 @@ public class NormativaBackController extends PantallaBaseController {
 			llistaNormativesDTO.add(
 						new NormativaDTO(
 								normativa.getId() != null ? normativa.getId().longValue() : 0, 
-								normativa.getNumero() != null ? normativa.getNumero().longValue() : 0, 
+								normativa.getNumero() != null ? normativa.getNumero().longValue() : -1l, 
 								titulo, 
 								normativa.getFecha(),
 								normativa.getFechaBoletin(),
