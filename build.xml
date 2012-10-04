@@ -334,6 +334,7 @@
 	 	<filelist dir="moduls/back" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/back2" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/api"          files="appmodule.xml"/>
+	 	<filelist dir="moduls/apiws"        files="appmodule.xml"/>
  	</concat>
  	
  	
