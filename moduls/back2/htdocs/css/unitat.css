@@ -75,3 +75,59 @@ div.file span {
     font-weight: bold;
     margin-left: 1em;
 }
+
+
+/* submenuUA */
+
+.submenuUA{
+	height: 47px;
+	font-size: 13px;
+	padding-top: 15px;
+}
+.submenuUA li{
+	position: relative;
+	float: left;
+	list-style: none;
+	border: 1px solid #DBDBDB;
+	border-radius: 5px;
+	margin-right: 8px;
+	padding: 0 10px;
+	line-height: 25px;
+	height: 25px;
+	background-color: White;
+}
+.submenuUA li strong{
+	color: black;	
+}
+.submenuUA li.activo span{
+	position: absolute;
+	display: block;
+	height: 9px;
+	left: 0;
+	bottom: -9px;
+	width: 100%;
+	background: url(../img/menu/flecha_submenu.gif) 50% 0 no-repeat;	
+}
+.submenuUA li a{
+	color: #A0A0A0;
+	text-decoration: none;	
+}
+.submenuUA li.activo,
+.submenuUA li.inactivo:hover{
+	border-color: #C8C8C8;
+}
+.submenuUA li.inactivo:hover a{
+	color: Black;
+}
+
+
+/* Escritorio unidades hijas */
+
+#escritorioUnidadesHijas{
+	display:none;
+}
+
+#resultadosUnidadesHijas div.nom{
+	width: 630px;
+	padding-left: 21px; 
+}

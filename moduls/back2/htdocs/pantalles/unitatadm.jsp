@@ -15,9 +15,171 @@
     
     <div id="carregantDetall">
         <p class="executant"><spring:message code='unitatadm.carregant_unitatadm'/></p>
-    </div>          
+    </div>
+    
+    <!-- Escritorio unidades hijas -->
+    <div id="escritorioUnidadesHijas">
+    	<ul class="submenuUA">
+			<li class="detalle inactivo"><a href="javascript:void(0)">Detall de la UA</a></li>
+			<li class="hijas activo"><span></span><strong>Unitats filles</strong></li>
+		</ul>
+    	
+    	<ul id="opcionesUnidadesHijas" class="tabOpciones">
+	        <li class="opcio L actiu">
+	            <a id="tabListado" href="javascript:void(0)"><spring:message code='tab.llistat'/></a>
+	        </li>
+	        <li class="opcio C">
+	            <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
+	        </li>
+            <li id="btnNuevaUAhija" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea una nova Unitat Administrativa</span></span></a></li>
+	    </ul>
+	    <div id="resultadosUnidadesHijas">
+	        <div class="resultats L actiu">
+	            <div class="dades">
+	                <p class="executant">Carregant llistat de unitats administratives. Esperi un moment, si us plau.</p>
+	            </div>
+	            <input type="hidden" value="0" class="pagPagina" />
+	            <input type="hidden" value="DESC" class="ordreTipus" />
+	            <input type="hidden" value="id" class="ordreCamp" />
+	        </div>
+	        <div class="resultats C">
+	            <!-- cercador -->
+	            <div id="cercadorUnitatsFilles">
+	                <div id="cercador_contingut_unitats_filles" class="cercador cercador_contingut">
+	                	<div class="opcionesBusqueda">
+	                        <h2><spring:message code='txt.OPCIONS_CERCA'/></h2>                    
+	                        <div class="fila">
+	                            <div class="element checkbox">                                
+	                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
+	                                <input id="cerca_uaFilles" type="checkbox" name="cerca_uaFilles" value="1" />
+	                            </div>
+	                        </div>
+	                        <div class="fila">
+	                            <div class="element checkbox">                                
+	                                <label for="cerca_uaMeves"><spring:message code='camp.cerca_totes_unitats'/></label>                                
+	                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
+	                            </div>
+	                        </div>
+	                    </div>	                    
+	                    <div class="busquedaBasica">
+	                        <h2><spring:message code='fitxes.llistat.cercador'/></h2>
+	                        <div class="fila">
+	                            <div class="element t25">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_codi"><spring:message code='fitxes.llistat.codi'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_codi" name="cerca_codi" type="text" />
+	                                </div>
+	                            </div>
+	                            <div class="element t75">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_textes"><spring:message code='fitxes.llistat.textes'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_textes" name="cerca_textes" type="text"/>
+	                                </div>
+	                            </div>      
+	                        </div>
+	                        <div class="fila">
+	                            <div class="element t25">
+	                                <div class="etiqueta">
+	                                    <label for="uahija_espacioTerritorial"><spring:message code='unitatadm.formulari.espai_territorial'/></label>
+	                                </div>
+	                                <div class="control select">
+	                                    <select id="uahija_espacioTerritorial" name="espacio_territorial">
+	                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
+	                                    </select>               
+	                                </div>
+	                            </div>                        
+	                            <div class="element t25">
+	                                <div class="etiqueta">
+	                                    <label for="uahija_tratamiento"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>
+	                                </div>
+	                                <div class="control select">
+	                                    <select id="uahija_tratamiento" name="tratamiento">
+	                                        <option value=""><spring:message code='camp.tria.opcio'/></option>	                                        
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>                        
+	                        <%--
+	                        <div class="fila">
+	                            <div class="element t21">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_url"><spring:message code='fitxes.llistat.url_forum'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_url" name="cerca_url" type="text"/>
+	                                </div>
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_responsable"><spring:message code='fitxes.llistat.responsable'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_responsable" name="cerca_responsable" type="text"/>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="fila">
+	                            <div class="element t21">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_fechaCaducidad"><spring:message code='fitxes.llistat.data.caducitat'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_fechaCaducidad" name="cerca_fechaCaducidad" type="text" readonly="readonly"/>
+	                                </div>
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_fechaPublicacion"><spring:message code='fitxes.llistat.data.publicacio'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_fechaPublicacion" name="cerca_fechaPublicacion" type="text" readonly="readonly"/>
+	                                </div>
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta">
+	                                    <label for="cerca_fechaActualizacion"><spring:message code='fitxes.llistat.data.actualitzacio'/></label>
+	                                </div>
+	                                <div class="control">
+	                                    <input id="cerca_fechaActualizacion" name="cerca_fechaActualizacion" type="text" readonly="readonly"/>
+	                                </div>
+	                            </div>                            
+	                        </div>
+	                        --%>
+	                        <div class="fila">                            
+	                            <div class="botonera noClear">
+	                                <div class="boton btnGenerico">
+	                                  <a id="btnLimpiarUnidadesHijasForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+	                                </div>
+	                                <div class="boton btnGenerico">
+	                                 <a id="btnBuscarUnidadesHijasForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	            <!-- /cercador -->
+	            <div class="dades"></div>
+	            <input type="hidden" value="0" class="pagPagina" /> 
+	            <input type="hidden" value="DESC" class="ordreTipus" /> 
+	            <input type="hidden" value="id" class="ordreCamp" />
+	        </div>
+	    </div>
+ 	</div>
+    <!-- /Escritorio unidades hijas --> 
+    
     <!-- escriptori_detall -->
     <div id="escriptori_detall" class="escriptori_detall">
+    	
+    	<ul class="submenuUA">
+			<li class="detalle activo"><span></span><strong>Detall de la UA</strong></li>
+			<li class="hijas inactivo"><a href="javascript:void(0)">Unitats filles</a></li>
+		</ul>
+    	    	
         <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value='<c:out value="${idUA}" />' />       
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
@@ -474,8 +636,7 @@
                         <div class="fila">
                             <div class="element t50p">
                                 <div class="etiqueta">
-                                    <label for="item_tractament"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>
-                                    
+                                    <label for="item_tractament"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>                                    
                                 </div>
                                 <div class="control select">
                                     <!-- input id="item_tractament" name="item_tractament" type="text" /-->
@@ -1334,6 +1495,7 @@
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/unidades_hijas.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_seccions.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_edificis.js'/>"></script>
@@ -1360,6 +1522,9 @@
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         
 		var urlPrevisualizarUA = '<c:out value="${urlPrevisualitzacio}"/>';
+		
+		// @todo Rellenar con la ULR correcta.
+		var urlListaUAs = '';
 		
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";
@@ -1396,7 +1561,10 @@
         var txtPagines = "<spring:message code='txt.pagines'/>";
         var txtCercant = "<spring:message code='txt.cercant'/>";    
         var txtCercantUnitatsAnteriors = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
-        var txtCercantUnitatsSeguents = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;       
+        var txtCercantUnitatsSeguents = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
+        var txtCercantAnteriors = txtCercantUnitatsAnteriors;
+   		var txtCercantSeguents = txtCercantUnitatsSeguents;
+   		       
         var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
     
         // arbre

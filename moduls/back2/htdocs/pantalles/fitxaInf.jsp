@@ -69,7 +69,6 @@
    var txtPer = "<spring:message code='txt.per'/>";
    var txtEsborrarCorrecte = "<spring:message code='txt.fitxa_borrat'/>";
    // taula
-   var pag_Res = 5;
    var txtNom = "<spring:message code='txt.nom'/>";
    var txtPare = "<spring:message code='txt.pare'/>";
    var txtCercant = "<spring:message code='txt.cercant'/>";

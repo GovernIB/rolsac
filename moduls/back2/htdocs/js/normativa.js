@@ -148,7 +148,9 @@ function CLlistat(){
 			
 			}
 			
-			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".";
+			codi_totals += this.getHtmlItemsPagina(); 
+			codi_totals += "</p>";
 
 			//De momento no habrá ordenación
 			/*

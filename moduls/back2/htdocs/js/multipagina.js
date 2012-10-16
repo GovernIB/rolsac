@@ -1,22 +1,27 @@
 /*
  datos{
-	total: N∫ total de elementos
-	itemsPorPagina: Elementos por p·gina
-	paginaActual: N∫ de la p·gina actual
-	funcionPagina: String con la funciÛn a la que se le pasar· la nueva p·gina de la forma "funcionPagina(n)"
+	total: N¬∫ total de elementos
+	itemsPorPagina: Elementos por p√°gina
+	paginaActual: N¬∫ de la p√°gina actual
+	funcionPagina: String con la funci√≥n a la que se le pasar√° la nueva p√°gina de la forma "funcionPagina(n)"
 	}
 */
 function Multipagina(datos){		
 	var totalItems;
 	var itemsPorPagina;
 	var paginaActual = 0;
-	var funcionPagina
+	var funcionPagina;
+	
+	this.cambiaItemsPorPagina = function(num){
+		pag_Res=num;		
+		eval(funcionPagina+'(1)');
+	}
 			
 	this.getPaginaActual = function(){
 		return paginaActual;
 	}
 	
-	this.setPaginaActual = function(n){		
+	this.setPaginaActual = function(n){
 		paginaActual = n;
 	}
 		
@@ -32,21 +37,58 @@ function Multipagina(datos){
 			funcionPagina = datos.funcionPagina;
 		}
 	}
-						
+	
 	// Devuelve el cÛdigo HTML del multip·gina.
 	this.getHtml = function(){
+		
 		var html = "";
 		var codi_paginas = "";
 		var paginasNum = Math.ceil(totalItems/itemsPorPagina);					
 		var paginas = [];
+		var margenPaginas = 2;
 		
 		if( paginasNum > 1 ){
-		
-			for ( var i=0; i < paginasNum; i++ ) {		
-				paginas.push( ( i == paginaActual ) ? "<strong>"+( i+1 )+"</strong>" : "<a href=\"javascript:;\" onclick=\""+funcionPagina+"("+ ( i+1 ) +")\">" + ( i+1 ) + "</a>" );
+			
+			// Calculamos la "ventana de p√°ginas"
+			var primeraPagVentana = paginaActual - margenPaginas;
+			var ultimaPagVentana = paginaActual + margenPaginas;
+			
+			var extraDerecha = ultimaPagVentana - paginasNum + 1;
+			var extraIzquierda = -(primeraPagVentana);
+			
+			if( extraDerecha > 0 ){
+				primeraPagVentana -= extraDerecha;
+			}else if( extraIzquierda > 0 ){
+				ultimaPagVentana += extraIzquierda;
+			}
+			
+			if( paginaActual > 0 ){
+				
+				// Primera p√°gina
+				html += '<a class="inicio" onclick="'+funcionPagina+'(1);" href="javascript:void(0)" title="'+txtInicio+'"><span></span></a>';
+				
+				// Retroceder una p√°gina
+				html += '<a class="retroceder" onclick="'+funcionPagina+'('+(paginaActual)+');" href="javascript:void(0)" title="'+txtAnterior+'"><span></span></a>';
+				
+			}
+			
+			for ( var i=0; i < paginasNum; i++ ) {
+				
+				if( i >= primeraPagVentana && i <= ultimaPagVentana ){
+					html += ( i == paginaActual ) ? '<strong>'+( i+1 )+'</strong>' : '<a class="pagina" onclick="'+funcionPagina+'('+ ( i+1 ) +')"  href="javascript:void(0);">' + ( i+1 ) + '</a>';
+				}
+				
 			}	
-			html += paginas.join(" ");			
-			html = '<p class="paginacio" role="">'+html+'</p>';
+			
+			html += '<form action="" onsubmit="'+funcionPagina+'(jQuery(this).find(\'input\').val());return false;"><input type="text" name="multipagina" value="" /></form>';
+			
+			// √öltima p√°gina
+			html += '<span class="de">' + txtDe + '</span><a class="ultimo" onclick="'+funcionPagina+'('+paginasNum+');'+'" href="javascript:void(0)">'+paginasNum+'</a>';
+			
+			// P√°gina siguiente
+			html += '<a class="siguiente" onclick="'+funcionPagina+'('+(paginaActual+2)+')'+'" href="javascript:void(0)" title="'+txtSiguiente+'"></a>';
+			
+			html = '<div class="paginacio" role="">'+html+'</div>';
 		}
 		
 		return html;		

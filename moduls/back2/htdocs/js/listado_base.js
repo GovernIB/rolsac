@@ -82,11 +82,12 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	
 	// Cambia a la pestaña de listado.
 	this.tabListado = function() {
+		
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
 		jQuery(idTabListado).parent().addClass("actiu");
 		
 		opcio_unitat = "L";
-				
+		
 		// resultats		
 		resultats_elm.find("div.actiu").slideUp(300,function() {
 			jQuery(this).removeClass("actiu");
@@ -100,6 +101,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	
 	// Cambia a la pestaña del buscador.
 	this.tabBuscador = function(){
+		
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
 		jQuery(idTabBuscador).parent().addClass("actiu");
 		
@@ -147,7 +149,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	 * @param enlace_html Número de la página de destino.
 	 */
 	this.anar = function(enlace_html, carregarFunc){
-
+		
 		if (!carregarFunc || carregarFunc == 'undefined' ) {
 			carregarFunc = that.carregar;
 		}
@@ -177,6 +179,30 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 				
 			});
 		});	
+	}
+	
+	this.getHtmlItemsPagina = function(){
+		var items = [10,20,50];
+		var numTodos = 99999;
+		var html = '<span class="itemsPagina">'+txtMostrar+'&nbsp;';
+		
+		for(var i=0; i<items.length; i++){
+			if( pag_Res == items[i] ){
+				html += '<strong>'+items[i]+'</strong>&nbsp;';
+			}else{
+				html += '<a href="javascript:void(0);" onclick="multipagina.cambiaItemsPorPagina('+items[i]+')">'+items[i]+'</a>&nbsp;';
+			} 
+		}
+		
+		if( pag_Res == numTodos ){
+			html += '<strong>'+ txtTodos +'</strong>';
+		}else{
+			html += '<a href="javascript:void(0)" onclick="multipagina.cambiaItemsPorPagina('+numTodos+')">'+ txtTodos +'</a>';	
+		}
+		
+		html += '&nbsp;'+txtItemsPagina+'</span>';
+		
+		return html;
 	}
 
     /**

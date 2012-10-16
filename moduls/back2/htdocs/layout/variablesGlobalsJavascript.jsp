@@ -12,7 +12,7 @@
     // pagines
     var pagProcediments = '<c:url value="/catalegProcediments/catalegProcediments.do"/>';
     //resultados por pagina
-    var pag_Res = 5; //TODO: Se tiene que recuperar de BBDD
+    var pag_Res = 10; //TODO: Se tiene que recuperar de BBDD
     
     var txtSinValor = '<spring:message code="aplicacio.sense_valor"/>';
     // missatge
@@ -42,6 +42,7 @@
     var txtPassara = '<spring:message code="planificacio.passara_a_estar"/>';
     var txtCaducada = '<spring:message code="planificacio.caducada"/>';
     var txtPublicada = '<spring:message code="planificacio.publicada"/>';
+    var txtNombre = 'Nom';
 
     var txtTitol = '<spring:message code="camp.titol_normativa"/>';
     var txtData = '<spring:message code="camp.data"/>';
@@ -105,4 +106,13 @@
     var txtTraduccioCorrecta = "<spring:message code='traductor.traduccio.correcta'/>";
     var txtTraductorAvis = "<spring:message code='traductor.avis'/>";
     var txtTraductorAvisTitol = "<spring:message code='traductor.avis.titol'/>";
+    
+    // Textos navegador multip√°gina.
+    var txtDe = "de";
+    var txtInicio = "Inicio";
+    var txtAnterior = "Anterior";
+    var txtSiguiente = "Seguent";
+    var txtMostrar = "Mostrar";
+    var txtTodos = "Tots";
+    var txtItemsPagina = "elements per p‡gina"
 </script>

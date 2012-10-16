@@ -126,8 +126,11 @@ function CLlistat(){
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
 			}
+						
+			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + ' ' + resultatInici + ' ' + txtMostremAl + ' ' + resultatFinal + txt_ordenacio + '.';
+			codi_totals += this.getHtmlItemsPagina();
+			codi_totals += "</p>";
 			
-			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + ' ' + resultatInici + ' ' + txtMostremAl + ' ' + resultatFinal + txt_ordenacio + ".</p>";
 			
 			/* De moment, sense ordre
 			codi_cap1 = "<div class=\"th fitxa" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
@@ -417,7 +420,7 @@ function CDetall(){
 //		}
 	}
 			
-	this.nou = function() {
+	this.nou = function() {		
 		//Ocultar paneles
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
         jQuery("#modulAuditories, #modulEstadistiques").hide();
