@@ -312,6 +312,7 @@
 	 	<filelist dir="moduls/utils" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/back" 		files="appmodule.xml"/>
 	 	<filelist dir="moduls/back2" 		files="appmodule.xml"/>
+	 	<filelist dir="moduls/ws" 			files="appmodule.xml"/>
  	</concat>
  	
  	
