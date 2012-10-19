@@ -485,7 +485,7 @@
 	 
 	  <property name="sonar.host.url" value="http://localhost:9000" />
 		  
-	  <target name="sonar">
+	  <target name="sonar-java">
 	    <!-- list of mandatories Sonar properties -->
 	    <property name="sonar.modules" 
 	    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml" />
@@ -499,5 +499,25 @@
 -->	 
 	    <sonar:sonar key="caib:rolsac" version="1.1" xmlns:sonar="antlib:org.sonar.ant"/>
 	  </target>
+
+	  <target name="sonar-js">
+	    <!-- list of mandatories Sonar properties -->
+
+	  	<property name="sonar.language" value="js" />
+	  	<property name="sonar.sources" value="${basedir}/htdocs" />
+	    <property name="sonar.modules" 
+	    		 value="moduls/back/build_sonar_js.xml,moduls/back2/build_sonar_js.xml" />
+	 
+	    <!-- list of optional Sonar properties -->
+<!--
+	    <property name="sonar.binaries" value="..." />
+	  	<property name="sonar.projectName" value="this value overrides the name defined in Ant root node" />
+	    <property name="sonar.tests" value="list of test source directories separated by a comma" />
+	    <property name="sonar.libraries" value="list of paths to libraries separated by a comma (These libraries are for example used by the Sonar Findbugs plugin)" />
+-->	 
+	  	
+	    <sonar:sonar key="caib:rolsac" version="1.1" xmlns:sonar="antlib:org.sonar.ant"/>
+	  </target>
+
 	
 </project>

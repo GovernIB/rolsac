@@ -80,14 +80,18 @@
 		
 
 	<target name="test.unitario" depends="test.unitario.compile">
-		<junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="no">
-		<formatter type="plain" usefile="false"/>
-		<batchtest todir="${test.output.dir}">
-		      <fileset dir="${test.unitario.src.dir}">
-		      	<include name="**/*Test.java"/>
-		       </fileset>
-		</batchtest>
-		<classpath refid="test.unitario.classpath"/>
+		<junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
+			
+			<!--jvmarg. para usar jvmarg se requiere fork=yes -->
+			<!--jvmarg value="-verbose:class"/ -->
+			
+			<formatter type="plain" usefile="false"/>
+			<batchtest todir="${test.output.dir}">
+		      	<fileset dir="${test.unitario.src.dir}">
+			      	<include name="**/*Test.java"/>
+			       </fileset>
+			</batchtest>
+			<classpath refid="test.unitario.classpath"/>
 		</junit>
 	</target>	
 	
