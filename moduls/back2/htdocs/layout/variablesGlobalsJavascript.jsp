@@ -2,8 +2,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <script type="text/javascript">
 
-    // TODO: cambiar las urls de php por las buenas.
-   
+	// idiomes configurats a l'aplicaciÃ³
+	var idiomesAplicacio = ["ca", "es", "fr", "en", "de"];
+
     // pagines comuns
     var pagArrel = '<c:url value="/" />';
     var pagSortirAplicacio = "<c:out value="${capUrlSortir}"/>"; 
@@ -95,7 +96,7 @@
     var txtErrorPermisos = '<spring:message code="error.permisos"/>';
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';    
         
-    // Errores de validación
+    // Errores de validaciï¿½n
     var txtMaxim = "<spring:message code='txt.maxim'/>";
     var txtCaracters = "<spring:message code='txt.caracters'/>";
     
