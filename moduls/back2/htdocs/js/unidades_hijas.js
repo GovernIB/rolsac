@@ -41,7 +41,8 @@ function CEscritorioUnidadesHijas(){
 		this.anar(pag);
 	}
 	
-	this.finCargaListado = function(data,opcions){
+	this.finCargaListado = function(opcions,data){
+		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");	
 		
 		// total
 		resultats_total = parseInt(data.total,10);
@@ -88,13 +89,19 @@ function CEscritorioUnidadesHijas(){
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNombre + "</a></div>";
 			codi_cap2 = "<div class=\"th fecha" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
 			
+			if( !modoBuscador ){
+				codi_cap3 = "<div class=\"th orden\" role=\"columnheader\">" + txtOrdre + "</a></div>";	
+			}else{
+				codi_cap3 = '';
+			}
+			
 			// codi taula
 			codi_taula = "<div class=\"table llistat uahijas\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
 			
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 				codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-					codi_taula += codi_cap1 + codi_cap2;
+					codi_taula += codi_cap1 + codi_cap2 + codi_cap3;
 				codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -113,7 +120,18 @@ function CEscritorioUnidadesHijas(){
 					
 					codi_taula += "<div class=\"td fecha\" role=\"gridcell\">" + dada_node.fecha + "</div>";
 					
+					if( !modoBuscador ){
+						
+						codi_taula += "<div class=\"td orden\" role=\"gridcell\">";
+					
+							codi_taula += that.getHtmlSelectorOrdenacion("uaHija_"+dada_node.id, dada_node.ordre, resultats_total );
+					
+						codi_taula += "</div>";
+						
+					}
+					
 					codi_taula += "</div>";
+
 				});
 			
 			codi_taula += "</div>";
@@ -147,7 +165,7 @@ function CEscritorioUnidadesHijas(){
 				$obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function(){escritorioUnidadesHijas.ficha(this);});
                 
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
-                jQuery("#resultats .table .th a").unbind("click").click(function(){
+                jQuery("#resultadosUnidadesHijas .table .th a").unbind("click").click(function(){
                     escritorioUnidadesHijas.ordena(this,opcions);
                 });                
 							
@@ -155,6 +173,31 @@ function CEscritorioUnidadesHijas(){
 				if (typeof opcions.cercador != "undefined" && opcions.cercador == "si") {
 					$obj.find("#cercador_contingut_unitats_filles").find("input, select").removeAttr("disabled");
 				}
+				
+				jQuery("#resultadosUnidadesHijas .llistat .tbody select.ordenacion").bind("change").bind("change",function(){
+					
+					var itemID = jQuery(this).attr("id").split("_")[1];
+					var orden = jQuery(this).val();
+					
+					//var dataVars = "id=" + itemID;
+					var dataVars = "id=" + itemID+"&orden="+orden;
+					
+					$.ajax({
+						type: "POST",
+						url: pagPujar,
+						data: dataVars,
+						dataType: "json",
+						error: function(){
+							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+						},
+						success: function(data){
+							that.anulaCache();
+							that.carregar({});
+						}
+					});
+					
+				});
+				
 			});
 		});
 	}
@@ -279,7 +322,7 @@ function CEscritorioUnidadesHijas(){
 				{id: 27, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"}
 				],
 			};				
-		that.finCargaListado(datos,opcions);
+		that.finCargaListado(opcions,datos);
 			
 	}
 	

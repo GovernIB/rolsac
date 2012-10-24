@@ -143,11 +143,15 @@ function CLlistat(){
 				codi_taula += "<a id=\"seccio_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + printStringFromNull(dada_node.nom, txtSinValor) + "</a>";
 				codi_taula += "</div>";
 				codi_taula += "<div class=\"td enllas\" role=\"gridcell\">";
-				if (dada_node.ordre <1 && i < 1) {
+				
+				// Campo de ordenación.
+				/*if (dada_node.ordre <1 && i < 1) {
 					codi_taula += "&nbsp;";
 				} else {
 					codi_taula += "<a id=\"seccio_"+dada_node.id+"\" href=\"javascript:;\" class=\"seccio pujarSeccio\"><span>" + txtPujar + "</span></a>";
-				}
+				}*/
+				codi_taula += that.getHtmlSelectorOrdenacion("seccio_"+dada_node.id, dada_node.ordre, resultats_total );
+				
 				codi_taula += "</div>";
 				
 				codi_taula += "</div>";
@@ -195,10 +199,13 @@ function CLlistat(){
 					cercador_elm.find("input, select").removeAttr("disabled");
 				}
 				
-				jQuery("#resultats .llistat .tbody a.pujarSeccio").unbind("click").bind("click",function(){
-					itemID = jQuery(this).attr("id").split("_")[1];
+				//jQuery("#resultats .llistat .tbody a.pujarSeccio").unbind("click").bind("click",function(){
+				jQuery("#resultats .llistat .tbody select.ordenacion").unbind("change").bind("change",function(){
+					var itemID = jQuery(this).attr("id").split("_")[1];
+					var orden = jQuery(this).val();
 					
-					var dataVars = "id=" + itemID;
+					//var dataVars = "id=" + itemID;
+					var dataVars = "id=" + itemID + "&orden=" + orden;
 					
 					$.ajax({
 						type: "POST",

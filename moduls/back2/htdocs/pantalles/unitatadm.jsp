@@ -1520,6 +1520,9 @@
         var pagArrel = '<c:url value="/" />';    
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
+		
+		// dsanchez: URL para ordenar el listado de UA hijas. 
+		var pagOrdenarUAHijas = ''; 
         
 		var urlPrevisualizarUA = '<c:out value="${urlPrevisualitzacio}"/>';
 		

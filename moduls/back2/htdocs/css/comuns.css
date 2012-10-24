@@ -607,7 +607,10 @@ div.table div.tbody div.td a{
 div.table div.tbody div.td a:hover{
     color: Black;
 }
-
+div.table div.tbody div.td select.ordenacion{
+	width: 70px;
+	margin-top: 5px;
+} 
 
 /* Navegador multipágina */
 

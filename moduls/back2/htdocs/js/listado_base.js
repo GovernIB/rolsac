@@ -181,6 +181,20 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		});	
 	}
 	
+	this.getHtmlSelectorOrdenacion = function( id, orden, numItems ){
+		var html = '';
+		var selected;
+		html += '<select id="'+id+'" class="ordenacion">';
+		
+		for( var i=1; i<=numItems; i++ ){
+			selected = ( orden == i );
+			html += '<option value="'+i+'"'+ (selected ? ' selected' : '') +'>'+i+'</option>';
+		}
+		
+		html += '</select>';
+		return html;
+	}
+	
 	this.getHtmlItemsPagina = function(){
 		var items = [10,20,50];
 		var numTodos = 99999;

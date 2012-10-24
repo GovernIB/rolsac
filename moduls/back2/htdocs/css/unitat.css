@@ -131,3 +131,7 @@ div.file span {
 	width: 630px;
 	padding-left: 21px; 
 }
+
+#resultadosUnidadesHijas div.table div.fecha{
+	width: 320px;
+}
