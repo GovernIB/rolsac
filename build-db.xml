@@ -20,7 +20,10 @@
 			<include name="lucene-caib.jar"/>
 			<include name="odmg.jar"/>
 	    </fileset>
-        <fileset dir="${moduls.dir}" includes="model.jar"/>
+		<fileset dir="${moduls.dir}">
+	        <include name="model.jar"/>
+ 	  	    <include name="sac-oracle.jar"/>
+	  	</fileset>
     </path>
 
     <target name="initdb">

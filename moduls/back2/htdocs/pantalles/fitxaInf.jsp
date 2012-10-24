@@ -24,6 +24,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_seccions_ua.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_enllassos.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
@@ -138,6 +139,12 @@
    var txtFet = "<spring:message code='txt.fet_vital'/>";
    var txtFets = "<spring:message code='txt.fets_vitals'/>";
    var txtNoHiHaFets = txtNoHiHa + " " + txtFets;
+   // modul public objectiu
+   var txtPublic = "<spring:message code='txt.public_objectiu'/>";
+   var txtPublics = "<spring:message code='txt.publics_objectiu'/>";
+   var txtNoHiHaPublics = txtNoHiHa + " " + txtPublics;
+   var txtNoHiHaPublicsSeleccionats = txtNoHiHa + " " + txtPublics.toLowerCase() + " " + txtSeleccionats.toLowerCase();
+   
    // modul seccio/ua
    var txtSeccioUA = "<spring:message code='txt.seccio_ua'/>";
    var txtSeccionsUA = "<spring:message code='txt.seccions_ua'/>";
@@ -321,6 +328,19 @@
                                 </div>
                             </div>
                          --%>
+                         <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="cerca_publicObjectiu"><spring:message code='fitxes.llistat.public_objectiu'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="cerca_publicObjectiu" name="cerca_publicObjectiu" class="publicObjectiu">
+                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
+                                        <c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu">
+                                            <option value='<c:out value="${publicObjectiu.id}" />'><c:out value="${publicObjectiu.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>                         
                             <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_materia"><spring:message code='fitxes.llistat.materia'/></label>
@@ -989,6 +1009,56 @@
             </div>
             <!-- /modul -->
             
+			<!-- modul -->
+            <div class="modul">
+            	<input type="hidden" id="llistaPublicObjectiu" name="publicsObjectiu" value=""/>
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='fitxes.public_objectiu'/> *</legend>
+                    <div class="modul_continguts mostrat">                    
+                        <!-- modulPublicObjectiu -->
+                        <div class="ModulPublicObjectiu selectorChecks">
+                        
+                            <input type="hidden" name="modul_public_modificat" value="0" />
+                        
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='fitxes.no_hi_ha_public_objectiu' /></p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.gestiona_public_objectiu'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+									<c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${publicObjectiu.nom}" /></span><input type="checkbox" value="<c:out value='${publicObjectiu.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulPublicObjectiu-->                        
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
+                                    
             <!-- modul -->
             <div class="modul">
             	<input type="hidden" id="llistaMateries" name="materies" value=""/>

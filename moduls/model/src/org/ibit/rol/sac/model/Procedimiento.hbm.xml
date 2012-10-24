@@ -63,7 +63,13 @@
             <key column="PRM_CODPRO" foreign-key="RSC_PRMPRO_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.Materia" column="PRM_CODMAT"  foreign-key="RSC_PRMMAT_FK"/>
         </set>
-
+        
+        <set name="publicosObjetivo" cascade="none" lazy="true" table="RSC_POBPRO">
+            <cache usage="read-write"/>
+            <key column="PPR_CODPRO" foreign-key="RSC_PPRPRO_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.PublicoObjetivo" column="PPR_CODPOB"  foreign-key="RSC_PPRPOB_FK"/>
+        </set>
+        
         <set name="hechosVitalesProcedimientos" cascade="all" lazy="true" inverse="true">
             <cache usage="read-write"/>
             <key column="HVP_CODPRO" foreign-key="RSC_HVPPRO_FK"/>

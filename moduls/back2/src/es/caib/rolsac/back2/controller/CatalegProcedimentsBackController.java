@@ -31,11 +31,13 @@ import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -53,6 +55,7 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
+import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.stereotype.Controller;
@@ -108,7 +111,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		try {
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
 			model.put("llistaFetsVitals", LlistatUtil.llistarHechosVitales(lang));
-//			model.put("llistaPublicObjectiu", LlistatUtil.llistarPublicObjectius(lang));
+			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
 		} catch (DelegateException dEx) {
@@ -168,7 +171,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	        	fetVital = scanner.nextLong();
 			}
         }
-		
+        
+        Long publicObjectiu = null;
+        String publicObjectiuString = request.getParameter("publicObjectiu");
+        if (publicObjectiuString != null) {
+			Scanner scanner = new Scanner(publicObjectiuString);
+	        if (scanner.hasNextLong()) {
+	        	publicObjectiu = scanner.nextLong();
+			}
+        }
+        
 		try {
             Long codi = ParseUtil.parseLong(request.getParameter("codi"));
             paramMap.put("id", codi);
@@ -320,7 +332,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 		try {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
-			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital);
+			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
@@ -472,6 +484,19 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             } 
             // Fin Materias asociadas
             
+			// Publics Objectiu associats
+            if (proc.getPublicosObjetivo() != null) {             
+                List<IdNomDTO> llistaPublicsDTO = new ArrayList<IdNomDTO>();
+                for(PublicoObjetivo pob : proc.getPublicosObjetivo()){
+                	TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) pob.getTraduccion(lang);
+                	llistaPublicsDTO.add(new IdNomDTO(pob.getId(), tpob == null ? "" : tpob.getTitulo() ));                
+                }
+                resultats.put("publicsObjectiu", llistaPublicsDTO);
+            } else {
+                resultats.put("publicsObjectiu", null);
+            }      
+            // Fi Publics Objectiu asociats
+            
 			// Hechos vitales asociados
             List<Map<String, Object>> llistaFetsDTO = new ArrayList<Map<String, Object>>();
             for(HechoVitalProcedimiento hechoVitalProc : proc.getHechosVitalesProcedimientos()) {
@@ -618,7 +643,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 //				error = messageSource.getMessage("proc.error.falta.ua", null, request.getLocale());
 //				result = new IdNomDTO(-3l, error);
 //			} else {
-				
+			if (request.getParameter("publicsObjectiu") == null || request.getParameter("publicsObjectiu").equals("")){
+				error = messageSource.getMessage("proc.error.falta.public", null, request.getLocale());
+				result = new IdNomDTO(-3l, error);
+			} 
+			else {				
 			ProcedimientoDelegate procedimentDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal procediment = new ProcedimientoLocal();
 			ProcedimientoLocal procedimentOld;			
@@ -643,6 +672,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setTramites(procedimentOld.getTramites());					
 				procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
 				procediment.setMaterias(procedimentOld.getMaterias());
+				procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
 //				} else {
 //					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
 //					procediment.setUnidadAdministrativa(ua);
@@ -682,6 +712,41 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 }
             }
             // Fin Materias
+			
+            // Public Objectiu
+            /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
+             * En el primer caso es bastante probable que se repitan la mayoria de public objectiu.
+             */
+            if (isModuloModificado("modul_public_modificat",request)){
+            	if (request.getParameter("publicsObjectiu") != null && !"".equals(request.getParameter("publicsObjectiu"))){ 
+	            	PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+	                Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
+	                String[] codisPublicsNous = request.getParameter("publicsObjectiu").split(",");
+	                
+	                if (edicion){
+	                    for (int i = 0; i < codisPublicsNous.length; i++){
+	                        for (PublicoObjetivo pob: procedimentOld.getPublicosObjetivo()){
+	                            if(pob.getId().equals(Long.valueOf(codisPublicsNous[i]))) {//materia ya existente
+	                            	publicsNous.add(pob);
+	                            	codisPublicsNous[i] = null;
+	                                break;
+	                            }
+	                        }                            
+	                    }                         
+	                }                    
+	                
+	                for (String codiPob: codisPublicsNous){
+	                    if (codiPob != null){
+	                    	publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(Long.valueOf(codiPob)));
+	                    }                        
+	                }
+	                
+	                procediment.setPublicosObjetivo(publicsNous);                                   
+	            } else {
+	            	procediment.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+	            }
+            }
+            // Public Objectiu
             
             // Actualizar la lista de Trámites
             String tramitsProcediment = request.getParameter("tramitsProcediment");
@@ -1000,7 +1065,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			String ok = messageSource.getMessage("proc.guardat.correcte", null, request.getLocale());
 			result = new IdNomDTO(procId, ok);
-
+			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				error = messageSource.getMessage("error.permisos", null, request.getLocale());

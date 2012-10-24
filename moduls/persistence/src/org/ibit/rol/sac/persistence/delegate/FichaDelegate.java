@@ -53,9 +53,9 @@ public class FichaDelegate implements FichaDelegateI {
 		return impl.buscarFichas(parametros, traduccion);
 	}
 
-	public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden)
+	public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden)
            throws DelegateException {
-	   return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, uaFilles, uaMeves, campoOrdenacion, orden);
+	   return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
 	}
 	
 	public List buscarFichas(String texto) throws DelegateException {
@@ -239,11 +239,11 @@ public class FichaDelegate implements FichaDelegateI {
 	}
 
 	public List buscarFichas(Map parametros, String traduccion,
-			UnidadAdministrativa ua, Long idFetVital, Long idMateria,
+			UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic,
 			boolean uaFilles, boolean uaMeves, String campoOrdenacion,
 			String orden) throws DelegateException {
 		
-		return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, uaFilles, uaMeves, campoOrdenacion, orden);
+		return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
 	} 
 
 }

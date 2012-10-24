@@ -88,9 +88,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
      */
-    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
         try {
-            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, uaFilles, uaMeves, campoOrdenacion, orden);
+            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -99,9 +99,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.String, org.ibit.rol.sac.model.UnidadAdministrativa, boolean)
      */
-    public List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
+    public List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic,  boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
         try {
-            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, uaFilles, uaMeves, campoOrdenacion, orden);
+            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

@@ -244,6 +244,7 @@ function CLlistat(){
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
+			dataVars_cercador += "&publicObjectiu=" + $("#cerca_publicObjectiu").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();
 			dataVars_cercador += "&uaMeves=" + uaMevesVal;
@@ -332,9 +333,12 @@ function CDetall(){
 		} else {		
 			var llista_materies = ModulMateries.listaMaterias();
 			llista_materies = llista_materies.slice(9);
+			var llista_publics = ModulPublicObjectiu.listaPublics();
+			llista_publics = llista_publics.slice(16);
             $("#llistaSeccions").val(llistaSeccions);
 			$("#llistaMateries").val(llista_materies);
-			$("#llistaFetsVitals").val(ModulFetsVitals.listaHechosVitales());	
+			$("#llistaFetsVitals").val(ModulFetsVitals.listaHechosVitales());
+			$("#llistaPublicObjectiu").val(llista_publics);	
 			
 			// Validamos el formulario
 			if(!that.formulariValid()){
@@ -444,7 +448,9 @@ function CDetall(){
 		ModulMateries.nuevo();
 	
 		ModulFetsVitals.nuevo();
-
+		
+		ModulPublicObjectiu.nuevo();
+		
 		//TODO: moure a modul_seccion_ua.js
 		secc_ua_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");
 		secc_ua_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaSeccioUA + ".");
@@ -542,6 +548,8 @@ function CDetall(){
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		
 		ModulFetsVitals.cargarHechosVitales(dada_node.fetsVitals);
+		
+		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
 		
 		//TODO:moure a modul_seccions_ua
 		seccUA_seleccionats_elm = escriptori_detall_elm.find("div.modulSeccionsUA div.seleccionats");

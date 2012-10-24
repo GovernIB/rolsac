@@ -42,8 +42,8 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     private String info;
     private String responsable;
     private Set<HechoVitalProcedimiento> hechosVitalesProcedimientos;
-
-    private String taxa;
+    private Set<PublicoObjetivo> publicosObjetivo;
+	private String taxa;
     private UnidadAdministrativa organResolutori;
     
     
@@ -369,7 +369,25 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	public void setOrganResolutori(UnidadAdministrativa organResolutori) {
 		this.organResolutori = organResolutori;
 	}
+    public Set<PublicoObjetivo> getPublicosObjetivo() {
+		return publicosObjetivo;
+	}
 
+	public void setPublicosObjetivo(Set<PublicoObjetivo> publicosObjetivo) {
+		this.publicosObjetivo = publicosObjetivo;
+	}
+	
+	public void addPublicosObjetivo(PublicoObjetivo publicosObjetivo) {
+		this.publicosObjetivo.add(publicosObjetivo);
+		
+	}
+
+	public void removePublicosObjetivo(long id) {
+		PublicoObjetivo pob=new PublicoObjetivo();
+		pob.setId(id);
+		this.publicosObjetivo.remove(pob);
+	}
+	
 	//u92770[enric] añadido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {

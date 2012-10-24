@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,6 +50,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.ProcedimientoRemoto;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Traduccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionFamilia;
@@ -535,6 +535,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
                 	}
             	}            	
                 Hibernate.initialize(procedimiento.getMaterias());
+                Hibernate.initialize(procedimiento.getPublicosObjetivo());
                 Hibernate.initialize(procedimiento.getNormativas());
                 for( Normativa n : procedimiento.getNormativas() )
                 {
@@ -822,7 +823,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital) {
+    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital,Long publicObjectiu) {
 		Session session = getSession();
 
 		try {
@@ -881,9 +882,9 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			} else {
 				uaQuery = " ";
 			}
-
+			           
 			String queryStr = "select distinct procedimiento from ProcedimientoLocal as procedimiento "
-		        + ", procedimiento.traducciones as trad " + i18nQuery + uaQuery
+				+ ", procedimiento.traducciones as trad " + i18nQuery + uaQuery
 		        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
 			
 			Query query = session.createQuery(queryStr);
@@ -919,7 +920,16 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 				procedimientos = procTempList;
 			}
-
+			if (publicObjectiu != null) {
+				procTempList = new LinkedList<ProcedimientoLocal>();
+				List<ProcedimientoLocal> procsPublicObjectiu = (List<ProcedimientoLocal>) this.buscarProcedimientosPublicoObjetivo(publicObjectiu);
+				for (ProcedimientoLocal procPublicObjectiu: procsPublicObjectiu) {
+					if (procedimientos.contains(procPublicObjectiu)) {
+						procTempList.add(procPublicObjectiu);
+					}
+				}
+				procedimientos = procTempList;
+			}
 			
 			// Filtrar si no se tiene acceso
 			if (!userIsOper()) {
@@ -1026,7 +1036,32 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
-
+    /**
+     * Obtiene una lista de procedimientos del mismo Publico Objetivo
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List buscarProcedimientosPublicoObjetivo(Long id) {
+        Session session = getSession();
+        try {
+            List result = new ArrayList();
+            PublicoObjetivo publico = (PublicoObjetivo) session.load(PublicoObjetivo.class, id);
+            Hibernate.initialize(publico.getProcedimientosLocales());
+            for (Iterator iter = publico.getProcedimientosLocales().iterator(); iter.hasNext();) {
+                ProcedimientoLocal procedimiento = (ProcedimientoLocal) iter.next();
+                if (publico(procedimiento)) {
+                    result.add(procedimiento);
+                }
+            }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
+            return result;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
     /**
      * Busca todos los Procedimientos con un texto determinado.
      * @ejb.interface-method
@@ -1733,7 +1768,31 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             close(session);
         }
     }
-
+    /**
+     * Listar procedimientos Publico Objetivo y una Unidad Administrativa
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public List listarProcedimientosPublicoObjetivoUA(Long publico_id, Long ua_id) {
+        Session session = getSession();
+        try {
+            List result = new ArrayList();
+            PublicoObjetivo  publico = (PublicoObjetivo) session.load(PublicoObjetivo.class, publico_id);
+            for (Iterator iterator = publico.getProcedimientosLocales().iterator(); iterator.hasNext();) {
+            	ProcedimientoLocal procedimiento = (ProcedimientoLocal) iterator.next();
+            	 if ( procedimiento.getUnidadAdministrativa().getId().equals(ua_id) && publico(procedimiento)){
+                     result.add(procedimiento);
+                  }
+            }
+            //Ordenamos los procedimientos por el campo orden (si nulo, ordena por el campo id)
+            Collections.sort(result, new ProcedimientoLocal());
+            return result;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
     /**
      * Obtiene los procedimientos p�blicos de un Hecho Vital
      * @ejb.interface-method

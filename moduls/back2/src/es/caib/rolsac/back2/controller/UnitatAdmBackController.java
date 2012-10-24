@@ -858,7 +858,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
            
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null, uaFilles, uaMeves, null, null);
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null);           
             
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
