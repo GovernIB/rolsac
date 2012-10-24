@@ -409,6 +409,14 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
+    
+    public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.getNumProcediments(procedimentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
 
     public PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {
         try {

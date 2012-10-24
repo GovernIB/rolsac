@@ -58,10 +58,11 @@ public abstract class ByLongCriteria implements CriteriaObject {
             }
 
             if (!parsed && criteria.contains(",")) {
+                criteria = criteria.replaceAll(",$", "");  // remove possible trailing comma
                 List<String> values = Arrays.asList(criteria.split(","));
                 valuesSet = new HashSet<Long>();
                 for (String v : values) {
-                    valuesSet.add(Long.parseLong(v));
+                    valuesSet.add(Long.parseLong(v.trim()));
                 }
                 parsed = true;
             }

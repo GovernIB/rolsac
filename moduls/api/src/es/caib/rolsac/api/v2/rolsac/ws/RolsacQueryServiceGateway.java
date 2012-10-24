@@ -518,6 +518,13 @@ public class RolsacQueryServiceGateway {
 		return Arrays.asList(stub.llistarProcediments(procedimentCriteria));	
 	}
 
+	public int getNumProcediments(
+            ProcedimentCriteria procedimentCriteria)
+            throws QueryServiceException, RemoteException {
+        
+        return stub.getNumProcediments(procedimentCriteria);    
+    }
+	
 	public List<PublicObjectiuDTO> llistarPublicsObjectius(
 			PublicObjectiuCriteria publicObjectiuCriteria)
 			throws QueryServiceException, RemoteException {

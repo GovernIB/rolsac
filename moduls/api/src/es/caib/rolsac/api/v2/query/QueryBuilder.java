@@ -102,11 +102,10 @@ public class QueryBuilder {
         if (countFlag) {
             hql.append("COUNT(");
         }
-        if (StringUtils.isNotBlank(orderBy)){
-            hql.append(selectAlias);
-        } else {
-            hql.append("DISTINCT ").append(selectAlias);
+        if (StringUtils.isBlank(orderBy)){
+            hql.append("DISTINCT ");            
         }
+        hql.append(selectAlias);
         if (countFlag) {
             hql.append(")");
         }
@@ -150,6 +149,9 @@ public class QueryBuilder {
         case IN:
             where += field + " IN (:" + r.getParameter() + ")";
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
+            break;
+        case IN_SELECT:  // IN_SELECT is case sensitive.
+            where += r.getParameter() + " IN (" + r.getValue() + ")";
             break;
         case LIKE:
             where += field + " LIKE :" + r.getParameter();

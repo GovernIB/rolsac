@@ -66,6 +66,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String version;
 
+    private java.lang.String familia;
+
+    private java.lang.String agrupacionMateria;
+
     public ProcedimentCriteria() {
     }
 
@@ -103,7 +107,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String url,
            java.lang.String validacion,
            java.lang.Boolean ventanillaUnica,
-           java.lang.String version) {
+           java.lang.String version,
+           java.lang.String familia,
+           java.lang.String agrupacionMateria) {
         super(
             id,
             idioma,
@@ -139,6 +145,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.validacion = validacion;
         this.ventanillaUnica = ventanillaUnica;
         this.version = version;
+        this.familia = familia;
+        this.agrupacionMateria = agrupacionMateria;
     }
 
 
@@ -721,6 +729,46 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.version = version;
     }
 
+
+    /**
+     * Gets the familia value for this ProcedimentCriteria.
+     * 
+     * @return familia
+     */
+    public java.lang.String getFamilia() {
+        return familia;
+    }
+
+
+    /**
+     * Sets the familia value for this ProcedimentCriteria.
+     * 
+     * @param familia
+     */
+    public void setFamilia(java.lang.String familia) {
+        this.familia = familia;
+    }
+
+
+    /**
+     * Gets the agrupacionMateria value for this ProcedimentCriteria.
+     * 
+     * @return agrupacionMateria
+     */
+    public java.lang.String getAgrupacionMateria() {
+        return agrupacionMateria;
+    }
+
+
+    /**
+     * Sets the agrupacionMateria value for this ProcedimentCriteria.
+     * 
+     * @param agrupacionMateria
+     */
+    public void setAgrupacionMateria(java.lang.String agrupacionMateria) {
+        this.agrupacionMateria = agrupacionMateria;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -819,7 +867,13 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.ventanillaUnica.equals(other.getVentanillaUnica()))) &&
             ((this.version==null && other.getVersion()==null) || 
              (this.version!=null &&
-              this.version.equals(other.getVersion())));
+              this.version.equals(other.getVersion()))) &&
+            ((this.familia==null && other.getFamilia()==null) || 
+             (this.familia!=null &&
+              this.familia.equals(other.getFamilia()))) &&
+            ((this.agrupacionMateria==null && other.getAgrupacionMateria()==null) || 
+             (this.agrupacionMateria!=null &&
+              this.agrupacionMateria.equals(other.getAgrupacionMateria())));
         __equalsCalc = null;
         return _equals;
     }
@@ -917,6 +971,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getVersion() != null) {
             _hashCode += getVersion().hashCode();
+        }
+        if (getFamilia() != null) {
+            _hashCode += getFamilia().hashCode();
+        }
+        if (getAgrupacionMateria() != null) {
+            _hashCode += getAgrupacionMateria().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1099,6 +1159,18 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("version");
         elemField.setXmlName(new javax.xml.namespace.QName("", "version"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("familia");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "familia"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("agrupacionMateria");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "agrupacionMateria"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

@@ -314,6 +314,57 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
         return procedimentDTOList;
     }
+    
+    /**
+     * Cuenta procedimientos.
+     * @param procedimentCriteria
+     * @return int
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public int getNumProcediments(ProcedimentCriteria procedimentCriteria) {
+        Integer numResultats = -1;
+        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
+        Session session = null;
+
+        try {
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
+            criteris.addAll(BasicUtils.parseCriterias(
+                    ProcedimentCriteria.class,
+                    HQL_PROCEDIMIENTO_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, 
+                    procedimentCriteria));
+            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_PROCEDIMIENTO_ALIAS, 
+                    entities, 
+                    procedimentCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS,
+                    true);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            numResultats = (Integer) query.uniqueResult();
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+
+        return numResultats;
+    }
 
     /**
      * Obtiene una materia.

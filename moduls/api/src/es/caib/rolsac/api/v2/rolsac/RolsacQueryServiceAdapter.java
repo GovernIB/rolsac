@@ -133,6 +133,15 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
         }
     }
+    
+    public int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException {
+        try {
+            Integer num = rolsacQueryServiceStrategy.getNumProcediments(procedimentCriteria);
+            return num;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.COUNT_GETTER + "procedimientos.", e);
+        }
+    }
 
     public AgrupacioFetVitalQueryServiceAdapter obtenirAgrupacioFetVital(AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws QueryServiceException {
         try {

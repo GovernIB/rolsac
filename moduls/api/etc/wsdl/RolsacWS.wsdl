@@ -625,6 +625,8 @@
 							<element name="validacion" nillable="true" type="xsd:string" />
 							<element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
 							<element name="version" nillable="true" type="xsd:string" />
+                            <element name="familia" nillable="true" type="xsd:string" />
+                            <element name="agrupacionMateria" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>
@@ -2488,6 +2490,9 @@
 	<wsdl:message name="llistarProcedimentsResponse">
 		<wsdl:part name="llistarProcedimentsReturn" type="impl:ArrayOfProcedimentDTO" />
 	</wsdl:message>
+    <wsdl:message name="getNumProcedimentsResponse">
+        <wsdl:part name="getNumProcedimentsReturn" type="xsd:int" />
+    </wsdl:message>    
 	<wsdl:message name="llistarUnitatsAdministrativesResponse">
 		<wsdl:part name="llistarUnitatsAdministrativesReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
 	</wsdl:message>
@@ -2608,6 +2613,9 @@
 	<wsdl:message name="llistarProcedimentsRequest">
 		<wsdl:part name="in0" type="tns4:ProcedimentCriteria" />
 	</wsdl:message>
+    <wsdl:message name="getNumProcedimentsRequest">
+        <wsdl:part name="in0" type="tns4:ProcedimentCriteria" />
+    </wsdl:message>    
 	<wsdl:message name="obtenirFetVitalResponse">
 		<wsdl:part name="obtenirFetVitalReturn" type="tns7:FetVitalDTO" />
 	</wsdl:message>
@@ -2720,12 +2728,19 @@
 				name="obtenirProcedimentResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarProcediments"
-			parameterOrder="in0">
-			<wsdl:input message="intf:llistarProcedimentsRequest"
-				name="llistarProcedimentsRequest" />
-			<wsdl:output message="intf:llistarProcedimentsResponse"
-				name="llistarProcedimentsResponse" />
-		</wsdl:operation>
+            parameterOrder="in0">
+            <wsdl:input message="intf:llistarProcedimentsRequest"
+                name="llistarProcedimentsRequest" />
+            <wsdl:output message="intf:llistarProcedimentsResponse"
+                name="llistarProcedimentsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getNumProcediments"
+            parameterOrder="in0">
+            <wsdl:input message="intf:getNumProcedimentsRequest"
+                name="getNumProcedimentsRequest" />
+            <wsdl:output message="intf:getNumProcedimentsResponse"
+                name="getNumProcedimentsResponse" />
+        </wsdl:operation>
 		<wsdl:operation name="obtenirMateria" parameterOrder="in0">
 			<wsdl:input message="intf:obtenirMateriaRequest" name="obtenirMateriaRequest" />
 			<wsdl:output message="intf:obtenirMateriaResponse" name="obtenirMateriaResponse" />
@@ -3059,16 +3074,27 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarProcediments">
-			<wsdlsoap:operation soapAction="" />
-			<wsdl:input name="llistarProcedimentsRequest">
-				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
-			</wsdl:input>
-			<wsdl:output name="llistarProcedimentsResponse">
-				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
-			</wsdl:output>
-		</wsdl:operation>
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarProcedimentsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarProcedimentsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getNumProcediments">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="getNumProcedimentsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="getNumProcedimentsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
 		<wsdl:operation name="obtenirMateria">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirMateriaRequest">

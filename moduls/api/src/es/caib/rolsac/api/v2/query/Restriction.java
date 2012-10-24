@@ -3,7 +3,7 @@ package es.caib.rolsac.api.v2.query;
 public class Restriction {
 
     public static enum LOGIC {AND, OR};
-    public static enum OPERATION {EQ, NEQ, IN, LIKE, LT, GT, LE, GE, EQ_DATE, NULL, NOT_NULL};
+    public static enum OPERATION {EQ, NEQ, IN, IN_SELECT, LIKE, LT, GT, LE, GE, EQ_DATE, NULL, NOT_NULL};
 
     private LOGIC logic;
     private String parameter;

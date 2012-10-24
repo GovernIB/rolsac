@@ -149,6 +149,8 @@ public interface RolsacQueryServiceStrategy {
     ProcedimentDTO obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
     List<ProcedimentDTO> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
+    
+    Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException;
 
     PublicObjectiuDTO obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException;
 

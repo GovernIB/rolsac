@@ -99,6 +99,16 @@ public class RolsacQueryServiceDelegate {
         }
     }
     
+    public int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.getNumProcediments(procedimentCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
     
     public MateriaDTO obtenirMateria(MateriaCriteria materiaCriteria) throws DelegateException {
         try {

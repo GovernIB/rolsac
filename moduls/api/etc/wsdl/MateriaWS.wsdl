@@ -208,6 +208,8 @@
 							<element name="validacion" nillable="true" type="xsd:string" />
 							<element name="ventanillaUnica" nillable="true" type="xsd:boolean" />
 							<element name="version" nillable="true" type="xsd:string" />
+                            <element name="familia" nillable="true" type="xsd:string" />
+                            <element name="agrupacionMateria" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

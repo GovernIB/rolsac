@@ -18,7 +18,6 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacQueryServiceAdapter;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialQueryServiceAdapter;
-import es.caib.rolsac.api.v2.estadistica.EstadisticaInsertServiceAdapter;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceAdapter;
@@ -150,6 +149,8 @@ public interface RolsacQueryService {
     ProcedimentQueryServiceAdapter obtenirProcediment(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
 
     List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
+    
+    int getNumProcediments(ProcedimentCriteria procedimentCriteria) throws QueryServiceException;
 
     PublicObjectiuQueryServiceAdapter obtenirPublicObjectiu(PublicObjectiuCriteria publicObjectiuCriteria) throws QueryServiceException;
 

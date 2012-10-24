@@ -743,15 +743,25 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 	}
 
 	public List<ProcedimentDTO> llistarProcediments(
-			ProcedimentCriteria procedimentCriteria) throws StrategyException {
-		try {
-			return gateway.llistarProcediments(procedimentCriteria);
-		} catch (QueryServiceException qse) {
-			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
-		} catch (RemoteException e) {
-			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
-	}
+            ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return gateway.llistarProcediments(procedimentCriteria);
+        } catch (QueryServiceException qse) {
+            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }                       
+    }
+	
+	public Integer getNumProcediments(ProcedimentCriteria procedimentCriteria) throws StrategyException {
+        try {
+            return gateway.getNumProcediments(procedimentCriteria);
+        } catch (QueryServiceException qse) {
+            throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }                       
+    }
 
 	public List<PublicObjectiuDTO> llistarPublicsObjectius(
 			PublicObjectiuCriteria publicObjectiuCriteria) throws StrategyException {

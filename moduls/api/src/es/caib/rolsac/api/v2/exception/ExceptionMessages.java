@@ -18,6 +18,7 @@ public class ExceptionMessages {
     // QueryServices
     public static final String OBJECT_GETTER = "Error obteniendo ";
     public static final String LIST_GETTER = OBJECT_GETTER + "listado de ";
+    public static final String COUNT_GETTER = OBJECT_GETTER + "número de ";
 
     // Config
     public static final String CONFIG_ARXIU_URL = "No esta definida la propiedad de la url para archivos.";

@@ -41,9 +41,12 @@ public class BasicUtils {
     }
 
     /**
-     * Use case: if (procedimentCriteria.getTaxa() != null) { ProcedimentByTaxaCriteria criteria = new
-     * ProcedimentByTaxaCriteria(entityAlias); // i18nALias si es traducible
-     * criteria.parseCriteria(booleanToString(procedimentCriteria.getTaxa())); criteriaObjects.add(criteria); }
+     * Use case:
+     * if (procedimentCriteria.getTaxa() != null) { 
+     *     ProcedimentByTaxaCriteria criteria = new ProcedimentByTaxaCriteria(entityAlias); // i18nALias si es traducible
+     *     criteria.parseCriteria(booleanToString(procedimentCriteria.getTaxa()));
+     *     criteriaObjects.add(criteria); 
+     * }
      */
     public static List<CriteriaObject> parseCriterias(Class<?> criteriaClass, String entityAlias, String i18nAlias,
             BasicCriteria basicCriteria) throws CriteriaObjectParseException {
@@ -61,8 +64,7 @@ public class BasicUtils {
                 	
                     Object value = m.invoke(basicCriteria);
                     if (value != null) {
-                        CriteriaObject co = getParsedCriteria(m, value, criteriaClass, entityAlias, i18nAlias,
-                                basicCriteria);
+                        CriteriaObject co = getParsedCriteria(m, value, criteriaClass, entityAlias, i18nAlias, basicCriteria);
                         if (co != null) {
                             criteriaObjects.add(co);
                         }
