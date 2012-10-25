@@ -32,7 +32,7 @@ cas 3) Ja tenim instal.lat rolsac 1.0.2. 1.0.4 és la última versió. Volem actual
 cas 4) Ja tenim instal.lat rolsac 1.1.0. Volem actualitzar a rolsac 1.1.1.
  Exportar  bbdd/1.1/rolsac_update_from_1.1.0_to_1.1.1.sql  
  
-cas 5) Ja estem a rolsac 1.1. Volem actualtizar-nos a rolsac 1.2
+cas 5) Ja estem a rolsac 1.1.0 (Es la última versió) Volem actualtizar-nos a rolsac 1.2.0
  Exportar, si existeix, bbdd/1.2/rolsac_update_from_1.1_to_1.2.sql
 
 
