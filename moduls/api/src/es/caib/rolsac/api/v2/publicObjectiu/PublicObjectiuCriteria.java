@@ -18,6 +18,10 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
 
     private java.lang.String t_palabrasclave;
 
+    private java.lang.String procedimiento;
+
+    private java.lang.String ficha;
+
     public PublicObjectiuCriteria() {
     }
 
@@ -31,7 +35,9 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
            java.lang.String codigoEstandar,
            java.lang.String t_titulo,
            java.lang.String t_descripcion,
-           java.lang.String t_palabrasclave) {
+           java.lang.String t_palabrasclave,
+           java.lang.String procedimiento,
+           java.lang.String ficha) {
         super(
             id,
             idioma,
@@ -43,6 +49,8 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
         this.t_titulo = t_titulo;
         this.t_descripcion = t_descripcion;
         this.t_palabrasclave = t_palabrasclave;
+        this.procedimiento = procedimiento;
+        this.ficha = ficha;
     }
 
 
@@ -145,6 +153,46 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
         this.t_palabrasclave = t_palabrasclave;
     }
 
+
+    /**
+     * Gets the procedimiento value for this PublicObjectiuCriteria.
+     * 
+     * @return procedimiento
+     */
+    public java.lang.String getProcedimiento() {
+        return procedimiento;
+    }
+
+
+    /**
+     * Sets the procedimiento value for this PublicObjectiuCriteria.
+     * 
+     * @param procedimiento
+     */
+    public void setProcedimiento(java.lang.String procedimiento) {
+        this.procedimiento = procedimiento;
+    }
+
+
+    /**
+     * Gets the ficha value for this PublicObjectiuCriteria.
+     * 
+     * @return ficha
+     */
+    public java.lang.String getFicha() {
+        return ficha;
+    }
+
+
+    /**
+     * Sets the ficha value for this PublicObjectiuCriteria.
+     * 
+     * @param ficha
+     */
+    public void setFicha(java.lang.String ficha) {
+        this.ficha = ficha;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof PublicObjectiuCriteria)) return false;
@@ -171,7 +219,13 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
               this.t_descripcion.equals(other.getT_descripcion()))) &&
             ((this.t_palabrasclave==null && other.getT_palabrasclave()==null) || 
              (this.t_palabrasclave!=null &&
-              this.t_palabrasclave.equals(other.getT_palabrasclave())));
+              this.t_palabrasclave.equals(other.getT_palabrasclave()))) &&
+            ((this.procedimiento==null && other.getProcedimiento()==null) || 
+             (this.procedimiento!=null &&
+              this.procedimiento.equals(other.getProcedimiento()))) &&
+            ((this.ficha==null && other.getFicha()==null) || 
+             (this.ficha!=null &&
+              this.ficha.equals(other.getFicha())));
         __equalsCalc = null;
         return _equals;
     }
@@ -197,6 +251,12 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
         }
         if (getT_palabrasclave() != null) {
             _hashCode += getT_palabrasclave().hashCode();
+        }
+        if (getProcedimiento() != null) {
+            _hashCode += getProcedimiento().hashCode();
+        }
+        if (getFicha() != null) {
+            _hashCode += getFicha().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -235,6 +295,18 @@ public class PublicObjectiuCriteria  extends es.caib.rolsac.api.v2.general.Basic
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("t_palabrasclave");
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_palabrasclave"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("procedimiento");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "procedimiento"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("ficha");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "ficha"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

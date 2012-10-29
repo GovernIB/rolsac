@@ -16,6 +16,8 @@ import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.procediment.ejb.intf.ProcedimentQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
@@ -141,4 +143,17 @@ public class ProcedimentQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }    
+    
+    @SuppressWarnings("unchecked")
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws DelegateException {
+        try {
+            ProcedimentQueryServiceEJBRemote ejb = procedimentQueryServiceLocator.getProcedimentQueryServiceEJB();
+            return ejb.llistarPublicsObjectius(id, poCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
 }

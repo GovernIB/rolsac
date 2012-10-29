@@ -7,6 +7,10 @@ import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceStrategy;
 
 public class PublicObjectiuQueryServiceWSStrategy implements
@@ -26,8 +30,7 @@ public class PublicObjectiuQueryServiceWSStrategy implements
 		}
 	}
 
-	public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id,
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+	public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id, AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
 			throws StrategyException {
 		try {
 			return gateway.llistarAgrupacions(id, agrupacioFetVitalCriteria);
@@ -35,4 +38,21 @@ public class PublicObjectiuQueryServiceWSStrategy implements
 			throw new  StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria)
+            throws StrategyException {
+        try {
+            return gateway.llistarProcediments(id, procedimentCriteria);
+        } catch (RemoteException e) {
+            throw new  StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws StrategyException {
+        try {
+            return gateway.llistarFitxes(id, fitxaCriteria);
+        } catch (RemoteException e) {
+            throw new  StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
 }

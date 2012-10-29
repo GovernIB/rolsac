@@ -34,6 +34,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
 
     private java.lang.String validacion;
 
+    private java.lang.String publicoObjetivo;
+
     public FitxaCriteria() {
     }
 
@@ -55,7 +57,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String t_url,
            java.lang.String urlForo,
            java.lang.String urlVideo,
-           java.lang.String validacion) {
+           java.lang.String validacion,
+           java.lang.String publicoObjetivo) {
         super(
             id,
             idioma,
@@ -75,6 +78,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.urlForo = urlForo;
         this.urlVideo = urlVideo;
         this.validacion = validacion;
+        this.publicoObjetivo = publicoObjetivo;
     }
 
 
@@ -337,6 +341,26 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.validacion = validacion;
     }
 
+
+    /**
+     * Gets the publicoObjetivo value for this FitxaCriteria.
+     * 
+     * @return publicoObjetivo
+     */
+    public java.lang.String getPublicoObjetivo() {
+        return publicoObjetivo;
+    }
+
+
+    /**
+     * Sets the publicoObjetivo value for this FitxaCriteria.
+     * 
+     * @param publicoObjetivo
+     */
+    public void setPublicoObjetivo(java.lang.String publicoObjetivo) {
+        this.publicoObjetivo = publicoObjetivo;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FitxaCriteria)) return false;
@@ -387,7 +411,10 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
               this.urlVideo.equals(other.getUrlVideo()))) &&
             ((this.validacion==null && other.getValidacion()==null) || 
              (this.validacion!=null &&
-              this.validacion.equals(other.getValidacion())));
+              this.validacion.equals(other.getValidacion()))) &&
+            ((this.publicoObjetivo==null && other.getPublicoObjetivo()==null) || 
+             (this.publicoObjetivo!=null &&
+              this.publicoObjetivo.equals(other.getPublicoObjetivo())));
         __equalsCalc = null;
         return _equals;
     }
@@ -437,6 +464,9 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         }
         if (getValidacion() != null) {
             _hashCode += getValidacion().hashCode();
+        }
+        if (getPublicoObjetivo() != null) {
+            _hashCode += getPublicoObjetivo().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -523,6 +553,12 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("validacion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "validacion"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publicoObjetivo");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "publicoObjetivo"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

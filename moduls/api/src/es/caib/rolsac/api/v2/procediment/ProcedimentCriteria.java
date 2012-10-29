@@ -70,6 +70,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String agrupacionMateria;
 
+    private java.lang.String publicoObjetivo;
+
     public ProcedimentCriteria() {
     }
 
@@ -109,7 +111,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.Boolean ventanillaUnica,
            java.lang.String version,
            java.lang.String familia,
-           java.lang.String agrupacionMateria) {
+           java.lang.String agrupacionMateria,
+           java.lang.String publicoObjetivo) {
         super(
             id,
             idioma,
@@ -147,6 +150,7 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.version = version;
         this.familia = familia;
         this.agrupacionMateria = agrupacionMateria;
+        this.publicoObjetivo = publicoObjetivo;
     }
 
 
@@ -769,6 +773,26 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.agrupacionMateria = agrupacionMateria;
     }
 
+
+    /**
+     * Gets the publicoObjetivo value for this ProcedimentCriteria.
+     * 
+     * @return publicoObjetivo
+     */
+    public java.lang.String getPublicoObjetivo() {
+        return publicoObjetivo;
+    }
+
+
+    /**
+     * Sets the publicoObjetivo value for this ProcedimentCriteria.
+     * 
+     * @param publicoObjetivo
+     */
+    public void setPublicoObjetivo(java.lang.String publicoObjetivo) {
+        this.publicoObjetivo = publicoObjetivo;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -873,7 +897,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.familia.equals(other.getFamilia()))) &&
             ((this.agrupacionMateria==null && other.getAgrupacionMateria()==null) || 
              (this.agrupacionMateria!=null &&
-              this.agrupacionMateria.equals(other.getAgrupacionMateria())));
+              this.agrupacionMateria.equals(other.getAgrupacionMateria()))) &&
+            ((this.publicoObjetivo==null && other.getPublicoObjetivo()==null) || 
+             (this.publicoObjetivo!=null &&
+              this.publicoObjetivo.equals(other.getPublicoObjetivo())));
         __equalsCalc = null;
         return _equals;
     }
@@ -977,6 +1004,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getAgrupacionMateria() != null) {
             _hashCode += getAgrupacionMateria().hashCode();
+        }
+        if (getPublicoObjetivo() != null) {
+            _hashCode += getPublicoObjetivo().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1171,6 +1201,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("agrupacionMateria");
         elemField.setXmlName(new javax.xml.namespace.QName("", "agrupacionMateria"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("publicoObjetivo");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "publicoObjetivo"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

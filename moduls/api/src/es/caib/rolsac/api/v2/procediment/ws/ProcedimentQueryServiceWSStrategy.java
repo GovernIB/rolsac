@@ -15,11 +15,12 @@ import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceStrategy;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
-public class ProcedimentQueryServiceWSStrategy implements
-		ProcedimentQueryServiceStrategy {
+public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServiceStrategy {
 
 	// @Injected
 	ProcedimentQueryServiceGateway gateway;
@@ -114,5 +115,13 @@ public class ProcedimentQueryServiceWSStrategy implements
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}
 	}
+
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws StrategyException {
+        try {
+            return gateway.llistarPublicsObjectius(id, poCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
 
 }

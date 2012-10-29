@@ -71,7 +71,7 @@ public class BasicUtils {
                     }
                 }
             } catch (Exception e) {
-                throw new CriteriaObjectParseException("Error parseando " + m.getName() + "de la clase "
+                throw new CriteriaObjectParseException("Error parseando " + m.getName() + " de la clase "
                         + criteriaClass + ".", e);
             }
         }

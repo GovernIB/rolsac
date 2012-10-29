@@ -1,21 +1,19 @@
 package es.caib.rolsac.api.v2.general.co;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+import es.caib.rolsac.api.v2.general.CSVUtil;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.Restriction;
 import es.caib.rolsac.api.v2.query.Restriction.OPERATION;
 
 public abstract class ByLongCriteria implements CriteriaObject {
 
-    private String field;
-    private Long value;
-    private Long minValue;
-    private Long maxValue;
-    private Set<Long> valuesSet;
+    protected String field;
+    protected Long value;
+    protected Long minValue;
+    protected Long maxValue;
+    protected Set<Long> valuesSet;
 
     protected ByLongCriteria(String field) {
         this.field = field;
@@ -31,39 +29,34 @@ public abstract class ByLongCriteria implements CriteriaObject {
         boolean parsed = false;
         try {
             if (criteria.startsWith("<=")) {
-                maxValue = Long.parseLong(criteria.substring(1)) + 1;
+                maxValue = Long.parseLong(criteria.substring(1).trim()) + 1;
                 parsed = true;
             }
 
             if (!parsed && criteria.startsWith(">=")) {
-                minValue = Long.parseLong(criteria.substring(1)) - 1;
+                minValue = Long.parseLong(criteria.substring(1).trim()) - 1;
                 parsed = true;
             }
 
             if (!parsed && criteria.startsWith("<")) {
-                maxValue = Long.parseLong(criteria.substring(1));
+                maxValue = Long.parseLong(criteria.substring(1).trim());
                 parsed = true;
             }
 
             if (!parsed && criteria.startsWith(">")) {
-                minValue = Long.parseLong(criteria.substring(1));
+                minValue = Long.parseLong(criteria.substring(1).trim());
                 parsed = true;
             }
 
             if (!parsed && !criteria.startsWith("-") && criteria.contains("-")) {
                 String[] range = criteria.split("-");
-                minValue = Long.parseLong(range[0]) - 1;
-                maxValue = Long.parseLong(range[1]) + 1;
+                minValue = Long.parseLong(range[0].trim()) - 1;
+                maxValue = Long.parseLong(range[1].trim()) + 1;
                 parsed = true;
             }
 
             if (!parsed && criteria.contains(",")) {
-                criteria = criteria.replaceAll(",$", "");  // remove possible trailing comma
-                List<String> values = Arrays.asList(criteria.split(","));
-                valuesSet = new HashSet<Long>();
-                for (String v : values) {
-                    valuesSet.add(Long.parseLong(v.trim()));
-                }
+                valuesSet = CSVUtil.csv2LongSet(criteria);
                 parsed = true;
             }
 

@@ -11,8 +11,14 @@ import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalQueryServiceAdap
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
+import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
 import es.caib.rolsac.api.v2.publicObjectiu.ejb.PublicObjectiuQueryServiceEJBStrategy;
 
 public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO implements PublicObjectiuQueryService {
@@ -55,6 +61,32 @@ public class PublicObjectiuQueryServiceAdapter extends PublicObjectiuDTO impleme
             return llistaAgrupacions;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "agrupaciones.", e);
+        }
+    }
+
+    public List<ProcedimentQueryServiceAdapter> llistarProcediments(ProcedimentCriteria procediemntCriteria) throws QueryServiceException {
+        try {
+            List<ProcedimentDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarProcediments(getId(), procediemntCriteria);
+            List<ProcedimentQueryServiceAdapter> llistaProcediments = new ArrayList<ProcedimentQueryServiceAdapter>();
+            for (ProcedimentDTO procDTO : llistaDTO) {
+                llistaProcediments.add((ProcedimentQueryServiceAdapter) BeanUtils.getAdapter("procediment", getStrategy(), procDTO));
+            }
+            return llistaProcediments;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "procedimientos.", e);
+        }
+    }
+
+    public List<FitxaQueryServiceAdapter> llistarFitxes(FitxaCriteria fitxaCriteria) throws QueryServiceException {
+        try {
+            List<FitxaDTO> llistaDTO = publicObjectiuQueryServiceStrategy.llistarFitxes(getId(), fitxaCriteria);
+            List<FitxaQueryServiceAdapter> llistaFitxes = new ArrayList<FitxaQueryServiceAdapter>();
+            for (FitxaDTO fitxaDTO : llistaDTO) {
+                llistaFitxes.add((FitxaQueryServiceAdapter) BeanUtils.getAdapter("fitxa", getStrategy(), fitxaDTO));
+            }
+            return llistaFitxes;
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "fichas.", e);
         }
     }
 

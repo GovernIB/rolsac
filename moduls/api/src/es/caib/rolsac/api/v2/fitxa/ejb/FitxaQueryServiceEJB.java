@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
@@ -32,6 +33,8 @@ import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
@@ -74,6 +77,8 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
     private static final String HQL_SECCION_CLASS = HQL_FICHASUA_ALIAS + ".seccion";
     private static final String HQL_SECCION_ALIAS = "s";
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
+    private static final String HQL_PUBLICO_OBJETIVO_CLASS = HQL_FICHA_ALIAS + ".publicosObjetivo";
+    private static final String HQL_PUBLICO_OBJETIVO_ALIAS = "po";
     
     /**
      * @ejb.create-method
@@ -564,6 +569,54 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      */
     public ArxiuDTO obtenirBaner(Long baner) {
         return getArxiuDTO(baner);
+    }
+    
+    /**
+     * Obtiene listado de publicos objetivos de la ficha.
+     * @param id
+     * @param poCriteria
+     * @return List<PublicObjectiuDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) {
+        List<PublicObjectiuDTO> poDTOList = new ArrayList<PublicObjectiuDTO>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(PublicObjectiuCriteria.class, HQL_PUBLICO_OBJETIVO_ALIAS, HQL_TRADUCCIONES_ALIAS, poCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
+            entities.add(new FromClause(HQL_PUBLICO_OBJETIVO_CLASS, HQL_PUBLICO_OBJETIVO_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_PUBLICO_OBJETIVO_ALIAS, entities, poCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            FitxaCriteria fc = new FitxaCriteria();
+            fc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHA_ALIAS, fc);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<PublicoObjetivo> poResult = (List<PublicoObjetivo>) query.list();
+
+            for (PublicoObjetivo po : poResult) {
+                poDTOList.add((PublicObjectiuDTO) BasicUtils.entityToDTO(PublicObjectiuDTO.class,  po, poCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            close(session);
+        }
+
+        return poDTOList;
     }
     
 }

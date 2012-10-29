@@ -12,13 +12,19 @@ import net.sf.hibernate.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.general.co.CriteriaObjectParseException;
+import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
@@ -47,6 +53,10 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
     private static final String HQL_AGRUPACIO_FV_CLASS = HQL_PUBLIC_OBJECTIU_ALIAS + ".agrupaciones";
     private static final String HQL_AGRUPACIO_FV_ALIAS = "afv";
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
+    private static final String HQL_PROCEDIMENT_CLASS = HQL_PUBLIC_OBJECTIU_ALIAS + ".procedimientosLocales";
+    private static final String HQL_PROCEDIMENT_ALIAS = "proc";
+    private static final String HQL_FITXA_CLASS = HQL_PUBLIC_OBJECTIU_ALIAS + ".fichas";
+    private static final String HQL_FITXA_ALIAS = "fi";
     
     /**
      * @ejb.create-method
@@ -143,6 +153,102 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
         }
 
         return agrupacionDTOList;
+    }
+    
+    /**
+     * Obtiene listado de procedimientos del publico objetivo.
+     * @param id
+     * @param procCriteria
+     * @return List<ProcedimentDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procCriteria) {
+        List<ProcedimentDTO> procDTOList = new ArrayList<ProcedimentDTO>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMENT_ALIAS, HQL_TRADUCCIONES_ALIAS, procCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PUBLIC_OBJECTIU_CLASS, HQL_PUBLIC_OBJECTIU_ALIAS));
+            entities.add(new FromClause(HQL_PROCEDIMENT_CLASS, HQL_PROCEDIMENT_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_PROCEDIMENT_ALIAS, entities, procCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            PublicObjectiuCriteria poc = new PublicObjectiuCriteria();
+            poc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(PublicObjectiuCriteria.class, HQL_PUBLIC_OBJECTIU_ALIAS, poc);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<ProcedimientoLocal> procResult = (List<ProcedimientoLocal>) query.list();
+
+            for (ProcedimientoLocal proc : procResult) {
+                procDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class, proc, procCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            close(session);
+        }
+
+        return procDTOList;
+    }
+    
+    /**
+     * Obtiene listado de fichas del publico objetivo.
+     * @param id
+     * @param fitxaCriteria
+     * @return List<FitxaDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
+        List<FitxaDTO> fitxaDTOList = new ArrayList<FitxaDTO>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PUBLIC_OBJECTIU_CLASS, HQL_PUBLIC_OBJECTIU_ALIAS));
+            entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            PublicObjectiuCriteria poc = new PublicObjectiuCriteria();
+            poc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(PublicObjectiuCriteria.class, HQL_PUBLIC_OBJECTIU_ALIAS, poc);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<Ficha> fichaResult = (List<Ficha>) query.list();
+
+            for (Ficha ficha : fichaResult) {
+                fitxaDTOList.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class, ficha, fitxaCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            close(session);
+        }
+
+        return fitxaDTOList;
     }
     
 }

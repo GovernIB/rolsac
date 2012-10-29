@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceStrategy;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
@@ -100,6 +102,14 @@ public class ProcedimentQueryServiceEJBStrategy implements ProcedimentQueryServi
     public List<DocumentDTO> llistarDocuments(long id, DocumentCriteria documentCriteria) throws StrategyException {
         try {
             return procedimentQueryServiceDelegate.llistarDocuments(id, documentCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws StrategyException {
+        try {
+            return procedimentQueryServiceDelegate.llistarPublicsObjectius(id, poCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

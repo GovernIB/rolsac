@@ -5,6 +5,7 @@
 	xmlns:tns2="http://general.v2.api.rolsac.caib.es" xmlns:tns3="http://fetVital.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://document.v2.api.rolsac.caib.es" xmlns:tns5="http://enllac.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://seccio.v2.api.rolsac.caib.es" xmlns:tns7="http://arxiu.v2.api.rolsac.caib.es"
+    xmlns:tns8="http://publicObjectiu.v2.api.rolsac.caib.es"
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.fitxa.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
@@ -220,6 +221,67 @@
 				</sequence>
 			</complexType>
 		</schema>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://publicObjectiu.v2.api.rolsac.caib.es">
+            <import namespace="http://tipus.v2.api.rolsac.caib.es" />
+            <import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+            <import namespace="http://usuari.v2.api.rolsac.caib.es" />
+            <import namespace="http://enllac.v2.api.rolsac.caib.es" />
+            <import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://perfil.v2.api.rolsac.caib.es" />
+            <import namespace="http://document.v2.api.rolsac.caib.es" />
+            <import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://materia.v2.api.rolsac.caib.es" />
+            <import namespace="http://edifici.v2.api.rolsac.caib.es" />
+            <import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+            <import namespace="http://procediment.v2.api.rolsac.caib.es" />
+            <import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+            <import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
+            <import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
+            <import namespace="http://seccio.v2.api.rolsac.caib.es" />
+            <import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
+            <import namespace="http://familia.v2.api.rolsac.caib.es" />
+            <import namespace="http://tramit.v2.api.rolsac.caib.es" />
+            <import namespace="http://normativa.v2.api.rolsac.caib.es" />
+            <import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
+            <import namespace="http://general.v2.api.rolsac.caib.es" />
+            <import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+            <import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
+            <import namespace="http://taxa.v2.api.rolsac.caib.es" />
+            <import namespace="http://formulari.v2.api.rolsac.caib.es" />
+            <import namespace="http://xml.apache.org/xml-soap" />
+            <import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+            <import namespace="http://fitxaUA.v2.api.rolsac.caib.es" />
+            <import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+            <import namespace="http://personal.v2.api.rolsac.caib.es" />
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <complexType name="PublicObjectiuCriteria">
+                <complexContent>
+                    <extension base="tns2:BasicCriteria">
+                        <sequence>
+                            <element name="orden" nillable="true" type="xsd:string" />
+                            <element name="codigoEstandar" nillable="true" type="xsd:string" />
+                            <element name="t_titulo" nillable="true" type="xsd:string" />
+                            <element name="t_descripcion" nillable="true" type="xsd:string" />
+                            <element name="t_palabrasclave" nillable="true" type="xsd:string" />
+                            <element name="procedimiento" nillable="true" type="xsd:string" />
+                            <element name="ficha" nillable="true" type="xsd:string" />
+                        </sequence>
+                    </extension>
+                </complexContent>
+            </complexType>
+            <complexType name="PublicObjectiuDTO">
+                <sequence>
+                    <element name="codigoEstandar" nillable="true" type="xsd:string" />
+                    <element name="descripcion" nillable="true" type="xsd:string" />
+                    <element name="id" type="xsd:long" />
+                    <element name="orden" type="xsd:int" />
+                    <element name="palabrasclave" nillable="true" type="xsd:string" />
+                    <element name="titulo" nillable="true" type="xsd:string" />
+                </sequence>
+            </complexType>
+        </schema>
 	</wsdl:types>
 	<wsdl:message name="getNumSeccionsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -234,6 +296,10 @@
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns6:SeccioCriteria" />
 	</wsdl:message>
+    <wsdl:message name="llistarPublicsObjectiusRequest">
+        <wsdl:part name="in0" type="xsd:long" />
+        <wsdl:part name="in1" type="tns8:PublicObjectiuCriteria" />
+    </wsdl:message>
 	<wsdl:message name="llistarEnllacosRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns5:EnllacCriteria" />
@@ -247,6 +313,9 @@
 	<wsdl:message name="llistarSeccionsResponse">
 		<wsdl:part name="llistarSeccionsReturn" type="impl:ArrayOf_xsd_anyType" />
 	</wsdl:message>
+    <wsdl:message name="llistarPublicsObjectiusResponse">
+        <wsdl:part name="llistarPublicsObjectiusReturn" type="impl:ArrayOf_xsd_anyType" />
+    </wsdl:message>
 	<wsdl:message name="llistarFetsVitalsRequest">
 		<wsdl:part name="in0" type="xsd:long" />
 		<wsdl:part name="in1" type="tns3:FetVitalCriteria" />
@@ -335,9 +404,13 @@
 			<wsdl:output message="impl:llistarEnllacosResponse" name="llistarEnllacosResponse" />
 		</wsdl:operation>
 		<wsdl:operation name="llistarSeccions" parameterOrder="in0 in1">
-			<wsdl:input message="impl:llistarSeccionsRequest" name="llistarSeccionsRequest" />
-			<wsdl:output message="impl:llistarSeccionsResponse" name="llistarSeccionsResponse" />
-		</wsdl:operation>
+            <wsdl:input message="impl:llistarSeccionsRequest" name="llistarSeccionsRequest" />
+            <wsdl:output message="impl:llistarSeccionsResponse" name="llistarSeccionsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="llistarPublicsObjectius" parameterOrder="in0 in1">
+            <wsdl:input message="impl:llistarPublicsObjectiusRequest" name="llistarPublicsObjectiusRequest" />
+            <wsdl:output message="impl:llistarPublicsObjectiusResponse" name="llistarPublicsObjectiusResponse" />
+        </wsdl:operation>
 		<wsdl:operation name="obtenirIcona" parameterOrder="in0">
 			<wsdl:input message="impl:obtenirIconaRequest" name="obtenirIconaRequest" />
 			<wsdl:output message="impl:obtenirIconaResponse" name="obtenirIconaResponse" />
@@ -427,16 +500,27 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="llistarSeccions">
-			<wsdlsoap:operation soapAction="" />
-			<wsdl:input name="llistarSeccionsRequest">
-				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
-			</wsdl:input>
-			<wsdl:output name="llistarSeccionsResponse">
-				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-					namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
-			</wsdl:output>
-		</wsdl:operation>
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarSeccionsRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarSeccionsResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="llistarPublicsObjectius">
+            <wsdlsoap:operation soapAction="" />
+            <wsdl:input name="llistarPublicsObjectiusRequest">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://intf.ejb.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:input>
+            <wsdl:output name="llistarPublicsObjectiusResponse">
+                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                    namespace="http://ws.fitxa.v2.api.rolsac.caib.es" use="encoded" />
+            </wsdl:output>
+        </wsdl:operation>
 		<wsdl:operation name="obtenirIcona">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="obtenirIconaRequest">

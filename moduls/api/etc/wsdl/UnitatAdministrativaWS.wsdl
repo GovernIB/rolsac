@@ -215,6 +215,7 @@
 							<element name="version" nillable="true" type="xsd:string" />
                             <element name="familia" nillable="true" type="xsd:string" />
                             <element name="agrupacionMateria" nillable="true" type="xsd:string" />
+                            <element name="publicoObjetivo" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>
@@ -352,6 +353,7 @@
 							<element name="urlForo" nillable="true" type="xsd:string" />
 							<element name="urlVideo" nillable="true" type="xsd:string" />
 							<element name="validacion" nillable="true" type="xsd:string" />
+                            <element name="publicoObjetivo" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

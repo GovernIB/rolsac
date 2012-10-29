@@ -21,6 +21,8 @@ import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
@@ -161,4 +163,22 @@ public class ProcedimentQueryServiceGateway {
 
 		return llistaDocuments;
 	}
+	
+	public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws RemoteException {
+
+        Object[] tmpLlista = null;
+        List<PublicObjectiuDTO> llistaPOs = null;
+
+        tmpLlista = stub.llistarPublicsObjectius(id, poCriteria);
+        llistaPOs = new ArrayList<PublicObjectiuDTO>(Arrays.asList(tmpLlista).size());
+
+        for (Object o : tmpLlista) {
+            PublicObjectiuDTO podto = (PublicObjectiuDTO) DTOUtil.object2DTO(o, PublicObjectiuDTO.class);
+            llistaPOs.add(podto);
+        }
+
+        return llistaPOs;
+
+    }
+	
 }

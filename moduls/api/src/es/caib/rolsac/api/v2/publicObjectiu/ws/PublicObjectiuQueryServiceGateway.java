@@ -12,8 +12,12 @@ import org.apache.axis.AxisFault;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
+import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.general.DTOUtil;
+import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 
 public class PublicObjectiuQueryServiceGateway {
 
@@ -43,23 +47,52 @@ public class PublicObjectiuQueryServiceGateway {
 	}
 
 	public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id,
-			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
-			throws RemoteException {
+            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+            throws RemoteException {
 
-    	Object[] tmpLlista = null;
-    	List<AgrupacioFetVitalDTO> llistaAgrupacionsFetVitals = null;
-    	
-		tmpLlista = stub.llistarAgrupacions(id, agrupacioFetVitalCriteria);
-		llistaAgrupacionsFetVitals = new ArrayList<AgrupacioFetVitalDTO>( Arrays.asList(tmpLlista).size() );
-		
-		for (Object o : tmpLlista) {
-			AgrupacioFetVitalDTO afvdto = (AgrupacioFetVitalDTO) DTOUtil.object2DTO(o, AgrupacioFetVitalDTO.class);
-			llistaAgrupacionsFetVitals.add(afvdto);
-		}
-    	
-		return llistaAgrupacionsFetVitals;		
-		
-	}
+        Object[] tmpLlista = null;
+        List<AgrupacioFetVitalDTO> llistaAgrupacionsFetVitals = null;
+        
+        tmpLlista = stub.llistarAgrupacions(id, agrupacioFetVitalCriteria);
+        llistaAgrupacionsFetVitals = new ArrayList<AgrupacioFetVitalDTO>( Arrays.asList(tmpLlista).size() );
+        
+        for (Object o : tmpLlista) {
+            AgrupacioFetVitalDTO afvdto = (AgrupacioFetVitalDTO) DTOUtil.object2DTO(o, AgrupacioFetVitalDTO.class);
+            llistaAgrupacionsFetVitals.add(afvdto);
+        }
+        
+        return llistaAgrupacionsFetVitals;      
+        
+    }
 	
+	public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws RemoteException {
+        Object[] tmpLlista = null;
+        List<ProcedimentDTO> llistaProcediments = null;
+        
+        tmpLlista = stub.llistarProcediments(id, procedimentCriteria);
+        llistaProcediments = new ArrayList<ProcedimentDTO>( Arrays.asList(tmpLlista).size() );
+        
+        for (Object o : tmpLlista) {
+            ProcedimentDTO pdto = (ProcedimentDTO) DTOUtil.object2DTO(o, ProcedimentDTO.class);
+            llistaProcediments.add(pdto);
+        }
+        
+        return llistaProcediments;      
+    }
+	
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws RemoteException {
+        Object[] tmpLlista = null;
+        List<FitxaDTO> llistaFitxes = null;
+        
+        tmpLlista = stub.llistarFitxes(id, fitxaCriteria);
+        llistaFitxes = new ArrayList<FitxaDTO>( Arrays.asList(tmpLlista).size() );
+        
+        for (Object o : tmpLlista) {
+            FitxaDTO fdto = (FitxaDTO) DTOUtil.object2DTO(o, FitxaDTO.class);
+            llistaFitxes.add(fdto);
+        }
+        
+        return llistaFitxes;      
+    }
 	
 }

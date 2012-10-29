@@ -12,6 +12,8 @@ import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceStrategy;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -124,6 +126,14 @@ public class FitxaQueryServiceEJBStrategy implements FitxaQueryServiceStrategy {
     public ArxiuDTO obtenirBaner(Long baner) throws StrategyException {
         try {
             return fitxaQueryServiceDelegate.obtenirBaner(baner);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws StrategyException {
+        try {
+            return fitxaQueryServiceDelegate.llistarPublicsObjectius(id, poCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

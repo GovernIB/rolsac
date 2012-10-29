@@ -333,7 +333,7 @@
             <parameter qname="in0" type="tns:TipusAfectacioCriteria" xmlns:tns="http://tipusAfectacio.v2.api.rolsac.caib.es" />
         </operation>
         <parameter name="allowedMethods"
-            value="obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris" />
+            value="getNumProcediments obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
@@ -1155,6 +1155,12 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:SeccioCriteria" xmlns:tns="http://seccio.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarPublicsObjectius" qname="operNS:llistarPublicsObjectius" xmlns:operNS="http://intf.ejb.fitxa.v2.api.rolsac.caib.es"
+            returnQName="llistarPublicsObjectiusReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.fitxa.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:PublicObjectiuCriteria" xmlns:tns="http://publicObjectiu.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="obtenirIcona" qname="operNS:obtenirIcona" xmlns:operNS="http://intf.ejb.fitxa.v2.api.rolsac.caib.es"
             returnQName="obtenirIconaReturn" returnType="rtns:ArxiuDTO" xmlns:rtns="http://arxiu.v2.api.rolsac.caib.es"
             soapAction="">
@@ -1191,7 +1197,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="obtenirImatge getNumUnitatsAdministratives llistarUnitatsAdministratives getNumDocuments getNumFetsVitals llistarSeccions llistarEnllacos llistarDocuments obtenirIcona getNumEnllacos llistarFetsVitals getNumSeccions obtenirBaner" />
+            value="llistarPublicsObjectius obtenirImatge getNumUnitatsAdministratives llistarUnitatsAdministratives getNumDocuments getNumFetsVitals llistarSeccions llistarEnllacos llistarDocuments obtenirIcona getNumEnllacos llistarFetsVitals getNumSeccions obtenirBaner" />
 
         <typeMapping xmlns:ns="http://seccio.v2.api.rolsac.caib.es" qname="ns:SeccioCriteria"
             type="java:es.caib.rolsac.api.v2.seccio.SeccioCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1713,6 +1719,12 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:DocumentCriteria" xmlns:tns="http://document.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarPublicsObjectius" qname="operNS:llistarPublicsObjectius" xmlns:operNS="http://intf.ejb.procediment.v2.api.rolsac.caib.es"
+            returnQName="llistarPublicsObjectiusReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.procediment.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:PublicObjectiuCriteria" xmlns:tns="http://publicObjectiu.v2.api.rolsac.caib.es" />
+        </operation>
         <operation name="getNumNormatives" qname="operNS:getNumNormatives" xmlns:operNS="http://intf.ejb.procediment.v2.api.rolsac.caib.es"
             returnQName="getNumNormativesReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema"
             soapAction="">
@@ -1746,7 +1758,7 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
         <parameter name="allowedMethods"
-            value="llistarFetsVitals getNumDocuments getNumTramits getNumFetsVitals llistarNormatives getNumMateries getNumNormatives llistarDocuments llistarTramits llistarMateries" />
+            value="llistarPublicsObjectius getNumTramits getNumMateries getNumFetsVitals llistarMateries llistarDocuments getNumNormatives llistarFetsVitals getNumDocuments llistarTramits llistarNormatives" />
 
         <typeMapping xmlns:ns="http://tramit.v2.api.rolsac.caib.es" qname="ns:TramitCriteria"
             type="java:es.caib.rolsac.api.v2.tramit.TramitCriteria" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
@@ -1790,7 +1802,19 @@
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
             <parameter qname="in1" type="tns:AgrupacioFetVitalCriteria" xmlns:tns="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
         </operation>
-        <parameter name="allowedMethods" value="getNumAgrupacions llistarAgrupacions" />
+        <operation name="llistarProcediments" qname="operNS:llistarProcediments" xmlns:operNS="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+            returnQName="llistarProcedimentsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:ProcedimentCriteria" xmlns:tns="http://procediment.v2.api.rolsac.caib.es" />
+        </operation>
+        <operation name="llistarFitxes" qname="operNS:llistarFitxes" xmlns:operNS="http://intf.ejb.publicObjectiu.v2.api.rolsac.caib.es"
+            returnQName="llistarFitxesReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.publicObjectiu.v2.api.rolsac.caib.es"
+            returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="">
+            <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
+            <parameter qname="in1" type="tns:FitxaCriteria" xmlns:tns="http://fitxa.v2.api.rolsac.caib.es" />
+        </operation>
+        <parameter name="allowedMethods" value="getNumAgrupacions llistarFitxes llistarAgrupacions llistarProcediments" />
 
         <arrayMapping xmlns:ns="http://ws.publicObjectiu.v2.api.rolsac.caib.es" qname="ns:ArrayOf_xsd_anyType"
             type="java:java.lang.Object[]" innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"

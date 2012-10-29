@@ -19,6 +19,8 @@ import es.caib.rolsac.api.v2.normativa.NormativaCriteria;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentQueryServiceAdapter;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.tramit.TramitCriteria;
 import es.caib.rolsac.api.v2.tramit.TramitQueryServiceAdapter;
@@ -29,7 +31,7 @@ public class ProcedimentQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
     }
 
     @Test
@@ -203,6 +205,20 @@ public class ProcedimentQueryServiceTest {
             List<DocumentQueryServiceAdapter> listDocumentQueryServiceAdapter = procediment
                     .llistarDocuments(new DocumentCriteria());
             Assert.assertTrue(listDocumentQueryServiceAdapter.size() == 5);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
+    
+    @Test
+    public void llistarPublicsObjectius() {
+        ProcedimentCriteria procedimentCriteria = new ProcedimentCriteria();
+        procedimentCriteria.setId("638506");
+        try {
+            ProcedimentQueryServiceAdapter procediment = rolsacQS.obtenirProcediment(procedimentCriteria);
+            Assert.assertNotNull(procediment);
+            List<PublicObjectiuQueryServiceAdapter> listPOQueryServiceAdapter = procediment.llistarPublicsObjectius(new PublicObjectiuCriteria());
+            Assert.assertTrue(listPOQueryServiceAdapter.size() == 4);
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }

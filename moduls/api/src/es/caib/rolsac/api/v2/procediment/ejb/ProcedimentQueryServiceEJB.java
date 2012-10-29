@@ -16,6 +16,7 @@ import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Tramite;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
@@ -34,6 +35,8 @@ import es.caib.rolsac.api.v2.normativa.NormativaDTO;
 import es.caib.rolsac.api.v2.normativa.NormativaQueryService.TIPUS_NORMATIVA;
 import es.caib.rolsac.api.v2.normativa.co.NormativaByProcedimientoCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
@@ -75,6 +78,8 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
     private static final String HQL_DOCUMENTOS_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".documentos";
     private static final String HQL_DOCUMENTOS_ALIAS = "d";
     private static final String HQL_TRADUCCIONES_ALIAS = "trad";
+    private static final String HQL_PUBLICO_OBJETIVO_CLASS = HQL_PROCEDIMIENTO_ALIAS + ".publicosObjetivo";
+    private static final String HQL_PUBLICO_OBJETIVO_ALIAS = "po";
 
     /**
      * @ejb.create-method
@@ -567,6 +572,54 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
         }
 
         return documentsDTOList;
+    }
+    
+    /**
+     * Obtiene listado de publicos objetivos del procedimiento.
+     * @param id
+     * @param poCriteria
+     * @return List<PublicObjectiuDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) {
+        List<PublicObjectiuDTO> poDTOList = new ArrayList<PublicObjectiuDTO>();
+        List<CriteriaObject> criteris;
+        Session session = null;
+
+        try {            
+            criteris = BasicUtils.parseCriterias(PublicObjectiuCriteria.class, HQL_PUBLICO_OBJETIVO_ALIAS, HQL_TRADUCCIONES_ALIAS, poCriteria);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
+            entities.add(new FromClause(HQL_PUBLICO_OBJETIVO_CLASS, HQL_PUBLICO_OBJETIVO_ALIAS));
+            QueryBuilder qb = new QueryBuilder(HQL_PUBLICO_OBJETIVO_ALIAS, entities, poCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+            
+            ProcedimentCriteria pc = new ProcedimentCriteria();
+            pc.setId(String.valueOf(id));
+            criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTO_ALIAS, pc);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<PublicoObjetivo> poResult = (List<PublicoObjetivo>) query.list();
+
+            for (PublicoObjetivo po : poResult) {
+                poDTOList.add((PublicObjectiuDTO) BasicUtils.entityToDTO(PublicObjectiuDTO.class,  po, poCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+        } finally {
+            close(session);
+        }
+
+        return poDTOList;
     }
     
 }

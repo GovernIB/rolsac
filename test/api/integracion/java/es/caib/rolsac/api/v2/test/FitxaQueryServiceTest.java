@@ -18,6 +18,8 @@ import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.general.BeanUtils;
 import es.caib.rolsac.api.v2.general.BeanUtils.STRATEGY;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuCriteria;
+import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuQueryServiceAdapter;
 import es.caib.rolsac.api.v2.rolsac.RolsacQueryService;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioQueryServiceAdapter;
@@ -30,7 +32,7 @@ public class FitxaQueryServiceTest {
 
     @Before
     public void setup() {
-        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.WS);
+        rolsacQS = (RolsacQueryService) BeanUtils.getAdapter("rolsac", STRATEGY.EJB);
     }
    
     @Test
@@ -214,4 +216,19 @@ public class FitxaQueryServiceTest {
             Assert.fail(e.toString());
         }
     }
+    
+    @Test
+    public void llistarPublicsObjectius() {
+        FitxaCriteria fitxaCriteria = new FitxaCriteria();
+        fitxaCriteria.setId("206971");
+        try {
+            FitxaQueryServiceAdapter fitxa = rolsacQS.obtenirFitxa(fitxaCriteria);
+            Assert.assertNotNull(fitxa);
+            List<PublicObjectiuQueryServiceAdapter> listPOQueryServiceAdapter = fitxa.llistarPublicsObjectius(new PublicObjectiuCriteria());
+            Assert.assertTrue(listPOQueryServiceAdapter.size() == 1);
+        } catch (QueryServiceException e) {
+            Assert.fail(e.toString());
+        }
+    }
+    
 }
