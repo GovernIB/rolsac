@@ -123,6 +123,7 @@
 
 
   <target name="clean" description="Destruye los directorios de trabajo">
+	<ant dir="moduls/api" target="clean" inheritall="false"/>
     <delete dir="${output.dir}" quiet="yes"/>
   </target>
 
