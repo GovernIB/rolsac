@@ -134,6 +134,13 @@
         <delete dir="${ejb.gen.etc}" failonerror="false" />
         <delete dir="${ejb.classes}" failonerror="false" />
         <delete dir="${ejb.doc.api}" failonerror="false" />
+    	<delete dir="${jar.src}">
+    		<include name="**/ws/*QueryServiceEJBRemote*"/>
+    		<include name="**/ws/*QueryServiceEJBRemoteService*"/>
+    		<include name="**/ws/*QueryServiceEJBRemoteServiceLocator*"/>
+    		<include name="**/ws/*WSSoapBindingImpl*"/>
+    		<include name="**/ws/*WSSoapBindingStub*"/>
+    	</delete>
     </target>
 	
     <!-- Crea tots els directoris de treball necessaris -->
