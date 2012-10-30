@@ -29,6 +29,7 @@ public class Ficha extends Classificable implements Indexable, Validable {
 	private Set<HechoVital> hechosVitales;
 	private String info;
 	private String responsable;
+	private Set<PublicoObjetivo> publicosObjetivo;
 	 
 
 	//Constructores
@@ -225,7 +226,22 @@ public class Ficha extends Classificable implements Indexable, Validable {
 	public void setResponsable(String responsable) {
 		this.responsable = responsable;
 	}
+	
+	public Set<PublicoObjetivo> getPublicosObjetivo() {
+		return publicosObjetivo;
+	}
+	public void setPublicosObjetivo(Set<PublicoObjetivo> publicosObjetivo) {
+		this.publicosObjetivo = publicosObjetivo;
+	}
 
+    public void addPublicosObjetivo(PublicoObjetivo publicosObjetivo){
+    	this.publicosObjetivo.add(publicosObjetivo);
+    }
+    
+    public void removePublicosObjetivo(PublicoObjetivo publicosObjetivo){
+    	this.publicosObjetivo.remove(publicosObjetivo);
+    }
+	
 	@Override
 	public String toString() {
 		return "Ficha [id=" + id + ", fechaPublicacion=" + fechaPublicacion

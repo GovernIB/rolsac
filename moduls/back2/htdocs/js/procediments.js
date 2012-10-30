@@ -280,6 +280,7 @@ function CLlistat(){
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fet_vital").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
+			dataVars_cercador += "&publicObjectiu=" + $("#cerca_publicObjectiu").val();
 		} else {
 
 			pagPagina_elm = pagPagina_llistat_elm;
@@ -361,6 +362,7 @@ function CDetall(){
 		urlParams = ModulNormativa.listaNormativas();
 		urlParams += "&" + ModulMateries.listaMaterias();
 		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
+		urlParams += "&" + ModulPublicObjectiu.listaPublics();
 		urlParams += "&" + ModulTramit.listaTramites();
 		that.guardaGenerico(urlParams);
 	}
@@ -457,6 +459,7 @@ function CDetall(){
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();
 		ModulNormativa.nuevo();
+		ModulPublicObjectiu.nuevo();
         EscriptoriNormativa.nuevo();
         
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").hide();
@@ -607,6 +610,7 @@ function CDetall(){
             */
 		ModulDocuments.inicializarDocuments(dada_node.documents);
 		ModulMateries.inicializarMaterias(dada_node.materies);
+		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
 		ModulFetsVitals.inicializarHechosVitales(dada_node.fetsVitals);
 		ModulNormativa.inicializarNormativas(dada_node.normatives);
 		

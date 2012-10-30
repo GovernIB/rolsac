@@ -1,5 +1,6 @@
 package org.ibit.rol.sac.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,6 +16,8 @@ public class PublicoObjetivo extends Traducible {
     private String codigoEstandar;
     private Set<AgrupacionHechoVital> agrupaciones;
     private Integer orden;
+    private Set fichas = new HashSet();
+    private Set procedimientosLocales  = new HashSet();
     
     public Long getId() {
         return id;
@@ -49,5 +52,21 @@ public class PublicoObjetivo extends Traducible {
 
 	public void setOrden(Integer orden) {
 		this.orden = orden;
+	}
+	
+    public Set getFichas() {
+		return fichas;
+	}
+
+	public void setFichas(Set fichas) {
+		this.fichas = fichas;
+	}
+
+	public Set getProcedimientosLocales() {
+		return procedimientosLocales;
+	}
+
+	public void setProcedimientosLocales(Set procedimientosLocales) {
+		this.procedimientosLocales = procedimientosLocales;
 	}
 }

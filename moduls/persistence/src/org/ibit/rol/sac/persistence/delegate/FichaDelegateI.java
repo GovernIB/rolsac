@@ -27,7 +27,7 @@ public interface FichaDelegateI {
 
 	public abstract List buscarFichas(String texto) throws DelegateException;
 	
-	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;
+	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;
 
 	public abstract List listarFichas() throws DelegateException;
 

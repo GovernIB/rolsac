@@ -31,6 +31,16 @@
                 <property name="palabrasclave" length="4000" column="TRP_PALCLA"/>
             </composite-element>
         </map>
+                <set name="fichas" cascade="none" inverse="true" lazy="true" table="RSC_POBFIC">
+            <key column="PFC_CODPOB" foreign-key="RSC_PFCPOB_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.Ficha" column="PFC_CODFIC" foreign-key="RSC_PFCFIC_FK" />
+        </set>
+        
+        <set name="procedimientosLocales" cascade="none" inverse="true" lazy="true" table="RSC_POBPRO" >
+            <key column="PPR_CODPOB" foreign-key="RSC_PPRPOB_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PPR_CODPRO" foreign-key="RSC_PPRRO_FK" />
+        </set>
+        
     </class>
     <query name="publico.byname">
         <![CDATA[select pub from PublicoObjetivo as pub, trad in pub.traducciones where trad.titulo = :titulo]]>

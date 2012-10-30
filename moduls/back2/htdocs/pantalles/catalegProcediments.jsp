@@ -22,6 +22,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_normativa.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_tramits.js'/>"></script>
 <!--<script type="text/javascript" src="<c:url value='/js/modul_fetsVitals.js'/>"></script>-->
@@ -133,6 +134,12 @@
     var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
     var txtNoHiHaMateriaSeleccionada = txtNoHiHa + " " + txtMateria.toLowerCase() + " " + txtSeleccionada.toLowerCase();
     var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries.toLowerCase() + " " + txtSeleccionades.toLowerCase();
+
+ 	// modul public objectiu
+    var txtPublic = "<spring:message code='txt.public_objectiu'/>";
+    var txtPublics = "<spring:message code='txt.publics_objectiu'/>";
+    var txtNoHiHaPublics = txtNoHiHa + " " + txtPublics;
+    var txtNoHiHaPublicsSeleccionats = txtNoHiHa + " " + txtPublics.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
     var txtNormativa = "<spring:message code='quadreControl.normativa'/>";
     var txtNormatives = "<spring:message code='quadreControl.normatives'/>";
@@ -505,6 +512,19 @@
                         <div class="fila">
                             <div class="element t25">
                                 <div class="etiqueta">
+                                    <label for="cerca_publicObjectiu"><spring:message code='camp.publicObjectiu'/></label>
+                                </div>
+                                <div class="control select">
+                                    <select id="cerca_publicObjectiu" name="cerca_publicObjectiu" class="publicObjectiu">
+                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
+                                        <c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu">
+                                            <option value='<c:out value="${publicObjectiu.id}" />'><c:out value="${publicObjectiu.nom}" /></option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="element t25">
+                                <div class="etiqueta">
                                     <label for="cerca_materia">Matèria</label>
                                 </div>
                                 <div class="control">
@@ -529,7 +549,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="element t50">
+                            <div class="element t25">
                                 <div class="etiqueta">
                                     <label for="cerca_familia"><spring:message code='camp.familia'/></label>
                                 </div>
@@ -1992,7 +2012,56 @@
                 </fieldset>
             </div>
             <!-- /modul -->
-            
+                        
+            <!-- /modul Public Objectiu -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='unitatadm.formulari.publics'/> *</legend>
+                    <div class="modul_continguts mostrat">
+                        
+                        <!-- modulPublicObjectiu -->
+                        <div class="ModulPublicObjectiu selectorChecks">
+                        
+                            <input name="modul_public_modificat" type="hidden" value="0" />
+                        
+                            <div class="seleccionats">
+                                <p class="info"><spring:message code='unitatadm.formulari.publics.noInfo'/>.</p>
+                                <div class="listaOrdenable"></div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.publics.gestiona'/></span></span></a>
+                                </div>
+                            </div>
+                            <div class="llistat">
+                                <ul>
+									<c:forEach items="${llistaPublicsObjectiu}" var="publicObjectiu" varStatus="i">
+                                        <c:choose>
+                                            <c:when test="${(i.count) % 2 == 0}">
+                                                <li class="par">
+                                            </c:when>
+                                            <c:otherwise>
+                                               <li class="impar">
+                                            </c:otherwise>
+                                        </c:choose>                                     
+                                          <label><span><c:out value="${publicObjectiu.nom}" /></span><input type="checkbox" value="<c:out value='${publicObjectiu.id}' />" /></label>
+                                        </li>                                                                                                               
+                                    </c:forEach>
+                                </ul>
+                                <div class="botonera">
+                                    <div class="btnGenerico">
+                                        <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+                                    </div>
+                                    <div class="btnGenerico">
+                                        <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulPublicObjectiu -->
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
             <!-- modul -->            
             <div id="modul_tramits" class="modul destacado">                               
                 <div class="dec1"></div>

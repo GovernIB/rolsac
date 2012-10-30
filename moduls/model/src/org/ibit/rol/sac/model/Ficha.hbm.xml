@@ -55,7 +55,13 @@
             <key column="FIH_CODFIC" foreign-key="RSC_FIHFIC_FK"/>
             <many-to-many class="org.ibit.rol.sac.model.HechoVital" column="FIH_CODHEV" foreign-key="RSC_FIHHEV_FK" />
         </set>
-
+        
+        <set name="publicosObjetivo" cascade="none" lazy="true" table="RSC_POBFIC" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="PFC_CODFIC" foreign-key="RSC_PFCFIC_FK"/>
+            <many-to-many class="org.ibit.rol.sac.model.PublicoObjetivo" column="PFC_CODPOB" foreign-key="RSC_PFCPOB_FK" />
+        </set>
+        
         <set name="fichasua" cascade="all" lazy="false" batch-size="200">
             <cache usage="read-write"/>
             <key column="FUA_CODFIC" foreign-key="RSC_FUAFIC_FK"/>

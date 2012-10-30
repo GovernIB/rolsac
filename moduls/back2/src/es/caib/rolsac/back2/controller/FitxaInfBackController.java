@@ -32,10 +32,12 @@ import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionEnlace;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
+import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionSeccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.EnlaceDTO;
@@ -52,6 +54,7 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.http.HttpHeaders;
@@ -118,6 +121,21 @@ public class FitxaInfBackController extends PantallaBaseController {
         	
         	model.put("llistaFetsVitals", llistaFetsVitalsDTO);
         	
+        	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();  
+        	List<PublicoObjetivo> llistaPublicsObjectiu = new ArrayList<PublicoObjetivo>();                
+        	List<IdNomDTO> llistaPublicsObjectiuDTO = new ArrayList<IdNomDTO>();
+        	
+        	llistaPublicsObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
+
+        	
+        	for (PublicoObjetivo publicObjectiu : llistaPublicsObjectiu) {
+        		TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
+        		llistaPublicsObjectiuDTO.add(new IdNomDTO(publicObjectiu.getId(), 
+        				tpo == null ? null : tpo.getTitulo()));
+        	}
+        	
+        	model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);
+        	
         } catch (DelegateException dEx) {
         	if (dEx.isSecurityException()) {
         		// model.put("error", "permisos");//TODO:mensajes de error
@@ -150,6 +168,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         UnidadAdministrativa ua = null;
         Long fetVital = null;
         Long materia = null;
+        Long publicObjectiu = null;
         
         
 //        if (session.getAttribute("unidadAdministrativa") == null) {
@@ -182,6 +201,10 @@ public class FitxaInfBackController extends PantallaBaseController {
             materia = Long.parseLong(request.getParameter("materia"));
         } catch (NumberFormatException e){}
         
+        try {
+        	publicObjectiu = Long.parseLong(request.getParameter("publicObjectiu"));
+        } catch (NumberFormatException e){}
+
         try {
             fetVital = Long.parseLong(request.getParameter("fetVital"));
         } catch (NumberFormatException e){}
@@ -230,7 +253,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         try {
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, uaFilles, uaMeves, campoOrdenacion, orden);           
+            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden);                      
                         
             for (Ficha fitxa : llistaFitxes) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
@@ -265,6 +288,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         Map<String, Object> resultats = new HashMap<String, Object>();
         List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
         List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+        List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
         List<FichaUADTO> llistaFichaUADTO = new ArrayList<FichaUADTO>();
         List<EnlaceDTO> llistaEnllassosDTO = new ArrayList<EnlaceDTO>();
         
@@ -431,6 +455,22 @@ public class FitxaInfBackController extends PantallaBaseController {
                 resultats.put("fetsVitals", null);
             }
             
+            //Publics Objectiu
+            
+            if (fitxa.getPublicosObjetivo() != null) {             
+                
+                for(PublicoObjetivo publicObj : fitxa.getPublicosObjetivo()){
+                	TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) publicObj.getTraduccion(lang);
+                    llistaPublicObjectiuDTO.add(new IdNomDTO(publicObj.getId(), 
+                    		tpob == null ? "" : tpob.getTitulo()));                
+                   }
+                
+                resultats.put("publicsObjectiu", llistaPublicObjectiuDTO);
+            
+            } else {
+                resultats.put("publicsObjectiu", null);
+            }
+            
             //Relaci� Ficha-Seccio-UA
             
             if (fitxa.getFichasua() != null){
@@ -540,7 +580,11 @@ public class FitxaInfBackController extends PantallaBaseController {
                 result = new IdNomDTO(-3l, error);
                 return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
             }
-            
+            if (valoresForm.get("publicsObjectiu") == null || valoresForm.get("publicsObjectiu").equals("")) {
+            	error = messageSource.getMessage("fitxes.missatge.es_necessari_public", null, request.getLocale());
+                result = new IdNomDTO(-3l, error);
+                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+            }
             // Tiempos para trazas
             Date startTrace;
             long execTime;
@@ -589,6 +633,7 @@ public class FitxaInfBackController extends PantallaBaseController {
                 fitxa.setEnlaces(fitxaOld.getEnlaces());
                 fitxa.setMaterias(fitxaOld.getMaterias());
                 fitxa.setHechosVitales(fitxaOld.getHechosVitales());
+                fitxa.setPublicosObjetivo(fitxaOld.getPublicosObjetivo());
 			} 
 			
 			if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
@@ -746,7 +791,43 @@ public class FitxaInfBackController extends PantallaBaseController {
                 }
             }
             
+            //Public Objectiu
             
+            if (isModuloModificado("modul_public_modificat", valoresForm)){
+            	if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))){
+	            	PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+	                Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
+	                String[] codisPublicsNous = valoresForm.get("publicsObjectiu").split(",");
+	                
+	                if (edicion){
+	                    for (int i = 0; i<codisPublicsNous.length; i++){
+	                        for (PublicoObjetivo pob: fitxaOld.getPublicosObjetivo()){
+	                            if(pob.getId().equals(ParseUtil.parseLong(codisPublicsNous[i]))){
+	                            	publicsNous.add(pob);
+	                            	codisPublicsNous[i] = null;
+	                                break;
+	                            }
+	                        }                            
+	                    }                         
+	                }                    
+	                
+	                for (String codiPublic: codisPublicsNous){
+	                    if (codiPublic != null){
+	                        Long codi = ParseUtil.parseLong(codiPublic);
+	                        log.debug("Inici de ObtenirPublicObjectiu(" + codi + ")");
+	                        startTrace = new Date();
+	                        publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(codi));
+	                        execTime = new Date().getTime() - startTrace.getTime();
+	                        log.debug("Temps d'execucio de ObtenirPublicObjectiu(" + codi + "): " + execTime + " milisegons.");
+	                    }                        
+	                }
+	                
+	                fitxa.setPublicosObjetivo(publicsNous);   
+            	} else {
+                    fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+                }
+            }
+               
            // Documents
 	        Documento document;
 	        DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();

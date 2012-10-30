@@ -256,6 +256,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                 Hibernate.initialize(ficha.getEnlaces());
                 Hibernate.initialize(ficha.getMaterias());
                 Hibernate.initialize(ficha.getHechosVitales());
+                Hibernate.initialize(ficha.getPublicosObjetivo());
                 Hibernate.initialize(ficha.getFichasua());
                 Hibernate.initialize(ficha.getBaner());
                 Hibernate.initialize(ficha.getImagen());
@@ -401,7 +402,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {        
+    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {                
         Session session = getSession();
         
         try {           
@@ -412,7 +413,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             List params = new ArrayList();
             String i18nQuery = "";
             String fetVitalQuery = "";            
-            String materiaQuery = "";            
+            String materiaQuery = "";    
+            String publicQuery = "";   
             String mainQuery = "select distinct ficha from Ficha as ficha , ficha.traducciones as trad, ficha.fichasua as fsua ";
             
             if (traduccion.get("idioma") != null) {
@@ -478,8 +480,14 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
               materiaQuery = " and mat.id = ? "; 
               params.add(idMateria);
             }
-                       
-            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + orderBy);
+            
+            if(idPublic != null){
+                mainQuery += ",ficha.publicosObjetivo as pob ";  
+                publicQuery = " and pob.id = ? "; 
+                params.add(idPublic);
+              }
+            
+            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
                 query.setParameter(i, o);
