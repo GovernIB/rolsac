@@ -527,8 +527,9 @@
 		  
 	  <target name="sonar-java">
 	    <!-- list of mandatories Sonar properties -->
+	  	
 	    <property name="sonar.modules" 
-	    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml" />
+    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml,moduls/api/build.xml"/>
 	 
 	    <!-- list of optional Sonar properties -->
 <!--

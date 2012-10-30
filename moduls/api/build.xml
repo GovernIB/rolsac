@@ -129,7 +129,7 @@
 	</target>	
 		
 	<!-- Netetja tots els directoris de treball del API-->
-    <target name="clean">
+	<target name="clean">
         <delete dir="${ejb.gen.src}" failonerror="false" />
         <delete dir="${ejb.gen.etc}" failonerror="false" />
         <delete dir="${ejb.classes}" failonerror="false" />
@@ -310,9 +310,6 @@
 	<!-- <target name="main" depends="jar.jar" description="Construye el jar"/> -->
 	<target name="main" depends="ejb.client, ejb.server" description="Construye el jar"/>	
 
-	<target name="module.package" depends="ejb.client, ejb.server"/>
-	<path id="module.classpath" refid="jar.class.path"/>
-	<property name="module.classes"  location="${jar.classes}"/>
 	
 	<!-- Tasques i configuracio del client de WS -->
 	<property name="ws.etc.wsdl" value="${jar.etc}/wsdl"/>
@@ -583,4 +580,13 @@
 		</axis-wsdl2java>	
     	
     </target>    
+	
+	<target name="module.package" depends="ejb.client, ejb.server"/>
+	<path id="module.classpath" refid="jar.class.path"/>
+	<property name="module.classes"  location="${jar.classes}"/>
+
+	<import file="../build_test.xml"/>
+	<import file="../build_sonar.xml"/>
+	
+	
 </project>
