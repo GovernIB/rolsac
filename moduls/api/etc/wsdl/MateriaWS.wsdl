@@ -138,6 +138,7 @@
 							<element name="urlVideo" nillable="true" type="xsd:string" />
 							<element name="validacion" nillable="true" type="xsd:string" />
                             <element name="publicoObjetivo" nillable="true" type="xsd:string" />
+                            <element name="seccion" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

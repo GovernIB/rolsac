@@ -10,7 +10,10 @@ public class BeanUtils {
     private static final String ADAPTER_INFIX = "QueryService";
     private static final String ADAPTER_SUFIX = "Adapter";
     private static final String SPRING_CONTEXT_CLASSPATH = "classpath*:es/caib/rolsac/api/v2/resources/sac-api-context.xml";
-    private static final String AXIS_CLIENT_CONFIG = "es/caib/rolsac/api/v2/resources/sac-api-client-config.wsdd";
+    
+    // Uncomment for JUnit tests.
+    // private static final String AXIS_CLIENT_CONFIG = "es/caib/rolsac/api/v2/resources/sac-api-client-config.wsdd";
+    
     private static ApplicationContext ctx;
     
     private BeanUtils() {
@@ -18,7 +21,10 @@ public class BeanUtils {
     
     public static ApplicationContext getApplicationContextInstance() {
         if (ctx == null) {
-            System.setProperty("axis.ClientConfigFile", AXIS_CLIENT_CONFIG);
+            
+            // Uncomment for JUnit tests.
+            // System.setProperty("axis.ClientConfigFile", AXIS_CLIENT_CONFIG);
+            
             ctx = new ClassPathXmlApplicationContext(SPRING_CONTEXT_CLASSPATH);
         }
         return ctx;
