@@ -14,17 +14,17 @@ public class FitxaByPublicoObjetivoCriteria extends ByLongCriteria {
     }
 
     /**
-     * Use case: ... AND p IN (    // p = this.field 
-     *     SELECT po_.procedimientosLocales.elements
-     *     FROM PublicoObjetivo AS po_ 
-     *     WHERE po_.id IN (a1, a2, ...) 
+     * Use case: ... AND f IN (    // f = this.field
+     *     SELECT po_.fichas.elements
+     *     FROM PublicoObjetivo AS po_
+     *     WHERE po_.id IN (a1, a2, ...)
      * )
-     * 
+     *
      * @param qb
      */
     @Override
     public void extendCriteria(QueryBuilder qb) {
-        StringBuilder query = new StringBuilder(" SELECT po_.procedimientosLocales.elements ")
+        StringBuilder query = new StringBuilder(" SELECT po_.fichas.elements ")
                 .append("FROM PublicoObjetivo AS po_ ")
                 .append("WHERE po_.id ");
         CriteriaObjectUtil.buildInSelectQuery(query, this);
