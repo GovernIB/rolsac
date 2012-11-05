@@ -3,7 +3,7 @@
 <script type="text/javascript">
 
 	// idiomes configurats a l'aplicació
-	var idiomesAplicacio = [<%= "\"" + System.getProperty("es.caib.rolsac.idiomes").replace(",", "\",\"") + "\""%>];
+	var idiomesAplicacio = "<c:out value='${idiomes_aplicacio_string}'/>";
 
     // pagines comuns
     var pagArrel = '<c:url value="/" />';
