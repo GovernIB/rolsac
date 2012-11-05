@@ -856,7 +856,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	            /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
 	             * En el primer caso es bastante probable que se repitan la mayoria de normativas.
 	             */
-	            if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives")) && isModuloModificado("modulo_normativas_modificado",request)){
+	            if (isModuloModificado("modulo_normativas_modificado",request)){
+	              if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))){
 	                NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 	                Set<Normativa> normativesNoves = new HashSet<Normativa>();
 	                String[] codisNormativesNoves= request.getParameter("normatives").split(",");
@@ -879,7 +880,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	                    }                        
 	                }
 	                
-	                procediment.setNormativas(normativesNoves);                                   
+	                procediment.setNormativas(normativesNoves);   
+	              }else{	                
+	                procediment.setNormativas(new HashSet<Normativa>());
+	              }
 	            }
 	            // Fin normativas
 	            
