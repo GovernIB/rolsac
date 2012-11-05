@@ -127,7 +127,8 @@
 							<element name="codigoEstandar" nillable="true" type="xsd:string" />
 							<element name="t_nombre" nillable="true" type="xsd:string" />
 							<element name="t_presentacion" nillable="true" type="xsd:string" />
-							<element name="t_abreviatura" nillable="true" type="xsd:string" />							
+							<element name="t_abreviatura" nillable="true" type="xsd:string" />	
+                            <element name="seccion" nillable="true" type="xsd:string" />						
 						</sequence>
 					</extension>
 				</complexContent>

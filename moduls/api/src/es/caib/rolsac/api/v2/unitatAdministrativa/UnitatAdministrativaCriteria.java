@@ -36,6 +36,8 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
 
     private java.lang.String t_abreviatura;
 
+    private java.lang.String seccion;
+
     public UnitatAdministrativaCriteria() {
     }
 
@@ -58,7 +60,8 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
            java.lang.String codigoEstandar,
            java.lang.String t_nombre,
            java.lang.String t_presentacion,
-           java.lang.String t_abreviatura) {
+           java.lang.String t_abreviatura,
+           java.lang.String seccion) {
         super(
             id,
             idioma,
@@ -79,6 +82,7 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         this.t_nombre = t_nombre;
         this.t_presentacion = t_presentacion;
         this.t_abreviatura = t_abreviatura;
+        this.seccion = seccion;
     }
 
 
@@ -361,6 +365,26 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         this.t_abreviatura = t_abreviatura;
     }
 
+
+    /**
+     * Gets the seccion value for this UnitatAdministrativaCriteria.
+     * 
+     * @return seccion
+     */
+    public java.lang.String getSeccion() {
+        return seccion;
+    }
+
+
+    /**
+     * Sets the seccion value for this UnitatAdministrativaCriteria.
+     * 
+     * @param seccion
+     */
+    public void setSeccion(java.lang.String seccion) {
+        this.seccion = seccion;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof UnitatAdministrativaCriteria)) return false;
@@ -414,7 +438,10 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
               this.t_presentacion.equals(other.getT_presentacion()))) &&
             ((this.t_abreviatura==null && other.getT_abreviatura()==null) || 
              (this.t_abreviatura!=null &&
-              this.t_abreviatura.equals(other.getT_abreviatura())));
+              this.t_abreviatura.equals(other.getT_abreviatura()))) &&
+            ((this.seccion==null && other.getSeccion()==null) || 
+             (this.seccion!=null &&
+              this.seccion.equals(other.getSeccion())));
         __equalsCalc = null;
         return _equals;
     }
@@ -467,6 +494,9 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         }
         if (getT_abreviatura() != null) {
             _hashCode += getT_abreviatura().hashCode();
+        }
+        if (getSeccion() != null) {
+            _hashCode += getSeccion().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -559,6 +589,12 @@ public class UnitatAdministrativaCriteria  extends es.caib.rolsac.api.v2.general
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("t_abreviatura");
         elemField.setXmlName(new javax.xml.namespace.QName("", "t_abreviatura"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("seccion");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "seccion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
