@@ -673,6 +673,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setOrganResolutori(procedimentOld.getOrganResolutori());
 				procediment.setMaterias(procedimentOld.getMaterias());
 				procediment.setPublicosObjetivo(procedimentOld.getPublicosObjetivo());
+				procediment.setNormativas(procedimentOld.getNormativas());
 //				} else {
 //					// A los nuevos procedimientos se les asigna la UA de la miga de pan.
 //					procediment.setUnidadAdministrativa(ua);
@@ -856,30 +857,34 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             /* Para hacer menos accesos a BBDD se comprueba si es edicion o no. 
              * En el primer caso es bastante probable que se repitan la mayoria de normativas.
              */
-            if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives")) && isModuloModificado("modulo_normativas_modificado",request)){
-                NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-                Set<Normativa> normativesNoves = new HashSet<Normativa>();
-                String[] codisNormativesNoves= request.getParameter("normatives").split(",");
-                
-                if (edicion){
-                    for (int i = 0; i < codisNormativesNoves.length; i++){
-                        for (Normativa normativa: procedimentOld.getNormativas()){
-                            if(normativa.getId().equals(Long.valueOf(codisNormativesNoves[i]))) { // normativa ya existente
-                            	normativesNoves.add(normativa);
-                                codisNormativesNoves[i] = null;
-                                break;
-                            }
-                        }                            
-                    }                         
-                }                    
-                
-                for (String codiNormativa: codisNormativesNoves){
-                    if (codiNormativa != null){
-                    	normativesNoves.add(normativaDelegate.obtenerNormativa(Long.valueOf(codiNormativa)));
-                    }                        
-                }
-                
-                procediment.setNormativas(normativesNoves);                                   
+            if (isModuloModificado("modulo_normativas_modificado",request)){
+              if (request.getParameter("normatives") != null && !"".equals(request.getParameter("normatives"))){
+                  NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+                  Set<Normativa> normativesNoves = new HashSet<Normativa>();
+                  String[] codisNormativesNoves= request.getParameter("normatives").split(",");
+                  
+                  if (edicion){
+                      for (int i = 0; i < codisNormativesNoves.length; i++){
+                          for (Normativa normativa: procedimentOld.getNormativas()){
+                              if(normativa.getId().equals(Long.valueOf(codisNormativesNoves[i]))) { // normativa ya existente
+                              	normativesNoves.add(normativa);
+                                  codisNormativesNoves[i] = null;
+                                  break;
+                              }
+                          }                            
+                      }                         
+                  }                    
+                  
+                  for (String codiNormativa: codisNormativesNoves){
+                      if (codiNormativa != null){
+                      	normativesNoves.add(normativaDelegate.obtenerNormativa(Long.valueOf(codiNormativa)));
+                      }                        
+                  }
+                  
+                  procediment.setNormativas(normativesNoves);   
+              }else {
+                procediment.setNormativas(new HashSet<Normativa>());
+              }
             }
             // Fin normativas
             
