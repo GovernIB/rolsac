@@ -241,26 +241,58 @@
                     <div class="modul_continguts mostrat">                              
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop" >
+							<c:if test="${loop.first}">
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+							</c:if>
+							
+								<li class="idioma">
+								<a href="javascript:;" class="<c:out value="${lang}"/>">
+								<c:choose>
+									<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/>										
+									</c:when>
+									
+									<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/>			
+									</c:when>
+									
+									<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/>
+									</c:when>
+									
+									<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/>										
+									</c:when>
+									
+									<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/>										
+									</c:when>																	
+								</c:choose>
+								</a></li>								
+								
+							<c:if test="${loop.last}">
                             </ul>
+							</c:if>							
+							</c:forEach>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							<c:if test="${loop.first}">
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+							</c:if>
+                                <div class="idioma <c:out value="${lang}"/>">
                                     <div class="fila">                              
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_descripcio_ca"><spring:message code='edifici.formulari.descripcio'/></label>
+                                                <label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='edifici.formulari.descripcio'/></label>
                                             </div>
                                             <div class="control">                           
-                                                <input id="item_descripcio_ca" name="item_descripcio_ca" type="text" class="nou" />
+                                                <input id="item_descripcio_<c:out value="${lang}"/>" name="item_descripcio_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>                                      
                                         </div>                      
                                     </div>
+									
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
@@ -271,6 +303,7 @@
                                             </div>
                                         </div>
                                     </div>
+									
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">
@@ -289,6 +322,7 @@
                                             </div>
                                         </div>
                                     </div>
+									
                                     <div class="fila">
                                         <div class="element t50">
                                             <div class="etiqueta">
@@ -318,294 +352,16 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">                              
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_es"><spring:message code='edifici.formulari.descripcio'/></label>
-                                            </div>
-                                            <div class="control">                           
-                                                <input id="item_descripcio_es" name="item_descripcio_es" type="text" class="nou" />
-                                            </div>                                      
-                                        </div>                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_direccio_es"><spring:message code='edifici.formulari.direccio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_direccio_es" name="item_direccio_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_postal_es"><spring:message code='edifici.formulari.codi_postal'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_postal_es" name="item_codi_postal_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_poblacio_es"><spring:message code='edifici.formulari.poblacio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_poblacio_es" name="item_poblacio_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_latitud_es"><spring:message code='edifici.formulari.latitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_latitud_es" name="item_latitud_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud"><spring:message code='edifici.formulari.longitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_longitud_es" name="item_longitud_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud_es">&nbsp;</label>
-                                            </div>
-                                            <span class="btnGenerico">
-                                                <a href="javascript:carregarCoordenades('<c:url value="/pantalles/popCoordenades.do"/>','popCoordenades','item_id','item_latitud','item_longitud');" class="btn coordenades">
-                                                 <span><span><spring:message code='boto.coordenades'/></span></span>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">                              
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_en"><spring:message code='edifici.formulari.descripcio'/></label>
-                                            </div>
-                                            <div class="control">                           
-                                                <input id="item_descripcio_en" name="item_descripcio_en" type="text" class="nou" />
-                                            </div>                                      
-                                        </div>                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_direccio_en"><spring:message code='edifici.formulari.direccio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_direccio_en" name="item_direccio_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_postal_en"><spring:message code='edifici.formulari.codi_postal'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_postal_en" name="item_codi_postal_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_poblacio_en"><spring:message code='edifici.formulari.poblacio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_poblacio_en" name="item_poblacio_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_latitud_en"><spring:message code='edifici.formulari.latitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_latitud_en" name="item_latitud_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud"><spring:message code='edifici.formulari.longitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_longitud_en" name="item_longitud_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud_en">&nbsp;</label>
-                                            </div>
-                                            <span class="btnGenerico">
-                                                <a href="javascript:carregarCoordenades('<c:url value="/pantalles/popCoordenades.do"/>','popCoordenades','item_id','item_latitud','item_longitud');" class="btn coordenades">
-                                                 <span><span><spring:message code='boto.coordenades'/></span></span>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">                              
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_de"><spring:message code='edifici.formulari.descripcio'/></label>
-                                            </div>
-                                            <div class="control">                           
-                                                <input id="item_descripcio_de" name="item_descripcio_de" type="text" class="nou" />
-                                            </div>                                      
-                                        </div>                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_direccio_de"><spring:message code='edifici.formulari.direccio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_direccio_de" name="item_direccio_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_postal_de"><spring:message code='edifici.formulari.codi_postal'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_postal_de" name="item_codi_postal_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_poblacio_de"><spring:message code='edifici.formulari.poblacio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_poblacio_de" name="item_poblacio_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_latitud_de"><spring:message code='edifici.formulari.latitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_latitud_de" name="item_latitud_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud"><spring:message code='edifici.formulari.longitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_longitud_de" name="item_longitud_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud_de">&nbsp;</label>
-                                            </div>
-                                            <span class="btnGenerico">
-                                                <a href="javascript:carregarCoordenades('<c:url value="/pantalles/popCoordenades.do"/>','popCoordenades','item_id','item_latitud','item_longitud');" class="btn coordenades">
-                                                 <span><span><spring:message code='boto.coordenades'/></span></span>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">                              
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_fr"><spring:message code='edifici.formulari.descripcio'/></label>
-                                            </div>
-                                            <div class="control">                           
-                                                <input id="item_descripcio_fr" name="item_descripcio_fr" type="text" class="nou" />
-                                            </div>                                      
-                                        </div>                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_direccio_fr"><spring:message code='edifici.formulari.direccio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_direccio_fr" name="item_direccio_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_postal_fr"><spring:message code='edifici.formulari.codi_postal'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_postal_fr" name="item_codi_postal_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_poblacio_fr"><spring:message code='edifici.formulari.poblacio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_poblacio_fr" name="item_poblacio_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_latitud_fr"><spring:message code='edifici.formulari.latitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_latitud_fr" name="item_latitud_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud"><spring:message code='edifici.formulari.longitud'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_longitud_fr" name="item_longitud_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50">
-                                            <div class="etiqueta">
-                                                <label for="item_longitud_fr">&nbsp;</label>
-                                            </div>
-                                            <span class="btnGenerico">
-                                                <a href="javascript:carregarCoordenades('<c:url value="/pantalles/popCoordenades.do"/>','popCoordenades','item_id','item_latitud','item_longitud');" class="btn coordenades">
-                                                 <span><span><spring:message code='boto.coordenades'/></span></span>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /fr -->
+                            <c:if test="${loop.last}">    
                             </div>
+							</c:if>
+							</c:forEach>
                         </div>
                         <!-- /fila -->
                     </div>                          
                 </fieldset>                 
             </div>
-            <!-- /modul -->
+            <!-- /modul -->		
             <!-- modul -->
             <div class="modul">
                 <fieldset>

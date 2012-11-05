@@ -32,26 +32,35 @@
                         <!-- fila -->
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
+                            
                             <ul class="idiomes">
-                                <li class="idioma">
-                                    <a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a>
-                                </li>
-                                <li class="idioma">
-                                    <a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a>
-                                </li>
-                                <li class="idioma">
-                                    <a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a>
-                                </li>
-                                <li class="idioma">
-                                    <a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a>
-                                </li>
-                                <li class="idioma">
-                                    <a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a>
-                                </li>
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+								<li class="idioma">
+									<a href="javascript:;" class="<c:out value='${lang}'/>">
+									<c:choose>
+										<c:when test="${lang eq 'ca'}">
+											<spring:message code='txt.idioma.ca'/>			
+										</c:when>
+										<c:when test="${lang eq 'es'}">
+											<spring:message code='txt.idioma.es'/>			
+										</c:when>
+										<c:when test="${lang eq 'en'}">
+											<spring:message code='txt.idioma.en'/>			
+										</c:when>
+										<c:when test="${lang eq 'fr'}">
+											<spring:message code='txt.idioma.fr'/>			
+										</c:when>
+										<c:when test="${lang eq 'de'}">
+											<spring:message code='txt.idioma.de'/>			
+										</c:when>										
+									</c:choose>
+									</a>
+								</li>								
+								</c:forEach>
                             </ul>
-                            <div class="idiomes">
-                            <!-- ca -->
-                                <div class="idioma ca"> 
+                            <div class="idiomes">															
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+                                <div class="idioma <c:out value='${lang}'/>"> 
                                     <div class="fila">
                                         <div class="element t50p">                                      
                                             <div class="etiqueta"><label for="item_codi_estandar"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
@@ -63,10 +72,10 @@
                                     <div class="fila">
                                         <div class="element t75p">
                                             <div class="etiqueta">
-                                                <label for="item_nom_ca"><spring:message code='unitatadm.formulari.nom'/></label>
+                                                <label for="item_nom_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.nom'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_ca" name="item_nom_ca" type="text" />
+                                                <input id="item_nom_<c:out value='${lang}'/>" name="item_nom_<c:out value='${lang}'/>" type="text" />
                                             </div>
                                         </div>
                                         <div id="caja_item_clave_primaria" class="element t25p">
@@ -80,23 +89,23 @@
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_presentacio_ca"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
+                                            <div class="etiqueta"><label for="item_presentacio_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_presentacio_ca" name="item_presentacio_ca" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+                                                <textarea id="item_presentacio_<c:out value='${lang}'/>" name="item_presentacio_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
                                             </div>
                                         </div>
                                     </div>  
                                     <div class="fila">
                                         <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_abreviatura_ca"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
+                                            <div class="etiqueta"><label for="item_abreviatura_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
                                             <div class="control">
-                                                <input id="item_abreviatura_ca" name="item_abreviatura_ca" type="text" />
+                                                <input id="item_abreviatura_<c:out value='${lang}'/>" name="item_abreviatura_<c:out value='${lang}'/>" type="text" />
                                             </div>
                                         </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_url_ca"><spring:message code='unitatadm.formulari.url'/></label></div>
+                                        <div class="element t50p">										
+                                            <div class="etiqueta"><label for="item_url_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.url'/></label></div>
                                             <div class="control">
-                                                <input id="item_url_ca" name="item_url_ca" type="text" />
+                                                <input id="item_url_<c:out value='${lang}'/>" name="item_url_<c:out value='${lang}'/>" type="text" />
                                             </div>
                                         </div>
                                     </div>
@@ -114,265 +123,10 @@
                                         </div>                                          
                                     </div>      
                                 </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_codi_estandar_es"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
-                                            <div class="control">
-                                                <input id="item_codi_estandar_es" name="item_codi_estandar_es" type="text" />
-                                            </div>                                          
-                                        </div>                                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t75p">
-                                            <div class="etiqueta"><label for="item_nom_es"><spring:message code='unitatadm.formulari.nom'/></label></div>
-                                            <div class="control">
-                                                <input id="item_nom_es" name="item_nom_es" type="text" />
-                                            </div>
-                                        </div>
-                                        <div id="caja_item_clave_primaria_es" class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_clave_primaria_es"><spring:message code='camp.clau_primaria'/></label>                                                
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_clave_primaria_es" name="item_clave_primaria_es" type="text" readonly="readonly" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_presentacio_es"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_es" name="item_presentacio_es" style="width:100%" rows="6" class="rich complexe nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_abreviatura_es"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
-                                            <div class="control">
-                                                <input id="item_abreviatura_es" name="item_abreviatura_es" type="text" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_url_es"><spring:message code='unitatadm.formulari.url'/></label></div>
-                                            <div class="control">
-                                                <input id="item_url_es" name="item_url_es" type="text" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_espai_territorial_es"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
-                                            <div class="control select">                                                
-                                                <select id="item_espai_territorial_es" name="item_espai_territorial_es">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
-                                                        <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>  
-                                    </div>                                    
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_codi_estandar_en"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
-                                            <div class="control">
-                                                <input id="item_codi_estandar_en" name="item_codi_estandar_en" type="text" />
-                                            </div>                                          
-                                        </div>                                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t75p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_en"><spring:message code='unitatadm.formulari.nom'/></label>
-                                                
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_en" name="item_nom_en" type="text" />
-                                            </div>                                            
-                                        </div>
-                                        <div id="caja_item_clave_primaria_en" class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_clave_primaria_en"><spring:message code='camp.clau_primaria'/></label>                                                
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_clave_primaria_en" name="item_clave_primaria_en" type="text" readonly="readonly"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_presentacio_en"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_en" name="item_presentacio_en" style="width:100%" rows="6" class="rich complexe nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_abreviatura_en"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
-                                            <div class="control">
-                                                <input id="item_abreviatura_en" name="item_abreviatura_en" type="text" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_url_en"><spring:message code='unitatadm.formulari.url'/></label></div>
-                                            <div class="control">
-                                                <input id="item_url_en" name="item_url_en" type="text" />
-                                            </div>  
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_espai_territorial_en"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
-                                            <div class="control select">                                                
-                                                <select id="item_espai_territorial_en" name="item_espai_territorial_en">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
-                                                        <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>  
-                                    </div>
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_codi_estandar_de"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
-                                            <div class="control">
-                                                <input id="item_codi_estandar_de" name="item_codi_estandar_de" type="text" />
-                                            </div>                                          
-                                        </div>                                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t75p">
-                                            <div class="etiqueta"><label for="item_nom_de"><spring:message code='unitatadm.formulari.nom'/></label></div>
-                                            <div class="control">
-                                                <input id="item_nom_de" name="item_nom_de" type="text" />
-                                            </div>
-                                        </div>
-                                        <div id="caja_item_clave_primaria_de" class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_clave_primaria_de"><spring:message code='camp.clau_primaria'/></label>                                                
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_clave_primaria_de" name="item_clave_primaria_de" type="text" readonly="readonly"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_presentacio_de"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_de" name="item_presentacio_de" style="width:100%" rows="6" class="rich complexe nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_abreviatura_de"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
-                                            <div class="control">
-                                                <input id="item_abreviatura_de" name="item_abreviatura_de" type="text" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_url_de"><spring:message code='unitatadm.formulari.url'/></label></div>
-                                            <div class="control">
-                                                <input id="item_url_de" name="item_url_de" type="text" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_espai_territorial_de"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
-                                            <div class="control select">                                                
-                                                <select id="item_espai_territorial_de" name="item_espai_territorial_de">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
-                                                        <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>  
-                                    </div>                                    
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_codi_estandar_fr"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
-                                            <div class="control">
-                                                <input id="item_codi_estandar_fr" name="item_codi_estandar_fr" type="text" />
-                                            </div>                                          
-                                        </div>                                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t75p">
-                                            <div class="etiqueta"><label for="item_nom_fr"><spring:message code='unitatadm.formulari.nom'/></label></div>
-                                            <div class="control">
-                                                <input id="item_nom_fr" name="item_nom_fr" type="text" />
-                                            </div>
-                                        </div>
-                                        <div id="caja_item_clave_primaria_fr" class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_clave_primaria_fr"><spring:message code='camp.clau_primaria'/></label>                                                
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_clave_primaria_fr" name="item_clave_primaria_fr" type="text" readonly="readonly"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_presentacio_fr"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_presentacio_fr" name="item_presentacio_fr" style="width:100%" rows="6" class="rich complexe nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>  
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_abreviatura_fr"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
-                                            <div class="control">
-                                                <input id="item_abreviatura_fr" name="item_abreviatura_fr" type="text" />
-                                            </div>
-                                        </div>
-                                        <div class="element t50p">
-                                            <div class="etiqueta"><label for="item_url_fr"><spring:message code='unitatadm.formulari.url'/></label></div>
-                                            <div class="control">
-                                                <input id="item_url_fr" name="item_url_fr" type="text" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t50p">                                      
-                                            <div class="etiqueta"><label for="item_espai_territorial_fr"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
-                                            <div class="control select">                                                
-                                                <select id="item_espai_territorial_fr" name="item_espai_territorial_fr">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
-                                                        <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>  
-                                    </div>                                    
-                                </div>
-                                <!-- /fr -->        
+								</c:forEach>
                             </div>
                         </div>
-                        <!-- /fila -->
+                        <!-- /fila -->                           
                     </div>
                 </fieldset>
             </div>
@@ -782,7 +536,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend>ESTADï¿½STIQUES</legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -807,18 +561,18 @@
                                 <thead>
                                     <th class="usuario"><div>USUARI</div></th>
                                     <th class="fecha"><div>DATA</div></th>
-                                    <th class="operacion"><div>OPERACIÓ</div></th>
+                                    <th class="operacion"><div>OPERACIï¿½</div></th>
                                 </thead>                    
                                 <tbody>
                                     <tr>
                                         <td class="usuario"><div>rsanz</div></td>
                                         <td class="fecha"><div>16/01/2012</div></td>
-                                        <td class="operacion"><div>Modificació</div></td>
+                                        <td class="operacion"><div>Modificaciï¿½</div></td>
                                     </tr>
                                     <tr>
                                         <td class="usuario"><div>jfernandez</div></td>
                                         <td class="fecha"><div>16/01/2012</div></td>
-                                        <td class="operacion"><div>Modificació</div></td>
+                                        <td class="operacion"><div>Modificaciï¿½</div></td>
                                     </tr>
                                     <tr>
                                         <td class="usuario"><div>flopez</div></td>
@@ -1376,7 +1130,7 @@
         var txtMostremAl = " al ";
         var txtNoHiHa = "<spring:message code='txt.no_hi_ha'/>";
         var txtNoHiHaUnitats = txtNoHiHa + " " + txtUnitats.toLowerCase();
-        var txtNoHiHaFitxes = "Aquesta secció no té fitxes";
+        var txtNoHiHaFitxes = "Aquesta secciï¿½ no tï¿½ fitxes";
         var txtCarregantUnitats = txtCarregant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         var txtOrdenats = "<spring:message code='txt.ordenats'/>";
         var txtAscendentment = "<spring:message code='txt.ascendent'/>";
@@ -1389,11 +1143,11 @@
         var txtCercantUnitats = txtCercant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         // paginacio
         var txtTrobat = "S'ha trobat";
-        var txtSeguents = "Següents";
+        var txtSeguents = "Segï¿½ents";
         var txtAnteriors = "Anteriors";
         var txtInici = "Inici";
         var txtFinal = "Final";
-        var txtPagines = "Pàgines";
+        var txtPagines = "Pï¿½gines";
         var txtCercant = "<spring:message code='txt.cercant'/>";    
         var txtCercantUnitatsAnteriors = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantUnitatsSeguents = txtCercant + " " + txtUnitats.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;       
@@ -1407,7 +1161,7 @@
         
         // detall
         var txtCarregantDetall = txtCarregant + " detall de l "+ txtUnitat.toLowerCase() + ". " + txtEspere;
-        var txtEdificiEliminar = "Està segur de voler eliminar aquesta " + txtUnitat.toLowerCase() + "?";
+        var txtEdificiEliminar = "Estï¿½ segur de voler eliminar aquesta " + txtUnitat.toLowerCase() + "?";
         var txtEnviantDades = "Enviant dades al servidor. " + txtEspere;        
         var txtMostra = "Mostra";
         var txtAmaga = "<spring:message code='txt.amaga'/>";
@@ -1419,25 +1173,25 @@
         var txtElimina = "Elimina";
         var txtHiHa = "Hi ha";
         var txtNoHiHa = "No hi ha";
-        var txtItems = "Ítems";
+        var txtItems = "ï¿½tems";
         var txtCarregantItems = "Carregant " + txtItems.toLowerCase();
         var txtCercantItems = "Cercant " + txtItems.toLowerCase();
         var txtCercantItemsAnteriors = "Cercant " + txtItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
         var txtCercantItemsSeguents = "Cercant " + txtItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
         // modul materies
-        var txtMateria = "matèria";
-        var txtMateries = "matèries";
+        var txtMateria = "matï¿½ria";
+        var txtMateries = "matï¿½ries";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
         var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries + " " + txtSeleccionades.toLowerCase();
         
         // modul seccions
-        var txtSeccio = "secció";
+        var txtSeccio = "secciï¿½";
         var txtSeccions = "seccions";
         var txtNoHiHaSeccions = txtNoHiHa + " " + txtSeccions;
         var txtFitxa = "fitxa";
         var txtFitxes = "fitxes";        
         var txtNoHiHaFitxes = txtNoHiHa + " " + txtFitxes;
-        var txtPublicacio = "publicació";
+        var txtPublicacio = "publicaciï¿½";
         var txtCaducitat = "caducitat";
         var txtOrdre = "ordre";
         var txtGestioFitxes = "<spring:message code='unitatadm.formulari.fitxes.gestiona' />";
@@ -1448,22 +1202,22 @@
         // modul edificis
         var txtEdifici = "Edifici";
         var txtEdificis = "Edificis";
-        var txtAdresa = "Adreça";
+        var txtAdresa = "Adreï¿½a";
         var txtCodiPostal = "Codi Postal";
-        var txtPoblacio = "Població";
+        var txtPoblacio = "Poblaciï¿½";
         var txtNoHiHaEdificis = txtNoHiHa + " " + txtEdificis.toLowerCase();
         var txtNoHiHaEdificisSeleccionats = "No hi ha " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
         // error conexio
         var txtCalcularTotal = "Calcular el total";
-        var txtAjaxError = "S'ha produït un error de conexió.";
+        var txtAjaxError = "S'ha produï¿½t un error de conexiï¿½.";
         var txtIntenteho = "Intente-ho de nou en uns minuts.";
-        var txtConexionIntentar = "Intentar conexió en";
+        var txtConexionIntentar = "Intentar conexiï¿½ en";
         var txtSegon = "segon";
         var txtSegons = "segons";
         var txtConectar = "Conectar ara";
-        var txtFuncions = "Les funcions de l'aplicació s'han deshabilitat";
-        var txtFuncionsFins = "fins que no es restableixi la comunicació";
+        var txtFuncions = "Les funcions de l'aplicaciï¿½ s'han deshabilitat";
+        var txtFuncionsFins = "fins que no es restableixi la comunicaciï¿½";
 
         var txtCampObligatori = "Es un camp obligatori";
 

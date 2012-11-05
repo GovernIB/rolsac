@@ -188,142 +188,79 @@
                     <legend><spring:message code='txt.dades'/></legend>                          
                     <div class="modul_continguts mostrat">                              
                         <div class="fila">
-                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							<c:if test="${loop.first}">
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+							</c:if>
+							
+								<li class="idioma">
+								<a href="javascript:;" class="<c:out value="${lang}"/>">
+								
+								<c:choose>
+									<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/>									
+									</c:when>
+									
+									<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/>		
+									</c:when>
+									
+									<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/>
+									</c:when>
+									
+									<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/>
+									</c:when>
+									
+									<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/>
+									</c:when>																	
+								</c:choose>
+								
+								</a></li>																
+							<c:if test="${loop.last}">
                             </ul>
+							</c:if>
+							</c:forEach>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							<c:if test="${loop.first}">
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+							</c:if>
+                                <div class="idioma <c:out value="${lang}"/>">
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_nom_ca"><spring:message code='camp.nom'/></label>
+                                                <label for="item_nom_<c:out value="${lang}"/>"><spring:message code='camp.nom'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_descripcio_ca"><spring:message code='camp.descripcio'/></label>
+                                                <label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='camp.descripcio'/></label>
                                             </div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_ca" name="item_descripcio_ca" cols="50" rows="4" class="nou"></textarea>
+                                                <textarea id="item_descripcio_<c:out value="${lang}"/>" name="item_descripcio_<c:out value="${lang}"/>" cols="50" rows="4" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">                              
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_es"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">                           
-                                                <input id="item_nom_es" name="item_nom_es" type="text" class="nou" />
-                                            </div>                                      
-                                        </div>                      
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_es"><spring:message code='camp.descripcio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_es" name="item_descripcio_es" cols="50" rows="4" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_en"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_en" name="item_nom_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_en"><spring:message code='camp.descripcio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_en" name="item_descripcio_en" cols="50" rows="4" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_de"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_de" name="item_nom_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                        <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_de"><spring:message code='camp.descripcio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_de" name="item_descripcio_de" cols="50" rows="4" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_fr"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_fr" name="item_nom_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_descripcio_fr"><spring:message code='camp.descripcio'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_fr" name="item_descripcio_fr" cols="50" rows="4" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /fr -->
+							<c:if test="${loop.last}">
                             </div>
+							</c:if>
+							</c:forEach>
                         </div>
                         <!-- /fila -->
                     </div>                          
                 </fieldset>                 
             </div>
-            <!-- /modul -->
+            <!-- /modul -->		
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->

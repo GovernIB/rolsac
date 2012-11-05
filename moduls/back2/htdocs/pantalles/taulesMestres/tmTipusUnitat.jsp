@@ -188,16 +188,45 @@
                     <div class="modul_continguts mostrat">                              
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
-                            <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
-                            </ul>
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+								<c:if test="${loop.first}">
+								<ul class="idiomes">
+								</c:if>
+									<li class="idioma"><a href="javascript:;" class="<c:out value="${lang}"/>">
+									<c:choose>
+										<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/></a></li>
+										</c:when>
+										
+										<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/></a></li>
+										</c:when>
+										
+										<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/></a></li>
+										</c:when>
+										
+										<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/></a></li>
+										</c:when>
+										
+										<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/></a></li>
+										</c:when>																				
+									</c:choose>
+									</a></li>
+								<c:if test="${loop.last}">
+								</ul>
+								</c:if>
+							</c:forEach>							
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							
+							<c:if test="${loop.first}">
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+							</c:if>
+							
+                                <div class="idioma <c:out value="${lang}"/>">
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">
@@ -211,319 +240,65 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_tipus_ca"><spring:message code='tipusUnitat.formulari.tipus'/></label>
+                                                <label for="item_tipus_<c:out value="${lang}"/>"><spring:message code='tipusUnitat.formulari.tipus'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_tipus_ca" name="item_tipus_ca" type="text" class="nou" />
+                                                <input id="item_tipus_<c:out value="${lang}"/>" name="item_tipus_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_carreg_masculi_ca"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
+                                                <label for="item_carreg_masculi_<c:out value="${lang}"/>"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_carreg_masculi_ca" name="item_carreg_masculi_ca" type="text" class="nou" />
+                                                <input id="item_carreg_masculi_<c:out value="${lang}"/>" name="item_carreg_masculi_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_tractament_masculi_ca"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
+                                                <label for="item_tractament_masculi_<c:out value="${lang}"/>"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_tractament_masculi_ca" name="item_tractament_masculi_ca" type="text" class="nou" />
+                                                <input id="item_tractament_masculi_<c:out value="${lang}"/>" name="item_tractament_masculi_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_carreg_femeni_ca"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
+                                                <label for="item_carreg_femeni_<c:out value="${lang}"/>"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_carreg_femeni_ca" name="item_carreg_femeni_ca" type="text" class="nou" />
+                                                <input id="item_carreg_femeni_<c:out value="${lang}"/>" name="item_carreg_femeni_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_tractament_femeni_ca"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
+                                                <label for="item_tractament_femeni_<c:out value="${lang}"/>"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_tractament_femeni_ca" name="item_tractament_femeni_ca" type="text" class="nou" />
+                                                <input id="item_tractament_femeni_<c:out value="${lang}"/>" name="item_tractament_femeni_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_es"><spring:message code='camp.codi.estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_es" name="item_codi_estandard_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tipus_es"><spring:message code='tipusUnitat.formulari.tipus'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tipus_es" name="item_tipus_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_masculi_es"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_masculi_es" name="item_carreg_masculi_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_masculi_es"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_masculi_es" name="item_tractament_masculi_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_femeni_es"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_femeni_es" name="item_carreg_femeni_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_femeni_es"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_femeni_es" name="item_tractament_femeni_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_en"><spring:message code='camp.codi.estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_en" name="item_codi_estandard_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tipus_en"><spring:message code='tipusUnitat.formulari.tipus'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tipus_en" name="item_tipus_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_masculi_en"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_masculi_en" name="item_carreg_masculi_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_masculi_en"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_masculi_en" name="item_tractament_masculi_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_femeni_en"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_femeni_en" name="item_carreg_femeni_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_femeni_en"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_femeni_en" name="item_tractament_femeni_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_de"><spring:message code='camp.codi.estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_de" name="item_codi_estandard_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tipus_de"><spring:message code='tipusUnitat.formulari.tipus'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tipus_de" name="item_tipus_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_masculi_de"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_masculi_de" name="item_carreg_masculi_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_masculi_de"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_masculi_de" name="item_tractament_masculi_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_femeni_de"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_femeni_de" name="item_carreg_femeni_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_femeni_de"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_femeni_de" name="item_tractament_femeni_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_fr"><spring:message code='camp.codi.estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_fr" name="item_codi_estandard_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tipus_fr"><spring:message code='tipusUnitat.formulari.tipus'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tipus_fr" name="item_tipus_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_masculi_fr"><spring:message code='tipusUnitat.formulari.carreg.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_masculi_fr" name="item_carreg_masculi_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_masculi_fr"><spring:message code='tipusUnitat.formulari.tractament.masculi'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_masculi_fr" name="item_tractament_masculi_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_carreg_femeni_fr"><spring:message code='tipusUnitat.formulari.carreg.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_carreg_femeni_fr" name="item_carreg_femeni_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_tractament_femeni_fr"><spring:message code='tipusUnitat.formulari.tractament.femeni'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_tractament_femeni_fr" name="item_tractament_femeni_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /fr -->
+
+							<c:if test="${loop.last}">
                             </div>
+							</c:if>							
+							</c:forEach>
                         </div>
                         <!-- /fila -->
                     </div>                          
                 </fieldset>                 
             </div>
-            <!-- /modul -->
-            
+            <!-- /modul -->                       
         </div>             
         <!-- /modulPrincipal -->    
         <!-- modulLateral -->
