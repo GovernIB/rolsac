@@ -1,5 +1,5 @@
 // CERRAR Y MENSAJES	
-$(document).ready(function(){
+$(document).ready(function() {
 	
 	$(window).bind('resize',function(e){
 	    if ($('.falsePopUp').length > 0) {
@@ -7,8 +7,9 @@ $(document).ready(function(){
 	    }
 	});
 
-	idiomas = ["ca", "es", "en", "fr", "de"];
 	
+   idiomas = idiomesAplicacio.split(",");
+  
 	// elements
 	contenidor_elm = $("#contenidor");
 	cap_elm = $("#cap");

@@ -1,30 +1,24 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.model.Normativa;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Validable;
-import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.ws.ProcedimientoTransferible;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.ActuacioMinModel;
-import org.ibit.rol.sac.model.webcaib.ActuacioModel;
-import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
-import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
-import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Validable;
+import org.ibit.rol.sac.model.Validacion;
+import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
+import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
+import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 
 /**
  * Business delegate para manipular procedimientos.
@@ -32,7 +26,7 @@ import java.util.Map;
 public class ProcedimientoDelegateImpl implements StatelessDelegate, ProcedimientoDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== MÃ‰TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -82,9 +76,9 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscadorProcedimientos(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
 	 */
-    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu) throws DelegateException {
+    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats) throws DelegateException {
         try {
-            return getFacade().buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+            return getFacade().buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -503,6 +497,15 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
         }
     }
     
+	public int contarProcedimientosBuscador(Map paramMap, Map traducciones, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves,
+			Long materia, Long fetVital, Long publicObjectiu) throws DelegateException {
+		try {
+			return getFacade().contarProcedimientosBuscador(paramMap, traducciones, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -526,5 +529,4 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-
 }

@@ -58,8 +58,6 @@
 		es.caib.rolsac.model.ws.urlProcedimiento=https://proves.caib.es/govern/sac/visor_proc.do?codi=%id%&amp;lang=
 
 		es.caib.rolsac.codiEstandarSecGrupMat=GRUPMATERIES
-						
-
 
 		es.caib.rolsac.persistence.hibernate.sessionInterceptors = es.caib.rolsac.persistence.hibernate.ConnectionInfoInterceptor
 		es.caib.rolsac.persistence.hibernate.databaseConnectionInfoClass = es.caib.rolsac.oracle.OracleConnectionInfo

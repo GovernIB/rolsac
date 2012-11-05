@@ -1,9 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
 <script type="text/javascript">
 
     // TODO: cambiar las urls de php por las buenas.
-   
+	// idiomes configurats a l'aplicaciÃ³
+	var idiomesAplicacio = "<c:out value='${idiomes_aplicacio_string}'/>";	  
+	   
     // pagines comuns
     var pagArrel = '<c:url value="/" />';
     var pagSortirAplicacio = "<c:out value="${capUrlSortir}"/>"; 
@@ -114,5 +117,5 @@
     var txtSiguiente = "Seguent";
     var txtMostrar = "Mostrar";
     var txtTodos = "Tots";
-    var txtItemsPagina = "elements per pàgina"
+    var txtItemsPagina = "elements per pï¿½gina"
 </script>

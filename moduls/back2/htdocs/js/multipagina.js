@@ -38,7 +38,7 @@ function Multipagina(datos){
 		}
 	}
 	
-	// Devuelve el código HTML del multipágina.
+	// Devuelve el cï¿½digo HTML del multipï¿½gina.
 	this.getHtml = function(){
 		
 		var html = "";

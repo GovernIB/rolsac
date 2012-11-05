@@ -198,16 +198,49 @@
                     <div class="modul_continguts mostrat">                              
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							
+							<c:if test="${loop.first}">
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
-                            </ul>
+							</c:if>
+							
+								<li class="idioma">
+								<a href="javascript:;" class="<c:out value="${lang}"/>">
+								
+								<c:choose>
+									<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/>									
+									</c:when>
+									
+									<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/>		
+									</c:when>
+
+									<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/>	
+									</c:when>
+
+									<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/>	
+									</c:when>
+
+									<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/>	
+									</c:when>									
+								</c:choose>
+								
+								</a></li>																
+							<c:if test="${loop.last}">
+							</ul>							
+							</c:if> 
+							
+							</c:forEach>
+							
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">   
+                                <div class="idioma <c:out value="${lang}"/>">
+								
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">
@@ -218,194 +251,38 @@
                                             </div>
                                         </div>
                                     </div>
+									
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_titol_ca"><spring:message code='publicObjectiu.formulari.titol'/></label>
+                                                <label for="item_titol_<c:out value="${lang}"/>"><spring:message code='publicObjectiu.formulari.titol'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_titol_ca" name="item_titol_ca" type="text" class="nou" />
+                                                <input id="item_titol_<c:out value="${lang}"/>" name="item_titol_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div> 
+									
                                     <div class="fila">
                                         <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_descripcio_ca"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
+                                            <div class="etiqueta"><label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_descripcio_ca" name="item_descripcio_ca" cols="70" rows="3" class="nou"></textarea>
+                                                <textarea id="item_descripcio_<c:out value="${lang}"/>" name="item_descripcio_<c:out value="${lang}"/>" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
+									
                                     <div class="fila">
                                         <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_paraules_clau_ca"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
+                                            <div class="etiqueta"><label for="item_paraules_clau_<c:out value="${lang}"/>"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
                                             <div class="control">
-                                                <textarea id="item_paraules_clau_ca" name="item_paraules_clau_ca" cols="70" rows="3" class="nou"></textarea>
+                                                <textarea id="item_paraules_clau_<c:out value="${lang}"/>" name="item_paraules_clau_<c:out value="${lang}"/>" cols="70" rows="3" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_es"><spring:message code='publicObjectiu.formulari.codi_estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_es" name="item_codi_estandard_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_titol_es"><spring:message code='publicObjectiu.formulari.titol'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_titol_es" name="item_titol_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_descripcio_es"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_es" name="item_descripcio_es" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_paraules_clau_es"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_paraules_clau_es" name="item_paraules_clau_es" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_en"><spring:message code='publicObjectiu.formulari.codi_estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_en" name="item_codi_estandard_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_titol_en"><spring:message code='publicObjectiu.formulari.titol'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_titol_en" name="item_titol_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_descripcio_en"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_en" name="item_descripcio_en" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_paraules_clau_en"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_paraules_clau_en" name="item_paraules_clau_en" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_de"><spring:message code='publicObjectiu.formulari.codi_estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_de" name="item_codi_estandard_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_titol_de"><spring:message code='publicObjectiu.formulari.titol'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_titol_de" name="item_titol_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_descripcio_de"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_de" name="item_descripcio_de" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_paraules_clau_de"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_paraules_clau_de" name="item_paraules_clau_de" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_fr"><spring:message code='publicObjectiu.formulari.codi_estandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_fr" name="item_codi_estandard_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_titol_fr"><spring:message code='publicObjectiu.formulari.titol'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_titol_fr" name="item_titol_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div> 
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_descripcio_fr"><spring:message code='publicObjectiu.formulari.descripcio'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_descripcio_fr" name="item_descripcio_fr" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_paraules_clau_fr"><spring:message code='publicObjectiu.formulari.paraules_clau'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_paraules_clau_fr" name="item_paraules_clau_fr" cols="70" rows="3" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /fr -->
+									
+                                </div>                                
+								</c:forEach>
                             </div>
                         </div>
                         <!-- /fila -->

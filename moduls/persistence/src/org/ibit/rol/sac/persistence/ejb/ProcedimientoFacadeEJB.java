@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,6 +102,7 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
 public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements ProcedimientoDelegateI {
 
 	private static String idioma_per_defecte = "ca";
+	private static int RESULTATS_CERCA_TOTS = 99999;
 	
     /**
      * Obtiene referï¿½ncia al ejb de control de Acceso.
@@ -443,7 +443,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
      * @ejb.permission unchecked="true"
      */
     public List listarProcedimientos() {
-    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este método debe ser unchecked para permitir accesos via WS 
+    	//agarcia: antes era @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}". Pero este mï¿½todo debe ser unchecked para permitir accesos via WS 
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
@@ -521,7 +521,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
             	for( Documento d : procedimiento.getDocumentos() )
             	{
             		if (d==null) {
-            			continue; //por algún motivo, en ocasiones los documentos en la colección son nulos 
+            			continue; //por algï¿½n motivo, en ocasiones los documentos en la colecciï¿½n son nulos 
             		}
             		Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
                 	Set<String> idiomes = mapaTraduccions.keySet();
@@ -622,7 +622,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         } finally {
             close(session);
         }
-   		//Esto no está funcionando bien...
+   		//Esto no estï¿½ funcionando bien...
         //----------------------------------------------------------------------
         //ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
 		//Comparator comp = new DocsProcedimientoComparator();
@@ -644,7 +644,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	  	Collections.sort(norms, new Normativa()); 
 	  	procedimiento.setNormativas(new HashSet<Normativa>(norms));
 	  	
-		/* TODO: error de compilación tras el merge con 177
+		/* TODO: error de compilaciï¿½n tras el merge con 177
 	  	//Ordenamos los normativas por el campo id
 	  	List tramites = new ArrayList(procedimiento.getTramites());
 	  	Collections.sort(tramites, new Tramite()); 
@@ -816,6 +816,143 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
         }
     }
     
+    /**
+	 * Cuenta todas los Procedimientos que cumplen los criterios de bÃºsqueda.
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public int contarProcedimientosBuscador(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu) {
+	
+		Session session = getSession();
+
+		try {
+			
+			if (!userIsOper()) {
+				parametros.put("validacion", Validacion.PUBLICA);
+			}
+
+			List params = new ArrayList();
+			String i18nQuery = "";
+			if (traduccion.get("idioma") != null) {
+				i18nQuery = populateQuery(parametros, traduccion, params);
+			} else {
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				if (paramsQuery.length() == 0) {
+					i18nQuery += " where ";
+				} else {
+					i18nQuery += paramsQuery + " and ";
+				}
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+			}			
+			
+			List<Long> listaIdsProcedimientos = null;
+			
+			String queryUA = obtenerCadenaFiltroUA(parametros, ua, uaFilles, uaMeves, session);			
+			int totalRegistros = 0;
+			
+			String from = "from ProcedimientoLocal as procedimiento, ";
+			String where = "";
+
+			if ( materia != null ) {
+				where += " and procedimiento.id in ( select procsLocales.id " +
+																"from Materia as mat, mat.procedimientosLocales as procsLocales " +
+																"where mat.id = " + materia + ")";
+			} 
+			
+			if ( fetVital != null ) {
+				from += "procedimiento.hechosVitalesProcedimientos as hechosVit, ";
+				where += " and hechosVit.hechoVital.id = " + fetVital; 
+			}
+			
+			if ( publicObjectiu != null ) {
+				from += "procedimiento.publicosObjetivo as pubObj, ";
+				where += " and pubObj.publicoObjectivo.id = " + publicObjectiu;
+			}			
+			
+			Query queryTotalRegistros = session.createQuery( "select distinct procedimiento.id " + from + 
+																				"procedimiento.traducciones as trad " + i18nQuery + (" ".equals(queryUA) ? "" : " and" + queryUA) + where ) ;  
+
+			for (int i = 0; i < params.size(); i++) {
+				String o = (String) params.get(i);
+				queryTotalRegistros.setString(i, o);
+			}
+			
+			Usuario usuario = getUsuario( session );
+			
+			listaIdsProcedimientos = queryTotalRegistros.list();
+						
+			if ( !userIsOper() )
+				return listaIdsProcedimientos.size();
+			else {
+
+				for ( int i = 0; i < listaIdsProcedimientos.size(); i++ ) {
+					
+					ProcedimientoLocal procLocal = new ProcedimientoLocal();
+					Long tmpId = listaIdsProcedimientos.get(i);
+					procLocal.setId( tmpId );
+									
+					if ( tieneAcceso(usuario, procLocal) )
+						totalRegistros++;
+				}				
+				
+			}
+						
+			return totalRegistros;
+			
+		} catch (DelegateException de) {
+			throw new EJBException(de);
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+	}
+
+	private String obtenerCadenaFiltroUA(Map parametros, UnidadAdministrativa ua,
+			boolean uaFilles, boolean uaMeves, Session session)
+			throws HibernateException, DelegateException {
+
+		Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
+		Set<Long> uasIds = new HashSet<Long>();
+		
+		if ( ua != null ) {
+			ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
+			uas.add(ua);
+		}
+		
+		if (uaMeves) 
+			uas.addAll( getUsuario(session).getUnidadesAdministrativas() );
+		
+		if ( uaFilles ) {
+			UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+			
+			for ( UnidadAdministrativa uaActual : uas ) {
+				uasIds.add( uaActual.getId() );
+				List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId( uaActual.getId() );
+				uasIds.addAll( idsDescendientes );
+			}
+		} else {
+			for ( UnidadAdministrativa uaActual : uas ) {
+				uasIds.add( uaActual.getId() );
+			}
+		}
+		
+		String uaQuery;
+		if (!uasIds.isEmpty()) {
+			uaQuery = " procedimiento.unidadAdministrativa.id in (";
+			String sep = "";
+			for (Long uaId : uasIds) {
+				uaQuery += sep + uaId;
+				sep = ", ";
+			}
+			uaQuery += ")";
+		} else {
+			uaQuery = " ";
+		}
+		
+		return uaQuery;
+	}
 
     /**
 	 * Busca todas los Procedimientos que cumplen los criterios de busqueda del nuevo back (sacback2).
@@ -823,7 +960,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital,Long publicObjectiu) {
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats) {
 		Session session = getSession();
 
 		try {
@@ -844,47 +981,30 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
 			}
-
-			Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
-			Set<Long> uasIds = new HashSet<Long>();
-
-			if (ua != null) {
-				ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
-				uas.add(ua);
-			}
-
-			if (uaMeves) {
-				uas.addAll(getUsuario(session).getUnidadesAdministrativas());
-			}
-
-			if (uaFilles) {
-				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-				for (UnidadAdministrativa uaActual : uas) {
-					uasIds.add(uaActual.getId());
-					List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
-					uasIds.addAll(idsDescendientes);
-				}
-			} else {
-				for (UnidadAdministrativa uaActual : uas) {
-					uasIds.add(uaActual.getId());
-				}
-			}
-
-			String uaQuery;
-			if (!uasIds.isEmpty()) {
-				uaQuery = " and procedimiento.unidadAdministrativa.id in (";
-				String sep = "";
-				for (Long uaId : uasIds) {
-					uaQuery += sep + uaId;
-					sep = ", ";
-				}
-				uaQuery += ")";
-			} else {
-				uaQuery = " ";
-			}
 			           
-			String queryStr = "select distinct procedimiento from ProcedimientoLocal as procedimiento "
-				+ ", procedimiento.traducciones as trad " + i18nQuery + uaQuery
+			String uaQuery = obtenerCadenaFiltroUA(parametros, ua, uaFilles, uaMeves, session);
+			
+			String from = "from ProcedimientoLocal as procedimiento, ";
+			String where = "";
+			
+			if ( materia != null ) {
+				where += " and procedimiento.id in ( select procsLocales.id " +
+																"from Materia as mat, mat.procedimientosLocales as procsLocales " +
+																"where mat.id = " + materia + ")";
+			} 
+			
+			if ( fetVital != null ) {
+				from += "procedimiento.hechosVitalesProcedimientos as hechosVit, ";
+				where += " and hechosVit.hechoVital.id = " + fetVital; 
+			}
+			
+			if ( publicObjectiu != null ) {
+				from += "procedimiento.publicosObjectivo as pubObj, ";
+				where += " and pubObj.publicoObjectivo.id = " + publicObjectiu;
+			}
+			
+			String queryStr = "select distinct procedimiento " + from 
+		        + "procedimiento.traducciones as trad " + i18nQuery + (" ".equals(uaQuery) ? "" : " and" + uaQuery ) + where  
 		        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
 			
 			Query query = session.createQuery(queryStr);
@@ -894,42 +1014,15 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				query.setString(i, o);
 			}
 
+			int resultadosMax = new Integer(resultats).intValue();
+			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+			
+			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}				
+			
 			List<ProcedimientoLocal> procedimientos = query.list();
-			
-			// Filtrar poc materias y hechos vitales.
-			List<ProcedimientoLocal> procTempList;
-			
-			if (materia != null) {
-				procTempList = new LinkedList<ProcedimientoLocal>();
-				List<ProcedimientoLocal> procsMateries = (List<ProcedimientoLocal>) this.buscarProcedimientosMateria(materia);
-				for (ProcedimientoLocal procMateria: procsMateries) {
-					if (procedimientos.contains(procMateria)) {
-						procTempList.add(procMateria);
-					}
-				}
-				procedimientos = procTempList;
-			}
-			
-			if (fetVital != null) {
-				procTempList = new LinkedList<ProcedimientoLocal>();
-				List<ProcedimientoLocal> procsFetVital = (List<ProcedimientoLocal>) this.listarProcedimientosHechoVital(fetVital);
-				for (ProcedimientoLocal procFetVital: procsFetVital) {
-					if (procedimientos.contains(procFetVital)) {
-						procTempList.add(procFetVital);
-					}
-				}
-				procedimientos = procTempList;
-			}
-			if (publicObjectiu != null) {
-				procTempList = new LinkedList<ProcedimientoLocal>();
-				List<ProcedimientoLocal> procsPublicObjectiu = (List<ProcedimientoLocal>) this.buscarProcedimientosPublicoObjetivo(publicObjectiu);
-				for (ProcedimientoLocal procPublicObjectiu: procsPublicObjectiu) {
-					if (procedimientos.contains(procPublicObjectiu)) {
-						procTempList.add(procPublicObjectiu);
-					}
-				}
-				procedimientos = procTempList;
-			}
 			
 			// Filtrar si no se tiene acceso
 			if (!userIsOper()) {
@@ -953,7 +1046,6 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			close(session);
 		}
 	}
-    
     
     /**
      * Construye el query de bï¿½squeda multiidioma en todos los campos
@@ -1183,7 +1275,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 					//Obtenemos el valor numerico del final
 					Long n = Long.valueOf(str.substring((str.lastIndexOf('.')+1))).longValue();
 					
-					//Obtenemos el procedimiento, recuperamos el identificador y lo añadimos a la lista
+					//Obtenemos el procedimiento, recuperamos el identificador y lo aï¿½adimos a la lista
 					idProcs.add( obtenerProcedimiento(n).getId());
 				}
 			}

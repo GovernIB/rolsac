@@ -84,9 +84,9 @@ public class ProcedimientoDelegate {
 		return impl.buscarProcedimientos(param, trad);
 	}
 	
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu)
+	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
 			throws DelegateException {
-		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats);
 	}
 
 	public List buscarProcedimientosFamilia(Long id) throws DelegateException {
@@ -219,7 +219,10 @@ public class ProcedimientoDelegate {
     
     public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
     	return impl.buscarProcedimientosCaducados(listaUnidadAdministrativaId, fechaCaducidad);
-    }
+    }    
     
+	public int contarProcedimientosBuscador(Map paramMap, Map traducciones, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu) throws DelegateException {    
+		return impl.contarProcedimientosBuscador(paramMap, traducciones, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+	}
     
 }

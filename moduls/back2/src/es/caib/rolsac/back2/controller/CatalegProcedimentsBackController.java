@@ -5,6 +5,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -84,6 +85,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		else
 			crearModelSencill_pantalla(model, session, request);
 
+		//model.put( "idiomes_aplicacio", session.getAttribute("idiomes_aplicacio") );
+		
 		loadIndexModel (model, request);	
 		return "index";
 	}
@@ -136,6 +139,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
+		int numTotalProcediments = 0;
+		
 		List<ProcedimientoLocal> llistaProcedimientos = new ArrayList<ProcedimientoLocal>();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
@@ -208,7 +213,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 		String ventanillaUnica = request.getParameter("finestreta");
 		if ("1".equals(ventanillaUnica)) {
-			paramMap.put("ventana", 1);
+			paramMap.put("ventanillaUnica", 1);
 		}
 
 		
@@ -297,7 +302,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		}
 
-		// Paràmetres ordenació
+		// Parï¿½metres ordenaciï¿½
 		String ordreCamp = request.getParameter("ordreCamp");
 		if (ordreCamp != null && !"".equals(ordreCamp)) {
 			paramMap.put("ordreCamp", ordreCamp);
@@ -306,7 +311,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (ordreTipus != null && !"".equals(ordreTipus)) {
 			paramMap.put("ordreTipus", ordreTipus);
 		}
-
 		
 		// Textes (en todos los campos todos los idiomas)
 		String textes = request.getParameter("textes");
@@ -330,9 +334,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tradMap.put("idioma", lang);
 		}
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+		
 		try {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
-			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
 
 			for (ProcedimientoLocal pl : llistaProcedimientos) {
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
@@ -345,6 +356,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 								 DateUtils.formatDate(pl.getFechaActualizacion()),
 								 tfa == null ? null : tfa.getNombre()));
 			}
+			
+			numTotalProcediments = procedimientosDelegate.contarProcedimientosBuscador(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				// model.put("error", "permisos");
@@ -353,8 +367,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				logException(log, dEx);
 			}
 		}
-
-		resultats.put("total", llistaProcedimientoLocalDTO.size());
+ 		
+		//Total de registros
+		resultats.put("total", numTotalProcediments);
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 		
 		return resultats;
@@ -382,6 +397,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
 			
 			// Idiomas
+			//Cambiar por el valor que estarÃ¡ en la sesiÃ³n
+			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+			
 			if (proc.getTraduccion("ca") != null) {
 				resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion("ca"));
 			} else {
@@ -422,7 +440,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					if (doc != null) {
 						// Montar map solo con los campos 'titulo' de las traducciones del documento.
 						Map<String, String> titulos = new HashMap<String, String>();
-						IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+						//IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 						List<String> idiomas = idiomaDelegate.listarLenguajes();
 						String nombre;
 						TraduccionDocumento traDoc;
@@ -454,7 +472,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	        } 
             // Fin documentos relacionados
            			
-			// Trámites relacionados
+			// Trï¿½mites relacionados
 			List<IdNomDTO> listaTramitesDTO = null;
 			
 			if ( proc.getTramites() != null ) {
@@ -470,7 +488,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} 	
 			
 			resultats.put("tramites", listaTramitesDTO);
-			//Fin trámites relacionados
+			//Fin trï¿½mites relacionados
 			
 			// Materias asociadas
             if (proc.getMaterias() != null) {             
@@ -749,7 +767,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             }
             // Public Objectiu
             
-            // Actualizar la lista de Trámites
+            // Actualizar la lista de Trï¿½mites
             String tramitsProcediment = request.getParameter("tramitsProcediment");
             TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
             
@@ -797,7 +815,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
                 	}
             	}                	                   	
             	
-            	// Actualizamos el orden de la lista de trámites
+            	// Actualizamos el orden de la lista de trï¿½mites
             	HashMap<String, String[]> actualizadorTramites = new HashMap<String, String[]>();
             	
             	for (Tramite tramite : tramitesNuevos ) {
@@ -817,7 +835,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             
             	procediment.setTramites(null);
             }               
-            //Fin trámites
+            //Fin trï¿½mites
             
             // Hechos vitales 
             if (request.getParameter("fetsVitals") != null && edicion && isModuloModificado("modulo_hechos_modificado",request)) {

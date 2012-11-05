@@ -212,15 +212,34 @@
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+								<li class="idioma">
+								<a href="javascript:;" class="<c:out value="${lang}"/>">
+								<c:choose>
+									<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/>
+									</c:when>
+									<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/>
+									</c:when>
+									<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/>
+									</c:when>
+									<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/>
+									</c:when>
+									<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/>
+									</c:when>									
+								</c:choose>
+								</a>
+								</li>
+								</c:forEach>
                             </ul>
+							
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+								<div class="idioma <c:out value='${lang}'/>">			
                                     <!-- fila -->
                                     <div class="fila">
                                         <div class="element t25p">
@@ -236,10 +255,10 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_nom_ca"><spring:message code='camp.nom'/></label>
+                                                <label for="item_nom_<c:out value="${lang}"/>"><spring:message code='camp.nom'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>                                    
@@ -260,193 +279,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- /fila -->
-                                </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_es"><spring:message code='camp.codiEstandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_es" name="item_codi_estandard_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_es"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_es" name="item_nom_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_seccio_es"><spring:message code='camp.seccio'/></label>
-                                            </div>
-                                            <div class="control select">
-                                                <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-                                                <select id="item_seccio_es" name="item_seccio_es">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaSeccio}" var="seccio">
-                                                        <option value='<c:out value="${seccio.id}" />'><c:out value="${seccio.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_en"><spring:message code='camp.codiEstandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_en" name="item_codi_estandard_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_en"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_en" name="item_nom_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_seccio_en"><spring:message code='camp.seccio'/></label>
-                                            </div>
-                                            <div class="control select">
-                                                <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-                                                <select id="item_seccio_en" name="item_seccio_en">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaSeccio}" var="seccio">
-                                                        <option value='<c:out value="${seccio.id}" />'><c:out value="${seccio.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_de"><spring:message code='camp.codiEstandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_de" name="item_codi_estandard_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_de"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_de" name="item_nom_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_seccio_de"><spring:message code='camp.seccio'/></label>
-                                            </div>
-                                            <div class="control select">
-                                                <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-                                                <select id="item_seccio_de" name="item_seccio_de">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaSeccio}" var="seccio">
-                                                        <option value='<c:out value="${seccio.id}" />'><c:out value="${seccio.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t25p">
-                                            <div class="etiqueta">
-                                                <label for="item_codi_estandard_fr"><spring:message code='camp.codiEstandard'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_codi_estandard_fr" name="item_codi_estandard_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_fr"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_fr" name="item_nom_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_seccio_fr"><spring:message code='camp.seccio'/></label>
-                                            </div>
-                                            <div class="control select">
-                                                <!-- <input id="item_espai_territorial" name="item_espai_territorial" type="text" /-->
-                                                <select id="item_seccio_fr" name="item_seccio_fr">
-                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
-                                                    <c:forEach items="${llistaSeccio}" var="seccio">
-                                                        <option value='<c:out value="${seccio.id}" />'><c:out value="${seccio.nom}" /></option>
-                                                    </c:forEach>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /fila -->
-                                </div>
-                                <!-- /fr -->
+                                    <!-- /fila -->								
+								</div>
+								</c:forEach>								
                             </div>
                         </div>
                         <!-- /fila -->

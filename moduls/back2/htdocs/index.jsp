@@ -4,8 +4,8 @@
 <html>
 <head>
 	
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><%
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title><%
 String appTitol = System.getProperty("entitat.aplicacio.titol");
 if (appTitol==null) {
 %><spring:message code='aplicacio.titol'/><% 
@@ -23,7 +23,7 @@ if (appTitol==null) {
     <!--[if IE 7]>
     <link href="<c:url value='/css/ie7.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <![endif]-->
-     
+    <jsp:include page="layout/variablesGlobalsJavascript.jsp" flush="true"/>     
     <script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
@@ -33,7 +33,6 @@ if (appTitol==null) {
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/multipagina.js'/>"></script>
     
-    <jsp:include page="layout/variablesGlobalsJavascript.jsp" flush="true"/>    
 </head>
     <body>
         <div id="contenidor">       

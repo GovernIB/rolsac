@@ -193,23 +193,51 @@
                     <div class="modul_continguts mostrat">
                         <div class="fila">
                             <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+							<c:if test="${loop.first}">
                             <ul class="idiomes">
-                                <li class="idioma"><a href="javascript:;" class="ca"><spring:message code='txt.idioma.ca'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="es"><spring:message code='txt.idioma.es'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="en"><spring:message code='txt.idioma.en'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="de"><spring:message code='txt.idioma.de'/></a></li>
-                                <li class="idioma"><a href="javascript:;" class="fr"><spring:message code='txt.idioma.fr'/></a></li>
+							</c:if>							
+								<li class="idioma"><a href="javascript:;" class="<c:out value="${lang}"/>">
+								<c:choose>
+									<c:when test="${lang eq 'ca'}">
+										<spring:message code='txt.idioma.ca'/>			
+									</c:when>
+									
+									<c:when test="${lang eq 'es'}">
+										<spring:message code='txt.idioma.es'/>			
+									</c:when>
+
+									<c:when test="${lang eq 'en'}">
+										<spring:message code='txt.idioma.en'/>			
+									</c:when>
+
+									<c:when test="${lang eq 'fr'}">
+										<spring:message code='txt.idioma.fr'/>			
+									</c:when>
+
+									<c:when test="${lang eq 'de'}">
+										<spring:message code='txt.idioma.de'/>
+									</c:when>									
+								</c:choose>								
+								</a></li>
+							<c:if test="${loop.last}">
                             </ul>
+							</c:if>
+							</c:forEach>
+							
+							<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">							
+							<c:if test="${loop.first}">
                             <div class="idiomes">
-                                <!-- ca -->
-                                <div class="idioma ca">
+							</c:if>
+                                <div class="idioma <c:out value="${lang}"/>">
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_nom_ca"><spring:message code='camp.nom'/></label>
+                                                <label for="item_nom_<c:out value="${lang}"/>"><spring:message code='camp.nom'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_ca" name="item_nom_ca" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
@@ -247,255 +275,18 @@
                                                 <input id="item_coordenades" name="item_coordenades" type="text" class="nou" />
                                             </div>
                                         </div>
-                                    </div>                    
-                                    
+                                    </div>                                                        
                                 </div>
-                                <!-- /ca -->
-                                <!-- es -->
-                                <div class="idioma es">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_es"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_es" name="item_nom_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_pare_es"><spring:message code='camp.codiPare'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_pare_es" name="item_pare" type="text" readonly="readonly" />                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador" class="fila">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_es');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_coordenades_es"><spring:message code='camp.coordenades'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_coordenades_es" name="item_coordenades_es" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>  
-                                    
-                                </div>
-                                <!-- /es -->
-                                <!-- en -->
-                                <div class="idioma en">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_en"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_en" name="item_nom_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_pare_en"><spring:message code='camp.codiPare'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_pare_en" name="item_pare_en" type="text" readonly="readonly" />                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador" class="fila">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_en');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_coordenades_en"><spring:message code='camp.coordenades'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_coordenades_en" name="item_coordenades_en" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>  
-                                </div>
-                                <!-- /en -->
-                                <!-- de -->
-                                <div class="idioma de">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_de"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_de" name="item_nom_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_pare_de"><spring:message code='camp.codiPare'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_pare_de" name="item_pare_de" type="text" readonly="readonly" />                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador" class="fila">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_de');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_coordenades_de"><spring:message code='camp.coordenades'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_coordenades_de" name="item_coordenades_de" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>  
-                                </div>
-                                <!-- /de -->
-                                <!-- fr -->
-                                <div class="idioma fr">
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_nom_fr"><spring:message code='camp.nom'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_nom_fr" name="item_nom_fr" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_pare_fr"><spring:message code='camp.codiPare'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_pare_fr" name="item_pare_fr" type="text" readonly="readonly" />                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Botonera -->
-                                    <div id="cercador" class="fila">
-                                        <div class="botonera" style="margin-top: 0px; float:left;">
-                                            <div class="boton btnGenerico" style="margin-left: 0px;">
-                                                <a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare_fr');" class="btn consulta">
-                                                    <span><span><spring:message code='boto.canviarETPare'/></span></span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /Botonera -->
-                                    <!-- fila -->
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_coordenades_fr"><spring:message code='camp.coordenades'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <input id="item_coordenades_fr" name="item_coordenades" type="text" class="nou" />
-                                            </div>
-                                        </div>
-                                    </div>  
-                                </div>
-                                <!-- /fr -->
+							<c:if test="${loop.last}">
                             </div>
+							</c:if>							
+							</c:forEach>
                         </div>
                         <!-- /fila -->
                     </div>                          
                 </fieldset>                 
             </div>
-            <!-- /modul -->
-            
-        <!-- modul -->
-        <%--<div class="modul">
-            <fieldset>
-                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend><spring:message code='txt.dades'/></legend>
-                <div class="modul_continguts mostrat">
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta">
-                                <label for="item_pare"><spring:message code='camp.codiPare'/></label>
-                            </div>
-							<div class="control">
-                                <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
-                                <input id="item_codi_pare" name="item_codi_pare" type="hidden" />
-							</div>
-						</div>
-					</div>
-					<!-- Botonera -->
-					<div id="cercador" class="fila">
-						<div class="botonera" style="margin-top: 0px; float:left;">
-							<div class="boton btnGenerico" style="margin-left: 0px;">
-								<a href="javascript:carregarArbreET('<c:url value="/pantalles/popArbreET.do"/>', 'popET', 'item_id', 'item_codi_pare', 'item_pare');" class="btn consulta">
-									<span><span><spring:message code='boto.canviarETPare'/></span></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<!-- /Botonera -->
-                    <!-- fila -->
-                    <div class="fila">
-                        <div class="element t99p">
-                            <div class="etiqueta">
-                                <label for="item_coordenades"><spring:message code='camp.coordenades'/></label>
-                            </div>
-                            <div class="control">
-                                <input id="item_coordenades" name="item_coordenades" type="text" class="nou" />
-                            </div>
-                        </div>
-                    </div>                    
-                </div>
-            </fieldset>
-        </div>--%>
-        <!-- /modul -->
+            <!-- /modul -->           
         
         <!-- modul -->
         <div class="modul">

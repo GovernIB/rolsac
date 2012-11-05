@@ -48,6 +48,7 @@ function DetallBase(soloFicha, reglasFormulario){
 	var soloFicha = soloFicha || false;
     
     this.idiomas = ["es","ca","en","de","fr"];
+    //this.idiomas = idiomas; 
 
 	// Url de la previsualizacion (tiene que sobreescribirse al extender la clase).
 	this.urlPrevisualizar = null;
