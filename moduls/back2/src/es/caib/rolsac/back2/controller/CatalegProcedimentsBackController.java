@@ -1135,11 +1135,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			} else {
 				paramTrad.put("idioma", idioma);
 			}			
-			
-			
+						
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", ua.getId(), false, false, campoOrdenacion, orden);
+			
+			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
+			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden);			
 			
 			for (Normativa normativa : llistaNormatives) {
 				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
