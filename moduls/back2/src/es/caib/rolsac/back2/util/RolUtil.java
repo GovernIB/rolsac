@@ -2,7 +2,6 @@ package es.caib.rolsac.back2.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-
 /*
  * Los roles de usuario són inclusivos. Los mètodos de esta clase permiten 
  * saber si un usuario tiene los permisos de un determinado rol, bien porque 
@@ -17,15 +16,12 @@ public class RolUtil {
 	public static final String PERMIS_OPERADOR = "RSC_OPER";
 	// public static final String PERMIS_INFO = "RSC_INFO";
 	
-	
 	private HttpServletRequest request;
-	
 	
 	public RolUtil(HttpServletRequest request) {
 		this.request = request;
 	}
-		
-	
+
 //	public List<String> getRoles() {
 //		List<String> rolesList = new ArrayList<String>(4);
 //		rolesList.add(PERMIS_SYSTEM);
@@ -35,31 +31,42 @@ public class RolUtil {
 //		return rolesList;
 //	}
 	
+	public static boolean userIsSystem(String role) {
+		return PERMIS_SYSTEM.equals(role);
+	}
+	
+	public static boolean userIsAdmin(String role) {
+		return userIsSystem(role) || PERMIS_ADMIN.equals(role);
+	}
+	
+	public static boolean userIsSuper(String role) {
+		return userIsAdmin(role) || PERMIS_SUPER.equals(role);
+	}
+
+	public static boolean userIsOper(String role) {
+		return userIsSuper(role) || PERMIS_OPERADOR.equals(role);
+	}
+		
 	
 	public boolean userIsSystem() {
 		return request.isUserInRole(PERMIS_SYSTEM);
 	}
 	
-	
 	public boolean userIsAdmin() {
 		return userIsSystem() || request.isUserInRole(PERMIS_ADMIN);
 	}
-	
 	
 	public boolean userIsSuper() {
 		return userIsAdmin() || request.isUserInRole(PERMIS_SUPER);
 	}
 	
-	
 	public boolean userIsOper() {
 		return userIsSuper() || request.isUserInRole(PERMIS_OPERADOR);
 	}
 	
-	
 //	public boolean userIsInfo() {
 //		return userIsOper() || request.isUserInRole(PERMIS_INFO);
 //	}
-
 	
 	public String getUserRol() {
 		String rol;
@@ -80,7 +87,6 @@ public class RolUtil {
 		
 		return rol;
 	}
-
 	
     public boolean userIs(String role) {
     	boolean userIsRol;
@@ -101,7 +107,6 @@ public class RolUtil {
     	
     	return userIsRol;
     }
-
 
 	public HttpServletRequest getRequest() {
     	return request;

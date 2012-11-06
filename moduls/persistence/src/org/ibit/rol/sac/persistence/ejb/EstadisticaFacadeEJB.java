@@ -3,7 +3,6 @@ package org.ibit.rol.sac.persistence.ejb;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,10 +39,10 @@ import org.ibit.rol.sac.model.Periodo;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.util.PeriodoUtil;
+import org.ibit.rol.sac.persistence.util.RolUtil;
+
+
 
 /**
  * SessionBean para manejar y consultar Estadisticas.
@@ -351,7 +350,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Normativas más visitadas en un periodo
+     * Normativas mï¿½s visitadas en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -381,7 +380,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Procedimientos más visitados en un periodo
+     * Procedimientos mï¿½s visitados en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -411,7 +410,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Fichas más visitadas en un periodo
+     * Fichas mï¿½s visitadas en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -609,72 +608,71 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
         	
-        	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-        	if (listaUnidadAdministrativaId.size() > 0) {
-        		
-        		// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
-        		Query queryProcedimiento = null;
-            	Query queryNormativa = null;
-            	Query queryFicha = null;
-        		
-            	
-        		queryProcedimiento = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
-            			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
-            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
-            			" and plo.unidadAdministrativa.id in (:lId) " +
-            			" order by a.fecha desc");
-        		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
-        		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
-        		queryProcedimiento.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        		queryProcedimiento.setMaxResults(numeroRegistros);
-        		
-        		queryNormativa = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, NormativaLocal as nlo " +
-        			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
+        	if (listaUnidadAdministrativaId.isEmpty() )
+        		return new HashMap<Timestamp, Object>();
+        	
+        	String userName = getUsuario(session).getUsername();
+        	String clausulaUsuari = " and a.usuario=:usuari ";
+        	
+        	if ( RolUtil.userIsSuper(userName) )
+        		clausulaUsuari = "";
+    		// Lanzamos 3 query porque una solo hacia que el tiempo de respuesta fuese exponencial
+    		Query queryProcedimiento = null;
+        	Query queryNormativa = null;
+        	Query queryFicha = null;
+        	
+    		queryProcedimiento = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, ProcedimientoLocal as plo " +
+        			"where h.id=a.historico.id and h.class = HistoricoProcedimiento " +
         			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
-        			" and nlo.unidadAdministrativa.id in (:lId) " +
+        			clausulaUsuari +
+        			" and plo.unidadAdministrativa.id in (:lId) " +
         			" order by a.fecha desc");
-        		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
-        		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
-        		queryNormativa.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        		queryNormativa.setMaxResults(numeroRegistros);
-        		
-        		queryFicha = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
-            			"where h.id=a.historico.id and h.class = HistoricoFicha " +
-            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
-            			" and fua.ficha.id = fic.id and fua.unidadAdministrativa.id in (:lId) "  +
-            			" order by a.fecha desc");
-        		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
-        		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);
-        		queryFicha.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
-        		queryFicha.setMaxResults(numeroRegistros);
-        		
-        		
-        		Map<Timestamp, Object> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros);
-        		
-        		return historicoOrdenado;
-        		
-        	} else {
-        	/*	Query query = null;
-        		query = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a " +
-            			"where h.id=a.historico.id and h.class in (HistoricoProcedimiento, HistoricoNormativa, HistoricoFicha ) " +
-            			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR + 
-            			" order by a.fecha desc");
-        		query.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
-            	query.setParameter("fechaFin", fechaFin, Hibernate.DATE);
-            	query.setMaxResults(numeroRegistros);
-            	//query.setCacheable(true);
-            	
-            	List<Object[]> lQuery = query.list();
-            	Map<Timestamp, Object> historico = new HashMap<Timestamp, Object>();
-        		
-        		for (Object[] obj : lQuery) {
-        			historico.put((Timestamp)obj[0], obj[1]);
-        		}
-        		
-        		 return historico;*/
-        	    return new HashMap<Timestamp, Object>();
-        	}
-           
+    		        		        		
+    		queryProcedimiento.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+    		queryProcedimiento.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+    		
+    		if (!"".equals(clausulaUsuari))
+    			queryProcedimiento.setParameter("usuari", userName);
+    		
+    		queryProcedimiento.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+    		queryProcedimiento.setMaxResults(numeroRegistros);
+    		
+    		queryNormativa = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, NormativaLocal as nlo " +
+    			"where h.id=a.historico.id and h.class = HistoricoNormativa " +
+    			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+    			clausulaUsuari +
+    			" and nlo.unidadAdministrativa.id in (:lId) " +
+    			" order by a.fecha desc");
+    		
+    		queryNormativa.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+    		queryNormativa.setParameter("fechaFin", fechaFin, Hibernate.DATE);
+    		
+    		if (!"".equals(clausulaUsuari))
+    			queryNormativa.setParameter("usuari", userName);
+    		
+    		queryNormativa.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+    		queryNormativa.setMaxResults(numeroRegistros);
+    		
+    		queryFicha = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
+        			"where h.id=a.historico.id and h.class = HistoricoFicha " +
+        			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
+        			" and fua.ficha.id = fic.id and fua.unidadAdministrativa.id in (:lId) "  +
+        			clausulaUsuari +
+        			" order by a.fecha desc");
+    		
+    		queryFicha.setParameter("fechaInicio", fechaInicio, Hibernate.DATE);
+    		queryFicha.setParameter("fechaFin", fechaFin, Hibernate.DATE);        		
+    		queryFicha.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
+    		
+    		if (!"".equals(clausulaUsuari))
+    			queryFicha.setParameter("usuari", userName);    		
+    		
+    		queryFicha.setMaxResults(numeroRegistros);
+    		
+    		Map<Timestamp, Object> historicoOrdenado = ordenarLista(queryProcedimiento, queryNormativa, queryFicha, numeroRegistros);
+    		
+    		return historicoOrdenado;
+        		           
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
