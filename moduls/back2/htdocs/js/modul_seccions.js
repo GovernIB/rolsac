@@ -147,7 +147,7 @@ function CModulSeccio() {
 		} 
 		
 		// En el cas de les fitxes, "nodoOrigen" varia en funcio de quina seccio 
-		// s'esta† gestionant		
+		// s'estaÔøΩ gestionant		
 		paramsFicha = {
 				nombre: "fitxa",
 				nodoOrigen: "",
@@ -169,7 +169,7 @@ function CModulSeccio() {
 				if (llistaFitxes != null)
 					texteFitxes = " (" + llistaFitxes.length  + " " + ( llistaFitxes.length > 1 ? txtFitxes : txtFitxa ) + ")";
 				
-				// crearem una llista per a cada enllass de seccio, que contindra†les fitxes que te assignades
+				// crearem una llista per a cada enllass de seccio, que contindraÔøΩles fitxes que te assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\">";
                 codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
                 codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
@@ -264,7 +264,8 @@ function CModulSeccio() {
 		nodeSeccio = $(el).parent().parent(); // div.contenedorFichas        
         
 		// Guarda el total de fitxes d'aquesta secci√≥ per a la c√≤pia
-		nomSeccio = nodeSeccio.prev().html();
+		//nomSeccio = nodeSeccio.prev().html();		
+		nomSeccio = nodeSeccio.prev().prev().html();
 		
 		// Si no hi ha fitxes en aquesta secci√≥, el seu nom el trobarem en "parent"
 		if (nomSeccio == null)
@@ -502,7 +503,8 @@ function CModulSeccio() {
 				
 		// Actualizar el numero de fichas de la seccion despues de los cambios
 		texteFitxes = " (" + numFitxes + " " + ( numFitxes == 1 ? txtFitxa : txtFitxes  ) + ")";
-		$(paramsFicha.nodoOrigen).parent().find('span:first').html(texteFitxes); 
+		//$(paramsFicha.nodoOrigen).parent().find('span:first').html(texteFitxes); 
+		$(paramsFicha.nodoOrigen).parents(".nodoListaSecciones").find("span:first").html(texteFitxes);
 		
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
@@ -1027,15 +1029,13 @@ function CEscriptoriSeccioFitxes() {
 			info_elm.html( info_elm.text() + txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");			
 		else {			
 			info_elm.html( info_elm.text() + txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
-//			if (ordenar_secciones) {
 				fitxes_seleccionats_elm.find(".listaOrdenable ul").sortable({
 					axis: 'y',
 					update: function(event, ui) {
 						ModulFitxes.calculaOrden(ui, "origen");
-						EscriptoriSeccioFitxes.contaSeleccionats();
+						EscriptoriSeccioFitxes.contaSeleccionats($("#titolSeccio").find("span").html());
 					}
 				}).css({cursor:"move"});
-//			}
 		}
 		
 		fitxes_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				
