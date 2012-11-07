@@ -264,7 +264,7 @@ function CModulSeccio() {
 		nodeSeccio = $(el).parent().parent(); // div.contenedorFichas        
         
 		// Guarda el total de fitxes d'aquesta secció per a la còpia
-		nomSeccio = nodeSeccio.prev().html();
+		nomSeccio = nodeSeccio.prev().prev().html();
 		
 		// Si no hi ha fitxes en aquesta secció, el seu nom el trobarem en "parent"
 		if (nomSeccio == null)
@@ -502,7 +502,7 @@ function CModulSeccio() {
 				
 		// Actualizar el numero de fichas de la seccion despues de los cambios
 		texteFitxes = " (" + numFitxes + " " + ( numFitxes == 1 ? txtFitxa : txtFitxes  ) + ")";
-		$(paramsFicha.nodoOrigen).parent().find('span:first').html(texteFitxes); 
+		$(paramsFicha.nodoOrigen).parents(".nodoListaSecciones").find("span:first").html(texteFitxes);
 		
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
@@ -1027,15 +1027,13 @@ function CEscriptoriSeccioFitxes() {
 			info_elm.html( info_elm.text() + txtSeleccionat + " <strong>" + seleccionats_val + " " + txtFitxa.toLowerCase() + "</strong>.");			
 		else {			
 			info_elm.html( info_elm.text() + txtSeleccionades + " <strong>" + seleccionats_val + " " + txtFitxes.toLowerCase() + "</strong>.");
-//			if (ordenar_secciones) {
-				fitxes_seleccionats_elm.find(".listaOrdenable ul").sortable({
-					axis: 'y',
-					update: function(event, ui) {
-						ModulFitxes.calculaOrden(ui, "origen");
-						EscriptoriSeccioFitxes.contaSeleccionats();
-					}
-				}).css({cursor:"move"});
-//			}
+			fitxes_seleccionats_elm.find(".listaOrdenable ul").sortable({
+				axis: 'y',
+				update: function(event, ui) {
+					ModulFitxes.calculaOrden(ui, "origen");
+					EscriptoriSeccioFitxes.contaSeleccionats( $("#titolSeccio").find("span").html() );
+				}
+			}).css({cursor:"move"});
 		}
 		
 		fitxes_seleccionats_elm.find(".listaOrdenable a.elimina").unbind("click").bind("click", function(){				

@@ -349,7 +349,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Normativas más visitadas en un periodo
+     * Normativas mï¿½s visitadas en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -379,7 +379,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Procedimientos más visitados en un periodo
+     * Procedimientos mï¿½s visitados en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -409,7 +409,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Fichas más visitadas en un periodo
+     * Fichas mï¿½s visitadas en un periodo
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -653,7 +653,7 @@ public abstract class EstadisticaFacadeEJB extends HibernateEJB {
     		queryNormativa.setParameterList("lId", listaUnidadAdministrativaId, Hibernate.LONG);
     		queryNormativa.setMaxResults(numeroRegistros);
     		
-    		queryFicha = session.createQuery("select a.fecha, h from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
+    		queryFicha = session.createQuery("select distinct a.fecha, h from Historico as h, Auditoria as a, Ficha as fic, FichaUA as fua " +
         			"where h.id=a.historico.id and h.class = HistoricoFicha " +
         			"and a.fecha between :fechaInicio and :fechaFin and a.codigoOperacion=" + Auditoria.MODIFICAR +
         			" and fua.ficha.id = fic.id and fua.unidadAdministrativa.id in (:lId) "  +
