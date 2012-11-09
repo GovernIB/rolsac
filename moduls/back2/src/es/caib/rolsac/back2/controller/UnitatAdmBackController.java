@@ -76,10 +76,13 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
 			
-			lower1 = lower1.substring(0, lower1.indexOf("#"));
-			lower2 = lower2.substring(0, lower2.indexOf("#"));
+			//lower1 = lower1.substring(0, lower1.indexOf("#"));
+			//lower2 = lower2.substring(0, lower2.indexOf("#"));
 			
-			return new Long(lower1).compareTo(new Long(lower2));
+			lower1 = lower1.split("#")[2];
+			lower2 = lower2.split("#")[2];
+			
+			return lower1.compareTo(lower2);
 		}
 	}       
     
@@ -215,7 +218,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
                 resultats.put("fr",new TraduccionUA());  
             }
             
-            //Configuración/gestion
+            //Configuraciï¿½n/gestion
             
             //resultats.put("item_clau_hita", uni.getClaveHita());
             resultats.put("item_codi_estandar", uni.getCodigoEstandar());
@@ -313,7 +316,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
             
             List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
             
-        	//Obtenemos el id y el nombre de la sección
+        	//Obtenemos el id y el nombre de la secciï¿½n
         	Set secciones = arbolSecciones.keySet();
         	
         	for (Iterator iterator = secciones.iterator(); iterator.hasNext();) {
@@ -340,7 +343,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     						
     						fichaDTO.setId( fichaUA.getFicha().getId() );
     						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-    						
+    						fichaDTO.setOrdre( new Long(fichaUA.getOrden()) );
     						listaFichasDTO.add( fichaDTO );
 						
 						}
@@ -404,9 +407,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -418,8 +421,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
         
         try {
-        	//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+        	//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
         	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
     		for (FileItem item : items) {
@@ -584,7 +587,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
             	
 				String[] codisMateriesNoves = valoresForm.get("materies").split(",");				
 				
-				//Si es edición sólo tendremos en cuenta las nuevas materias
+				//Si es ediciï¿½n sï¿½lo tendremos en cuenta las nuevas materias
 				if (edicion) {
 										
 					borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
@@ -615,7 +618,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				}
             }
             
-			// Edificios solo en caso de edición
+			// Edificios solo en caso de ediciï¿½n
 			if (edicion && isModuloModificado("modulo_edificios_modificado", valoresForm)) {
 				EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
 				
@@ -629,7 +632,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				//Crear una llista amb els edificis assignats de la unitat
 				String[] listaEdificios = valoresForm.get("llistaEdificis").replace(",", " ").trim().split(" ");		
 				
-				//Grabar en la unidad cada edificio de la lista (parámetro "listaEdificios")			
+				//Grabar en la unidad cada edificio de la lista (parï¿½metro "listaEdificios")			
 				if (!"".equals(listaEdificios[0])) {				
 					for (int i = 0; i < listaEdificios.length; i++) 
 						edificioDelegate.anyadirUnidad(unitatAdministrativa.getId(), new Long(listaEdificios[i]));
@@ -658,14 +661,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
     				// Actualizar el orden de las fichas			
     				for (int i = 0; i < llistaSeccions.length; i++) {
     					
-    					//Obtener las fichas de la sección actual y preparar la ordenación si ha habido cambios en la seccion
+    					//Obtener las fichas de la secciï¿½n actual y preparar la ordenaciï¿½n si ha habido cambios en la seccion
     					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
     					if (isSeccionModificada(idSeccion, valoresForm)) {
         				
     					    List<Long> listaIdFichasUA = new ArrayList<Long>();
         					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
         
-        					// Necesitamos los códigos de Ficha UA para la ordenación
+        					// Necesitamos los cï¿½digos de Ficha UA para la ordenaciï¿½n
         					SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
         					log.debug("Inici de obtenerFichaUAFichaIds().");
                             startTrace = new Date();
@@ -754,7 +757,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 	
 //    /**
-//     * Método que comprueba si hay que mostrar los logos
+//     * Mï¿½todo que comprueba si hay que mostrar los logos
 //     *
 //     * @return boolean
 //     */
@@ -777,7 +780,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    	if (!hayMicrositesUA(id)) {
 	    		UnidadAdministrativa unitatAdministrativa = unidadAdministrativaDelegate.consultarUnidadAdministrativa(id);
 	    	
-	    		// Validamos que se pueda eliminar la UA. Se podrá eliminar si no tiene elementos relacionados. A excepción de 
+	    		// Validamos que se pueda eliminar la UA. Se podrï¿½ eliminar si no tiene elementos relacionados. A excepciï¿½n de 
 	    		// usuarios y edificios.
 	    		boolean esBorrable = validarPermisosEliminacionUA(unitatAdministrativa,unidadAdministrativaDelegate);
 	    		
@@ -818,7 +821,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 		String lang = request.getLocale().getLanguage();
 				
-		//Per defecte només carregarem les fitxes de la UA actual i de les seves UAs filles
+		//Per defecte nomï¿½s carregarem les fitxes de la UA actual i de les seves UAs filles
 		boolean uaMeves = false;
 		boolean uaFilles = false;
 		
@@ -829,7 +832,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
         	resultats.put("id", -2);
         	
-        	log.error("Error de sessión: Sessión expirada o no inciada");
+        	log.error("Error de sessiï¿½n: Sessiï¿½n expirada o no inciada");
         	
             return resultats; // Si no hay unidad administrativa se devuelve vacio
             
@@ -933,7 +936,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	} 
 	
 	/**
-     * Método que comprueba si hay microsites para una Unidad Orgánica
+     * Mï¿½todo que comprueba si hay microsites para una Unidad Orgï¿½nica
      * @param idua identificador de la unidad organica
      * @return boolean
      */
@@ -970,12 +973,12 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 	
     /**
-     * Descripción: Método que valida si la UA puede ser eliminada.
+     * Descripciï¿½n: Mï¿½todo que valida si la UA puede ser eliminada.
      * 
      * @author Indra
      * @param  ua Unidad administrativas
      * @param  unidadDelegate  Delegado de la Unidad administrativa
-     * @return Devuelve true o false en función de si la unidad administrativa puede ser o no borrada
+     * @return Devuelve true o false en funciï¿½n de si la unidad administrativa puede ser o no borrada
      */
     private boolean validarPermisosEliminacionUA(UnidadAdministrativa ua, UnidadAdministrativaDelegate unidadDelegate) {
     	
@@ -1039,9 +1042,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
     }
     
 	/**
-	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecerán
-	 * a ella, según los códigos de Materia pasados por parámetro. Si la lista de códigos está vacía, se 
-	 * borrarán todas las materias de la UA. 
+	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecerï¿½n
+	 * a ella, segï¿½n los cï¿½digos de Materia pasados por parï¿½metro. Si la lista de cï¿½digos estï¿½ vacï¿½a, se 
+	 * borrarï¿½n todas las materias de la UA. 
 	 */
 	private void borrarUnidadesMateriaObsoletas(UnidadAdministrativa unidadAdministrativa, String[] codigosMateriasNuevas) throws DelegateException {
 		
@@ -1059,14 +1062,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				while ( i < totalMateriasNuevas && ( !materia.getId().equals(new Long(codigosMateriasNuevas[i])) ) ) 
 					i++;
 				
-				//Si la materia no está entre los codigos nuevos, significa que ha sido eliminada
+				//Si la materia no estï¿½ entre los codigos nuevos, significa que ha sido eliminada
 				//y, por tanto, la borraremos
 				if ( i == totalMateriasNuevas  ) 
 					listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
 				
 			}
 			
-		//Si la lista de códigos está vacía, significará que hay que borrar todas las materias de la UA
+		//Si la lista de cï¿½digos estï¿½ vacï¿½a, significarï¿½ que hay que borrar todas las materias de la UA
 		} else {
 			for ( UnidadMateria unidadMateria : listaUnidadMateria ) 
 				listaIdUnidadMateriaObsoleta.add(new Long(unidadMateria.getId()));
@@ -1086,15 +1089,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		for( Iterator it = arbolSecciones.keySet().iterator(); it.hasNext(); ) {
 	    	String key = (String)it.next();
 	    	
-	    	//Eliminamos el código html que pueda haber en el nombre de la sección.
+	    	//Eliminamos el cï¿½digo html que pueda haber en el nombre de la secciï¿½n.
 	    	key = key.split("#")[0] + "#" + (key.split("#")[1]).replaceAll("\\<.*?>", "");
 	    	 
-	    	//Obtenemos el orden de la sección de cualquier FichaUA de la sección actual
+	    	//Obtenemos el orden de la secciï¿½n de cualquier FichaUA de la secciï¿½n actual
 	    	//para reordenar el TreeMap original
 	    	if (arbolSecciones.get(key) != null){
 	            int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();	            
 	            newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));	            
-	            //La lista de fichasUA se devolverá ordenada según su campo "orden"
+	            //La lista de fichasUA se devolverï¿½ ordenada segï¿½n su campo "orden"
 	            Collections.sort( (ArrayList<FichaUA>) arbolSecciones.get(key) );	            
 	    	}	    	
 	    }
@@ -1104,7 +1107,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}	
 	
 	/**
-	 * Retorna una cadena que canvia les vocals amb accent o dièresi 
+	 * Retorna una cadena que canvia les vocals amb accent o diï¿½resi 
 	 * per vocals sense aquestes (emprat per cercar registres coincidents 
 	 * de seccions).
 	 * 
@@ -1112,11 +1115,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	 * @return String
 	 */
 	private String toFormatComparacio( String cadena ) {
-		return cadena.toLowerCase().replaceAll("[áàä]", "a")
-					 			   .replaceAll("[éèë]", "e")
-					 			   .replaceAll("[íìï]", "i")
-					 			   .replaceAll("[óòö]", "o")
-					 			   .replaceAll("[úùü]", "u");		
+		return cadena.toLowerCase().replaceAll("[ï¿½ï¿½ï¿½]", "a")
+					 			   .replaceAll("[ï¿½ï¿½ï¿½]", "e")
+					 			   .replaceAll("[ï¿½ï¿½ï¿½]", "i")
+					 			   .replaceAll("[ï¿½ï¿½ï¿½]", "o")
+					 			   .replaceAll("[ï¿½ï¿½ï¿½]", "u");		
 	}
 	
 	/**
