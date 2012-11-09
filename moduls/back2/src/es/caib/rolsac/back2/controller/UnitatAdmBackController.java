@@ -76,10 +76,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			String lower1 =	 element1.toString();
 			String lower2 =	 element2.toString();
 			
-			lower1 = lower1.substring(0, lower1.indexOf("#"));
-			lower2 = lower2.substring(0, lower2.indexOf("#"));
+			lower1 = lower1.split("#")[2];
+			lower2 = lower2.split("#")[2];
 			
-			return new Long(lower1).compareTo(new Long(lower2));
+			return lower1.compareTo(lower2);
 		}
 	}       
     
@@ -340,7 +340,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     						
     						fichaDTO.setId( fichaUA.getFicha().getId() );
     						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-    						
+    						fichaDTO.setOrdre( new Long(fichaUA.getOrden()) );    						
     						listaFichasDTO.add( fichaDTO );
 						
 						}
