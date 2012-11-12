@@ -430,7 +430,7 @@
         <input id="item_id" name="item_id" type="hidden" value="" class="nou" />
         <div class="botonera dalt">
             <ul>
-                <%-- dsanchez: Al deshabilitar el botón hay que añadir la clase "off" --%>
+                <%-- dsanchez: Al deshabilitar el botï¿½n hay que aï¿½adir la clase "off" --%>
                 <!-- <li class="btnVolver off"> -->
                 
                 <li class="btnVolver impar">
@@ -506,7 +506,7 @@
                            <div id="cercador">
                                <div class="botonera" style="margin-top: 0px; float:left;">
                                    <div class="boton btnGenerico" style="margin-left: 0px;">
-                                   	   <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua');" class="btn consulta">
+									   <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_ua_id', 'item_ua');" class="btn consulta">                                   	   
                                        <%--  <a href="javascript:ArbreUA('item_ua', 'item_ua_id');" class="btn consulta"> --%>
                                        <span><span><spring:message code='boto.canviarUA'/></span></span>
                                        </a>

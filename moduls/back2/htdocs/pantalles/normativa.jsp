@@ -1596,7 +1596,7 @@
                     <div id="botoneraCambioUA">
                         <div class="botonera">
                             <div class="boton btnGenerico">
-                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">                                
+								<a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_ua_id', 'item_ua_nom');" class="btn consulta">
                                 <span><span><spring:message code='boto.canviarUA'/></span></span>
                                 </a>
                             </div>
@@ -1628,7 +1628,7 @@
                             <div class="seleccionat">
                                 <p class="info"><spring:message code='txt.no_procediments'/></p>
                                 <div class="listaOrdenable"></div> 
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                     <!-- /modulProcediments -->

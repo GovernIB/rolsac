@@ -54,9 +54,9 @@
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
-    
+
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
-    
+
     //texts
     var txtEsborrarCorrecte = "<spring:message code='txt.procediment_esborrat_correcte'/>";
     var txtEsborrarTramitCorrecte = "<spring:message code='txt.tramit_esborrat_correcte'/>";
@@ -842,8 +842,8 @@
                                                     <input id="item_organ_responsable" name="item_organ_responsable" type="text" class="nou" readonly="readonly" />                                                
                                                 </div>
                                                 <div class="botones">
-                                                    <div class="btnCambiar boton btnGenerico">
-                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable');" class="btn consulta">
+                                                    <div class="btnCambiar boton btnGenerico">                        
+                                                        <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_responsable_id', 'item_organ_responsable');" class="btn consulta">
                                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                                         </a>
                                                     </div>
@@ -868,7 +868,7 @@
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
-                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
+														<a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
                                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                                         </a>
                                                     </div>
@@ -1886,7 +1886,7 @@
 		                                        </div>
 		                                        <div class="botones">
 		                                            <div class="btnCambiar boton btnGenerico">
-		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_<c:out value="${lang}"/>');" class="btn consulta">		                                                
+		                                                <a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_<c:out value="${lang}"/>');" class="btn consulta">		                                                		                                                
 		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
 		                                                </a>
 		                                            </div>

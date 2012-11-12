@@ -114,8 +114,9 @@ public class PopupUABackController {
 
         //log.info("Entramos en expandir");
         List tieneHijos = new ArrayList();
-
+        
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
+        request.setAttribute("idSelect", request.getParameter("idSelect"));                	
 
         List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
         

@@ -11,6 +11,11 @@
     <link href="<c:url value='/css/comuns.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/arbreUA.css'/>" rel="stylesheet" type="text/css" media="screen" />
     
+	<!-- Para evitar error de idiomas en esta pantalla -->
+    <script>
+    var idiomesAplicacio = "<c:out value='${idiomes_aplicacio_string}'/>";
+    </script>	
+    
     <script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/error.js'/>"></script>
@@ -19,7 +24,7 @@
     <script type="text/javascript" src="<c:url value='/js/detall_base.js'/>"></script>    
 
     <script type="text/javascript">
-    <!--
+    <!--    
         var ex=new Array;
         var max=1000
         var nivell=0
@@ -135,10 +140,10 @@
                     break;
             }
             if (ex[i].opened==false){
-                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:open(" + i + ")'><img src='../img/botons/mostra.gif' width=12 height=12 border=0></a><a style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a></li>")
+                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:open(" + i + ")'><img src='../img/botons/mostra.gif' width=12 height=12 border=0></a><a id='" + ex[i].codi + "' style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a></li>")
                 max=ex[i].level
             } else {
-                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:unopen(" + i + ")'><img src='../img/botons/amaga.gif' width=12 height=12 border=0></a><a style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a>");
+                document.write("<li style='font-size: 13px; padding: 5px 12px 0;'><a href='javascript:unopen(" + i + ")'><img src='../img/botons/amaga.gif' width=12 height=12 border=0></a><a id='" + ex[i].codi + "' style='color: #0099CC; text-decoration: none;' href='javascript:carregar(\"" + ex[i].codi + "\",\"" + ex[i].descripcion + "\")'>" + ex[i].descripcion + "</a>");
                 max=1000
                 if (ex[i].level<ex[i+1].level){
                     document.write("<ul style='list-style: none outside none;'>")
@@ -170,7 +175,6 @@
         }
 
         
-
         function open(nr){
             window.location = "<c:url value='popArbreUAExpandir.do' />?idUA=<c:out value='${idUA}' />&idSelect=" + ex[nr].codi + "&idHidden=<c:out value='${id_hidden}' />&idInput=<c:out value='${id_input}' />";
         }

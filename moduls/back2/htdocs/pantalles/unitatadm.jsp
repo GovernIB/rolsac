@@ -759,7 +759,7 @@
                         <!-- Botonera -->                        
                         <div class="botonera">
                             <div class="boton btnGenerico" style="margin-left: 0px;">
-                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_pare_id','item_pare');" class="btn consulta">
+								<a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','item_pare_id', 'item_pare');" class="btn consulta">                                
                                     <span><span><spring:message code='boto.canviarUAPare'/></span></span>
                                 </a>
                             </div>
