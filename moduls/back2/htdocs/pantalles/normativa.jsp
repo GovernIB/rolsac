@@ -1253,10 +1253,22 @@
 	                            <div class="etiqueta"><label for="item_pagina_inicial_<c:out value="${lang}"/>"><spring:message code='camp.pagina_inicial'/></label></div>
 	                            <div class="control">
 	                                <input id="item_pagina_inicial_<c:out value="${lang}"/>" name="item_pagina_inicial_<c:out value="${lang}"/>" type="text" class="nou" />
-	                            </div>
+	                            </div>																			
+                            </div>							
+							</c:forEach>
+                        </div>	
+						
+                        <div class="element t50p multilang">						
+							<c:forEach items="${idiomes_aplicacio}" var="lang">
+							<div class="campoIdioma <c:out value="${lang}"/>">
+	                            <div class="etiqueta"><label for="item_pagina_final_<c:out value="${lang}"/>"><spring:message code='camp.pagina_final'/></label></div>
+	                            <div class="control">
+	                                <input id="item_pagina_final_<c:out value="${lang}"/>" name="item_pagina_final_<c:out value="${lang}"/>" type="text" class="nou" />
+	                            </div>																			
                             </div>							
 							</c:forEach>
                         </div>						
+						
                     </div>
                     <!-- /fila -->
                     
