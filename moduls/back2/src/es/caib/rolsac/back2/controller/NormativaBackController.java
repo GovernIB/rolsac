@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -175,10 +176,15 @@ public class NormativaBackController extends PantallaBaseController {
 		}
 		
 		try {
+			
 			//Obtener par�metros de b�squeda
-		
-		    if (request.getParameter("id") != null && !"".equals(request.getParameter("id")) )
-                paramMap.put("id", ParseUtil.parseLong(request.getParameter("id")));
+			String idStr = request.getParameter("id");
+			Long id = -1l;
+									
+			if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
+				id = ParseUtil.parseLong( idStr.trim() );
+			
+			paramMap.put("id", idStr != null ? id : null );        		
 		    
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");

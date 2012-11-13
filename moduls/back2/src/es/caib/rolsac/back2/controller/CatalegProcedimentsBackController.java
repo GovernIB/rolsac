@@ -181,12 +181,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
         }
         
-		try {
-            Long codi = ParseUtil.parseLong(request.getParameter("codi"));
-            paramMap.put("id", codi);
-        } catch (NumberFormatException e){
-        }
-        
+		String idStr = request.getParameter("codi");
+		Long id = -1l;
+								
+		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
+			id = ParseUtil.parseLong( idStr.trim() );
+		
+		paramMap.put("id", idStr != null ? id : null );        
 		
 		Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
 		if (fechaCaducidad != null) {
