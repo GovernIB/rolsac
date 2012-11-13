@@ -54,9 +54,9 @@ import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -173,12 +173,14 @@ public class FitxaInfBackController extends PantallaBaseController {
         if (session.getAttribute("unidadAdministrativa") != null) {
         	ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
         }
-          
-        try {
-            Long codi = ParseUtil.parseLong(request.getParameter("codi"));
-            paramMap.put("id", codi);
-        } catch (NumberFormatException e) {
-        }
+        
+		String idStr = request.getParameter("codi");
+		Long id = -1l;
+								
+		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
+			id = ParseUtil.parseLong( idStr.trim() );
+		
+		paramMap.put("id", idStr != null ? id : null );
         
         if (request.isUserInRole("sacoper")) {
             paramMap.put("validacion", ""); // En el back antiguo estaba asi.
@@ -512,7 +514,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         
         try {      
         	
-        	//Aqui nos llegarïa un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+        	//Aqui nos llegarï¿½a un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
     		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);

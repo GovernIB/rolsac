@@ -149,7 +149,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, String> tradMap = new HashMap<String, String>();
 
 		String lang = getRequestLanguage(request);
-
 		
 		UnidadAdministrativa ua = null;
 		if (getUAFromSession(session) != null) {
@@ -179,6 +178,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
         
         Long publicObjectiu = null;
         String publicObjectiuString = request.getParameter("publicObjectiu");
+        
         if (publicObjectiuString != null) {
 			Scanner scanner = new Scanner(publicObjectiuString);
 	        if (scanner.hasNextLong()) {
@@ -186,18 +186,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
         }
         
-		try {
-            Long codi = ParseUtil.parseLong(request.getParameter("codi"));
-            paramMap.put("id", codi);
-        } catch (NumberFormatException e){
-        }
-        
+		String idStr = request.getParameter("codi");
+		Long id = -1l;
+								
+		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
+			id = ParseUtil.parseLong( idStr.trim() );
+		
+		paramMap.put("id", idStr != null ? id : null );
 		
 		Date fechaCaducidad = DateUtils.parseDate(request.getParameter("fechaCaducidad"));
 		if (fechaCaducidad != null) {
 			paramMap.put("fechaCaducidad", fechaCaducidad);
 		}
-		
 		
 		Date fechaPublicacion = DateUtils.parseDate(request.getParameter("fechaPublicacion"));
 		if (fechaPublicacion != null) {

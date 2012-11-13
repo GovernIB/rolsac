@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -155,7 +156,7 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String idioma = request.getLocale().getLanguage();
 		
-		//Obtenemos la ordenación por parámetro
+		//Obtenemos la ordenaciï¿½n por parï¿½metro
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
@@ -168,18 +169,22 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		Long idUA = null;
 //		if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
-//			return resultats;//Si no hay unidad administrativa se devuelve vacío
+//			return resultats;//Si no hay unidad administrativa se devuelve vacï¿½o
 //		}	
 		if (request.getParameter("idUA") != null && !request.getParameter("idUA").equals("")){                      
 			idUA = ParseUtil.parseLong(request.getParameter("idUA"));
 		}
 		
 		try {
-			//Obtener parámetros de búsqueda
-		
-		    if (request.getParameter("id") != null && !"".equals(request.getParameter("id")) )
-                paramMap.put("id", ParseUtil.parseLong(request.getParameter("id")));
-		    
+			//Obtener parï¿½metros de bï¿½squeda
+			String idStr = request.getParameter("id");
+			Long id = -1l;
+									
+			if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
+				id = ParseUtil.parseLong( idStr.trim() );
+			
+			paramMap.put("id", idStr != null ? id : null );
+									    
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));
@@ -272,8 +277,8 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String idioma = request.getLocale().getLanguage();
 
-		//TODO: ordenación
-		//Obtenemos la ordenación por parámetro
+		//TODO: ordenaciï¿½n
+		//Obtenemos la ordenaciï¿½n por parï¿½metro
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
@@ -455,9 +460,9 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -473,8 +478,8 @@ public class NormativaBackController extends PantallaBaseController {
 		
         try {
         	
-    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
@@ -538,7 +543,7 @@ public class NormativaBackController extends PantallaBaseController {
         		normativa.setProcedimientos(normativaOld.getProcedimientos());
         		normativa.setId(idNorm);
         	} else {
-        		//Comprobar permisos de creación
+        		//Comprobar permisos de creaciï¿½n
             	if (!normativaDelegate.autorizaCrearNormativa(ParseUtil.parseInt(valoresForm.get("item_validacio")))) {
     				IdNomDTO error = new IdNomDTO(-1l, messageSource.getMessage("error.permisos", null, request.getLocale()));
     				return new ResponseEntity<String>(error.getJson(), responseHeaders, HttpStatus.CREATED);
@@ -574,7 +579,7 @@ public class NormativaBackController extends PantallaBaseController {
         		//Campo comentado en Back2
         		//traNorm.setObservaciones(valoresForm.get("item_des_curta_" + idioma));     
 
-        		//Responsable sólo en normativa externa
+        		//Responsable sï¿½lo en normativa externa
         		if (!normativaLocal) {        				
         			((TraduccionNormativaExterna)traNorm).setResponsable(valoresForm.get("item_responsable_" + idioma));
         		}
@@ -590,7 +595,7 @@ public class NormativaBackController extends PantallaBaseController {
         		}
         	}
 
-        	//Obtener los demás campos
+        	//Obtener los demï¿½s campos
         	if (valoresForm.get("item_numero") != null && !"".equals(valoresForm.get("item_numero")))
         		normativa.setNumero(ParseUtil.parseLong(valoresForm.get("item_numero")));
 
@@ -636,12 +641,12 @@ public class NormativaBackController extends PantallaBaseController {
         		String jsonAfectaciones = valoresForm.get("afectaciones");
         		AfectacionesDTO afectaciones = mapper.readValue(jsonAfectaciones, AfectacionesDTO.class);
     
-        		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar qué añadir y qué eliminar.
+        		//Si estamos editando comparar la lista actual de afectaciones actual con la nueva para determinar quï¿½ aï¿½adir y quï¿½ eliminar.
         		if (edicion) {
         			Set<Afectacion> listaActualAfectaciones = normativa.getAfectadas();
         			for (Afectacion afectacionOld : listaActualAfectaciones) {
         				
-        				//Buscar la afectación afectacionOld en la lista nueva recibida en el post
+        				//Buscar la afectaciï¿½n afectacionOld en la lista nueva recibida en el post
         				boolean estaEnLaListaNueva = false;
         				for (AfectacionDTO afectacionNew : afectaciones.getListaAfectaciones()) {
         					if (afectacionOld.getNormativa().getId().equals(afectacionNew.getNormaId()) && afectacionOld.getTipoAfectacion().getId().equals(afectacionNew.getAfectacioId()) ) {
@@ -650,14 +655,14 @@ public class NormativaBackController extends PantallaBaseController {
         						break;
         					}
         				}
-        				//Si no está en la lista nueva es que hay que eliminarla		
+        				//Si no estï¿½ en la lista nueva es que hay que eliminarla		
         				if (!estaEnLaListaNueva) {    				
         					normativaDelegate.eliminarAfectacion(normativa.getId(), afectacionOld.getTipoAfectacion().getId(), afectacionOld.getNormativa().getId());
         				}
         			}
         		}
         		
-        		//Añadir afectaciones
+        		//Aï¿½adir afectaciones
     			for (AfectacionDTO afectacion : afectaciones.getListaAfectaciones()) {
     				normativaDelegate.anyadirAfectacion(afectacion.getNormaId(), afectacion.getAfectacioId(), normativa.getId());
     			}         	
@@ -745,12 +750,12 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String idioma = request.getLocale().getLanguage();
 		
-		//TODO obtener la ordenación por parámetro
+		//TODO obtener la ordenaciï¿½n por parï¿½metro
 		String campoOrdenacion = "fecha";
 		String orden = "desc";		
 		
 		try {
-			//Obtener parámetros de búsqueda					
+			//Obtener parï¿½metros de bï¿½squeda					
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));
@@ -801,7 +806,7 @@ public class NormativaBackController extends PantallaBaseController {
 	}	
 
 	/**
-	 * Obtiene una lista de NormativaDTO a partir de una lista de envíos de eboib
+	 * Obtiene una lista de NormativaDTO a partir de una lista de envï¿½os de eboib
 	 * @param listadonormativas
 	 * @param idioma
 	 * @return
@@ -878,9 +883,9 @@ public class NormativaBackController extends PantallaBaseController {
 		
 	//TODO: mover a clase de utilidades.
 	/**
-	 * De un string que contiene un enlace HTML extrae el título del enlace.
+	 * De un string que contiene un enlace HTML extrae el tï¿½tulo del enlace.
 	 * @param texto String que contiene el enlace.
-	 * @return Título del enlace, si no hay enlace devuelve el texto tal cual.
+	 * @return Tï¿½tulo del enlace, si no hay enlace devuelve el texto tal cual.
 	 */
 	private static String obtenerTituloDeEnlaceHtml(String texto) {
 		if (texto == null)
@@ -888,7 +893,7 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String tmp = texto;
 		
-		//Será el texto desde el primer '>' y desde ahí al primer '<'
+		//Serï¿½ el texto desde el primer '>' y desde ahï¿½ al primer '<'
 		int pos = tmp.indexOf('>');
 		if ( pos > -1) {
 			tmp = tmp.substring(pos + 1);
