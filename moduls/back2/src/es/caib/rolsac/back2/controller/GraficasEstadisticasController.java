@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.axis.utils.StringUtils;
+import static es.caib.rolsac.utils.StringUtils.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Archivo;
@@ -59,7 +59,7 @@ public class GraficasEstadisticasController extends ArchivoController {
 	public Archivo obtenerArchivo(HttpServletRequest request) throws Exception {		
         //obtener archivo concreto con el delegate
         String tipus = request.getParameter("tipus");
-        if (StringUtils.isEmpty(tipus) || tipus.equals(Parametros.TIPUS_GRAFICA_QUADRE_CONTROL) ) {
+        if (vacio(tipus) || tipus.equals(Parametros.TIPUS_GRAFICA_QUADRE_CONTROL) ) {
         	return this.obtenerArchivoQuadreControl(request);
         } else if (tipus.equals(Parametros.TIPUS_GRAFICA_MODUL) ) {
         	return this.obtenerArchivoModul(request);
