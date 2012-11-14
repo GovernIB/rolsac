@@ -422,6 +422,11 @@
                 <include name="hibernate2.jar" />
                 <include name="ehcache.jar" />
             </fileset>
+
+            <zipfileset dir="${lib}/axis-1.4" prefix="lib">
+                  <include name="axis.jar" />
+            </zipfileset>
+
 			
     	</ear>
   </target>	
@@ -516,6 +521,15 @@
 	  <!-- ================================================================== -->
 	  <!-- sonar (analitzador de codi)                                                                                                                             -->
 	  <!-- ================================================================== -->
+
+   	  <target name="proxy">
+   	 	<property name="proxy.host" value="rproxy1.caib.es"/>
+	    <property name="proxy.port" value="3128"/>
+	    <property name="proxy.user" value="u92770"/>
+	    <property name="proxy.pass" value="palma093"/>
+	    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
+	      proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
+	  </target>
 	
 	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
 	    <classpath path="${lib}/sonar-ant-task-1.4.jar" /> 
@@ -523,9 +537,11 @@
 	    <!-- In such case this classpath node is no more mandatory -->
 	  </taskdef>
 	 
-	  <property name="sonar.host.url" value="http://localhost:9000" />
+	  <!-- property name="sonar.host.url" value="http://localhost:9000" / -->
+	
+	  <property name="sonar.host.url" value="https://tomcat-ejaenv.rhcloud.com/sonar"/>
 		  
-	  <target name="sonar-java">
+	  <target name="sonar-java" depends="proxy">
 	    <!-- list of mandatories Sonar properties -->
 	  	
 	    <property name="sonar.modules" 
@@ -541,7 +557,7 @@
 	    <sonar:sonar key="caib:rolsac" version="${rolsac.target}" xmlns:sonar="antlib:org.sonar.ant"/>
 	  </target>
 
-	  <target name="sonar-js">
+	  <target name="sonar-js"  depends="proxy">
 	    <!-- list of mandatories Sonar properties -->
 
 	  	<property name="sonar.language" value="js" />

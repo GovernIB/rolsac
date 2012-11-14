@@ -282,6 +282,7 @@
             excludes="WEB-INF/web.xml,META-INF/MANIFEST.MF">
             <manifest>
                 <attribute name="Created-By" value="Govern"/>
+            	<attribute name="Class-Path" value="lib/axis.jar"/>
             </manifest>
         </war>
     </target>

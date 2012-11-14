@@ -71,7 +71,6 @@
     	
 		<!-- agarcia: librerias comunes en 00librerias -->
     	<fileset dir="${lib.dir}/webcaib">
-			<include name="axis.jar"/>
 		 	<include name="commons-lang-2.1.jar"/>
 			<include name="commons-beanutils-1.8.3.jar"/>
 		    <include name="dom4j.jar"/>
@@ -224,6 +223,7 @@
             basedir="${ejb.classes}">
             <manifest>
                 <attribute name="Created-By" value="Fundaci� IBIT"/>
+               	<attribute name="Class-Path" value="lib/axis.jar"/>
             </manifest>
             <metainf dir="${ejb.gen.etc}" includes="*.xml" excludes="hibernate-rolsac.cfg.xml"/>
             <fileset dir="${ejb.gen.etc}" includes="hibernate-rolsac.cfg.xml"/>

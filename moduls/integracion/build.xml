@@ -44,7 +44,6 @@
     	 </fileset>
 		<!-- agarcia: librerias comunes en 00librerias -->
 		<fileset dir="${lib.dir}/webcaib">
-		    <!--include name="axis.jar"/-->
 		    <include name="juddi-proxy.jar"/>
 			<include name="struts.jar"/>  <!-- vuds -->
 		</fileset>
@@ -91,6 +90,7 @@
         <war warfile="${jar.product}/${modul}.war" needxmlfile='false'>
             <manifest>
                 <attribute name="Created-By" value="INDRA"/>
+            	<attribute name="Class-Path" value="lib/axis.jar"/>
             </manifest>
 
         	<lib dir="${jar.product}">

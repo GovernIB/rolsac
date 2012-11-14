@@ -51,7 +51,6 @@
             <include name="jsp-api.jar"/>
             <include name="hibernate2.jar"/>
             <include name="commons-logging.jar"/>
-        	<include name="axis-1.4/axis.jar"/>
         	<include name="jaxrpc.jar"/>
         	<include name="micromodel.jar"/>
         	<include name="sac-micropersistence.jar"/>
