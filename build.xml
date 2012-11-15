@@ -523,20 +523,24 @@
 	  <!-- ================================================================== -->
 
    	  <target name="proxy">
-   	 	<property name="proxy.host" value="rproxy1.caib.es"/>
-	    <property name="proxy.port" value="3128"/>
-	    <property name="proxy.user" value="u92770"/>
-	    <property name="proxy.pass" value="palma093"/>
 	    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
 	      proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
 	  </target>
 	
 	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-	    <classpath path="${lib}/sonar-ant-task-1.4.jar" /> 
+	    <classpath>
+	    	<pathelement path="${lib}/sonar-ant-task-1.4.jar" />
+	     </classpath>
+	    	
 	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
 	    <!-- In such case this classpath node is no more mandatory -->
 	  </taskdef>
 	 
+	
+	<property name="sonar.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
+	<property name="sonar.jdbc.username" value="sonar" />
+	<property name="sonar.jdbc.password" value="sonar" />
+	
 	  <!-- property name="sonar.host.url" value="http://localhost:9000" / -->
 	
 	  <property name="sonar.host.url" value="https://tomcat-ejaenv.rhcloud.com/sonar"/>
