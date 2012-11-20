@@ -2,7 +2,7 @@
         name="jboss.util:type=Service,name=RolsacProperties">
     <!-- Set properties using the properties file style. -->
     <attribute name="Properties">
-       es.caib.rolsac.portal.url=https://proves.caib.es
+       es.caib.rolsac.portal.url=https://sdesweblin1.caib.es
 	   es.caib.rolsac.integracion.traductor=S
 	   
 <!--
@@ -20,7 +20,7 @@
 	   -->
 	   es.caib.rolsac.traspasboib.mode=eBoib
 	   <!-- url pel mode de connexió eboib -->
-	   es.caib.rolsac.traspasboib.url=https://proves.caib.es/eboibfront/
+	   es.caib.rolsac.traspasboib.url=https://sdesweblin1.caib.es/eboibfront/
 
 	   es.caib.rolsac.tramite.sistra=Y
 	   
@@ -53,9 +53,9 @@
 		
 		es.caib.rolsac.numResponsables=3
 		
-		es.caib.rolsac.model.ws.urlUnidad=https://proves.caib.es/govern/organigrama/area.do?coduo=%id%&amp;lang=
-		es.caib.rolsac.model.ws.urlFicha=https://proves.caib.es/govern/sac/fitxa.do?codi=%id%&amp;lang=
-		es.caib.rolsac.model.ws.urlProcedimiento=https://proves.caib.es/govern/sac/visor_proc.do?codi=%id%&amp;lang=
+		es.caib.rolsac.model.ws.urlUnidad=https://sdesweblin1.caib.es/govern/organigrama/area.do?coduo=%id%&amp;lang=
+		es.caib.rolsac.model.ws.urlFicha=https://sdesweblin1.caib.es/govern/sac/fitxa.do?codi=%id%&amp;lang=
+		es.caib.rolsac.model.ws.urlProcedimiento=https://sdesweblin1.caib.es/govern/sac/visor_proc.do?codi=%id%&amp;lang=
 
 		es.caib.rolsac.codiEstandarSecGrupMat=GRUPMATERIES
 

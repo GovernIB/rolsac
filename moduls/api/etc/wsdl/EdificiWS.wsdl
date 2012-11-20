@@ -98,7 +98,6 @@
 					<element name="mime" nillable="true" type="xsd:string" />
 					<element name="nombre" nillable="true" type="xsd:string" />
 					<element name="peso" type="xsd:long" />
-					<element name="url" nillable="true" type="xsd:string" />
 				</sequence>
 			</complexType>
 		</schema>
