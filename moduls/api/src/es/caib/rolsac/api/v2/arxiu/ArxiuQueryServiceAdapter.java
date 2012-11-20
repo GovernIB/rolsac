@@ -22,14 +22,5 @@ public class ArxiuQueryServiceAdapter extends ArxiuDTO implements ArxiuQueryServ
             throw new QueryServiceException(ExceptionMessages.ADAPTER_CONSTRUCTOR, e);
         }
     }
-    
-    /**
-     * Construye la parte final de la URL para obtener archivos.
-     * 
-     * @return Parte final de la URL para obtener archivos.
-     */
-    public String getUrl() {
-        return ARXIU_CONTEXTPATH_URL + getId();
-    }
 
 }

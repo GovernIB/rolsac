@@ -16,6 +16,8 @@ public class ArxiuDTO  implements java.io.Serializable {
 
     private long peso;
 
+    private java.lang.String url;
+
     public ArxiuDTO() {
     }
 
@@ -23,11 +25,13 @@ public class ArxiuDTO  implements java.io.Serializable {
            long id,
            java.lang.String mime,
            java.lang.String nombre,
-           long peso) {
+           long peso,
+           java.lang.String url) {
            this.id = id;
            this.mime = mime;
            this.nombre = nombre;
            this.peso = peso;
+           this.url = url;
     }
 
 
@@ -110,6 +114,26 @@ public class ArxiuDTO  implements java.io.Serializable {
         this.peso = peso;
     }
 
+
+    /**
+     * Gets the url value for this ArxiuDTO.
+     * 
+     * @return url
+     */
+    public java.lang.String getUrl() {
+        return url;
+    }
+
+
+    /**
+     * Sets the url value for this ArxiuDTO.
+     * 
+     * @param url
+     */
+    public void setUrl(java.lang.String url) {
+        this.url = url;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ArxiuDTO)) return false;
@@ -129,7 +153,10 @@ public class ArxiuDTO  implements java.io.Serializable {
             ((this.nombre==null && other.getNombre()==null) || 
              (this.nombre!=null &&
               this.nombre.equals(other.getNombre()))) &&
-            this.peso == other.getPeso();
+            this.peso == other.getPeso() &&
+            ((this.url==null && other.getUrl()==null) || 
+             (this.url!=null &&
+              this.url.equals(other.getUrl())));
         __equalsCalc = null;
         return _equals;
     }
@@ -149,6 +176,9 @@ public class ArxiuDTO  implements java.io.Serializable {
             _hashCode += getNombre().hashCode();
         }
         _hashCode += new Long(getPeso()).hashCode();
+        if (getUrl() != null) {
+            _hashCode += getUrl().hashCode();
+        }
         __hashCodeCalc = false;
         return _hashCode;
     }
@@ -182,6 +212,12 @@ public class ArxiuDTO  implements java.io.Serializable {
         elemField.setXmlName(new javax.xml.namespace.QName("", "peso"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setNillable(false);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("url");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "url"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
 

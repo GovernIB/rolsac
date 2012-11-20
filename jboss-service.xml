@@ -34,7 +34,7 @@
 	   
 	   <!-- API -->
        es.caib.rolsac.api.v2.idiomaPerDefecte=ca
-       es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
+       es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
 	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
