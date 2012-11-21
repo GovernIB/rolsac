@@ -92,13 +92,13 @@ public class ProcedimentByActivoCriteria implements CriteriaObject {
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.LT, fecha));
         qb.addGroupedRestrictions(restrictions);
         
-        restrictions = new ArrayList<Restriction>(2);
+        restrictions = new ArrayList<Restriction>(3);
         restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.NULL));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));
         qb.addGroupedRestrictions(restrictions);
         
-        restrictions = new ArrayList<Restriction>(2);
+        restrictions = new ArrayList<Restriction>(3);
         restrictions.add(new Restriction(LOGIC.OR, alias + "validacion", OPERATION.EQ, Validacion.PUBLICA));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaCaducidad", OPERATION.GE, fecha));
         restrictions.add(new Restriction(LOGIC.AND, alias + "fechaPublicacion", OPERATION.GT, fecha));

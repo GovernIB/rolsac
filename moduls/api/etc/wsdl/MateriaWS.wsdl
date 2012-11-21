@@ -214,6 +214,7 @@
                             <element name="familia" nillable="true" type="xsd:string" />
                             <element name="agrupacionMateria" nillable="true" type="xsd:string" />
                             <element name="publicoObjetivo" nillable="true" type="xsd:string" />
+                            <element name="textos" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

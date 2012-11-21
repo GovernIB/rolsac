@@ -72,6 +72,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String publicoObjetivo;
 
+    private java.lang.String textos;
+
     public ProcedimentCriteria() {
     }
 
@@ -112,7 +114,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String version,
            java.lang.String familia,
            java.lang.String agrupacionMateria,
-           java.lang.String publicoObjetivo) {
+           java.lang.String publicoObjetivo,
+           java.lang.String textos) {
         super(
             id,
             idioma,
@@ -151,6 +154,7 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.familia = familia;
         this.agrupacionMateria = agrupacionMateria;
         this.publicoObjetivo = publicoObjetivo;
+        this.textos = textos;
     }
 
 
@@ -793,6 +797,26 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.publicoObjetivo = publicoObjetivo;
     }
 
+
+    /**
+     * Gets the textos value for this ProcedimentCriteria.
+     * 
+     * @return textos
+     */
+    public java.lang.String getTextos() {
+        return textos;
+    }
+
+
+    /**
+     * Sets the textos value for this ProcedimentCriteria.
+     * 
+     * @param textos
+     */
+    public void setTextos(java.lang.String textos) {
+        this.textos = textos;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -900,7 +924,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.agrupacionMateria.equals(other.getAgrupacionMateria()))) &&
             ((this.publicoObjetivo==null && other.getPublicoObjetivo()==null) || 
              (this.publicoObjetivo!=null &&
-              this.publicoObjetivo.equals(other.getPublicoObjetivo())));
+              this.publicoObjetivo.equals(other.getPublicoObjetivo()))) &&
+            ((this.textos==null && other.getTextos()==null) || 
+             (this.textos!=null &&
+              this.textos.equals(other.getTextos())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1007,6 +1034,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getPublicoObjetivo() != null) {
             _hashCode += getPublicoObjetivo().hashCode();
+        }
+        if (getTextos() != null) {
+            _hashCode += getTextos().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1207,6 +1237,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("publicoObjetivo");
         elemField.setXmlName(new javax.xml.namespace.QName("", "publicoObjetivo"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("textos");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "textos"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
