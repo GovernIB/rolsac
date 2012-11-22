@@ -96,7 +96,6 @@
 	<property name="module.classes"  location="${jar.classes}"/>
 
 	<import file="../build_test.xml"/>	
-	<import file="../build_sonar.xml"/>
 
     <target name="main" depends="jar.jar" description="Construye el jar"/>
 

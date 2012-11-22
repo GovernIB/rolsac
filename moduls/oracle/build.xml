@@ -111,9 +111,6 @@
 		
 	<import file="../build_test.xml" />
 		
-	<!-- sonar -->
-	<import file="../build_sonar.xml" />
-
 	<!-- main -->
 	<target name="main" depends="jar.jar" description="Construye el jar" />
 

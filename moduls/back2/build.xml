@@ -154,7 +154,5 @@
         </replace>
 		
 	</target>
-    
-	<import file="../build_sonar.xml"/>
 
 </project>

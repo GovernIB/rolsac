@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project name="back" basedir=".">
-	
-	<property name="sonar.projectKey" value="caib:rolsac-back" />
-  	<property name="sonar.sources" value="${basedir}/htdocs" />
-    
-</project>

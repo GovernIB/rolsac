@@ -526,58 +526,132 @@
 	    <setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}"
 	      proxyuser="${proxy.user}" proxypassword="${proxy.pass}"/>
 	  </target>
+
+	  <target name="sonar" depends="proxy">
+	  	
+	    <!-- list of mandatories Sonar properties -->
+		<property name="sonar.jdbc.url" value="${sonar.jdbc.url}" />
+		<property name="sonar.jdbc.username" value="sonar" />
+		<property name="sonar.jdbc.password" value="sonar" />
+		
+		 <property name="sonar.host.url" value="${sonar.host.url}"/>
+	  	 <property name="sonar.projectKey" value="caib:rolsac"/>
+	  	 <property name="sonar.projectName" value="${rolsac.target}"/>
+	  	 <property name="sonar.projectVersion" value="${rolsac.target}"/>
+	  	 <property name="sonar.sources" value="moduls"/>
 	
-	  <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-	    <classpath>
-	    	<pathelement path="${lib}/sonar-ant-task-1.4.jar" />
-	     </classpath>
+	  	<!-- Set modules IDs -->
+	   	<property name="sonar.modules" 
+	   		value="
+		   		api,
+	   			back,
+	   			back2,
+	   			extractor,
+	   			integracion,
+	   			model,
+	   			oracle,
+	   			persistence,
+	   			traspas-boib,
+	  	 		utils,
+	   			back-js,
+	   			back2-js,
+	   		"/>
+
+	  	
+	  	
+		<!-- modul api -->
+		<property name="api.sonar.projectName" value="caib:rolsac-api" />
+	  	<property name="api.sonar.projectBaseDir" value="moduls/api" />
+	    <property name="api.sonar.sources" value="src" />
+	    <property name="api.sonar.binaries" value="output/api/classes" />
+	    <property name="api.sonar.language" value="java"/>
+	
+	  	<!-- modul back -->
+		<property name="back.sonar.projectName" value="caib:rolsac-back" />
+	  	<property name="back.sonar.projectBaseDir" value="moduls/back" />
+	    <property name="back.sonar.sources" value="src" />
+	    <property name="back.sonar.binaries" value="output/back/classes" />
+	    <property name="back.sonar.language" value="java"/>
+
+	  	<!-- modul back2 -->
+		<property name="back2.sonar.projectName" value="caib:rolsac-back2" />
+	  	<property name="back2.sonar.projectBaseDir" value="moduls/back2" />
+	    <property name="back2.sonar.sources" value="src" />
+	    <property name="back2.sonar.binaries" value="output/back2/classes" />
+	    <property name="back2.sonar.language" value="java"/>
+
+	  	<!-- modul extractor -->
+		<property name="extractor.sonar.projectName" value="caib:rolsac-extractor" />
+	  	<property name="extractor.sonar.projectBaseDir" value="moduls/extractor" />
+	  	<property name="extractor.sonar.sources" value="src" />
+	    <property name="extractor.sonar.binaries" value="output/extractor/classes" />
+	  	<property name="extractor.sonar.language" value="java"/>
+
+	  	<!-- modul integracion -->
+		<property name="integracion.sonar.projectName" value="caib:rolsac-integracion" />
+	  	<property name="integracion.sonar.projectBaseDir" value="moduls/integracion" />
+	  	<property name="integracion.sonar.sources" value="src" />
+	    <property name="integracion.sonar.binaries" value="output/integracion/classes" />
+	  	<property name="integracion.sonar.language" value="java"/>
+
+	  	<!-- modul model -->
+		<property name="model.sonar.projectName" value="caib:rolsac-model" />
+	  	<property name="model.sonar.projectBaseDir" value="moduls/model" />
+	  	<property name="model.sonar.sources" value="src" />
+	    <property name="model.sonar.binaries" value="output/model/classes" />
+	  	<property name="model.sonar.language" value="java"/>
+
+	  	<!-- modul oracle -->
+		<property name="oracle.sonar.projectName" value="caib:rolsac-oracle" />
+	  	<property name="oracle.sonar.projectBaseDir" value="moduls/oracle" />
+	  	<property name="oracle.sonar.sources" value="src" />
+	    <property name="oracle.sonar.binaries" value="output/oracle/classes" />
+	  	<property name="oracle.sonar.language" value="java"/>
+
+	  	<!-- modul persistence -->
+		<property name="persistence.sonar.projectName" value="caib:rolsac-persistence" />
+	  	<property name="persistence.sonar.projectBaseDir" value="moduls/persistence" />
+	  	<property name="persistence.sonar.sources" value="src" />
+	    <property name="persistence.sonar.binaries" value="output/persistence/classes" />
+	  	<property name="persistence.sonar.language" value="java"/>
+
+	  	<!-- modul utils -->
+		<property name="utils.sonar.projectName" value="caib:rolsac-utils" />
+	  	<property name="utils.sonar.projectBaseDir" value="moduls/utils" />
+	  	<property name="utils.sonar.sources" value="src" />
+	    <property name="utils.sonar.binaries" value="output/utils/classes" />
+	  	<property name="utils.sonar.language" value="java"/>
+
+	  	
+	  	<!-- modul traspas-boib -->
+		<property name="traspas-boib.sonar.projectName" value="caib:rolsac-traspas-boib" />
+	  	<property name="traspas-boib.sonar.projectBaseDir" value="moduls/traspas-boib" />
+	  	<property name="traspas-boib.sonar.sources" value="src" />
+	    <property name="traspas-boib.sonar.binaries" value="output/traspas-boib/classes" />
+	  	<property name="traspas-boib.sonar.language" value="java"/>
+
+	  	<!-- modul back javacript -->
+		<property name="back-js.sonar.projectName" value="caib:rolsac-back-js" />
+	  	<property name="back-js.sonar.projectBaseDir" value="moduls/back" />
+	  	<property name="back-js.sonar.sources" value="htdocs" />
+	  	<property name="back-js.sonar.language" value="js"/>
+
+	  	<!-- modul back2 javacript -->
+	  	<property name="back2-js.sonar.projectName" value="caib:rolsac-back2-js" />
+	  	<property name="back2-js.sonar.projectBaseDir" value="moduls/back2" />
+	  	<property name="back2-js.sonar.sources" value="htdocs" />
+	  	<property name="back2-js.sonar.language" value="js"/>
+
+	  	<!-- Execute Sonar -->
+	    <taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+	        <classpath>
+	        	<pathelement path="${lib}/sonar-ant-task-2.0.jar" />
+	         </classpath>
+	    </taskdef>
 	    	
-	    <!-- This sonar Ant task library can also be put in the ${ANT_HOME\}/lib directory-->
-	    <!-- In such case this classpath node is no more mandatory -->
-	  </taskdef>
-	 
-	
-	<property name="sonar.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
-	<property name="sonar.jdbc.username" value="sonar" />
-	<property name="sonar.jdbc.password" value="sonar" />
-	
-	  <!-- property name="sonar.host.url" value="http://localhost:9000" / -->
-	
-	  <property name="sonar.host.url" value="https://tomcat-ejaenv.rhcloud.com/sonar"/>
-		  
-	  <target name="sonar-java" depends="proxy">
-	    <!-- list of mandatories Sonar properties -->
+  	    <sonar:sonar xmlns:sonar="antlib:org.sonar.ant"/>
 	  	
-	    <property name="sonar.modules" 
-    		 value="moduls/utils/build.xml,moduls/model/build.xml,moduls/persistence/build.xml,moduls/integracion/build.xml,moduls/ws/build.xml,moduls/back/build.xml,moduls/back2/build.xml,moduls/traspas-boib/build.xml,moduls/api/build.xml"/>
-	 
-	    <!-- list of optional Sonar properties -->
-<!--
-	    <property name="sonar.binaries" value="..." />
-	  	<property name="sonar.projectName" value="this value overrides the name defined in Ant root node" />
-	    <property name="sonar.tests" value="list of test source directories separated by a comma" />
-	    <property name="sonar.libraries" value="list of paths to libraries separated by a comma (These libraries are for example used by the Sonar Findbugs plugin)" />
--->	 
-	    <sonar:sonar key="caib:rolsac" version="${rolsac.target}" xmlns:sonar="antlib:org.sonar.ant"/>
 	  </target>
 
-	  <target name="sonar-js"  depends="proxy">
-	    <!-- list of mandatories Sonar properties -->
-
-	  	<property name="sonar.language" value="js" />
-	  	<property name="sonar.sources" value="${basedir}/htdocs" />
-	    <property name="sonar.modules" 
-	    		 value="moduls/back/build_sonar_js.xml,moduls/back2/build_sonar_js.xml" />
-	 
-	    <!-- list of optional Sonar properties -->
-<!--
-	    <property name="sonar.binaries" value="..." />
-	  	<property name="sonar.projectName" value="this value overrides the name defined in Ant root node" />
-	    <property name="sonar.tests" value="list of test source directories separated by a comma" />
-	    <property name="sonar.libraries" value="list of paths to libraries separated by a comma (These libraries are for example used by the Sonar Findbugs plugin)" />
--->	 
-	  	
-	    <sonar:sonar key="caib:rolsac" version="${rolsac.target}" xmlns:sonar="antlib:org.sonar.ant"/>
-	  </target>
 	
 </project>
