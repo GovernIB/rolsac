@@ -61,9 +61,9 @@
 					<extension base="tns3:BasicCriteria">
 						<sequence>
 							<element name="fechaActualizacion" nillable="true"
-								type="xsd:dateTime" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+								type="xsd:string" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
 							<element name="foro_tema" nillable="true" type="xsd:string" />
 							<element name="info" nillable="true" type="xsd:string" />
 							<element name="responsable" nillable="true" type="xsd:string" />
@@ -129,9 +129,9 @@
 						<sequence>
 							<element name="actiu" nillable="true" type="xsd:boolean" />
 							<element name="fechaActualizacion" nillable="true"
-								type="xsd:dateTime" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+								type="xsd:string" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
 							<element name="indicador" nillable="true" type="xsd:boolean" />
 							<element name="info" nillable="true" type="xsd:string" />
 							<element name="orden" nillable="true" type="xsd:string" />

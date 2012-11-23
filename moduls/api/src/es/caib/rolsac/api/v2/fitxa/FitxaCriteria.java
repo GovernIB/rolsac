@@ -8,11 +8,11 @@
 package es.caib.rolsac.api.v2.fitxa;
 
 public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria  implements java.io.Serializable {
-    private java.util.Calendar fechaActualizacion;
+    private java.lang.String fechaActualizacion;
 
-    private java.util.Calendar fechaCaducidad;
+    private java.lang.String fechaCaducidad;
 
-    private java.util.Calendar fechaPublicacion;
+    private java.lang.String fechaPublicacion;
 
     private java.lang.String foro_tema;
 
@@ -47,9 +47,9 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String inici,
            java.lang.String ordenacio,
            java.lang.String tamany,
-           java.util.Calendar fechaActualizacion,
-           java.util.Calendar fechaCaducidad,
-           java.util.Calendar fechaPublicacion,
+           java.lang.String fechaActualizacion,
+           java.lang.String fechaCaducidad,
+           java.lang.String fechaPublicacion,
            java.lang.String foro_tema,
            java.lang.String info,
            java.lang.String responsable,
@@ -91,7 +91,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @return fechaActualizacion
      */
-    public java.util.Calendar getFechaActualizacion() {
+    public java.lang.String getFechaActualizacion() {
         return fechaActualizacion;
     }
 
@@ -101,7 +101,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @param fechaActualizacion
      */
-    public void setFechaActualizacion(java.util.Calendar fechaActualizacion) {
+    public void setFechaActualizacion(java.lang.String fechaActualizacion) {
         this.fechaActualizacion = fechaActualizacion;
     }
 
@@ -111,7 +111,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @return fechaCaducidad
      */
-    public java.util.Calendar getFechaCaducidad() {
+    public java.lang.String getFechaCaducidad() {
         return fechaCaducidad;
     }
 
@@ -121,7 +121,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @param fechaCaducidad
      */
-    public void setFechaCaducidad(java.util.Calendar fechaCaducidad) {
+    public void setFechaCaducidad(java.lang.String fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
     }
 
@@ -131,7 +131,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @return fechaPublicacion
      */
-    public java.util.Calendar getFechaPublicacion() {
+    public java.lang.String getFechaPublicacion() {
         return fechaPublicacion;
     }
 
@@ -141,7 +141,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
      * 
      * @param fechaPublicacion
      */
-    public void setFechaPublicacion(java.util.Calendar fechaPublicacion) {
+    public void setFechaPublicacion(java.lang.String fechaPublicacion) {
         this.fechaPublicacion = fechaPublicacion;
     }
 
@@ -511,19 +511,19 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         org.apache.axis.description.ElementDesc elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fechaActualizacion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fechaActualizacion"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fechaCaducidad");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fechaCaducidad"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fechaPublicacion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fechaPublicacion"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

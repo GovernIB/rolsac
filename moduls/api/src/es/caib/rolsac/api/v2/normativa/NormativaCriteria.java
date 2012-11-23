@@ -14,9 +14,9 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
 
     private java.lang.String ley;
 
-    private java.util.Calendar fecha;
+    private java.lang.String fecha;
 
-    private java.util.Calendar fechaBoletin;
+    private java.lang.String fechaBoletin;
 
     private java.lang.String validacion;
 
@@ -54,8 +54,8 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
            java.lang.String numero,
            java.lang.String registro,
            java.lang.String ley,
-           java.util.Calendar fecha,
-           java.util.Calendar fechaBoletin,
+           java.lang.String fecha,
+           java.lang.String fechaBoletin,
            java.lang.String validacion,
            java.lang.String codiVuds,
            java.lang.String descCodiVuds,
@@ -159,7 +159,7 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
      * 
      * @return fecha
      */
-    public java.util.Calendar getFecha() {
+    public java.lang.String getFecha() {
         return fecha;
     }
 
@@ -169,7 +169,7 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
      * 
      * @param fecha
      */
-    public void setFecha(java.util.Calendar fecha) {
+    public void setFecha(java.lang.String fecha) {
         this.fecha = fecha;
     }
 
@@ -179,7 +179,7 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
      * 
      * @return fechaBoletin
      */
-    public java.util.Calendar getFechaBoletin() {
+    public java.lang.String getFechaBoletin() {
         return fechaBoletin;
     }
 
@@ -189,7 +189,7 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
      * 
      * @param fechaBoletin
      */
-    public void setFechaBoletin(java.util.Calendar fechaBoletin) {
+    public void setFechaBoletin(java.lang.String fechaBoletin) {
         this.fechaBoletin = fechaBoletin;
     }
 
@@ -589,13 +589,13 @@ public class NormativaCriteria  extends es.caib.rolsac.api.v2.general.BasicCrite
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fecha");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fecha"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("fechaBoletin");
         elemField.setXmlName(new javax.xml.namespace.QName("", "fechaBoletin"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();

@@ -598,9 +598,9 @@
 						<sequence>
 							<element name="actiu" nillable="true" type="xsd:boolean" />
 							<element name="fechaActualizacion" nillable="true"
-								type="xsd:dateTime" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+								type="xsd:string" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
 							<element name="indicador" nillable="true" type="xsd:boolean" />
 							<element name="info" nillable="true" type="xsd:string" />
 							<element name="orden" nillable="true" type="xsd:string" />
@@ -785,9 +785,9 @@
 							<element name="orden" nillable="true" type="xsd:string" />
 							<element name="versio" nillable="true" type="xsd:string" />
 							<element name="validacio" nillable="true" type="xsd:string" />							
-							<element name="dataCaducitat" nillable="true" type="xsd:dateTime" />
-							<element name="dataPublicacio" nillable="true" type="xsd:dateTime" />
-							<element name="dataActualitzacio" nillable="true" type="xsd:dateTime" />
+							<element name="dataCaducitat" nillable="true" type="xsd:string" />
+							<element name="dataPublicacio" nillable="true" type="xsd:string" />
+							<element name="dataActualitzacio" nillable="true" type="xsd:string" />
 							<element name="codiVuds" nillable="true" type="xsd:string" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />
 							<element name="idTraTel" nillable="true" type="xsd:string" />
@@ -938,9 +938,9 @@
 					<extension base="tns2:BasicCriteria">
 						<sequence>
 							<element name="fechaActualizacion" nillable="true"
-								type="xsd:dateTime" />
-							<element name="fechaCaducidad" nillable="true" type="xsd:dateTime" />
-							<element name="fechaPublicacion" nillable="true" type="xsd:dateTime" />
+								type="xsd:string" />
+							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
+							<element name="fechaPublicacion" nillable="true" type="xsd:string" />
 							<element name="foro_tema" nillable="true" type="xsd:string" />
 							<element name="info" nillable="true" type="xsd:string" />
 							<element name="responsable" nillable="true" type="xsd:string" />
@@ -1086,8 +1086,8 @@
 							<element name="numero" nillable="true" type="xsd:string" />
 							<element name="registro" nillable="true" type="xsd:string" />
 							<element name="ley" nillable="true" type="xsd:string" />
-							<element name="fecha" nillable="true" type="xsd:dateTime" />
-							<element name="fechaBoletin" nillable="true" type="xsd:dateTime" />
+							<element name="fecha" nillable="true" type="xsd:string" />
+							<element name="fechaBoletin" nillable="true" type="xsd:string" />
 							<element name="validacion" nillable="true" type="xsd:string" />
 							<element name="codiVuds" nillable="true" type="xsd:string" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />

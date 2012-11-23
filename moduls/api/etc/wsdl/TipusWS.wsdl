@@ -37,8 +37,8 @@
 							<element name="numero" nillable="true" type="xsd:string" />
 							<element name="registro" nillable="true" type="xsd:string" />
 							<element name="ley" nillable="true" type="xsd:string" />
-							<element name="fecha" nillable="true" type="xsd:dateTime" />
-							<element name="fechaBoletin" nillable="true" type="xsd:dateTime" />
+							<element name="fecha" nillable="true" type="xsd:string" />
+							<element name="fechaBoletin" nillable="true" type="xsd:string" />
 							<element name="validacion" nillable="true" type="xsd:string" />
 							<element name="codiVuds" nillable="true" type="xsd:string" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />

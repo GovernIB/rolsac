@@ -2,7 +2,6 @@ package es.caib.rolsac.api.v2.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +13,8 @@ import net.sf.hibernate.Session;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.Periodo;
 
-import es.caib.rolsac.api.v2.general.PeriodoUtil;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
 import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
 
@@ -138,50 +137,70 @@ public class QueryBuilder {
     private void addOperation(Restriction r) {
         String field = caseInsensitiveField(r.getParameter(), r.getValue());
         switch (r.getOperation()) {
+        
         case EQ:
             where += field + " = :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+       
         case NEQ:
             where += field + " != :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case IN:
             where += field + " IN (:" + r.getParameter() + ")";
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case IN_SELECT:  // IN_SELECT is case sensitive.
             where += r.getParameter() + " IN (" + r.getValue() + ")";
             break;
+        
         case LIKE:
             where += field + " LIKE :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case LT:
             where += field + " < :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case GT:
             where += field + " > :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case LE:
             where += field + " <= :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
+        
         case GE:
             where += field + " >= :" + r.getParameter();
             namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
             break;
-        case EQ_DATE:
-            Date nextDay = PeriodoUtil.getNextDay((Date) r.getValue());
-            where += "(" + field + " >= :" + r.getParameter() + " AND " + field + " < :" + r.getParameter() + "_)";
-            namedParameters.put(r.getParameter(), caseInsensitiveValue(r.getValue()));
-            namedParameters.put(r.getParameter() + "_", nextDay);
+        
+        case DATE:
+            Periodo periodo = (Periodo) r.getValue();
+            where += "(";
+            if (periodo.getFechaInicio() != null) {
+                where += field + " >= :" + r.getParameter();
+                namedParameters.put(r.getParameter(), periodo.getFechaInicio());
+            }
+            if (periodo.getFechaFin() != null) {
+                if (periodo.getFechaInicio() != null) { where += " AND "; };
+                where += field + " < :" + r.getParameter() + "_";
+                namedParameters.put(r.getParameter() + "_", periodo.getFechaFin());
+            }
+            where += ")";
             break;
+        
         case NULL:
             where += field + " IS NULL";
             break;
+        
         case NOT_NULL:
             where += field + " IS NOT NULL";
             break;

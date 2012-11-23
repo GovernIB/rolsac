@@ -16,11 +16,11 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
 
     private java.lang.String validacio;
 
-    private java.util.Calendar dataCaducitat;
+    private java.lang.String dataCaducitat;
 
-    private java.util.Calendar dataPublicacio;
+    private java.lang.String dataPublicacio;
 
-    private java.util.Calendar dataActualitzacio;
+    private java.lang.String dataActualitzacio;
 
     private java.lang.String codiVuds;
 
@@ -59,9 +59,9 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
            java.lang.String orden,
            java.lang.String versio,
            java.lang.String validacio,
-           java.util.Calendar dataCaducitat,
-           java.util.Calendar dataPublicacio,
-           java.util.Calendar dataActualitzacio,
+           java.lang.String dataCaducitat,
+           java.lang.String dataPublicacio,
+           java.lang.String dataActualitzacio,
            java.lang.String codiVuds,
            java.lang.String descCodiVuds,
            java.lang.String idTraTel,
@@ -187,7 +187,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @return dataCaducitat
      */
-    public java.util.Calendar getDataCaducitat() {
+    public java.lang.String getDataCaducitat() {
         return dataCaducitat;
     }
 
@@ -197,7 +197,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @param dataCaducitat
      */
-    public void setDataCaducitat(java.util.Calendar dataCaducitat) {
+    public void setDataCaducitat(java.lang.String dataCaducitat) {
         this.dataCaducitat = dataCaducitat;
     }
 
@@ -207,7 +207,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @return dataPublicacio
      */
-    public java.util.Calendar getDataPublicacio() {
+    public java.lang.String getDataPublicacio() {
         return dataPublicacio;
     }
 
@@ -217,7 +217,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @param dataPublicacio
      */
-    public void setDataPublicacio(java.util.Calendar dataPublicacio) {
+    public void setDataPublicacio(java.lang.String dataPublicacio) {
         this.dataPublicacio = dataPublicacio;
     }
 
@@ -227,7 +227,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @return dataActualitzacio
      */
-    public java.util.Calendar getDataActualitzacio() {
+    public java.lang.String getDataActualitzacio() {
         return dataActualitzacio;
     }
 
@@ -237,7 +237,7 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      * 
      * @param dataActualitzacio
      */
-    public void setDataActualitzacio(java.util.Calendar dataActualitzacio) {
+    public void setDataActualitzacio(java.lang.String dataActualitzacio) {
         this.dataActualitzacio = dataActualitzacio;
     }
 
@@ -655,19 +655,19 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataCaducitat");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dataCaducitat"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataPublicacio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dataPublicacio"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataActualitzacio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dataActualitzacio"));
-        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
