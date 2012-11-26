@@ -8,6 +8,8 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 public interface ProcedimientoDelegateI {
 
 	public abstract Long grabarProcedimiento(ProcedimientoLocal procedimiento,
@@ -38,7 +40,7 @@ public interface ProcedimientoDelegateI {
 	public abstract List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma)
 			throws DelegateException;
 	
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
 			throws DelegateException;
 		
 	public abstract void anyadirNormativa(Long norm_id, Long proc)
@@ -123,8 +125,6 @@ public interface ProcedimientoDelegateI {
 	
 	public abstract ProcedimientoLocal obtenerProcedimientoPM(Long id) throws DelegateException;
 
-	public abstract int contarProcedimientosBuscador(Map paramMap, Map traducciones, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu) throws DelegateException;
-	
 	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException; 
     
 	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;	

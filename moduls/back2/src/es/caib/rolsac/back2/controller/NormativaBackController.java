@@ -63,6 +63,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/normativa/")
@@ -99,10 +100,12 @@ public class NormativaBackController extends PantallaBaseController {
         	//Boletines
         	List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
         	List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
+        	
         	for (Boletin boletin : listaBoletines) {        		       		
         		IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
         		listaBoletinesDTO.add(bol);
         	}
+        	
         	model.put("llistaButlletins", listaBoletinesDTO);
         	
         	//Tipos normativa
@@ -155,6 +158,9 @@ public class NormativaBackController extends PantallaBaseController {
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		
 		String idioma = request.getLocale().getLanguage();
+
+        ResultadoBusqueda resultadoBusquedaLocal = new ResultadoBusqueda();
+        ResultadoBusqueda resultadoBusquedaExterna = new ResultadoBusqueda();
 		
 		//Obtenemos la ordenaci�n por par�metro
 		String campoOrdenacion = request.getParameter("ordreCamp");
@@ -168,9 +174,7 @@ public class NormativaBackController extends PantallaBaseController {
         boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
 		
 		Long idUA = null;
-//		if (request.getParameter("idUA") == null || request.getParameter("idUA").equals("")){                      
-//			return resultats;//Si no hay unidad administrativa se devuelve vac�o
-//		}	
+		
 		if (request.getParameter("idUA") != null && !request.getParameter("idUA").equals("")){                      
 			idUA = ParseUtil.parseLong(request.getParameter("idUA"));
 		}
@@ -220,6 +224,7 @@ public class NormativaBackController extends PantallaBaseController {
 			
 			// Textes (en todos los campos todos los idiomas)
 			String text = request.getParameter("text");
+			
 			if (text != null && !"".equals(text)) {
 				text = text.toUpperCase();
 
@@ -230,15 +235,32 @@ public class NormativaBackController extends PantallaBaseController {
 			} else {
 				paramTrad.put("idioma", idioma);
 			}			
-			
+						
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
-			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", idUA, meves, uaFilles, campoOrdenacion, orden);
+			//Información de paginación
+			String pagPag = request.getParameter("pagPag");		
+			String pagRes = request.getParameter("pagRes");
+			
+			if (pagPag == null) pagPag = String.valueOf(0); 
+			if (pagRes == null) pagRes = String.valueOf(10);                			
+			
+			resultadoBusquedaLocal = normativaDelegate.buscarNormativas(
+					paramMap, paramTrad, "local", idUA, meves, uaFilles,
+					campoOrdenacion, orden, pagPag, pagRes);
+			
+			llistaNormatives = (List<Normativa>) resultadoBusquedaLocal.getListaResultados();
 			
 			if (buscaExternas) {
-				List listaExternas = normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", idUA, meves, uaFilles, campoOrdenacion, orden);
+				
+				resultadoBusquedaExterna = normativaDelegate.buscarNormativas(
+						paramMap, paramTrad, "externa", idUA, meves, uaFilles,
+						campoOrdenacion, orden, pagPag, pagRes);
+				
+				List listaExternas = resultadoBusquedaExterna.getListaResultados();				
 				llistaNormatives.addAll(listaExternas);
+				
 			}
 			
 			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
@@ -250,6 +272,15 @@ public class NormativaBackController extends PantallaBaseController {
 				
 				if ("DESC".equals(orden))
 					Collections.reverse(llistaNormativesDTO);
+				
+				//Reajustar la lista a las que se han pedido (quitar de ella los que sobran)							
+				int registrosPag = Integer.parseInt(pagRes);
+				int indice = registrosPag;												
+				
+				if ( llistaNormativesDTO.size() > indice && registrosPag <= 50 ) {
+					llistaNormativesDTO = llistaNormativesDTO.subList(0, indice);
+				}
+				
 			}
 			
 		} catch (ParseException e) {
@@ -263,7 +294,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
 		}
 		
-		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("total",   resultadoBusquedaLocal.getTotalResultados() + resultadoBusquedaExterna.getTotalResultados() );
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
@@ -283,7 +314,15 @@ public class NormativaBackController extends PantallaBaseController {
 		String orden = request.getParameter("ordreTipus");
 		
 		//Realizar la consulta y obtener resultados
-		SearchNormativa bdcons = new EBoibSearchNormativa(request.getParameter("numeroboletin"), request.getParameter("numeroregistro"), request.getParameter("fecha"));
+		String numBoletin = request.getParameter("numeroboletin");
+		String numRegistro = request.getParameter("numeroregistro");
+		String fecha = request.getParameter("fecha");
+		
+		if ( numBoletin != null ) numBoletin = numBoletin.trim();
+		if ( numRegistro != null ) numRegistro = numRegistro.trim();
+		if ( fecha != null ) fecha = fecha.trim();
+		
+		SearchNormativa bdcons = new EBoibSearchNormativa( numBoletin, numRegistro, fecha );
 		bdcons.makeSearch();
 		
 		/*
@@ -301,7 +340,6 @@ public class NormativaBackController extends PantallaBaseController {
 
 		return resultats;
 	}
-
 
 	@RequestMapping(value = "/detallBoib.do", method = POST)
 	public @ResponseBody Map<String, Object> detallBoib(HttpServletRequest request, Map<String, Object> model) {
@@ -775,12 +813,22 @@ public class NormativaBackController extends PantallaBaseController {
 			} else {
 				paramTrad.put("idioma", idioma);
 			}						
+
+			//Información de paginación
+			String pagPag = request.getParameter("pagPag");		
+			String pagRes = request.getParameter("pagRes");
+			
+			if (pagPag == null) pagPag = String.valueOf(0); 
+			if (pagRes == null) pagRes = String.valueOf(10);                			
 			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
-			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden));
-			llistaNormatives.addAll(normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", null, false, false, campoOrdenacion, orden));
+			ResultadoBusqueda resultadoBusquedaLocales = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden, pagPag, pagRes); 
+			ResultadoBusqueda resultadoBusquedaExternas = normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+			
+			llistaNormatives.addAll( (List<Normativa>) resultadoBusquedaLocales.getListaResultados() );
+			llistaNormatives.addAll( (List<Normativa>) resultadoBusquedaExternas.getListaResultados() );
 			
 			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
 			
@@ -836,9 +884,7 @@ public class NormativaBackController extends PantallaBaseController {
 		return llistaNormativesDTO;
 
 	
-	}
-
-	
+	}	
 	
 	/**
 	 * Obtiene una lista de NormativaDTO a partir de una lista de Normativa.

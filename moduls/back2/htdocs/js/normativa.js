@@ -179,7 +179,8 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each(function(i) {						
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				caducat_titol_class = (dada_node.caducat) ? " normativa" : " normativaCaducada";
@@ -307,10 +308,12 @@ function CLlistat(){
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		//dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
 										
 		// ajax		
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ) {
+		if ( modoListado || modoBuscador ) {		
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
@@ -1140,9 +1143,4 @@ function CDetall(){
 		}
 		
 	}
-	
-	
-	
 };
-
-

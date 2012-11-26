@@ -63,6 +63,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/unitatadm/")
@@ -810,7 +811,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	@RequestMapping(value = "/llistatFitxesUA.do", method = POST)
 	public @ResponseBody Map<String, Object> llistaFitxes(HttpServletRequest request) {
 		
-		List<Ficha> llistaFitxes = new ArrayList<Ficha>();
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -858,9 +859,21 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	
             FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
            
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null);           
+    		//Información de paginación
+//    		String pagPag = request.getParameter("pagPag");		
+//    		String pagRes = request.getParameter("pagRes");
+//    		
+//    		if (pagPag == null) pagPag = String.valueOf(0); 
+//    		if (pagRes == null) pagRes = String.valueOf(10);
+    		
+    		//Información de paginación
+    		String pagPag = "0";
+    		String pagRes = "99999";    		
             
-            for (Ficha fitxa : llistaFitxes) {
+            resultadoBusqueda = fitxaDelegate.buscarFichas( paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null, pagPag, pagRes );           
+            
+            for (Ficha fitxa : (ArrayList<Ficha>) resultadoBusqueda.getListaResultados() ) {
+            	
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 

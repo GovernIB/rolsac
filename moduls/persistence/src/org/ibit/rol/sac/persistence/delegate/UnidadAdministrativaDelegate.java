@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.hibernate.Session;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
@@ -230,7 +232,7 @@ public class UnidadAdministrativaDelegate {
     }
     
    /**
-     * Autorización eliminar Unidad Administrativa.Devuleve true si tiene acceso.
+     * Autorizaciï¿½n eliminar Unidad Administrativa.Devuleve true si tiene acceso.
      */
     public boolean autorizarEliminarUA(Long idUa) throws DelegateException {
     		return impl.autorizarEliminarUA(idUa);
@@ -326,10 +328,15 @@ public class UnidadAdministrativaDelegate {
     
 	public void repararOrdenFichasUA() throws DelegateException {
 		impl.repararOrdenFichasUA();
-	}
+	}	
     
 	public String toString() {
 		return impl.toString();
+	}
+	
+	public String obtenerCadenaFiltroUA(Long ua,
+			boolean uaFilles, boolean uaMeves) throws DelegateException {
+		return impl.obtenerCadenaFiltroUA(ua, uaFilles, uaMeves);
 	}
 
 }

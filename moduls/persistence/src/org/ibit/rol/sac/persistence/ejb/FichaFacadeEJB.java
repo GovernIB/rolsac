@@ -31,6 +31,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
@@ -79,6 +80,8 @@ import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * SessionBean para mantener y consultar Fichas (PORMAD)
  *
@@ -92,6 +95,8 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  * @ejb.transaction type="Required"
  */
 public abstract class FichaFacadeEJB extends HibernateEJB {
+	
+	private static int RESULTATS_CERCA_TOTS = 99999;
 	
 	protected Hashtable contenidos_web; // contiene url y su contenido para agilizar el proceso de indexacion de fichas
 	
@@ -123,7 +128,6 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     public boolean autorizaCrearFicha(Integer validacionFicha) throws SecurityException  {
     	return !(validacionFicha.equals(Validacion.PUBLICA) && !userIsSuper()); 
     }
-    
         
     /**
      * Autoriza la modificaciï¿½n ficha
@@ -133,7 +137,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     public boolean autorizaModificarFicha(Long idFicha) throws SecurityException {
          return (getAccesoManager().tieneAccesoFicha(idFicha));
     }    
-    
+        
     /**
      * Crea o actualiza una Ficha
      * @ejb.interface-method
@@ -226,7 +230,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List buscarFichasHuerfanas(){
+    public List buscarFichasHuerfanas() {
         Session session = getSession();
         try{
             Query query = session.createQuery("select distinct ficha from Ficha as ficha " +
@@ -477,7 +481,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	criteria.add(Expression.eq("pub.id", idPublic));
             }
             
-            //Parámetros 
+            //Parï¿½metros 
             for (Iterator i = parametros.keySet().iterator(); i.hasNext();) {
             	String key = (String) i.next();
             	Object value = parametros.get(key);
@@ -546,13 +550,18 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
              close(session);            
          }    	
     }
-        
+
     /**
      * Busca todas las fichas que cumplen los criterios de busqueda del nuevo back (sacback2). 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) {        
+	public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion,
+			UnidadAdministrativa ua, Long idFetVital, Long idMateria,
+			Long idPublic, boolean uaFilles, boolean uaMeves,
+			String campoOrdenacion, String orden, String pagina,
+			String resultats) {
+		
         Session session = getSession();
         
         try {           
@@ -570,104 +579,106 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             if (traduccion.get("idioma") != null) {
                 i18nQuery = populateQuery(parametros, traduccion, params);
             } else {
-                String paramsQuery = populateQuery(parametros, new HashMap(), params);
-                if (paramsQuery.length() != 0) {
-                    i18nQuery += paramsQuery + " and ";
-                }
-                i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				if (paramsQuery.length() == 0) {
+					i18nQuery += " where ";
+				} else {
+					i18nQuery += paramsQuery + " and ";
+				}
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ") ";
             }
             
             String orderBy = "";
             if (campoOrdenacion != null && orden != null) orderBy = " order by ficha." + campoOrdenacion + " " + orden;
             
-            Set<UnidadAdministrativa> uas = new HashSet<UnidadAdministrativa>();
-            Set<Long> uasIds = new HashSet<Long>();
+			Long idUA = (ua != null) ? ua.getId() : null;            
+            String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );                        
             
-            if (ua != null) {
-	            ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, ua.getId());
-	            uas.add(ua);
-            }
+            if ( !StringUtils.isEmpty(uaQuery) )            	
+            	uaQuery = " and fsua.unidadAdministrativa.id in (" + uaQuery + ") ";
             
-            if (uaMeves) {
-            	uas.addAll(getUsuario(session).getUnidadesAdministrativas());
-            } 
-            
-            if (uaFilles) {
-            	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate(); 
-            	for (UnidadAdministrativa uaActual : uas) {
-            		uasIds.add(uaActual.getId());
-            		List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual.getId());
-            		uasIds.addAll(idsDescendientes);                		
-            	}
-            } else {
-            	for (UnidadAdministrativa uaActual : uas) {
-            		uasIds.add(uaActual.getId());
-            	}
-            }
-            
-            String uaQuery;
-            if (!uasIds.isEmpty()) {
-            	uaQuery = " and fsua.unidadAdministrativa.id in (";
-	            String sep = "";
-                for (Long uaId : uasIds) {
-                	uaQuery += sep + uaId;
-                	sep = ", ";
-                }
-                uaQuery += ")";
-            } else {
-            	uaQuery = " ";
-            }
-            
-            
-            if(idFetVital != null){
+            if ( idFetVital != null ) {
               mainQuery += ",ficha.hechosVitales as hec ";  
               fetVitalQuery = " and hec.id = ? ";
-              params.add(idFetVital);
+              params.add( idFetVital );
             } 
             
-            if(idMateria != null){
+            if ( idMateria != null ) {
               mainQuery += ",ficha.materias as mat ";  
               materiaQuery = " and mat.id = ? "; 
-              params.add(idMateria);
-            }
+              params.add( idMateria );
+            }            
             
-            
-            if(idPublic != null){
+            if ( idPublic != null ) {
                 mainQuery += ",ficha.publicosObjetivo as pob ";  
                 publicQuery = " and pob.id = ? "; 
                 params.add(idPublic);
             }
             
-            Query query = session.createQuery(mainQuery + " where " + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
+            Query query = session.createQuery(mainQuery + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
             
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
                 query.setParameter(i, o);
             }
      
-            List<Ficha> fichas = query.list();
+			int resultadosMax = new Integer(resultats).intValue();
+			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+			
+			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+			
             if (!userIsOper()) {
-                return fichas;
+            	
+                resultadoBusqueda.setTotalResultados( query.list().size() );
+                
+    			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+    				query.setFirstResult(primerResultado);
+    				query.setMaxResults(resultadosMax);
+    			}            
+            	
+    			resultadoBusqueda.setListaResultados(query.list());
+                
             } else {
+            	
+    			List<Ficha> fichas = query.list();
+    			
                 List<Ficha> fichasAcceso = new ArrayList<Ficha>();
                 Usuario usuario = getUsuario(session);
-                for (Ficha ficha: fichas){
-                    if(tieneAcceso(usuario, ficha)){
-                        fichasAcceso.add(ficha);
-                     }   
+                
+                // Procesar todas las fichas para saber el total y 
+                // aprovechar el bucle para ir guardando el nÃºmero 
+                // de fichas solicitadas segÃºn los parÃ¡metros de paginaciÃ³n.                
+                int contadorTotales = 0;
+                int fichasInsertadas = 0;
+                int iteraciones = 0;
+                
+                for ( Ficha ficha : fichas ) {
+                	if ( tieneAcceso(usuario, ficha) ) {
+                		if ( fichasInsertadas != resultadosMax && iteraciones >= primerResultado ) { 
+                			fichasAcceso.add(ficha);
+                			fichasInsertadas++;
+                		}                	
+                		contadorTotales++;                		
+                	}  
+                	iteraciones++;
                 }
-                return fichasAcceso;
+                
+                resultadoBusqueda.setTotalResultados( contadorTotales );
+                resultadoBusqueda.setListaResultados( fichasAcceso );
+                
             }
-        } catch (DelegateException de) {
-            throw new EJBException(de);
+            
+            return resultadoBusqueda;
+            
+		} catch (DelegateException de) {
+			throw new EJBException(de);            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
             close(session);
         }
-    }
-    
-    
+    }    
+        
     /**
      * Aï¿½ade una nueva materia a la ficha
      * @ejb.interface-method
@@ -1431,27 +1442,29 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
 
-        // Tratamiento de parametros
         for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
-            if (value != null) {
-                if (aux.length() > 0) aux = aux + " and ";
+            if (!key.startsWith("ordre") && value != null) {
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
+                        if (aux.length() > 0) aux = aux + " and ";
                         if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
                             sValue = sValue.substring(1, (sValue.length() - 1));
-                            aux = aux + " upper( ficha." + key + " ) like ? " ;
+                            aux = aux + " upper( ficha." + key + " ) like ? ";
                             params.add(sValue);
                         } else {
                             aux = aux + " upper( ficha." + key + " ) like ? ";
                             params.add("%"+sValue+"%");
                         }
                     }
+                } else if (value instanceof Date) {
+                    if (aux.length() > 0) aux = aux + " and ";
+                    aux = aux + "ficha." + key + " = '" + value + "'";
                 } else {
-                    aux = aux + "ficha." + key + " =  ? ";
-                    params.add(value);
+                    if (aux.length() > 0) aux = aux + " and ";
+                    aux = aux + "ficha." + key + " = " + value;
                 }
             }
         }
@@ -1479,12 +1492,15 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                         }
                     }
                 } else {
-                    aux = aux + " and trad." + key + " =  ? ";
+                    aux = aux + " and trad." + key + " = ? ";
                     params.add(value);
                 }
             }
         }
 
+        if (aux.length() > 0) {
+            aux = "where " + aux;
+        }
         return aux;
     }
     
@@ -2468,7 +2484,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	}
 		
 	 /**
-     * Crea las relaciones sección-ficha de una unidad administrativa 
+     * Crea las relaciones secciï¿½n-ficha de una unidad administrativa 
      * 
      * @param ua Unidad administrativa a actualizar  
      * @param listaSeccionesFicha Estructura que contiene las nuevas "secciones-fichas"  
@@ -2483,7 +2499,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			listaFUAOrigen = new HashSet<FichaUA>();
 		}
 		
-		// Construir una lista con la información de las distintas secciones		
+		// Construir una lista con la informaciï¿½n de las distintas secciones		
 		Set<SimpleSeccion> listaSimpleSeccion = new HashSet<SimpleSeccion>();
 		
 		for ( FichaUA fichaUA : listaFUAOrigen ) {
@@ -2494,8 +2510,8 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 		List<SimpleFichaUA> listaSimpleFichaUA = new ArrayList<SimpleFichaUA>();
 		List<SimpleFichaUA> listaSimpleFichaUAIgnorar = new ArrayList<SimpleFichaUA>();
 				
-		// Crea una lista seccionID + fichaID + orden sección. El orden
-		// será el mismo en el cual vienen los datos
+		// Crea una lista seccionID + fichaID + orden secciï¿½n. El orden
+		// serï¿½ el mismo en el cual vienen los datos
 		int i = 0;
 		while (i < listaSeccionesFicha.length && !"".equals(listaSeccionesFicha[i]) ) {
 			
@@ -2516,7 +2532,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			i++;			
 		}
 		
-		// Detectar las fichas ua a borrar (el orden también se tiene en cuenta)
+		// Detectar las fichas ua a borrar (el orden tambiï¿½n se tiene en cuenta)
 		for (FichaUA fUA : listaFUAOrigen ) {
 						
 			boolean encontrada = false;
@@ -2540,7 +2556,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				listaFUABorrar.add( fUA.getId() );
 		}	
 		
-		//Crear sólo las que no existían antes
+		//Crear sï¿½lo las que no existï¿½an antes
 		List<SimpleFichaUA> listaNuevas = new ArrayList<SimpleFichaUA>();
 		for (SimpleFichaUA fichaUA : listaSimpleFichaUA) {
 			if (!listaSimpleFichaUAIgnorar.contains( fichaUA)) { // || fichaUA.isCambioOrden(listaSimpleSeccion)) {
@@ -2565,7 +2581,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			for ( Long idBorrar : listaBorrar ) {
 
 	            if (!getAccesoManager().tieneAccesoFichaUnidad(idBorrar))
-	                throw new SecurityException("No tiene acceso a la relación");
+	                throw new SecurityException("No tiene acceso a la relaciï¿½n");
 				
                 FichaUA fichaUA = (FichaUA) session.load(FichaUA.class, idBorrar);
                 
@@ -2611,7 +2627,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 	            Seccion seccion = (Seccion) session.load(Seccion.class, simpleFichaUA.getIdSeccion() );
 	            
 	            if (!getAccesoManager().tieneAccesoSeccion( simpleFichaUA.getIdSeccion() )) 
-	                throw new SecurityException("No tiene acceso a la sección");
+	                throw new SecurityException("No tiene acceso a la secciï¿½n");
 
 	            // Cuando se anyade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
 	            fichaUA.setSeccion(seccion);	            

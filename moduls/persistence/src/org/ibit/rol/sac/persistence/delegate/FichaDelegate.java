@@ -12,6 +12,8 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular fichas.
  * ejaen@dgtic  - u92770
@@ -53,9 +55,9 @@ public class FichaDelegate implements FichaDelegateI {
 		return impl.buscarFichas(parametros, traduccion);
 	}
 
-	public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden)
+	public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats)
            throws DelegateException {
-	   return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
+	   return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden, pagina, resultats);
 	}
 	
 	public List buscarFichas(String texto) throws DelegateException {
@@ -224,7 +226,6 @@ public class FichaDelegate implements FichaDelegateI {
     public Ficha obtenerFichaPMA(Long id) throws DelegateException {
            return impl.obtenerFichaPMA(id);
 	}
-	
     
     public int buscarFichasActivas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
 		return impl.buscarFichasActivas(listaUnidadAdministrativaId,fechaCaducidad);
@@ -245,5 +246,5 @@ public class FichaDelegate implements FichaDelegateI {
 		
 		return impl.buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
 	} 
-
+		
 }

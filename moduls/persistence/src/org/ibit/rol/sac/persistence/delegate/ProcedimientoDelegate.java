@@ -9,6 +9,8 @@ import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /*
  * ejaen@dgtic  - u92770
  * Classe desacoplada del JBOSS per permetre testing. 
@@ -27,8 +29,7 @@ public class ProcedimientoDelegate {
 
 	public void setImpl(ProcedimientoDelegateI impl) {
 		this.impl = impl;
-	}
-	
+	}	
 		
 	public boolean autorizaCrearProcedimiento(Integer validacionProcedimiento) throws DelegateException {
             return impl.autorizaCrearProcedimiento(validacionProcedimiento);
@@ -37,7 +38,6 @@ public class ProcedimientoDelegate {
     public boolean autorizaModificarProcedimiento(Long idProcedimiento) throws DelegateException {
             return impl.autorizaModificarProcedimiento(idProcedimiento);
     }     
-    
     
     public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
         return impl.buscarProcedimientosUATexto(idUnidad, texto, idioma);
@@ -84,7 +84,7 @@ public class ProcedimientoDelegate {
 		return impl.buscarProcedimientos(param, trad);
 	}
 	
-	public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
 			throws DelegateException {
 		return impl.buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats);
 	}
@@ -220,9 +220,5 @@ public class ProcedimientoDelegate {
     public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException {
     	return impl.buscarProcedimientosCaducados(listaUnidadAdministrativaId, fechaCaducidad);
     }    
-    
-	public int contarProcedimientosBuscador(Map paramMap, Map traducciones, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu) throws DelegateException {    
-		return impl.contarProcedimientosBuscador(paramMap, traducciones, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
-	}
-    
+        
 }

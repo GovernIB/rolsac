@@ -70,12 +70,12 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  */
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
-    /** Nom pel govern de les illes a la taula d'unitats orgàniques */
+    /** Nom pel govern de les illes a la taula d'unitats orgï¿½niques */
     public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";    
     private static String idioma_per_defecte ="ca";
     
     /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -399,7 +399,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Busca todas las Unidades Administrativas que cumplen los criterios de búsqueda
+     * Busca todas las Unidades Administrativas que cumplen los criterios de bï¿½squeda
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -494,7 +494,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Obtiene la información general de una Unidad Administrativa
+     * Obtiene la informaciï¿½n general de una Unidad Administrativa
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -579,11 +579,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 }
                 return ua;
             } else {
-                throw new SecurityException("La unitat administrativa no és publica con id "+ua.getId() );
+                throw new SecurityException("La unitat administrativa no ï¿½s publica con id "+ua.getId() );
             }
 
         } catch (HibernateException he) {
-            throw new EJBException("No s' ha trobat la unitat administrativa sol·licitada",he);
+            throw new EJBException("No s' ha trobat la unitat administrativa solï¿½licitada",he);
         } finally {
             close(session);
         }
@@ -630,7 +630,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             }
 
         } catch (HibernateException he) {
-            throw new EJBException("No s' ha trobat la unitat administrativa sol·licitada",he);
+            throw new EJBException("No s' ha trobat la unitat administrativa solï¿½licitada",he);
         } finally {
             close(session);
         }
@@ -937,7 +937,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * añade un nuevo edificio a la unidad administrativa
+     * aï¿½ade un nuevo edificio a la unidad administrativa
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
@@ -995,7 +995,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 
     /**
-     * Descripción: Autorización eliminar Unidad Administrativa.Devuleve true si tiene acceso.
+     * Descripciï¿½n: Autorizaciï¿½n eliminar Unidad Administrativa.Devuleve true si tiene acceso.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.organigrama}"
      */
@@ -1021,7 +1021,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
     
     /**
-     * Descripción: Eliminar una unidad administrativa. Se podra eliminar la UA, 
+     * Descripciï¿½n: Eliminar una unidad administrativa. Se podra eliminar la UA, 
      * si no tiene elementos relacionados (Procedimientos,Normativas,etc.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.organigrama}"
@@ -1036,11 +1036,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         	Boolean isRaiz = ua.isRaiz();
 
         	if (!isRaiz) {
-        		// Si no és arrel, el pot borrar només si té accés a l'antecesor. 
+        		// Si no ï¿½s arrel, el pot borrar nomï¿½s si tï¿½ accï¿½s a l'antecesor. 
         		if (!autorizarEliminarUA(ua.getPadre().getId()))
         			throw new SecurityException("No tiene acceso al antecesor de la unidad.");
         	} else {
-        		// Si és arrel, només si és ADMIN o SYSTEM i té accés a l'unitat.
+        		// Si ï¿½s arrel, nomï¿½s si ï¿½s ADMIN o SYSTEM i tï¿½ accï¿½s a l'unitat.
     			if (!userIsAdmin() || !autorizarEliminarUA(ua.getId()))
     				throw new SecurityException("No tiene acceso a la unidad.");
         	}
@@ -1081,7 +1081,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             session.flush();
             }
         } catch (HibernateException he) {
-            throw new EJBException("El sistema está actualizando los datos, espere unos minutos.");
+            throw new EJBException("El sistema estï¿½ actualizando los datos, espere unos minutos.");
         } finally {
             close(session);
         }
@@ -1519,8 +1519,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.permission unchecked="true"
      *
      * @param idEspacio id del espacio territorial del que queremos obtener una determinada UA
-     * @para tipo tipo de búsqueda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
-     * @para UAOpcionales. En el caso de tipo = CONSELL o GOV, puede haber múltipes UA para un determinado espacio territorial,
+     * @para tipo tipo de bï¿½squeda que queremos generar (AJU - AYUNTAMIENTO, CONSELL -  CONSELLS INSULARS, GOV - GOVERN)
+     * @para UAOpcionales. En el caso de tipo = CONSELL o GOV, puede haber mï¿½ltipes UA para un determinado espacio territorial,
      *                     en esta lista estan las opciones a filtrar.
      * @return la {@link UnidadAdministrativa} deseada
      */
@@ -1808,7 +1808,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
 	
     /**
-     * Añade la ua al indice en todos los idiomas
+     * Aï¿½ade la ua al indice en todos los idiomas
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -1904,7 +1904,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	
 	
     /* ================================================ */
-    /* ==  MÉTODOS PRIVADOS  ========================== */
+    /* ==  Mï¿½TODOS PRIVADOS  ========================== */
     /* ================================================ */
 
     private int numUnidadesRaiz(Session session) throws HibernateException {
@@ -1913,7 +1913,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
     /**
-     * Construye el query de búsqueda segun los parámetros
+     * Construye el query de bï¿½squeda segun los parï¿½metros
      */
     private String populateQuery(Map parametros, Map traduccion, List params) {
         String aux = "";
@@ -2854,6 +2854,74 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return mollapa;
 	}		
 
+	
+	/**
+	 * MÃ©todo que devuelve una cadena csv de ids de unidades administrativas segÃºn los 
+	 * parÃ¡metros pasados.
+	 * 	 
+	 * @param ua
+	 * @param uaFilles
+	 * @param uaMeves
+	 * @param session
+	 * @return
+	 * @throws HibernateException
+	 * @throws DelegateException
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves)
+			throws DelegateException {
+
+		Session session = getSession();
+		
+		try {
+			
+			Set<Long> uas = new HashSet<Long>();
+			Set<Long> uasIds = new HashSet<Long>();
+			
+			if ( ua != null ) {
+				uas.add(ua);
+			}
+			
+			if ( uaMeves ) {
+				uas.addAll( getUsuario(session).getUnidadesAdministrativas() );
+			}
+			
+			if ( uaFilles ) {
+				UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				
+				for (Long uaActual : uas ) {
+					uasIds.add( uaActual );
+					List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId( uaActual );
+					uasIds.addAll( idsDescendientes );
+				}
+				
+			} else {
+				
+				for ( Long uaActual : uas ) {
+					uasIds.add( uaActual );
+				}				
+			}
+			
+			String uaQuery = "";
+			String sep = "";	
+			
+			for (Long uaId : uasIds) {
+				uaQuery += sep + uaId;
+				sep = ", ";
+			}
+			
+			return uaQuery;
+			
+        } catch (HibernateException he) {
+            throw new EJBException(he);			
+        } finally {
+        	close(session);
+        }
+		
+	}	
+	
 	private String initTab(String texte) {
 		   		      
 		String[][] canvis = new String[][] { {" I "  , " i "},
@@ -2873,8 +2941,8 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                {" Amb ", " amb "},
                {" Que ", " que "},
                {" Per ", " per "},
-               {"l.L"  , "l·l"},
-               {"l·L"  , "l·l"}
+               {"l.L"  , "lï¿½l"},
+               {"lï¿½L"  , "lï¿½l"}
                 };
 		
 		
@@ -2924,6 +2992,5 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	    for ( int index = original.indexOf(patro); index != -1; index = original.indexOf(patro,index+LONG_CANVI)) {
 	    	texte.replace( index, index + LONG_CANVI, canvi);
 	    }
-	}	
-	
+	}		
 }

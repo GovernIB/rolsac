@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +23,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
@@ -31,6 +31,7 @@ import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
@@ -57,6 +58,8 @@ import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
 /**
@@ -270,6 +273,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             }
 
             return normativasAcceso;
+            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -277,21 +281,25 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         }
     }
     
-    
     /**
      * Busca todas las Normativas que cumplen los criterios de búsqueda aplicando el orden indicado.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String campoOrdenacion, String orden) {
+	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
+			Long idUA, boolean uaMeves, boolean uaFilles,
+			String campoOrdenacion, String orden, String pagina,
+			String resultats) {
+		
         Session session = getSession();
+        
         try {
         	
         	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
         	
-            List params = new ArrayList();
-            
+            List params = new ArrayList();            
             String sQuery = "";
+            
             if (traduccion.get("idioma") != null) {
             	sQuery = populateQuery(parametros, traduccion, params);
             } else {
@@ -305,79 +313,93 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
             
             Query query;
+            
             if ("local".equals(tipo)) {
-            	//Si la búsqueda es por normativas locales filtramos por unidades administrativas
-            	Set<Long> uas = new HashSet<Long>();
-        		if (idUA != null) {
-        			uas.add(idUA);
-        		}
+            
+            	String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
             	
-            	//Si se ha indicado mostrar normativas de las unidades administrativas del usuario
-                if (uaMeves) {
-                	
-                	Set<UnidadAdministrativa> listaUAsUsuario = getUsuario(session).getUnidadesAdministrativas();
-                	for (UnidadAdministrativa ua : listaUAsUsuario) {                		
-                		uas.add(ua.getId());
-                		// Lo siguiente se haria para buscar en las UAs hijas.
-                		// List<Long> listaDescendientes = uaDelegate.cargarArbolUnidadId(ua.getId());
-                		// uas.addAll(listaDescendientes);                		
-                	}
-                }
-                
-                if (uaFilles) {
-                	for (Long uaActual : uas) {
-                		uas.add(uaActual);
-                		List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId(uaActual);
-                		uas.addAll(idsDescendientes);                		
-                	}
-                } else {
-                	for (Long uaActual : uas) {
-                		uas.add(uaActual);
-                	}
-                }
-
-                if (!uas.isEmpty()) {
-	                sQuery += " and normativa.unidadAdministrativa.id in (";
-	                String sep = "";
-	                for (Long ua : uas) {
-	                	sQuery += sep + ua;
-	                	sep = ", ";
-	                }
-	                sQuery += ")";
-                }
+                if ( !StringUtils.isEmpty(uaQuery) )            	
+                	uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
             	
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("select distinct normativa from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+                query = session.createQuery("select distinct normativa from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + uaQuery + orderBy);
                 
             } else { // "externa".equals(tipo))
                 // Eliminado "left join fetch" por problemas en el cache de traducciones.
                 query = session.createQuery("select distinct normativa from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
             }
             
-            for (int i = 0; i < params.size(); i++) {
+            for ( int i = 0; i < params.size(); i++ ) {
                 Object o = params.get(i);
                 query.setParameter(i, o);
-            }
+            }            
+
+            boolean ignorarPaginacion = true; 
+            
+            int resultadosMax = 0;
+            int primerResultado = 0;
+            
+            if ( resultats != null && pagina != null ) {
+            	resultadosMax = new Integer(resultats).intValue();
+				primerResultado = new Integer(pagina).intValue() * resultadosMax;
+				ignorarPaginacion = false;
+        	}
+            
+            ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
             
             List normativas = query.list();
-
             List normativasAcceso = new ArrayList();
             Usuario usuario = getUsuario(session);
-            for (int i = 0; i < normativas.size(); i++) {
-                if("local".equals(tipo)){
+               
+            // Procesar todas las normativas para saber el total y 
+            // aprovechar el bucle para ir guardando el número 
+            // de normativas solicitadas según los parámetros de paginación.                
+            int contadorTotales = 0;
+            int normativasInsertadas = 0;
+            int iteraciones = 0;
+            
+            Class<?> clazz = "local".equals(tipo) ? NormativaLocal.class : NormativaExterna.class;
+            
+            for ( int i = 0; i < normativas.size(); i++ ) {
+            
+            	if ( tieneAcceso(usuario, (Normativa) normativas.get(i) ) )  {
+            		
+            		if ( ignorarPaginacion || (normativasInsertadas != resultadosMax && iteraciones >= primerResultado) ) {
+            			normativasAcceso.add(  clazz.cast(normativas.get(i) ) );
+            			normativasInsertadas++;
+            		}
+            		
+            		contadorTotales++;
+            		
+            	}
+            	
+            	iteraciones++;
+            	            	 
+            	/*
+                if ( "local".equals(tipo) ){
+                	
                     NormativaLocal normativa =  (NormativaLocal)normativas.get(i);
-                    if(tieneAcceso(usuario, normativa)){
+                    
+                    if ( tieneAcceso(usuario, normativa) ) {
                         normativasAcceso.add(normativa);
                     }
-                } else{
+                    
+                } else {
+                	
                     NormativaExterna normativa =  (NormativaExterna)normativas.get(i);
+                    
                     if(tieneAcceso(usuario, normativa)){
                         normativasAcceso.add(normativa);
                     }
+                    
                 }
+                */
             }
-
-            return normativasAcceso;
+            
+            resultadoBusqueda.setListaResultados( normativasAcceso );
+            resultadoBusqueda.setTotalResultados( contadorTotales );
+            
+            return resultadoBusqueda;
             
       } catch (DelegateException de) {
         	throw new EJBException(de);
@@ -396,13 +418,20 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         String aux = "";
 
         for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+        	
             String key = (String) iterTraducciones.next();
             Object value = traducciones.get(key);
+            
             if (value != null) {
+            	
             	if (aux.length() > 0) aux = aux + " or ";
+            	
                 if (value instanceof String) {
+                	
                     String sValue = (String) value;
+                    
                     if (sValue.length() > 0) {
+                    	
                         if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
                             sValue = sValue.substring(1, (sValue.length() - 1));
                             aux = aux + " upper( trad." + key + " ) like ? ";
@@ -411,12 +440,15 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                             aux = aux + " upper( trad." + key + " ) like ? ";
                             params.add("%"+sValue+"%");
                         }
+                        
                     }
                 } else {
                     aux = aux + " trad." + key + " = ? ";
                     params.add(value);
                 }
+                
             }
+            
         }
 
         return aux;

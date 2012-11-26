@@ -1,25 +1,26 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.lucene.indra.model.ModelFilterObject;
-import org.ibit.rol.sac.persistence.intf.FichaFacade;
-import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
-import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
-import org.ibit.rol.sac.model.Ficha;
-import org.ibit.rol.sac.model.Archivo;
-import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
-
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-
+import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.lucene.indra.model.ModelFilterObject;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.intf.FichaFacade;
+import org.ibit.rol.sac.persistence.intf.FichaFacadeHome;
+import org.ibit.rol.sac.persistence.util.FichaFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular fichas.
@@ -27,7 +28,7 @@ import java.rmi.RemoteException;
 public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -88,9 +89,9 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
     /* (non-Javadoc)
      * @see org.ibit.rol.sac.persistence.delegate.FichaDelegateI#buscarFichas(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
      */
-    public List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException {
+    public ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats) throws DelegateException {
         try {
-            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden);
+            return getFacade().buscarFichas(parametros, traduccion, ua, idFetVital, idMateria, idPublic, uaFilles, uaMeves, campoOrdenacion, orden, pagina, resultats);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
@@ -539,7 +540,7 @@ public class FichaDelegateImpl implements StatelessDelegate, FichaDelegateI {
 	           throw new DelegateException(e);
 	       }
 	}
-	
+
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

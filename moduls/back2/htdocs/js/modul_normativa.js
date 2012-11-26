@@ -322,14 +322,16 @@ function CEscriptoriNormativa(){
 		}
 			
 		// paginacio
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_normativa_elm.val(),10);
+		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_normativa_elm.val(),10);
+		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();			
 			
 		// ordre
 		ordre_Tipus = ordreTipus_normativa_elm.val();
 		ordre_Camp = ordreCamp_normativa_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
+		//dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
 		
 		// ajax
 		$.ajax({

@@ -178,7 +178,7 @@ function CLlistat(){
 
 			// codi cuerpo
 			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
-			$(data.nodes).each(function(i) {			
+			$(data.nodes).each( function(i) {			
 				dada_node = this;
 				
 				parClass = (i%2) ? " par": "";
@@ -340,7 +340,7 @@ function CLlistat(){
 					}
 				}
 			});
-		}else{
+		} else {
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}	
 	}    

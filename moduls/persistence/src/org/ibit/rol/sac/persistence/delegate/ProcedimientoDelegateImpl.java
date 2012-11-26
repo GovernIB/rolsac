@@ -20,6 +20,8 @@ import org.ibit.rol.sac.persistence.intf.ProcedimientoFacade;
 import org.ibit.rol.sac.persistence.intf.ProcedimientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.ProcedimientoFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular procedimientos.
  */
@@ -76,7 +78,7 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegateI#buscadorProcedimientos(java.util.Map, java.util.Map, org.ibit.rol.sac.model.UnidadAdministrativa, boolean, boolean)
 	 */
-    public List buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats) throws DelegateException {
+    public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats) throws DelegateException {
         try {
             return getFacade().buscadorProcedimientos(parametros, traduccion, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagina, resultats);
         } catch (RemoteException e) {
@@ -496,15 +498,6 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
             throw new DelegateException(e);
         }
     }
-    
-	public int contarProcedimientosBuscador(Map paramMap, Map traducciones, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves,
-			Long materia, Long fetVital, Long publicObjectiu) throws DelegateException {
-		try {
-			return getFacade().contarProcedimientosBuscador(paramMap, traducciones, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
-		} catch (RemoteException e) {
-			throw new DelegateException(e);
-		}
-	}
     
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */

@@ -5,7 +5,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -67,6 +66,7 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.utils.DateUtils;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
@@ -74,7 +74,6 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 public class CatalegProcedimentsBackController extends PantallaBaseController {
 	
 	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
-	
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
 
@@ -103,7 +102,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
-	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {		
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 2);
@@ -134,14 +133,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private UnidadAdministrativa getUAFromSession(HttpSession session) {
 		return (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 	}
-
 	
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
-		int numTotalProcediments = 0;
-		
-		List<ProcedimientoLocal> llistaProcedimientos = new ArrayList<ProcedimientoLocal>();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 
 		Map<String, Object> resultats = new HashMap<String, Object>();
@@ -223,7 +218,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} else if ("0".equals(taxa)) {
 			paramMap.put("taxa", 0);
 		}
-
 		
 		String indicador = request.getParameter("indicador");
 		if ("1".equals(indicador)) {
@@ -334,6 +328,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tradMap.put("idioma", lang);
 		}
 
+		int numTotalProcediments = 0;
+		
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");		
 		String pagRes = request.getParameter("pagRes");
@@ -341,14 +337,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (pagPag == null) pagPag = String.valueOf(0); 
 		if (pagRes == null) pagRes = String.valueOf(10);
 		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
 		try {
+			
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
-			llistaProcedimientos = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
-
-			for (ProcedimientoLocal pl : llistaProcedimientos) {
+			
+			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
+			
+			for ( ProcedimientoLocal pl : (List<ProcedimientoLocal>) resultadoBusqueda.getListaResultados() ) {
+				
 				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
 				TraduccionFamilia tfa = null;
+				
 				if (pl.getFamilia() != null) tfa = (TraduccionFamilia) pl.getFamilia().getTraduccion(lang);
+				
 				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
 								 pl.getId(), 
 								 tpl == null ? "" : tpl.getNombre(), 
@@ -357,24 +360,23 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 								 tfa == null ? null : tfa.getNombre()));
 			}
 			
-			numTotalProcediments = procedimientosDelegate.contarProcedimientosBuscador(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu);
-			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				// model.put("error", "permisos");
 			} else {
 				// model.put("error", "altres");
 				logException(log, dEx);
 			}
+			
 		}
  		
 		//Total de registros
-		resultats.put("total", numTotalProcediments);
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 		
 		return resultats;
 	}
-
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {
@@ -1155,12 +1157,21 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				paramTrad.put("idioma", idioma);
 			}			
 			
+			//Información de paginación
+			String pagPag = request.getParameter("pagPag");		
+			String pagRes = request.getParameter("pagRes");
+			
+			if (pagPag == null) pagPag = String.valueOf(0); 
+			if (pagRes == null) pagRes = String.valueOf(10);                						
 			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			llistaNormatives = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden);						
+			llistaNormatives = (List<Normativa>) normativaDelegate
+					.buscarNormativas(paramMap, paramTrad, "local", null,
+							false, false, campoOrdenacion, orden, pagPag,
+							pagRes).getListaResultados();						
 			
 			for (Normativa normativa : llistaNormatives) {
 				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
@@ -546,5 +549,9 @@ public interface UnidadAdministrativaDelegateI {
 	 */
     public abstract UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) 
     		throws DelegateException;
+    
+	public abstract String obtenerCadenaFiltroUA(Long ua,
+			boolean uaFilles, boolean uaMeves)
+			throws DelegateException;    
     
 }

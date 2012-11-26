@@ -68,7 +68,8 @@ var paginacio_marge = 4;
 
 // llistat
 var itemID_ultim = 0;
-function CLlistat(){
+
+function CLlistat() {
 	this.extend = ListadoBase;
 	this.extend();
 		
@@ -154,7 +155,8 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				caducat_titol_class = (dada_node.caducat) ? " fitxa" : " fitxaCaducat";
@@ -272,17 +274,17 @@ function CLlistat(){
 			
 		// paginacio
 		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_elm.val(),10);
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
+		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
 			
 		// ordre
 		ordre_Tipus = ordreTipus_elm.val();
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
 		// ajax
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		if ( modoListado || modoBuscador ) {
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
@@ -306,7 +308,7 @@ function CLlistat(){
 					}
 				}
 			});
-		}else{
+		} else {
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}
 	}

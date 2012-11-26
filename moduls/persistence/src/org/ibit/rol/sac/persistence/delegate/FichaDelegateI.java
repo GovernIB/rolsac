@@ -12,6 +12,8 @@ import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 public interface FichaDelegateI {
 
 	public abstract boolean autorizaCrearFicha(Integer validacionNormativa)
@@ -27,8 +29,7 @@ public interface FichaDelegateI {
 
 	public abstract List buscarFichas(String texto) throws DelegateException;
 	
-	public abstract List buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;
-
+	public abstract ResultadoBusqueda buscarFichas(Map parametros, Map traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden, String pagina, String resultats) throws DelegateException;
 	
 	public abstract List buscarFichas(Map parametros, String traduccion, UnidadAdministrativa ua, Long idFetVital, Long idMateria, Long idPublic, boolean uaFilles, boolean uaMeves, String campoOrdenacion, String orden) throws DelegateException;	
 
@@ -158,5 +159,6 @@ public interface FichaDelegateI {
 	public int buscarFichasCaducadas(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	
 	public void crearSeccionesFichas( UnidadAdministrativa ua, String[] listaSeccionesFicha ) throws DelegateException;
+		
 	
 }

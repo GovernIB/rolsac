@@ -1,8 +1,6 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.io.ByteArrayOutputStream;
 import java.rmi.RemoteException;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -12,13 +10,14 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.webcaib.UOMinModel;
-import org.ibit.rol.sac.model.webcaib.UOModel;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
@@ -29,7 +28,7 @@ import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, UnidadAdministrativaDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -1007,6 +1006,14 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         }
  	}
  	
+    public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves) throws DelegateException {
+    	try {
+    		return getFacade().obtenerCadenaFiltroUA( ua, uaFilles, uaMeves );
+    	}  catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}  	
+    }    
+ 	
  	
      public void eliminarUaSinRelaciones(Long idUA) throws DelegateException {
          try {
@@ -1050,6 +1057,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }    
+    }
     
 }

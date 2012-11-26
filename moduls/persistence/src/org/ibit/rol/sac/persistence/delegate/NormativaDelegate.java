@@ -17,6 +17,8 @@ import org.ibit.rol.sac.persistence.intf.NormativaFacade;
 import org.ibit.rol.sac.persistence.intf.NormativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.NormativaFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular normativas.
  */
@@ -81,9 +83,12 @@ public class NormativaDelegate implements StatelessDelegate {
         }
     }
     
-    public List buscarNormativas(Map parametros, Map traduccion, String tipo, Long idUA, boolean uaMeves, boolean uaFilles, String campoOrdenacion, String orden) throws DelegateException {
+	public ResultadoBusqueda buscarNormativas(Map parametros, Map traduccion, String tipo,
+			Long idUA, boolean uaMeves, boolean uaFilles,
+			String campoOrdenacion, String orden, String pagina,
+			String resultats) throws DelegateException {
         try {
-            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, campoOrdenacion, orden);
+            return getFacade().buscarNormativas(parametros, traduccion, tipo, idUA, uaMeves, uaFilles, campoOrdenacion, orden, pagina, resultats);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

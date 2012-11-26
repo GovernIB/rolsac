@@ -384,14 +384,15 @@ function CEscriptoriProcediment(){
 		}
 			
 		// paginacio
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_procediment_elm.val(),10);
+		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_procediment_elm.val(),10);
+		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
 			
 		// ordre
 		ordre_Tipus = ordreTipus_procediment_elm.val();
 		ordre_Camp = ordreCamp_procediment_elm.val();
 			
 		// variables
-		dataVars += "&pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
+		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
 		
 		// ajax
 		$.ajax({

@@ -68,6 +68,7 @@ import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
@@ -89,11 +90,12 @@ public class FitxaInfBackController extends PantallaBaseController {
         request.setAttribute("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
         
         String lang = request.getLocale().getLanguage();
+        
         if (session.getAttribute("unidadAdministrativa") != null) {
             model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
             model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
-
         }
+        
         try {
         	
         	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
@@ -126,7 +128,6 @@ public class FitxaInfBackController extends PantallaBaseController {
         	List<IdNomDTO> llistaPublicsObjectiuDTO = new ArrayList<IdNomDTO>();
         	
         	llistaPublicsObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
-
         	
         	for (PublicoObjetivo publicObjectiu : llistaPublicsObjectiu) {
         		TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
@@ -153,7 +154,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     @RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
         
-        List<Ficha> llistaFitxes = new ArrayList<Ficha>();
+        //List<Ficha> llistaFitxes = new ArrayList<Ficha>();
         List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
         Map<String, Object> resultats = new HashMap<String, Object>();
         Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -211,24 +212,40 @@ public class FitxaInfBackController extends PantallaBaseController {
         // Textes (en todos los campos todos los idiomas)
         String textes = request.getParameter("textes");
         
-        if (textes != null && !"".equals(textes)) {
+        if ( textes != null && !"".equals(textes) ) {
+        	
             textes = textes.toUpperCase();
+            
             if (tradMap.get("titulo") == null) {
                 tradMap.put("titulo", textes);
             }
+            
             tradMap.put("descAbr", textes);
             tradMap.put("descripcion", textes);
             tradMap.put("url", textes);
+            
         } else {
             tradMap.put("idioma", lang);
         }
+
+        ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
         
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);                
+		
         try {
-            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+        	
+            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();            
             
-            llistaFitxes = fitxaDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden);      
-            
-            for (Ficha fitxa : llistaFitxes) {
+			resultadoBusqueda = fitxaDelegate.buscarFichas(
+					paramMap, tradMap, ua, fetVital, materia, publicObjectiu,					
+					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes);
+			            
+            for (Ficha fitxa : (ArrayList<Ficha>) resultadoBusqueda.getListaResultados() ) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
@@ -236,8 +253,8 @@ public class FitxaInfBackController extends PantallaBaseController {
                                                              DateUtils.formatDate(fitxa.getFechaCaducidad()),
                                                              DateUtils.formatDate(fitxa.getFechaActualizacion()),
                                                              fitxa.isVisible()));
-            }
-
+            }   
+            
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {
                 // model.put("error", "permisos");
@@ -248,7 +265,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             }
         }
         
-        resultats.put("total", llistaFitxesDTO.size());
+        resultats.put("total",  resultadoBusqueda.getTotalResultados());
         resultats.put("nodes", llistaFitxesDTO);
         
         return resultats;
@@ -314,9 +331,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             } else {
                 resultats.put("fr", new TraduccionFicha());
             }
-            
             // Fin idiomas
-
             
             // Documentos relacionados
 			if (fitxa.getDocumentos() != null) {
