@@ -2175,7 +2175,7 @@
 	                            </ul>
 	                            
 	                            <div class="seleccionats">	                                
-									<c:forEach items="idiomes_aplicacio" var="lang" varStatus="loop">									
+									<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">									
 									<c:if test="${loop.first}">
 	                                <div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
 									</c:if>									
