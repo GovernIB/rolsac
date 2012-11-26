@@ -215,6 +215,8 @@
                             <element name="agrupacionMateria" nillable="true" type="xsd:string" />
                             <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                             <element name="textos" nillable="true" type="xsd:string" />
+                            <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
+                            <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

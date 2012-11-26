@@ -74,6 +74,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String textos;
 
+    private java.lang.String unidadAdministrativa;
+
+    private java.lang.String agrupacionHechoVital;
+
     public ProcedimentCriteria() {
     }
 
@@ -115,7 +119,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String familia,
            java.lang.String agrupacionMateria,
            java.lang.String publicoObjetivo,
-           java.lang.String textos) {
+           java.lang.String textos,
+           java.lang.String unidadAdministrativa,
+           java.lang.String agrupacionHechoVital) {
         super(
             id,
             idioma,
@@ -155,6 +161,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.agrupacionMateria = agrupacionMateria;
         this.publicoObjetivo = publicoObjetivo;
         this.textos = textos;
+        this.unidadAdministrativa = unidadAdministrativa;
+        this.agrupacionHechoVital = agrupacionHechoVital;
     }
 
 
@@ -817,6 +825,46 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.textos = textos;
     }
 
+
+    /**
+     * Gets the unidadAdministrativa value for this ProcedimentCriteria.
+     * 
+     * @return unidadAdministrativa
+     */
+    public java.lang.String getUnidadAdministrativa() {
+        return unidadAdministrativa;
+    }
+
+
+    /**
+     * Sets the unidadAdministrativa value for this ProcedimentCriteria.
+     * 
+     * @param unidadAdministrativa
+     */
+    public void setUnidadAdministrativa(java.lang.String unidadAdministrativa) {
+        this.unidadAdministrativa = unidadAdministrativa;
+    }
+
+
+    /**
+     * Gets the agrupacionHechoVital value for this ProcedimentCriteria.
+     * 
+     * @return agrupacionHechoVital
+     */
+    public java.lang.String getAgrupacionHechoVital() {
+        return agrupacionHechoVital;
+    }
+
+
+    /**
+     * Sets the agrupacionHechoVital value for this ProcedimentCriteria.
+     * 
+     * @param agrupacionHechoVital
+     */
+    public void setAgrupacionHechoVital(java.lang.String agrupacionHechoVital) {
+        this.agrupacionHechoVital = agrupacionHechoVital;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -927,7 +975,13 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.publicoObjetivo.equals(other.getPublicoObjetivo()))) &&
             ((this.textos==null && other.getTextos()==null) || 
              (this.textos!=null &&
-              this.textos.equals(other.getTextos())));
+              this.textos.equals(other.getTextos()))) &&
+            ((this.unidadAdministrativa==null && other.getUnidadAdministrativa()==null) || 
+             (this.unidadAdministrativa!=null &&
+              this.unidadAdministrativa.equals(other.getUnidadAdministrativa()))) &&
+            ((this.agrupacionHechoVital==null && other.getAgrupacionHechoVital()==null) || 
+             (this.agrupacionHechoVital!=null &&
+              this.agrupacionHechoVital.equals(other.getAgrupacionHechoVital())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1037,6 +1091,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getTextos() != null) {
             _hashCode += getTextos().hashCode();
+        }
+        if (getUnidadAdministrativa() != null) {
+            _hashCode += getUnidadAdministrativa().hashCode();
+        }
+        if (getAgrupacionHechoVital() != null) {
+            _hashCode += getAgrupacionHechoVital().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1243,6 +1303,18 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("textos");
         elemField.setXmlName(new javax.xml.namespace.QName("", "textos"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("unidadAdministrativa");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "unidadAdministrativa"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("agrupacionHechoVital");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "agrupacionHechoVital"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
