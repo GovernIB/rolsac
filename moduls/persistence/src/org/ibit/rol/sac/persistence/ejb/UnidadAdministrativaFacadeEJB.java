@@ -2872,11 +2872,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	 */
 	public String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves)
 			throws DelegateException {
-
-		Session session = getSession();
-		
-		try {
-			
+	
 			Set<Long> uas = new HashSet<Long>();
 			Set<Long> uasIds = new HashSet<Long>();
 			
@@ -2885,7 +2881,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			}
 			
 			if ( uaMeves ) {
-				uas.addAll( getUsuario(session).getUnidadesAdministrativas() );
+				uas.addAll( getIdsUnidadesAdministrativasUsuario( ctx.getCallerPrincipal().getName() ) );  
 			}
 			
 			if ( uaFilles ) {
@@ -2912,14 +2908,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				sep = ", ";
 			}
 			
-			return uaQuery;
-			
-        } catch (HibernateException he) {
-            throw new EJBException(he);			
-        } finally {
-        	close(session);
-        }
-		
+			return uaQuery;			        	
 	}	
 	
 	private String initTab(String texte) {
@@ -2992,5 +2981,24 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	    for ( int index = original.indexOf(patro); index != -1; index = original.indexOf(patro,index+LONG_CANVI)) {
 	    	texte.replace( index, index + LONG_CANVI, canvi);
 	    }
-	}		
+	}	
+	
+	private List<Long> getIdsUnidadesAdministrativasUsuario(String nombreUsuario) {
+		
+		Session session = getSession();
+		
+		try {
+			Query query = session.createQuery("select ua.id " +
+															"from UnidadAdministrativa as ua, ua.usuarios as uaUsu " +
+															"where uaUsu.username = '" + nombreUsuario + "'");
+			
+			return query.list(); 
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		
+	}
 }
