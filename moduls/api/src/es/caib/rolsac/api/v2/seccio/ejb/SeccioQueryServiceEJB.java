@@ -68,6 +68,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -99,7 +100,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -141,7 +142,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -195,7 +196,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {

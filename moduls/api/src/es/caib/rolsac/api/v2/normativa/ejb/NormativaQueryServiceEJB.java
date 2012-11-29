@@ -65,6 +65,7 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -150,7 +151,7 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
 
             query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectadas AS afec LEFT JOIN afec.normativa AS nafec WHERE n.id = :id ");
             query.setParameter("id", id);
-            numResultats += ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } finally {
@@ -226,7 +227,7 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
 
             query = session.createQuery("SELECT COUNT(DISTINCT nafec) FROM NormativaExterna AS n LEFT JOIN n.afectantes AS afec LEFT JOIN afec.afectante AS nafec WHERE n.id = :id ");
             query.setParameter("id", id);
-            numResultats += ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } finally {
@@ -310,7 +311,7 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {

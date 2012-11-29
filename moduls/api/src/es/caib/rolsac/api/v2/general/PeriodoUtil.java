@@ -1,8 +1,12 @@
 package es.caib.rolsac.api.v2.general;
 
-import org.ibit.rol.sac.model.Periodo;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
-import java.util.*;
+import org.ibit.rol.sac.model.Periodo;
 
 public class PeriodoUtil {
 

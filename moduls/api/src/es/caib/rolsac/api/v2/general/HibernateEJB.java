@@ -304,4 +304,10 @@ public abstract class HibernateEJB implements SessionBean {
         return hficha;
     }
 
+    protected int getNumberResults(Query query) throws HibernateException {
+        Object result = query.uniqueResult();
+        if (result == null) return 0;
+        return (Integer) result;
+    }
+    
 }

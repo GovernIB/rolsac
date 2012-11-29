@@ -57,6 +57,7 @@ public class PerfilQueryServiceEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -183,7 +184,7 @@ public class PerfilQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = (Integer) query.uniqueResult();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -224,7 +225,7 @@ public class PerfilQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = (Integer) query.uniqueResult();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {

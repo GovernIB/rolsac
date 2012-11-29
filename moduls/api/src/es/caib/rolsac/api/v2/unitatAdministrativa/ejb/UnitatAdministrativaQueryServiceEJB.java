@@ -113,6 +113,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -767,7 +768,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -808,7 +809,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -850,7 +851,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -891,7 +892,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -931,7 +932,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
             QueryBuilder qb = new QueryBuilder(HQL_NORMATIVA_ALIAS, entities, null, null, true);
             qb.extendCriteriaObjects(criteris);
             Query query = qb.createQuery(session);
-            numResultats = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
 
             UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
             uac.setId(String.valueOf(id));
@@ -977,7 +978,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -1018,7 +1019,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -1060,7 +1061,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -1102,7 +1103,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
@@ -1144,7 +1145,7 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats  = ((Integer) query.uniqueResult()).intValue();
+            numResultats = getNumberResults(query);
         } catch (HibernateException e) {
             log.error(e);
         } catch (CriteriaObjectParseException e) {
