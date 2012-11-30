@@ -104,8 +104,10 @@ public class BasicUtils {
          */
         StringBuilder concreteCriteriaClassName = new StringBuilder();
         String[] packageWords = criteriaClass.getName().split("\\.");
-        String[] classWords = packageWords[packageWords.length - 1].split("(?=\\p{Lu})"); // split by unicode capital
-                                                                                          // letter.
+        
+        // split by unicode capital letter.
+        String[] classWords = packageWords[packageWords.length - 1].split("(?=\\p{Lu})");
+        
         for (int i = 0; i < (packageWords.length - 1); i++) {
             concreteCriteriaClassName.append(packageWords[i]).append(".");
         }
@@ -135,7 +137,12 @@ public class BasicUtils {
             } else {
                 stringValue = String.valueOf(value);
             }
-            parser.invoke(concreteCriteria, stringValue);
+            
+            if (StringUtils.isNotBlank(stringValue)) {
+                parser.invoke(concreteCriteria, stringValue);
+            } else {
+                concreteCriteria = null;
+            }
         }
 
         return concreteCriteria;
@@ -143,22 +150,23 @@ public class BasicUtils {
 
     private static void parseBasicCriteria(String entityAlias, String i18nAlias, List<CriteriaObject> criteriaObjects,
             BasicCriteria basicCriteria) throws CriteriaObjectParseException {
-        if (basicCriteria.getId() != null) {
+        
+        if (StringUtils.isNotBlank(basicCriteria.getId())) {
             BasicByIdCriteria criteria = new BasicByIdCriteria(entityAlias);
             criteria.parseCriteria(basicCriteria.getId());
             criteriaObjects.add(criteria);
         }
-        if (basicCriteria.getOrdenacio() != null) {
+        if (StringUtils.isNotBlank(basicCriteria.getOrdenacio())) {
             BasicByOrdenacioCriteria criteria = new BasicByOrdenacioCriteria(entityAlias, i18nAlias);
             criteria.parseCriteria(basicCriteria.getOrdenacio());
             criteriaObjects.add(criteria);
         }
-        if (basicCriteria.getInici() != null) {
+        if (StringUtils.isNotBlank(basicCriteria.getInici())) {
             BasicByIniciCriteria criteria = new BasicByIniciCriteria();
             criteria.parseCriteria(basicCriteria.getInici());
             criteriaObjects.add(criteria);
         }
-        if (basicCriteria.getTamany() != null) {
+        if (StringUtils.isNotBlank(basicCriteria.getTamany())) {
             BasicByTamanyCriteria criteria = new BasicByTamanyCriteria();
             criteria.parseCriteria(basicCriteria.getTamany());
             criteriaObjects.add(criteria);
@@ -184,11 +192,9 @@ public class BasicUtils {
 	        // DTO con un constructor mas
 			dtoConstructor = dtoClass.getConstructor( (Class[]) null  );
 		} catch (SecurityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		    log.error(e1);
 		} catch (NoSuchMethodException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		    log.error(e1);
 		}                    	
         
         Object dto = null;
