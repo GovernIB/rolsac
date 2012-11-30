@@ -1,15 +1,19 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.Tratamiento;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Tratamientos.
@@ -67,6 +71,15 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
         }
     }
 
+    /**
+     * Lista todos los Tratamientos
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public ResultadoBusqueda listarTratamientos(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTratamientos());
+    }    
+    
     /**
      * Lista todos los Tratamientos
      * @ejb.interface-method

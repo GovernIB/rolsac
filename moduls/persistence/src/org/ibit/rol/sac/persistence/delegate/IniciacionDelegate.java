@@ -1,15 +1,10 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.intf.IniciacionFacade;
-import org.ibit.rol.sac.persistence.intf.IniciacionFacadeHome;
-import org.ibit.rol.sac.persistence.util.IniciacionFacadeUtil;
-import org.ibit.rol.sac.model.Iniciacion;
- 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
 import java.util.List;
+
+import org.ibit.rol.sac.model.Iniciacion;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*
  * ejaen@dgtic  - u92770
@@ -39,6 +34,10 @@ public class IniciacionDelegate  {
 		return impl.grabarIniciacion(tipo);
     }
  
+	public ResultadoBusqueda listarIniciacion(int pagina, int resultats) throws DelegateException {
+		return impl.listarIniciacion(pagina, resultats);
+	}
+	
 	public List listarIniciacion() throws DelegateException {
 		return impl.listarIniciacion();
         }

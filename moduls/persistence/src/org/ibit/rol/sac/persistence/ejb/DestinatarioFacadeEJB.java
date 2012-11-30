@@ -10,9 +10,10 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Destinatario;
-import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
 import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Destinatarios (PORMAD)
@@ -29,7 +30,7 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 public abstract class DestinatarioFacadeEJB extends HibernateEJB implements DestinatarioDelegateI {
 
      /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -77,7 +78,15 @@ public abstract class DestinatarioFacadeEJB extends HibernateEJB implements Dest
         }
     }
 
-
+    /**
+    * Lista los destinatarios (nuevo backoffice)
+    * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+    */
+    public ResultadoBusqueda listarDestinatarios(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarDestinatarios());
+    }
+    
      /**
      * Lista los destinatarios
      * @ejb.interface-method

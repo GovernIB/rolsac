@@ -24,6 +24,7 @@ import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -48,7 +49,6 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 		loadIndexModel (model, request);	
         return "index";
     }
-
     
 	@RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatTipusIniciacions(HttpServletRequest request) {
@@ -56,16 +56,30 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 		List<Map<String, Object>> llistaIniciacionsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> iniciacioDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();						
 
 		try {
 			IniciacionDelegate iniciacioDelegate = DelegateUtil.getIniciacionDelegate();
-			List<Iniciacion> llistaIniciacions = iniciacioDelegate.listarIniciacion();
-			for (Iniciacion iniciacio: llistaIniciacions) {
+			
+			resultadoBusqueda = iniciacioDelegate.listarIniciacion(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (Iniciacion iniciacio: castList(Iniciacion.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionIniciacion ti = (TraduccionIniciacion) iniciacio.getTraduccion(request.getLocale().getLanguage());
+				
 				iniciacioDTO = new HashMap<String, Object>();
 				iniciacioDTO.put("id", iniciacio.getId());
 				iniciacioDTO.put("codi_estandard", iniciacio.getCodigoEstandar());
 				iniciacioDTO.put("nom", ti == null ? "" : ti.getNombre());
+				
 				llistaIniciacionsDTO.add(iniciacioDTO);
 			}
 		} catch (DelegateException dEx) {
@@ -76,7 +90,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaIniciacionsDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados() );
 		resultats.put("nodes", llistaIniciacionsDTO);
 
 		return resultats;
@@ -201,26 +215,31 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 
 		return result;
 	}	
-	
 
 	@RequestMapping(value = "/esborrarTipusIniciacio.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarTipusIniciacio(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
+		
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
 			IniciacionDelegate iniciacioDelegate = DelegateUtil.getIniciacionDelegate();
 			iniciacioDelegate.borrarIniciacion(id);
 			resultatStatus.setId(1l);
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
 			} else {
 				resultatStatus.setId(-2l);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus d'iniciació no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus d'iniciaciï¿½ no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

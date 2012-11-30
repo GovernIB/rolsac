@@ -1,22 +1,25 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.persistence.intf.TratamientoFacade;
 import org.ibit.rol.sac.persistence.intf.TratamientoFacadeHome;
 import org.ibit.rol.sac.persistence.util.TratamientoFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Tratamientos.
  */
 public class TratamientoDelegate implements StatelessDelegate{
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
     public Long grabarTratamiento(Tratamiento tratamiento) throws DelegateException {
         try {
@@ -34,6 +37,14 @@ public class TratamientoDelegate implements StatelessDelegate{
         }
     }
 
+    public ResultadoBusqueda listarTratamientos(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarTratamientos(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public List listarTratamientos() throws DelegateException {
         try {
             return getFacade().listarTratamientos();

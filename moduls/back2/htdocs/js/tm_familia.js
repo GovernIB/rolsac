@@ -127,7 +127,7 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -149,7 +149,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multipágina.
+			// Instanciamos el navegador multipï¿½gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -221,8 +221,6 @@ function CLlistat(){
 		}
 			
 		// paginacio
-		// pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) :
-		// parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
@@ -230,10 +228,10 @@ function CLlistat(){
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
 		// ajax
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		if ( modoListado || modoBuscador ) {
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,

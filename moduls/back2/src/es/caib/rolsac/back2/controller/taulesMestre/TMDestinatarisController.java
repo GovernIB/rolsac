@@ -22,6 +22,7 @@ import org.ibit.rol.sac.persistence.delegate.DestinatarioDelegate;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -46,7 +47,6 @@ public class TMDestinatarisController extends PantallaBaseController {
 		loadIndexModel (model, request);	
         return "index";
     }  
-
     
     @RequestMapping(value = "/llistat.do")
    	public @ResponseBody Map<String, Object> llistatDestinataris(HttpServletRequest request) {
@@ -55,10 +55,21 @@ public class TMDestinatarisController extends PantallaBaseController {
    		Map<String, Object> destinatariDTO;
    		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();		
+   		
    		try {
    			DestinatarioDelegate destinatariDelegate = DelegateUtil.getDestinatarioDelegate();
-   			List<Destinatario> llistaDestinataris = destinatariDelegate.listarDestinatarios();
-   			for (Destinatario destinatari: llistaDestinataris) {
+   			
+   			resultadoBusqueda = destinatariDelegate.listarDestinatarios(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+   			
+   			for (Destinatario destinatari: castList(Destinatario.class, resultadoBusqueda.getListaResultados()) ) {
    				destinatariDTO = new HashMap<String, Object>();
    				destinatariDTO.put("id", destinatari.getId());
    				destinatariDTO.put("nom", destinatari.getNombre());
@@ -75,7 +86,7 @@ public class TMDestinatarisController extends PantallaBaseController {
    			}
    		}
 
-   		resultats.put("total", llistaDestinatarisDTO.size());
+   		resultats.put("total", resultadoBusqueda.getTotalResultados());
    		resultats.put("nodes", llistaDestinatarisDTO);
 
    		return resultats;
@@ -170,7 +181,7 @@ public class TMDestinatarisController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de destinatari no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de destinatari no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

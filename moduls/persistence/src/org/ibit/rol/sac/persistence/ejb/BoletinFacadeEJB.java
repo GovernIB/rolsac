@@ -1,14 +1,18 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import org.ibit.rol.sac.model.Boletin;
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.List;
-import java.util.Set;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.Boletin;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Boletin.
@@ -23,7 +27,10 @@ import java.util.Set;
  * @ejb.transaction type="Required"
  */
 public abstract class BoletinFacadeEJB extends HibernateEJB {
-    /**
+
+	private static final long serialVersionUID = 364556289440568520L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -49,6 +56,15 @@ public abstract class BoletinFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Lista todos los boletines.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public ResultadoBusqueda listarBoletines(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarBoletines());
+    }
+    
     /**
      * Lista todos los boletines.
      * @ejb.interface-method

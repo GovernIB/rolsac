@@ -104,8 +104,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements ProcedimientoDelegateI {
 
-	private static String idioma_per_defecte = "ca";
-	private static int RESULTATS_CERCA_TOTS = 99999;
+	private static String idioma_per_defecte = "ca";	
 	
     /**
      * Obtiene refer�ncia al ejb de control de Acceso.

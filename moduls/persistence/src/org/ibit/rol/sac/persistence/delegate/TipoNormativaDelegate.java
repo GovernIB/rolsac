@@ -1,25 +1,30 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.Tipo;
-import org.ibit.rol.sac.persistence.intf.TipoNormativaFacadeHome;
-import org.ibit.rol.sac.persistence.intf.TipoNormativaFacade;
-import org.ibit.rol.sac.persistence.util.TipoNormativaFacadeUtil;
-
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
 import java.rmi.RemoteException;
 import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.Tipo;
+import org.ibit.rol.sac.persistence.intf.TipoNormativaFacade;
+import org.ibit.rol.sac.persistence.intf.TipoNormativaFacadeHome;
+import org.ibit.rol.sac.persistence.util.TipoNormativaFacadeUtil;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular tipos normativas.
  */
 public class TipoNormativaDelegate implements StatelessDelegate {
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarTipoNormativa(Tipo tiponorm) throws DelegateException {
+	private static final long serialVersionUID = 986051651952144005L;
+
+	public Long grabarTipoNormativa(Tipo tiponorm) throws DelegateException {
         try {
             return getFacade().grabarTipoNormativa(tiponorm);
         } catch (RemoteException e) {
@@ -27,6 +32,14 @@ public class TipoNormativaDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarTiposNormativas(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarTiposNormativas(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public List listarTiposNormativas() throws DelegateException {
         try {
             return getFacade().listarTiposNormativas();

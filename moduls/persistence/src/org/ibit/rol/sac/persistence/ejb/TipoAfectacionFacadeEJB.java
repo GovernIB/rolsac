@@ -1,15 +1,17 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Hibernate;
-import org.ibit.rol.sac.model.TipoAfectacion;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.List;
-import java.util.Set;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+import org.ibit.rol.sac.model.TipoAfectacion;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Tipo Afectacion.
@@ -25,7 +27,9 @@ import java.util.Set;
  */
 public abstract class TipoAfectacionFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 5246339899571321776L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -50,13 +54,22 @@ public abstract class TipoAfectacionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
     /**
      * Lista todos los tipos afectaciones.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarTiposAfectaciones() {
+    public ResultadoBusqueda listarTiposAfectaciones(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTiposAfectaciones());
+    }
+    
+    /**
+     * Lista todos los tipos afectaciones.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public List<TipoAfectacion> listarTiposAfectaciones() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(TipoAfectacion.class);

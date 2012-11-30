@@ -1,12 +1,15 @@
 package es.caib.rolsac.back2.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Usuario;
@@ -38,6 +41,7 @@ public abstract class PantallaBaseController {
 	protected void loadIndexModel (Map<String, Object> model, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
+
 		String nomLlinatges = (String) session.getAttribute("capNomLlinatges");
 		if (nomLlinatges == null) {
 	    	String username = request.getRemoteUser();
@@ -61,5 +65,24 @@ public abstract class PantallaBaseController {
 		
 	}
 	
-	
+    /**
+     * Método encargado de realizar el casting de listas no tipadas a listas
+     * tipadas
+     * 
+     * @param <T>
+     * @param clazz Clase del tipo de objeto contenido en la lista
+     * @param c Colección a ser tipada
+     * @return Lista tipada
+     */
+    public <T>List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+        List<T> r = new ArrayList<T>();
+        if (c != null) {     
+            r = new ArrayList<T>(c.size());            
+            for (Object o : c) {
+            	r.add(clazz.cast(o));
+            }
+        }
+        return r;
+    }    	
+	    
 }

@@ -5,6 +5,8 @@ import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 import org.ibit.rol.sac.model.*;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -98,7 +100,18 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
     }
 
     /**
+     * Lista todas los Hechos Vitales (nuevo backoffice, tablas maestras).
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */    
+    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados) {    	
+    	return listarTablaMaestraPaginada( pagina, resultados, listarHechosVitales() );    	
+    }
+    
+    /**
      * Lista todas los Hechos Vitales.
+     * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -117,6 +130,10 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         }
     }
 
+    private List<?> listarTablaMaestra() {
+    	return listarHechosVitales();
+    }
+    
     /**
      * Lista todas los Hechos Vitales y sus procedimientos.
      * @ejb.interface-method

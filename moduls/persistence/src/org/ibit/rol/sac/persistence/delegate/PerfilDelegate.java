@@ -12,13 +12,15 @@ import org.ibit.rol.sac.persistence.intf.PerfilFacade;
 import org.ibit.rol.sac.persistence.intf.PerfilFacadeHome;
 import org.ibit.rol.sac.persistence.util.PerfilFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular mascaras.
  */
 public class PerfilDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarPerfil(PerfilCiudadano perfil) throws DelegateException {
@@ -29,6 +31,14 @@ public class PerfilDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarPerfiles(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarPerfiles(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	} 
+    }
+    
     public List listarPerfiles() throws DelegateException {
         try {
             return getFacade().listarPerfiles();

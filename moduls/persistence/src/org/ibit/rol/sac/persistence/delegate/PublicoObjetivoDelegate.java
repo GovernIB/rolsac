@@ -1,17 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.delegate.DelegateException;
-import org.ibit.rol.sac.persistence.delegate.StatelessDelegate;
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.persistence.intf.PublicoObjetivoFacade;
 import org.ibit.rol.sac.persistence.intf.PublicoObjetivoFacadeHome;
 import org.ibit.rol.sac.persistence.util.PublicoObjetivoFacadeUtil;
-import org.ibit.rol.sac.model.PublicoObjetivo;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Publico Objetivo.
@@ -19,7 +20,7 @@ import java.util.List;
 public class PublicoObjetivoDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarPublicoObjetivo(PublicoObjetivo hechov) throws DelegateException {
@@ -30,6 +31,14 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarPublicoObjetivo(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarPublicoObjetivo(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     @SuppressWarnings("unchecked")
 	public List<PublicoObjetivo> listarPublicoObjetivo() throws DelegateException {
         try {

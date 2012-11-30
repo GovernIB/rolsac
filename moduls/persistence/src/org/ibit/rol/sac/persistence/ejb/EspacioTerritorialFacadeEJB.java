@@ -1,19 +1,22 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
-import org.ibit.rol.sac.model.EspacioTerritorial;
-import org.ibit.rol.sac.model.Archivo;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
-import net.sf.hibernate.*;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Espacios Territoriales (PORMAD)
@@ -30,7 +33,7 @@ import net.sf.hibernate.*;
 public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
 
      /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -184,7 +187,7 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
     }
     
     /**
-     * Lista de los hijos de una sección determinada.
+     * Lista de los hijos de una secciï¿½n determinada.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -224,7 +227,15 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         }
     }
 
-
+    /**
+    * Lista los espacios Territoriales
+    * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+    */    
+    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarEspaciosTerritoriales());
+    }
+    
      /**
      * Lista los espacios Territoriales
      * @ejb.interface-method

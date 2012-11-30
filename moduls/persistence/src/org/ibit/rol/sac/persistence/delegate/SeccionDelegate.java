@@ -15,13 +15,15 @@ import org.ibit.rol.sac.persistence.intf.SeccionFacadeHome;
 import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.ibit.rol.sac.persistence.util.SeccionFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular Secciones.
  */
 public class SeccionDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long crearSeccion(Seccion seccion, Long padre_id)
@@ -101,6 +103,14 @@ public class SeccionDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarSeccionesRaiz(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarSeccionesRaiz(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public List listarSeccionesRaiz() throws DelegateException {
         try {
             return getFacade().listarSeccionesRaiz();

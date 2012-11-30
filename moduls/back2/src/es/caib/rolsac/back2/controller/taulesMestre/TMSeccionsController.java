@@ -39,6 +39,7 @@ import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/seccions/")
@@ -130,17 +131,33 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		Map<String, Object> seccioDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
 		try {
+			
 			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
-			List<Seccion> seccions = seccioDelegate.listarSeccionesRaiz();
-			for (Seccion seccion : seccions) {
+			
+			resultadoBusqueda = seccioDelegate.listarSeccionesRaiz(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (Seccion seccion : castList(Seccion.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionSeccion ts = (TraduccionSeccion) seccion.getTraduccion(request.getLocale().getLanguage());
+				
 				seccioDTO = new HashMap<String, Object>();
 				seccioDTO.put("id", seccion.getId());
 				seccioDTO.put("nom", ts == null ? "" : ts.getNombre());
 				seccioDTO.put("ordre", seccion.getOrden());
+				
 				llistaSeccioDTO.add(seccioDTO);
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
@@ -149,12 +166,11 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 			}
 		}
 		
-		resultats.put("total", llistaSeccioDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaSeccioDTO);
 
 		return resultats;
 	}
-    
     
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
@@ -324,9 +340,9 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -339,8 +355,8 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		
         try {
         	
-    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
         	Set<String> seccioForm = new HashSet<String>();
         	Set<String> fitxaForm = new HashSet<String>();
@@ -381,7 +397,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
         	}
         	seccion.setTraduccionMap(traduccions);
         	
-        	//Obtener los demás campos
+        	//Obtener los demï¿½s campos
         	Long idSeccioPare = null;
         	if (valoresForm.get("item_codi_pare") != null && !"".equals(valoresForm.get("item_codi_pare"))) {
         		idSeccioPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
@@ -467,7 +483,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de secció no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de secciï¿½ no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
@@ -490,7 +506,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de secció no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de secciï¿½ no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

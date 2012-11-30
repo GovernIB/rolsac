@@ -50,6 +50,7 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/espaisTerritorials/")
@@ -60,7 +61,6 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
     @RequestMapping(value = "/espaiTerritorialBreadcrumb.do")
     public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request) {
     	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
     	try {
     		// Breadcrumb del elemento
     		List<Map<String, Object>> breadcrumbDTO = new ArrayList<Map<String, Object>>();
@@ -141,7 +141,6 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
         return "index";
     }
     
-    
     @RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatEspaiTerritorial(HttpServletRequest request) {
 	
@@ -149,16 +148,31 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 		Map<String, Object> espaiDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
 		try {
+			
 			EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
-			List<EspacioTerritorial> espais = espaiDelegate.listarEspacioTerritorialesRaiz();
-			for (EspacioTerritorial espacio: espais) {
+			
+			resultadoBusqueda = espaiDelegate.listarEspaciosTerritoriales(Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			
+			for (EspacioTerritorial espacio: castList(EspacioTerritorial.class, resultadoBusqueda.getListaResultados() ) ) {
+				
 				TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) espacio.getTraduccion(request.getLocale().getLanguage());
+				
 				espaiDTO = new HashMap<String, Object>();
 				espaiDTO.put("id", espacio.getId());
 				espaiDTO.put("nom", tet == null ? "" : tet.getNombre());
 				llistaEspaiDTO.add(espaiDTO);
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
@@ -167,7 +181,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 			}
 		}
 		
-		resultats.put("total", llistaEspaiDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaEspaiDTO);
 
 		return resultats;
@@ -246,7 +260,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
             } else {
                 resultats.put("espaisRelacionats", null);
             }
-            // Fi Metèries asociades
+            // Fi Metï¿½ries asociades
             
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -283,9 +297,9 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -300,8 +314,8 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 		
         try {
         	
-    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
         	FileItem fileItem;
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
@@ -346,7 +360,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
         		
         	}
         	
-        	//Obtener los demás campos
+        	//Obtener los demï¿½s campos
         	Long idEspaiPare = null;
         	if (valoresForm.get("item_codi_pare") != null && !"".equals(valoresForm.get("item_codi_pare"))) {
         		idEspaiPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
@@ -435,7 +449,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de espai territorial no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de espai territorial no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

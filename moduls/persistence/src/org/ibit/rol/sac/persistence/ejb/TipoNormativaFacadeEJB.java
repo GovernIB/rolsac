@@ -1,14 +1,18 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-import org.ibit.rol.sac.model.Tipo;
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.List;
-import java.util.Set;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.Tipo;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Tipo Normativa.
@@ -49,6 +53,15 @@ public abstract class TipoNormativaFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+    * Lista todos los tipos normativas (nuevo backoffice).
+    * @ejb.interface-method
+    * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+    */
+    public ResultadoBusqueda listarTiposNormativas(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTiposNormativas());
+    }
+    
      /**
      * Lista todos los tipos normativas.
      * @ejb.interface-method

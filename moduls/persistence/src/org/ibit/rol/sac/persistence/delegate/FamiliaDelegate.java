@@ -1,15 +1,10 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.intf.FamiliaFacade;
-import org.ibit.rol.sac.persistence.intf.FamiliaFacadeHome;
-import org.ibit.rol.sac.persistence.util.FamiliaFacadeUtil;
+import java.util.List;
+
 import org.ibit.rol.sac.model.Familia;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*
  * ejaen@dgtic  - u92770
@@ -39,6 +34,10 @@ public class FamiliaDelegate  {
 		return impl.grabarFamilia(familia);
     }
 
+	public ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException {
+		return impl.listarFamilias(pagina, resultats);
+	}
+	
 	public List listarFamilias() throws DelegateException {
 		return impl.listarFamilias();
         }
@@ -50,7 +49,5 @@ public class FamiliaDelegate  {
     public boolean tieneProcedimientos(Long id) throws DelegateException {
 		return impl.tieneProcedimientos(id);
     }
-
-
 
 }

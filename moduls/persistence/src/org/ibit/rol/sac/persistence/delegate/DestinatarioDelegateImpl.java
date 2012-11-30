@@ -1,15 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.Destinatario;
 import org.ibit.rol.sac.persistence.intf.DestinatarioFacade;
 import org.ibit.rol.sac.persistence.intf.DestinatarioFacadeHome;
 import org.ibit.rol.sac.persistence.util.DestinatarioFacadeUtil;
-import org.ibit.rol.sac.model.Destinatario;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +24,7 @@ import java.util.List;
 public class DestinatarioDelegateImpl implements  StatelessDelegate, DestinatarioDelegateI{
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -46,6 +49,14 @@ public class DestinatarioDelegateImpl implements  StatelessDelegate, Destinatari
         }
     }
 
+    public ResultadoBusqueda listarDestinatarios(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarDestinatarios(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.DestinatarioDelegateI#listarDestinatarios()
 	 */

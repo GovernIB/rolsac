@@ -151,7 +151,8 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {						
+			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each( function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -279,10 +280,11 @@ function CLlistat(){
 		ordre_Camp = "";*/
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
 		// ajax		
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+	    if ( modoListado || modoBuscador ) {
 			$.ajax({
 				type: "POST",
 				url: pagLlistatPersonal,
@@ -307,6 +309,7 @@ function CLlistat(){
 					
 				}
 			});
+			
 		}else{			
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}

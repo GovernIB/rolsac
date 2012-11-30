@@ -24,9 +24,9 @@ import org.ibit.rol.sac.persistence.delegate.TipoNormativaDelegate;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 
 @Controller
 @RequestMapping("/tipusNormatives/")
@@ -50,20 +50,32 @@ public class TMTipusNormativesController extends PantallaBaseController {
         return "index";
     }
     
-    
     @RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request) {
 
        List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
 
-       try {                      		   
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+      		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();              
+       
+       try {                      		  
+    	   
 			TipoNormativaDelegate tipoNormativaDelegate = DelegateUtil.getTipoNormativaDelegate();
-			List<Tipo> llistaTipusNormativa = tipoNormativaDelegate.listarTiposNormativas();
-			for(Tipo tipo : llistaTipusNormativa){
+			
+			resultadoBusqueda = tipoNormativaDelegate.listarTiposNormativas(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for(Tipo tipo : castList(Tipo.class, resultadoBusqueda.getListaResultados()) ){
 				TraduccionTipo tp = (TraduccionTipo) tipo.getTraduccion(request.getLocale().getLanguage());
                 llistaTipus.add(new IdNomDTO(tipo.getId(), tp == null ? "" : tp.getNombre()));                
            }
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
@@ -72,13 +84,11 @@ public class TMTipusNormativesController extends PantallaBaseController {
             }
 		}
 
-		resultats.put("total", llistaTipus.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
         resultats.put("nodes", llistaTipus);
 
 		return resultats;
 	}
-    
-    
 
 	@RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
@@ -217,7 +227,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus de normativa no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus de normativa no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

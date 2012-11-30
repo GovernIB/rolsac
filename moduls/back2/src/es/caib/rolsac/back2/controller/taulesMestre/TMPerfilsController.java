@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/perfils/")
@@ -58,17 +59,31 @@ public class TMPerfilsController extends PantallaBaseController {
 		Map<String, Object> perfilDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();		
+		
 		try {
 			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
-			List<PerfilCiudadano> llistaPerfils = perfilDelegate.listarPerfiles();
-			for (PerfilCiudadano perfil: llistaPerfils) {
+			
+			resultadoBusqueda = perfilDelegate.listarPerfiles(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (PerfilCiudadano perfil: castList(PerfilCiudadano.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionPerfilCiudadano tp = (TraduccionPerfilCiudadano) perfil.getTraduccion(request.getLocale().getLanguage());
+				
 				perfilDTO = new HashMap<String, Object>();
 				perfilDTO.put("id", perfil.getId());
 				perfilDTO.put("codi_estandard", perfil.getCodigoEstandard());
 				perfilDTO.put("path_iconografia", perfil.getPathIconografia());
 				perfilDTO.put("nom", tp == null ? "" : tp.getNombre());
 				perfilDTO.put("descripcio", tp == null ? "" : tp.getDescripcion());
+				
 				llistaPerfilsDTO.add(perfilDTO);
 			}
 		} catch (DelegateException dEx) {
@@ -79,7 +94,7 @@ public class TMPerfilsController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaPerfilsDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaPerfilsDTO);
 
 		return resultats;
@@ -145,7 +160,7 @@ public class TMPerfilsController extends PantallaBaseController {
 				        
 				        llistaIcones.add(iconaDTO);
 			        } else {
-			        	log.error("La família " + perfil.getId() + " te una icona null o sense arxiu.");
+			        	log.error("La famï¿½lia " + perfil.getId() + " te una icona null o sense arxiu.");
 			        }
 		        }
 			    resultats.put("iconesFamilia", llistaIcones);
@@ -170,7 +185,7 @@ public class TMPerfilsController extends PantallaBaseController {
 				        
 				        llistaIcones.add(iconaDTO);
 			        } else {
-			        	log.error("La matèria " + perfil.getId() + " te una icona null o sense arxiu.");
+			        	log.error("La matï¿½ria " + perfil.getId() + " te una icona null o sense arxiu.");
 			        }
 		        }
 			    resultats.put("iconesMateria", llistaIcones);
@@ -280,7 +295,7 @@ public class TMPerfilsController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

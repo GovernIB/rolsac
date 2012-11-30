@@ -40,6 +40,7 @@ import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/administracioRemota/")
@@ -93,17 +94,33 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		Map<String, Object> adRemotaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();				
+		
 		try {
 			AdministracionRemotaDelegate adRemotaDelegate = DelegateUtil.getAdministracionRemotaDelegate();
-			List<AdministracionRemota> llistaAdRemotes = adRemotaDelegate.listarAdministracionRemota();
-			for (AdministracionRemota adRemota : llistaAdRemotes) {
+			
+			resultadoBusqueda = adRemotaDelegate.listarAdministracionRemota( Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			
+			for (AdministracionRemota adRemota : castList(AdministracionRemota.class, resultadoBusqueda.getListaResultados())) {
+				
 				adRemotaDTO = new HashMap<String, Object>();
 				adRemotaDTO.put("id", adRemota.getId());
 				adRemotaDTO.put("idRemoto", adRemota.getIdRemoto());
 				adRemotaDTO.put("nom", adRemota.getNombre());
+				
 				llistaAdinistracionsRemotesDTO.add(adRemotaDTO);
+				
 			}
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
@@ -111,7 +128,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaAdinistracionsRemotesDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaAdinistracionsRemotesDTO);
 
 		return resultats;
@@ -178,10 +195,10 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en
 		 * Firefox. Si no se fuerza el content type Spring lo calcula y
-		 * curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame
+		 * curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame
 		 * (oculto) algunos navegadores interpretan la respuesta como un
-		 * descargable o fichero vinculado a una aplicación. De esta forma, y
+		 * descargable o fichero vinculado a una aplicaciï¿½n. De esta forma, y
 		 * devolviendo un ResponseEntity, forzaremos el Content-Type de la
 		 * respuesta.
 		 */
@@ -194,9 +211,9 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 
 		try {
-			// Aquí nos llegará un multipart, de modo que no podemos obtener los
+			// Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los
 			// datos mediante request.getParameter().
-			// Iremos recopilando los parámetros de tipo fichero en el Map
+			// Iremos recopilando los parï¿½metros de tipo fichero en el Map
 			// ficherosForm y el resto en valoresForm.
 			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 
@@ -319,12 +336,12 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de destinatari no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de destinatari no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
 
-	// Mètodes de sincronització
+	// Mï¿½todes de sincronitzaciï¿½
 	@RequestMapping(value="/sincronitzacio.do", method = POST)
 	public @ResponseBody IdNomDTO sincronitzaAdministracioRemota(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -373,19 +390,19 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 			
 		} catch (UnidadAdminCENoEncontradaException e) {
 			resultatStatus.setId(-3l);
-			resultatStatus.setNom("Error de sincronització: Unitat no trobada.");
-			log.error("Error de sincronització (UA no trobada): " + ExceptionUtils.getStackTrace(e));
+			resultatStatus.setNom("Error de sincronitzaciï¿½: Unitat no trobada.");
+			log.error("Error de sincronitzaciï¿½ (UA no trobada): " + ExceptionUtils.getStackTrace(e));
 		} catch (SincronizacionTrabajadoException e) {
 			resultatStatus.setId(-4l);
-			resultatStatus.setNom("Error de sincronització: Sincronitzador ocupat.");
-			log.error("Error de sincronització (Sincronitzador ocupat): " + ExceptionUtils.getStackTrace(e));
+			resultatStatus.setNom("Error de sincronitzaciï¿½: Sincronitzador ocupat.");
+			log.error("Error de sincronitzaciï¿½ (Sincronitzador ocupat): " + ExceptionUtils.getStackTrace(e));
 		} catch (ComunicacionException e) {
 			resultatStatus.setId(-5l);
-			resultatStatus.setNom("Error de sincronització: Ha ocorregut un error amb la comunicació.");
-			log.error("Error de comunicació: " + ExceptionUtils.getStackTrace(e));
+			resultatStatus.setNom("Error de sincronitzaciï¿½: Ha ocorregut un error amb la comunicaciï¿½.");
+			log.error("Error de comunicaciï¿½: " + ExceptionUtils.getStackTrace(e));
 		} catch (CapaDeDatosException e) {
 			resultatStatus.setId(-6l);
-			resultatStatus.setNom("Error de sincronització: Ha ocorregut un error amb les dades.");
+			resultatStatus.setNom("Error de sincronitzaciï¿½: Ha ocorregut un error amb les dades.");
 			log.error("Error en la capa de dades: " + ExceptionUtils.getStackTrace(e));
 		}
 		

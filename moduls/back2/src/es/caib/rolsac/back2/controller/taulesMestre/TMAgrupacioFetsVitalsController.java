@@ -45,6 +45,7 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/agrupacioFetsVitals/")
@@ -58,7 +59,9 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
         model.put("submenu", "layout/submenu/submenuTMAgrupacioFetsVitals.jsp");
         
         RolUtil rolUtil= new RolUtil(request);
+        
         if (rolUtil.userIsAdmin()) {
+        	
         	model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioFetsVitals.jsp");
         	
         	String lang = request.getLocale().getLanguage();
@@ -66,9 +69,10 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
         	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 			List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
 			List<PublicoObjetivo> llistaPublicObjectiu = new ArrayList<PublicoObjetivo>();
+			
 			try {
-				llistaPublicObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
 				
+				llistaPublicObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
 				
 				for (PublicoObjetivo publicObjectiu : llistaPublicObjectiu) {
 					TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
@@ -76,7 +80,6 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 							.getId(),tpo == null ? null : tpo.getTitulo() 
 					));
 				}
-
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException()) {
 					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
@@ -123,34 +126,32 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 		List<Map<String, Object>> llistaAgrupacioFetsVitalsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> agrupacioFetsVitalsDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		Map<String, String> tradMap = new HashMap<String, String>();
-
-		String lang = request.getLocale().getLanguage();
 		
-		// Parametres de cerca
-		// Textes (en todos los campos todos los idiomas)
-//		String texte = request.getParameter("texte");
-//		if (texte != null && !"".equals(texte)) {
-//			texte = texte.toUpperCase();
-//			tradMap.put("nombre", texte);
-//			tradMap.put("descripcion", texte);
-//			tradMap.put("palabrasclave", texte);
-//		} else {
-//			tradMap.put("idioma", lang);
-//		}
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
 		
-		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();   			
+				
 		try {
+			
 			AgrupacionHVDelegate agrupacioFVDelegate = DelegateUtil.getAgrupacionHVDelegate();
-			List<AgrupacionHechoVital> llistaAgrupacioFetsVitals = agrupacioFVDelegate.listarAgrupacionHV();
-			for (AgrupacionHechoVital agrupacioFetVital: llistaAgrupacioFetsVitals) {
-				TraduccionAgrupacionHV tvf = (TraduccionAgrupacionHV) agrupacioFetVital.getTraduccion(request.getLocale().getLanguage());
+			
+			resultadoBusqueda = agrupacioFVDelegate.listarAgrupacionesHVHechosVitales(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (AgrupacionHechoVital agrupacioFetVital: (List<AgrupacionHechoVital>)  resultadoBusqueda.getListaResultados() ) {
+				
+				TraduccionAgrupacionHV tvf = (TraduccionAgrupacionHV) agrupacioFetVital
+						.getTraduccion(request.getLocale().getLanguage());
+				
 				agrupacioFetsVitalsDTO = new HashMap<String, Object>();
 				agrupacioFetsVitalsDTO.put("id", agrupacioFetVital.getId());
 				agrupacioFetsVitalsDTO.put("nom", tvf == null ? "" : tvf.getNombre());
 				agrupacioFetsVitalsDTO.put("codiEstandard", agrupacioFetVital.getCodigoEstandar());
+				
 				llistaAgrupacioFetsVitalsDTO.add(agrupacioFetsVitalsDTO);
 			}
 		} catch (DelegateException dEx) {
@@ -161,7 +162,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaAgrupacioFetsVitalsDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaAgrupacioFetsVitalsDTO);
 
 		return resultats;
@@ -171,9 +172,9 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     public ResponseEntity<String> guardarAgrupacioFetsVitals(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -297,7 +298,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 						
 						Long idFetVitalForm = ParseUtil.parseLong(elements[2]);
 						
-						// Consideram tots els fets vitals com a nous perquè borrarem els antics.
+						// Consideram tots els fets vitals com a nous perquï¿½ borrarem els antics.
 						HechoVitalAgrupacionHV hechoVitalAgrupacionHV = new HechoVitalAgrupacionHV();
 
 						hechoVitalAgrupacionHV.setAgrupacion(agrupacioFetVital);
@@ -466,7 +467,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

@@ -3,8 +3,8 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,28 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.PublicoObjetivo;
-import org.ibit.rol.sac.model.TraduccionEdificio;
-import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
-import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/publicObjectiu/")
@@ -65,16 +57,29 @@ public class TMPublicObjectiuController extends PantallaBaseController {
    		Map<String, Object> publicObjectiuDTO;
    		Map<String, Object> resultats = new HashMap<String, Object>();
  		
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();   			   		
+   		
    		try {
    			PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
-   			List<PublicoObjetivo> llistaPublicObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
-   			for (PublicoObjetivo publicObjectiu: llistaPublicObjectiu) {
-//   			TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(request.getLocale().getLanguage());
+   			
+   			resultadoBusqueda = publicObjectiuDelegate.listarPublicoObjetivo(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+   			
+   			for (PublicoObjetivo publicObjectiu: castList(PublicoObjetivo.class, resultadoBusqueda.getListaResultados()) ) {
+   				
    				publicObjectiuDTO = new HashMap<String, Object>();
    				publicObjectiuDTO.put("id", publicObjectiu.getId());
    				publicObjectiuDTO.put("ordre", publicObjectiu.getOrden());
    				publicObjectiuDTO.put("codiEstandard", publicObjectiu.getCodigoEstandar());
+   				
    				llistaPublicObjectiuDTO.add(publicObjectiuDTO);
+   				
    			}
    		} catch (DelegateException dEx) {
    			if (dEx.isSecurityException()) {
@@ -84,7 +89,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
    			}
    		}
 
-   		resultats.put("total", llistaPublicObjectiuDTO.size());
+   		resultats.put("total", resultadoBusqueda.getTotalResultados());
    		resultats.put("nodes", llistaPublicObjectiuDTO);
 
    		return resultats;
@@ -218,7 +223,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
@@ -241,8 +246,8 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
-	}
+	}           
 }

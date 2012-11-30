@@ -1,18 +1,21 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.model.HechoVital;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
 import org.ibit.rol.sac.persistence.intf.HechoVitalFacade;
 import org.ibit.rol.sac.persistence.intf.HechoVitalFacadeHome;
 import org.ibit.rol.sac.persistence.util.HechoVitalFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Set;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Hechos Vitales.
@@ -20,7 +23,7 @@ import java.util.Set;
 public class HechoVitalDelegate implements StatelessDelegate {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     public Long grabarHechoVital(HechoVital hechov) throws DelegateException {
@@ -39,6 +42,14 @@ public class HechoVitalDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados) throws DelegateException {
+    	try {
+    		return getFacade().listarHechosVitales(pagina, resultados);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public List listarHechosVitales() throws DelegateException {
         try {
             return getFacade().listarHechosVitales();

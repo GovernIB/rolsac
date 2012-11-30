@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/familia/")
@@ -90,16 +91,32 @@ public class TMFamiliaController extends PantallaBaseController {
 		Map<String, Object> familiaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();						
+		
 		try {
+			
 			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
-			List<Familia> llistaFamilies = familiaDelegate.listarFamilias();
-			for (Familia familia: llistaFamilies) {
+			
+			resultadoBusqueda = familiaDelegate.listarFamilias(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (Familia familia: castList(Familia.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionFamilia tf = (TraduccionFamilia) familia.getTraduccion(request.getLocale().getLanguage());
+				
 				familiaDTO = new HashMap<String, Object>();
 				familiaDTO.put("id", familia.getId());
 				familiaDTO.put("nom", tf == null ? "" : tf.getNombre());
 				familiaDTO.put("descripcio", tf == null ? "" : tf.getDescripcion());
+				
 				llistaFamiliaDTO.add(familiaDTO);
+				
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
@@ -109,12 +126,11 @@ public class TMFamiliaController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaFamiliaDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaFamiliaDTO);
 
 		return resultats;
 	}
-    
     
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
@@ -140,7 +156,7 @@ public class TMFamiliaController extends PantallaBaseController {
  						iconaDTO.put("nombre", icona.getIcono().getNombre());
  		                llistaIcones.add(iconaDTO);
  					} else {
- 						log.error("La família " + familia.getId() + " te una icona null o sense arxiu.");
+ 						log.error("La famï¿½lia " + familia.getId() + " te una icona null o sense arxiu.");
  					}
  	            }
  				
@@ -239,7 +255,7 @@ public class TMFamiliaController extends PantallaBaseController {
 	                	if (id != null) {
 	                    	codisIcones.add(id);
 	                	} else {
-	                		log.warn("S'ha rebut un id de icona no numéric: " + id);
+	                		log.warn("S'ha rebut un id de icona no numï¿½ric: " + id);
 	                	}
 	                }
 	            }
@@ -301,7 +317,7 @@ public class TMFamiliaController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de familia no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de familia no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

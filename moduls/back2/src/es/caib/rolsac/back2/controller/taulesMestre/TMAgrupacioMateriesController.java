@@ -1,5 +1,7 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,13 +13,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -40,13 +35,18 @@ import org.ibit.rol.sac.persistence.delegate.MateriaAgrupacionMDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
-
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/agrupacioMateries/")
@@ -143,26 +143,43 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 		Map<String, Object> agrupacioMateriaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
 		try {
-			MateriaAgrupacionMDelegate agrupacioMateriaDelegate = DelegateUtil.getMateriaAgrupacionMDelegate();
-			List<AgrupacionMateria> agrupacionMateries = agrupacioMateriaDelegate.listarAgrupacionMaterias();
-			for (AgrupacionMateria agrupacionMateria: agrupacionMateries) {
+			
+			MateriaAgrupacionMDelegate agrupacioMateriaDelegate = DelegateUtil.getMateriaAgrupacionMDelegate();			
+			resultadoBusqueda = agrupacioMateriaDelegate.listarAgrupacionMaterias(Integer.parseInt(pagPag), Integer.parseInt(pagRes));			
+			
+			for (AgrupacionMateria agrupacionMateria: castList(AgrupacionMateria.class, resultadoBusqueda.getListaResultados() ) ) {
+				
 				TraduccionAgrupacionM tam = (TraduccionAgrupacionM) agrupacionMateria.getTraduccion(request.getLocale().getLanguage());
 				agrupacioMateriaDTO = new HashMap<String, Object>();
 				agrupacioMateriaDTO.put("id", agrupacionMateria.getId());
 				agrupacioMateriaDTO.put("nom", tam == null ? "" : tam.getNombre());
 				agrupacioMateriaDTO.put("codi_estandar", agrupacionMateria.getCodigoEstandar());
+				
 				llistaAgrupacioMateriaDTO.add(agrupacioMateriaDTO);
+				
 			}
+			
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
 				log.error("Error: " + dEx.getMessage());
 			}
+			
 		}
 
-		resultats.put("total", llistaAgrupacioMateriaDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaAgrupacioMateriaDTO);
 
 		return resultats;
@@ -173,9 +190,9 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
     public ResponseEntity<String> guardarAgrupacioMateries(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -255,7 +272,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 						
 						Long idMateriaForm = ParseUtil.parseLong(elements[2]);
 
-						// Consideram totes les matèries com a noves perquè borrarem les antigues.
+						// Consideram totes les matï¿½ries com a noves perquï¿½ borrarem les antigues.
 						MateriaAgrupacionM materiaAgrupacionM = new MateriaAgrupacionM();
 
 						materiaAgrupacionM.setAgrupacion(agrupacioMateria);
@@ -312,7 +329,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			omplirCampsTraduibles(resultats, agrupacioMateries);
 	        
 	        
-	        // Matèries asociades
+	        // Matï¿½ries asociades
             if (agrupacioMateries.getMateriasAgrupacionM() != null) {             
             	Map<String, String> map;
             	List<Map<String, String>> llistaMateriesAgrupacio = new ArrayList<Map<String, String>>();            	
@@ -340,7 +357,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
             } else {
                 resultats.put("materies", null);
             } 
-            // Fi Metèries asociades
+            // Fi Metï¿½ries asociades
 	        
 	        
 	    } catch (DelegateException dEx) {
@@ -416,7 +433,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

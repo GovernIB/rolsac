@@ -96,8 +96,6 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class FichaFacadeEJB extends HibernateEJB {
 	
-	private static int RESULTATS_CERCA_TOTS = 99999;
-	
 	protected Hashtable contenidos_web; // contiene url y su contenido para agilizar el proceso de indexacion de fichas
 	
     /**

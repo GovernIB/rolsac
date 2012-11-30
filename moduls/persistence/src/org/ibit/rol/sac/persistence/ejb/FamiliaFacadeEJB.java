@@ -1,20 +1,23 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.PerfilCiudadano;
-import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar familia.
@@ -56,6 +59,15 @@ public abstract class FamiliaFacadeEJB extends HibernateEJB implements FamiliaDe
         }
     }
 
+    /**
+    * Lista todas las familias.
+    * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+    */
+    public ResultadoBusqueda listarFamilias(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarFamilias());
+    }
+    
      /**
      * Lista todas las familias.
      * @ejb.interface-method

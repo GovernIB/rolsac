@@ -4,11 +4,15 @@ import java.util.List;
 
 import org.ibit.rol.sac.model.Familia;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 public interface FamiliaDelegateI {
 
 	public abstract Long grabarFamilia(Familia familia)
 			throws DelegateException;
 
+	public abstract ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException;
+	
 	public abstract List listarFamilias() throws DelegateException;
 
 	public abstract Familia obtenerFamilia(Long id) throws DelegateException;

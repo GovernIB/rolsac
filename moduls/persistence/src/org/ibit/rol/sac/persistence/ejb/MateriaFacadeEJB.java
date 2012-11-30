@@ -22,6 +22,8 @@ import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
  
 
 /**
@@ -66,21 +68,34 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
         }
     }
 
-     /**
-     * Lista todas las materias.
-     * @ejb.interface-method
-     * @ejb.permission unchecked="true"
-     */
+    /**
+    * Lista todas las materias (nuevo backoffice).
+    * 
+    * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+    */    
+    public ResultadoBusqueda listarMaterias(int pagina, int resultados) {
+    	return listarTablaMaestraPaginada(pagina, resultados, listarMaterias());
+    }
+    
+    /**
+    * Lista todas las materias.
+    * @ejb.interface-method
+    * @ejb.permission unchecked="true"
+    */        
     public List listarMaterias() {
-        Session session = getSession();
-        try {
-            Criteria criteri = session.createCriteria(Materia.class);
-            return criteri.addOrder(Order.asc("codigoEstandar")).list();
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    	Session session = getSession();
+    	
+    	try {
+    		Criteria criteri = session.createCriteria(Materia.class);
+    		
+    		return criteri.addOrder(Order.asc("codigoEstandar")).list();
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
     }
 
      /**
@@ -118,9 +133,6 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
-
-    
 
     /**
      * Obtiene una materia. (metode que s'emplea per el backoffice i el frontoffice.
@@ -255,7 +267,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
     }    
     
     /**
-     * Obtiene el archivo distribución competencial de una Materia.(PORMAD)
+     * Obtiene el archivo distribuciï¿½n competencial de una Materia.(PORMAD)
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */

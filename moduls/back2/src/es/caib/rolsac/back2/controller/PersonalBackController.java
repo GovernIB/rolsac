@@ -1,5 +1,8 @@
 package es.caib.rolsac.back2.controller;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,24 +11,22 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.PersonalDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.PersonalDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import org.ibit.rol.sac.model.dto.IdNomDTO;
-import org.ibit.rol.sac.model.dto.PersonalDTO;
-
-import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import es.caib.rolsac.back2.util.RolUtil;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
 @Controller
@@ -60,7 +61,6 @@ public class PersonalBackController extends PantallaBaseController {
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
 
-       List<Personal> llistaPersonal = new ArrayList<Personal>();
        List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
 	   Map<String, Object> paramMap = new HashMap<String, Object>();
@@ -82,12 +82,22 @@ public class PersonalBackController extends PantallaBaseController {
        paramMap.put("numeroLargoMovil", request.getParameter("nlm"));
        paramMap.put("unidadAdministrativa.id", new Long(request.getParameter("idUA")));		   		      		     		   
        
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       
+       ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+       
        try {                      		   
 		   		   		
 			PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
-			llistaPersonal = personalDelegate.listarPersonalFiltro(paramMap);
 			
-			for(Personal persona : llistaPersonal){                
+			resultadoBusqueda = personalDelegate.buscadorListarPersonal(paramMap, Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			
+			for ( Personal persona : (List<Personal>) resultadoBusqueda.getListaResultados() ) {                
 	               llistaPersonalDTO.add(new PersonalDTO(  persona.getId(), 
 	                                                                   persona.getNombre(),
 	                                                                   persona.getUsername(),
@@ -105,12 +115,11 @@ public class PersonalBackController extends PantallaBaseController {
             }
 		}
 
-		resultats.put("total", llistaPersonalDTO.size());
-        resultats.put("nodes", llistaPersonalDTO);
+		resultats.put( "total", resultadoBusqueda.getTotalResultados() );
+        resultats.put( "nodes", llistaPersonalDTO );
 
 		return resultats;
 	}
-
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {

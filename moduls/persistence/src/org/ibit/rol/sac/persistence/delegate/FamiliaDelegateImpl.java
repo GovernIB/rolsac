@@ -1,26 +1,32 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.persistence.intf.FamiliaFacade;
 import org.ibit.rol.sac.persistence.intf.FamiliaFacadeHome;
 import org.ibit.rol.sac.persistence.util.FamiliaFacadeUtil;
-import org.ibit.rol.sac.model.Familia;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular familias.
  */
 public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
 
+	private static final long serialVersionUID = -5255731439556042563L;
+	
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    /* (non-Javadoc)
+
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#grabarFamilia(org.ibit.rol.sac.model.Familia)
 	 */
     public Long grabarFamilia(Familia familia) throws DelegateException {
@@ -31,6 +37,14 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
         }
     }
 
+    public ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarFamilias(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.FamiliaDelegateI#listarFamilias()
 	 */

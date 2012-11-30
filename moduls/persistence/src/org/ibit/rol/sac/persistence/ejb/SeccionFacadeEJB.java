@@ -24,6 +24,8 @@ import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * SessionBean para mantener y consultar Secciones.
  * 
@@ -45,7 +47,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Crea una Sección.
+     * Crea una Secciï¿½n.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -71,7 +73,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza una Sección.
+     * Actualiza una Secciï¿½n.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -85,7 +87,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             if (padreOld_id != null)
                 padreOld = this.obtenerSeccion(padreOld_id);
 
-            /* Comprova si el pare antic és diferent del nou. Tots dos valors poden ser null. */
+            /* Comprova si el pare antic ï¿½s diferent del nou. Tots dos valors poden ser null. */
             if ( (padre_id == null && padreOld_id != null) || (padre_id != null && padreOld_id == null) || (padre_id != null && padreOld_id != null && !padre_id.equals(padreOld_id))) {
                 if (padre_id == null) { //Quitamos de jerarquia i metemos en raiz.
                     if (padreOld != null)
@@ -114,7 +116,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza los ordenes de las fichas de una sección según el orden de los campos del form
+     * Actualiza los ordenes de las fichas de una secciï¿½n segï¿½n el orden de los campos del form
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -157,7 +159,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Abre huecos en los ordenes de las fichas de una sección reordeno las fichas de 5 en 5 para dejar huecos para
+     * Abre huecos en los ordenes de las fichas de una secciï¿½n reordeno las fichas de 5 en 5 para dejar huecos para
      * moverlas
      * 
      * @ejb.interface-method
@@ -255,7 +257,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una sección determinada.
+     * Obtiene una secciï¿½n determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -277,7 +279,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una sección determinada.
+     * Obtiene una secciï¿½n determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -300,7 +302,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una sección determinada segun el nombre.
+     * Obtiene una secciï¿½n determinada segun el nombre.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -326,6 +328,16 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Lista de secciones raiz (nuevo backoffice).
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public ResultadoBusqueda listarSeccionesRaiz(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarSeccionesRaiz());
+    }
+    
     /**
      * Lista de secciones raiz.
      * 
@@ -391,7 +403,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Lista de la raiz hasta la sección indicada por el id.
+     * Lista de la raiz hasta la secciï¿½n indicada por el id.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -417,7 +429,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Lista de los hijos de una sección determinada.
+     * Lista de los hijos de una secciï¿½n determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -437,7 +449,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Borra una sección determinada.
+     * Borra una secciï¿½n determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"

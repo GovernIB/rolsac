@@ -9,11 +9,15 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.webcaib.MateriaModel;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 public interface MateriaDelegateI {
 
 	public abstract Long grabarMateria(Materia materia)
 			throws DelegateException;
 
+    public abstract ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException;
+    
 	public abstract List listarMaterias() throws DelegateException;
 
 	public abstract List listarMateriasFront() throws DelegateException;

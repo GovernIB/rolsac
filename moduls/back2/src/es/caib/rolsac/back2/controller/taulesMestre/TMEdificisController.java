@@ -41,6 +41,7 @@ import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/edifici/")
@@ -75,7 +76,6 @@ public class TMEdificisController extends PantallaBaseController {
 		Map<String, String> tradMap = new HashMap<String, String>();
 
 		String lang = request.getLocale().getLanguage();
-		
 		// Parametres de cerca
 		
 		String direccio = request.getParameter("direccio");
@@ -108,7 +108,6 @@ public class TMEdificisController extends PantallaBaseController {
 			paramMap.put("email", email.toUpperCase());
 		}
 		
-		
 		// Textes (en todos los campos todos los idiomas)
 		String descripcio = request.getParameter("descripcio");
 		if (descripcio != null && !"".equals(descripcio)) {
@@ -118,16 +117,30 @@ public class TMEdificisController extends PantallaBaseController {
 			tradMap.put("idioma", lang);
 		}
 		
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();								
 		
 		try {
+			
 			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-			List<Edificio> llistaEdificis = edificiDelegate.buscarEdificiosConMultiidioma(paramMap, tradMap) ;
-			for (Edificio edifici: llistaEdificis) {
+			
+			resultadoBusqueda = edificiDelegate.listarEdificios(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (Edificio edifici: castList(Edificio.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionEdificio tp = (TraduccionEdificio) edifici.getTraduccion(request.getLocale().getLanguage());
+				
 				edificiDTO = new HashMap<String, Object>();
 				edificiDTO.put("id", edifici.getId());
 				edificiDTO.put("direccio", edifici.getDireccion());
 				edificiDTO.put("descripcio", tp == null ? "" : tp.getDescripcion());
+				
 				llistaEdificiDTO.add(edificiDTO);
 			}
 		} catch (DelegateException dEx) {
@@ -138,7 +151,7 @@ public class TMEdificisController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaEdificiDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaEdificiDTO);
 
 		return resultats;

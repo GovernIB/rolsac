@@ -1,19 +1,23 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
-import net.sf.hibernate.expression.Order;
-import net.sf.hibernate.expression.Expression;
-
-import org.ibit.rol.sac.persistence.ejb.HibernateEJB;
-import org.ibit.rol.sac.model.PublicoObjetivo;
-import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
+
+import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.PublicoObjetivo;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Publico Objetivo.(PORMAD)
@@ -63,7 +67,16 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    /**
+     * Lista todos los Publico Objetivo.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ResultadoBusqueda listarPublicoObjetivo(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina,  resultats, listarPublicoObjetivo());
+    }
+    
     /**
      * Lista todos los Publico Objetivo.
      * @ejb.interface-method
@@ -73,17 +86,24 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
 	public List<PublicoObjetivo> listarPublicoObjetivo() {
         Session session = getSession();
         try {
+        	
             Criteria criteri = session.createCriteria(PublicoObjetivo.class);
             criteri.addOrder(Order.asc("orden"));
             List<PublicoObjetivo> publicos = criteri.list();
+            
             for(PublicoObjetivo publico: publicos){
+            	
                 Hibernate.initialize(publico.getAgrupaciones());
                 Set<AgrupacionHechoVital> agrupaciones = publico.getAgrupaciones();
+                
                 for ( AgrupacionHechoVital agrupacion: agrupaciones){
                     Hibernate.initialize(agrupacion.getHechosVitalesAgrupacionHV());
                 }
+                
             }
+            
             return publicos;
+            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -162,7 +182,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Incrementa el orden de un Público Objetivo.
+     * Incrementa el orden de un Pï¿½blico Objetivo.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */

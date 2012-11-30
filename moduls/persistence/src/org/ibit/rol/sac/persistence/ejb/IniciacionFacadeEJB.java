@@ -1,21 +1,18 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.Criteria;
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
- 
-import org.ibit.rol.sac.model.Iniciacion;
-import org.ibit.rol.sac.model.TipoAfectacion;
-import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
-import org.ibit.rol.sac.persistence.delegate.IniciacionDelegateI;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
+
+import org.ibit.rol.sac.model.Iniciacion;
+import org.ibit.rol.sac.persistence.delegate.IniciacionDelegateI;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Iniciacion
@@ -57,6 +54,16 @@ public abstract class IniciacionFacadeEJB extends HibernateEJB implements Inicia
             close(session);
         }
     }
+    
+    /**
+     * Lista todas las iniciaciones
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ResultadoBusqueda listarIniciacion(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarIniciacion());
+    }
+    
     /**
      * Lista todas las iniciaciones
      * @ejb.interface-method

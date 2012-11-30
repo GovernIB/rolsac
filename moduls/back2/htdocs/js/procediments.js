@@ -316,6 +316,7 @@ function CLlistat(){
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;               
 		
 		// ajax
+		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){		
 		if ( modoListado || modoBuscador )  {
 			$.ajax({
 				type: "POST",

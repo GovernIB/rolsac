@@ -130,7 +130,7 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each( function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -144,7 +144,7 @@ function CLlistat(){
 				codi_taula += "</div>";
 				codi_taula += "<div class=\"td enllas\" role=\"gridcell\">";
 				
-				// Campo de ordenación.
+				// Campo de ordenaciï¿½n.
 				/*if (dada_node.ordre <1 && i < 1) {
 					codi_taula += "&nbsp;";
 				} else {
@@ -262,8 +262,6 @@ function CLlistat(){
 		}
 			
 		// paginacio
-		// pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) :
-		// parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
@@ -271,10 +269,10 @@ function CLlistat(){
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
 		// ajax
-		if ( ( modoListado && !LlistatSeccions.cacheDatosListado ) || modoBuscador ){
+		if ( modoListado || modoBuscador ) {
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,

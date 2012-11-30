@@ -1,19 +1,20 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.Collection;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.persistence.intf.EspacioTerritorialFacade;
 import org.ibit.rol.sac.persistence.intf.EspacioTerritorialFacadeHome;
 import org.ibit.rol.sac.persistence.util.EspacioTerritorialFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +26,7 @@ import java.util.Set;
 public class EspacioTerritorialDelegate  implements StatelessDelegate{
 
      /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 	public Long crearEspacioTerritorial(EspacioTerritorial espTerr,
 			Long padre_id) throws DelegateException {
@@ -82,6 +83,15 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
             throw new DelegateException(e);
         }
     }
+    
+    public ResultadoBusqueda listarEspaciosTerritoriales( int pagina, int resultats ) throws DelegateException {
+    	try {
+    		return getFacade().listarEspaciosTerritoriales(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     @SuppressWarnings("unchecked")
     public List<EspacioTerritorial> listarEspaciosTerritoriales() throws DelegateException {
         try {

@@ -348,7 +348,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
             
             List normativas = query.list();
-            List normativasAcceso = new ArrayList();
+            List normativasAcceso = new ArrayList<Normativa>();
             Usuario usuario = getUsuario(session);
                
             // Procesar todas las normativas para saber el total y 
@@ -373,27 +373,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             		
             	}
             	
-            	iteraciones++;
-            	            	 
-            	/*
-                if ( "local".equals(tipo) ){
-                	
-                    NormativaLocal normativa =  (NormativaLocal)normativas.get(i);
-                    
-                    if ( tieneAcceso(usuario, normativa) ) {
-                        normativasAcceso.add(normativa);
-                    }
-                    
-                } else {
-                	
-                    NormativaExterna normativa =  (NormativaExterna)normativas.get(i);
-                    
-                    if(tieneAcceso(usuario, normativa)){
-                        normativasAcceso.add(normativa);
-                    }
-                    
-                }
-                */
+            	iteraciones++;            	            	 
             }
             
             resultadoBusqueda.setListaResultados( normativasAcceso );

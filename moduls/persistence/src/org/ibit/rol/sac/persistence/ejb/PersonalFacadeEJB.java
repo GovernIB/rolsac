@@ -12,6 +12,8 @@ import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 
@@ -36,7 +38,7 @@ import java.util.Set;
 public abstract class PersonalFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -143,12 +145,66 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+    /**
+     * Lista el personal (buscador del nuevo backoffice)
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
+     */ 
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultats) {
+    	
+		int resultadosMax = new Integer(resultats).intValue();
+		int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+    	
+    	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+    	
+        Session session = getSession();
+        try {
+        	
+            if (!userIsOper()) {
+                parametros.put("validacion", Validacion.PUBLICA);
+            }
+
+            List params = new ArrayList();
+            String sQuery = populateQuery(parametros, params);
+            String sql="from Personal perso ";
+            
+            if ( params.size() > 0 ) 
+            	sql += " where " + sQuery;
+            
+            sql += " order by ltrim(perso.nombre) ASC ";
+            
+            Query query = session.createQuery(sql);
+            
+            for (int i = 0; i < params.size(); i++) {
+                Object o = params.get(i);
+                query.setParameter(i, o);
+            }
+
+			resultadoBusqueda.setTotalResultados( query.list().size() );
+			
+			if ( resultadosMax != RESULTATS_CERCA_TOTS ) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}				
+			
+			resultadoBusqueda.setListaResultados(query.list());
+			
+			return resultadoBusqueda;
+            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }    	
+    
     /**
      * Lista el personal
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
-     */ 
-    
+     */     
     public List listarPersonalFiltro(Map parametros){
     	 
     	        Session session = getSession();

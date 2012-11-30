@@ -58,7 +58,7 @@ function CLlistat(){
 	
 	this.iniciar = function() {
 		
-		//redigirimos el método que guarda porque en este caso también hacemos un upload de archivos			
+		//redigirimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos			
 		this.carregar({});
 	}
 	
@@ -135,7 +135,8 @@ function CLlistat(){
 			codi_taula += "<div class=\"tbody\">";
 
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1, resultatFinal).each(function(i) {
+			//$(data.nodes).slice(resultatInici-1, resultatFinal).each(function(i) {
+			$(data.nodes).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -149,7 +150,7 @@ function CLlistat(){
 				codi_taula += "</div>";				
 				codi_taula += "<div class=\"td enllas\" role=\"gridcell\">";
 				
-				// Campo de ordenación
+				// Campo de ordenaciï¿½n
 				/*
 				if (dada_node.ordre <1 && i < 1) {
 					codi_taula += "&nbsp;";
@@ -170,7 +171,7 @@ function CLlistat(){
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
-			// Instanciamos el navegador multipágina.
+			// Instanciamos el navegador multipï¿½gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -277,10 +278,11 @@ function CLlistat(){
 		ordre_Camp = ordreCamp_elm.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
 		
 		// ajax
-		if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
+		if ( modoListado || modoBuscador ) {		
 			$.ajax({
 				type: "POST",
 				url: pagLlistat,
@@ -348,7 +350,7 @@ function CDetall(){
 		
 	}
 	
-	//Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
+	//Sobreescribe el mï¿½todo guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
 	this.guarda_upload = function(e) {
 		
 		// Validamos el formulario
@@ -358,7 +360,7 @@ function CDetall(){
 		
 		ModulProcediment.calculaOrden();
 		
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin jquery.form
+		//Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin jquery.form
 		$("#formGuardar").ajaxSubmit({	
 			url: pagGuardar,
 			dataType: 'json',

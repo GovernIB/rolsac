@@ -1,15 +1,25 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
-import net.sf.hibernate.expression.Order;
-import org.ibit.rol.sac.model.*;
-import org.ibit.rol.sac.persistence.ejb.HibernateEJB;
-import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
-import java.util.List;
-import java.util.Collections;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Order;
+
+import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
+import org.ibit.rol.sac.model.PublicoObjetivo;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Agrupaciones Hechos Vitales.(PORMAD)
@@ -82,6 +92,16 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
         } finally {
             close(session);
         }
+    }
+    
+    /**
+     * Lista todas las Agrupaciones Hechos Vitales (nuevo backoffice).
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */    
+    public ResultadoBusqueda listarAgrupacionHV(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarAgrupacionHV());
     }
     
     /**

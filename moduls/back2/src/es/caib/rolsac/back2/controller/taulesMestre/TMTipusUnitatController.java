@@ -12,14 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/tipusUnitat/")
@@ -58,11 +57,25 @@ public class TMTipusUnitatController extends PantallaBaseController {
 		Map<String, Object> unitatDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+      		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();              		
+		
 		try {
+			
 			TratamientoDelegate unitatDelegate = DelegateUtil.getTratamientoDelegate();
-			List<Tratamiento> llistaUnitats = unitatDelegate.listarTratamientos();
-			for (Tratamiento unitat: llistaUnitats) {
+			
+			resultadoBusqueda = unitatDelegate.listarTratamientos(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for (Tratamiento unitat: castList(Tratamiento.class, resultadoBusqueda.getListaResultados() ) ) {
+				
 				TraduccionTratamiento tu = (TraduccionTratamiento) unitat.getTraduccion(request.getLocale().getLanguage());
+				
 				unitatDTO = new HashMap<String, Object>();
 				unitatDTO.put("id", unitat.getId());
 				unitatDTO.put("codi_estandard", unitat.getCodigoEstandar());
@@ -82,7 +95,7 @@ public class TMTipusUnitatController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaUnitatsDTO.size());
+		resultats.put( "total", resultadoBusqueda.getTotalResultados() );
 		resultats.put("nodes", llistaUnitatsDTO);
 
 		return resultats;
@@ -187,6 +200,7 @@ public class TMTipusUnitatController extends PantallaBaseController {
 				tu.setCargoM(request.getParameter("item_carreg_masculi_" + lang));
 				tu.setTratamientoF(request.getParameter("item_tractament_femeni_" + lang));
 				tu.setTratamientoM(request.getParameter("item_tractament_masculi_" + lang));
+				
 				unitat.setTraduccion(lang, tu);
 			}
 			// Fin idiomas
@@ -237,7 +251,7 @@ public class TMTipusUnitatController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus d'iniciació no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus d'iniciaciï¿½ no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

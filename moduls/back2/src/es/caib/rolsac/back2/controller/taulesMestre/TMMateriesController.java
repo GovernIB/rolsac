@@ -45,6 +45,7 @@ import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/materies/")
@@ -92,16 +93,30 @@ public class TMMateriesController extends PantallaBaseController {
 		Map<String, Object> materiaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
+		//InformaciÃ³n de paginaciÃ³n
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+       		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+		
 		try {
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-			List<Materia> materies = materiaDelegate.listarMaterias();
-			for (Materia materia: materies) {
+			
+			resultadoBusqueda = materiaDelegate.listarMaterias( Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			
+			for ( Materia materia: castList(Materia.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(request.getLocale().getLanguage());
+				
 				materiaDTO = new HashMap<String, Object>();
 				materiaDTO.put("id", materia.getId());
 				materiaDTO.put("nom", tm == null ? "" : tm.getNombre());
 				materiaDTO.put("codi_estandar", materia.getCodigoEstandar());
 				llistaMateriaDTO.add(materiaDTO);
+				
 			}
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
@@ -111,7 +126,7 @@ public class TMMateriesController extends PantallaBaseController {
 			}
 		}
 
-		resultats.put("total", llistaMateriaDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados() );
 		resultats.put("nodes", llistaMateriaDTO);
 
 		return resultats;
@@ -286,9 +301,9 @@ public class TMMateriesController extends PantallaBaseController {
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -303,8 +318,8 @@ public class TMMateriesController extends PantallaBaseController {
 		
         try {
         	
-    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
         	FileItem fileItem;
     		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
@@ -386,7 +401,7 @@ public class TMMateriesController extends PantallaBaseController {
 	                	if (id != null) {
 	                    	codisIcones.add(id);
 	                	} else {
-	                		log.warn("S'ha rebut un id de icona no numéric: " + id);
+	                		log.warn("S'ha rebut un id de icona no numï¿½ric: " + id);
 	                	}
 	                }
 	            }
@@ -411,7 +426,7 @@ public class TMMateriesController extends PantallaBaseController {
             // fin Iconos
 
 			
-        	//Obtener los demás campos
+        	//Obtener los demï¿½s campos
         	materia.setCodiHita(valoresForm.get("item_codi_hita"));
         	materia.setCodigoEstandar(valoresForm.get("item_codi_estandard"));
         	materia.setDestacada(valoresForm.get("item_destacada") != null && !"".equals(valoresForm.get("item_destacada")));
@@ -494,7 +509,7 @@ public class TMMateriesController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de materia no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de materia no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

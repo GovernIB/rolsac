@@ -5,9 +5,8 @@ import java.util.List;
 
 /**
  *   Clase utilizada para recoger los datos de una búsqueda (registros actuales paginados y total), 
- * creada para que los EJB devuelvan esta información en una única transacción en los casos en 
- * los que no se puede implementar un método que cuente el total de registros de una búsqueda 
- * por motivos de rendimiento (e.g. "Fitxes Informativas", "Normativas", "Procedimientos").    
+ * creada para que los EJB devuelvan esta información en una única llamada/transacción. 
+ *  (e.g. "Fitxes Informativas", "Normativas", "Procedimientos").    
  */
 public class ResultadoBusqueda implements Serializable {
 	

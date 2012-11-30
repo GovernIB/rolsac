@@ -1,15 +1,13 @@
 package es.caib.rolsac.back2.controller.taulesMestre;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
@@ -21,11 +19,13 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.TipoAfectacionDelegate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.RolUtil;
-
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/tipusAfectacio/")
@@ -49,19 +49,32 @@ public class TMTipusAfectacioController extends PantallaBaseController {
         return "index";
     }
     
-    
     @RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatTipusAfectacions(HttpServletRequest request) {
 
        List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
 
-       try {                      		   
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+     		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();       
+       
+       try {     
+    	   
 			TipoAfectacionDelegate tipoAfectacioDelegate = DelegateUtil.getTipoAfectacionDelegate();
-			List<TipoAfectacion> llistaTipusAfectacio = tipoAfectacioDelegate.listarTiposAfectaciones();
-			for(TipoAfectacion tipoAfectacion : llistaTipusAfectacio){
+			
+			resultadoBusqueda = tipoAfectacioDelegate.listarTiposAfectaciones(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			
+			for ( TipoAfectacion tipoAfectacion : castList(TipoAfectacion.class, resultadoBusqueda.getListaResultados()) ) {
+				
 				TraduccionTipoAfectacion tp = (TraduccionTipoAfectacion) tipoAfectacion.getTraduccion(request.getLocale().getLanguage());
-                llistaTipus.add(new IdNomDTO(tipoAfectacion.getId(), tp == null ? "" : tp.getNombre()));                
+                llistaTipus.add(new IdNomDTO(tipoAfectacion.getId(), tp == null ? "" : tp.getNombre()));
+                
            }
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
@@ -71,13 +84,11 @@ public class TMTipusAfectacioController extends PantallaBaseController {
             }
 		}
 
-		resultats.put("total", llistaTipus.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
         resultats.put("nodes", llistaTipus);
 
 		return resultats;
 	}
-    
-    
 
 	@RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
@@ -216,7 +227,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de tipus de Afectacio no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de tipus de Afectacio no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

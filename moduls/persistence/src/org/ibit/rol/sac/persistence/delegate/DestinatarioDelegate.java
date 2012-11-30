@@ -1,15 +1,10 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import org.ibit.rol.sac.persistence.intf.DestinatarioFacade;
-import org.ibit.rol.sac.persistence.intf.DestinatarioFacadeHome;
-import org.ibit.rol.sac.persistence.util.DestinatarioFacadeUtil;
+import java.util.List;
+
 import org.ibit.rol.sac.model.Destinatario;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
 public class DestinatarioDelegate {
@@ -33,6 +28,10 @@ public class DestinatarioDelegate {
 		return impl.grabarDestinatario(destinatario);
     }
     
+	public ResultadoBusqueda listarDestinatarios(int pagina, int resultats) throws DelegateException {
+		return impl.listarDestinatarios(pagina, resultats);
+	}
+	
 	public List<Destinatario> listarDestinatarios() throws DelegateException {
 		return impl.listarDestinatarios();
         }

@@ -24,6 +24,8 @@ import org.ibit.rol.sac.model.TramiteRemoto;
 import org.ibit.rol.sac.model.UnidadAdministrativaRemota;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * SessionBean para mantener y consultar las AdministracionRemota (PORMAD)
  * 
@@ -63,6 +65,16 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 		}
 	}
 
+	/**
+	 * Lista todas las Administraciones Remotas (nuevo backoffice).
+	 * 
+	 * @ejb.interface-method
+	 * @ejb.permission unchecked="true"
+	 */
+	public ResultadoBusqueda listarAdministracionRemota(int pagina, int resultats) {
+		return listarTablaMaestraPaginada(pagina, resultats, listarAdministracionRemota());
+	}
+	
 	/**
 	 * Lista todas las Administraciones Remotas.
 	 * 

@@ -1,22 +1,24 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.persistence.intf.MateriaAgrupacionMFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaAgrupacionMFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaAgrupacionMFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular MateriaAgrupacionM.
  */
 public class MateriaAgrupacionMDelegate implements StatelessDelegate {
    /* ========================================================= */
-   /* ======================== MÉTODOS DE NEGOCIO ============= */
+   /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
    /* ========================================================= */
 
    public Long grabarMateriaAgrupacionM(MateriaAgrupacionM materiap, Long materia_id, Long agrupacion_id) throws DelegateException {
@@ -51,12 +53,12 @@ public class MateriaAgrupacionMDelegate implements StatelessDelegate {
        }
    }
    
-   public List listarAgrupacionMaterias() throws DelegateException {
-       try {
-           return getFacade().listarAgrupacionMaterias();
-       } catch (RemoteException e) {
-           throw new DelegateException(e);
-       }
+   public ResultadoBusqueda listarAgrupacionMaterias(int pagina, int resultats) throws DelegateException {
+	   try {
+		   return getFacade().listarAgrupacionMaterias(pagina, resultats);
+	   } catch (RemoteException e) {
+		   throw new DelegateException(e);
+	   }
    }
    
    /* ========================================================= */

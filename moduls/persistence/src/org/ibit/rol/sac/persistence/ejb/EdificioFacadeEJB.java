@@ -1,18 +1,29 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.*;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Edificios.
@@ -89,7 +100,15 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
         }
     }
     
-
+    /**
+     * Lista todos los Edificios
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public ResultadoBusqueda listarEdificios(int pagina, int resultats) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarEdificios());
+    }
+    
     /**
      * Lista todos los Edificios
      * @ejb.interface-method

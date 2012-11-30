@@ -1,8 +1,8 @@
 package org.ibit.rol.sac.persistence.ejb;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -17,13 +17,18 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.SessionFactory;
 import net.sf.hibernate.expression.Expression;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Comentario;
 import org.ibit.rol.sac.model.ComentarioFicha;
 import org.ibit.rol.sac.model.ComentarioProcedimiento;
+import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
+import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.Historico;
 import org.ibit.rol.sac.model.HistoricoFicha;
 import org.ibit.rol.sac.model.HistoricoMateria;
@@ -32,33 +37,28 @@ import org.ibit.rol.sac.model.HistoricoProcedimiento;
 import org.ibit.rol.sac.model.HistoricoUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
+import org.ibit.rol.sac.model.NormativaLocal;
+import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionFicha;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
-import org.ibit.rol.sac.model.Seccion;
-import org.ibit.rol.sac.model.NormativaLocal;
-import org.ibit.rol.sac.model.FichaUA;
-import org.ibit.rol.sac.model.Documento;
-import org.ibit.rol.sac.model.Tramite;
-import org.ibit.rol.sac.model.Formulario;
-import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.Personal;
 
 import es.caib.rolsac.persistence.hibernate.HibernateLocator;
 import es.caib.rolsac.persistence.hibernate.SessionInterceptor;
 import es.caib.rolsac.persistence.hibernate.SessionInterceptorBuilder;
-
-
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
- * Bean con la funcionalidad básica para interactuar con HIBERNATE.
+ * Bean con la funcionalidad bï¿½sica para interactuar con HIBERNATE.
  *
  * @ejb.bean
  *  view-type="remote"
@@ -72,12 +72,14 @@ import es.caib.rolsac.persistence.hibernate.SessionInterceptorBuilder;
  */
 public abstract class HibernateEJB implements SessionBean {
 
-    protected static Log log = LogFactory.getLog(HibernateEJB.class);
+	private static final long serialVersionUID = -988912799020601354L;
+
+	protected static Log log = LogFactory.getLog(HibernateEJB.class);
 
     protected SessionFactory sessionFactory = null;
     protected SessionContext ctx = null;
 
-    
+    public static int RESULTATS_CERCA_TOTS = 99999;    
     
     public void setSessionContext(SessionContext ctx) {
         this.ctx = ctx;
@@ -121,7 +123,7 @@ public abstract class HibernateEJB implements SessionBean {
             session.setFlushMode(FlushMode.COMMIT);  // (1)
             
             // (1) FIXME: ejaen@dgtic - diria que el flush mode.COMMIT  no te sentit doncs les transaccions 
-            // en rolsac son CMT, i  en el moment del commit la sessio hibernate ja l'haurà tancat el EJB
+            // en rolsac son CMT, i  en el moment del commit la sessio hibernate ja l'haurï¿½ tancat el EJB
 
             log.debug("se ha abierto la sesion: "+ session);
             return session;	
@@ -144,8 +146,8 @@ public abstract class HibernateEJB implements SessionBean {
     }
 
     /*
-        Los roles de usuario són inclusivos.
-        Los siguientes mètodos permiten saber si un usuario tiene los permisos
+        Los roles de usuario sï¿½n inclusivos.
+        Los siguientes mï¿½todos permiten saber si un usuario tiene los permisos
         de un determinado rol, bien porque sea su rol, o porque tenga uno superior. 
     */
 
@@ -208,8 +210,8 @@ public abstract class HibernateEJB implements SessionBean {
         return (Usuario) usuaris.get(0);
     }
     /**
-     * Descripción: Delete del valor del campo CodUA de la tabla Historico. El método devolverá una session para que el commit se  
-     * realice en la función que llama a este método.
+     * Descripciï¿½n: Delete del valor del campo CodUA de la tabla Historico. El mï¿½todo devolverï¿½ una session para que el commit se  
+     * realice en la funciï¿½n que llama a este mï¿½todo.
      * 
      * @param session  session
      * @param ua  Unidad Administrativa
@@ -406,8 +408,8 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar una unidad administrativa.
-     * El paràmetro modificación indica el nivel de acceso, si solo a efectos de relacionar informacion (false)
-     *  o tambien de modificación (true).
+     * El parï¿½metro modificaciï¿½n indica el nivel de acceso, si solo a efectos de relacionar informacion (false)
+     *  o tambien de modificaciï¿½n (true).
      */
     protected boolean tieneAcceso(Usuario usuario, UnidadAdministrativa unidad, boolean modificacion) {
         return userIsSystem()
@@ -415,7 +417,7 @@ public abstract class HibernateEJB implements SessionBean {
     }
 
     /**
-     * Comprueba si un usuario puede modificar los contenidos de una sección.
+     * Comprueba si un usuario puede modificar los contenidos de una secciï¿½n.
      */
     protected boolean tieneAcceso(Usuario usuario, Seccion seccion) {
         return (userIsSystem() || userIs(seccion.getPerfil()));
@@ -431,8 +433,8 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar una normativa.
-     * Tendrà acceso si tiene acceso a la validacion y la normativa no està relacionada con ninguna unidad o
-     * tiene acceso a la unidad con la que està relacionada.
+     * Tendrï¿½ acceso si tiene acceso a la validacion y la normativa no estï¿½ relacionada con ninguna unidad o
+     * tiene acceso a la unidad con la que estï¿½ relacionada.
      */
     protected boolean tieneAcceso(Usuario usuario, Normativa normativa) {
         if (!tieneAccesoValidable(usuario, normativa)) {
@@ -451,9 +453,9 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar una ficha.
-     * Tendrà acceso si tiene acceso a la validacion y no està relacionada
-     *  o tiene acceso a alguna unidad/sección con
-     * la que esté relacionada.
+     * Tendrï¿½ acceso si tiene acceso a la validacion y no estï¿½ relacionada
+     *  o tiene acceso a alguna unidad/secciï¿½n con
+     * la que estï¿½ relacionada.
      */
     protected boolean tieneAcceso(Usuario usuario, Ficha ficha) {
         if (!tieneAccesoValidable(usuario, ficha)) {
@@ -474,9 +476,9 @@ public abstract class HibernateEJB implements SessionBean {
     }
 
     /**
-     * Comprueba si un usuario puede modificar una relación ficha - unidad.
-     * Tendrà acceso si tiene acceso a la sección y a la unidad.
-     * Si la unidad és <code>null</code> és una relación general y debe ser usuario de
+     * Comprueba si un usuario puede modificar una relaciï¿½n ficha - unidad.
+     * Tendrï¿½ acceso si tiene acceso a la secciï¿½n y a la unidad.
+     * Si la unidad ï¿½s <code>null</code> ï¿½s una relaciï¿½n general y debe ser usuario de
      * sistema.
      */
     protected boolean tieneAcceso(Usuario usuario, FichaUA fichaUA) {
@@ -487,7 +489,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un documento.
-     * Tendrà acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.
+     * Tendrï¿½ acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.
      */
     protected boolean tieneAcceso(Usuario usuario, Documento documento) {
         if (documento.getFicha() != null) {
@@ -501,7 +503,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un tramite.
-     * Tendrà acceso si tiene acceso al procedimiento.
+     * Tendrï¿½ acceso si tiene acceso al procedimiento.
      */
     protected boolean tieneAcceso(Usuario usuario, Tramite tramite) {
         return tramite.getProcedimiento() == null || tieneAcceso(usuario, tramite.getProcedimiento());
@@ -509,7 +511,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un formulario.
-     * Tendrà acceso si tiene acceso al tramite.
+     * Tendrï¿½ acceso si tiene acceso al tramite.
      */
     protected boolean tieneAcceso(Usuario usuario, Formulario formulario) {
         return formulario.getTramite() == null || tieneAcceso(usuario, formulario.getTramite());
@@ -517,7 +519,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un edificio.
-     * Tendrà acceso si el edificio no pertenece a ninguna unidad o si tiene
+     * Tendrï¿½ acceso si el edificio no pertenece a ninguna unidad o si tiene
      * acceso a alguna de las unidades a las que pertenece.
      */
     protected boolean tieneAcceso(Usuario usuario, Edificio edificio) {
@@ -536,7 +538,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un personal.
-     * Tendrà acceso si puede acceder a la unidad administrativa.
+     * Tendrï¿½ acceso si puede acceder a la unidad administrativa.
      */
     protected boolean tieneAcceso(Usuario usuario, Personal personal) {
         return tieneAcceso(usuario, personal.getUnidadAdministrativa(), true);
@@ -544,7 +546,7 @@ public abstract class HibernateEJB implements SessionBean {
 
     /**
      * Comprueba si un usuario puede modificar un comentario.
-     * Tendrá acceso si es el informador que lo creo o tiene acceso a la ficha
+     * Tendrï¿½ acceso si es el informador que lo creo o tiene acceso a la ficha
      * o al procedimiento a que pertenece el comentario.
      */
     protected boolean tieneAcceso(Usuario usuario, Comentario comentario) {
@@ -568,4 +570,35 @@ public abstract class HibernateEJB implements SessionBean {
     protected boolean tieneAccesoValidable(Usuario usuario, Validable validable) {
         return (userIsSuper() || validable.getValidacion().equals(Validacion.INTERNA));
     }
+        
+    /**
+     * MÃ©todo que gestiona la paginaciÃ³n de las listas de entidades de tablas maestras.
+     * 
+     * @param pagina NÃºmero de pÃ¡gina actual
+     * @param resultados NÃºmero de resultados a mostrar
+     * @return ResultadoBusqueda Objeto con la informaciÃ³n solicitada (registros de pÃ¡gina y total)
+     */
+    protected ResultadoBusqueda listarTablaMaestraPaginada(int pagina, int resultats, List<?> listaEntidades) {
+    	
+    	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+    	
+    	int indiceDesde = pagina * resultats;
+    	int indiceHasta = indiceDesde + resultats;
+    	int tamanyoLista = listaEntidades.size();
+    	
+    	if (indiceHasta > tamanyoLista) {
+    		indiceHasta = tamanyoLista;
+    	}
+    		
+    	resultadoBusqueda.setTotalResultados(listaEntidades.size());
+    	
+    	if ( resultats < RESULTATS_CERCA_TOTS ) {
+    		listaEntidades = listaEntidades.subList( indiceDesde, indiceHasta );    		
+    	}
+    	
+    	resultadoBusqueda.setListaResultados(listaEntidades);
+    	
+    	return resultadoBusqueda;
+    }
+    
 }

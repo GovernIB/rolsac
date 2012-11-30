@@ -1,27 +1,21 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import org.ibit.rol.sac.model.Edificio;
-import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.persistence.intf.EdificioFacade;
 import org.ibit.rol.sac.persistence.intf.EdificioFacadeHome;
 import org.ibit.rol.sac.persistence.util.EdificioFacadeUtil;
-import org.ibit.rol.sac.persistence.ws.Actualizador;
 
-import javax.ejb.EJBException;
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular edificios.
@@ -48,6 +42,14 @@ public class EdificioDelegate implements StatelessDelegate {
         }
     }
 
+    public ResultadoBusqueda listarEdificios(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarEdificios(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     public List listarEdificios() throws DelegateException {
         try {
             return getFacade().listarEdificios();

@@ -15,6 +15,8 @@ import org.ibit.rol.sac.persistence.intf.MateriaFacade;
 import org.ibit.rol.sac.persistence.intf.MateriaFacadeHome;
 import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular materias.
  * 
@@ -29,7 +31,7 @@ import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
  public class MateriaDelegateImpl implements StatelessDelegate, MateriaDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -43,6 +45,14 @@ import org.ibit.rol.sac.persistence.util.MateriaFacadeUtil;
         }
     }
 
+    public ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException {
+    	try {
+    		return getFacade().listarMaterias(pagina, resultados);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);    		
+    	} 
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.MateriaDelegateI#listarMaterias()
 	 */

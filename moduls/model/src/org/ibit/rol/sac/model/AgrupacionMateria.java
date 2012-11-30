@@ -4,6 +4,8 @@ import java.util.List;
 
 public class AgrupacionMateria extends Traducible {
 
+	private static final long serialVersionUID = -2532864361217879481L;
+	
 	private Long id;
 	private String codigoEstandar;
 	private List<MateriaAgrupacionM> materiasAgrupacionM;
@@ -54,9 +56,5 @@ public class AgrupacionMateria extends Traducible {
 	
 	public void setSeccion(Seccion seccion) {
 		this.seccion = seccion;
-	}
-	
-
-	
-	
+	}	
 }

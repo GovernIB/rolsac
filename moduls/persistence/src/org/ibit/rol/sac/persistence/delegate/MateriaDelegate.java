@@ -7,6 +7,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular materias.
  * 
@@ -38,6 +40,10 @@ import org.ibit.rol.sac.model.MateriaAgrupacionM;
 			return impl.grabarMateria(materia);
 		}
 
+	    public ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException {
+	    	return impl.listarMaterias(pagina, resultados);
+	    }
+	    
 		public List listarMaterias() throws DelegateException {
 			return impl.listarMaterias();
 		}

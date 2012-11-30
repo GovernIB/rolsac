@@ -1,24 +1,27 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.persistence.intf.PersonalFacade;
 import org.ibit.rol.sac.persistence.intf.PersonalFacadeHome;
 import org.ibit.rol.sac.persistence.util.PersonalFacadeUtil;
 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Personal.
  */
 public class PersonalDelegate implements StatelessDelegate{
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
     public Long grabarPersonal(Personal personal, Long unidAdmin_id) throws DelegateException {
        try {
@@ -43,6 +46,14 @@ public class PersonalDelegate implements StatelessDelegate{
            throw new DelegateException(e);
        }
     }
+
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados) throws DelegateException {
+        try {
+            return getFacade().buscadorListarPersonal(parametros, pagina, resultados);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+     }
     
     public List listarPersonalFiltro(Map parametros) throws DelegateException {
         try {

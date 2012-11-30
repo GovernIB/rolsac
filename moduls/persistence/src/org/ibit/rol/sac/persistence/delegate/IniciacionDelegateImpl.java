@@ -1,15 +1,18 @@
 package org.ibit.rol.sac.persistence.delegate;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
+import javax.ejb.CreateException;
+import javax.ejb.Handle;
+import javax.naming.NamingException;
+
+import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.persistence.intf.IniciacionFacade;
 import org.ibit.rol.sac.persistence.intf.IniciacionFacadeHome;
 import org.ibit.rol.sac.persistence.util.IniciacionFacadeUtil;
-import org.ibit.rol.sac.model.Iniciacion;
- 
-import javax.ejb.Handle;
-import javax.ejb.CreateException;
-import javax.naming.NamingException;
-import java.rmi.RemoteException;
-import java.util.List;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * Business delegate para manipular Iniciacion.
@@ -17,11 +20,10 @@ import java.util.List;
 public class IniciacionDelegateImpl implements StatelessDelegate, IniciacionDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     
-
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.IniciacionDelegateI#obtenerIniciacion(java.lang.Long)
 	 */
@@ -33,6 +35,14 @@ public class IniciacionDelegateImpl implements StatelessDelegate, IniciacionDele
         }
     }
 
+    public ResultadoBusqueda listarIniciacion(int pagina, int resultats) throws DelegateException {
+    	try {
+    		return getFacade().listarIniciacion(pagina, resultats);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.IniciacionDelegateI#listarIniciacion()
 	 */
