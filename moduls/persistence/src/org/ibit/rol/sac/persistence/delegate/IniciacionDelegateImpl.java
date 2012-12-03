@@ -35,9 +35,9 @@ public class IniciacionDelegateImpl implements StatelessDelegate, IniciacionDele
         }
     }
 
-    public ResultadoBusqueda listarIniciacion(int pagina, int resultats) throws DelegateException {
+    public ResultadoBusqueda listarIniciacion(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarIniciacion(pagina, resultats);
+    		return getFacade().listarIniciacion(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

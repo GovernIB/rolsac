@@ -32,9 +32,9 @@ public class TipoNormativaDelegate implements StatelessDelegate {
         }
     }
 
-    public ResultadoBusqueda listarTiposNormativas(int pagina, int resultats) throws DelegateException {
+    public ResultadoBusqueda listarTiposNormativas(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarTiposNormativas(pagina, resultats);
+    		return getFacade().listarTiposNormativas(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

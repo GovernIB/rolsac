@@ -90,9 +90,9 @@ public class AgrupacionHVDelegate implements StatelessDelegate {
         }
     }
 
-	public ResultadoBusqueda listarAgrupacionesHVHechosVitales(int pagina, int resultats) throws DelegateException {
+	public ResultadoBusqueda listarAgrupacionesHVHechosVitales(int pagina, int resultats, String idioma) throws DelegateException {
         try {
-            return getFacade().listarAgrupacionHV(pagina, resultats);
+            return getFacade().listarAgrupacionHV(pagina, resultats, idioma);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

@@ -107,17 +107,21 @@ public class TMMateriesController extends PantallaBaseController {
 			
 			resultadoBusqueda = materiaDelegate.listarMaterias( Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
 			
-			for ( Materia materia: castList(Materia.class, resultadoBusqueda.getListaResultados()) ) {
+			for (Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(request.getLocale().getLanguage());
+				Long id =  (Long) ((Object[]) o)[0];
+				String codiEstandar = (String) ((Object[]) o)[1];
+				String nom = (String) ((Object[]) o)[2];
 				
 				materiaDTO = new HashMap<String, Object>();
-				materiaDTO.put("id", materia.getId());
-				materiaDTO.put("nom", tm == null ? "" : tm.getNombre());
-				materiaDTO.put("codi_estandar", materia.getCodigoEstandar());
-				llistaMateriaDTO.add(materiaDTO);
+				materiaDTO.put("id", id);
+				materiaDTO.put("codi_estandar", codiEstandar ); 
+				materiaDTO.put("nom", nom );
 				
+				llistaMateriaDTO.add(materiaDTO);				
 			}
+			
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());

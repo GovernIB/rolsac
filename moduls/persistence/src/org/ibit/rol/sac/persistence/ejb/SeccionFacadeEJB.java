@@ -334,8 +334,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public ResultadoBusqueda listarSeccionesRaiz(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarSeccionesRaiz());
+    public ResultadoBusqueda listarSeccionesRaiz(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMSeccionesRaiz(idioma));
     }
     
     /**
@@ -357,6 +357,27 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Lista de secciones raíz (menú Administración) 
+     */
+    private List listarTMSeccionesRaiz(String idioma) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select sec.id, sec.orden, trad.nombre " +
+    														"from Seccion as sec, sec.traducciones as trad " +
+    														"where index(trad) = :idioma and sec.padre is null " +
+    														"order by sec.orden asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	    	
+    }
+    
     /**
      * Lista todas las secciones.
      * 

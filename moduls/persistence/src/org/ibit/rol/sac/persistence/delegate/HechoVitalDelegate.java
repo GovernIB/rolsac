@@ -42,9 +42,9 @@ public class HechoVitalDelegate implements StatelessDelegate {
         }
     }
 
-    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados) throws DelegateException {
+    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarHechosVitales(pagina, resultados);
+    		return getFacade().listarHechosVitales(pagina, resultados, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

@@ -11,7 +11,7 @@ public interface FamiliaDelegateI {
 	public abstract Long grabarFamilia(Familia familia)
 			throws DelegateException;
 
-	public abstract ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException;
+	public abstract ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) throws DelegateException;
 	
 	public abstract List listarFamilias() throws DelegateException;
 

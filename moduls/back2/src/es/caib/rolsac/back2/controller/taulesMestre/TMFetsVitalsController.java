@@ -84,9 +84,9 @@ public class TMFetsVitalsController extends PantallaBaseController {
    	public @ResponseBody Map<String, Object> llistatFetsVitals(HttpServletRequest request) {
    	
    		List<Map<String, Object>> llistaFetsVitalsDTO = new ArrayList<Map<String, Object>>();
-   		Map<String, Object> fetVitalsDTO;
+   		Map<String, Object> fetVitalDTO;
    		Map<String, Object> resultats = new HashMap<String, Object>();
-
+   		
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");		
 		String pagRes = request.getParameter("pagRes");
@@ -98,17 +98,22 @@ public class TMFetsVitalsController extends PantallaBaseController {
    		
    		try {
    			HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
+   			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 
-   			resultadoBusqueda = fetsVitalsDelegate.listarHechosVitales(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+   			resultadoBusqueda = fetsVitalsDelegate.listarHechosVitales(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
    			
-   			for (HechoVital fetVital:  (List<HechoVital>) resultadoBusqueda.getListaResultados()) {
+   			for (Object o : resultadoBusqueda.getListaResultados() ) {
    				
-   				TraduccionHechoVital tfv = (TraduccionHechoVital) fetVital.getTraduccion(request.getLocale().getLanguage());
-   				fetVitalsDTO = new HashMap<String, Object>();
-   				fetVitalsDTO.put("id", fetVital.getId());
-   				fetVitalsDTO.put("ordre", fetVital.getOrden());
-   				fetVitalsDTO.put("nom", tfv == null ? "" : tfv.getNombre());
-   				llistaFetsVitalsDTO.add(fetVitalsDTO);
+   				Long id = (Long) ((Object[]) o )[0];
+   				int ordre = ((Integer) ((Object[]) o )[1]).intValue();
+   				String nom = (String) ((Object[]) o)[2];
+   				
+   				fetVitalDTO = new HashMap<String, Object>();
+   				fetVitalDTO.put("id", id);
+   				fetVitalDTO.put("ordre", ordre);
+   				fetVitalDTO.put("nom", nom);
+   				
+   				llistaFetsVitalsDTO.add(fetVitalDTO);
    				
    			}
    			

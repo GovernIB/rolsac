@@ -70,22 +70,29 @@ public class TMPerfilsController extends PantallaBaseController {
 		
 		try {
 			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = perfilDelegate.listarPerfiles(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = perfilDelegate.listarPerfiles(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for (PerfilCiudadano perfil: castList(PerfilCiudadano.class, resultadoBusqueda.getListaResultados()) ) {
+			for (Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				TraduccionPerfilCiudadano tp = (TraduccionPerfilCiudadano) perfil.getTraduccion(request.getLocale().getLanguage());
+				Long id = (Long) ((Object[]) o)[0];
+				String codiEstandard = (String) ((Object[]) o)[1];
+				String pathIconografia = (String) ((Object[]) o)[2];
+				String nom = (String) ((Object[]) o)[3];
+				String descripcio = (String) ((Object[]) o)[4];
 				
 				perfilDTO = new HashMap<String, Object>();
-				perfilDTO.put("id", perfil.getId());
-				perfilDTO.put("codi_estandard", perfil.getCodigoEstandard());
-				perfilDTO.put("path_iconografia", perfil.getPathIconografia());
-				perfilDTO.put("nom", tp == null ? "" : tp.getNombre());
-				perfilDTO.put("descripcio", tp == null ? "" : tp.getDescripcion());
 				
-				llistaPerfilsDTO.add(perfilDTO);
+				perfilDTO.put("id", id);
+				perfilDTO.put("codi_estandard", codiEstandard);
+				perfilDTO.put("path_iconografia", pathIconografia == null ? "": pathIconografia);
+				perfilDTO.put("nom", nom == null ? "" : nom);
+				perfilDTO.put("descripcio", descripcio == null? "" : descripcio);
+				
+				llistaPerfilsDTO.add(perfilDTO);				
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
@@ -98,7 +105,6 @@ public class TMPerfilsController extends PantallaBaseController {
 		resultats.put("nodes", llistaPerfilsDTO);
 
 		return resultats;
-
     }
     
     @RequestMapping(value = "/pagDetall.do")

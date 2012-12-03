@@ -11,7 +11,7 @@ public interface IniciacionDelegateI {
 	public abstract Iniciacion obtenerIniciacion(Long id)
 			throws DelegateException;
 
-	public abstract ResultadoBusqueda listarIniciacion(int pagina, int resultats) throws DelegateException;
+	public abstract ResultadoBusqueda listarIniciacion(int pagina, int resultats, String idioma) throws DelegateException;
 	
 	public abstract List listarIniciacion() throws DelegateException;
 

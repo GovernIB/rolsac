@@ -34,7 +34,12 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
     /* ======================== M�TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    /* (non-Javadoc)
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8339842386814116044L;
+
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.MateriaDelegateI#grabarMateria(org.ibit.rol.sac.model.Materia)
 	 */
     public Long grabarMateria(Materia materia) throws DelegateException {
@@ -62,7 +67,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }
+    }    
 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.MateriaDelegateI#listarMateriasFront()

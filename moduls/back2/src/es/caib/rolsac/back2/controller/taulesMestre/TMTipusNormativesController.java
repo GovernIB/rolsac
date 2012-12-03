@@ -68,13 +68,16 @@ public class TMTipusNormativesController extends PantallaBaseController {
        try {                      		  
     	   
 			TipoNormativaDelegate tipoNormativaDelegate = DelegateUtil.getTipoNormativaDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = tipoNormativaDelegate.listarTiposNormativas(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = tipoNormativaDelegate.listarTiposNormativas(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for(Tipo tipo : castList(Tipo.class, resultadoBusqueda.getListaResultados()) ){
-				TraduccionTipo tp = (TraduccionTipo) tipo.getTraduccion(request.getLocale().getLanguage());
-                llistaTipus.add(new IdNomDTO(tipo.getId(), tp == null ? "" : tp.getNombre()));                
-           }
+			for (Object o : resultadoBusqueda.getListaResultados()) {
+				Long id = (Long) ((Object[]) o)[0];
+				String nom = ((Object[]) o)[1] == null ? "" : (String) ((Object[]) o)[1];
+				
+				llistaTipus.add(new IdNomDTO(id, nom) );
+			}
 			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {

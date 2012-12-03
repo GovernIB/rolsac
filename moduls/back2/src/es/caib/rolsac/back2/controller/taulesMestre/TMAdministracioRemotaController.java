@@ -85,12 +85,11 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		loadIndexModel (model, request);	
 		return "index";
 	}
-
 	
 	@RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatAdministracioRemota(HttpServletRequest request) {
 
-		List<Map<String, Object>> llistaAdinistracionsRemotesDTO = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> llistaAdiministracionsRemotesDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> adRemotaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 
@@ -108,15 +107,17 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 			
 			resultadoBusqueda = adRemotaDelegate.listarAdministracionRemota( Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
 			
-			for (AdministracionRemota adRemota : castList(AdministracionRemota.class, resultadoBusqueda.getListaResultados())) {
+			for ( Object o : resultadoBusqueda.getListaResultados() ) {
+				Long id = (Long) ((Object[]) o)[0];
+				String idRemoto = (String) ((Object[]) o)[1];
+				String nom = (String) ((Object[]) o)[2];
 				
 				adRemotaDTO = new HashMap<String, Object>();
-				adRemotaDTO.put("id", adRemota.getId());
-				adRemotaDTO.put("idRemoto", adRemota.getIdRemoto());
-				adRemotaDTO.put("nom", adRemota.getNombre());
+				adRemotaDTO.put("id", id);
+				adRemotaDTO.put("idRemoto", idRemoto);
+				adRemotaDTO.put("nom", nom);
 				
-				llistaAdinistracionsRemotesDTO.add(adRemotaDTO);
-				
+				llistaAdiministracionsRemotesDTO.add(adRemotaDTO);
 			}
 			
 		} catch (DelegateException dEx) {
@@ -129,7 +130,7 @@ public class TMAdministracioRemotaController extends PantallaBaseController {
 		}
 
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
-		resultats.put("nodes", llistaAdinistracionsRemotesDTO);
+		resultats.put("nodes", llistaAdiministracionsRemotesDTO);
 
 		return resultats;
 	}

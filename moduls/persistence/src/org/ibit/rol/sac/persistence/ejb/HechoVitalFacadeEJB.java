@@ -105,8 +105,8 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */    
-    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados) {    	
-    	return listarTablaMaestraPaginada( pagina, resultados, listarHechosVitales() );    	
+    public ResultadoBusqueda listarHechosVitales(int pagina, int resultados, String idioma) {    	
+    	return listarTablaMaestraPaginada( pagina, resultados, listarTMHechosVitales( idioma ) );    	
     }
     
     /**
@@ -130,8 +130,22 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         }
     }
 
-    private List<?> listarTablaMaestra() {
-    	return listarHechosVitales();
+    private List listarTMHechosVitales(String idioma) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select hechoVital.id, hechoVital.orden, trad.nombre " +
+    														"from HechoVital as hechoVital, hechoVital.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by hechoVital.orden asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	
     }
     
     /**

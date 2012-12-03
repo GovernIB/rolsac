@@ -72,7 +72,7 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 	 * @ejb.permission unchecked="true"
 	 */
 	public ResultadoBusqueda listarAdministracionRemota(int pagina, int resultats) {
-		return listarTablaMaestraPaginada(pagina, resultats, listarAdministracionRemota());
+		return listarTablaMaestraPaginada(pagina, resultats, listarTMAdministracionRemota());
 	}
 	
 	/**
@@ -93,6 +93,25 @@ public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 		} finally {
 			close(session);
 		}
+	}
+
+	/**
+	 * Lista todas las Administraciones remotas (menú Administración) 
+	 */
+	private List listarTMAdministracionRemota() {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select admRemota.id, admRemota.idRemoto, admRemota.nombre " +
+    														"from AdministracionRemota as admRemota " +
+    														"order by admRemota.nombre asc");
+    		
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    		
 	}
 
 	/**

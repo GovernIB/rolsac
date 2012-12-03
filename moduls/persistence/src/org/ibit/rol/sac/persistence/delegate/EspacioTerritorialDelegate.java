@@ -84,9 +84,9 @@ public class EspacioTerritorialDelegate  implements StatelessDelegate{
         }
     }
     
-    public ResultadoBusqueda listarEspaciosTerritoriales( int pagina, int resultats ) throws DelegateException {
+    public ResultadoBusqueda listarEspaciosTerritoriales( int pagina, int resultats, String idioma ) throws DelegateException {
     	try {
-    		return getFacade().listarEspaciosTerritoriales(pagina, resultats);
+    		return getFacade().listarEspaciosTerritoriales(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

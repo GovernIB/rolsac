@@ -10,6 +10,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Familia;
@@ -64,8 +65,8 @@ public abstract class FamiliaFacadeEJB extends HibernateEJB implements FamiliaDe
     * @ejb.interface-method
     * @ejb.permission unchecked="true"
     */
-    public ResultadoBusqueda listarFamilias(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarFamilias());
+    public ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMFamilias(idioma));
     }
     
      /**
@@ -85,6 +86,27 @@ public abstract class FamiliaFacadeEJB extends HibernateEJB implements FamiliaDe
         }
     }
 
+    /**
+     *  Lista todas las familias (menú Administración)
+     */
+    private List listarTMFamilias( String idioma ) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select familia.id, trad.nombre, trad.descripcion " +
+    														"from Familia as familia, familia.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by trad.nombre asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	    	
+    }
+    
      /**
      * Obtiene una familia.
      * @ejb.interface-method

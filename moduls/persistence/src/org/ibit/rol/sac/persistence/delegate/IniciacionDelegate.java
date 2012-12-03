@@ -34,8 +34,8 @@ public class IniciacionDelegate  {
 		return impl.grabarIniciacion(tipo);
     }
  
-	public ResultadoBusqueda listarIniciacion(int pagina, int resultats) throws DelegateException {
-		return impl.listarIniciacion(pagina, resultats);
+	public ResultadoBusqueda listarIniciacion(int pagina, int resultats, String idioma) throws DelegateException {
+		return impl.listarIniciacion(pagina, resultats, idioma);
 	}
 	
 	public List listarIniciacion() throws DelegateException {

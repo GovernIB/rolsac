@@ -105,8 +105,8 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public ResultadoBusqueda listarEdificios(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarEdificios());
+    public ResultadoBusqueda listarEdificios(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMEdificios(idioma));
     }
     
     /**
@@ -127,6 +127,24 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
         }
     }
 
+    private List listarTMEdificios(String idioma) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select edificio.id, edificio.direccion, trad.descripcion " +
+    														"from Edificio as edificio, edificio.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by edificio.direccion asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	    	
+    }
+    
      /**
      * Obtiene una lista de edificios
      * @ejb.interface-method

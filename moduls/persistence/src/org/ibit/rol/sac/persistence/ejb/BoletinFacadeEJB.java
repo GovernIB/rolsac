@@ -8,6 +8,7 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Boletin;
@@ -62,7 +63,7 @@ public abstract class BoletinFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
     public ResultadoBusqueda listarBoletines(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarBoletines());
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMBoletines());
     }
     
     /**
@@ -82,6 +83,26 @@ public abstract class BoletinFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Lista todos los boletines (menú Administración)
+     */
+    private List listarTMBoletines() {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select boletin.id, boletin.nombre, boletin.enlace " +
+    														"from Boletin as boletin " +    														
+    														"order by boletin.nombre asc");
+    		
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	
+    	
+    }
+    
     /**
      * Obtiene un boletin.
      * @ejb.interface-method

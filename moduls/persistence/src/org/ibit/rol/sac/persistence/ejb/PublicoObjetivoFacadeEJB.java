@@ -74,7 +74,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public ResultadoBusqueda listarPublicoObjetivo(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina,  resultats, listarPublicoObjetivo());
+    	return listarTablaMaestraPaginada(pagina,  resultats, listarTMPublicoObjetivo());
     }
     
     /**
@@ -111,6 +111,26 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Listar público objetivo (menú administración) 
+     */
+    private List listarTMPublicoObjetivo() {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select pubObj.id, pubObj.orden, pubObj.codigoEstandar  " +
+    														"from PublicoObjetivo as pubObj " +
+    														"order by pubObj.orden asc");
+    		
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	
+
+    }
+    
     /**
      * Obtiene un Publico Objetivo
      * @ejb.interface-method

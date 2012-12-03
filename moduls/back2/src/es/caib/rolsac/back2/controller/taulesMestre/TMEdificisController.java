@@ -129,20 +129,25 @@ public class TMEdificisController extends PantallaBaseController {
 		try {
 			
 			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = edificiDelegate.listarEdificios(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = edificiDelegate.listarEdificios(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for (Edificio edifici: castList(Edificio.class, resultadoBusqueda.getListaResultados()) ) {
-				
-				TraduccionEdificio tp = (TraduccionEdificio) edifici.getTraduccion(request.getLocale().getLanguage());
+			for (Object o : resultadoBusqueda.getListaResultados()) {
+
+				Long id = (Long) ((Object[]) o)[0];
+				String adressa = (String) ((Object[]) o)[1];
+				String descripcioEdifici = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
 				
 				edificiDTO = new HashMap<String, Object>();
-				edificiDTO.put("id", edifici.getId());
-				edificiDTO.put("direccio", edifici.getDireccion());
-				edificiDTO.put("descripcio", tp == null ? "" : tp.getDescripcion());
+				edificiDTO.put("id", id);
+				edificiDTO.put("direccio", adressa);
+				edificiDTO.put("descripcio", descripcioEdifici);
 				
 				llistaEdificiDTO.add(edificiDTO);
-			}
+				
+			}			
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());

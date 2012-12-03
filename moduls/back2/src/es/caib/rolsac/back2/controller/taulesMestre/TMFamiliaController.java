@@ -83,7 +83,6 @@ public class TMFamiliaController extends PantallaBaseController {
         return "index";
     }
     
-    
     @RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatFamilia(HttpServletRequest request) {
 	
@@ -103,21 +102,25 @@ public class TMFamiliaController extends PantallaBaseController {
 		try {
 			
 			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = familiaDelegate.listarFamilias(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = familiaDelegate.listarFamilias(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for (Familia familia: castList(Familia.class, resultadoBusqueda.getListaResultados()) ) {
+			for (Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				TraduccionFamilia tf = (TraduccionFamilia) familia.getTraduccion(request.getLocale().getLanguage());
+				Long id = (Long) ((Object[]) o)[0];
+				String nom = ((Object[]) o)[1] == null ? "" : (String) ((Object[]) o)[1];
+				String descripcio = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
 				
 				familiaDTO = new HashMap<String, Object>();
-				familiaDTO.put("id", familia.getId());
-				familiaDTO.put("nom", tf == null ? "" : tf.getNombre());
-				familiaDTO.put("descripcio", tf == null ? "" : tf.getDescripcion());
+				familiaDTO.put("id", id);
+				familiaDTO.put("nom", nom);
+				familiaDTO.put("descripcio", descripcio);
 				
 				llistaFamiliaDTO.add(familiaDTO);
 				
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());

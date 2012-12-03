@@ -134,26 +134,31 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 		if (pagPag == null) pagPag = String.valueOf(0); 
 		if (pagRes == null) pagRes = String.valueOf(10);
        		
-		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();   			
-				
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();   					
+		
 		try {
 			
 			AgrupacionHVDelegate agrupacioFVDelegate = DelegateUtil.getAgrupacionHVDelegate();
+			String idiomaPerDefecte = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = agrupacioFVDelegate.listarAgrupacionesHVHechosVitales(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = agrupacioFVDelegate
+					.listarAgrupacionesHVHechosVitales(
+							Integer.parseInt(pagPag), Integer.parseInt(pagRes),
+							idiomaPerDefecte);
 			
-			for (AgrupacionHechoVital agrupacioFetVital: (List<AgrupacionHechoVital>)  resultadoBusqueda.getListaResultados() ) {
-				
-				TraduccionAgrupacionHV tvf = (TraduccionAgrupacionHV) agrupacioFetVital
-						.getTraduccion(request.getLocale().getLanguage());
+			for (Object o : resultadoBusqueda.getListaResultados()) {
+				Long id = (Long) ((Object[]) o)[0];
+				String codiEstandard = (String) ((Object[]) o)[1];
+				String nom = (String) ((Object[]) o)[2];
 				
 				agrupacioFetsVitalsDTO = new HashMap<String, Object>();
-				agrupacioFetsVitalsDTO.put("id", agrupacioFetVital.getId());
-				agrupacioFetsVitalsDTO.put("nom", tvf == null ? "" : tvf.getNombre());
-				agrupacioFetsVitalsDTO.put("codiEstandard", agrupacioFetVital.getCodigoEstandar());
+				agrupacioFetsVitalsDTO.put("id",  id);
+				agrupacioFetsVitalsDTO.put("codiEstandard", codiEstandard);
+				agrupacioFetsVitalsDTO.put("nom", nom);
 				
 				llistaAgrupacioFetsVitalsDTO.add(agrupacioFetsVitalsDTO);
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());

@@ -7,6 +7,7 @@ import javax.ejb.EJBException;
 
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Iniciacion;
@@ -60,8 +61,26 @@ public abstract class IniciacionFacadeEJB extends HibernateEJB implements Inicia
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public ResultadoBusqueda listarIniciacion(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarIniciacion());
+    public ResultadoBusqueda listarIniciacion(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMIniciacion(idioma));
+    }
+    
+    private List listarTMIniciacion(String idioma) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select ini.id, ini.codigoEstandar, trad.nombre " +
+    														"from Iniciacion as ini, ini.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by ini.codigoEstandar asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	
     }
     
     /**

@@ -10,6 +10,7 @@ import javax.ejb.EJBException;
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 
@@ -66,8 +67,8 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public ResultadoBusqueda listarPerfiles(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarPerfiles());
+    public ResultadoBusqueda listarPerfiles(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMPerfiles(idioma));
     }    
     
     /**
@@ -87,7 +88,29 @@ public abstract class PerfilFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+	/**
+	 * Lista todos los perfiles (menú administración) 
+	 */
+    private List listarTMPerfiles(String idioma) {
+    	
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select p.id, p.codigoEstandard, p.pathIconografia, trad.nombre, trad.descripcion  " +
+    														"from PerfilCiudadano as p, p.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by p.codigoEstandard asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}
+    }
+    
     /**
      * Obtiene un perfil.
      * @ejb.interface-method

@@ -232,8 +232,8 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
     * @ejb.interface-method
     * @ejb.permission unchecked="true"
     */    
-    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarEspaciosTerritoriales());
+    public ResultadoBusqueda listarEspaciosTerritoriales(int pagina, int resultats, String idioma ) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMEspaciosTerritoriales( idioma ));
     }
     
      /**
@@ -251,6 +251,27 @@ public abstract class EspacioTerritorialFacadeEJB extends HibernateEJB{
         } finally {
             close(session);
         }
+    }
+    
+    /**
+     * Lista los espacios territoriales (menú administración)
+     */
+    private List listarTMEspaciosTerritoriales( String idioma ) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select espTer.id, trad.nombre " +
+    														"from EspacioTerritorial as espTer, espTer.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by trad.nombre asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	    	
     }
 
      /**

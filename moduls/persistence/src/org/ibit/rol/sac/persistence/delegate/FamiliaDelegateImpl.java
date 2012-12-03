@@ -37,9 +37,9 @@ public class FamiliaDelegateImpl implements StatelessDelegate, FamiliaDelegateI{
         }
     }
 
-    public ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException {
+    public ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarFamilias(pagina, resultats);
+    		return getFacade().listarFamilias(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

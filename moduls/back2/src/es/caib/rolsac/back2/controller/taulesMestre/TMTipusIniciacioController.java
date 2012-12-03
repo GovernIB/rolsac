@@ -68,20 +68,25 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 
 		try {
 			IniciacionDelegate iniciacioDelegate = DelegateUtil.getIniciacionDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = iniciacioDelegate.listarIniciacion(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = iniciacioDelegate.listarIniciacion(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for (Iniciacion iniciacio: castList(Iniciacion.class, resultadoBusqueda.getListaResultados()) ) {
+			for ( Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				TraduccionIniciacion ti = (TraduccionIniciacion) iniciacio.getTraduccion(request.getLocale().getLanguage());
-				
+				Long id = (Long) ((Object[]) o)[0];
+				String codiEstandard = (String) ((Object[]) o)[1];
+				String nom = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
+
 				iniciacioDTO = new HashMap<String, Object>();
-				iniciacioDTO.put("id", iniciacio.getId());
-				iniciacioDTO.put("codi_estandard", iniciacio.getCodigoEstandar());
-				iniciacioDTO.put("nom", ti == null ? "" : ti.getNombre());
+				iniciacioDTO.put("id", id);
+				iniciacioDTO.put("codi_estandard", codiEstandard);
+				iniciacioDTO.put("nom", nom);
 				
 				llistaIniciacionsDTO.add(iniciacioDTO);
+				
 			}
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());

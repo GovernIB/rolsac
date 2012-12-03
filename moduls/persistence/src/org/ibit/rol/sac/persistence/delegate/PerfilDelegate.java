@@ -31,9 +31,9 @@ public class PerfilDelegate implements StatelessDelegate {
         }
     }
 
-    public ResultadoBusqueda listarPerfiles(int pagina, int resultats) throws DelegateException {
+    public ResultadoBusqueda listarPerfiles(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarPerfiles(pagina, resultats);
+    		return getFacade().listarPerfiles(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	} 

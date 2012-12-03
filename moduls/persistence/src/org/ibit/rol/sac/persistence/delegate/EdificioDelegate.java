@@ -42,9 +42,9 @@ public class EdificioDelegate implements StatelessDelegate {
         }
     }
 
-    public ResultadoBusqueda listarEdificios(int pagina, int resultats) throws DelegateException {
+    public ResultadoBusqueda listarEdificios(int pagina, int resultats, String idioma) throws DelegateException {
     	try {
-    		return getFacade().listarEdificios(pagina, resultats);
+    		return getFacade().listarEdificios(pagina, resultats, idioma);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);
     	}

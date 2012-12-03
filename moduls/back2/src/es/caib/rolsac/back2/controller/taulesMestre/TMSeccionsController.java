@@ -143,19 +143,22 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		try {
 			
 			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			resultadoBusqueda = seccioDelegate.listarSeccionesRaiz(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+			resultadoBusqueda = seccioDelegate.listarSeccionesRaiz(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
-			for (Seccion seccion : castList(Seccion.class, resultadoBusqueda.getListaResultados()) ) {
-				
-				TraduccionSeccion ts = (TraduccionSeccion) seccion.getTraduccion(request.getLocale().getLanguage());
-				
+			for ( Object o : resultadoBusqueda.getListaResultados() ) {
+
+				Long id = (Long) ((Object[]) o)[0];
+				int ordre = ((Integer) ((Object[]) o)[1]).intValue();
+				String nom = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
+						
 				seccioDTO = new HashMap<String, Object>();
-				seccioDTO.put("id", seccion.getId());
-				seccioDTO.put("nom", ts == null ? "" : ts.getNombre());
-				seccioDTO.put("ordre", seccion.getOrden());
+				seccioDTO.put("id", id);
+				seccioDTO.put("nom", nom);
+				seccioDTO.put("ordre", ordre);
 				
-				llistaSeccioDTO.add(seccioDTO);
+				llistaSeccioDTO.add(seccioDTO);				
 			}
 			
 		} catch (DelegateException dEx) {

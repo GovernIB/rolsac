@@ -71,16 +71,20 @@ public class TMPublicObjectiuController extends PantallaBaseController {
    			
    			resultadoBusqueda = publicObjectiuDelegate.listarPublicoObjetivo(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
    			
-   			for (PublicoObjetivo publicObjectiu: castList(PublicoObjetivo.class, resultadoBusqueda.getListaResultados()) ) {
+   			for (Object o : resultadoBusqueda.getListaResultados()) {
+   			
+   				Long id = (Long) ((Object[]) o)[0];
+   				Integer ordre = (Integer) ((Object[]) o) [1];
+   				String codiEstandard = (String) ((Object[]) o )[2];
    				
    				publicObjectiuDTO = new HashMap<String, Object>();
-   				publicObjectiuDTO.put("id", publicObjectiu.getId());
-   				publicObjectiuDTO.put("ordre", publicObjectiu.getOrden());
-   				publicObjectiuDTO.put("codiEstandard", publicObjectiu.getCodigoEstandar());
+   				publicObjectiuDTO.put("id", id);
+   				publicObjectiuDTO.put("ordre", ordre);
+   				publicObjectiuDTO.put("codiEstandard", codiEstandard);
    				
    				llistaPublicObjectiuDTO.add(publicObjectiuDTO);
-   				
    			}
+   			
    		} catch (DelegateException dEx) {
    			if (dEx.isSecurityException()) {
    				log.error("Permisos insuficients: " + dEx.getMessage());

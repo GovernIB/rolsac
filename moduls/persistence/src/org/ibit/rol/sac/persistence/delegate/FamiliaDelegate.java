@@ -34,8 +34,8 @@ public class FamiliaDelegate  {
 		return impl.grabarFamilia(familia);
     }
 
-	public ResultadoBusqueda listarFamilias(int pagina, int resultats) throws DelegateException {
-		return impl.listarFamilias(pagina, resultats);
+	public ResultadoBusqueda listarFamilias(int pagina, int resultats, String idioma) throws DelegateException {
+		return impl.listarFamilias(pagina, resultats, idioma);
 	}
 	
 	public List listarFamilias() throws DelegateException {

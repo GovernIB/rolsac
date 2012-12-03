@@ -158,18 +158,20 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
-			
+			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 			
-			resultadoBusqueda = espaiDelegate.listarEspaciosTerritoriales(Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			resultadoBusqueda = espaiDelegate.listarEspaciosTerritoriales(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto );
 			
-			for (EspacioTerritorial espacio: castList(EspacioTerritorial.class, resultadoBusqueda.getListaResultados() ) ) {
+			for ( Object o : resultadoBusqueda.getListaResultados() ) {
 				
-				TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) espacio.getTraduccion(request.getLocale().getLanguage());
-				
+				Long id = (Long) ((Object[]) o)[0];
+				String nom = ((Object[]) o)[1] != null ? (String) ((Object[]) o)[1] : "";
+						
 				espaiDTO = new HashMap<String, Object>();
-				espaiDTO.put("id", espacio.getId());
-				espaiDTO.put("nom", tet == null ? "" : tet.getNombre());
+				espaiDTO.put("id", id);
+				espaiDTO.put("nom", nom);
+				
 				llistaEspaiDTO.add(espaiDTO);
 			}
 			
@@ -186,7 +188,6 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 
 		return resultats;
 	}
-    
     
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {

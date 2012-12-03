@@ -70,14 +70,18 @@ public class TMButlletinsOficialsController extends PantallaBaseController {
 			
 			resultadoBusqueda = butlletiDelegate.listarBoletines(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
 			
-			for (Boletin butlleti: castList(Boletin.class, resultadoBusqueda.getListaResultados())) {
+			for (Object o : resultadoBusqueda.getListaResultados()) {
+				
+				Long id = (Long) ((Object[]) o)[0];
+				String nom = (String) ((Object[]) o)[1];
+				String enllas = (String) ((Object[]) o)[2];
 				
 				butlletiDTO = new HashMap<String, Object>();
-				butlletiDTO.put("id", butlleti.getId());
-				butlletiDTO.put("enllas", butlleti.getEnlace());
-				butlletiDTO.put("nom", butlleti.getNombre());
+				butlletiDTO.put("id", id);
+				butlletiDTO.put("enllas", enllas);
+				butlletiDTO.put("nom", nom);
 				
-				llistaButlletinsDTO.add(butlletiDTO);
+				llistaButlletinsDTO.add(butlletiDTO);				
 				
 			}
 			

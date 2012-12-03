@@ -100,8 +100,8 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */    
-    public ResultadoBusqueda listarAgrupacionHV(int pagina, int resultats) {
-    	return listarTablaMaestraPaginada(pagina, resultats, listarAgrupacionHV());
+    public ResultadoBusqueda listarAgrupacionHV(int pagina, int resultats, String idioma) {
+    	return listarTablaMaestraPaginada(pagina, resultats, listarTMAgrupacionHV( idioma ));
     }
     
     /**
@@ -121,7 +121,28 @@ public abstract class AgrupacionHVFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+    
+    /**
+     * Lista las agrupaciones hechos vitals para el menú de administración.
+     */
+    private List listarTMAgrupacionHV( String idioma) {
+    	Session session = getSession();
+    	
+    	try {
+    		Query query = session.createQuery("select ahv.id, ahv.codigoEstandar, trad.nombre " +
+    														"from AgrupacionHechoVital as ahv, ahv.traducciones as trad " +
+    														"where index(trad) = :idioma " +
+    														"order by ahv.codigoEstandar asc");
+    		
+    		query.setParameter("idioma", idioma);
+    		return query.list();    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    	} finally {
+    		close(session);
+    	}    	
+    }
+    
     /**
      * Obtiene una Agrupacion hecho vital.
      * @ejb.interface-method
