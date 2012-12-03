@@ -235,8 +235,6 @@ function CLlistat(){
 	this.carregar = function(opcions) {
 		// opcions: cercador (si, no), ajaxPag (integer), ordreTipus (ASC,
 		// DESC), ordreCamp (tipus, carrec, tractament)
-		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
-		var modoListado = !modoBuscador;		
 		
 		dataVars = "";
 		
@@ -266,8 +264,6 @@ function CLlistat(){
 		}
 			
 		// paginacio
-		// pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) :
-		// parseInt(pagPagina_elm.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
@@ -278,29 +274,21 @@ function CLlistat(){
 		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
 		
 		// ajax
-		//if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
-		if ( modoListado || modoBuscador ) {		
-			$.ajax({
-				type: "POST",
-				url: pagLlistat,
-				data: dataVars,
-				dataType: "json",
-				error: function() {
-					if (!a_enllas) {
-						// missatge
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-					}
-				},
-				success: function(data) {				
-					Llistat.finCargaListado(opcions,data);
-					if( modoListado ){											
-						Llistat.cacheDatosListado = data;
-					}
+		$.ajax({
+			type: "POST",
+			url: pagLlistat,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+				if (!a_enllas) {
+					// missatge
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				}
-			});
-		}else{
-			Llistat.finCargaListado(opcions, Llistat.cacheDatosListado);
-		}
+			},
+			success: function(data) {				
+				Llistat.finCargaListado(opcions,data);
+			}
+		});
 	}
 };
 
