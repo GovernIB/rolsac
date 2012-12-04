@@ -2,8 +2,6 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.Set;
-import java.util.List;
 import java.util.Date;
 
 public interface Procedimiento extends ValueObject {

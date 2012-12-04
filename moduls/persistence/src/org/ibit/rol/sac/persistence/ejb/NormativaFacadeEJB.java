@@ -42,6 +42,7 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
@@ -321,12 +322,18 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 if ( !StringUtils.isEmpty(uaQuery) )            	
                 	uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
             	
-                // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("select distinct normativa from NormativaLocal as normativa, normativa.traducciones as trad where " + sQuery + uaQuery + orderBy);
-                
+                query = session.createQuery("select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
+									                		"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, trad.titulo, boletin.nombre, " +
+									                		"normativa.unidadAdministrativa) " +
+								                		"from NormativaLocal as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
+								                		"normativa.boletin as boletin where "+ sQuery + uaQuery + orderBy);
+               
             } else { // "externa".equals(tipo))
-                // Eliminado "left join fetch" por problemas en el cache de traducciones.
-                query = session.createQuery("select distinct normativa from NormativaExterna as normativa, normativa.traducciones as trad where " + sQuery + orderBy);
+            	query = session.createQuery("select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
+            												"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, " +
+            												"trad.titulo, boletin.nombre ) " +
+            											"from NormativaExterna as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
+            												"normativa.boletin as boletin where " + sQuery + orderBy);            	
             }
             
             for ( int i = 0; i < params.size(); i++ ) {

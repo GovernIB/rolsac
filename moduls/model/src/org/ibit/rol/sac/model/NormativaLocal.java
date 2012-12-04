@@ -2,11 +2,37 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.Iterator;
-
+import java.util.Date;
 
 public class NormativaLocal extends Normativa implements Indexable {
 
+	private static final long serialVersionUID = -2873594389705741463L;
+			
+	private UnidadAdministrativa unidadAdministrativa;
+    
+	public NormativaLocal() {
+		super();
+	}
+	
+	// Contructor para optimizar las búsquedas
+	public NormativaLocal(Long id, Long numero, Date fecha, Date fechaBoletin, 
+			String nombreTipo, Integer validacion, String traduccionTitulo, String nombreBoletin, 
+			UnidadAdministrativa unidadAdministrativa) {
+		
+		super();
+		
+		setId(id != null ? id : 0);
+		setNumero(numero != null ? numero : -1l );
+		setFecha(fecha);
+		setFechaBoletin(fechaBoletin);
+		setValidacion(validacion);
+		setNombreTipo(nombreTipo != null ? nombreTipo : "");
+		setTraduccionTitulo( traduccionTitulo != null ? traduccionTitulo : "");
+		setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");		
+		
+		this.unidadAdministrativa = unidadAdministrativa;
+	}
+	
     public UnidadAdministrativa getUnidadAdministrativa() {
         return unidadAdministrativa;
     }
@@ -15,22 +41,4 @@ public class NormativaLocal extends Normativa implements Indexable {
         this.unidadAdministrativa = unidadAdministrativa;
     }
 
-    private UnidadAdministrativa unidadAdministrativa;
-
-    /*
-    public IndexObject indexObject() {
-        final IndexObject io = super.indexObject();
-        for (Iterator iterator = getTraducciones().values().iterator(); iterator.hasNext();) {
-            TraduccionNormativa tr = (TraduccionNormativa) iterator.next();
-            if (tr != null) {
-                io.addTextLine(tr.getApartado());
-                io.addTextLine(tr.getObservaciones());
-                io.addTextLine(tr.getSeccion());
-                io.addTextLine(tr.getTitulo());
-                io.addArchivo(tr.getArchivo());
-            }
-        }
-        return io;
-    }
-    */
 }

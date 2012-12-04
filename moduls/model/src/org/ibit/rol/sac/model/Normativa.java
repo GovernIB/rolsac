@@ -4,8 +4,8 @@ package org.ibit.rol.sac.model;
 
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 public class Normativa extends Traducible implements Indexable, Validable, Comparator {
 
@@ -24,8 +24,36 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     private String codiVuds;  	 
     private String descCodiVuds;
 
+//	//Campos usados para optimizar la búsqueda
+	private String traduccionTitulo;
+	private String nombreBoletin;
+	private String nombreTipo;    
 
-    public Long getId() {
+    public String getTraduccionTitulo() {
+		return traduccionTitulo;
+	}
+
+	public void setTraduccionTitulo(String traduccionTitulo) {
+		this.traduccionTitulo = traduccionTitulo;
+	}
+
+	public String getNombreBoletin() {
+		return nombreBoletin;
+	}
+
+	public void setNombreBoletin(String nombreBoletin) {
+		this.nombreBoletin = nombreBoletin;
+	}
+
+	public String getNombreTipo() {
+		return nombreTipo;
+	}
+
+	public void setNombreTipo(String nombreTipo) {
+		this.nombreTipo = nombreTipo;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -159,14 +187,7 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     }
     
     public Boolean isVisible() {
-		Boolean visible;
-		if (this.getValidacion().equals(Validacion.PUBLICA)) {
-			visible = Boolean.TRUE;
-		} else {
-			visible = Boolean.FALSE;
-		}
-		
-    	return visible; 
+    	return this.getValidacion().equals(Validacion.PUBLICA);    			
     }
     
     // Metode creat per poder ser cridad des de la JSP atraves de jstl

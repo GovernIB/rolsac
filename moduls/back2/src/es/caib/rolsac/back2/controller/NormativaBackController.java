@@ -250,7 +250,7 @@ public class NormativaBackController extends PantallaBaseController {
 					paramMap, paramTrad, "local", idUA, meves, uaFilles,
 					campoOrdenacion, orden, pagPag, pagRes);
 			
-			llistaNormatives = (List<Normativa>) resultadoBusquedaLocal.getListaResultados();
+			llistaNormatives = castList(Normativa.class, resultadoBusquedaLocal.getListaResultados());
 			
 			if (buscaExternas) {
 				
@@ -258,12 +258,28 @@ public class NormativaBackController extends PantallaBaseController {
 						paramMap, paramTrad, "externa", idUA, meves, uaFilles,
 						campoOrdenacion, orden, pagPag, pagRes);
 				
-				List listaExternas = resultadoBusquedaExterna.getListaResultados();				
+				List<NormativaExterna> listaExternas = castList(NormativaExterna.class, resultadoBusquedaExterna.getListaResultados());				
 				llistaNormatives.addAll(listaExternas);
 				
 			}
 			
-			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
+			for ( Normativa normativa : llistaNormatives ) {
+							
+				boolean local = NormativaLocal.class.isInstance(normativa);
+				
+				llistaNormativesDTO.add( new NormativaDTO(
+							normativa.getId(), 
+							normativa.getNumero(),
+							obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
+							normativa.getFecha(),
+							normativa.getFechaBoletin(),
+							normativa.getNombreBoletin(),
+							normativa.getNombreTipo(),
+							local ? "Local" : "Externa",
+							normativa.isVisible())
+				);
+				
+			}
 			
 			//Ordenar lista si se combinan locales y externas
 			if (buscaExternas) {
