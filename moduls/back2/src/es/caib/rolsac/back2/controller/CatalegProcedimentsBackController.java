@@ -345,19 +345,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
 			
-			for ( ProcedimientoLocal pl : (List<ProcedimientoLocal>) resultadoBusqueda.getListaResultados() ) {
+			for ( ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados() ) ) {
 				
-				TraduccionProcedimientoLocal tpl = (TraduccionProcedimientoLocal) pl.getTraduccion(lang);
-				TraduccionFamilia tfa = null;
+				ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
+						pl.getId(), pl.getNombreProcedimiento(),
+						pl.isVisible(), DateUtils.formatDate(pl.getFechaActualizacion()),
+						pl.getNombreFamilia());				
 				
-				if (pl.getFamilia() != null) tfa = (TraduccionFamilia) pl.getFamilia().getTraduccion(lang);
+				llistaProcedimientoLocalDTO.add( procLocalDTO );
 				
-				llistaProcedimientoLocalDTO.add(new ProcedimientoLocalDTO(
-								 pl.getId(), 
-								 tpl == null ? "" : tpl.getNombre(), 
-								 pl.isVisible(),
-								 DateUtils.formatDate(pl.getFechaActualizacion()),
-								 tfa == null ? null : tfa.getNombre()));
 			}
 			
 		} catch (DelegateException dEx) {

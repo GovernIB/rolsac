@@ -40,7 +40,6 @@ import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Familia;
-import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
@@ -872,9 +871,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				where += " and pubsObj.id = " + publicObjectiu;				
 			}
 			
-			String queryStr = "select distinct procedimiento " + from 
-		        + "procedimiento.traducciones as trad " + i18nQuery + uaQuery + where  
-		        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			where += " and index(tradFam) = 'ca' ";
+			String select = "select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, " +
+								    "procedimiento.fechaActualizacion, procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, " +
+								    "tradFam.nombre, procedimiento.unidadAdministrativa ) ";
+
+			String queryStr = select + from 
+			        + "procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where  
+			        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
 			
 			Query query = session.createQuery(queryStr);
 			

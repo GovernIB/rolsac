@@ -46,7 +46,29 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 	private String taxa;
     private UnidadAdministrativa organResolutori;
     
+    //---------------------------------------------
+    //Campos especiales para optimizar la búsqueda
+    private String nombreProcedimiento;
+    private String nombreFamilia;
     
+    //Constructor para búsqueda optimizada
+	public ProcedimientoLocal(Long id, String nombreProcedimiento,
+			Integer validacion, Date fechaActualizacion, Date fechaCaducidad,
+			Date fechaPublicacion, String nombreFamilia, UnidadAdministrativa ua) {
+		
+    	super();
+    	
+    	this.id = id;
+    	this.nombreProcedimiento = nombreProcedimiento != null ? nombreProcedimiento : "";
+    	this.validacion = validacion;
+    	this.fechaActualizacion = fechaActualizacion;
+    	this.fechaCaducidad = fechaCaducidad;
+    	this.fechaPublicacion = fechaPublicacion;
+    	this.nombreFamilia = nombreFamilia != null ? nombreFamilia : "";
+    	this.unidadAdministrativa = ua;
+    }    
+    //---------------------------------------------
+
     //Constructores
     public ProcedimientoLocal(Long id) {
 		super();
@@ -57,6 +79,15 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		super();
 	}
 
+    public String getNombreFamilia() {
+    	return this.nombreFamilia;
+    }
+    
+    public String getNombreProcedimiento() {
+    	return this.nombreProcedimiento;
+    }
+    //-------------------------------------------
+    
     // get & set
 
 	public Long getId() {
@@ -388,7 +419,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		this.publicosObjetivo.remove(pob);
 	}
 	
-	//u92770[enric] a�adido equals para que procedimiento pueda ser testeable con easyMock.
+	//u92770[enric] a�adido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {
 		ProcedimientoLocal other=(ProcedimientoLocal)obj;
