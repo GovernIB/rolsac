@@ -315,6 +315,8 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             
             Query query;
             
+            String whereTraduccionTipo = traduccion.get("idioma") != null ? " and index(traTipo) = '" + traduccion.get("idioma") + "' " : ""; 
+            
             if ("local".equals(tipo)) {
             
             	String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
@@ -326,14 +328,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 									                		"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, trad.titulo, boletin.nombre, " +
 									                		"normativa.unidadAdministrativa) " +
 								                		"from NormativaLocal as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
-								                		"normativa.boletin as boletin where "+ sQuery + uaQuery + orderBy);
+								                		"normativa.boletin as boletin where "+ sQuery + uaQuery + whereTraduccionTipo + orderBy);
                
             } else { // "externa".equals(tipo))
             	query = session.createQuery("select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
             												"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, " +
             												"trad.titulo, boletin.nombre ) " +
             											"from NormativaExterna as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
-            												"normativa.boletin as boletin where " + sQuery + orderBy);            	
+            												"normativa.boletin as boletin where " + sQuery + whereTraduccionTipo + orderBy);            	
             }
             
             for ( int i = 0; i < params.size(); i++ ) {
