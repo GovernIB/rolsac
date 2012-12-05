@@ -45,6 +45,7 @@ public class Tramite extends Ordenable implements Comparator {
 
     Set<DocumentTramit> docsInformatius = new HashSet<DocumentTramit>();	//set of documents
     Set<DocumentTramit> formularios = new HashSet<DocumentTramit>();	//set of documents
+    Set<DocumentTramit> docsRequerits = new HashSet<DocumentTramit>();  //set of documents
     Set<Taxa> taxes = new HashSet<Taxa>();  //set of taxa
     String dataActualitzacioVuds;  //String: "no enviat"  "data hora"
 
@@ -146,10 +147,13 @@ public class Tramite extends Ordenable implements Comparator {
 		switch(doc.getTipus()) {
 			case DocumentTramit.DOCINFORMATIU:
 				addDocInformatiu(doc);					
-				break;
+			  break;
 			case DocumentTramit.FORMULARI:
 				addFormulario(doc);
-			break;
+			  break;
+	    case DocumentTramit.REQUERIT:
+	      addDocRequerits(doc);
+	      break;
 		}
 	}
 
@@ -167,10 +171,28 @@ public class Tramite extends Ordenable implements Comparator {
 		case DocumentTramit.FORMULARI: 
 			formularios.remove(doc);
 		break;
+    case DocumentTramit.REQUERIT:
+      docsRequerits.remove(doc);
+    break;
+
 		}
     }
 
-	
+    public Set<DocumentTramit> getDocsRequerits() {
+      return docsRequerits;
+    }
+
+    public void setDocsRequerits(Set<DocumentTramit> docsRequerits) {
+      this.docsRequerits = docsRequerits;
+    }
+
+    public void addDocRequerits(DocumentTramit doc) {
+      doc.setTramit(this);
+      doc.setOrden((long)docsRequerits.size()+1);
+      docsRequerits.add(doc);             
+    }
+
+
 	public void addTaxa(Taxa taxa) {
 		taxa.setTramit(this);
 		taxes.add(taxa);

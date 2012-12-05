@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Taxa;
+import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
 import org.ibit.rol.sac.model.TraduccionProcedimiento;
 import org.ibit.rol.sac.model.TraduccionTaxa;
@@ -117,6 +118,7 @@ public class TramiteBackController {
     		}
     	
     		// Documentos
+    		Set<DocumentTramit> listaDocumentsRequerits = tramite.getDocsRequerits();
     		Set<DocumentTramit> listaDocumentos = tramite.getDocsInformatius();
     		Set<DocumentTramit> listaFormularios = tramite.getFormularios();
     		Set<Taxa> listaTasas = tramite.getTaxes();
@@ -150,6 +152,26 @@ public class TramiteBackController {
     		resultats.put("formulariosTramite", listaFormulariosDTO);
     		// Fin formularios relacionados
     		
+        // Documents Requerits relacionats
+        List<IdNomDTO> listaRequeritsDTO = null;
+        if ( listaDocumentsRequerits != null ) {
+          
+          listaRequeritsDTO = new ArrayList<IdNomDTO>();
+          String nomDocRequerit="";
+          for (DocumentTramit docReq : listaDocumentsRequerits ) { 
+            if (docReq.getDocCatalogo()!=null){
+              nomDocRequerit = ((TraduccionCatalegDocuments)docReq.getDocCatalogo().getTraduccion(request.getLocale().getLanguage())).getNombre();
+            } else {
+              nomDocRequerit = ((TraduccionDocumento) docReq.getTraduccion(request.getLocale().getLanguage())).getTitulo();
+           }
+           listaRequeritsDTO.add( new IdNomDTO(docReq.getId(), nomDocRequerit) );
+          }     
+        }
+        
+        resultats.put("docRequeritsTramite", listaRequeritsDTO);
+        // Fin formularios relacionados
+        
+
     		// Tasas relacionadas
     		List<IdNomDTO> listaTasasDTO = null;
     		if ( listaTasas != null ) {
@@ -362,20 +384,25 @@ public class TramiteBackController {
         			}        		        			
         		}          	        		
         		
-            	//Guardar documentos y formularios
-            	String formulariosTramite = request.getParameter("formularisTramit");
-            	String documentosTramite = request.getParameter("documentsTramit");
-            	String separador = (!"".equals(formulariosTramite) && !"".equals(documentosTramite)  ? "," : ""); 
-            	
-            	documentosTramite = documentosTramite + separador + formulariosTramite;
+            //Guardar documentos y formularios
+            String formulariosTramite = request.getParameter("formularisTramit");
+            String documentosTramite = request.getParameter("documentsTramit");
+            String documentsRequerits = request.getParameter("documentsRequerits");
+                          
+            String separador = (!"".equals(documentosTramite))? "," : "";
+            documentosTramite += (!"".equals(formulariosTramite)? separador + formulariosTramite :"");
+            separador = (!"".equals(documentosTramite))? "," : "";
+            documentosTramite += (!"".equals(documentsRequerits)? separador + documentsRequerits :"");
+
 
         		Set<DocumentTramit> listaDocumentosOld = tramiteOld.getDocsInformatius();
         		Set<DocumentTramit> listaFormulariosOld = tramiteOld.getFormularios();
-            	
-        		//Combinamos las dos listas para hacerlo todo en una misma operación
-        		for (DocumentTramit documentTramit : listaFormulariosOld)
-        			listaDocumentosOld.add(documentTramit);
+        		Set<DocumentTramit> listaDocumentsReqOld = tramiteOld.getDocsRequerits();
         		
+            //Combinamos las tres listas para hacerlo todo en una misma operación
+            listaDocumentosOld.addAll(listaFormulariosOld);
+            listaDocumentosOld.addAll(listaDocumentsReqOld);
+            
             	if ( !"".equals(documentosTramite) ) {
             		
             		Set<Long> listaDocumentosBorrar = new HashSet<Long>();
@@ -424,11 +451,14 @@ public class TramiteBackController {
             		
             		for ( DocumentTramit documentTramit : documentosNuevos ) {
             			Long idDoc = documentTramit.getId();
-            			String ordenDocumento = request.getParameter("formularisTramit_orden_" + idDoc) ;
-            			
-            			if ( ordenDocumento == null ) 
-            				ordenDocumento = request.getParameter("documentsTramit_orden_" + idDoc);
-            			
+                  String ordenDocumento ="";
+                  if (documentTramit.getTipus()==0){
+                    ordenDocumento = request.getParameter("documentsTramit_orden_" + idDoc);
+                  } else if (documentTramit.getTipus()==1) {
+                    ordenDocumento = request.getParameter("formularisTramit_orden_" + idDoc) ;
+                  }else {
+                    ordenDocumento = request.getParameter("documentsRequerits_orden_" + idDoc);
+                  }
             			String[] orden = { ordenDocumento };
             			actualizadorDocs.put("orden_doc" + idDoc, orden);
             		}

@@ -247,5 +247,10 @@ public final class DelegateUtil {
     public static NormativaExternaRemotaDelegate getNormativaExternaRemotaDelegate() {
         return (NormativaExternaRemotaDelegate) DelegateFactory.getDelegate(NormativaExternaRemotaDelegate.class);
     }
-    
+    public static CatalegDocumentsDelegate getCatalegDocumentsDelegate() {
+      return (CatalegDocumentsDelegate) DelegateFactory.getDelegate(CatalegDocumentsDelegate.class);
+    }
+    public static ExcepcioDocumentacioDelegate getExcepcioDocumentacioDelegate() {
+      return (ExcepcioDocumentacioDelegate) DelegateFactory.getDelegate(ExcepcioDocumentacioDelegate.class);
+    }
 }

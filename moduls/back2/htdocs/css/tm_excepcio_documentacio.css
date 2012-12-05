@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+/* llistats table */
+
+div.llistat div.nom { 
+    width: 100%;
+    padding-left: 21px;
+}
+div.llistat div.tbody div.nom {
+    width: 100%;
+}
+
+div.llistat div.tbody div.excepcioDocumentacio {
+    padding-left: 21px;
+    width: 100%;
+}

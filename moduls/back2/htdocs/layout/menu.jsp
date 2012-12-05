@@ -79,6 +79,12 @@
 							<li>
 								<a href="<c:url value="/tipusIniciacio/tipusIniciacions.do"/>"><spring:message code="menu.tipus_iniciacio" /></a>
 							</li>
+							<li>
+								<a href="<c:url value="/catalegDocuments/catalegDocuments.do"/>"><spring:message code="menu.cataleg_documents" /></a>
+							</li>
+							<li>
+								<a href="<c:url value="/excepcioDocumentacio/excepcioDocumentacio.do"/>"><spring:message code="menu.excepcio_documentacio" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>

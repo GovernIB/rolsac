@@ -63,7 +63,9 @@
         <mapping resource="org/ibit/rol/sac/model/AgrupacionMateria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/MateriaAgrupacionM.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Enlace.hbm.xml" />
-
+		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/ExcepcioDocumentacio.hbm.xml" />
+        
         <mapping resource="org/ibit/rol/sac/model/lucene/LuceneFile.hbm.xml"/>
         
         <mapping resource="org/ibit/rol/sac/model/GrupoSuscripcion.hbm.xml" />

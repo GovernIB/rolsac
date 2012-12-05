@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.ExcepcioDocumentacio" table="RSC_EXCDOC">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="EXD_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <set name="catalegDocuments" cascade="none" inverse="true" lazy="true">
+            <key column="CDC_CODEXD" foreign-key="RSC_CDCEXD_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.CatalegDocuments"/>
+        </set>
+        <set name="docsRequerits" cascade="none" inverse="true" lazy="true">
+            <key column="DOC_CODEXD" foreign-key="RSC_DOCEXD_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
+        </set>
+        <map name="traducciones" cascade="all" table="RSC_TRAEXD">
+            <cache usage="read-write"/>
+            <key column="TED_CODEXD" foreign-key="RSC_TEEXD_FK"/>
+            <index column="TED_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio">
+                <property name="nombre" length="128" column="TED_NOM"/>
+                <property name="descripcion" length="4000" column="TED_DESCRI"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

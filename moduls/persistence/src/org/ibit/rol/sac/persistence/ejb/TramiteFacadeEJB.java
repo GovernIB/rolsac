@@ -527,6 +527,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 			// 3. eliminar documents del tr�mit del cache perqu� es recarreguin les llistes de formularis i docsinformatius amb el nou ordre.
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsInformatius", tid);
 			getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.formularios", tid);
+	     getSessionFactory().evictCollection("org.ibit.rol.sac.model.Tramite.docsRequerits", tid);
 			// 4. Actualizamos WS
 			Tramite tramite =cargaTramite(session,tid);
 			if(tramite.getProcedimiento()!=null){
@@ -673,6 +674,7 @@ public abstract class TramiteFacadeEJB extends HibernateEJB implements
 	            }
 	        }
 		}
+    Hibernate.initialize(tramite.getDocsRequerits());
 		Hibernate.initialize(tramite.getTaxes());
 		return tramite;
 	}

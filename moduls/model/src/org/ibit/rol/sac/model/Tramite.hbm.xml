@@ -62,6 +62,11 @@
             <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
         </set>
 
+		<set name="docsRequerits" cascade="all-delete-orphan" inverse="true" lazy="true" where="TIPUS = 2" order-by="ORDEN">
+            <cache usage="read-write"/>
+            <key column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
+        </set>
 
         <set name="taxes" cascade="all-delete-orphan" inverse="true" lazy="true">
             <cache usage="read-write"/>

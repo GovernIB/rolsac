@@ -949,6 +949,9 @@ div.table div.tbody div.td select.ordenacion{
 .escriptori_detall h2{
     display: none;
 }
+.escriptori_detall .disabled {
+	color: Grey;
+}
 .escriptori_detall .grupoModulosFormulario{
     float: left;
     width: 779px;       

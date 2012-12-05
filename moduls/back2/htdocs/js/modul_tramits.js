@@ -123,7 +123,8 @@ function CModulTramit(){
                 // y los m�dulos de documentos y formularios
                 escriptori_tramits_elm.find(".btnEliminar").hide();
                 escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
-                escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();             
+                escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();
+				escriptori_tramits_elm.find("div#modul_documents_requerits").hide();
                 escriptori_tramits_elm.find("div#modul_taxes_tramits").hide();              
             });         
         });
@@ -229,7 +230,8 @@ function CEscriptoriTramit(){
         }
                 
         var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
-                        "&" + ModulFormularisTramit.listarFormularios() + 
+                        "&" + ModulFormularisTramit.listarFormularios() +
+                        "&" + ModulDocumentsRequerits.listarDocumentosRequeridos() +
                         "&" + ModulTaxesTramit.listarTasas();           
         
         //Enviamos el formulario mediante el m�todo ajaxSubmit del plugin $.form
@@ -318,7 +320,7 @@ function CEscriptoriTramit(){
     }
     
     this.limpia = function(){
-        $('#formTramits :input').each(limpiarCampo);        
+        $("#formTramits :input").each(limpiarCampo);        
         $("#id_tramit_actual").val(""); //Se neteja manualment ja que limpiarCampo no afecta els input hidden
     }
     
@@ -413,6 +415,7 @@ function CEscriptoriTramit(){
 //          escriptori_tramits_elm.find("#modul_taxes_tramits").hide();
                 
         // Cargar documentos, formularios y tasas
+        ModulDocumentsRequerits.inicializarDocumentsRequerits(datos.docRequeritsTramite);
         ModulDocumentsTramit.inicializarDocuments(datos.documentosTramite);
         ModulFormularisTramit.inicializarFormularis(datos.formulariosTramite);              
         ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);      
@@ -441,6 +444,7 @@ function CEscriptoriTramit(){
                     escriptori_detall_elm.fadeOut(300, function() {
                         escriptori_tramits_elm.fadeIn(300, function() {                         
                             escriptori_tramits_elm.find(".btnEliminar").show();
+                            escriptori_tramits_elm.find("div#modul_documents_requerits").show();
                             escriptori_tramits_elm.find("div#modul_documents_tramits").show();
                             escriptori_tramits_elm.find("div#modul_formularis_tramits").show();
                             

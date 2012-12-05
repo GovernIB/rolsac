@@ -24,7 +24,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
+import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
@@ -38,15 +40,19 @@ import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
+import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
+import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
+import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.FamiliaDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
@@ -102,7 +108,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	}
 
-	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {		
+	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 2);
@@ -116,6 +122,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
+	    model.put("excepcions", llistarExcepcionsDocumentacio(lang));
+	    model.put("cataleg", llistarCatalegDocuments(lang));
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
@@ -133,6 +142,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	private UnidadAdministrativa getUAFromSession(HttpSession session) {
 		return (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
 	}
+
 	
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
@@ -1299,5 +1309,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
     private boolean isModuloModificado(String modulo, HttpServletRequest request) {
         return "1".equals(request.getParameter(modulo));
     }
-	
+    private List<IdNomDTO> llistarExcepcionsDocumentacio(String lang) throws DelegateException {
+      ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+      List<IdNomDTO> excepcioObjDTOList = new ArrayList<IdNomDTO>();
+      List<ExcepcioDocumentacio> llistaExcepcionsDocumentacio = excepcioDelegate.llistarExcepcioDocumentacio();
+      TraduccionExcepcioDocumentacio ted;
+      for (ExcepcioDocumentacio excepcio : llistaExcepcionsDocumentacio ) {
+        ted = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(lang);
+        excepcioObjDTOList.add(new IdNomDTO(excepcio.getId(), ted.getNombre()));
+      }
+      return excepcioObjDTOList;
+    }
+    
+    private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
+      CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+      List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
+      List<CatalegDocuments> llistaCatalegDocuments = catdocDelegate.llistarCatalegDocuments();
+      TraduccionCatalegDocuments tcd;
+      for (CatalegDocuments document : llistaCatalegDocuments ) {
+        tcd = (TraduccionCatalegDocuments) document.getTraduccion(lang);
+        catalegObjDTOList.add(new IdNomDTO(document.getId(), tcd.getNombre()));
+      }
+      return catalegObjDTOList;
+    }
+
 }

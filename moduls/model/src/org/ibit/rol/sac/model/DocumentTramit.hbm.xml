@@ -15,6 +15,9 @@
 
         <many-to-one name="tramit" column="CODITRA" foreign-key="RSC_CODITRA_FK"/>
         <many-to-one name="archivo" cascade="all" column="DOC_CODARC" foreign-key="RSC_DOCARC_FK"/>
+        <many-to-one name="docCatalogo" class="org.ibit.rol.sac.model.CatalegDocuments" column="DOC_CODCDC" foreign-key="RSC_DOCTRA_CATDOC_FK"/>
+		<many-to-one name="excepcioDocumentacio" class="org.ibit.rol.sac.model.ExcepcioDocumentacio" column="DOC_CODEXD" foreign-key="RSC_DOCTRA_EXCDOC_FK"/>
+        
         <property name="orden" column="ORDEN" />
         <property name="tipus" column="TIPUS" />
 

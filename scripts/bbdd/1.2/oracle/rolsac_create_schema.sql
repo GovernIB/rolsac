@@ -1,5 +1,6 @@
 alter table RSC_PROMAT drop constraint RSC_PRMMAT_FK;
 alter table RSC_PROMAT drop constraint RSC_PRMPRO_FK;
+alter table RSC_CATDOC drop constraint RSC_CDCEXD_FK;
 alter table RSC_SCRGRP drop constraint RSC_STPSGR_FK;
 alter table RSC_TRAPOB drop constraint RSC_TRPPOB_FK;
 alter table RSC_TRANOE drop constraint RSC_TNEARC_FK;
@@ -35,6 +36,8 @@ alter table RSC_COMENT drop constraint RSC_COMFIC_FK;
 alter table RSC_COMENT drop constraint RSC_COMUSU_FK;
 alter table RSC_COMENT drop constraint RSC_COMPRO_FK;
 alter table RSC_GRPGID drop constraint FK_RSC_GRPG_REFERENCE_RSC_GRPG;
+alter table RSC_DOCTRA drop constraint RSC_DOCTRA_CATDOC_FK;
+alter table RSC_DOCTRA drop constraint RSC_DOCTRA_EXCDOC_FK;
 alter table RSC_DOCTRA drop constraint RSC_DOCARC_FK;
 alter table RSC_DOCTRA drop constraint RSC_CODITRA_FK;
 alter table RSC_SCRGID drop constraint RSC_SGRSGI_FK;
@@ -50,11 +53,11 @@ alter table RSC_SCRTEM drop constraint FK_RSC_SCRT_REFERENCE_RSC_SCRI;
 alter table RSC_TRADOC drop constraint RSC_TDOARC_FK;
 alter table RSC_TRADOC drop constraint RSC_TDODOC_FK;
 alter table RSC_AGRMAT drop constraint RSC_AGMSEC_FK;
-alter table RSC_TRAESP drop constraint RSC_TESESP_FK;
 alter table RSC_DOCUME drop constraint RSC_DOCARC2_FK;
 alter table RSC_DOCUME drop constraint RSC_DORADM_FK;
 alter table RSC_DOCUME drop constraint RSC_DOCPRO_FK;
 alter table RSC_DOCUME drop constraint RSC_DOCFIC_FK;
+alter table RSC_TRAESP drop constraint RSC_TESESP_FK;
 alter table RSC_TRASEC drop constraint RSC_TSESEC_FK;
 alter table RSC_ICOFAM drop constraint RSC_ICFFAM_FK;
 alter table RSC_ICOFAM drop constraint RSC_ICFICO_FK;
@@ -100,6 +103,7 @@ alter table RSC_TRANOL drop constraint RSC_TNLARC_FK;
 alter table RSC_TRANOL drop constraint RSC_TNLNOR_FK;
 alter table RSC_TRADOCTRA drop constraint RSC_TDODOCTRA_FK;
 alter table RSC_TRADOCTRA drop constraint RSC_TDOARC_FK;
+alter table RSC_TRAEXD drop constraint RSC_TEEXD_FK;
 alter table RSC_POBFIC drop constraint RSC_PFCFIC_FK;
 alter table RSC_POBFIC drop constraint RSC_PFCPOB_FK;
 alter table RSC_TRAHEV drop constraint RSC_THECON_FK;
@@ -130,11 +134,11 @@ alter table RSC_HISTOR drop constraint RSC_HISNOR_FK;
 alter table RSC_HISTOR drop constraint RSC_HISPRO_FK;
 alter table RSC_HISTOR drop constraint RSC_HISFIC_FK;
 alter table RSC_HISTOR drop constraint RSC_HISMAT_FK;
-alter table RSC_FICHEV drop constraint RSC_FIHFIC_FK;
-alter table RSC_FICHEV drop constraint RSC_FIHHEV_FK;
 alter table RSC_ICMATE drop constraint RSC_ICMPEC_FK;
 alter table RSC_ICMATE drop constraint RSC_ICMICO_FK;
 alter table RSC_ICMATE drop constraint RSC_ICMMAT_FK;
+alter table RSC_FICHEV drop constraint RSC_FIHFIC_FK;
+alter table RSC_FICHEV drop constraint RSC_FIHHEV_FK;
 alter table RSC_TRATAX drop constraint RSC_TRATAX_FK;
 alter table RSC_PROCED drop constraint RSC_PROUNA_FK;
 alter table RSC_PROCED drop constraint RSC_PRO_CODUNA_RESOL_FK;
@@ -155,11 +159,14 @@ alter table RSC_ESPTER drop constraint RSC_ESPLOG_FK;
 alter table RSC_ESPTER drop constraint RSC_ESPMAP_FK;
 alter table RSC_ESPTER drop constraint RSC_ESPESP_FK;
 alter table RSC_TRAFAM drop constraint RSC_TFAFAM_FK;
+alter table RSC_TRACDC drop constraint RSC_TCDCDC_FK;
 drop table RSC_INICI cascade constraints;
 drop table RSC_PROMAT cascade constraints;
+drop table RSC_CATDOC cascade constraints;
 drop table RSC_SCRGRP cascade constraints;
 drop table RSC_TRAPOB cascade constraints;
 drop table RSC_TRANOE cascade constraints;
+drop table RSC_EXCDOC cascade constraints;
 drop table RSC_TIPAFE cascade constraints;
 drop table RSC_TRAPRO cascade constraints;
 drop table RSC_ADMREM cascade constraints;
@@ -194,8 +201,8 @@ drop table RSC_TRATRT cascade constraints;
 drop table RSC_SCRTEM cascade constraints;
 drop table RSC_TRADOC cascade constraints;
 drop table RSC_AGRMAT cascade constraints;
-drop table RSC_TRAESP cascade constraints;
 drop table RSC_DOCUME cascade constraints;
+drop table RSC_TRAESP cascade constraints;
 drop table RSC_TRASEC cascade constraints;
 drop table RSC_ICOFAM cascade constraints;
 drop table RSC_ESTADI cascade constraints;
@@ -224,6 +231,7 @@ drop table RSC_TRAFIC cascade constraints;
 drop table RSC_TRANOL cascade constraints;
 drop table RSC_TRADOCTRA cascade constraints;
 drop table RSC_FAMILI cascade constraints;
+drop table RSC_TRAEXD cascade constraints;
 drop table RSC_POBFIC cascade constraints;
 drop table RSC_TRAHEV cascade constraints;
 drop table RSC_TRAUNM cascade constraints;
@@ -234,8 +242,8 @@ drop table RSC_POBPRO cascade constraints;
 drop table RSC_UNIADM cascade constraints;
 drop table RSC_TRAMIT cascade constraints;
 drop table RSC_HISTOR cascade constraints;
-drop table RSC_FICHEV cascade constraints;
 drop table RSC_ICMATE cascade constraints;
+drop table RSC_FICHEV cascade constraints;
 drop table RSC_TRATAX cascade constraints;
 drop table RSC_PROCED cascade constraints;
 drop table RSC_SCRENV cascade constraints;
@@ -244,12 +252,13 @@ drop table RSC_SCRIPC cascade constraints;
 drop table RSC_AFECTA cascade constraints;
 drop table RSC_ESPTER cascade constraints;
 drop table RSC_TRAFAM cascade constraints;
+drop table RSC_TRACDC cascade constraints;
 drop sequence RSC_SEQ_COM;
 drop sequence RSC_SEQ_ALL;
-drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQSEN;
-drop sequence RSC_SEQSCK;
+drop sequence RSC_SEQSGR;
 drop sequence RSC_SEQSCR;
+drop sequence RSC_SEQSCK;
 drop sequence RSC_SEQGRP;
 drop sequence RSC_SEQHIS;
 create table RSC_INICI (
@@ -261,6 +270,13 @@ create table RSC_PROMAT (
    PRM_CODMAT number(19,0) not null,
    PRM_CODPRO number(19,0) not null,
    primary key (PRM_CODPRO, PRM_CODMAT)
+);
+create table RSC_CATDOC (
+   CDC_CODI number(19,0) not null,
+   CDC_ORDEN number(19,0),
+   CDC_ADMRSP number(10,0),
+   CDC_CODEXD number(19,0),
+   primary key (CDC_CODI)
 );
 create table RSC_SCRGRP (
    SGR_COD number(19,0) not null,
@@ -289,6 +305,10 @@ create table RSC_TRANOE (
    TNE_OBSERV varchar2(4000),
    TNE_CODIDI varchar2(2) not null,
    primary key (TNE_CODNOR, TNE_CODIDI)
+);
+create table RSC_EXCDOC (
+   EXD_CODI number(19,0) not null,
+   primary key (EXD_CODI)
 );
 create table RSC_TIPAFE (
    TIA_CODI number(19,0) not null,
@@ -489,6 +509,8 @@ create table RSC_DOCTRA (
    DOC_CODI number(19,0) not null,
    CODITRA number(19,0),
    DOC_CODARC number(19,0),
+   DOC_CODCDC number(19,0),
+   DOC_CODEXD number(19,0),
    ORDEN number(19,0),
    TIPUS number(10,0),
    primary key (DOC_CODI)
@@ -559,12 +581,6 @@ create table RSC_AGRMAT (
    AGM_CODSEC number(19,0),
    primary key (AGM_CODI)
 );
-create table RSC_TRAESP (
-   TES_CODESP number(19,0) not null,
-   TES_NOMBRE varchar2(256),
-   TES_CODIDI varchar2(2) not null,
-   primary key (TES_CODESP, TES_CODIDI)
-);
 create table RSC_DOCUME (
    DOC_CODI number(19,0) not null,
    DOC_TYPE varchar2(64) not null,
@@ -576,6 +592,12 @@ create table RSC_DOCUME (
    DOR_URLREM varchar2(512),
    DOR_CODADM number(19,0),
    primary key (DOC_CODI)
+);
+create table RSC_TRAESP (
+   TES_CODESP number(19,0) not null,
+   TES_NOMBRE varchar2(256),
+   TES_CODIDI varchar2(2) not null,
+   primary key (TES_CODESP, TES_CODIDI)
 );
 create table RSC_TRASEC (
    TSE_CODSEC number(19,0) not null,
@@ -820,6 +842,13 @@ create table RSC_FAMILI (
    FAM_CODI number(19,0) not null,
    primary key (FAM_CODI)
 );
+create table RSC_TRAEXD (
+   TED_CODEXD number(19,0) not null,
+   TED_NOM varchar2(128),
+   TED_DESCRI varchar2(4000),
+   TED_CODIDI varchar2(2) not null,
+   primary key (TED_CODEXD, TED_CODIDI)
+);
 create table RSC_POBFIC (
    PFC_CODFIC number(19,0) not null,
    PFC_CODPOB number(19,0) not null,
@@ -942,17 +971,17 @@ create table RSC_HISTOR (
    HIS_CODMAT number(19,0),
    primary key (HIS_CODI)
 );
-create table RSC_FICHEV (
-   FIH_CODFIC number(19,0) not null,
-   FIH_CODHEV number(19,0) not null,
-   primary key (FIH_CODFIC, FIH_CODHEV)
-);
 create table RSC_ICMATE (
    ICM_CODI number(19,0) not null,
    ICM_CODMAT number(19,0),
    ICM_CODPEC number(19,0),
    ICM_ICONO number(19,0),
    primary key (ICM_CODI)
+);
+create table RSC_FICHEV (
+   FIH_CODFIC number(19,0) not null,
+   FIH_CODHEV number(19,0) not null,
+   primary key (FIH_CODFIC, FIH_CODHEV)
 );
 create table RSC_TRATAX (
    TTAX_CODI number(19,0) not null,
@@ -1084,8 +1113,16 @@ create table RSC_TRAFAM (
    TFA_CODIDI varchar2(2) not null,
    primary key (TFA_CODFAM, TFA_CODIDI)
 );
+create table RSC_TRACDC (
+   TCD_CODCDC number(19,0) not null,
+   TCD_NOM varchar2(256),
+   TCD_DESCRI varchar2(4000),
+   TCD_CODIDI varchar2(2) not null,
+   primary key (TCD_CODCDC, TCD_CODIDI)
+);
 alter table RSC_PROMAT add constraint RSC_PRMMAT_FK foreign key (PRM_CODMAT) references RSC_MATERI;
 alter table RSC_PROMAT add constraint RSC_PRMPRO_FK foreign key (PRM_CODPRO) references RSC_PROCED;
+alter table RSC_CATDOC add constraint RSC_CDCEXD_FK foreign key (CDC_CODEXD) references RSC_EXCDOC;
 alter table RSC_SCRGRP add constraint RSC_STPSGR_FK foreign key (SGR_STPCOD) references RSC_SCRTIP;
 alter table RSC_TRAPOB add constraint RSC_TRPPOB_FK foreign key (TRP_CODPOB) references RSC_PUBOBJ;
 alter table RSC_TRANOE add constraint RSC_TNEARC_FK foreign key (TNE_CODARC) references RSC_ARCHIV;
@@ -1121,6 +1158,8 @@ alter table RSC_COMENT add constraint RSC_COMFIC_FK foreign key (COM_CODFIC) ref
 alter table RSC_COMENT add constraint RSC_COMUSU_FK foreign key (COM_CODUSU) references RSC_USUARI;
 alter table RSC_COMENT add constraint RSC_COMPRO_FK foreign key (COM_CODPRO) references RSC_PROCED;
 alter table RSC_GRPGID add constraint FK_RSC_GRPG_REFERENCE_RSC_GRPG foreign key (SGR_GRPCOD) references RSC_GRPGEN;
+alter table RSC_DOCTRA add constraint RSC_DOCTRA_CATDOC_FK foreign key (DOC_CODCDC) references RSC_CATDOC;
+alter table RSC_DOCTRA add constraint RSC_DOCTRA_EXCDOC_FK foreign key (DOC_CODEXD) references RSC_EXCDOC;
 alter table RSC_DOCTRA add constraint RSC_DOCARC_FK foreign key (DOC_CODARC) references RSC_ARCHIV;
 alter table RSC_DOCTRA add constraint RSC_CODITRA_FK foreign key (CODITRA) references RSC_TRAMIT;
 alter table RSC_SCRGID add constraint RSC_SGRSGI_FK foreign key (SGI_SGRCOD) references RSC_SCRGRP;
@@ -1136,11 +1175,11 @@ alter table RSC_SCRTEM add constraint FK_RSC_SCRT_REFERENCE_RSC_SCRI foreign key
 alter table RSC_TRADOC add constraint RSC_TDOARC_FK foreign key (TDO_CODARC) references RSC_ARCHIV;
 alter table RSC_TRADOC add constraint RSC_TDODOC_FK foreign key (TDO_CODDOC) references RSC_DOCUME;
 alter table RSC_AGRMAT add constraint RSC_AGMSEC_FK foreign key (AGM_CODSEC) references RSC_SECCIO;
-alter table RSC_TRAESP add constraint RSC_TESESP_FK foreign key (TES_CODESP) references RSC_ESPTER;
 alter table RSC_DOCUME add constraint RSC_DOCARC2_FK foreign key (DOC_CODARC2) references RSC_ARCHIV;
 alter table RSC_DOCUME add constraint RSC_DORADM_FK foreign key (DOR_CODADM) references RSC_ADMREM;
 alter table RSC_DOCUME add constraint RSC_DOCPRO_FK foreign key (DOC_CODPRO) references RSC_PROCED;
 alter table RSC_DOCUME add constraint RSC_DOCFIC_FK foreign key (DOC_CODFIC) references RSC_FICHA;
+alter table RSC_TRAESP add constraint RSC_TESESP_FK foreign key (TES_CODESP) references RSC_ESPTER;
 alter table RSC_TRASEC add constraint RSC_TSESEC_FK foreign key (TSE_CODSEC) references RSC_SECCIO;
 alter table RSC_ICOFAM add constraint RSC_ICFFAM_FK foreign key (ICF_CODFAM) references RSC_FAMILI;
 alter table RSC_ICOFAM add constraint RSC_ICFICO_FK foreign key (ICF_ICONO) references RSC_ARCHIV;
@@ -1186,6 +1225,7 @@ alter table RSC_TRANOL add constraint RSC_TNLARC_FK foreign key (TNL_CODARC) ref
 alter table RSC_TRANOL add constraint RSC_TNLNOR_FK foreign key (TNL_CODNOR) references RSC_NORMAT;
 alter table RSC_TRADOCTRA add constraint RSC_TDODOCTRA_FK foreign key (TDO_CODTRA) references RSC_DOCTRA;
 alter table RSC_TRADOCTRA add constraint RSC_TDOARC_FK foreign key (TDO_CODARC) references RSC_ARCHIV;
+alter table RSC_TRAEXD add constraint RSC_TEEXD_FK foreign key (TED_CODEXD) references RSC_EXCDOC;
 alter table RSC_POBFIC add constraint RSC_PFCFIC_FK foreign key (PFC_CODFIC) references RSC_FICHA;
 alter table RSC_POBFIC add constraint RSC_PFCPOB_FK foreign key (PFC_CODPOB) references RSC_PUBOBJ;
 alter table RSC_TRAHEV add constraint RSC_THECON_FK foreign key (THE_CONTEN) references RSC_ARCHIV;
@@ -1216,11 +1256,11 @@ alter table RSC_HISTOR add constraint RSC_HISNOR_FK foreign key (HIS_CODNOR) ref
 alter table RSC_HISTOR add constraint RSC_HISPRO_FK foreign key (HIS_CODPRO) references RSC_PROCED;
 alter table RSC_HISTOR add constraint RSC_HISFIC_FK foreign key (HIS_CODFIC) references RSC_FICHA;
 alter table RSC_HISTOR add constraint RSC_HISMAT_FK foreign key (HIS_CODMAT) references RSC_MATERI;
-alter table RSC_FICHEV add constraint RSC_FIHFIC_FK foreign key (FIH_CODFIC) references RSC_FICHA;
-alter table RSC_FICHEV add constraint RSC_FIHHEV_FK foreign key (FIH_CODHEV) references RSC_HECVIT;
 alter table RSC_ICMATE add constraint RSC_ICMPEC_FK foreign key (ICM_CODPEC) references RSC_PERCIU;
 alter table RSC_ICMATE add constraint RSC_ICMICO_FK foreign key (ICM_ICONO) references RSC_ARCHIV;
 alter table RSC_ICMATE add constraint RSC_ICMMAT_FK foreign key (ICM_CODMAT) references RSC_MATERI;
+alter table RSC_FICHEV add constraint RSC_FIHFIC_FK foreign key (FIH_CODFIC) references RSC_FICHA;
+alter table RSC_FICHEV add constraint RSC_FIHHEV_FK foreign key (FIH_CODHEV) references RSC_HECVIT;
 alter table RSC_TRATAX add constraint RSC_TRATAX_FK foreign key (TTAX_CODI) references RSC_TAXA;
 alter table RSC_PROCED add constraint RSC_PROUNA_FK foreign key (PRO_CODUNA) references RSC_UNIADM;
 alter table RSC_PROCED add constraint RSC_PRO_CODUNA_RESOL_FK foreign key (PRO_CODUNA_RESOL) references RSC_UNIADM;
@@ -1241,11 +1281,12 @@ alter table RSC_ESPTER add constraint RSC_ESPLOG_FK foreign key (ESP_LOGO) refer
 alter table RSC_ESPTER add constraint RSC_ESPMAP_FK foreign key (ESP_MAPA) references RSC_ARCHIV;
 alter table RSC_ESPTER add constraint RSC_ESPESP_FK foreign key (ESP_CODESP) references RSC_ESPTER;
 alter table RSC_TRAFAM add constraint RSC_TFAFAM_FK foreign key (TFA_CODFAM) references RSC_FAMILI;
+alter table RSC_TRACDC add constraint RSC_TCDCDC_FK foreign key (TCD_CODCDC) references RSC_CATDOC;
 create sequence RSC_SEQ_COM;
 create sequence RSC_SEQ_ALL;
-create sequence RSC_SEQSGR;
 create sequence RSC_SEQSEN;
-create sequence RSC_SEQSCK;
+create sequence RSC_SEQSGR;
 create sequence RSC_SEQSCR;
+create sequence RSC_SEQSCK;
 create sequence RSC_SEQGRP;
 create sequence RSC_SEQHIS;

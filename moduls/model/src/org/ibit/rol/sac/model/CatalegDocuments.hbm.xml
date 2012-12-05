@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class name="org.ibit.rol.sac.model.CatalegDocuments" table="RSC_CATDOC">
+        <cache usage="read-write"/>
+        <id name="id" unsaved-value="null" column="CDC_CODI">
+            <generator class="sequence">
+                <param name="sequence">RSC_SEQ_ALL</param>
+            </generator>
+        </id>
+        <property name="ordre" column="CDC_ORDEN"/>
+        <property name="admResponsable" column="CDC_ADMRSP"/>
+        
+        <set name="doctramite" cascade="none" lazy="true" inverse="true">
+            <key column="DOC_CODCDC" foreign-key="RSC_DOCTRA_CATDOC_FK"/>
+            <one-to-many class="org.ibit.rol.sac.model.DocumentTramit"/>
+        </set>
+        
+        <many-to-one class="org.ibit.rol.sac.model.ExcepcioDocumentacio" name="excepcioDocumentacio" column="CDC_CODEXD" foreign-key="RSC_CDCEXD_FK"/>
+        
+        <map name="traducciones" cascade="all" table="RSC_TRACDC" batch-size="50">
+            <cache usage="read-write"/>
+            <key column="TCD_CODCDC" foreign-key="RSC_TCDCDC_FK"/>
+            <index column="TCD_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionCatalegDocuments">
+            	<property name="nombre" length="256" column="TCD_NOM"/>
+                <property name="descripcion" length="4000" column="TCD_DESCRI"/>
+            </composite-element>
+        </map>
+    </class>
+</hibernate-mapping>

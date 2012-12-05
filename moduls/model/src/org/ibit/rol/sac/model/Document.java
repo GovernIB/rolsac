@@ -12,7 +12,7 @@ public abstract class Document extends Ordenable {
 	public static final int DOCINFORMATIU=0; 
 	public static final int FORMULARI=1;
 	//public static final int DOCPRESENTAR=2;
-	//public static final int REQUISIT=3;
+	public static final int REQUERIT=2;
 	
 	
 	private Archivo archivo;
@@ -68,7 +68,7 @@ public abstract class Document extends Ordenable {
 		case DOCINFORMATIU:return "docInformatiu";
 		case FORMULARI:return "formulari";
 		//case DOCPRESENTAR:return "docPresentar";
-		//case REQUISIT: return "requisit";
+		case REQUERIT: return "docRequerit";
 
 		}
 		return null;

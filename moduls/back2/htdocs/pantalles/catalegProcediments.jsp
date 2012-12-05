@@ -20,6 +20,7 @@
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_documents_requerits.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_materies.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_public_objectiu.js'/>"></script>
@@ -48,6 +49,9 @@
     var pagCarregarDoc = '<c:url value="/documents/carregarDocument.do" />';    
     var pagGuardarDocTramit = '<c:url value="/documentsTramit/guardarDocumentTramit.do" />';
     var pagCarregarDocTramit = '<c:url value="/documentsTramit/carregarDocumentTramit.do" />';
+    var pagGuardarDocRequerit = '<c:url value="/documentsRequerits/guardarDocumentRequerit.do" />';
+    var pagCarregarDocRequerit = '<c:url value="/documentsRequerits/carregarDocumentRequerit.do" />';
+    var pagExcepcioDocRequerit = '<c:url value="/documentsRequerits/recuperaExcepcionsDocumentacio.do" />';
     var pagGuardarTaxaTramit = '<c:url value="/taxa/guardarTaxa.do" />';
     var pagCarregarTaxaTramit = '<c:url value="/taxa/carregarTaxaTramit.do" />';
     var pagAuditories = '<c:url value="/auditories/llistat.do" />';
@@ -2179,7 +2183,7 @@
 	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
 	                        <div class="modulDocumentsTramit multilang">                            
 	                            <ul class="idiomes" style="display:none;">                                
-									<c:forEach items="idiomes_aplicacio" var="lang" varStatus="loop">
+									<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
 									<c:if test="${loop.first}">
 									<li class='
 									<c:out value="${lang}"/> seleccionat'>
@@ -2215,16 +2219,16 @@
 									</c:forEach>
 	                            </ul>
 	                            
-	                            <div class="seleccionats">	                                
-									<c:forEach items="idiomes_aplicacio" var="lang" varStatus="loop">									
-									<c:if test="${loop.first}">
-	                                <div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
-									</c:if>									
-									<c:if test="${!loop.first}">
-									<div class='<c:out value="${lang}"/> cajaIdioma'>
-									</c:if>										
-	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-	                                    <div class="listaOrdenable"></div>									
+		                            <div class="seleccionats">	                                
+										<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">									
+										<c:if test="${loop.first}">
+		                                <div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
+										</c:if>									
+										<c:if test="${!loop.first}">
+										<div class='<c:out value="${lang}"/> cajaIdioma'>
+										</c:if>										
+		                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+		                                    <div class="listaOrdenable"></div>									
 									</div>																		
 									</c:forEach>									
 	                                <div class="btnGenerico">
@@ -2237,7 +2241,73 @@
 	                </fieldset>
 	            </div>
 	            <!-- /modul -->    
-		        	        
+		        <!-- Documentacio Requerida -->
+		        <div class="modul" id="modul_documents_requerits">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='document.documentacioRequerida'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulDocuments -->
+	                        <%-- dsanchez: Clase "multilang" para listas multi-idioma --%>
+	                        <div class="modulDocumentsRequerits multilang">                            
+								<ul class="idiomes" style="display:none;">                                
+									<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+									<c:if test="${loop.first}">
+									<li class='
+									<c:out value="${lang}"/> seleccionat'>
+									</c:if>									
+									<c:if test="${!loop.first}">
+									<li class='<c:out value="${lang}"/>'>
+									</c:if>
+
+									<c:choose>
+										<c:when test="${lang eq 'ca'}">
+											<spring:message code='txt.idioma.ca_abr'/>
+										</c:when>
+
+										<c:when test="${lang eq 'es'}">
+											<spring:message code='txt.idioma.es_abr'/>
+										</c:when>
+
+										<c:when test="${lang eq 'en'}">
+											<spring:message code='txt.idioma.en_abr'/>
+										</c:when>
+
+										<c:when test="${lang eq 'de'}">
+											<spring:message code='txt.idioma.de_abr'/>
+										</c:when>
+
+										<c:when test="${lang eq 'fr'}">
+											<spring:message code='txt.idioma.fr_abr'/>
+										</c:when>										
+									</c:choose>
+									
+									<spring:message code='txt.idioma.ca_abr'/>
+									</li>
+									</c:forEach>
+	                            </ul>
+	                            
+                            	<div class="seleccionats">	                                
+								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">									
+									<c:if test="${loop.first}">
+	                                <div class='seleccionat cajaIdioma <c:out value="${lang}"/>'>
+									</c:if>									
+									<c:if test="${!loop.first}">
+									<div class='<c:out value="${lang}"/> cajaIdioma'>
+									</c:if>										
+	                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+	                                    <div class="listaOrdenable"></div>									
+									</div>																		
+								</c:forEach>									
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
+                                </div>                                  
+	                        </div>
+	                        <!-- /modulDocuments -->                                 
+	                    </div>    
+	                </fieldset>
+	            </div>
+		        <!-- /modul -->	     
 		    </div>
 		    <!-- /Men? de publicaci?n -->		    		                   
 	</div>    
@@ -2739,3 +2809,205 @@
     </form>
 </div>
 <!-- escriptori_documents_tramits -->
+
+<!-- escriptori documents requerits -->
+<div id="escriptori_documents_requerits" class="escriptori_detall">
+    <script type="text/javascript">
+        var txtTituloDocRequeritObligatorio = "<spring:message code='personal.formulari_document_tramit.titol.obligatori'/>";    
+        var txtDocCatalegObligatorio = "<spring:message code='personal.formulari_document_tramit.titol.obligatori'/>";
+        var txtTituloNoSoloNumeros = "<spring:message code='personal.formulari_document_tramit.titol.no_nomes_numeros'/>";
+        var txtTipusDocDocRequeritObligatorio = "<spring:message code='document_requerit.formulari_docreq_tramit.tipus_documentacio.obligatori'/>";
+        var txtCatalegDocumentsObligatorio = "<spring:message code='document_requerit.formulari_docreq_tramit.cataleg_document.obligatori'/>";
+                       
+        // dades formularis
+        var FormulariDadesDocRequerit = [
+           	// Tipus Documentacio
+            { 
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "item_tipdoc_ca",
+                "obligatori": "si",
+                "tipus": "numeric",
+                "error": {
+                    "obligatori": txtTipusDocDocRequeritObligatorio
+                }
+            }
+        ];
+    </script>
+    <form id="formGuardarDocReq" action="" method="POST">
+        <input type="hidden" name="docReqTramitId" id="docReqTramitId" />
+        <input type="hidden" name="docReqId" id="docReqId" />          
+        <input type="hidden" name="tipDoc" id="tipDoc" value="2" />
+        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>
+        <!-- modulPrincipal -->
+        <!--div id="modulPrincipal" class="grupoModulosFormulario"-->                    
+        <div id="modulDocuments" class="grupoModulosFormulario modulPrincipal">
+            <!-- modul -->
+            <div class="modul">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.documents_requerits'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/>:</p>
+							<ul class="idiomes">                            
+								<c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">								
+									<li class="idioma"><a href="javascript:;" class='<c:out value="${lang}"/>'>								
+									<c:choose>
+										<c:when test="${lang eq 'ca'}">
+											<spring:message code='txt.idioma.ca'/>
+										</c:when>
+										
+										<c:when test="${lang eq 'es'}">
+											<spring:message code='txt.idioma.es'/>
+										</c:when>
+										
+										<c:when test="${lang eq 'en'}">
+											<spring:message code='txt.idioma.en'/>
+										</c:when>										
+
+										<c:when test="${lang eq 'fr'}">
+											<spring:message code='txt.idioma.fr'/>
+										</c:when>										
+
+										<c:when test="${lang eq 'de'}">
+											<spring:message code='txt.idioma.de'/>
+										</c:when>		
+										<c:otherwise></c:otherwise>								
+									</c:choose>
+									</a></li>									
+								</c:forEach>
+								
+                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                    <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
+                                </li>
+                            </ul>
+                            <div class="idiomes">
+                            
+                            <c:forEach items="${idiomes_aplicacio}" var="lang">
+                                <div class="idioma <c:out value='${lang}'/>">
+                                    <div class="fila">
+                                    	 <div class="element t21p">
+			                            	 <div class="etiqueta">
+			                                	 <label for="item_tipdoc_<c:out value='${lang}'/>"><spring:message code='document_requerit.formulari_docreq_tramit.tipus_documentacio'/></label>
+			                             	</div>
+			                             	<div class="control select">
+			                                	 <select id="item_tipdoc_<c:out value='${lang}'/>" class="nou" name="item_tipdoc_<c:out value='${lang}'/>">
+			                                    	<option value="1"><spring:message code='document_requerit.formulari_docreq_tramit.tipus_documentacio.valor_comu'/></option>
+			                                    	<option value="2"><spring:message code='document_requerit.formulari_docreq_tramit.tipus_documentacio.valor_especifica'/></option>
+			                                 	</select>
+			                             	</div>
+				                         </div>
+                                    </div>
+									<div class="fila" id="seccio_doc_cataleg_<c:out value='${lang}'/>">
+			                         	<div class="element t50p">
+			                            	 <div class="etiqueta">
+			                                	 <label for="item_cataleg_<c:out value='${lang}'/>"><spring:message code='camp.cataleg_documents'/>
+			                                	 	<c:choose> 
+				                                	 <c:when test="${lang eq 'ca'}">
+				                                	 	<span class="obligatori">*</span> 
+				                                	 </c:when>
+				                                	</c:choose>
+			                                	 </label>
+			                             	</div>
+			                             	<div class="control select">
+			                                	<select id="item_cataleg_<c:out value='${lang}'/>" name="item_cataleg_<c:out value='${lang}'/>" class="nou">
+			                                    	<option value="" selected="selected"><spring:message code='camp.cap'/></option>
+			                                        	<c:forEach items="${cataleg}" var="cataleg">
+			                                            	<option value="<c:out value="${cataleg.id}"/>"><c:out value="${cataleg.nom}"/></option>
+			                                           	</c:forEach>
+			                                  	</select>
+			                               	</div>
+			                         	</div>
+			                         </div>                                    
+                                    <div class="fila"  id="seccio_doc_especific_<c:out value='${lang}'/>" >
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_requerit_titol_<c:out value='${lang}'/>"><spring:message code='camp.titol'/>
+                                                	<c:choose> 
+                                                     <c:when test="${lang eq 'ca'}">
+				                                	 	<span class="obligatori">*</span> 
+				                                	 </c:when>
+				                                	</c:choose>
+			                                	 </label>
+                                            </div>
+                                            <div class="control">
+                                                <input id="doc_requerit_titol_<c:out value='${lang}'/>" name="doc_requerit_titol_<c:out value='${lang}'/>" type="text" class="nou" />
+                                            </div>
+                                        </div>
+                                    </div>
+									<div class="fila">
+                                        <div class="element t99p">
+                                            <div class="etiqueta">
+                                                <label for="doc_requerit_descripcio_<c:out value='${lang}'/>"><spring:message code='camp.descripcio'/></label>
+                                            </div>
+                                            <div class="control">
+                                                <textarea id="doc_requerit_descripcio_<c:out value='${lang}'/>" name="doc_requerit_descripcio_<c:out value='${lang}'/>" cols="50" rows="2" class="nou"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                    <div class="fila" id="seccio_excepcions_<c:out value='${lang}'/>">
+			                         	<div class="element t50p">
+			  	                        	<div class="etiqueta">
+			                                	 <label for="item_check_excepcio"></label>
+			                             	</div>
+                                            <div class="control">
+                                                <input id="item_check_excepcio_<c:out value='${lang}'/>" name="item_check_excepcio_<c:out value='${lang}'/>" type="checkbox" value="on" class="nou" />
+                                                <label for="item_check_excepcio_<c:out value='${lang}'/>"><spring:message code='camp.excepcio_documentacio'/></label>
+                                            </div>                                            
+                                        </div>
+			                         	<div class="element t50p">
+			                            	 <div class="etiqueta">
+			                                	 <label for="item_excepcio_<c:out value='${lang}'/>"><spring:message code='catdoc.formulari.causes_excepcio'/> <span class="obligatori"></span></label>
+			                             	</div>
+			                             	<div class="control select">
+			                                	<select id="item_excepcio_<c:out value='${lang}'/>" name="item_excepcio_<c:out value='${lang}'/>" class="nou">
+			                                    	<option value="" selected="selected"><spring:message code='camp.cap'/></option>
+			                                        	<c:forEach items="${excepcions}" var="excepcio">
+			                                            	<option value="<c:out value="${excepcio.id}"/>"><c:out value="${excepcio.nom}"/></option>
+			                                           	</c:forEach>
+			                                  	</select>
+			                               	</div>
+			                         	</div>
+			                         </div>
+                                </div>
+								</c:forEach>
+                            </div>
+                        </div>
+                        <!-- /fila -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulPrincipal -->
+        <!-- modulLateral -->
+        <div class="modulLateral">
+            <!-- modul -->
+            <div class="modul publicacio">
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+                    <legend><spring:message code='txt.accions'/></legend>
+                    <div class="modul_continguts mostrat">
+                        <!-- botonera dalt -->
+                        <div class="botonera dalt">
+                          <ul>
+                              <li class="btnVolver impar">
+                                  <a id="btnVolver_documents_requerits" href="javascript:;" class="btn torna"><span><span><spring:message code='boto.torna'/></span></span></a>
+                              </li>
+                              <li class="btnGuardar par">
+                                  <a id="btnGuardar_documents_requerits" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+                              </li>
+                              <li class="btnEliminar impar" style="display:none;">
+                                  <a id="btnEliminar_documents_requerits" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+                              </li>
+                          </ul>
+                        </div>
+                        <!-- /botonera dalt -->
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <!-- /modulLateral -->
+    </form>
+</div>
+<!-- /escriptori documents requerits -->
