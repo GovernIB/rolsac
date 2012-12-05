@@ -1174,25 +1174,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			llistaNormatives = (List<Normativa>) normativaDelegate
+			llistaNormatives = castList(Normativa.class, normativaDelegate
 					.buscarNormativas(paramMap, paramTrad, "local", null,
 							false, false, campoOrdenacion, orden, pagPag,
-							pagRes).getListaResultados();						
+							pagRes).getListaResultados());						
 			
 			for (Normativa normativa : llistaNormatives) {
-				TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
-				String titulo = "";
-				if (traNor != null) {
-					//Retirar posible enlace incrustado en titulo
-					titulo = HtmlUtils.obtenerTituloDeEnlaceHtml(traNor.getTitulo());
-				}					
-
-				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
-						normativa.getId(),
-						titulo,
-						DateUtils.formatDate(normativa.getFecha()),
-						DateUtils.formatDate(normativa.getFechaBoletin())
-				));
+				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(normativa
+						.getId(), HtmlUtils.obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()), DateUtils
+						.formatDate(normativa.getFecha()), DateUtils
+						.formatDate(normativa.getFechaBoletin())));
 			}
 
 		} catch (DelegateException dEx) {
