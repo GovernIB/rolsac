@@ -131,7 +131,7 @@ SearchNormativa {
 		                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
 		                normativabean = normativa;
 			            meterListaNormativa(normativa);
-		                break;
+		                abortar = true;
 		            }
 	            }
 			}
