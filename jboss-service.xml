@@ -20,7 +20,7 @@
 	   -->
 	   es.caib.rolsac.traspasboib.mode=eBoib
 	   <!-- url pel mode de connexió eboib -->
-	   es.caib.rolsac.traspasboib.url=https://sdesweblin1.caib.es/eboibfront/
+	   es.caib.rolsac.traspasboib.url=https://www.caib.es/eboibfront/
 
 	   es.caib.rolsac.tramite.sistra=Y
 	   

@@ -117,17 +117,24 @@ SearchNormativa {
 			for (String enviamentUrl : rdf.enviaments) {
 				if (abortar) break;
 				TrNormativaLocalBean normativa =  getEnviament(rdf, enviamentUrl);
-	            meterListaNormativa(normativa);
-	            if (normativa.getValorRegistro().equals(numregboib)) {
-	                abortar = true;;
-	                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
-	                if (estaInsertadoEnSac) {
-	                    numeroregistros=-1;
-	                    mensajeavisobean.setCabecera("ERROR EN ELS PARÀMETRES");
-	                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introduïts en el SAC");
-	                }
-	                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
-	                normativabean = normativa;
+	            if (numregboib.equals("")) {
+	            	//No estamos buscando por numeroboib
+		            meterListaNormativa(normativa);
+	            } else {
+	            	//Estamos buscando por numeroboib
+		            if (normativa.getValorRegistro().equals(numregboib)) {
+		            	//Registro encontrado
+		                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
+		                if (estaInsertadoEnSac) {
+		                    numeroregistros=-1;
+		                    mensajeavisobean.setCabecera("ERROR EN ELS PARÀMETRES");
+		                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introduïts en el SAC");
+		                }
+		                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
+		                normativabean = normativa;
+			            meterListaNormativa(normativa);
+		                break;
+		            }
 	            }
 			}
 		}
