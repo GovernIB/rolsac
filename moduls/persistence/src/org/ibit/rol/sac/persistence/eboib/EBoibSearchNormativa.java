@@ -88,8 +88,6 @@ SearchNormativa {
 	
 
 	public void makeSearch() {
-			// TODO Auto-generated method stub
-			
 		/*
 		 * 1.- buscar el BOIB por fecha o número en RSS
 		 * 		- buscar por número: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009
