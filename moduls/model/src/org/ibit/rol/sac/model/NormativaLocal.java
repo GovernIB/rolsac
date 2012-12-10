@@ -17,7 +17,7 @@ public class NormativaLocal extends Normativa implements Indexable {
 	// Contructor para optimizar las búsquedas
 	public NormativaLocal(Long id, Long numero, Date fecha, Date fechaBoletin, 
 			String nombreTipo, Integer validacion, String traduccionTitulo, String nombreBoletin, 
-			UnidadAdministrativa unidadAdministrativa) {
+			String idioma, UnidadAdministrativa unidadAdministrativa) {
 		
 		super();
 		
@@ -28,7 +28,8 @@ public class NormativaLocal extends Normativa implements Indexable {
 		setValidacion(validacion);
 		setNombreTipo(nombreTipo != null ? nombreTipo : "");
 		setTraduccionTitulo( traduccionTitulo != null ? traduccionTitulo : "");
-		setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");		
+		setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");
+		setIdioma(idioma);
 		
 		this.unidadAdministrativa = unidadAdministrativa;
 	}

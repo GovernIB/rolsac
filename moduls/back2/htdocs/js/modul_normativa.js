@@ -248,7 +248,7 @@ function CEscriptoriNormativa(){
 				codi_taula += "<a class=\"normativa_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + dada_node.titulo + "</a>";
 				codi_taula += "</div>";
 				
-				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + dada_node.fecha + "</div>";
+				codi_taula += "<div class=\"td data\" role=\"gridcell\">" + (dada_node.fecha == null ? "" : dada_node.fecha)  + "</div>";
 				codi_taula += "<div class=\"td dataButlleti\" role=\"gridcell\">" + dada_node.fechaBoletin+ "</div>";
 				
 				codi_taula += "</div>";
@@ -330,8 +330,7 @@ function CEscriptoriNormativa(){
 		ordre_Camp = ordreCamp_normativa_elm.val();
 			
 		// variables
-		//dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
-		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
+		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
 		
 		// ajax
 		$.ajax({

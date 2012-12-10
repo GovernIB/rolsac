@@ -175,6 +175,8 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		Long idUA = null;
 		
+		int resultadosDescartados = 0;
+		
 		if (request.getParameter("idUA") != null && !request.getParameter("idUA").equals("")){                      
 			idUA = ParseUtil.parseLong(request.getParameter("idUA"));
 		}
@@ -263,22 +265,30 @@ public class NormativaBackController extends PantallaBaseController {
 				
 			}
 			
+			String idiomaPorDefecto = request.getLocale().getLanguage();
+			
 			for ( Normativa normativa : llistaNormatives ) {
 							
 				boolean local = NormativaLocal.class.isInstance(normativa);
 				
-				llistaNormativesDTO.add( new NormativaDTO(
-							normativa.getId(), 
-							normativa.getNumero(),
-							obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
-							normativa.getFecha(),
-							normativa.getFechaBoletin(),
-							normativa.getNombreBoletin(),
-							normativa.getNombreTipo(),
-							local ? "Local" : "Externa",
-							normativa.isVisible())
-				);
-				
+				//Sólo guardar registros del idioma por defecto (para evitar registros repetidos en
+				//búsquedas por texto multi-idioma
+				if ( idiomaPorDefecto.equals(normativa.getIdioma() ) ) {					
+					llistaNormativesDTO.add( new NormativaDTO(
+								normativa.getId(), 
+								normativa.getNumero(),
+								obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
+								normativa.getFecha(),
+								normativa.getFechaBoletin(),
+								normativa.getNombreBoletin(),
+								normativa.getNombreTipo(),
+								local ? "Local" : "Externa",
+								normativa.isVisible())
+					);
+					
+				} else {
+					resultadosDescartados++;
+				}									
 			}
 			
 			//Ordenar lista si se combinan locales y externas
@@ -310,7 +320,7 @@ public class NormativaBackController extends PantallaBaseController {
             }
 		}
 		
-		resultats.put("total",   resultadoBusquedaLocal.getTotalResultados() + resultadoBusquedaExterna.getTotalResultados() );
+		resultats.put("total",   resultadoBusquedaLocal.getTotalResultados() + resultadoBusquedaExterna.getTotalResultados() - resultadosDescartados);
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;

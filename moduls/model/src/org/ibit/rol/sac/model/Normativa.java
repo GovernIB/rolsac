@@ -28,7 +28,8 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 	private String traduccionTitulo;
 	private String nombreBoletin;
 	private String nombreTipo;    
-
+	private String idioma;
+	
     public String getTraduccionTitulo() {
 		return traduccionTitulo;
 	}
@@ -49,6 +50,14 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 		return nombreTipo;
 	}
 
+	public String getIdioma() {
+		return idioma;
+	}
+		
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+	
 	public void setNombreTipo(String nombreTipo) {
 		this.nombreTipo = nombreTipo;
 	}

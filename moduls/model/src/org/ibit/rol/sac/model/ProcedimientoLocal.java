@@ -50,11 +50,12 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     //Campos especiales para optimizar la búsqueda
     private String nombreProcedimiento;
     private String nombreFamilia;
+    private String idioma;
     
     //Constructor para búsqueda optimizada
 	public ProcedimientoLocal(Long id, String nombreProcedimiento,
 			Integer validacion, Date fechaActualizacion, Date fechaCaducidad,
-			Date fechaPublicacion, String nombreFamilia, UnidadAdministrativa ua) {
+			Date fechaPublicacion, String nombreFamilia, String idioma, UnidadAdministrativa ua) {
 		
     	super();
     	
@@ -66,6 +67,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     	this.fechaPublicacion = fechaPublicacion;
     	this.nombreFamilia = nombreFamilia != null ? nombreFamilia : "";
     	this.unidadAdministrativa = ua;
+    	this.idioma = idioma;
     }    
     //---------------------------------------------
 
@@ -85,6 +87,10 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
     
     public String getNombreProcedimiento() {
     	return this.nombreProcedimiento;
+    }
+    
+    public String getIdioma() {
+    	return this.idioma;
     }
     //-------------------------------------------
     

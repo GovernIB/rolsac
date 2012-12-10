@@ -315,7 +315,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             
             Query query;
             
-            String whereTraduccionTipo = traduccion.get("idioma") != null ? " and index(traTipo) = '" + traduccion.get("idioma") + "' " : ""; 
+            String whereTraduccionTipo = traduccion.get("idioma") != null ? " and index(traTipo) = '" + traduccion.get("idioma") + "' " : " and index(traTipo) = '"  + idioma_per_defecte + "'"; 
             
             if ("local".equals(tipo)) {
             
@@ -326,14 +326,14 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             	
                 query = session.createQuery("select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
 									                		"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, trad.titulo, boletin.nombre, " +
-									                		"normativa.unidadAdministrativa) " +
+									                		"index(trad), normativa.unidadAdministrativa) " +
 								                		"from NormativaLocal as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
 								                		"normativa.boletin as boletin where "+ sQuery + uaQuery + whereTraduccionTipo + orderBy);
                
             } else { // "externa".equals(tipo))
             	query = session.createQuery("select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
             												"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, " +
-            												"trad.titulo, boletin.nombre ) " +
+            												"trad.titulo, boletin.nombre, index(trad) ) " +
             											"from NormativaExterna as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
             												"normativa.boletin as boletin where " + sQuery + whereTraduccionTipo + orderBy);            	
             }

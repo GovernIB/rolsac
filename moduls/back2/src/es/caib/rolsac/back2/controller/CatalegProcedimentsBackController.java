@@ -34,14 +34,13 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
+import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionFamilia;
+import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionNormativa;
 import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
-import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
-import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
 import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -162,6 +161,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
 		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));		
+		
+		int resultadosDescartados = 0;
 		
 		Long materia = null;
 		String materiaString = request.getParameter("materia");
@@ -338,8 +339,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tradMap.put("idioma", lang);
 		}
 
-		int numTotalProcediments = 0;
-		
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");		
 		String pagRes = request.getParameter("pagRes");
@@ -354,16 +353,20 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 			
 			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
+			String idiomaPorDefecto = request.getLocale().getLanguage();
 			
 			for ( ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados() ) ) {
 				
-				ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
-						pl.getId(), pl.getNombreProcedimiento(),
-						pl.isVisible(), DateUtils.formatDate(pl.getFechaActualizacion()),
-						pl.getNombreFamilia());				
-				
-				llistaProcedimientoLocalDTO.add( procLocalDTO );
-				
+				if ( idiomaPorDefecto.equals(pl.getIdioma()) ) {
+					ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
+							pl.getId(), pl.getNombreProcedimiento(),
+							pl.isVisible(), DateUtils.formatDate(pl.getFechaActualizacion()),
+							pl.getNombreFamilia());				
+					
+					llistaProcedimientoLocalDTO.add( procLocalDTO );
+				} else {
+					resultadosDescartados++;
+				}
 			}
 			
 		} catch (DelegateException dEx) {
@@ -378,7 +381,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
  		
 		//Total de registros
-		resultats.put("total", resultadoBusqueda.getTotalResultados());
+		resultats.put("total", resultadoBusqueda.getTotalResultados() - resultadosDescartados);
 		resultats.put("nodes", llistaProcedimientoLocalDTO);
 		
 		return resultats;
@@ -1140,6 +1143,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);		
 		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
 			//Obtener par�metros de b�squeda
@@ -1170,16 +1174,17 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (pagPag == null) pagPag = String.valueOf(0); 
 			if (pagRes == null) pagRes = String.valueOf(10);                						
 			
+			resultadoBusqueda = new ResultadoBusqueda();
+			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			llistaNormatives = castList(Normativa.class, normativaDelegate
-					.buscarNormativas(paramMap, paramTrad, "local", null,
-							false, false, campoOrdenacion, orden, pagPag,
-							pagRes).getListaResultados());						
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap,
+					paramTrad, "local", null, false, false, campoOrdenacion,
+					orden, pagPag, pagRes);		
 			
-			for (Normativa normativa : llistaNormatives) {
+			for ( Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
 				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(normativa
 						.getId(), HtmlUtils.obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()), DateUtils
 						.formatDate(normativa.getFecha()), DateUtils
@@ -1195,7 +1200,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		}
 		
-		resultats.put("total", llistaNormativesDTO.size());
+		resultats.put("total", resultadoBusqueda.getTotalResultados() );
 		resultats.put("nodes", llistaNormativesDTO);
 		
 		return resultats;
