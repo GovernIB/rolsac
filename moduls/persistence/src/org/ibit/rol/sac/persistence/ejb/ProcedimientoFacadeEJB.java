@@ -63,6 +63,7 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
+import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.Traduccio;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -845,31 +846,66 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 				}
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
 			}
-			  
+
 			Long idUA = (ua != null) ? ua.getId() : null;			
 			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
-			
+
             if ( !StringUtils.isEmpty(uaQuery) )            	
             	uaQuery = " and procedimiento.unidadAdministrativa.id in (" + uaQuery + ")";
-            
+
 			String from = "from ProcedimientoLocal as procedimiento, ";
 			String where = "";
-			
+
 			if ( materia != null ) {
 				where += " and procedimiento.id in ( select procsLocales.id " +
 																"from Materia as mat, mat.procedimientosLocales as procsLocales " +
 																"where mat.id = " + materia + ")";
-			} 
-			
+			}
+
 			if ( fetVital != null ) {
 				from += "procedimiento.hechosVitalesProcedimientos as hechosVit, "; 
 				where += " and hechosVit.hechoVital.id = " + fetVital;				
 			}
-			
+
 			if ( publicObjectiu != null ) {
 				from += "procedimiento.publicosObjetivo as pubsObj, ";
 				where += " and pubsObj.id = " + publicObjectiu;				
 			}
+
+			if ( userIsOper() ) {
+				//Filtrar por las unidades a que el usuario tiene acceso:
+
+				//tieneAccesoValidable
+				if (!userIsSuper()) {
+					where += " and prod.validacion = " + Validacion.INTERNA;
+				}
+
+				// tieneAcceso
+				if (!userIsSystem()) {
+
+		            if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
+						uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
+			            if ( !StringUtils.isEmpty(uaQuery) ) {        	
+			            	uaQuery = " and procedimiento.unidadAdministrativa.id in (" + uaQuery + ")";
+			            } else {
+			            	//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y 
+			            	//no es system. Por lo que en realidad no hace falta ejecutar nada, sino más bien devolver
+			            	//un resultado vacío
+			            	
+			            	//uaQuery = " and procedimiento.unidadAdministrativa.id in (-1)";
+			    			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
+			    			resultadoBusqueda.setTotalResultados(0);
+			    			resultadoBusqueda.setListaResultados(new ArrayList<ProcedimientoLocal>());
+			    			return resultadoBusqueda;
+			            	
+			            }
+						
+					}
+				}
+
+			}
+			
+			
 			
 			where += " and index(tradFam) = 'ca' ";
 			String select = "select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, " +
@@ -892,46 +928,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
 
-			if ( !userIsOper() ) {
-				
-				resultadoBusqueda.setTotalResultados(query.list().size());
-				
-				if ( resultadosMax != RESULTATS_CERCA_TOTS) {
-					query.setFirstResult(primerResultado);
-					query.setMaxResults(resultadosMax);
-				}				
-				
-				resultadoBusqueda.setListaResultados(query.list());				
-				
-			} else {
-								
-				List<ProcedimientoLocal> procedimientos = query.list();
-				
-				List procedimientosAcceso = new ArrayList();
-				Usuario usuario = getUsuario(session);
-				
-                // Procesar todos los procedimientos para saber el total y 
-                // aprovechar el bucle para ir guardando el número 
-                // de fichas solicitadas según los parámetros de paginación.                
-                int contadorTotales = 0;
-                int procedimientosInsertados = 0;
-                int iteraciones = 0;
-                
-                for ( ProcedimientoLocal procedimiento : procedimientos ) {
-                	if ( tieneAcceso(usuario, procedimiento) ) {
-                		if ( procedimientosInsertados != resultadosMax && iteraciones >= primerResultado ) { 
-                			procedimientosAcceso.add(procedimiento);
-                			procedimientosInsertados++;
-                		}                	
-                		contadorTotales++;                		
-                	}  
-                	iteraciones++;
-                }
-                
-                resultadoBusqueda.setTotalResultados( contadorTotales );
-                resultadoBusqueda.setListaResultados(procedimientosAcceso);
-                
-			}
+			resultadoBusqueda.setTotalResultados(query.list().size());
+			
+			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}				
+			
+			resultadoBusqueda.setListaResultados(query.list());				
 			
 			return resultadoBusqueda;
 			
