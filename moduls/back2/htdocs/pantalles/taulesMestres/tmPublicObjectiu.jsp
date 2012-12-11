@@ -9,7 +9,7 @@
     var pagDetall = '<c:url value="/publicObjectiu/pagDetall.do" />';
     var pagGuardar = '<c:url value="/publicObjectiu/guardar.do" />';
     var pagEsborrar = '<c:url value="/publicObjectiu/esborrarPublicObjectiu.do" />';
-    var pagPujar  = '<c:url value="/publicObjectiu/pujarPublicObjectiu.do" />';
+    var pagReordenar = '<c:url value="/publicObjectiu/reordenarPublicObjectiu.do" />';
 
     //texts
     var txt_per = "<spring:message code='txt.per'/>";

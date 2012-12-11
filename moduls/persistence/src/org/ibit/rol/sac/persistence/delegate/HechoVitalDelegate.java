@@ -22,11 +22,13 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public class HechoVitalDelegate implements StatelessDelegate {
 
+	private static final long serialVersionUID = 3704892105290675900L;
+	
     /* ========================================================= */
     /* ======================== M�TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long grabarHechoVital(HechoVital hechov) throws DelegateException {
+	public Long grabarHechoVital(HechoVital hechov) throws DelegateException {
         try {
             return getFacade().grabarHechoVital(hechov);
         } catch (RemoteException e) {
@@ -50,7 +52,7 @@ public class HechoVitalDelegate implements StatelessDelegate {
     	}
     }
     
-    public List listarHechosVitales() throws DelegateException {
+    public List<HechoVital> listarHechosVitales() throws DelegateException {
         try {
             return getFacade().listarHechosVitales();
         } catch (RemoteException e) {
@@ -58,7 +60,7 @@ public class HechoVitalDelegate implements StatelessDelegate {
         }
     }
 
-    public List listarHechosVitalesProcedimientos() throws DelegateException {
+    public List<HechoVital> listarHechosVitalesProcedimientos() throws DelegateException {
         try {
             return getFacade().listarHechosVitalesProcedimientos();
         } catch (RemoteException e) {
@@ -180,6 +182,15 @@ public class HechoVitalDelegate implements StatelessDelegate {
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
+    }
+    
+    
+    public void reordenar(Long id, Integer ordenNuevo, Integer ordenAnterior ) throws DelegateException {
+    	try {
+    		getFacade().reordenar(id, ordenNuevo, ordenAnterior);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
     }
     
     /* ========================================================= */

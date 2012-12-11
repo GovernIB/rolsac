@@ -2889,7 +2889,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				for (Long uaActual : uas ) {
 					uasIds.add( uaActual );
-					List<Long> idsDescendientes = uaDelegate.cargarArbolUnidadId( uaActual );
+					List<Long> idsDescendientes = castList(Long.class, uaDelegate.cargarArbolUnidadId( uaActual ) ) ;
 					uasIds.addAll( idsDescendientes );
 				}
 				

@@ -1,20 +1,32 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
-import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.Order;
-import org.ibit.rol.sac.model.*;
-
-import es.caib.rolsac.utils.ResultadoBusqueda;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
+
+import org.ibit.rol.sac.model.AgrupacionHechoVital;
+import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.HechoVital;
+import org.ibit.rol.sac.model.HechoVitalAgrupacionHV;
+import org.ibit.rol.sac.model.HechoVitalProcedimiento;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.TraduccionHechoVital;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**
  * SessionBean para mantener y consultar Hechos Vitales.
@@ -30,7 +42,9 @@ import java.util.Set;
  */
 public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 4424545544639940449L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -48,7 +62,8 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         try {
             if (hechov.getId() == null) {
                 Criteria criteria = session.createCriteria(HechoVital.class);
-                List result = criteria.list();
+                List<HechoVital> result = castList(HechoVital.class, criteria.list());
+                
                 if (result.isEmpty()) {
                     hechov.setOrden(0);
                 } else {
@@ -115,14 +130,14 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarHechosVitales() {
+    public List<HechoVital> listarHechosVitales() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(HechoVital.class);
             criteri.addOrder(Order.asc("orden"));
             criteri.setCacheable(true);
 
-            return criteri.list();
+            return castList(HechoVital.class, criteri.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -130,7 +145,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         }
     }
 
-    private List listarTMHechosVitales(String idioma) {
+    private List<?> listarTMHechosVitales(String idioma) {
     	Session session = getSession();
     	
     	try {
@@ -153,14 +168,14 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarHechosVitalesProcedimientos() {
+    public List<HechoVital> listarHechosVitalesProcedimientos() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(HechoVital.class);
             criteri.addOrder(Order.asc("orden"));
             criteri.setCacheable(true);
 
-            List result = criteri.list();
+            List<HechoVital> result = castList(HechoVital.class, criteri.list());
             for (int i = 0; i < result.size(); i++) {
                 HechoVital hechoVital = (HechoVital) result.get(i);
                 Hibernate.initialize(hechoVital.getHechosVitalesProcedimientos());
@@ -209,7 +224,8 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
             Hibernate.initialize(hechov.getIcono());
             Hibernate.initialize(hechov.getIconoGrande());
             Hibernate.initialize(hechov.getHechosVitalesProcedimientos());
-            for (Iterator iterator = hechov.getLangs().iterator(); iterator.hasNext();) {
+            
+            for (Iterator<String> iterator = hechov.getLangs().iterator(); iterator.hasNext();) {
                 String lang = (String) iterator.next();
                 TraduccionHechoVital traduccion = (TraduccionHechoVital) hechov.getTraduccion(lang);
                 if(traduccion != null){
@@ -238,7 +254,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
             query.setParameter("nombre", nombre);
             query.setMaxResults(1);
             query.setCacheable(true);
-            List result = query.list();
+            List<HechoVital> result = castList(HechoVital.class, query.list() );
             if (result.isEmpty()) {
                 return null;
             }
@@ -319,28 +335,29 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             HechoVital hechov = (HechoVital) session.load(HechoVital.class, id);
-            for(Ficha ficha : (Set<Ficha>)hechov.getFichas()){
+            for (Ficha ficha : castSet(Ficha.class, hechov.getFichas())) {
             	ficha.removeHechovital(hechov);
             }
+           
+            List<HechoVitalProcedimiento> hechosvp = castList(HechoVitalProcedimiento.class, hechov.getHechosVitalesProcedimientos());
             
-            List hechosvp = hechov.getHechosVitalesProcedimientos();
-            for (Iterator iter = hechosvp.iterator(); iter.hasNext();) {
+            for (Iterator<HechoVitalProcedimiento> iter = hechosvp.iterator(); iter.hasNext();) {
                 HechoVitalProcedimiento hechovp = (HechoVitalProcedimiento) iter.next();
                 ProcedimientoLocal proc = hechovp.getProcedimiento();
                 proc.removeHechoVitalProcedimiento(hechovp);
             }
             
             Set<HechoVitalAgrupacionHV> hvagrList = hechov.getHechosVitalesAgrupacionHV();
-            for (Iterator iter = hvagrList.iterator(); iter.hasNext();) {
+            for (Iterator<HechoVitalAgrupacionHV> iter = hvagrList.iterator(); iter.hasNext();) {
                 HechoVitalAgrupacionHV hechova = (HechoVitalAgrupacionHV) iter.next();
                 AgrupacionHechoVital agru = hechova.getAgrupacion();
                 agru.removeHechoVitalAgrupacionHV(hechova);
             }
             
-            
             Criteria criteria = session.createCriteria(HechoVital.class);
             criteria.add(Expression.gt("orden", new Integer(hechov.getOrden())));
-            List hechos = criteria.list();
+            List<HechoVital> hechos = castList(HechoVital.class, criteria.list() );
+            
             for (int i = 0; i < hechos.size(); i++) {
                 HechoVital hec = (HechoVital) hechos.get(i);
                 hec.setOrden(i);
@@ -483,7 +500,6 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	@SuppressWarnings("unchecked")
     public Set<HechoVitalAgrupacionHV> obtenerGruposHechoVital(Long id_hechoVital) {
         Session session = getSession();
         try {
@@ -506,7 +522,6 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-	@SuppressWarnings("unchecked")
 	public List<HechoVital> buscar(final String busqueda, final String idioma){
 		List<HechoVital> resultado;
 		if(busqueda!=null && !"".equals(busqueda.trim())){
@@ -515,7 +530,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 	        	Query query = session.createQuery("from HechoVital as hev, hev.traducciones as trad where index(trad) = :idioma and upper(trad.nombre) like :busqueda");
 	        	query.setString("idioma", idioma);
 	        	query.setString("busqueda", "%"+busqueda.trim().toUpperCase()+"%");
-	        	resultado = (List<HechoVital>)query.list();
+	        	resultado = castList(HechoVital.class, query.list());
 	        } catch (HibernateException he) {
 	            throw new EJBException(he);
 	        } finally {
@@ -527,4 +542,59 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
 		
 		return resultado;
 	}
+
+    /**
+     * Asigna a un hecho vital un nuevo orden y reordena los elementos afectados.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */	
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior ) {
+        Session session = getSession();
+        
+        try {
+        	
+        	Criteria criteria = session.createCriteria(HechoVital.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	List<HechoVital> listaHechosVitales = castList(HechoVital.class, criteria.list());
+        	
+        	// Modificar sólo los elementos entre la posición del elemento que cambia 
+        	// de orden y su nueva posición 
+        	int ordenMayor = ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior;
+        	int ordenMenor = ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo;
+        	
+        	// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
+        	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
+        	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
+        	
+        	// Usar un "for" en lugar de un "while" acotado porque los números de orden 
+        	// podrían no ser consecutivos o incluso estar duplicados.
+        	for (HechoVital hechoVital: listaHechosVitales ) {        		    
+        		
+        		int orden = hechoVital.getOrden();
+        		
+        		if (orden >= ordenMenor && orden <= ordenMayor) {
+        			
+        			if ( id.equals(hechoVital.getId() ) ) {
+        				hechoVital.setOrden( ordenNuevo );
+        			} else {
+        				hechoVital.setOrden( orden + incremento );
+        			}
+        			
+        			session.saveOrUpdate(hechoVital);
+        		}
+        		
+        		// No es necesario procesar el resto de registros a partir del último cambio.
+        		if (orden > ordenMayor) break; 
+        	}
+        	
+        	session.flush();
+        	
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+        	close(session);
+        }    	
+    }    
+	
 }

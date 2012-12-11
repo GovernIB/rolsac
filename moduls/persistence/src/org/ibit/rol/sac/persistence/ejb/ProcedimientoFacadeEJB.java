@@ -896,16 +896,14 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			    			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
 			    			resultadoBusqueda.setTotalResultados(0);
 			    			resultadoBusqueda.setListaResultados(new ArrayList<ProcedimientoLocal>());
-			    			return resultadoBusqueda;
-			            	
+			    			
+			    			return resultadoBusqueda;			            	
 			            }
 						
 					}
 				}
 
 			}
-			
-			
 			
 			where += " and index(tradFam) = 'ca' ";
 			String select = "select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, " +

@@ -250,8 +250,35 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de pefil no n�meric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de pefil no numèric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
-	}           
+	}          
+    
+    @RequestMapping(value = "/reordenarPublicObjectiu.do", method = POST)
+    public @ResponseBody IdNomDTO reordenarPublicObjectiu(HttpServletRequest request) {
+    	IdNomDTO resultatStatus = new IdNomDTO();
+    	
+		try {
+			Long id = new Long(request.getParameter("id"));
+			Integer nuevoOrden = new Integer(request.getParameter("orden"));
+			Integer ordenOld = new Integer(request.getParameter("ordenAnterior"));
+			
+			PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+			publicObjectiuDelegate.reordenar(id, nuevoOrden, ordenOld);
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+		} catch (NumberFormatException nfEx) {
+			resultatStatus.setId(-3l);
+			log.error("Error: Id de public objectiu no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+		}
+		
+		return resultatStatus;
+    }
 }

@@ -27,6 +27,7 @@ import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
 import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -513,4 +514,31 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		}
 		return resultatStatus;
 	}
+    
+    @RequestMapping(value = "/reordenarSeccio.do", method = POST)
+    public @ResponseBody IdNomDTO reordenarSeccio(HttpServletRequest request) {
+    	IdNomDTO resultatStatus = new IdNomDTO();
+    	
+		try {
+			Long id = new Long(request.getParameter("id"));
+			Integer nuevoOrden = new Integer(request.getParameter("orden"));
+			Integer ordenOld = new Integer(request.getParameter("ordenAnterior"));
+			
+			SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+			seccionDelegate.reordenar(id, nuevoOrden, ordenOld);
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+		} catch (NumberFormatException nfEx) {
+			resultatStatus.setId(-3l);
+			log.error("Error: Id de secció no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+		}
+		
+		return resultatStatus;
+    }    
 }

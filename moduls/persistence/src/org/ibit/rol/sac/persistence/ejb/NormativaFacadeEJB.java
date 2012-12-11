@@ -31,7 +31,6 @@ import org.ibit.rol.sac.model.Afectacion;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Boletin;
-import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Historico;
@@ -42,7 +41,6 @@ import org.ibit.rol.sac.model.Normativa;
 import org.ibit.rol.sac.model.NormativaExterna;
 import org.ibit.rol.sac.model.NormativaLocal;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Tipo;
 import org.ibit.rol.sac.model.TipoAfectacion;
 import org.ibit.rol.sac.model.TraduccionHechoVital;
 import org.ibit.rol.sac.model.TraduccionMateria;
@@ -442,8 +440,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 
         return aux;
     }    
-    
-    
 
     /**
      * Busca todas las Normativas con un texto determinado.
@@ -1162,8 +1158,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
 	            close(session);
 	        }
 		
-			
 			return resultado;
 		}
-	    
 }

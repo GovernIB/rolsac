@@ -1,8 +1,12 @@
 package org.ibit.rol.sac.persistence.ejb;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -601,4 +605,43 @@ public abstract class HibernateEJB implements SessionBean {
     	return resultadoBusqueda;
     }
     
+    /**
+     * Método encargado de realizar el casting de listas no tipadas a listas
+     * tipadas
+     * 
+     * @param <T>
+     * @param clazz Clase del tipo de objeto contenido en la lista
+     * @param c Colección a ser tipada
+     * @return Lista tipada
+     */
+    protected <T>List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+        List<T> r = new ArrayList<T>();
+        if (c != null) {     
+            r = new ArrayList<T>(c.size());            
+            for (Object o : c) {
+            	r.add(clazz.cast(o));
+            }
+        }
+        return r;
+    }    	
+
+    /**
+     * Método encargado de realizar el casting de sets no tipados a sets
+     * tipados
+     * 
+     * @param <T>
+     * @param clazz Clase del tipo de objeto contenido en la lista
+     * @param c Colección a ser tipada
+     * @return Set tipado
+     */    
+    protected <T>Set<T> castSet(Class<? extends T> clazz, Collection<?> c) {
+        Set<T> r = new HashSet<T>();
+        if (c != null) {     
+            r = new HashSet<T>(c.size());            
+            for (Object o : c) {
+            	r.add(clazz.cast(o));
+            }
+        }
+        return r;    	
+    }
 }

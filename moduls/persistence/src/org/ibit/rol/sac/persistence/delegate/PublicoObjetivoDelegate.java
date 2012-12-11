@@ -79,6 +79,15 @@ public class PublicoObjetivoDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
+    public void reordenar(Long id, Integer nuevoOrden, Integer ordenAnterior) throws DelegateException {
+    	try {
+    		getFacade().reordenar(id, nuevoOrden, ordenAnterior);
+    	} catch (RemoteException e ) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

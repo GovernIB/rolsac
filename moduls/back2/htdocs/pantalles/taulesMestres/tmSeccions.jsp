@@ -18,7 +18,7 @@
     var pagGuardar = '<c:url value="/seccions/guardar.do" />';
     var pagEsborrar = '<c:url value="/seccions/esborrarSeccio.do" />';
     var pagBreadcrumb = '<c:url value="/seccions/seccioBreadcrumb.do" />';
-    var pagPujar = '<c:url value="/seccions/pujarSeccio.do" />';
+    var pagReordenar = '<c:url value="/seccions/reordenarSeccio.do" />';
     var pagFitxa = '<c:url value="/fitxainf/pagDetall.do" />';
     var pagFitxaDetall = '<c:url value="/fitxainf/fitxainf.do" />';
     var pagUADetall = '<c:url value="/unitatadm/unitatadm.do" />';

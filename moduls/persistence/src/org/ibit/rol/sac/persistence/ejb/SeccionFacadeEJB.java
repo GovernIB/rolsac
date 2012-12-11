@@ -17,6 +17,7 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
@@ -232,7 +233,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-
+        
     /**
      * Obtiene los ids de FichaUA y Ficha dada la UA y la seccion.
      * 
@@ -550,6 +551,60 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
     }
 
+    /**
+     * Asigna a una sección un nuevo orden y reordena los elementos afectados.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */	
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior ) {
+        Session session = getSession();
+        
+        try {
+        	
+        	Criteria criteria = session.createCriteria(Seccion.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	List<Seccion> listaSecciones = castList(Seccion.class, criteria.list());
+        	
+        	// Modificar sólo los elementos entre la posición del elemento que cambia 
+        	// de orden y su nueva posición 
+        	int ordenMayor = ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior;
+        	int ordenMenor = ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo;
+        	
+        	// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
+        	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
+        	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
+        	
+        	// Usar un "for" en lugar de un "while" acotado porque los números de orden 
+        	// podrían no ser consecutivos o incluso estar duplicados.
+        	for (Seccion seccion: listaSecciones ) {        		    
+        		
+        		int orden = seccion.getOrden();
+        		
+        		if (orden >= ordenMenor && orden <= ordenMayor) {
+        			
+        			if ( id.equals(seccion.getId() ) ) {
+        				seccion.setOrden( ordenNuevo );
+        			} else {
+        				seccion.setOrden( orden + incremento );
+        			}
+        			
+        			session.saveOrUpdate(seccion);
+        		}
+        		
+        		// No es necesario procesar el resto de registros a partir del último cambio.
+        		if (orden > ordenMayor) break; 
+        	}
+        	
+        	session.flush();
+        	
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+        	close(session);
+        }    	
+    }    
+    
     private void actualizarListaRaiz(Session session) throws HibernateException {
         session.flush();
         Query query = session.getNamedQuery("secciones.root");
@@ -564,5 +619,4 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Query query = session.getNamedQuery("secciones.root.count");
         return ((Integer) query.list().get(0)).intValue();
     }
-
 }

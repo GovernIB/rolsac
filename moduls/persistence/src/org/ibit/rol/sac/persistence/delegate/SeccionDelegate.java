@@ -187,6 +187,14 @@ public class SeccionDelegate implements StatelessDelegate {
         }
     }
     
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior ) throws DelegateException {
+    	try {
+    		getFacade().reordenar(id, ordenNuevo, ordenAnterior);
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

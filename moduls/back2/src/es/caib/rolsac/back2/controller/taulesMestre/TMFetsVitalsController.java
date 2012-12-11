@@ -488,4 +488,33 @@ public class TMFetsVitalsController extends PantallaBaseController {
 		}
 		return resultatStatus;
 	}
+    
+    @RequestMapping(value = "/reordenarFetsVitals.do", method = POST)
+    public @ResponseBody IdNomDTO reordenarFetsVitals(HttpServletRequest request) {
+    	IdNomDTO resultatStatus = new IdNomDTO();
+    	
+		try {
+			
+			Long id = new Long(request.getParameter("id"));
+			Integer ordenNuevo = new Integer(request.getParameter("orden"));
+			Integer ordenAnterior = new Integer(request.getParameter("ordenAnterior"));
+			
+			HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+			hechoVitalDelegate.reordenar(id, ordenNuevo, ordenAnterior);
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+		} catch (NumberFormatException nfEx) {
+			resultatStatus.setId(-3l);
+			log.error("Error: Id de fet vital no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+		}
+		
+		return resultatStatus;
+    }    
+    
 }

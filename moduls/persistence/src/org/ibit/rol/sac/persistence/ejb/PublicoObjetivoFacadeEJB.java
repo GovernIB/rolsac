@@ -206,7 +206,6 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
-    @SuppressWarnings("unchecked")
 	public void subirOrden(Long id) {
         Session session = getSession();
         try {
@@ -216,7 +215,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             if (orden > 0) {
                 Criteria criteri = session.createCriteria(PublicoObjetivo.class);
                 criteri.addOrder(Order.asc("orden"));
-                List<PublicoObjetivo> result = criteri.list();
+                List<PublicoObjetivo> result = castList(PublicoObjetivo.class, criteri.list());
 
                 PublicoObjetivo publico2 = (PublicoObjetivo) result.get(orden - 1);
 
@@ -234,5 +233,59 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-   
+           
+    /**
+     * Asigna a un publico objetivo un nuevo orden y reordena los elementos afectados.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */	
+    public void reordenar(Long id, Integer ordenNuevo, Integer ordenAnterior) {
+    	    	
+        Session session = getSession();
+        
+        try {
+        	
+        	Criteria criteria = session.createCriteria(PublicoObjetivo.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	List<PublicoObjetivo> listaPublicosObjetivo = castList(PublicoObjetivo.class, criteria.list());
+        	
+        	// Modificar sólo los elementos entre la posición del elemento que cambia 
+        	// de orden y su nueva posición 
+        	int ordenMayor = ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior;
+        	int ordenMenor = ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo;
+        	
+        	// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
+        	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
+        	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
+        	
+        	// Usar un "for" en lugar de un "while" acotado porque los números de orden pueden
+        	// no ser consecutivos o incluso estar duplicados.
+        	for (PublicoObjetivo publicoObjetivo : listaPublicosObjetivo ) {        		    
+        		
+        		int orden = publicoObjetivo.getOrden();
+        		
+        		if (orden >= ordenMenor && orden <= ordenMayor) {
+        			
+        			if ( id.equals(publicoObjetivo.getId() ) ) {
+        				publicoObjetivo.setOrden( ordenNuevo );
+        			} else {
+        				publicoObjetivo.setOrden( orden + incremento );
+        			}
+        			
+        			session.saveOrUpdate(publicoObjetivo);
+        		}
+        		
+        		// No es necesario procesar el resto de registros a partir del último cambio.
+        		if (orden > ordenMayor) break; 
+        	}
+        	
+        	session.flush();
+        	
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+        	close(session);
+        }
+    }
 }

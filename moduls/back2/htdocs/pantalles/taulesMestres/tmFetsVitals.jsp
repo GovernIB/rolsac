@@ -15,7 +15,7 @@
     var pagDetall = '<c:url value="/fetsVitals/pagDetall.do" />';
     var pagGuardar = '<c:url value="/fetsVitals/guardar.do" />';
     var pagEsborrar = '<c:url value="/fetsVitals/esborrarFetsVitals.do" />';
-    var pagPujar  = '<c:url value="/fetsVitals/pujarFetsVitals.do" />';
+    var pagReordenar  = '<c:url value="/fetsVitals/reordenarFetsVitals.do" />';
     var pagDetallProcediment = '<c:url value="/catalegProcediments/catalegProcediments.do" />';
     var pagLlistatProcediments = '<c:url value="/catalegProcediments/llistat.do" />';
 

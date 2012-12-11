@@ -9,7 +9,7 @@
  * @param idBuscadorContenido = Id del div con el contenido del buscador.
  * @param idTabListado = Id del enlace de la pestana del listado. 
  * @param idTabBuscador = Id del enlace de la pestana del buscador.
- * @param idBtnNuevo = Id del <li> de la pestaÒa de crear "algo" nuevo.
+ * @param idBtnNuevo = Id del <li> de la pesta√±a de crear "algo" nuevo.
  * @param idBtnBuscadorForm = Id del boton de busqueda.
  * @param idBtnLimpiarForm = Id del boton de limpiar formulario.
  */
@@ -42,7 +42,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	var that = this;
 	this.cacheDatosListado = null;
 	
-	// Atributo que contiene el id del elemento que se est· visualizando en la ficha.
+	// Atributo que contiene el id del elemento que se est√° visualizando en la ficha.
 	this.itemID;
 	
 	var resultats_elm = jQuery(idResultados);
@@ -55,7 +55,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		this.cacheDatosListado = null;
 	}
 	
-	// Cambia de p·gina.
+	// Cambia de p√°gina.
 	this.cambiaPagina = function( pag ){
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -64,7 +64,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		
 	/**
 	 * Carga la ficha de un item del listado.
-	 * @param link Objeto <A> sobre el que se realizÛ la acciÛn.
+	 * @param link Objeto <A> sobre el que se realiz√≥ la acci√≥n.
 	 */
 	this.ficha = function( link ){
 		// Obtenemos el id del item a partir del id del enlace.
@@ -75,12 +75,12 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		this.itemID = itemID;
 	}
 	
-	// Limpia el formulario de b˙squeda.
+	// Limpia el formulario de b√∫squeda.
 	this.limpia = function(){
         jQuery(idBuscadorContenido + ' :input').each(limpiarCampo);
 	}
 	
-	// Cambia a la pestaÒa de listado.
+	// Cambia a la pesta√±a de listado.
 	this.tabListado = function() {
 		
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
@@ -99,7 +99,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		});
 	}
 	
-	// Cambia a la pestaÒa del buscador.
+	// Cambia a la pesta√±a del buscador.
 	this.tabBuscador = function(){
 		
 		jQuery(idOpciones + " .actiu").removeClass("actiu");
@@ -123,7 +123,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		Detall.nou();
 	}
 	
-	// Realizar una b˙squeda
+	// Realizar una b√∫squeda
 	this.busca = function(){		
 			
 		cercador_elm.find("input, select").attr("disabled", "disabled");
@@ -137,7 +137,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 			resultats_dades_elm.html(codi_cercant).fadeIn(300, function() {
 			
 				// events taula
-				//pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p·gina.
+				//pagPagina_cercador_elm.val(0); // Al pulsar el boton de consulta, los resultados se han de mostrar desde la primera p√°gina.
 				that.carregar({cercador: "si"});
 				
 			});
@@ -145,8 +145,8 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	}
 	
 	/**
-	 * MÈtodo llamado al cambiar de p·gina.
-	 * @param enlace_html N˙mero de la p·gina de destino.
+	 * M√©todo llamado al cambiar de p√°gina.
+	 * @param enlace_html N√∫mero de la p√°gina de destino.
 	 */
 	this.anar = function(enlace_html, carregarFunc){
 		
@@ -186,9 +186,9 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 		var selected;
 		html += '<select id="'+id+'" class="ordenacion">';
 		
-		for( var i=1; i<=numItems; i++ ){
+		for( var i=0; i<numItems; i++ ){
 			selected = ( orden == i );
-			html += '<option value="'+i+'"'+ (selected ? ' selected' : '') +'>'+i+'</option>';
+			html += '<option value="'+i+'"'+ (selected ? ' selected' : '') +'>'+ (i+1) +'</option>';
 		}
 		
 		html += '</select>';
@@ -220,14 +220,14 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
 	}
 
     /**
-     * MÈtodo de ordenaciÛn.
+     * M√©todo de ordenaci√≥n.
      */
     this.ordena = function(domObj,opciones){
         var $enlace = jQuery(domObj);
         var $header = $enlace.parent();
         var tipo = "asc";
         
-        // Obtenemos el tipo de ordenaciÛn a partir de la clase del enlace.
+        // Obtenemos el tipo de ordenaci√≥n a partir de la clase del enlace.
         if( $header.hasClass("DESC") ){            
             $header.removeClass("DESC").addClass("ASC");
             tipo = "ASC";
@@ -239,7 +239,7 @@ function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, 
             tipo = "ASC";
         }
         
-        // Actualizamos los campos de informaciÛn de orden.
+        // Actualizamos los campos de informaci√≥n de orden.
         ordreTipus_elm.val(tipo);
 		ordreCamp_elm.val($enlace.attr("class"));        
         
