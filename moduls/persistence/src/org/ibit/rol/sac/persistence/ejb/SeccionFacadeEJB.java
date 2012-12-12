@@ -16,10 +16,7 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
-import net.sf.hibernate.expression.EqExpression;
 import net.sf.hibernate.expression.Expression;
-import net.sf.hibernate.expression.NotNullExpression;
-import net.sf.hibernate.expression.NullExpression;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Ficha;
@@ -40,7 +37,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class SeccionFacadeEJB extends HibernateEJB {
 
-    private static String idioma_per_defecte = "ca";
+	private static final long serialVersionUID = 7533847125462776332L;
 
     /**
      * @ejb.create-method
@@ -163,7 +160,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Abre huecos en los ordenes de las fichas de una secci�n reordeno las fichas de 5 en 5 para dejar huecos para
+     * Abre huecos en los ordenes de las fichas de una sección reordeno las fichas de 5 en 5 para dejar huecos para
      * moverlas
      * 
      * @ejb.interface-method
@@ -213,11 +210,11 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             int orden = sec1.getOrden();
             if (orden > 0) {
 
-                List hermanos;
+                List<Seccion> hermanos;
                 if (sec1.getPadre() != null) {
-                    hermanos = sec1.getPadre().getHijos();
+                    hermanos = castList(Seccion.class, sec1.getPadre().getHijos());
                 } else {
-                    hermanos = session.getNamedQuery("secciones.root").list();
+                    hermanos = castList(Seccion.class, session.getNamedQuery("secciones.root").list());
                 }
 
                 Seccion sec2 = (Seccion) hermanos.get(orden - 1);
@@ -251,7 +248,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             Query query = session.createQuery(select);
             query.setLong("idSeccion", idSeccion);
             query.setLong("idUA", idUA);
-            List<FichaUAFichaIds> ids = (List<FichaUAFichaIds>) query.list();
+            List<FichaUAFichaIds> ids = castList(FichaUAFichaIds.class, query.list() );
             return ids;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -293,7 +290,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         try {
             Criteria criteri = session.createCriteria(Seccion.class);
             criteri.add(Expression.eq("codigoEstandard", codigo));
-            List result = criteri.list();
+            List<Seccion> result = castList(Seccion.class, criteri.list());
+            
             if (result.isEmpty()) {
                 return null;
             }
@@ -318,7 +316,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             query.setParameter("nombre", nombre);
             query.setMaxResults(1);
             query.setCacheable(true);
-            List result = query.list();
+            List<Seccion> result = castList(Seccion.class, query.list());
             if (result.isEmpty()) {
                 return null;
             }
@@ -348,12 +346,12 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarSeccionesRaiz() {
+    public List<Seccion> listarSeccionesRaiz() {
         Session session = getSession();
         try {
             Query query = session.getNamedQuery("secciones.root");
             query.setCacheable(true);
-            return query.list();
+            return castList(Seccion.class, query.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -364,7 +362,9 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     /**
      * Lista de secciones raíz (menú Administración) 
      */
-    private List listarTMSeccionesRaiz(String idioma) {
+    private List<?> listarTMSeccionesRaiz(String idioma) {
+    	
+    	corregirOrdenacion();
     	Session session = getSession();
     	
     	try {
@@ -388,11 +388,11 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarSecciones() {
+    public List<Seccion> listarSecciones() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(Seccion.class);
-            return criteri.list();
+            return castList(Seccion.class, criteri.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -406,13 +406,14 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarSeccionesRaizPerfil() {
+    public List<Seccion> listarSeccionesRaizPerfil() {
         Session session = getSession();
         try {
             Query query = session.getNamedQuery("secciones.root");
             query.setCacheable(true);
-            List result = query.list();
-            List secciones = new ArrayList();
+            List<Seccion> result = castList(Seccion.class, query.list());
+            List<Seccion> secciones = new ArrayList<Seccion>();
+            
             for (int i = 0; i < result.size(); i++) {
                 Seccion seccion = (Seccion) result.get(i);
                 if (userIs(seccion.getPerfil())) {
@@ -433,10 +434,10 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarAntecesoresSeccion(Long id) {
+    public List<Seccion> listarAntecesoresSeccion(Long id) {
         Session session = getSession();
         try {
-            List result = new ArrayList();
+            List<Seccion> result = new ArrayList<Seccion>();
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
 
             result.add(seccion);
@@ -459,13 +460,13 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarHijosSeccion(Long id) {
+    public List<Seccion> listarHijosSeccion(Long id) {
         Session session = getSession();
         try {
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
             Hibernate.initialize(seccion.getHijos());
 
-            return seccion.getHijos();
+            return castList(Seccion.class, seccion.getHijos());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -483,8 +484,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Session session = getSession();
         try {
             Seccion seccion = (Seccion) session.load(Seccion.class, id);
-            Set fichasUA = seccion.getFichasUA();
-            for (Iterator iter = fichasUA.iterator(); iter.hasNext();) {
+            Set<FichaUA> fichasUA = castSet(FichaUA.class, seccion.getFichasUA());
+            for (Iterator<FichaUA> iter = fichasUA.iterator(); iter.hasNext();) {
                 FichaUA ficha = (FichaUA) iter.next();
                 UnidadAdministrativa ua = ficha.getUnidadAdministrativa();
                 Ficha fic = ficha.getFicha();
@@ -519,12 +520,12 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarSeccionesPadreUA(Long id_unidad) {
+    public List<Seccion> listarSeccionesPadreUA(Long id_unidad) {
         Session session = getSession();
         try {
-            List secciones = session
+            List<Seccion> secciones = castList(Seccion.class, session
                     .find("select distinct seccion from Seccion as seccion, seccion.fichasUA as fichas where fichas.unidadAdministrativa.id=? and seccion.padre is null order by seccion.orden",
-                            id_unidad, Hibernate.LONG);
+                            id_unidad, Hibernate.LONG));
             return secciones;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -569,7 +570,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         	criteria.add(  Expression.isNull("padre"));        	
         	criteria.addOrder(Order.asc("orden"));
         	List<Seccion> listaSecciones = castList(Seccion.class, criteria.list());
-        	
+
         	// Modificar sólo los elementos entre la posición del elemento que cambia 
         	// de orden y su nueva posición 
         	int ordenMayor = ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior;
@@ -579,8 +580,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
         	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
         	
-        	// Usar un "for" en lugar de un "while" acotado porque los números de orden 
-        	// podrían no ser consecutivos o incluso estar duplicados.
+        	// Usar un "for" en lugar de un "while" acotado porque en entornos de prueba, 
+        	// los números de orden podrían no ser consecutivos o incluso estar duplicados.
         	for (Seccion seccion: listaSecciones ) {        		    
         		
         		int orden = seccion.getOrden();
@@ -592,12 +593,9 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         			} else {
         				seccion.setOrden( orden + incremento );
         			}
-        			
-        			session.saveOrUpdate(seccion);
         		}
-        		
-        		// No es necesario procesar el resto de registros a partir del último cambio.
-        		if (orden > ordenMayor) break; 
+        		// Actualizar todo para asegurar que no hay duplicados ni huecos
+        		session.saveOrUpdate(seccion);        		
         	}
         	
         	session.flush();
@@ -612,7 +610,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     private void actualizarListaRaiz(Session session) throws HibernateException {
         session.flush();
         Query query = session.getNamedQuery("secciones.root");
-        List lista = query.list();
+        List<Seccion> lista = castList(Seccion.class, query.list());
         for (int i = 0; i < lista.size(); i++) {
             Seccion sec = (Seccion) lista.get(i);
             sec.setOrden(i);
@@ -623,4 +621,57 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         Query query = session.getNamedQuery("secciones.root.count");
         return ((Integer) query.list().get(0)).intValue();
     }
+    
+    /**
+     * Busca registros con el campo "orden" repetido y en caso afirmativo corrige
+     * toda la tabla ordenando los registros convenientemente. 
+     */
+    private void corregirOrdenacion() {
+    	
+    	if ( !isOrdenesRepetidos() ) return;
+
+    	Session session = getSession();
+    	
+    	try {
+        	Criteria criteria = session.createCriteria(Seccion.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	criteria.add(Expression.isNull("padre"));
+        	List<Seccion> listaSecciones = castList(Seccion.class, criteria.list());
+
+           	// Asegurar que la secuencia de orden incrementa de uno en uno        	
+        	for (int i = 0; i < listaSecciones.size(); i++) {
+        		Seccion seccion = listaSecciones.get(i);
+        		seccion.setOrden(i);
+        		
+        		session.saveOrUpdate(seccion);        		
+        	}
+        	
+        	session.flush();
+        	
+    	} catch (HibernateException he) {
+    		throw new EJBException(he); 
+    	} finally {
+    		close(session);
+    	}
+    }
+    
+    /**
+     * Comprueba si hay registros con el campo "orden" repetido
+     * 
+     * @return true Si existen registros con el campo orden repetido
+     */
+    private boolean isOrdenesRepetidos() {
+    	Session session = getSession();
+    	
+    	try {
+    		return !( session.createQuery("select seccion.orden from Seccion as seccion " +
+    												 "where seccion.padre is null " +
+    												 "group by seccion.orden " +
+    												 "having count(seccion.orden) > 1").list().isEmpty() );
+    	} catch (HibernateException e) {
+    		throw new EJBException(e);    		
+    	} finally {
+    		close(session);
+    	}    	
+    }    
 }

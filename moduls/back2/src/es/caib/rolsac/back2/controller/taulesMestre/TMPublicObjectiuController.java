@@ -3,7 +3,6 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,7 +128,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, PublicoObjetivo publicObjectiu) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-		List<String> langs = idiomaDelegate.listarLenguajes();
+		List<String> langs = castList(String.class, idiomaDelegate.listarLenguajes());
 		
 		for (String lang: langs) {
 		    if (null!=publicObjectiu.getTraduccion(lang)) {
@@ -168,7 +167,7 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 			// Idiomas
 			TraduccionPublicoObjetivo tpo;
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-			List<String> langs = idiomaDelegate.listarLenguajes();
+			List<String> langs = castList(String.class, idiomaDelegate.listarLenguajes());
 
 			for (String lang: langs) {
 				if (edicion) {

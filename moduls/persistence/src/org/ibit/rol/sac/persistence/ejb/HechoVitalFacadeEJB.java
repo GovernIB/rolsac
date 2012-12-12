@@ -146,6 +146,8 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
     }
 
     private List<?> listarTMHechosVitales(String idioma) {
+    	
+    	corregirOrdenacion();
     	Session session = getSession();
     	
     	try {
@@ -566,9 +568,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         	// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
         	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
         	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
-        	
-        	// Usar un "for" en lugar de un "while" acotado porque los números de orden 
-        	// podrían no ser consecutivos o incluso estar duplicados.
+        	        	
         	for (HechoVital hechoVital: listaHechosVitales ) {        		    
         		
         		int orden = hechoVital.getOrden();
@@ -579,13 +579,11 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         				hechoVital.setOrden( ordenNuevo );
         			} else {
         				hechoVital.setOrden( orden + incremento );
-        			}
-        			
-        			session.saveOrUpdate(hechoVital);
+        			}        			
         		}
         		
-        		// No es necesario procesar el resto de registros a partir del último cambio.
-        		if (orden > ordenMayor) break; 
+        		// Actualizar todo para asegurar que no hay duplicados ni huecos
+        		session.saveOrUpdate(hechoVital); 
         	}
         	
         	session.flush();
@@ -597,4 +595,55 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         }    	
     }    
 	
+    /**
+     * Busca registros con el campo "orden" repetido y en caso afirmativo corrige
+     * toda la tabla ordenando los registros convenientemente. 
+     */
+    private void corregirOrdenacion() {
+    	
+    	if ( !isOrdenesRepetidos() ) return;
+
+    	Session session = getSession();
+    	
+    	try {
+        	Criteria criteria = session.createCriteria(HechoVital.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	List<HechoVital> listaHechosVitales = castList(HechoVital.class, criteria.list());
+
+           	// Asegurar que la secuencia de orden incrementa de uno en uno        	
+        	for (int i = 0; i < listaHechosVitales.size(); i++) {
+        		HechoVital hechoVital = listaHechosVitales.get(i);
+        		hechoVital.setOrden(i);
+        		
+        		session.saveOrUpdate(hechoVital);        		
+        	}
+        	
+        	session.flush();
+        	
+    	} catch (HibernateException he) {
+    		throw new EJBException(he); 
+    	} finally {
+    		close(session);
+    	}
+    }
+    
+    /**
+     * Comprueba si hay registros con el campo "orden" repetido
+     * 
+     * @return true Si existen registros con el campo orden repetido
+     */
+    private boolean isOrdenesRepetidos() {
+    	Session session = getSession();
+    	
+    	try {
+    		return !( session.createQuery("select hechoVital.orden from HechoVital as hechoVital " +
+    												 "group by hechoVital.orden " +
+    												 "having count(hechoVital.orden) > 1").list().isEmpty() );
+    	} catch (HibernateException e) {
+    		throw new EJBException(e);    		
+    	} finally {
+    		close(session);
+    	}    	
+    }    
+    
 }

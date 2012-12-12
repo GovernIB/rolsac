@@ -33,7 +33,9 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
 
-    /**
+	private static final long serialVersionUID = 1069547135957871563L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -48,10 +50,12 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
      */
     public Long grabarPublicoObjetivo(PublicoObjetivo publico) {
         Session session = getSession();
+        
         try {
+        	
             if (publico.getId() == null) {
                 Criteria criteria = session.createCriteria(PublicoObjetivo.class);
-                List result = criteria.list();
+                List<PublicoObjetivo> result = castList(PublicoObjetivo.class, criteria.list());
                 if (result.isEmpty()) {
                     publico.setOrden(0);
                 } else {
@@ -60,7 +64,9 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             }
             session.saveOrUpdate(publico);
             session.flush();
+            
             return publico.getId();
+            
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -82,14 +88,15 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    @SuppressWarnings("unchecked")
 	public List<PublicoObjetivo> listarPublicoObjetivo() {
+    	
         Session session = getSession();
+                
         try {
         	
             Criteria criteri = session.createCriteria(PublicoObjetivo.class);
             criteri.addOrder(Order.asc("orden"));
-            List<PublicoObjetivo> publicos = criteri.list();
+            List<PublicoObjetivo> publicos = castList(PublicoObjetivo.class, criteri.list());
             
             for(PublicoObjetivo publico: publicos){
             	
@@ -114,9 +121,10 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
     /**
      * Listar público objetivo (menú administración) 
      */
-    private List listarTMPublicoObjetivo() {
-    	Session session = getSession();
+    private List<?> listarTMPublicoObjetivo() {
     	
+    	corregirOrdenacion();
+    	Session session = getSession();
     	try {
     		Query query = session.createQuery("select pubObj.id, pubObj.orden, pubObj.codigoEstandar  " +
     														"from PublicoObjetivo as pubObj " +
@@ -160,7 +168,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
             query.setParameter("titulo", titulo);
             query.setMaxResults(1);
             query.setCacheable(true);
-            List result = query.list();
+            List<PublicoObjetivo> result = castList(PublicoObjetivo.class, query.list());
             if (result.isEmpty()) {
                 return null;
             }
@@ -186,7 +194,8 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
 
             Criteria criteria = session.createCriteria(PublicoObjetivo.class);
             criteria.add(Expression.gt("orden", new Integer(publico.getOrden())));
-            List publicos = criteria.list();
+            List<PublicoObjetivo> publicos = castList(PublicoObjetivo.class, criteria.list());
+            
             for (int i = 0; i < publicos.size(); i++) {
                 PublicoObjetivo pub = (PublicoObjetivo) publicos.get(i);
                 pub.setOrden(i);
@@ -245,7 +254,7 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         Session session = getSession();
         
         try {
-        	
+
         	Criteria criteria = session.createCriteria(PublicoObjetivo.class);
         	criteria.addOrder(Order.asc("orden"));
         	List<PublicoObjetivo> listaPublicosObjetivo = castList(PublicoObjetivo.class, criteria.list());
@@ -259,8 +268,6 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
         	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
         	
-        	// Usar un "for" en lugar de un "while" acotado porque los números de orden pueden
-        	// no ser consecutivos o incluso estar duplicados.
         	for (PublicoObjetivo publicoObjetivo : listaPublicosObjetivo ) {        		    
         		
         		int orden = publicoObjetivo.getOrden();
@@ -272,12 +279,10 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         			} else {
         				publicoObjetivo.setOrden( orden + incremento );
         			}
-        			
-        			session.saveOrUpdate(publicoObjetivo);
         		}
-        		
-        		// No es necesario procesar el resto de registros a partir del último cambio.
-        		if (orden > ordenMayor) break; 
+
+        		// Actualizar todo para asegurar que no hay duplicados ni huecos        		
+        		session.saveOrUpdate(publicoObjetivo);
         	}
         	
         	session.flush();
@@ -287,5 +292,58 @@ public abstract class PublicoObjetivoFacadeEJB extends HibernateEJB {
         } finally {
         	close(session);
         }
+    }
+
+    /**
+     * Busca registros con el campo "orden" repetido y en caso afirmativo corrige
+     * toda la tabla ordenando los registros convenientemente. 
+     */
+    private void corregirOrdenacion() {
+    	
+    	if ( !isOrdenesRepetidos() ) return;
+
+    	Session session = getSession();
+    	
+    	try {
+        	Criteria criteria = session.createCriteria(PublicoObjetivo.class);
+        	criteria.addOrder(Order.asc("orden"));
+        	List<PublicoObjetivo> listaPublicosObjetivo = castList(PublicoObjetivo.class, criteria.list());
+
+           	// Asegurar que la secuencia de orden incrementa de uno en uno        	
+        	for (int i = 0; i < listaPublicosObjetivo.size(); i++) {
+        		PublicoObjetivo publicoObjetivo = listaPublicosObjetivo.get(i);
+        		publicoObjetivo.setOrden(i);
+        		
+        		session.saveOrUpdate(publicoObjetivo);        		
+        	}
+        	
+        	session.flush();
+        	
+    	} catch (HibernateException he) {
+    		throw new EJBException(he); 
+    	} finally {
+    		close(session);
+    	}
+    }
+    
+    /**
+     * Comprueba si hay registros con el campo "orden" repetido
+     * 
+     * @return true Si existen registros con el campo orden repetido
+     */
+    private boolean isOrdenesRepetidos() {
+    	Session session = getSession();
+    	
+    	try {
+    		
+    		return !( session.createQuery("select pubObj.orden from PublicoObjetivo as pubObj " +
+    												 "group by pubObj.orden " +
+    												 "having count(pubObj.orden) > 1").list().isEmpty() );
+    		
+    	} catch (HibernateException e) {
+    		throw new EJBException(e);    		
+    	} finally {
+    		close(session);
+    	}    	
     }
 }

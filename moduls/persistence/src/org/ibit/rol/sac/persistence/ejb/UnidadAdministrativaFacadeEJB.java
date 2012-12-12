@@ -70,7 +70,9 @@ import org.ibit.rol.sac.persistence.ws.Actualizador;
  */
 public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB implements UnidadAdministrativaDelegateI {
 
-    /** Nom pel govern de les illes a la taula d'unitats org�niques */
+	private static final long serialVersionUID = 6954366130820517158L;
+	
+	/** Nom pel govern de les illes a la taula d'unitats org�niques */
     public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";    
     private static String idioma_per_defecte ="ca";
     
@@ -180,7 +182,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 if (newIsNull || oldIsNull) {
                     session.flush();
                     Query query = session.getNamedQuery("unidades.root");
-                    List lista = query.list();
+                    List<UnidadAdministrativa> lista = castList(UnidadAdministrativa.class, query.list() );
                     for (int i = 0; i < lista.size(); i++) {
                         UnidadAdministrativa uni = (UnidadAdministrativa) lista.get(i);
                         uni.setOrden(i);
@@ -217,18 +219,19 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
+    
     /**
      * Lista los hijos de una unidad Administrativa.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarHijosUA(Long id) {
+    public List<UnidadAdministrativa> listarHijosUA(Long id) {
         Session session = getSession();
         try {
             UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
             Hibernate.initialize(ua.getHijos());
 
-            List result = new ArrayList();
+            List<UnidadAdministrativa> result = new ArrayList<UnidadAdministrativa>();
             for (int i = 0; i < ua.getHijos().size(); i++) {
                 UnidadAdministrativa uaHijo = (UnidadAdministrativa) ua.getHijos().get(i);
                 if (uaHijo != null && visible(uaHijo)) {
@@ -248,31 +251,37 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarUnidadesAdministrativasRaiz() {
+    public List<UnidadAdministrativa> listarUnidadesAdministrativasRaiz() {
         Session session = getSession();
         try {
             Usuario usu = getUsuario(session);
             if (userIsSystem()) {
-                return session.createCriteria(UnidadAdministrativa.class).add(Expression.isNull("padre")).list();
+                return castList(UnidadAdministrativa.class, session.createCriteria(UnidadAdministrativa.class).add(Expression.isNull("padre")).list());
             } else {
                 //List uas = new ArrayList(session.filter(usu.getUnidadesAdministrativas(), "where this.padre is null"));
                 // Les arrel no tenen perque tenir el pare null ja que un usuari pot tenir assignat un node qualsevol.
-                List uas = new ArrayList(usu.getUnidadesAdministrativas());
+                List<UnidadAdministrativa> uas = new ArrayList<UnidadAdministrativa>( castSet(UnidadAdministrativa.class, usu.getUnidadesAdministrativas()) );
 
                 // Eliminamos unidades duplicadas, por haber ya un antecesor.
-                Set duplicadas = new HashSet();
+                Set<UnidadAdministrativa> duplicadas = new HashSet<UnidadAdministrativa>();
+                
                 for (int i = 0; i < uas.size(); i++) {
+                	
                     UnidadAdministrativa unidad = (UnidadAdministrativa) uas.get(i);
                     UnidadAdministrativa padre = unidad.getPadre();
                     boolean duplicada = false;
+                    
                     while (!duplicada && padre != null) {
+                    	
                         if (uas.contains(padre)) {
                             duplicada = true;
                             duplicadas.add(unidad);
                         }
                         padre = padre.getPadre();
                     }
+                    
                 }
+                
                 uas.removeAll(duplicadas);
                 return uas;
             }
@@ -291,11 +300,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     public UnidadAdministrativa obtenerPrimeraUnidadAdministrativaRaiz() {
         Session session = getSession();
         try {
-            List result;
+            List<UnidadAdministrativa> result;
             Criteria criterio = session.createCriteria(UnidadAdministrativa.class);
             criterio.add(Expression.isNull("padre"));
             criterio.addOrder(Order.asc("orden"));
-            result = criterio.list();
+            result = castList(UnidadAdministrativa.class, criterio.list());
             return (UnidadAdministrativa) result.get(0);
 
         } catch (HibernateException he) {
@@ -310,7 +319,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarUnidadesAdministrativasRaiz(boolean publicadas) {
+    public List<UnidadAdministrativa> listarUnidadesAdministrativasRaiz(boolean publicadas) {
         Session session = getSession();
         try {
             Usuario usu = getUsuario(session);
@@ -324,7 +333,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 criteria.add(Expression.eq("usu.username", usu.getUsername()));
             }
 
-            return criteria.list();
+            return castList(UnidadAdministrativa.class, criteria.list());
 
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -338,9 +347,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarPadresUnidadAdministrativa(Long id) {
+    public List<UnidadAdministrativa> listarPadresUnidadAdministrativa(Long id) {
         Session session = getSession();
-        List padres = new Vector();
+        List<UnidadAdministrativa> padres = new Vector<UnidadAdministrativa>();
+        
         try {
             UnidadAdministrativa unidadAdministrativa = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
             padres.add(unidadAdministrativa);
@@ -365,10 +375,10 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List listarPadresUnidadAdministrativaAcceso(Long id) {
+    public List<UnidadAdministrativa> listarPadresUnidadAdministrativaAcceso(Long id) {
 
-        List padres = listarPadresUnidadAdministrativa(id);
-        List ret = new Vector();
+        List<UnidadAdministrativa> padres = listarPadresUnidadAdministrativa(id);
+        List<UnidadAdministrativa> ret = new Vector<UnidadAdministrativa>();
         	
     	for (int i=0;i<padres.size();i++) {
     		UnidadAdministrativa uni = (UnidadAdministrativa)padres.get(i);
@@ -403,22 +413,22 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List buscarUnidadesAdministrativas(Map parametros, Map traduccion) {
+    public List<UnidadAdministrativa> buscarUnidadesAdministrativas(Map parametros, Map traduccion) {
         Session session = getSession();
         try {
             Usuario usuario = getUsuario(session);
-            List params = new ArrayList();
+            List<String> params = new ArrayList<String>();
 
             String sQuery = populateQuery(parametros, traduccion, params);
             Query query = session.createQuery("from UnidadAdministrativa as unidad, unidad.traducciones as trad " + sQuery);
             for (int i = 0; i < params.size(); i++) {
-                String o = (String)params.get(i);
+                String o = params.get(i);
                 query.setString(i, o);
             }
-            List uas = query.list();
+            List<UnidadAdministrativa> uas = castList(UnidadAdministrativa.class, query.list());
 
-            List uasAux = new ArrayList();
-            for (Iterator iterUas = uas.iterator(); iterUas.hasNext();) {
+            List<UnidadAdministrativa> uasAux = new ArrayList<UnidadAdministrativa>();
+            for (Iterator<UnidadAdministrativa> iterUas = uas.iterator(); iterUas.hasNext();) {
                 UnidadAdministrativa ua = (UnidadAdministrativa) iterUas.next();
                 if (tieneAcceso(usuario, ua, false)) {
                     uasAux.add(ua);
@@ -712,7 +722,9 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             query.setParameter("nombre", nombre);
             query.setMaxResults(1);
             query.setCacheable(true);
-            List result = query.list();
+            
+            List<UnidadAdministrativa> result = castList(UnidadAdministrativa.class, query.list());
+            
             if (result.isEmpty()) {
                 return null;
             }
@@ -741,7 +753,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             query.setParameter("codEst", codEst);
             query.setMaxResults(1);
             query.setCacheable(true);
-            List result = query.list();
+            List<UnidadAdministrativa> result = castList(UnidadAdministrativa.class, query.list());
             if (result.isEmpty()) {
                 return null;
             }

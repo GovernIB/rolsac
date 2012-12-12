@@ -176,7 +176,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
 
 			//Procedimientos
 			List<ProcedimientoLocalDTO> procedimientos = new LinkedList<ProcedimientoLocalDTO>();
-	        List<HechoVitalProcedimiento> listaProcedimientos = fetsVitals.getHechosVitalesProcedimientos();
+	        List<HechoVitalProcedimiento> listaProcedimientos = castList(HechoVitalProcedimiento.class, fetsVitals.getHechosVitalesProcedimientos());
 	        Collections.sort(listaProcedimientos);
 	        for (HechoVitalProcedimiento hvProc : listaProcedimientos) {
 	        	if (hvProc != null) {
@@ -206,7 +206,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, HechoVital fetsVitals) throws DelegateException {
         IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-        List<String> langs = idiomaDelegate.listarLenguajes();
+        List<String> langs = castList(String.class, idiomaDelegate.listarLenguajes());
         
         for (String lang: langs) {
             if (null != fetsVitals.getTraduccion(lang)) {
