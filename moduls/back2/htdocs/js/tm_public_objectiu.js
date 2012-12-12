@@ -207,7 +207,7 @@ function CLlistat(){
 					var orden = jQuery(this).val();
 					
 					// Obtenemos el valor del orden anterior para saber en qué dirección reordenar los elementos
-					var ordenAnterior = jQuery("#publicObjectiu_" + itemID).prev().html();
+					var ordenAnterior = jQuery("#publicObjectiu_" + itemID).prev().html()-1;
 					
 					var dataVars = "id=" + itemID+"&orden="+orden + "&ordenAnterior=" + ordenAnterior;
 					
