@@ -16,7 +16,10 @@ import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.expression.EqExpression;
 import net.sf.hibernate.expression.Expression;
+import net.sf.hibernate.expression.NotNullExpression;
+import net.sf.hibernate.expression.NullExpression;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Ficha;
@@ -563,6 +566,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         try {
         	
         	Criteria criteria = session.createCriteria(Seccion.class);
+        	criteria.add(  Expression.isNull("padre"));        	
         	criteria.addOrder(Order.asc("orden"));
         	List<Seccion> listaSecciones = castList(Seccion.class, criteria.list());
         	
