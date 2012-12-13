@@ -265,20 +265,20 @@
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_nom<c:out value="${lang}"/>"><spring:message code='camp.nom'/></label>
+                                                <label for="item_nom_<c:out value="${lang}"/>"><spring:message code='camp.nom'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom<c:out value="${lang}"/>" name="item_nom<c:out value="${lang}"/>" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}"/>" name="item_nom_<c:out value="${lang}"/>" type="text" class="nou" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="fila">
                                         <div class="element t99p">
                                             <div class="etiqueta">
-                                                <label for="item_descripcio<c:out value="${lang}"/>"><spring:message code='camp.descripcio'/></label>
+                                                <label for="item_descripcio_<c:out value="${lang}"/>"><spring:message code='camp.descripcio'/></label>
                                             </div>
                                             <div class="control">
-                                                <textarea id="item_descripcio<c:out value="${lang}"/>" name="item_descripcio<c:out value="${lang}"/>" cols="50" rows="4" class="nou"></textarea>
+                                                <textarea id="item_descripcio_<c:out value="${lang}"/>" name="item_descripcio_<c:out value="${lang}"/>" cols="50" rows="4" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
