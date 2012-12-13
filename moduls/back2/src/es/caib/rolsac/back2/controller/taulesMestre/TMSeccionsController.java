@@ -178,6 +178,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
             Long idPadre = null;
             String nomPadre = "";
             TraduccionSeccion traS;
+            
             if (seccio.getPadre() != null) {
             	idPadre = seccio.getPadre().getId();
             	traS = (TraduccionSeccion) seccio.getPadre().getTraduccion(lang);
@@ -185,6 +186,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
             } else if (seccio.getPadre() == null) {
             	nomPadre = messageSource.getMessage("seccio.arrel", null, request.getLocale());
             }
+            
             resultats.put("item_codi_pare", idPadre);
             resultats.put("item_pare", nomPadre);
             resultats.put("item_codi_estandard", seccio.getCodigoEstandard());
@@ -324,9 +326,9 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -339,8 +341,8 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		
         try {
         	
-    		//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
         	Set<String> seccioForm = new HashSet<String>();
         	Set<String> fitxaForm = new HashSet<String>();
@@ -381,7 +383,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
         	}
         	seccion.setTraduccionMap(traduccions);
         	
-        	//Obtener los demás campos
+        	//Obtener los demï¿½s campos
         	Long idSeccioPare = null;
         	if (valoresForm.get("item_codi_pare") != null && !"".equals(valoresForm.get("item_codi_pare"))) {
         		idSeccioPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));
@@ -467,7 +469,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de secció no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de secciï¿½ no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
@@ -490,7 +492,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id de secció no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id de secciï¿½ no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
