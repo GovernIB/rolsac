@@ -20,7 +20,7 @@
 	   -->
 	   es.caib.rolsac.traspasboib.mode=eBoib
 	   <!-- url pel mode de connexió eboib -->
-	   es.caib.rolsac.traspasboib.url=https://sdesweblin1.caib.es/eboibfront/
+	   es.caib.rolsac.traspasboib.url=https://proves.caib.es/eboibfront/
 
 	   es.caib.rolsac.tramite.sistra=Y
 	   
@@ -28,9 +28,9 @@
 	   es.caib.rolsac.back2.urlSortir=http://intranet.caib.es
 	   
 	   <!-- urls per les previsualitzacions -->
-	   es.caib.rolsac.previsualitzacio.procediment.url=http://www.caib.es/govern/sac/visor_proc.do
-	   es.caib.rolsac.previsualitzacio.fitxa.url=http://www.caib.es/govern/sac/fitxa.do
-	   es.caib.rolsac.previsualitzacio.ua.url=http://www.caib.es/govern/organigrama/area.do
+	   es.caib.rolsac.previsualitzacio.procediment.url=http://sdesweblin1.caib.es/govern/sac/visor_proc.do
+	   es.caib.rolsac.previsualitzacio.fitxa.url=http://sdesweblin1.caib.es/govern/sac/fitxa.do
+	   es.caib.rolsac.previsualitzacio.ua.url=http://sdesweblin1.caib.es/govern/organigrama/area.do
 	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
