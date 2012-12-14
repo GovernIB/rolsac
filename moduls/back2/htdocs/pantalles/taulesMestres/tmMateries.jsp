@@ -504,7 +504,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.estadistiques'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">

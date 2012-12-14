@@ -262,7 +262,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>                    
+                        <h2><spring:message code='txt.opcions_cerca'/></h2>                    
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -311,7 +311,7 @@
                         </div>
                     </div>
                     <div class="busquedaAvanzada">
-                        <h2>CERCADOR AVANÇAT</h2>                        
+                        <h2><spring:message code='txt.cercador.avansat'/></h2>                        
                         <div class="fila">
                         <%--
                             <div class="element t25">
@@ -658,7 +658,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul amagat"><spring:message code='boto.mostra'/></a>
-                    <legend>INFORMADOR</legend>
+                    <legend><spring:message code='txt.informadors'/></legend>
                     <div class="modul_continguts">
                         <div class="fila">
                             <div class="element t50p">
@@ -689,7 +689,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.estadistiques'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -706,7 +706,7 @@
 	        <div id="modulAuditories" class="modul auditorias">                
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>AUDITORIES</legend>
+                    <legend><spring:message code='txt.auditories'/></legend>
                     <div class="modul_continguts mostrat">
                        <p class="executant"><spring:message code='txt.carregant'/></p>
                      <%--
@@ -747,7 +747,7 @@
             <!-- modul -->
             <div class="modul publicacio">
                 <fieldset>
-                    <legend>Publicació</legend>
+                    <legend><spring:message code='txt.publicacio'/></legend>
                     <div class="modul_continguts mostrat">
                         <!-- fila -->
                         <div class="fila">

@@ -536,7 +536,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTAD�STIQUES</legend> 
+                    <legend><spring:message code='txt.estadistiques'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -553,7 +553,7 @@
 		        <div id="modulAuditories" class="modul auditorias">                
                     <fieldset>
                         <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                        <legend>AUDITORIES</legend>
+                        <legend><spring:message code='txt.auditories'/></legend>
                         <div class="modul_continguts amagat">
                            <p class="executant"><spring:message code='txt.carregant'/></p>
                          <%--

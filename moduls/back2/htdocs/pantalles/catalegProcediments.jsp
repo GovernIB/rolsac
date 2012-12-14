@@ -434,7 +434,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>
+                        <h2><spring:message code='txt.opcions_cerca'/></h2>
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -483,7 +483,7 @@
                         </div>
                     </div>                    
                     <div class="busquedaAvanzada">
-                        <h2>CERCADOR AVANÇAT</h2>
+                        <h2><spring:message code='txt.cercador.avansat'/></h2>
                         <div class="fila">                                                                                    
                             <div class="element t25">
                                 <div class="etiqueta">
@@ -525,7 +525,7 @@
                             </div>
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_materia">Matèria</label>
+                                    <label for="cerca_materia"><spring:message code='camp.materia'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_materia" name="cerca_materia" class="t8">
@@ -538,7 +538,7 @@
                             </div>
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_fet_vital">Fet Vital</label>
+                                    <label for="cerca_fet_vital"><spring:message code='camp.fetVital'/></label>
                                 </div>
                                 <div class="control">
                                     <select id="cerca_fet_vital" name="cerca_fet_vital" class="t8">
@@ -584,8 +584,8 @@
                                 <div class="control">
                                     <select id="cerca_indicador" name="cerca_indicador" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0">No</option>
-                                        <option value="1">Sí</option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -596,8 +596,8 @@
                                 <div class="control">
                                     <select id="cerca_finestreta" name="cerca_finestreta" class="t8">
                                         <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                        <option value="0">No</option>
-                                        <option value="1">Sí</option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
                                     </select>
                                 </div>
                             </div>
@@ -1006,7 +1006,7 @@
             <div class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>INFORMADORS</legend>
+                    <legend><spring:message code='txt.informadors'/></legend>
                     <div class="modul_continguts mostrat">
                         <div class="fila">
                             <div class="element t99p">
@@ -1038,7 +1038,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.estadistiques'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -1055,7 +1055,7 @@
 	        <div id="modulAuditories" class="modul auditorias">                
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>AUDITORIES</legend>
+                    <legend><spring:message code='txt.auditories'/></legend>
                     <div class="modul_continguts mostrat">
                        <p class="executant"><spring:message code='txt.carregant'/></p>
                      <%--

@@ -803,7 +803,7 @@
             </li>
 	        <c:if test="${traspasboib == 'Y'}">
 	            <li class="opcio nuevo"><!--  qué es L C ... -->
-	                <a id="tabTraspasBoib" href="javascript:;">Traspàs del BOIB<!-- spring:message code='contenidos.normativas.traspaso.label'/ --></a>
+	                <a id="tabTraspasBoib" href="javascript:;"><spring:message code='camp.traspas_boib'/></a>
 	            </li>
 	        </c:if>
         </c:if>
@@ -821,7 +821,7 @@
             <div id="cercador">
                 <div id="cercador_contingut">
                     <div class="opcionesBusqueda">
-                        <h2>OPCIONS DE CERCA</h2>
+                        <h2><spring:message code='txt.opcions_cerca'/></h2>
                         <div class="fila">
                             <div class="element checkbox">                                
                                 <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
@@ -1041,7 +1041,7 @@
                         <div class="fila">
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="numeroboletinTB">N. Butlletí</label>
+                                    <label for="numeroboletinTB"><spring:message code='camp.numero_butlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="numeroboletinTB" name="numeroboletinTB" type="text" />
@@ -1050,7 +1050,7 @@
                             
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="numeroregistroTB">N. Registre</label>
+                                    <label for="numeroregistroTB"><spring:message code='camp.registre'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="numeroregistroTB" name="numeroregistroTB" type="text" maxlength="250" />
@@ -1059,7 +1059,7 @@
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="fechaTB">N. data</label>
+                                    <label for="fechaTB"><spring:message code='camp.data_butlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="fechaTB" name="fechaTB" type="text" class="data" />
@@ -1191,7 +1191,7 @@
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>DADES BUTLLETÍ</legend>
+                <legend><spring:message code='txt.dades_butlleti'/></legend>
                 <div class="modul_continguts mostrat">
                     <!-- fila -->
                     <div class="fila">
@@ -1207,13 +1207,13 @@
                             </div>       
                         </div>
                         <div class="element t25p">
-                            <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data'/></label></div>
+                            <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data_butlleti'/></label></div>
                             <div class="control">
                                 <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
                             </div>
                         </div>  
                         <div class="element t25p">
-                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.numero'/></label></div>
+                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.numero_butlleti'/></label></div>
                             <div class="control">
                                 <input id="item_numero" name="item_numero" type="text" class="nou" />
                             </div>
@@ -1323,7 +1323,7 @@
         <div class="modul">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>INFORMADOR</legend>
+                <legend><spring:message code='txt.informadors'/></legend>
                 <div class="modul_continguts mostrat">
                     <div class="fila">                        
                         <div class="element t99p multilang">
@@ -1368,7 +1368,7 @@
             <div id="modulEstadistiques" class="modul">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                    <legend>ESTADÍSTIQUES</legend> 
+                    <legend><spring:message code='txt.estadistiques'/></legend> 
                     <div class="modul_continguts mostrat">
                     <%-- 
                         <div class="fila">
@@ -1385,7 +1385,7 @@
         <div id="modulAuditories" class="modul auditorias">                
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>AUDITORIES</legend>
+                <legend><spring:message code='txt.auditories'/></legend>
                 <div class="modul_continguts mostrat">
                    <p class="executant"><spring:message code='txt.carregant'/></p>
                  <%--
@@ -1617,7 +1617,7 @@
         <div class="modul" id="modulRelacioOrganica">
             <fieldset>
                 <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
-                <legend>RELACIÓ ORGÀNICA</legend>
+                <legend><spring:message code='txt.relacioOrganica'/></legend>
                 <div class="modul_continguts mostrat">
                     
                     <!-- fila -->
