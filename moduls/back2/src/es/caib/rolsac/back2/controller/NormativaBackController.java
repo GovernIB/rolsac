@@ -288,11 +288,10 @@ public class NormativaBackController extends PantallaBaseController {
 		SearchNormativa bdcons = new EBoibSearchNormativa(request.getParameter("numeroboletin"), request.getParameter("numeroregistro"), request.getParameter("fecha"));
 		bdcons.makeSearch();
 		
-		/*
-		if ((bdcons.getNumeroNormativas() == -1) {
-			return mapping.findForward("successError");
+		if (bdcons.getNumeroNormativas() == -1) {
+			//error
+			resultats.put("errorMessage", bdcons.getMensajeavisobean().getCabecera() + ":" + bdcons.getMensajeavisobean().getSubcabecera());
 		}
-		*/
 		
 		if (bdcons.getNumeroNormativas() > 0) {
 			llistaNormativesDTO = pasarListaEboibADTO(bdcons.getListadonormativas(), idioma);
