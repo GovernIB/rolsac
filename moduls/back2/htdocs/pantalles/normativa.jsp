@@ -919,7 +919,7 @@
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_numero"><spring:message code='camp.numero'/></label>
+                                    <label for="cerca_numero"><spring:message code='camp.n_butlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="cerca_numero" name="cerca_numero" type="text" />
@@ -971,7 +971,7 @@
                         <div class="fila">
                             <div class="element t50">
                                 <div class="etiqueta">
-                                    <label for="cerca_registre"><spring:message code='camp.registre'/></label>
+                                    <label for="cerca_registre"><spring:message code='camp.n_registre'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="cerca_registre" name="cerca_registre" type="text" />
@@ -1057,7 +1057,7 @@
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="fechaTB"><spring:message code='camp.n_data'/></label>
+                                    <label for="fechaTB"><spring:message code='camp.dataButlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="fechaTB" name="fechaTB" type="text" class="data" />
@@ -1204,13 +1204,13 @@
                             </div>       
                         </div>
                         <div class="element t25p">
-                            <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.data'/></label></div>
+                            <div class="etiqueta"><label for="item_data_butlleti"><spring:message code='camp.dataButlleti'/></label></div>
                             <div class="control">
                                 <input id="item_data_butlleti" name="item_data_butlleti" type="text" class="nou" />
                             </div>
                         </div>  
                         <div class="element t25p">
-                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.numero'/></label></div>
+                            <div class="etiqueta"><label for="item_numero"><spring:message code='camp.n_butlleti'/></label></div>
                             <div class="control">
                                 <input id="item_numero" name="item_numero" type="text" class="nou" />
                             </div>
@@ -1221,7 +1221,7 @@
                     <!-- fila -->
                     <div class="fila">                        
                         <div class="element t50p">
-                            <div class="etiqueta"><label for="item_registre"><spring:message code='camp.registre'/></label></div>
+                            <div class="etiqueta"><label for="item_registre"><spring:message code='camp.n_registre'/></label></div>
                             <div class="control">
                                 <input id="item_registre" name="item_registre" type="text" class="nou" />
                             </div>
