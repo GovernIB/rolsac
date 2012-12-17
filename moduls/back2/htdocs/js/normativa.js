@@ -461,8 +461,8 @@ function CLlistat(){
 				}
 				
 			},
-			success: function(data) {				
-				Llistat.finCargaListadoTB(opcions,data);
+			success: function(data) {
+					Llistat.finCargaListadoTB(opcions,data);
 			}
 		});
 	
@@ -626,6 +626,13 @@ function CLlistat(){
 				
 			});
 		});
+		
+		if (data.errorMessage) {
+			// missatge
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.errorMessage + "</p>"});
+		}
+		
+		
 	}
 	
 	/**
