@@ -921,7 +921,7 @@
 
                             <div class="element t25">
                                 <div class="etiqueta">
-                                    <label for="cerca_numero"><spring:message code='camp.numero'/></label>
+                                    <label for="cerca_numero"><spring:message code='camp.numero_butlleti'/></label>
                                 </div>
                                 <div class="control">
                                     <input id="cerca_numero" name="cerca_numero" type="text" />
