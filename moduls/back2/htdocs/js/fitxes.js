@@ -96,6 +96,14 @@ function CLlistat(){
 			
 			txtT = (resultats_total > 1) ? txtLlistaItems : txtLlistaItem;
 			
+			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
+			if (resultats_total % pag_Res > 0){
+				ultimaPag++;
+			}
+			if (pag_Pag > ultimaPag) {
+				pag_Pag = ultimaPag;
+			}
+			
 			resultatInici = ((pag_Pag*pag_Res)+1);
 			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
 			
