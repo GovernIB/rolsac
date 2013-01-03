@@ -46,5 +46,6 @@ public class DocumentQueryServiceGateway {
 
 	public ArxiuDTO obtenirArxiu(long id) throws RemoteException {
 		return stub.obtenirArxiu(id);
-	}
+	}	
+	
 }

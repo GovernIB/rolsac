@@ -1,4 +1,4 @@
-// Módulo de unidades hijas.
+// Mï¿½dulo de unidades hijas.
 $(document).ready(function() {
 	jQuery(".submenuUA .detalle").click(function(){
 		jQuery("#escritorioUnidadesHijas").hide();
@@ -17,7 +17,7 @@ $(document).ready(function() {
 	multipagina = new Multipagina();
 });
 
-function CEscritorioUnidadesHijas(){		
+function CEscritorioUnidadesHijas() {		
 	this.extend = ListadoBase;
     this.extend("opcionesUnidadesHijas", "resultadosUnidadesHijas", "", "cercador_contingut_unitats_filles", "", "", "btnNuevaUAhija", "btnBuscarUnidadesHijasForm", "btnLimpiarUnidadesHijasForm");
     
@@ -34,7 +34,7 @@ function CEscritorioUnidadesHijas(){
 		this.carregar({});
 	}
 	
-	// Cambia de página.
+	// Cambia de pï¿½gina.
 	this.cambiaPagina = function( pag ){
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -137,7 +137,7 @@ function CEscritorioUnidadesHijas(){
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			// Actualizamos el navegador multipágina.
+			// Actualizamos el navegador multipï¿½gina.
 			multipagina.init({
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
@@ -289,7 +289,7 @@ function CEscritorioUnidadesHijas(){
 		}else{
 			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
 		}*/
-		// (MAQUETACIÓN) Llamamos al método para actualizar el listado directamente.
+		// (MAQUETACIï¿½N) Llamamos al mï¿½todo para actualizar el listado directamente.
 		var datos = {
 			total: 27,
 			nodes:[
@@ -326,7 +326,7 @@ function CEscritorioUnidadesHijas(){
 			
 	}
 	
-	// Método sobreescrito.
+	// Mï¿½todo sobreescrito.
 	this.nuevaFicha = function(){
 		alert("Implementar");
 	}

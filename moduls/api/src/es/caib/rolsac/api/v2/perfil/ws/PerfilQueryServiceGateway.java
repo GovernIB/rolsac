@@ -49,7 +49,7 @@ public class PerfilQueryServiceGateway {
 	}
 
 	public List<IconaFamiliaDTO> llistarIconesFamilia(long id,
-			IconaFamiliaCriteria iconaFamiliaCriteria) throws RemoteException {
+			IconaFamiliaCriteria iconaFamiliaCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<IconaFamiliaDTO> llistaIconesFamilia = null;
@@ -67,7 +67,7 @@ public class PerfilQueryServiceGateway {
 	}
 
 	public List<IconaMateriaDTO> llistarIconesMateria(long id,
-			IconaMateriaCriteria iconaMateriaCriteria) throws RemoteException {
+			IconaMateriaCriteria iconaMateriaCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<IconaMateriaDTO> llistaIconesMateria = null;

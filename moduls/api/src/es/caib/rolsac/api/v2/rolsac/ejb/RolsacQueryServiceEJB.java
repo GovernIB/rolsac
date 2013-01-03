@@ -15,11 +15,13 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.AgrupacionHechoVital;
 import org.ibit.rol.sac.model.AgrupacionMateria;
 import org.ibit.rol.sac.model.Boletin;
+import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.EspacioTerritorial;
+import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
@@ -50,6 +52,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -60,6 +64,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -137,6 +143,10 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
     private static final String HQL_PROCEDIMIENTO_ALIAS = "p";
     private static final String HQL_MATERIA_CLASS = "Materia";
     private static final String HQL_MATERIA_ALIAS = "m";
+    private static final String HQL_CATALOGO_DOCUMENTOS_CLASS = "CatalegDocuments";
+    private static final String HQL_CATALOGO_DOCUMENTOS_ALIAS = "cd";
+    private static final String HQL_EXCEPCION_DOCUMENTACION_CLASS = "ExcepcioDocumentacio";
+    private static final String HQL_EXCEPCION_DOCUMENTACION_ALIAS = "ex";
     private static final String HQL_TRAMIT_CLASS = "Tramite";
     private static final String HQL_TRAMIT_ALIAS = "t";
     private static final String HQL_UA_CLASS = "UnidadAdministrativa";
@@ -203,6 +213,221 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
+    
+    /**
+     * Obtiene excepción de documentación.
+     * @param excepcioDocumentacioCriteria
+     * @return ExcepcioDocumentacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) {
+    	
+        List<CriteriaObject> criteris;
+        ExcepcioDocumentacioDTO excepcioDocumentacioDTO = null;
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    ExcepcioDocumentacioCriteria.class,
+                    HQL_EXCEPCION_DOCUMENTACION_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, excepcioDocumentacioCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_EXCEPCION_DOCUMENTACION_CLASS, HQL_EXCEPCION_DOCUMENTACION_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_EXCEPCION_DOCUMENTACION_ALIAS, 
+                    entities, 
+                    excepcioDocumentacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            ExcepcioDocumentacio excepcioDocumentacio = (ExcepcioDocumentacio) query.uniqueResult();
+            if (excepcioDocumentacio != null) {
+                excepcioDocumentacioDTO = (ExcepcioDocumentacioDTO) BasicUtils.entityToDTO(ExcepcioDocumentacioDTO.class, excepcioDocumentacio, excepcioDocumentacioCriteria.getIdioma());
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+
+        return excepcioDocumentacioDTO;    	
+
+    }    
+    
+    /**
+     * Obtiene excepciones de documentación.
+     * @param excepcioDocumentacioCriteria
+     * @return List<ExcepcioDocumentacioDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) {
+        List<CriteriaObject> criteris;
+        List<ExcepcioDocumentacioDTO> excepcioDocumentacioDTOList = new ArrayList<ExcepcioDocumentacioDTO>();
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    ExcepcioDocumentacioCriteria.class,
+                    HQL_EXCEPCION_DOCUMENTACION_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, excepcioDocumentacioCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_EXCEPCION_DOCUMENTACION_CLASS, HQL_EXCEPCION_DOCUMENTACION_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_EXCEPCION_DOCUMENTACION_ALIAS, 
+                    entities, 
+                    excepcioDocumentacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<ExcepcioDocumentacio> excepcioDocumentacioResult = (List<ExcepcioDocumentacio>) query.list();
+            for (ExcepcioDocumentacio excepcioDocumentacio : excepcioDocumentacioResult) {
+                excepcioDocumentacioDTOList.add((ExcepcioDocumentacioDTO) BasicUtils.entityToDTO(
+                        ExcepcioDocumentacioDTO.class, 
+                        excepcioDocumentacio, 
+                        excepcioDocumentacioCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+        return excepcioDocumentacioDTOList;
+    }    
+    
+    /**
+     * Obtiene un catalogo de documentos.
+     * @param catalegDocumentsCriteria
+     * @return CatalegDocumentsDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) {
+    	
+        List<CriteriaObject> criteris;
+        CatalegDocumentsDTO catalegDocumentsDTO = null;
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    CatalegDocumentsCriteria.class,
+                    HQL_CATALOGO_DOCUMENTOS_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, catalegDocumentsCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_CATALOGO_DOCUMENTOS_CLASS, HQL_CATALOGO_DOCUMENTOS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_CATALOGO_DOCUMENTOS_ALIAS, 
+                    entities, 
+                    catalegDocumentsCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            CatalegDocuments catalegDocuments = (CatalegDocuments) query.uniqueResult();
+            if (catalegDocuments != null) {
+                catalegDocumentsDTO = (CatalegDocumentsDTO) BasicUtils.entityToDTO(CatalegDocumentsDTO.class, catalegDocuments, catalegDocumentsCriteria.getIdioma());
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+
+        return catalegDocumentsDTO;    	
+
+    }    
+    
+    /**
+     * Obtiene catálogos de documentos.
+     * @param catalegDocumentsCriteria
+     * @return List<CatalegDocumentsDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<CatalegDocumentsDTO> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) {
+        List<CriteriaObject> criteris;
+        List<CatalegDocumentsDTO> catalegDocumentsDTOList = new ArrayList<CatalegDocumentsDTO>();
+        Session session = null;
+
+        try {
+            criteris = BasicUtils.parseCriterias(
+                    CatalegDocumentsCriteria.class,
+                    HQL_CATALOGO_DOCUMENTOS_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, catalegDocumentsCriteria);
+
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_CATALOGO_DOCUMENTOS_CLASS, HQL_CATALOGO_DOCUMENTOS_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_CATALOGO_DOCUMENTOS_ALIAS, 
+                    entities, 
+                    catalegDocumentsCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<CatalegDocuments> catalegDocumentsResult = (List<CatalegDocuments>) query.list();
+            for (CatalegDocuments catalegDocuments: catalegDocumentsResult) {
+                catalegDocumentsDTOList.add((CatalegDocumentsDTO) BasicUtils.entityToDTO(
+                        CatalegDocumentsDTO.class, 
+                        catalegDocuments, 
+                        catalegDocumentsCriteria.getIdioma()));
+            }
+        } catch (HibernateException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (CriteriaObjectParseException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } catch (QueryBuilderException e) {
+            log.error(e);
+            throw new EJBException(e);
+        } finally {
+            close(session);
+        }
+        return catalegDocumentsDTOList;
+    }
+    
     
     /**
      * Obtiene un procedimiento.

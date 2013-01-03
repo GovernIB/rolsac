@@ -16,11 +16,11 @@ public interface MateriaDelegateI {
 
     public abstract ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException;
     
-	public abstract List listarMaterias() throws DelegateException;
+	public abstract List<Materia> listarMaterias() throws DelegateException;
 
-	public abstract List listarMateriasFront() throws DelegateException;
+	public abstract List<Materia> listarMateriasFront() throws DelegateException;
 
-	public abstract List listarMateriasFrontDestacadas(String lang)
+	public abstract List<Materia> listarMateriasFrontDestacadas(String lang)
 			throws DelegateException;
 
 	public abstract Materia obtenerMateria(Long id) throws DelegateException;
@@ -52,7 +52,6 @@ public interface MateriaDelegateI {
 	public abstract Archivo obtenerIconoGrande(Long id)
 			throws DelegateException;
 
-	@SuppressWarnings("unchecked")
 	public abstract Set<Materia> obtenerMateriasCE(
 			final String[] codigosEstandarMateria) throws DelegateException;
 

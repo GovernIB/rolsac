@@ -48,7 +48,7 @@ public class AgrupacioMateriaQueryServiceGateway {
 	}
 
 	public List<MateriaDTO> llistarMateries(long id,
-			MateriaCriteria materiaCriteria) throws RemoteException {
+			MateriaCriteria materiaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<MateriaDTO> llistaMateries = null;

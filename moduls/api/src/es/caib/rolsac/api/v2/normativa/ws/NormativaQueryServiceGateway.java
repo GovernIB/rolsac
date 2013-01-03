@@ -69,7 +69,7 @@ public class NormativaQueryServiceGateway {
 		return stub.obtenirArxiuNormativa(idArchivo);
 	}
 	
-	public List<NormativaDTO> llistarAfectades(long id) throws RemoteException {
+	public List<NormativaDTO> llistarAfectades(long id) throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaAfectades = null;
 		
@@ -84,7 +84,7 @@ public class NormativaQueryServiceGateway {
 		return llistaAfectades;		
 	}
 
-	public List<NormativaDTO> llistarAfectants(long id) throws RemoteException {
+	public List<NormativaDTO> llistarAfectants(long id) throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaAfectants = null;
 		
@@ -100,7 +100,7 @@ public class NormativaQueryServiceGateway {
 	}
 
 	public List<ProcedimentDTO> llistarProcediments(long id,
-			ProcedimentCriteria procedimentCriteria) throws RemoteException {
+			ProcedimentCriteria procedimentCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<ProcedimentDTO> llistaProcediments = null;

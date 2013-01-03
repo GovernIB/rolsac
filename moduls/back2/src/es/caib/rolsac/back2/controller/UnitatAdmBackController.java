@@ -60,6 +60,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
@@ -947,8 +948,50 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return resultats;
 	} 
 	
+	@RequestMapping(value = "/llistat.do", method = POST)
+	public @ResponseBody Map<String, Object> listarUnidadesAdministrativas(HttpServletRequest request, HttpSession session) {
+		
+		List<UnidadAdministrativaDTO> listaUnidadAdministrativaDTO = new ArrayList<UnidadAdministrativaDTO>();
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, String> tradMap = new HashMap<String, String>();
+
+		String lang = getRequestLanguage(request);
+		
+//		UnidadAdministrativa ua = null;
+		
+//		if (getUAFromSession(session) != null) {
+//			ua = (UnidadAdministrativa) getUAFromSession(session);
+//		}
+		
+//		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+				
+//		try {
+			
+		/*
+		select 
+			una_codi, una_coduna, tun_nombre
+		from 
+			rsc_uniadm, rsc_trauna
+		where tun_coduna = una_codi 
+			and tun_codidi = 'ca' 
+			and (una_codi in (select una_codi from rsc_uniadm where una_coduna is null) or 
+			una_coduna in (select una_codi from rsc_uniadm where una_coduna is null) )
+		order by una_codi; 
+		*/
+			
+//		} catch (DelegateException dEx) {
+//			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+//			resultats.put("id", -2);
+//			log.error(ExceptionUtils.getStackTrace(dEx));
+//		} 
+//		
+		return null;
+	}	
+//	
 	/**
-     * M�todo que comprueba si hay microsites para una Unidad Org�nica
+     * Método que comprueba si hay microsites para una Unidad Orgánica
      * @param idua identificador de la unidad organica
      * @return boolean
      */
@@ -972,8 +1015,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
     private boolean tieneMicrosites(Long idua) throws Exception {
 		boolean retorno = false;
 		org.ibit.rol.sac.micropersistence.delegate.MicrositeDelegate micro = org.ibit.rol.sac.micropersistence.delegate.DelegateUtil.getMicrositeDelegate();
-		List micros = micro.listarMicrosites();
-		Iterator iter = micros.iterator();
+		List<?> micros = micro.listarMicrosites();
+		Iterator<?> iter = micros.iterator();
 		while (iter.hasNext()) {
 			org.ibit.rol.sac.micromodel.Microsite mic = (org.ibit.rol.sac.micromodel.Microsite) iter.next();
 			if (mic.getUnidadAdministrativa()==idua.intValue()) {
@@ -1062,7 +1105,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 		UnidadMateriaDelegate unidadMateriaDelegate = DelegateUtil.getUnidadMateriaDelegate();
 		Set<UnidadMateria> listaUnidadMateria = unidadAdministrativa.getUnidadesMaterias();			
-		List<Long> listaIdUnidadMateriaObsoleta = new ArrayList();
+		List<Long> listaIdUnidadMateriaObsoleta = new ArrayList<Long>();
 				
 		if ( !"".equals(codigosMateriasNuevas[0]) ) {
 			for ( UnidadMateria unidadMateria : listaUnidadMateria ) {
@@ -1101,7 +1144,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		for( Iterator it = arbolSecciones.keySet().iterator(); it.hasNext(); ) {
 	    	String key = (String)it.next();
 	    	
-	    	//Eliminamos el c�digo html que pueda haber en el nombre de la secci�n.
+	    	//Eliminamos el código html que pueda haber en el nombre de la secci�n.
 	    	key = key.split("#")[0] + "#" + (key.split("#")[1]).replaceAll("\\<.*?>", "");
 	    	 
 	    	//Obtenemos el orden de la secci�n de cualquier FichaUA de la secci�n actual
@@ -1109,7 +1152,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    	if (arbolSecciones.get(key) != null){
 	            int orden = ((ArrayList<FichaUA>) arbolSecciones.get(key)).get(0).getOrdenseccion();	            
 	            newtreesecciones.put(orden+"#"+key, arbolSecciones.get(key));	            
-	            //La lista de fichasUA se devolver� ordenada seg�n su campo "orden"
+	            //La lista de fichasUA se devolverá ordenada según su campo "orden"
 	            Collections.sort( (ArrayList<FichaUA>) arbolSecciones.get(key) );	            
 	    	}	    	
 	    }

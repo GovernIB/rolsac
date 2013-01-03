@@ -3,6 +3,8 @@ package es.caib.rolsac.api.v2.general;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import es.caib.rolsac.api.v2.exception.APIException;
+
 public class DTOUtil {
 	
 	/**
@@ -13,7 +15,7 @@ public class DTOUtil {
 	 * @param c Classe a la qual pertany l'objecte
 	 * @return Object 
 	 */
-	public static Object object2DTO( Object o, Class<?> c ) {
+	public static Object object2DTO( Object o, Class<?> c ) throws APIException {
 
 		Constructor<?> constructorDTO = null;
 		Object resultDTO = null;
@@ -35,9 +37,13 @@ public class DTOUtil {
 			resultDTO = constructorDTO.newInstance( (Object[]) o );
 			
 		} catch (ClassNotFoundException cne) {
-		} catch (InvocationTargetException ite) {			
+			throw new APIException(cne.getMessage());
+		} catch (InvocationTargetException ite) {		
+			throw new APIException(ite.getMessage());
 		} catch (IllegalAccessException iae) {			
-		} catch (InstantiationException ie) {			
+			throw new APIException(iae.getMessage());
+		} catch (InstantiationException ie) {
+			throw new APIException(ie.getMessage());			
 		}
 		
 		return resultDTO;

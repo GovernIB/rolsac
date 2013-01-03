@@ -40,7 +40,7 @@ public class ButlletiQueryServiceGateway {
 	}
 
 	public List<NormativaDTO> llistarNormatives(long id,
-			NormativaCriteria normativaCriteria) throws RemoteException {
+			NormativaCriteria normativaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaNormatives = null;

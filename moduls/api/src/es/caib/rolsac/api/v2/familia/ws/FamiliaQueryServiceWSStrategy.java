@@ -3,6 +3,7 @@ package es.caib.rolsac.api.v2.familia.ws;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaQueryServiceStrategy;
@@ -42,6 +43,8 @@ public class FamiliaQueryServiceWSStrategy implements
 			return gateway.llistarProcedimentsLocals(id, procedimentCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -51,6 +54,8 @@ public class FamiliaQueryServiceWSStrategy implements
 			return gateway.llistarIcones(id, iconaFamiliaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 }

@@ -7,14 +7,16 @@ import java.rmi.RemoteException;
 import org.apache.axis.AxisFault;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
+import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.general.ConfiguracioServeis;
 import es.caib.rolsac.api.v2.tramit.TramitDTO;
 
 public class DocumentTramitQueryServiceGateway {
 
 	DocumentTramitWSSoapBindingStub stub;
-	DocumentTramitQueryServiceEJBRemoteServiceLocator locator;
 
 	public DocumentTramitQueryServiceGateway() {
 
@@ -25,6 +27,7 @@ public class DocumentTramitQueryServiceGateway {
 							ConfiguracioServeis
 									.getUrlServei(ConfiguracioServeis.NOM_SERVEI_DOCUMENT_TRAMIT)),
 					null);
+			
 		} catch (AxisFault e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -44,4 +47,14 @@ public class DocumentTramitQueryServiceGateway {
 		return stub.obtenirArxiu(idArxiu);
 	}
 
+	public CatalegDocumentsDTO obtenirCatalegDocuments(long id)
+			throws RemoteException {
+		return stub.obtenirCatalegDocuments(id);
+	}
+
+	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(long id)
+			throws RemoteException {
+		return stub.obtenirExcepcioDocumentacio(id);
+	}
+	
 }

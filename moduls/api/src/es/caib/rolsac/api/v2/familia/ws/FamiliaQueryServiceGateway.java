@@ -49,7 +49,7 @@ public class FamiliaQueryServiceGateway {
 	}
 	
 	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
-			ProcedimentCriteria procedimentCriteria) throws RemoteException {
+			ProcedimentCriteria procedimentCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<ProcedimentDTO> llistaMateries = null;
@@ -67,7 +67,7 @@ public class FamiliaQueryServiceGateway {
 	}
 
 	public List<IconaFamiliaDTO> llistarIcones(long id,
-			IconaFamiliaCriteria iconaFamiliaCriteria) throws RemoteException {
+			IconaFamiliaCriteria iconaFamiliaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<IconaFamiliaDTO> llistaIcones = null;

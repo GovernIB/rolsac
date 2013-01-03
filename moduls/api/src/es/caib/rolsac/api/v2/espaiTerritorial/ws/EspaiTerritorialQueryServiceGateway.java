@@ -63,16 +63,16 @@ public class EspaiTerritorialQueryServiceGateway {
 			EspaiTerritorialCriteria espaiTerritorialCriteria)
 			throws RemoteException {
 
-		// La definició d'aquest mètode al wsdl es diferent a la genèrica
-		// per tal d'evitar un ArrayStoreException. Per això no cal fer el
-		// pas de conversió des de "Object" a "xxxDTO" com a la resta de
-		// mètodes "llistarXxx"
+		// La definiciï¿½ d'aquest mï¿½tode al wsdl es diferent a la genï¿½rica
+		// per tal d'evitar un ArrayStoreException. Per aixï¿½ no cal fer el
+		// pas de conversiï¿½ des de "Object" a "xxxDTO" com a la resta de
+		// mï¿½todes "llistarXxx"
 		return Arrays.asList(stub.llistarFills(id, espaiTerritorialCriteria));
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;

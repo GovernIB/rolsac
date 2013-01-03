@@ -8,6 +8,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -18,6 +20,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
 import es.caib.rolsac.api.v2.familia.FamiliaDTO;
@@ -78,6 +82,10 @@ public interface RolsacQueryServiceStrategy {
 
     List<ButlletiDTO> llistarButlletins(ButlletiCriteria butlletiCriteria) throws StrategyException;
 
+    CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException; 
+    
+    List<CatalegDocumentsDTO> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException;
+    
     DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException;
 
     List<DocumentDTO> llistarDocuments(DocumentCriteria documentCriteria) throws StrategyException;
@@ -98,6 +106,10 @@ public interface RolsacQueryServiceStrategy {
 
     List<EspaiTerritorialDTO> llistarEspaisTerritorials(EspaiTerritorialCriteria espaiTerritorialCriteria) throws StrategyException;
 
+    ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException;
+    
+    List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException;
+    
     FamiliaDTO obtenirFamilia(FamiliaCriteria familiaCriteria) throws StrategyException;
 
     List<FamiliaDTO> llistarFamilies(FamiliaCriteria familiaCriteria) throws StrategyException;

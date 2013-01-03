@@ -245,7 +245,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
-
+    
     /**
      * Lista las unidades Administrativas raiz de un usuario.
      * @ejb.interface-method
@@ -3013,4 +3013,68 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		}
 		
 	}
+
+	/**
+	 * Buscador de unidades administrativas para el caso en que no haya
+	 * ninguna unidad administrativa seleccionada (i.e. desde Inicio)
+	 *  
+	 * @return Lista de unidades administrativas resultantes según los criterios de búsqueda
+	 */
+	private List<UnidadAdministrativa> buscadorUnidadesAdministrativasInicio() {
+		
+		Session session = getSession();
+		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
+		
+		if ( userIsSystem() ) {
+			//Listar todas las UAs raíz y las hijas de primer orden
+		} else {
+			//Listar las UA de este usuario somente
+			
+		}
+		
+		try {
+			//id, nombre, fecha, orden
+			Query query = session.createQuery("select new UnidadAdministrativa( ua.id, ua.codigoEstandar, trad.nombre, ua.orden ) " +
+														    "from UnidadAdministrativa ua, ua.traducciones trad " +
+														    "where ua.id in (:listaIdsUA) and index(trad) = :idioma ");
+			
+			//query.setParameter("listaIdsUA", listaIdsUA);
+			//query.setParameter("idioma", idioma);
+			
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}
+		
+	    /**
+	     * 
+	     */
+//	    public List<Long> listarIdsHijos(Long id) {
+//	    	Session session = getSession();
+//	    	List<Long> result = new ArrayList<Long>();
+//	    	try {
+//	    		Query query = session.createQuery("select ua.id from UnidadAdministrativa as ua where ua.id in (:listaIds)");
+//	    		
+//	    	} catch (HibernateException he) {
+//	    		throw new EJBException(he); 
+//	    	} finally {
+//	    		close(session);
+//	    	}
+//	    }
+	    		
+		return null;
+	}
+	
+	/**
+	 * Buscador de unidades administrativas para el caso en el que haya
+	 * una seleccionada (id)
+	 * 
+	 * @param id Id de la UA sobre la que se realizará la búsqueda
+	 * @return Lista de unidades administrativas resultantes sergún los criterios de búsqueda
+	 */
+	private List<UnidadAdministrativa> buscadorUnidadesAdministrativas(long id) {
+		return null;
+	}
+	
 }

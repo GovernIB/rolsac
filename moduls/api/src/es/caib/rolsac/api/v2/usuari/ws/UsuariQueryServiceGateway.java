@@ -37,7 +37,7 @@ public class UsuariQueryServiceGateway {
 	
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 		
     	Object[] tmpLlista = null;
     	List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;

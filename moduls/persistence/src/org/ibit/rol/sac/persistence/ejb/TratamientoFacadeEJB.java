@@ -12,6 +12,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.Tratamiento;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -29,7 +30,9 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class TratamientoFacadeEJB extends HibernateEJB{
 
-    /**
+	private static final long serialVersionUID = -2146085960416377575L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -85,11 +88,11 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List listarTratamientos(){
+    public List<Tratamiento> listarTratamientos(){
          Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(Tratamiento.class);
-            return criteri.list();
+            return castList(Tratamiento.class, criteri.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -105,7 +108,7 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
     public boolean tieneUnidades(Long id){
         Session session = getSession();
         try {
-            List uas = session.find("from UnidadAdministrativa as ua where ua.tratamiento.id=?", id, Hibernate.LONG);
+            List<UnidadAdministrativa> uas = castList(UnidadAdministrativa.class, session.find("from UnidadAdministrativa as ua where ua.tratamiento.id=?", id, Hibernate.LONG));
             return (uas.size()) != 0;
         } catch (HibernateException he) {
             throw new EJBException(he);
@@ -122,7 +125,7 @@ public abstract class TratamientoFacadeEJB extends HibernateEJB{
     public void borrarTratamiento(Long id) {
         Session session = getSession();
         try {
-            List uas = session.find("from UnidadAdministrativa as ua where ua.tratamiento.id=?", id, Hibernate.LONG);
+            List<UnidadAdministrativa> uas = castList(UnidadAdministrativa.class, session.find("from UnidadAdministrativa as ua where ua.tratamiento.id=?", id, Hibernate.LONG));
             if((uas.size())!=0){
                  throw new EJBException("El tratamiento contiene Unidades Administrativas");
             }

@@ -5,7 +5,13 @@ import org.apache.commons.beanutils.PropertyUtils;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryService;
 import es.caib.rolsac.api.v2.arxiu.ArxiuQueryServiceAdapter;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryService;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter;
 import es.caib.rolsac.api.v2.documentTramit.ejb.DocumentTramitQueryServiceEJBStrategy;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryService;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -56,5 +62,29 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
              throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "tramite.", e);
         }
     }
-    
+
+	public CatalegDocumentsQueryService obtenirCatalegDocument() throws QueryServiceException {
+		
+		if (this.getCatalegDocuments() == null) { return null; }
+		
+		try {
+			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getCatalegDocuments());
+			return (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
+		} catch (StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo documentos.", e);
+		}
+	}
+
+	public ExcepcioDocumentacioQueryService obtenirExcepcioDocumentacio()
+			throws QueryServiceException {
+		
+		if (this.getExcepcioDocumentacio() == null) { return null; }
+		
+		try {
+			ExcepcioDocumentacioDTO dto = documentTramitQueryServiceStrategy.obtenirExcepcioDocumentacio(this.getExcepcioDocumentacio());
+			return (ExcepcioDocumentacioQueryServiceAdapter) BeanUtils.getAdapter("excepcioDocumentacio", getStrategy(), dto);
+		} catch (StrategyException e) {
+			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "excepción documentación." , e);
+		}
+	}
 }

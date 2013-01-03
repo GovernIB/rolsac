@@ -5,6 +5,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -77,6 +78,8 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			return gateway.llistarTramits(id, tramitCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -86,6 +89,8 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			return gateway.llistarNormatives(id, normativaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -95,6 +100,8 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			return gateway.llistarMateries(id, materiaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -104,6 +111,8 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			return gateway.llistarFetsVitals(id, fetsVitalsCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -113,6 +122,8 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
 			return gateway.llistarDocuments(id, documentCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -121,7 +132,9 @@ public class ProcedimentQueryServiceWSStrategy implements ProcedimentQueryServic
             return gateway.llistarPublicsObjectius(id, poCriteria);
         } catch (RemoteException e) {
             throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-        }
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
 }

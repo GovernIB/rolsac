@@ -71,7 +71,7 @@ public class AgrupacioFetVitalQueryServiceGateway {
 	}
 
 	public List<FetVitalDTO> llistarFetsVitals(long id,
-			FetVitalCriteria fetVitalCriteria) throws RemoteException {
+			FetVitalCriteria fetVitalCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FetVitalDTO> llistaFetsVitals = null;

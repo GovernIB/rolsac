@@ -22,6 +22,10 @@ public class DocumentTramitDTO  implements java.io.Serializable {
 
     private java.lang.Long tramit;
 
+    private java.lang.Long catalegDocuments;
+
+    private java.lang.Long excepcioDocumentacio;
+
     public DocumentTramitDTO() {
     }
 
@@ -32,7 +36,9 @@ public class DocumentTramitDTO  implements java.io.Serializable {
            java.lang.Long ordre,
            java.lang.Integer tipus,
            java.lang.String titulo,
-           java.lang.Long tramit) {
+           java.lang.Long tramit,
+           java.lang.Long catalegDocuments,
+           java.lang.Long excepcioDocumentacio) {
            this.archivo = archivo;
            this.descripcion = descripcion;
            this.id = id;
@@ -40,6 +46,8 @@ public class DocumentTramitDTO  implements java.io.Serializable {
            this.tipus = tipus;
            this.titulo = titulo;
            this.tramit = tramit;
+           this.catalegDocuments = catalegDocuments;
+           this.excepcioDocumentacio = excepcioDocumentacio;
     }
 
 
@@ -182,6 +190,46 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         this.tramit = tramit;
     }
 
+
+    /**
+     * Gets the catalegDocuments value for this DocumentTramitDTO.
+     * 
+     * @return catalegDocuments
+     */
+    public java.lang.Long getCatalegDocuments() {
+        return catalegDocuments;
+    }
+
+
+    /**
+     * Sets the catalegDocuments value for this DocumentTramitDTO.
+     * 
+     * @param catalegDocuments
+     */
+    public void setCatalegDocuments(java.lang.Long catalegDocuments) {
+        this.catalegDocuments = catalegDocuments;
+    }
+
+
+    /**
+     * Gets the excepcioDocumentacio value for this DocumentTramitDTO.
+     * 
+     * @return excepcioDocumentacio
+     */
+    public java.lang.Long getExcepcioDocumentacio() {
+        return excepcioDocumentacio;
+    }
+
+
+    /**
+     * Sets the excepcioDocumentacio value for this DocumentTramitDTO.
+     * 
+     * @param excepcioDocumentacio
+     */
+    public void setExcepcioDocumentacio(java.lang.Long excepcioDocumentacio) {
+        this.excepcioDocumentacio = excepcioDocumentacio;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof DocumentTramitDTO)) return false;
@@ -214,7 +262,13 @@ public class DocumentTramitDTO  implements java.io.Serializable {
               this.titulo.equals(other.getTitulo()))) &&
             ((this.tramit==null && other.getTramit()==null) || 
              (this.tramit!=null &&
-              this.tramit.equals(other.getTramit())));
+              this.tramit.equals(other.getTramit()))) &&
+            ((this.catalegDocuments==null && other.getCatalegDocuments()==null) || 
+             (this.catalegDocuments!=null &&
+              this.catalegDocuments.equals(other.getCatalegDocuments()))) &&
+            ((this.excepcioDocumentacio==null && other.getExcepcioDocumentacio()==null) || 
+             (this.excepcioDocumentacio!=null &&
+              this.excepcioDocumentacio.equals(other.getExcepcioDocumentacio())));
         __equalsCalc = null;
         return _equals;
     }
@@ -246,6 +300,12 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         }
         if (getTramit() != null) {
             _hashCode += getTramit().hashCode();
+        }
+        if (getCatalegDocuments() != null) {
+            _hashCode += getCatalegDocuments().hashCode();
+        }
+        if (getExcepcioDocumentacio() != null) {
+            _hashCode += getExcepcioDocumentacio().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -296,6 +356,18 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("tramit");
         elemField.setXmlName(new javax.xml.namespace.QName("", "tramit"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("catalegDocuments");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "catalegDocuments"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("excepcioDocumentacio");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "excepcioDocumentacio"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

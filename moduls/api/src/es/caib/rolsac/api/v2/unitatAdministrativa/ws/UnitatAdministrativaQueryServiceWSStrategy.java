@@ -7,6 +7,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
@@ -68,7 +69,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarFilles(id, unitatAdministrativaCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException {
@@ -76,7 +79,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarEdificis(id, edificiCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<PersonalDTO> llistarPersonal(long id, PersonalCriteria personalCriteria) throws StrategyException {
@@ -84,7 +89,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarPersonal(id, personalCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<NormativaDTO> llistarNormatives(long id, NormativaCriteria normativaCriteria) throws StrategyException {
@@ -92,7 +99,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarNormatives(id, normativaCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
@@ -100,7 +109,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarProcediments(id, procedimentCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) throws StrategyException {
@@ -108,7 +119,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarTramits(id, tramitCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}    	
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}    	
     }
 
     public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria) throws StrategyException {
@@ -116,7 +129,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarUsuaris(id, usuariCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}    	
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}    	
     }
 
 //    public List<FitxaUADTO> llistarTotesFitxes(long id, FitxaUACriteria fitxaUACriteria) throws StrategyException {
@@ -132,7 +147,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarFitxes(id, fitxaCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}    	
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}    	
     }
 
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) throws StrategyException {
@@ -140,7 +157,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarSeccions(id, seccioCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public List<MateriaDTO> llistarMateries(long id, MateriaCriteria materiaCriteria) throws StrategyException {
@@ -148,7 +167,9 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.llistarMateries(id, materiaCriteria);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
     }
 
     public ArxiuDTO obtenirFotop(Long fotop) throws StrategyException {
@@ -164,7 +185,7 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
     		return gateway.obtenirFotog(fotog);
     	} catch (RemoteException e) {
     		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-    	}
+		} 
     }
 
     public ArxiuDTO obtenirLogoh(Long logoh) throws StrategyException {

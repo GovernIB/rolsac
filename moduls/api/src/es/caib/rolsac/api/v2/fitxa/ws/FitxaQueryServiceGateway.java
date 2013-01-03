@@ -82,7 +82,7 @@ public class FitxaQueryServiceGateway {
 	}
 	
 	public List<EnllacDTO> llistarEnllacos(long id,
-			EnllacCriteria enllacCriteria) throws RemoteException {
+			EnllacCriteria enllacCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<EnllacDTO> llistaEnllacos = null;
@@ -99,26 +99,8 @@ public class FitxaQueryServiceGateway {
 		
 	}
 
-//	public List<FitxaUADTO> llistarFitxesUA(long id,
-//			FitxaUACriteria fitxaUACriteria) throws RemoteException {
-//
-//		Object[] tmpLlista = null;
-//		List<FitxaUADTO> llistaMateries = null;
-//		
-//		tmpLlista = stub.llistarfi(id, fitxaUACriteria);
-//		llistaMateries = new ArrayList<FitxaUADTO>( Arrays.asList(tmpLlista).size() );
-//			
-//		for ( Object o : tmpLlista ) {
-//			FitxaUADTO fuadto = (FitxaUADTO) DTOUtil.object2DTO(o, FitxaUADTO.class);
-//			llistaMateries.add(fuadto);
-//		}
-//		
-//		return llistaMateries;		
-//		
-//	}
-
 	public List<DocumentDTO> llistarDocuments(long id,
-			DocumentCriteria documentCriteria) throws RemoteException {
+			DocumentCriteria documentCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<DocumentDTO> llistaDocuments = null;
@@ -135,26 +117,8 @@ public class FitxaQueryServiceGateway {
 		
 	}
 
-//	public List<MateriaDTO> llistarMateries(long id,
-//			MateriaCriteria materiaCriteria) throws RemoteException {
-//
-//		Object[] tmpLlista = null;
-//		List<MateriaDTO> llistaMateries = null;
-//		
-//		tmpLlista = stub.llistarMateries(id, materiaCriteria);
-//		llistaMateries = new ArrayList<MateriaDTO>( Arrays.asList(tmpLlista).size() );
-//			
-//		for ( Object o : tmpLlista ) {
-//			MateriaDTO mdto = (MateriaDTO) DTOUtil.object2DTO(o, MateriaDTO.class);
-//			llistaMateries.add(mdto);
-//		}
-//		
-//		return llistaMateries;		
-//		
-//	}
-
 	public List<FetVitalDTO> llistarFetsVitals(long id,
-			FetVitalCriteria fetVitalCriteria) throws RemoteException {
+			FetVitalCriteria fetVitalCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FetVitalDTO> llistaFetsVitals = null;
@@ -173,7 +137,7 @@ public class FitxaQueryServiceGateway {
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;
@@ -191,7 +155,7 @@ public class FitxaQueryServiceGateway {
 	}
 
 	public List<SeccioDTO> llistarSeccions(long id,
-			SeccioCriteria seccioCriteria) throws RemoteException {
+			SeccioCriteria seccioCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<SeccioDTO> llistaSeccions = null;
@@ -208,7 +172,9 @@ public class FitxaQueryServiceGateway {
 		
 	}
 	
-	public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws RemoteException {
+	public List<PublicObjectiuDTO> llistarPublicsObjectius(long id,
+			PublicObjectiuCriteria poCriteria) throws RemoteException,
+			APIException {
         Object[] tmpLlista = null;
         List<PublicObjectiuDTO> llistaPOs = null;
         

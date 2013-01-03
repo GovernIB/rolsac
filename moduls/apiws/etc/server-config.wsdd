@@ -888,17 +888,56 @@
             soapAction="">
             <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema" />
         </operation>
-        <parameter name="allowedMethods" value="obtenirTramit obtenirArxiu" />
+        
+		<operation name="obtenirCatalegDocuments" qname="operNS:obtenirCatalegDocuments" xmlns:operNS="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es" returnQName="obtenirCatalegDocumentsReturn" returnType="rtns:CatalegDocumentsDTO" xmlns:rtns="http://catalegDocuments.v2.api.rolsac.caib.es" soapAction="" >
+		  <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+		</operation>
+		
+		<operation name="obtenirExcepcioDocumentacio" qname="operNS:obtenirExcepcioDocumentacio" xmlns:operNS="http://intf.ejb.documentTramit.v2.api.rolsac.caib.es" returnQName="obtenirExcepcioDocumentacioReturn" returnType="rtns:ExcepcioDocumentacioDTO" xmlns:rtns="http://excepcioDocumentacio.v2.api.rolsac.caib.es" soapAction="" >
+		  <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+		</operation>
+		<parameter name="allowedMethods" value="obtenirCatalegDocuments obtenirTramit obtenirExcepcioDocumentacio obtenirArxiu"/>
 
-        <typeMapping xmlns:ns="http://arxiu.v2.api.rolsac.caib.es" qname="ns:ArxiuDTO"
-            type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-        <typeMapping xmlns:ns="http://tramit.v2.api.rolsac.caib.es" qname="ns:TramitDTO"
-            type="java:es.caib.rolsac.api.v2.tramit.TramitDTO" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
-        <typeMapping xmlns:ns="http://general.v2.api.rolsac.caib.es" qname="ns:EntitatRemota"
-            type="java:es.caib.rolsac.api.v2.general.EntitatRemota" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-            deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+		<typeMapping
+		  xmlns:ns="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+		  qname="ns:ExcepcioDocumentacioDTO"
+		  type="java:es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO"
+		  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+		  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+		  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		/>
+		<typeMapping
+		  xmlns:ns="http://general.v2.api.rolsac.caib.es"
+		  qname="ns:EntitatRemota"
+		  type="java:es.caib.rolsac.api.v2.general.EntitatRemota"
+		  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+		  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+		  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		/>
+		<typeMapping
+		  xmlns:ns="http://tramit.v2.api.rolsac.caib.es"
+		  qname="ns:TramitDTO"
+		  type="java:es.caib.rolsac.api.v2.tramit.TramitDTO"
+		  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+		  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+		  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		/>
+		<typeMapping
+		  xmlns:ns="http://arxiu.v2.api.rolsac.caib.es"
+		  qname="ns:ArxiuDTO"
+		  type="java:es.caib.rolsac.api.v2.arxiu.ArxiuDTO"
+		  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+		  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+		  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		/>
+		<typeMapping
+		  xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+		  qname="ns:CatalegDocumentsDTO"
+		  type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO"
+		  serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+		  deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+		  encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		/>
     </service>
 
     <service name="EdificiWS" provider="java:EJB">
@@ -2377,6 +2416,107 @@
             type="java:es.caib.rolsac.api.v2.general.EntitatRemota" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
             deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
     </service>
+
+    <service name="CatalegDocumentsWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.catalegDocuments.ejb.CatalegDocumentsQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.catalegDocuments.ejb.intf.CatalegDocumentsQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.catalegDocuments.ejb.intf.CatalegDocumentsQueryServiceEJBRemote" />
+        <parameter name="allowedMethods" value="*" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        
+      <operation name="getNumDocumentsTramit" qname="operNS:getNumDocumentsTramit" xmlns:operNS="http://intf.ejb.catalegDocuments.v2.api.rolsac.caib.es" returnQName="getNumDocumentsTramitReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarDocumentsTramits" qname="operNS:llistarDocumentsTramits" xmlns:operNS="http://intf.ejb.catalegDocuments.v2.api.rolsac.caib.es" returnQName="llistarDocumentsTramitsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.catalegDocuments.api.v2.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:DocumentTramitCriteria" xmlns:tns="http://documentTramit.v2.api.rolsac.caib.es"/>
+      </operation>
+      <parameter name="allowedMethods" value="llistarDocumentsTramits getNumDocumentsTramit"/>
+
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:DocumentTramitCriteria"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <arrayMapping
+        xmlns:ns="http://ws.catalegDocuments.api.v2.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />        
+    </service>
+
+    <service name="ExcepcioDocumentacioWS" provider="java:EJB">
+        <parameter name="beanJndiName" value="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceEJB" />
+        <parameter name="homeInterfaceName" value="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.intf.ExcepcioDocumentacioQueryServiceEJBHome" />
+        <parameter name="remoteInterfaceName" value="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.intf.ExcepcioDocumentacioQueryServiceEJBRemote" />
+        <parameter name="allowedMethods" value="*" />
+        <parameter name="jndiurl" value="https://localhost:8443" />
+        <parameter name="jndiContextClass" value="org.jnp.interfaces.NamingContextFactory" />
+        <parameter name="typeMappingVersion" value="1.1" />
+        
+      <operation name="getNumDocumentsTramit" qname="operNS:getNumDocumentsTramit" xmlns:operNS="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es" returnQName="getNumDocumentsTramitReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarDocumentsTramits" qname="operNS:llistarDocumentsTramits" xmlns:operNS="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es" returnQName="llistarDocumentsTramitsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:DocumentTramitCriteria" xmlns:tns="http://documentTramit.v2.api.rolsac.caib.es"/>
+      </operation>
+      <operation name="getNumCatalegsDocuments" qname="operNS:getNumCatalegsDocuments" xmlns:operNS="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es" returnQName="getNumCatalegsDocumentsReturn" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="llistarCatalegsDocuments" qname="operNS:llistarCatalegsDocuments" xmlns:operNS="http://intf.ejb.excepcioDocumentacio.v2.api.rolsac.caib.es" returnQName="llistarCatalegsDocumentsReturn" returnType="rtns:ArrayOf_xsd_anyType" xmlns:rtns="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es" returnItemType="tns2:anyType" xmlns:tns2="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="in1" type="tns:CatalegDocumentsCriteria" xmlns:tns="http://catalegDocuments.v2.api.rolsac.caib.es"/>
+      </operation>
+      <parameter name="allowedMethods" value="getNumCatalegsDocuments llistarDocumentsTramits getNumDocumentsTramit llistarCatalegsDocuments"/>
+
+      <arrayMapping
+        xmlns:ns="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"
+        qname="ns:ArrayOf_xsd_anyType"
+        type="java:java.lang.Object[]"
+        innerType="cmp-ns:anyType" xmlns:cmp-ns="http://www.w3.org/2001/XMLSchema"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://documentTramit.v2.api.rolsac.caib.es"
+        qname="ns:DocumentTramitCriteria"
+        type="java:es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:CatalegDocumentsCriteria"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />        
+	</service>
 
     <transport name="http">
         <requestFlow>

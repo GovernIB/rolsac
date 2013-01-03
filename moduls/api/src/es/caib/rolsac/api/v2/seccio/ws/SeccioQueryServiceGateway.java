@@ -67,7 +67,7 @@ public class SeccioQueryServiceGateway {
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
@@ -85,7 +85,7 @@ public class SeccioQueryServiceGateway {
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;

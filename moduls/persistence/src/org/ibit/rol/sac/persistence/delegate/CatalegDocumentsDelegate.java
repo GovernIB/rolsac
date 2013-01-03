@@ -47,7 +47,7 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
       }
     }
     
-    public List llistarCatalegDocuments() throws DelegateException {
+    public List<CatalegDocuments> llistarCatalegDocuments() throws DelegateException {
         try {
             return getFacade().llistarCatalegDocuments();
         } catch (RemoteException e) {
@@ -81,9 +81,9 @@ public class CatalegDocumentsDelegate implements StatelessDelegate {
         }
     }
   
-    /* ========================================================= */
-    /* ======================== REFERENCIA AL FACADE  ========== */
-    /* ========================================================= */
+    /*=========================================================*/
+    /*======================== REFERENCIA AL FACADE ==============*/
+    /*=========================================================*/
 
     private Handle facadeHandle;
 

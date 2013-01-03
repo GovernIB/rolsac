@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaQueryServiceStrategy;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
@@ -35,17 +36,6 @@ public class AgrupacioMateriaQueryServiceWSStrategy implements
 		}
 	}
 
-//	public List<MateriaAgrupacioDTO> llistarMateriesAgrupacio(long id,
-//			MateriaAgrupacioCriteria materiaAgrupacioCriteria)
-//			throws StrategyException {
-//		
-//		try {
-//			return gateway.llistarMateriesAgrupacio(id, materiaAgrupacioCriteria);
-//		} catch (RemoteException e) {
-//			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-//		}
-//	}
-
 	public List<MateriaDTO> llistarMateries(long id,
 			MateriaCriteria materiaCriteria) throws StrategyException {
 
@@ -53,6 +43,8 @@ public class AgrupacioMateriaQueryServiceWSStrategy implements
 			return gateway.llistarMateries(id, materiaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
 	}	
 }

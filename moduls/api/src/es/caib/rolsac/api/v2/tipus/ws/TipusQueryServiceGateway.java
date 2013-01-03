@@ -41,7 +41,7 @@ public class TipusQueryServiceGateway {
 	}
 
 	public List<NormativaDTO> llistarNormatives(Long id,
-			NormativaCriteria normativaCriteria) throws RemoteException {
+			NormativaCriteria normativaCriteria) throws RemoteException, APIException {
 		
     	Object[] tmpLlista = null;
     	List<NormativaDTO> llistaNormatives = null;

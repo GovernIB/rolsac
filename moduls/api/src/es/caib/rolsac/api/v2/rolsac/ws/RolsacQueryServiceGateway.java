@@ -14,6 +14,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -24,6 +26,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
@@ -380,6 +384,24 @@ public class RolsacQueryServiceGateway {
 		return taxaDTO;
 	}
 
+	public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria )
+			throws QueryServiceException, RemoteException {
+
+		CatalegDocumentsDTO catalegDocumentsDTO = new CatalegDocumentsDTO();
+		catalegDocumentsDTO = stub.obtenirCatalegDocuments(catalegDocumentsCriteria);
+
+		return catalegDocumentsDTO;
+	}
+	
+	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacioDTO(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria )
+			throws QueryServiceException, RemoteException {
+
+		ExcepcioDocumentacioDTO excepcioDocumentacioDTO = new ExcepcioDocumentacioDTO();
+		excepcioDocumentacioDTO = stub.obtenirExcepcioDocumentacio(excepcioDocumentacioCriteria);
+
+		return excepcioDocumentacioDTO;
+	}
+
 	public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(
 			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
 			throws QueryServiceException, RemoteException {
@@ -583,4 +605,19 @@ public class RolsacQueryServiceGateway {
 		
 		return Arrays.asList(stub.llistarTipusAfectacio(tipusAfectacioCriteria));
 	}
+	
+	public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(
+			ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria)
+			throws QueryServiceException, RemoteException {
+		
+		return Arrays.asList(stub.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria));
+	}
+	
+	public List<CatalegDocumentsDTO> llistarCatalegsDocuments(
+			CatalegDocumentsCriteria catalegDocumentsCriteria)
+			throws QueryServiceException, RemoteException {
+		
+		return Arrays.asList(stub.llistarCatalegsDocuments(catalegDocumentsCriteria));
+	}
+	
 }

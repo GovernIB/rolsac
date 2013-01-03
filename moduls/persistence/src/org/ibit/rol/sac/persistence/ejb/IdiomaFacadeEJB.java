@@ -25,7 +25,9 @@ import org.ibit.rol.sac.persistence.delegate.IdiomaDelegateI;
  */
 public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDelegateI {
 
-    /**
+	private static final long serialVersionUID = 2372863171398481198L;
+
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -38,12 +40,12 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List /* String */ listarLenguajes() {
+    public List<String> /* String */ listarLenguajes() {
         Session session = getSession();
         try {
             Query query = session.createQuery("select idi.lang from Idioma as idi order by idi.orden");
             query.setCacheable(true);
-            return query.list();
+            return castList(String.class, query.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -56,12 +58,12 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List /* String */ listarLenguajesTraductor() {
+    public List<String> listarLenguajesTraductor() {
         Session session = getSession();
         try {
             Query query = session.createQuery("select idi.langTraductor from Idioma as idi order by idi.orden");
             query.setCacheable(true);
-            return query.list();
+            return castList(String.class, query.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -97,7 +99,7 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
         try {
             Query query = session.createQuery("from Idioma");
             query.setCacheable(true);
-            return query.list();
+            return castList(Idioma.class, query.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -120,7 +122,7 @@ public abstract class IdiomaFacadeEJB extends HibernateEJB implements IdiomaDele
 	            Query query = session.createQuery("Select idi.lang from Idioma as idi");
 	            query.setCacheable(false);
 	            long ini = System.currentTimeMillis();
-	            List lista =  query.list();
+	            List<String> lista =  castList(String.class, query.list());
 	            long fin = System.currentTimeMillis();
 	            _acumula += (fin-ini); 
         	}

@@ -73,7 +73,7 @@ public class TramitQueryServiceGateway {
 
 	public List<DocumentTramitDTO> llistarFormularis(long id,
 			DocumentTramitCriteria documentTramitCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<DocumentTramitDTO> llistaFormularis = null;
@@ -91,7 +91,7 @@ public class TramitQueryServiceGateway {
 
 	public List<DocumentTramitDTO> llistatDocumentsInformatius(long id,
 			DocumentTramitCriteria documentTramitCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<DocumentTramitDTO> llistaDocuments = null;
@@ -108,7 +108,7 @@ public class TramitQueryServiceGateway {
 	}
 
 	public List<TaxaDTO> llistarTaxes(long id, TaxaCriteria taxaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<TaxaDTO> llistaTaxes = null;
 		

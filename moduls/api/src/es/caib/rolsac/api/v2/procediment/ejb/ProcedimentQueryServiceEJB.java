@@ -321,7 +321,6 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    @SuppressWarnings("unchecked")
     public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria) {
         List<TramitDTO> tramitsDTOList = new ArrayList<TramitDTO>();
         List<CriteriaObject> criteris;
@@ -342,7 +341,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Tramite> tramitesResult = (List<Tramite>) query.list();
+            List<Tramite> tramitesResult = castList(Tramite.class, query.list());
             for (Tramite tramite : tramitesResult) {
                 tramitsDTOList.add((TramitDTO) BasicUtils.entityToDTO(TramitDTO.class,  tramite, tramitCriteria.getIdioma()));
             }
@@ -586,6 +585,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) {
+    	
         List<PublicObjectiuDTO> poDTOList = new ArrayList<PublicObjectiuDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
@@ -621,6 +621,7 @@ public class ProcedimentQueryServiceEJB extends HibernateEJB {
         }
 
         return poDTOList;
+        
     }
     
 }

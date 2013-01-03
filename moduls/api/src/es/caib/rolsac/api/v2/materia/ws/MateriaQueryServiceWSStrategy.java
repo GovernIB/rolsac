@@ -6,6 +6,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
@@ -94,22 +95,15 @@ public class MateriaQueryServiceWSStrategy implements
 		}
 	}	
 	
-//	public ArxiuDTO obtenirDistribucioCompetencial(long id,
-//			ArxiuCriteria arxiuCriteria) throws StrategyException {		
-//		try {
-//			return gateway.obtenirDistribucioCompetencial(id, arxiuCriteria);
-//		} catch (RemoteException e) {
-//			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-//		}
-//	}
-
 	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
 			ProcedimentCriteria procedimentCriteria) throws StrategyException {
 		try {
 			return gateway.llistarProcedimentsLocals(id, procedimentCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}						
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
@@ -118,6 +112,8 @@ public class MateriaQueryServiceWSStrategy implements
 			return gateway.llistarFitxes(id, fitxaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}				
 	}
 
@@ -128,7 +124,9 @@ public class MateriaQueryServiceWSStrategy implements
 			return gateway.llistarAgrupacioMateries( id, agrupacioMateriaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}								
 	}
 
 	public List<IconaMateriaDTO> llistarIconesMateries(long id,
@@ -137,7 +135,9 @@ public class MateriaQueryServiceWSStrategy implements
 			return gateway.llistarIconesMateries(id, iconaMateriaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}				
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}								
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
@@ -147,7 +147,9 @@ public class MateriaQueryServiceWSStrategy implements
 			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}						
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}										
 	}
 
 	public List<UnitatMateriaDTO> llistarUnitatsMateria(long id,
@@ -157,7 +159,8 @@ public class MateriaQueryServiceWSStrategy implements
 			return gateway.llistarUnitatsMateria(id, unitatMateriaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}								
 	}
-
 }

@@ -3,7 +3,9 @@ package es.caib.rolsac.api.v2.documentTramit.ejb;
 import java.rmi.RemoteException;
 
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.documentTramit.ejb.intf.DocumentTramitQueryServiceEJBRemote;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.DelegateException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.LocatorException;
@@ -38,5 +40,28 @@ public class DocumentTramitQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+
+    public CatalegDocumentsDTO obtenirCatalegDocuments(long idCatalegDocuments) throws DelegateException {
+        try {
+            DocumentTramitQueryServiceEJBRemote ejb = documentTramitQueryServiceLocator.getDocumentTramitQueryServiceEJB();
+            return ejb.obtenirCatalegDocuments(idCatalegDocuments);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(long idExcepcioDocumentacio) throws DelegateException {
+        try {
+            DocumentTramitQueryServiceEJBRemote ejb = documentTramitQueryServiceLocator.getDocumentTramitQueryServiceEJB();
+            return ejb.obtenirExcepcioDocumentacio(idExcepcioDocumentacio);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
     
 }

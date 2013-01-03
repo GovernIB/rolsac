@@ -9,6 +9,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -19,6 +21,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
@@ -92,6 +96,27 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 		return unitatMateriaDTO;
 
 	}
+	
+	public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
+			try {
+				return  gateway.obtenirCatalegDocuments(catalegDocumentsCriteria);
+			} catch (QueryServiceException qse) {
+				throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+			} catch (RemoteException e) {
+				throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+			} 
+	}
+	
+	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
+		try {
+			return gateway.obtenirExcepcioDocumentacioDTO(excepcioDocumentacioCriteria);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} 
+	}
+	
 	public UsuariDTO obtenirUsuari(UsuariCriteria usuariCriteria) throws StrategyException{
 		UsuariDTO usuariDTO = new UsuariDTO();
 
@@ -108,6 +133,7 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 
 	public UnitatAdministrativaDTO obtenirUnitatAdministrativa(
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
+		
 		UnitatAdministrativaDTO unitatAdministrativaDTO = new UnitatAdministrativaDTO();
 
 		try {
@@ -857,6 +883,28 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 		}								
 	}
 
+	public List<CatalegDocumentsDTO> llistarCatalegsDocuments(
+			CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
+		try {
+			return gateway.llistarCatalegsDocuments(catalegDocumentsCriteria);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}								
+	}		
+
+	public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(
+			ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
+		try {
+			return gateway.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
+		} catch (QueryServiceException qse) {
+			throw new StrategyException(ExceptionMessages.REMOTE_SERVICE, qse);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}								
+	}			
+	
 	public TipusAfectacioDTO obtenirTipusAfectacio(
 			TipusAfectacioCriteria tipusAfectacioCriteria)
 			throws StrategyException {
@@ -868,5 +916,5 @@ public class RolsacQueryServiceWSStrategy implements RolsacQueryServiceStrategy 
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
 		}								
 	}
-
+	
 }

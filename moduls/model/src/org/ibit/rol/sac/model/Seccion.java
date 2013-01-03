@@ -2,12 +2,14 @@
 
 package org.ibit.rol.sac.model;
 
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
 
 public class Seccion extends Traducible implements Comparable {
 
-    public Long getId() {
+	private static final long serialVersionUID = 6322366470145398936L;
+
+	public Long getId() {
         return id;
     }
 
@@ -31,11 +33,11 @@ public class Seccion extends Traducible implements Comparable {
         this.padre = padre;
     }
 
-    public List getHijos() {
+    public List<Seccion> getHijos() {
         return hijos;
     }
 
-    public void setHijos(List hijos) {
+    public void setHijos(List<Seccion> hijos) {
         this.hijos = hijos;
     }
 
@@ -55,11 +57,11 @@ public class Seccion extends Traducible implements Comparable {
         this.orden = orden;
     }
 
-    public Set getFichasUA() {
+    public Set<FichaUA> getFichasUA() {
         return fichasUA;
     }
 
-    public void setFichasUA(Set fichasUA) {
+    public void setFichasUA(Set<FichaUA> fichasUA) {
         this.fichasUA = fichasUA;
     }
 
@@ -96,10 +98,10 @@ public class Seccion extends Traducible implements Comparable {
     private Long id;
     private String codigoEstandard;
     private Seccion padre;
-    private List hijos;
+    private List<Seccion> hijos;
     private String perfil;
     private int orden;
-    private Set fichasUA;
+    private Set<FichaUA> fichasUA;
 
 
 
@@ -109,13 +111,13 @@ public class Seccion extends Traducible implements Comparable {
     }
     
     public String toString(){
-		StringBuffer salida = new StringBuffer("---Sección---\n");
+		StringBuffer salida = new StringBuffer("---Secciï¿½n---\n");
 		salida.append("  -id: ");
 		salida.append(id);
 		salida.append("\n -nombre");
 		if (getTraduccion() != null)
 			salida.append(((TraduccionSeccion)getTraduccion()).getNombre());
-		salida.append("\n  -descripción: ");
+		salida.append("\n  -descripciï¿½n: ");
 		if(getTraduccion() != null)
 			salida.append(((TraduccionSeccion)getTraduccion()).getDescripcion());
 		salida.append("\n");

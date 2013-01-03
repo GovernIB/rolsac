@@ -5,6 +5,7 @@ import java.util.List;
 
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
@@ -29,6 +30,8 @@ public class TramitQueryServiceWSStrategy implements TramitQueryServiceStrategy 
 			return gateway.llistatDocumentsInformatius(id, documentTramitCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -38,6 +41,8 @@ public class TramitQueryServiceWSStrategy implements TramitQueryServiceStrategy 
 			return gateway.llistarTaxes(id, taxaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}		
 	}
 
@@ -82,8 +87,12 @@ public class TramitQueryServiceWSStrategy implements TramitQueryServiceStrategy 
 //	}
 
 	public ProcedimentDTO obtenirProcediment(long id) throws StrategyException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return gateway.obtenirProcediment(id);
+		} catch (RemoteException e) {
+			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		}
+		
 	}
 
 	public UnitatAdministrativaDTO obtenirOrganCompetent(long id)
@@ -102,6 +111,8 @@ public class TramitQueryServiceWSStrategy implements TramitQueryServiceStrategy 
 			return gateway.llistarFormularis(id, documentTramitCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
 	}
 }

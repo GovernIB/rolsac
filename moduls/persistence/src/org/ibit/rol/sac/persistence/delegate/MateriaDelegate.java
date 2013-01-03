@@ -44,15 +44,15 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 	    	return impl.listarMaterias(pagina, resultados);
 	    }
 	    
-		public List listarMaterias() throws DelegateException {
+		public List<Materia> listarMaterias() throws DelegateException {
 			return impl.listarMaterias();
 		}
 
-		public List listarMateriasFront() throws DelegateException {
+		public List<Materia> listarMateriasFront() throws DelegateException {
 			return impl.listarMateriasFront();
 		}
 
-		public List listarMateriasFrontDestacadas(String lang)
+		public List<Materia> listarMateriasFrontDestacadas(String lang)
 				throws DelegateException {
 			return impl.listarMateriasFrontDestacadas(lang);
 		}

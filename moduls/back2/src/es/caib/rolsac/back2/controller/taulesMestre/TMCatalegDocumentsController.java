@@ -3,60 +3,33 @@ package es.caib.rolsac.back2.controller.taulesMestre;
 import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.CatalegDocuments;
-import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
-import org.ibit.rol.sac.model.Familia;
-import org.ibit.rol.sac.model.Iniciacion;
-import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
-import org.ibit.rol.sac.model.TraduccionEdificio;
 import org.ibit.rol.sac.model.TraduccionExcepcioDocumentacio;
-import org.ibit.rol.sac.model.TraduccionPublicoObjetivo;
-import org.ibit.rol.sac.model.TraduccionUA;
-import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
-import org.ibit.rol.sac.persistence.delegate.EdificioDelegate;
 import org.ibit.rol.sac.persistence.delegate.ExcepcioDocumentacioDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
-import org.ibit.rol.sac.persistence.delegate.IniciacionDelegate;
-import org.ibit.rol.sac.persistence.delegate.PublicoObjetivoDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
-import es.caib.rolsac.back2.util.HtmlUtils;
-import es.caib.rolsac.back2.util.LlistatUtil;
-import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
-import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
@@ -135,7 +108,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
       tradMap.put("idioma", lang);
     }
     
-    //Información de paginación
+    //Informaciï¿½n de paginaciï¿½n
     String pagPag = request.getParameter("pagPag");   
     String pagRes = request.getParameter("pagRes");
     
@@ -192,8 +165,6 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
 			}
 	        
 			omplirCampsTraduibles(resultats, cataleg);
-	        
-	        String lang = request.getLocale().getLanguage();        
 	        
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
@@ -280,7 +251,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
 				throw new NumberFormatException();
 			}
 			
-			// Excepció documentació
+			// Excepciï¿½ documentaciï¿½
 			try {
 				String excepcioStr = request.getParameter("item_excepcio");
 				if (excepcioStr != null && !"".equals(excepcioStr)) {
@@ -333,7 +304,7 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id del document no numèric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id del document no numï¿½ric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}
@@ -348,8 +319,6 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
 		}
 		return excepcioObjDTOList;
 	}
-	private String getRequestLanguage(HttpServletRequest request) {
-		return request.getLocale().getLanguage();
-	}
+	
 }
 

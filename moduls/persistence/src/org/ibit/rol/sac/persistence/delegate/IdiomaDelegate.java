@@ -1,15 +1,7 @@
 package org.ibit.rol.sac.persistence.delegate;
 
-import java.rmi.RemoteException;
 import java.util.List;
 
-import javax.ejb.CreateException;
-import javax.ejb.Handle;
-import javax.naming.NamingException;
-
-import org.ibit.rol.sac.persistence.intf.IdiomaFacade;
-import org.ibit.rol.sac.persistence.intf.IdiomaFacadeHome;
-import org.ibit.rol.sac.persistence.util.IdiomaFacadeUtil;
 import org.ibit.rol.sac.model.Idioma;
 
 /*
@@ -21,14 +13,16 @@ import org.ibit.rol.sac.model.Idioma;
  */
 public class IdiomaDelegate implements StatelessDelegate {
 
-    // Cache de lengaujes
-    private List lenguajes = null;
-    private List lenguajesTraductor = null;
+	private static final long serialVersionUID = -4377464442759993342L;
+	
+	// Cache de lengaujes
+    private List<String> lenguajes = null;
+    private List<String> lenguajesTraductor = null;
     private long timeLen = 0L;
 
     // Cache de lenguaje por defecto
-    private String porDefecto = null;
-    private long timeDef = 0L;
+//    private String porDefecto = null;
+//    private long timeDef = 0L;
 	IdiomaDelegateI impl;
 	
 	private static long maxtime = 60000L; // 60 segundos
@@ -44,8 +38,7 @@ public class IdiomaDelegate implements StatelessDelegate {
 		this.impl = impl;
 	}
 	
-	
-    public List listarLenguajesTraductor() throws DelegateException {
+    public List<String> listarLenguajesTraductor() throws DelegateException {
             if (lenguajesTraductor == null || timeout(timeLen)) {
                 lenguajesTraductor = impl.listarLenguajesTraductor();
                 timeLen = System.currentTimeMillis();
@@ -61,13 +54,12 @@ public class IdiomaDelegate implements StatelessDelegate {
 		return impl.listarIdiomas();
 	}
 
-	public List listarLenguajes() throws DelegateException {
+	public List<String> listarLenguajes() throws DelegateException {
             if (lenguajes == null || timeout(timeLen)) {
                 lenguajes = impl.listarLenguajes();
                 timeLen = System.currentTimeMillis();
             }
             return lenguajes;
-   
 	}
 
 }

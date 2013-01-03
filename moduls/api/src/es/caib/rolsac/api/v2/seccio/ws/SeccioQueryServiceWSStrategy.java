@@ -3,6 +3,7 @@ package es.caib.rolsac.api.v2.seccio.ws;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
@@ -86,7 +87,9 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 			return gateway.llistarFitxes(id, fitxaCriteria);		
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		}		
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+		}
 	}
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
@@ -96,6 +99,8 @@ public class SeccioQueryServiceWSStrategy implements SeccioQueryServiceStrategy 
 			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);		
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}		
 	}
 }

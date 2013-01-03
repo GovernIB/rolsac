@@ -102,7 +102,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         	List<Materia> llistaMateries = new ArrayList<Materia>();
         	List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
         	
-        	llistaMateries = materiaDelegate.listarMaterias();
+        	llistaMateries = castList(Materia.class, materiaDelegate.listarMaterias() );
         	
         	for (Materia materia : llistaMateries) {
         		llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));                }
@@ -245,7 +245,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 					paramMap, tradMap, ua, fetVital, materia, publicObjectiu,					
 					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes);
 			            
-            for (Ficha fitxa : (ArrayList<Ficha>) resultadoBusqueda.getListaResultados() ) {
+            for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados() ) ) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
@@ -532,7 +532,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         	//Aqui nos llegar�a un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
     		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
     		
-    		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
+    		List<FileItem> items = castList(FileItem.class, UploadUtil.obtenerServletFileUpload().parseRequest(request));
 
     		Set<String> enllasos = new HashSet<String>();
     		Set<String> docsIds = new HashSet<String>();

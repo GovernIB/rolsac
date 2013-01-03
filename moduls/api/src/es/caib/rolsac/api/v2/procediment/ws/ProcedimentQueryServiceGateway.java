@@ -71,7 +71,7 @@ public class ProcedimentQueryServiceGateway {
 	}
 
 	public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<TramitDTO> llistaTramits = null;
@@ -89,7 +89,7 @@ public class ProcedimentQueryServiceGateway {
 	}
 
 	public List<NormativaDTO> llistarNormatives(long id,
-			NormativaCriteria normativaCriteria) throws RemoteException {
+			NormativaCriteria normativaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaNormatives = null;
@@ -108,7 +108,7 @@ public class ProcedimentQueryServiceGateway {
 	}
 
 	public List<MateriaDTO> llistarMateries(long id,
-			MateriaCriteria materiaCriteria) throws RemoteException {
+			MateriaCriteria materiaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<MateriaDTO> llistaMateries = null;
@@ -128,7 +128,7 @@ public class ProcedimentQueryServiceGateway {
 	}
 
 	public List<FetVitalDTO> llistarFetsVitals(long id,
-			FetVitalCriteria fetsVitalsCriteria) throws RemoteException {
+			FetVitalCriteria fetsVitalsCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FetVitalDTO> llistaFetsVitals = null;
@@ -147,7 +147,7 @@ public class ProcedimentQueryServiceGateway {
 	}
 
 	public List<DocumentDTO> llistarDocuments(long id,
-			DocumentCriteria documentCriteria) throws RemoteException {
+			DocumentCriteria documentCriteria) throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<DocumentDTO> llistaDocuments = null;
 
@@ -164,7 +164,9 @@ public class ProcedimentQueryServiceGateway {
 		return llistaDocuments;
 	}
 	
-	public List<PublicObjectiuDTO> llistarPublicsObjectius(long id, PublicObjectiuCriteria poCriteria) throws RemoteException {
+	public List<PublicObjectiuDTO> llistarPublicsObjectius(long id,
+			PublicObjectiuCriteria poCriteria) throws RemoteException,
+			APIException {
 
         Object[] tmpLlista = null;
         List<PublicObjectiuDTO> llistaPOs = null;

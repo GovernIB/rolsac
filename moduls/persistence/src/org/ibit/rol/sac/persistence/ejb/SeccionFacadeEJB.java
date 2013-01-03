@@ -128,8 +128,8 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         try {
             Seccion seccion = obtenerSeccion(id);
             int valor_orden = 0;
-            Set fichas = seccion.getFichasUA();
-            Set fichas_ordenadas = new HashSet();
+            Set<FichaUA> fichas = seccion.getFichasUA();
+            Set<FichaUA> fichas_ordenadas = new HashSet<FichaUA>();
             while (params.hasMoreElements()) {
                 String paramName = (String) params.nextElement();
                 if (paramName.startsWith("orden_fic")) {
@@ -137,7 +137,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
                     String[] parametros = (String[]) valores.get(paramName);
                     valor_orden = Integer.parseInt(parametros[0]);
 
-                    Iterator itfic = fichas.iterator();
+                    Iterator<FichaUA> itfic = fichas.iterator();
                     FichaUA fic = null;
                     while (itfic.hasNext()) {
                         fic = (FichaUA) itfic.next();
@@ -173,12 +173,12 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             Seccion seccion = obtenerSeccion(id);
 
             // Abro huecos q permitira luego intercalar fichas
-            Set fichas = seccion.getFichasUA();
-            Set fichas_ordenadas = new HashSet();
+            Set<FichaUA> fichas = seccion.getFichasUA();
+            Set<FichaUA> fichas_ordenadas = new HashSet<FichaUA>();
 
             int contador = 5;
 
-            Iterator itfic = fichas.iterator();
+            Iterator<FichaUA> itfic = fichas.iterator();
             FichaUA fic = null;
             while (itfic.hasNext()) {
                 fic = (FichaUA) itfic.next();

@@ -12,6 +12,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -64,6 +65,26 @@ public abstract class PantallaBaseController {
 	    model.put("capUrlSortir", System.getProperty("es.caib.rolsac.back2.urlSortir"));
 		
 	}
+	
+	/**
+	 * Devuelve el idioma actual.
+	 * 
+	 * @param request Request.
+	 * @return String con el nombre del idioma actual.
+	 */
+	protected String getRequestLanguage(HttpServletRequest request) {
+		return request.getLocale().getLanguage();
+	}	
+	
+	/**
+	 * Devuelve la UnidadAdministrativa actual.
+	 * 
+	 * @param session Sesión.
+	 * @return UnidadAdministrativa en uso.
+	 */
+	protected UnidadAdministrativa getUAFromSession(HttpSession session) {
+		return (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+	}	
 	
     /**
      * Método encargado de realizar el casting de listas no tipadas a listas

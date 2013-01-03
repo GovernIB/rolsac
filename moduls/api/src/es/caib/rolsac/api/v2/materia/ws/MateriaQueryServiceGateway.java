@@ -87,7 +87,7 @@ public class MateriaQueryServiceGateway {
 //	}
 
 	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
-			ProcedimentCriteria procedimentCriteria) throws RemoteException {
+			ProcedimentCriteria procedimentCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<ProcedimentDTO> llistarProcedimentsLocals = null;
@@ -104,7 +104,7 @@ public class MateriaQueryServiceGateway {
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
@@ -122,7 +122,7 @@ public class MateriaQueryServiceGateway {
 
 	public List<AgrupacioMateriaDTO> llistarAgrupacioMateries(long id,
 			AgrupacioMateriaCriteria agrupacioMateriaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<AgrupacioMateriaDTO> llistaAgrupacionsMateria = null;
@@ -139,7 +139,7 @@ public class MateriaQueryServiceGateway {
 	}
 
 	public List<IconaMateriaDTO> llistarIconesMateries(long id,
-			IconaMateriaCriteria iconaMateriaCriteria) throws RemoteException {
+			IconaMateriaCriteria iconaMateriaCriteria) throws RemoteException, APIException {
 	
 		Object[] tmpLlista = null;
 		List<IconaMateriaDTO> llistaIconesMateries = null;
@@ -157,7 +157,7 @@ public class MateriaQueryServiceGateway {
 
 	public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<UnitatAdministrativaDTO> llistaUnitatsAdministratives = null;
@@ -175,7 +175,7 @@ public class MateriaQueryServiceGateway {
 
 	public List<UnitatMateriaDTO> llistarUnitatsMateria(long id,
 			UnitatMateriaCriteria unitatMateriaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 	
 		Object[] tmpLlista = null;
 		List<UnitatMateriaDTO> llistaUnitatsMateria = null;

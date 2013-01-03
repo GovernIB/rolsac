@@ -8,6 +8,7 @@ import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
@@ -98,17 +99,10 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			return gateway.llistarEnllacos(id, enllacCriteria);		
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
-
-//	public List<FitxaUADTO> llistarFitxesUA(long id,
-//			FitxaUACriteria fitxaUACriteria) throws StrategyException {
-//		try {
-//			return gateway.llistarFitxesUA(id, fitxaUACriteria);			
-//		} catch (RemoteException e) {
-//			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-//		}
-//	}
 
 	public List<DocumentDTO> llistarDocuments(long id,
 			DocumentCriteria documentCriteria) throws StrategyException {
@@ -116,17 +110,10 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			return gateway.llistarDocuments(id, documentCriteria);			
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
-
-//	public List<MateriaDTO> llistarMateries(long id,
-//			MateriaCriteria materiaCriteria) throws StrategyException {
-//		try {
-//			return gateway.llistarMateries(id, materiaCriteria);			
-//		} catch (RemoteException e) {
-//			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-//		}
-//	}
 
 	public List<FetVitalDTO> llistarFetsVitals(long id,
 			FetVitalCriteria fetVitalCriteria) throws StrategyException {
@@ -134,6 +121,8 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			return gateway.llistarFetsVitals(id, fetVitalCriteria);			
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -143,6 +132,8 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);			
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -152,6 +143,8 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
 			return gateway.llistarSeccions(id, seccioCriteria);			
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 
@@ -161,6 +154,8 @@ public class FitxaQueryServiceWSStrategy implements FitxaQueryServiceStrategy {
             return gateway.llistarPublicsObjectius(id, poCriteria);         
         } catch (RemoteException e) {
             throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+        	throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
         }
     }
 }

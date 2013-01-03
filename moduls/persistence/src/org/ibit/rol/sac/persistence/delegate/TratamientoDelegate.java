@@ -18,8 +18,11 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * Business delegate para manipular Tratamientos.
  */
 public class TratamientoDelegate implements StatelessDelegate{
-    /* ========================================================= */
-    /* ======================== M�TODOS DE NEGOCIO ============= */
+		
+	private static final long serialVersionUID = -3796251379077427483L;
+
+	/* ========================================================= */
+    /* ======================== MÉTODOS DE NEGOCIO ============= */
     /* ========================================================= */
     public Long grabarTratamiento(Tratamiento tratamiento) throws DelegateException {
         try {
@@ -45,7 +48,7 @@ public class TratamientoDelegate implements StatelessDelegate{
     	}
     }
     
-    public List listarTratamientos() throws DelegateException {
+    public List<Tratamiento> listarTratamientos() throws DelegateException {
         try {
             return getFacade().listarTratamientos();
         } catch (RemoteException e) {

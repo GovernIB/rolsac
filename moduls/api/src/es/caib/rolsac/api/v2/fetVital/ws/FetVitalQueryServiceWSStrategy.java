@@ -6,6 +6,7 @@ import java.util.List;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalCriteria;
 import es.caib.rolsac.api.v2.agrupacioFetVital.AgrupacioFetVitalDTO;
 import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.fetVital.FetVitalQueryServiceStrategy;
@@ -75,14 +76,19 @@ public class FetVitalQueryServiceWSStrategy implements FetVitalQueryServiceStrat
 			return gateway.llistarFitxes(id, fitxaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
 
-    public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws StrategyException {
+	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
+			ProcedimentCriteria procedimentCriteria) throws StrategyException {
         try {
 			return gateway.llistarProcedimentsLocals(id, procedimentCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }    
     
@@ -92,6 +98,8 @@ public class FetVitalQueryServiceWSStrategy implements FetVitalQueryServiceStrat
 			return gateway.llistarFetsVitalsAgrupacionsFV(id, agrupacioFetVitalCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);		
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
     }
 

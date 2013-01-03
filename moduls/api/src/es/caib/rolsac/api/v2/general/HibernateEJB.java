@@ -1,6 +1,10 @@
 package es.caib.rolsac.api.v2.general;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -309,5 +313,26 @@ public abstract class HibernateEJB implements SessionBean {
         if (result == null) return 0;
         return (Integer) result;
     }
+
+    
+    /**
+     * Método encargado de realizar el casting de listas no tipadas a listas
+     * tipadas
+     * 
+     * @param <T>
+     * @param clazz Clase del tipo de objeto contenido en la lista
+     * @param c Colección a ser tipada
+     * @return Lista tipada
+     */
+    protected <T>List<T> castList(Class<? extends T> clazz, Collection<?> c) {
+        List<T> r = new ArrayList<T>();
+        if (c != null) {     
+            r = new ArrayList<T>(c.size());            
+            for (Object o : c) {
+            	r.add(clazz.cast(o));
+            }
+        }
+        return r;
+    }    
     
 }

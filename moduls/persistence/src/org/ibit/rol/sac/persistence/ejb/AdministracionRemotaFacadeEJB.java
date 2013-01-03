@@ -37,6 +37,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  */
 public abstract class AdministracionRemotaFacadeEJB extends HibernateEJB {
 
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * @ejb.create-method
 	 * @ejb.permission unchecked="true"

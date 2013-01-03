@@ -96,7 +96,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private boolean estemEnUnitatAdministrativa(HttpSession session) {
-		return null!= getUAFromSession(session);
+		return null != getUAFromSession(session);
 	}
 
 	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
@@ -134,15 +134,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 	}
 
-	private String getRequestLanguage(HttpServletRequest request) {
-		return request.getLocale().getLanguage();
-	}
-
-	private UnidadAdministrativa getUAFromSession(HttpSession session) {
-		return (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-	}
-
-	
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatProcediments(HttpServletRequest request, HttpSession session) {
 
@@ -354,7 +345,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
 			String idiomaPorDefecto = request.getLocale().getLanguage();
-			
+
 			for ( ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados() ) ) {
 				
 				if ( idiomaPorDefecto.equals(pl.getIdioma()) ) {
@@ -1125,7 +1116,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 		
 		//Listar las normativas de la unidad administrativa
-		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
+		//List<Normativa>llistaNormatives = new ArrayList<Normativa>();
 		List<ProcedimientoNormativaDTO>llistaNormativesDTO= new ArrayList<ProcedimientoNormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
@@ -1141,7 +1132,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (getUAFromSession(session) == null){
 			return resultats;//Si no hay unidad administrativa se devuelve vac�o
 		}
-		UnidadAdministrativa ua = (UnidadAdministrativa) getUAFromSession(session);		
 		
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		

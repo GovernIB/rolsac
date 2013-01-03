@@ -1,6 +1,5 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -12,11 +11,12 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
+
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 
 /**
- * SessionBean per mantenir i consultar Excepcions de Doumentació.
+ * SessionBean per mantenir i consultar Excepcions de Doumentaciï¿½.
  *
  * @ejb.bean
  *  name="sac/persistence/ExcepcioDocumentacioFacade"
@@ -28,7 +28,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
  * @ejb.transaction type="Required"
  */
 public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
-   /**
+	
+	private static final long serialVersionUID = -4181888881071845868L;
+	
+	/**
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
@@ -37,7 +40,7 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Crea o actualiza una excepció de documentació
+     * Crea o actualiza una excepciï¿½ de documentaciï¿½
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
@@ -55,7 +58,7 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
     }
     
     /**
-     *  Llista totes les excepcions de documentació paginadament
+     *  Llista totes les excepcions de documentaciï¿½ paginadament
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -64,15 +67,15 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
      }
      
      /**
-     * Llista totes les excepcions de documentació.
+     * Llista totes les excepcions de documentaciï¿½.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List llistarExcepcioDocumentacio() {
+    public List<ExcepcioDocumentacio> llistarExcepcioDocumentacio() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(ExcepcioDocumentacio.class);
-            return criteri.list();
+            return castList(ExcepcioDocumentacio.class, criteri.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -98,7 +101,7 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Indica si l'excepció està relacionada amb algun document del catàleg documental
+     * Indica si l'excepciï¿½ estï¿½ relacionada amb algun document del catï¿½leg documental
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -120,7 +123,7 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
         }
     }
     /**
-     * Indica si l'excepció està relacionada amb algun document especific requerit en el tramit
+     * Indica si l'excepciï¿½ estï¿½ relacionada amb algun document especific requerit en el tramit
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -142,7 +145,7 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
         }
     }
     /**
-     * Esborra una excepcion de documentació
+     * Esborra una excepcion de documentaciï¿½
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
@@ -152,11 +155,11 @@ public abstract class ExcepcioDocumentacioFacadeEJB extends HibernateEJB {
             ExcepcioDocumentacio excepcio = (ExcepcioDocumentacio) session.load(ExcepcioDocumentacio.class, id);
             Set catalegDocuments = excepcio.getCatalegDocuments();
             if(!catalegDocuments.isEmpty()){
-                throw new EJBException("L'excepcio de documentació té relacions definides amb el cataleg de documents");
+                throw new EJBException("L'excepcio de documentaciï¿½ tï¿½ relacions definides amb el cataleg de documents");
             }
             Set documentTramit = excepcio.getDocsRequerits();
             if(!documentTramit.isEmpty()){
-              throw new EJBException("L'excepcio de documentació té relacions definides amb algun document específic requerit en el tràmit");
+              throw new EJBException("L'excepcio de documentaciï¿½ tï¿½ relacions definides amb algun document especï¿½fic requerit en el trï¿½mit");
             }
             session.delete(excepcio);
             session.flush();

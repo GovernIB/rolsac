@@ -436,7 +436,6 @@ function CDetall(soloFicha){
 		});
 		
 	}
-	
     
 	this.elimina = function() {
 		

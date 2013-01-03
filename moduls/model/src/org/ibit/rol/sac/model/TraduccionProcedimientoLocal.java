@@ -2,10 +2,11 @@
 
 package org.ibit.rol.sac.model;
 
-
 public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
 
-    private String nombre;
+	private static final long serialVersionUID = -1313486359929062988L;
+	
+	private String nombre;
     private String resumen;
     private String destinatarios;
     private String resultat;
@@ -51,7 +52,6 @@ public class TraduccionProcedimientoLocal implements TraduccionProcedimiento {
     }
 
     @Deprecated
-
     public void setRequisitos(String requisitos) {
         this.requisitos = requisitos;
     }

@@ -48,7 +48,7 @@ public class PublicObjectiuQueryServiceGateway {
 
 	public List<AgrupacioFetVitalDTO> llistarAgrupacions(long id,
             AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
-            throws RemoteException {
+            throws RemoteException, APIException {
 
         Object[] tmpLlista = null;
         List<AgrupacioFetVitalDTO> llistaAgrupacionsFetVitals = null;
@@ -65,7 +65,10 @@ public class PublicObjectiuQueryServiceGateway {
         
     }
 	
-	public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) throws RemoteException {
+	public List<ProcedimentDTO> llistarProcediments(long id,
+			ProcedimentCriteria procedimentCriteria) throws RemoteException,
+			APIException {
+		
         Object[] tmpLlista = null;
         List<ProcedimentDTO> llistaProcediments = null;
         
@@ -80,7 +83,8 @@ public class PublicObjectiuQueryServiceGateway {
         return llistaProcediments;      
     }
 	
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws RemoteException {
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
+			throws RemoteException, APIException {
         Object[] tmpLlista = null;
         List<FitxaDTO> llistaFitxes = null;
         

@@ -117,7 +117,7 @@ public class ButlletiQueryServiceEJB extends HibernateEJB {
      * Obtiene el listado de normativas del boletin.
      * @param id
      * @param normativaCriteria
-     * @return int
+     * @return List<NormativaDTO>
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -183,5 +183,4 @@ public class ButlletiQueryServiceEJB extends HibernateEJB {
 
         return normativaDTOList;
     }
-    
 }

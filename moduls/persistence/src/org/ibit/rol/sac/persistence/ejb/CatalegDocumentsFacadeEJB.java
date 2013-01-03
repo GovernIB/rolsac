@@ -1,19 +1,26 @@
 package org.ibit.rol.sac.persistence.ejb;
 
-import net.sf.hibernate.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.CreateException;
+import javax.ejb.EJBException;
+
+import net.sf.hibernate.Criteria;
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 import org.ibit.rol.sac.model.CatalegDocuments;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
-import org.ibit.rol.sac.model.Usuario;
-
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
-
-import javax.ejb.CreateException;
-import javax.ejb.EJBException;
-import java.util.*;
 
 /**
  * SessionBean per mantenir i consultar el Cataleg de Documents
@@ -29,8 +36,11 @@ import java.util.*;
  */
 public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
 
-    /**
-     * Obtiene referència al ejb de control d'Accés.
+	
+	private static final long serialVersionUID = -2185416511499772305L;
+
+	/**
+     * Obtiene referï¿½ncia al ejb de control d'Accï¿½s.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -92,11 +102,11 @@ public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List llistarCatalegDocuments() {
+    public List<CatalegDocuments> llistarCatalegDocuments() {
         Session session = getSession();
         try {
             Criteria criteri = session.createCriteria(CatalegDocuments.class);
-            return criteri.list();
+            return castList(CatalegDocuments.class, criteri.list());
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
@@ -109,7 +119,7 @@ public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
-    public List cercarCatalegDocuments(Map parametros, Map traduccion) {
+    public List<CatalegDocuments> cercarCatalegDocuments(Map parametros, Map traduccion) {
         Session session = getSession();
         try {
             List params = new ArrayList();
@@ -190,7 +200,7 @@ public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
             CatalegDocuments docCat = (CatalegDocuments) session.load(CatalegDocuments.class, id);
             Set docTramit = docCat.getDoctramite();
             if (!docTramit.isEmpty()){
-            	throw new EJBException("El tipus de document està relacionat amb algun tramit");
+            	throw new EJBException("El tipus de document estï¿½ relacionat amb algun tramit");
             }
             session.delete(docCat);
             session.flush();
@@ -209,7 +219,7 @@ public abstract class CatalegDocumentsFacadeEJB extends HibernateEJB {
         String aux = "";
 
         // Tratamiento de parametros
-        for (Iterator iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
+        for (Iterator<?> iter1 = parametros.keySet().iterator(); iter1.hasNext();) {
             String key = (String) iter1.next();
             Object value = parametros.get(key);
             if (value != null) {

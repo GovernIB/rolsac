@@ -15,6 +15,7 @@
 	xmlns:tns27="http://perfil.v2.api.rolsac.caib.es" xmlns:tns28="http://seccio.v2.api.rolsac.caib.es"
 	xmlns:tns29="http://unitatMateria.v2.api.rolsac.caib.es" xmlns:tns3="http://espaiTerritorial.v2.api.rolsac.caib.es"
 	xmlns:tns30="http://tipus.v2.api.rolsac.caib.es" xmlns:tns31="http://tipusAfectacio.v2.api.rolsac.caib.es"
+	xmlns:tns32="http://catalegDocuments.v2.api.rolsac.caib.es" xmlns:tns33="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
 	xmlns:tns4="http://procediment.v2.api.rolsac.caib.es" xmlns:tns5="http://materia.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://tramit.v2.api.rolsac.caib.es" xmlns:tns7="http://fetVital.v2.api.rolsac.caib.es"
 	xmlns:tns8="http://fitxa.v2.api.rolsac.caib.es" xmlns:tns9="http://documentTramit.v2.api.rolsac.caib.es"
@@ -214,7 +215,7 @@
 				</complexContent>
 			</complexType>
 			
-			<!-- Per a evitar conflictes amb DTO i ArrayStoreException -->
+			<!-- Definim aquests tipus per a evitar conflictes amb DTO i ArrayStoreException -->
 			<complexType name="ArrayOfProcedimentDTO">
 				<complexContent>
 					<restriction base="soapenc:Array">
@@ -453,6 +454,22 @@
 					</restriction>
 				</complexContent>
 			</complexType>
+			
+			<complexType name="ArrayOfCatalegDocumentsDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns32:CatalegDocumentsDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>			
+			
+			<complexType name="ArrayOfExcepcioDocumentacioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns33:ExcepcioDocumentacioDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>			
 			
 			<!--  -->			
 		</schema>
@@ -1043,6 +1060,8 @@
 					<element name="tipus" nillable="true" type="xsd:int" />
 					<element name="titulo" nillable="true" type="xsd:string" />
 					<element name="tramit" nillable="true" type="xsd:long" />
+					<element name="catalegDocuments" nillable="true" type="xsd:long" />					
+					<element name="excepcioDocumentacio" nillable="true" type="xsd:long" />
 				</sequence>
 			</complexType>
 		</schema>
@@ -2348,7 +2367,63 @@
 				</sequence>
 			</complexType>
 		</schema>
-	</wsdl:types>
+		
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://catalegDocuments.v2.api.rolsac.caib.es">
+			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />						
+			<complexType name="CatalegDocumentsCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="nombre" nillable="true" type="xsd:string" />
+							<element name="descripcion" nillable="true" type="xsd:string" />							
+							<element name="admResponsable" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="CatalegDocumentsDTO">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="admResponsable" nillable="true" type="xsd:int" />
+					<element name="nombre" nillable="true" type="xsd:string" />					
+					<element name="orden" nillable="true" type="xsd:string" />
+					<element name="descripcion" nillable="true" type="xsd:string" />					 									
+				</sequence>
+			</complexType>
+		</schema>
+		
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://excepcioDocumentacio.v2.api.rolsac.caib.es">
+			<import namespace="http://catalegDocuments.v2.api.rolsac.caib.es" />
+			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />			
+			<complexType name="ExcepcioDocumentacioCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="nombre" nillable="true" type="xsd:string" />
+							<element name="descripcion" nillable="true" type="xsd:string" />							
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="ExcepcioDocumentacioDTO">
+				<sequence>
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="nombre" nillable="true" type="xsd:string" />										
+					<element name="descripcion" nillable="true" type="xsd:string" />					 									
+				</sequence>
+			</complexType>
+		</schema>
+		
+	</wsdl:types>	
 	<wsdl:message name="llistarUsuarisResponse">
 		<wsdl:part name="llistarUsuarisReturn" type="impl:ArrayOfUsuariDTO" />
 	</wsdl:message>
@@ -2715,6 +2790,36 @@
 	<wsdl:message name="obtenirPublicObjectiuRequest">
 		<wsdl:part name="in0" type="tns21:PublicObjectiuCriteria" />
 	</wsdl:message>
+	
+	<wsdl:message name="obtenirCatalegDocumentsRequest">
+		<wsdl:part name="in0" type="tns32:CatalegDocumentsCriteria" />
+	</wsdl:message>		
+	<wsdl:message name="obtenirCatalegDocumentsResponse">
+		<wsdl:part name="obtenirCatalegDocumentsReturn" type="tns32:CatalegDocumentsDTO" />
+	</wsdl:message>	
+		
+	<wsdl:message name="llistarCatalegsDocumentsRequest">
+		<wsdl:part name="in0" type="tns32:CatalegDocumentsCriteria" />
+	</wsdl:message>				
+	<wsdl:message name="llistarCatalegsDocumentsResponse">
+		<wsdl:part name="llistarCatalegsDocumentsReturn" type="impl:ArrayOfCatalegDocumentsDTO" />
+	</wsdl:message>
+	
+	<wsdl:message name="obtenirExcepcioDocumentacioRequest">
+		<wsdl:part name="in0" type="tns33:ExcepcioDocumentacioCriteria" />
+	</wsdl:message>			
+	<wsdl:message name="obtenirExcepcioDocumentacioResponse">
+		<wsdl:part name="obtenirExcepcioDocumentacioReturn" type="tns33:ExcepcioDocumentacioDTO" />
+	</wsdl:message>	
+		
+	<wsdl:message name="llistarExcepcionsDocumentacioRequest">
+		<wsdl:part name="in0" type="tns33:ExcepcioDocumentacioCriteria" />
+	</wsdl:message>					
+	<wsdl:message name="llistarExcepcionsDocumentacioResponse">
+		<wsdl:part name="llistarExcepcionsDocumentacioReturn" type="impl:ArrayOfExcepcioDocumentacioDTO" />
+	</wsdl:message>	
+	
+	
 	<wsdl:portType name="RolsacQueryServiceEJBRemote">
 		<wsdl:operation name="llistarUnitatsAdministratives"
 			parameterOrder="in0">
@@ -3045,10 +3150,45 @@
 			<wsdl:output message="intf:llistarTipusAfectacioResponse"
 				name="llistarTipusAfectacioResponse" />
 		</wsdl:operation>
+		
+		<wsdl:operation name="llistarCatalegsDocuments"
+			parameterOrder="in0">
+			<wsdl:input message="intf:llistarCatalegsDocumentsRequest"
+				name="llistarCatalegsDocumentsRequest" />
+			<wsdl:output message="intf:llistarCatalegsDocumentsResponse"
+				name="llistarCatalegsDocumentsResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="llistarExcepcionsDocumentacio"
+			parameterOrder="in0">
+			<wsdl:input message="intf:llistarExcepcionsDocumentacioRequest"
+				name="llistarExcepcionsDocumentacioRequest" />
+			<wsdl:output message="intf:llistarExcepcionsDocumentacioResponse"
+				name="llistarExcepcionsDocumentacioResponse" />
+		</wsdl:operation>
+						
+		<wsdl:operation name="obtenirCatalegDocuments"
+			parameterOrder="in0">
+			<wsdl:input message="intf:obtenirCatalegDocumentsRequest"
+				name="obtenirCatalegDocumentsRequest" />
+			<wsdl:output message="intf:obtenirCatalegDocumentsResponse"
+				name="obtenirCatalegDocumentsResponse" />
+		</wsdl:operation>
+
+		<wsdl:operation name="obtenirExcepcioDocumentacio"
+			parameterOrder="in0">
+			<wsdl:input message="intf:obtenirExcepcioDocumentacioRequest"
+				name="obtenirExcepcioDocumentacioRequest" />
+			<wsdl:output message="intf:obtenirExcepcioDocumentacioResponse"
+				name="obtenirExcepcioDocumentacioResponse" />
+		</wsdl:operation>
+						
 	</wsdl:portType>
+	
 	<wsdl:binding name="RolsacWSSoapBinding" type="intf:RolsacQueryServiceEJBRemote">
-		<wsdlsoap:binding style="rpc"
-			transport="http://schemas.xmlsoap.org/soap/http" />
+	
+		<wsdlsoap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+		
 		<wsdl:operation name="llistarUnitatsAdministratives">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarUnitatsAdministrativesRequest">
@@ -3719,8 +3859,57 @@
 				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
+		</wsdl:operation>				
+		
+		<wsdl:operation name="llistarCatalegsDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarCatalegsDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarCatalegsDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="obtenirCatalegDocuments">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirCatalegDocumentsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirCatalegDocumentsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+		
+		
+		<wsdl:operation name="llistarExcepcionsDocumentacio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarExcepcionsDocumentacioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarExcepcionsDocumentacioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="obtenirExcepcioDocumentacio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirExcepcioDocumentacioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirExcepcioDocumentacioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
 		</wsdl:operation>
 	</wsdl:binding>
+	
+	
 	<wsdl:service name="RolsacQueryServiceEJBRemoteService">
 		<wsdl:port binding="intf:RolsacWSSoapBinding" name="RolsacWS">
 			<wsdlsoap:address

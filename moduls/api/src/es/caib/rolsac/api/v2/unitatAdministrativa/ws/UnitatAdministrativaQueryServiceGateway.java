@@ -144,13 +144,13 @@ public class UnitatAdministrativaQueryServiceGateway {
 
 	public List<UnitatAdministrativaDTO> llistarFilles(long id,
 			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		return Arrays.asList( stub.llistarFilles(id, unitatAdministrativaCriteria));
 	}
 
 	public List<EdificiDTO> llistarEdificis(long id,
-			EdificiCriteria edificiCriteria) throws RemoteException {
+			EdificiCriteria edificiCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<EdificiDTO> llistaEdificis = null;
@@ -169,7 +169,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<PersonalDTO> llistarPersonal(long id,
-			PersonalCriteria personalCriteria) throws RemoteException {
+			PersonalCriteria personalCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<PersonalDTO> llistaPersonal = null;
@@ -188,7 +188,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<NormativaDTO> llistarNormatives(long id,
-			NormativaCriteria normativaCriteria) throws RemoteException {
+			NormativaCriteria normativaCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<NormativaDTO> llistaNormatives = null;
@@ -207,7 +207,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<ProcedimentDTO> llistarProcediments(long id,
-			ProcedimentCriteria procedimentCriteria) throws RemoteException {
+			ProcedimentCriteria procedimentCriteria) throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<ProcedimentDTO> llistaNormatives = null;
@@ -226,7 +226,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<TramitDTO> llistarTramits(long id, TramitCriteria tramitCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<TramitDTO> llistaTramits = null;
@@ -244,7 +244,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<UsuariDTO> llistarUsuaris(long id, UsuariCriteria usuariCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<UsuariDTO> llistaUsuaris = null;
@@ -262,7 +262,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
-			throws RemoteException {
+			throws RemoteException, APIException {
 
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
@@ -279,7 +279,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<SeccioDTO> llistarSeccions(long id,
-			SeccioCriteria seccioCriteria) throws RemoteException {
+			SeccioCriteria seccioCriteria) throws RemoteException, APIException {
 		
 		Object[] tmpLlista = null;
 		List<SeccioDTO> llistaSeccions = null;
@@ -296,7 +296,7 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<MateriaDTO> llistarMateries(long id,
-			MateriaCriteria materiaCriteria) throws RemoteException {
+			MateriaCriteria materiaCriteria) throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<MateriaDTO> llistaMateries = null;
 

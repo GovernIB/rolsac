@@ -3,6 +3,7 @@ package es.caib.rolsac.api.v2.usuari.ws;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import es.caib.rolsac.api.v2.exception.APIException;
 import es.caib.rolsac.api.v2.exception.ExceptionMessages;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.unitatAdministrativa.UnitatAdministrativaCriteria;
@@ -25,6 +26,8 @@ public class UsuariQueryServiceWSStrategy implements UsuariQueryServiceStrategy 
 			return gateway.llistarUnitatsAdministratives(id, unitatAdministrativaCriteria);
 		} catch (RemoteException e) {
 			throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+		} catch (APIException e) {
+			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
 		}
 	}
 

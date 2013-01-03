@@ -8,6 +8,8 @@ import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaCriteria;
 import es.caib.rolsac.api.v2.agrupacioMateria.AgrupacioMateriaDTO;
 import es.caib.rolsac.api.v2.butlleti.ButlletiCriteria;
 import es.caib.rolsac.api.v2.butlleti.ButlletiDTO;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria;
+import es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsDTO;
 import es.caib.rolsac.api.v2.document.DocumentCriteria;
 import es.caib.rolsac.api.v2.document.DocumentDTO;
 import es.caib.rolsac.api.v2.documentTramit.DocumentTramitCriteria;
@@ -18,6 +20,8 @@ import es.caib.rolsac.api.v2.enllac.EnllacCriteria;
 import es.caib.rolsac.api.v2.enllac.EnllacDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria;
+import es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO;
 import es.caib.rolsac.api.v2.exception.DelegateException;
 import es.caib.rolsac.api.v2.exception.StrategyException;
 import es.caib.rolsac.api.v2.familia.FamiliaCriteria;
@@ -121,7 +125,39 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
             throw new StrategyException(e);
         }
     }
+    
+    public CatalegDocumentsDTO obtenirCatalegDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
+    	try {
+    		return rolsacQueryServiceDelegate.obtenirCatalegDocuments(catalegDocumentsCriteria);    		
+    	} catch (DelegateException e) {
+    		throw new StrategyException(e);
+    	}
+    }
+    
+    public List<CatalegDocumentsDTO> llistarCatalegsDocuments(CatalegDocumentsCriteria catalegDocumentsCriteria) throws StrategyException {
+    	try {
+    		return rolsacQueryServiceDelegate.llistarCatalegsDocuments(catalegDocumentsCriteria);
+    	} catch (DelegateException e) {
+    		throw new StrategyException(e);
+    	}
+    }
 
+    public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(ExcepcioDocumentacioCriteria catalegDocumentsCriteria) throws StrategyException {
+    	try {
+    		return rolsacQueryServiceDelegate.obtenirExcepcioDocumentacio(catalegDocumentsCriteria);    		
+    	} catch (DelegateException e) {
+    		throw new StrategyException(e);
+    	}
+    }
+    
+    public List<ExcepcioDocumentacioDTO> llistarExcepcionsDocumentacio(ExcepcioDocumentacioCriteria excepcioDocumentacioCriteria) throws StrategyException {
+    	try {
+    		return rolsacQueryServiceDelegate.llistarExcepcionsDocumentacio(excepcioDocumentacioCriteria);
+    	} catch (DelegateException e) {
+    		throw new StrategyException(e);
+    	}
+    }
+    
     public DocumentDTO obtenirDocument(DocumentCriteria documentCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.obtenirDocument(documentCriteria);

@@ -90,7 +90,8 @@ public class FetVitalQueryServiceGateway {
     	return adto;
     }
     
-	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) throws RemoteException {
+	public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria)
+			throws RemoteException, APIException {
 		Object[] tmpLlista = null;
 		List<FitxaDTO> llistaFitxes = null;
 		
@@ -105,7 +106,9 @@ public class FetVitalQueryServiceGateway {
 		return llistaFitxes;
 	}
 	
-	public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) throws RemoteException {
+	public List<ProcedimentDTO> llistarProcedimentsLocals(long id,
+			ProcedimentCriteria procedimentCriteria) throws RemoteException,
+			APIException {
 		
 		Object[] tmpLlista = null;
 		List<ProcedimentDTO> llistaProcedimentsLocals =null;
@@ -121,8 +124,9 @@ public class FetVitalQueryServiceGateway {
 		return llistaProcedimentsLocals;
 	}
 	
-    public List<AgrupacioFetVitalDTO> llistarFetsVitalsAgrupacionsFV(long id,
-            AgrupacioFetVitalCriteria agrupacioFetVitalCriteria) throws RemoteException {
+	public List<AgrupacioFetVitalDTO> llistarFetsVitalsAgrupacionsFV(long id,
+			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
+			throws RemoteException, APIException {
     	
     	Object[] tmpLlista = null;
     	List<AgrupacioFetVitalDTO> llistaAgrupacionsFetVitals = null;

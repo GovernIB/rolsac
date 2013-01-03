@@ -17,11 +17,15 @@ import java.util.List;
  * Business delegate per manipular excepcions de documentacio.
  */
 public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
+	
+	private static final long serialVersionUID = -1542197568196968517L;
+	
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
-    public Long gravarExcepcioDocumentacio(ExcepcioDocumentacio excepcio)  throws DelegateException {
+
+	public Long gravarExcepcioDocumentacio(ExcepcioDocumentacio excepcio)  throws DelegateException {
         try {
             return getFacade().gravarExcepcioDocumentacio(excepcio);
         } catch (RemoteException e) {
@@ -37,7 +41,7 @@ public class ExcepcioDocumentacioDelegate implements StatelessDelegate {
       }
     }
     
-    public List llistarExcepcioDocumentacio() throws DelegateException {
+    public List<ExcepcioDocumentacio> llistarExcepcioDocumentacio() throws DelegateException {
         try {
             return getFacade().llistarExcepcioDocumentacio();
         } catch (RemoteException e) {

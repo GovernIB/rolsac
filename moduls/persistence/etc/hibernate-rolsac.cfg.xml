@@ -26,6 +26,7 @@
         <mapping resource="org/ibit/rol/sac/model/Auditoria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Boletin.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Comentario.hbm.xml" />
+		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />        
         <mapping resource="org/ibit/rol/sac/model/Documento.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/DocumentTramit.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Edificio.hbm.xml" />
@@ -63,7 +64,6 @@
         <mapping resource="org/ibit/rol/sac/model/AgrupacionMateria.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/MateriaAgrupacionM.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Enlace.hbm.xml" />
-		<mapping resource="org/ibit/rol/sac/model/CatalegDocuments.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/ExcepcioDocumentacio.hbm.xml" />
         
         <mapping resource="org/ibit/rol/sac/model/lucene/LuceneFile.hbm.xml"/>

@@ -129,6 +129,31 @@
 	<!-- ButlletiQueryService beans -->
 
 
+	<!-- CatalegDocumentsQueryService beans -->
+		
+	<!-- EJB -->
+	<bean id="catalegDocumentsQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter" scope="prototype">
+		<property name="catalegDocumentsQueryServiceStrategy" ref="catalegDocumentsQueryServiceEJBStrategy" />
+	</bean>
+	<bean id="catalegDocumentsQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.catalegDocuments.ejb.CatalegDocumentsQueryServiceEJBStrategy">
+		<property name="catalegDocumentsQueryServiceDelegate" ref="catalegDocumentsQueryServiceDelegate" />
+	</bean>
+	<bean id="catalegDocumentsQueryServiceDelegate" class="es.caib.rolsac.api.v2.catalegDocuments.ejb.CatalegDocumentsQueryServiceDelegate">
+		<property name="catalegDocumentsQueryServiceLocator" ref="catalegDocumentsQueryServiceEJBLocator" />
+	</bean>
+	<bean id="catalegDocumentsQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.catalegDocuments.ejb.CatalegDocumentsQueryServiceEJBLocator" />
+		
+	<!-- WS -->
+    <bean id="catalegDocumentsQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsQueryServiceAdapter" scope="prototype">
+        <property name="catalegDocumentsQueryServiceStrategy" ref="catalegDocumentsQueryServiceWSStrategy" />
+    </bean>
+    <bean id="catalegDocumentsQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayCatalegDocuments" />
+    </bean>
+	<bean id="gatewayCatalegDocuments" class="es.caib.rolsac.api.v2.catalegDocuments.ws.CatalegDocumentsQueryServiceGateway" />	
+	<!-- CatalegDocumentsQueryService beans -->
+		
+		
 	<!-- DocumentQueryService beans -->
 	<!-- EJB -->
 	<bean id="documentQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.document.DocumentQueryServiceAdapter" scope="prototype">
@@ -302,6 +327,33 @@
     
     <!-- EstadisticaInsertService beans -->
     
+    
+	<!-- ExcepcioDocumentacioQueryService beans -->		
+	<!-- EJB -->
+	<bean id="excepcioDocumentacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryServiceAdapter" scope="prototype">
+		<property name="excepcioDocumentacioQueryServiceStrategy" ref="excepcioDocumentacioQueryServiceEJBStrategy" />
+	</bean>
+	<bean id="excepcioDocumentacioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceEJBStrategy">
+		<property name="excepcioDocumentacioQueryServiceDelegate" ref="excepcioDocumentacioQueryServiceDelegate" />
+	</bean>
+	<bean id="excepcioDocumentacioQueryServiceDelegate" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceDelegate">
+		<property name="excepcioDocumentacioQueryServiceLocator" ref="excepcioDocumentacioQueryServiceEJBLocator" />
+	</bean>
+	<bean id="excepcioDocumentacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceEJBLocator" />
+		
+    <!-- WS -->
+    <bean id="excepcioDocumentacioServiceWSAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioServiceAdapter" scope="prototype">
+        <property name="excepcioDocumentacioServiceStrategy" ref="excepcioDocumentacioServiceWSStrategy" />
+    </bean>
+
+    <bean id="excepcioDocumentacioServiceWSStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioWSStrategy">
+        <property name="gateway" ref="gatewayExcepcioDocumentacio" />
+    </bean>
+
+	<bean id="gatewayExcepcioDocumentacio" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioServiceGateway" />	        
+				
+	<!-- ExcepcioDocumentacioQueryService beans --> 
+	   
 
     <!-- FamiliaQueryService beans -->
     <!-- EJB -->
