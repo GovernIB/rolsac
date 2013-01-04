@@ -31,6 +31,7 @@ import es.caib.rolsac.api.v2.edifici.EdificiCriteria;
 import es.caib.rolsac.api.v2.edifici.EdificiDTO;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialCriteria;
 import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
+import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
 import es.caib.rolsac.api.v2.general.BasicUtils;
@@ -235,6 +236,42 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
         return unitatAdministrativaDTOList;
     }
 
+    /**
+     * Obtiene los ids de todos los descendientes de una UA
+     * @param id
+     * @return List<Long>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public List<Long> llistarDescendents(long uaId) {
+        List<Long> uas = new ArrayList<Long>();
+        try {
+            UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
+            uaCriteria.setId(String.valueOf(uaId));
+            RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
+            UnitatAdministrativaDTO uaDto = ejb.obtenirUnitatAdministrativa(uaCriteria);
+            
+            List<UnitatAdministrativaDTO> uasList = new ArrayList<UnitatAdministrativaDTO>();
+            obtenirDescendents(uaDto, uasList);
+            for (UnitatAdministrativaDTO ua: uasList) {
+                uas.add(ua.getId());
+            }
+        } catch (QueryServiceException e) {
+            log.error(e);
+        }
+        return uas;
+    }
+    
+    // Obtiene recursivamente los descendientes de la UA
+    private void obtenirDescendents(UnitatAdministrativaDTO ua, List<UnitatAdministrativaDTO> descendientes) throws QueryServiceException {
+        descendientes.add(ua);
+        List<UnitatAdministrativaDTO> uas = llistarFilles(ua.getId(), new UnitatAdministrativaCriteria());
+        for (UnitatAdministrativaDTO uaDto: uas) {
+            obtenirDescendents(uaDto, descendientes);
+        }
+    }
+    
     /**
      * Obtiene listado de edificios.
      * @param id

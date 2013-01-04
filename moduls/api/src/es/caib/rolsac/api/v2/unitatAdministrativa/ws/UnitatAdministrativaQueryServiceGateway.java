@@ -143,11 +143,19 @@ public class UnitatAdministrativaQueryServiceGateway {
 	}
 
 	public List<UnitatAdministrativaDTO> llistarFilles(long id,
-			UnitatAdministrativaCriteria unitatAdministrativaCriteria)
-			throws RemoteException, APIException {
+            UnitatAdministrativaCriteria unitatAdministrativaCriteria)
+            throws RemoteException, APIException {
 
-		return Arrays.asList( stub.llistarFilles(id, unitatAdministrativaCriteria));
-	}
+        return Arrays.asList( stub.llistarFilles(id, unitatAdministrativaCriteria));
+    }
+	
+	public List<Long> llistarDescendents(Long uaId) throws RemoteException, APIException {
+	    List<Long> descendents = new ArrayList<Long>();
+	    for (Object o: stub.llistarDescendents(uaId)) {
+	        descendents.add((Long) o);
+	    }
+        return descendents;
+    }
 
 	public List<EdificiDTO> llistarEdificis(long id,
 			EdificiCriteria edificiCriteria) throws RemoteException, APIException {

@@ -105,6 +105,14 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "hijas.", e);
         }
     }
+    
+    public List<Long> llistarDescendents() throws QueryServiceException {
+        try {
+            return unitatAdministrativaQueryServiceStrategy.llistarDescendents(getId());
+        } catch (StrategyException e) {
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "descendientes.", e);
+        }
+    }
 
     public List<EdificiQueryServiceAdapter> llistarEdificis(EdificiCriteria edificiCriteria) throws QueryServiceException {
         try {

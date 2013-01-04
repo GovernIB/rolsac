@@ -69,6 +69,15 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
+    public List<Long> llistarDescendents(long uaId) throws StrategyException {
+        try {
+            return unitatAdministrativaQueryServiceDelegate.llistarDescendents(uaId);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+    
+    
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarEdificis(id, edificiCriteria);

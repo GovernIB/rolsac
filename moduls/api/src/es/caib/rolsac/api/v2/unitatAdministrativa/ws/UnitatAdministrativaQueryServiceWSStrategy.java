@@ -65,13 +65,23 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
 
     public List<UnitatAdministrativaDTO> llistarFilles(long id,
             UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException {
-    	try {
-    		return gateway.llistarFilles(id, unitatAdministrativaCriteria);
-    	} catch (RemoteException e) {
-    		throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
-		} catch (APIException e) {
-			throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
-		}
+        try {
+            return gateway.llistarFilles(id, unitatAdministrativaCriteria);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
+    }
+    
+    public List<Long> llistarDescendents(long uaId) throws StrategyException {
+        try {
+            return gateway.llistarDescendents(uaId);
+        } catch (RemoteException e) {
+            throw new StrategyException(ExceptionMessages.REMOTE_CALL, e);
+        } catch (APIException e) {
+            throw new StrategyException(ExceptionMessages.GATEWAY_OBJECT2DTO, e);
+        }
     }
 
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException {

@@ -83,6 +83,18 @@ public class UnitatAdministrativaQueryServiceDelegate {
             throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    public List<Long> llistarDescendents(long uaId) throws DelegateException {
+        try {
+            UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
+            return ejb.llistarDescendents(uaId);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws DelegateException {
