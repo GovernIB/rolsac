@@ -113,7 +113,7 @@ function CEscritorioUnidadesHijas() {
 					codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
 						codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
 						codi_taula += "<span style='visibility: hidden;' class=\"ordre\">" + (printStringFromNull(dada_node.orden, txtSinValor) + 1) + "</span>";						
-						codi_taula += "<a class=\"uahija_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
+						codi_taula += "<a id=\"uahija_" + dada_node.id  + "\" class=\"uahija_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
 					codi_taula += "</div>";
 					
 					if( !modoBuscador ) {
@@ -144,6 +144,12 @@ function CEscritorioUnidadesHijas() {
 			// codi final
 			codi_final = codi_totals + codi_taula + codi_navegacio;
 		
+			//TODO Corregir esta parte (carga el detalle pero acumula escritorios)			
+			//PROBAR Detall.recarregar(itemID)
+			$("#escritorioUnidadesHijas").find("div.uahijas a").unbind("click").bind("click", 
+					function() { jQuery("#escritorioUnidadesHijas").hide(); escritorioUnidadesHijas.ficha(this); 
+			});
+			
 		} else {
 			
 			// no hi ha items
