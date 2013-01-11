@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.ibit.rol.sac.model.TraduccionProcedimientoLocal;
 import org.ibit.rol.sac.model.TraduccionTratamiento;
 import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
@@ -32,15 +31,6 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 		private Integer numfoto3;
 		private Integer numfoto4;
 		
-		/*
-		private Archivo fotop;
-		private Archivo fotog;
-		private Archivo logoh;
-		private Archivo logov;
-		private Archivo logos;
-		private Archivo logot;
-		*/
-		
 		private Long fotop;
 		private Long fotog;
 		private Long logoh;
@@ -50,7 +40,6 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 		
 		private String codigoEstandar;
 		private Long padreId;
-		
 
 		//private Long[] hijosIds;
 		private UnidadAdministrativaDTO[] hijos;
@@ -62,6 +51,13 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 		private String abreviatura;
 		private String url;
 
+		public UnidadAdministrativaDTO(Long id, String codigoEstandar, String nombre, long orden) {
+			this.id = id;
+			this.codigoEstandar = codigoEstandar;
+			this.nombre = nombre;
+			this.orden = orden;
+		}
+		
 		public UnidadAdministrativaDTO(UnidadAdministrativa ua, String idioma, boolean popularHijos) {
 
 			this.id = ua.getId();
@@ -147,6 +143,10 @@ import org.ibit.rol.sac.model.UnidadAdministrativa;
 			this.url = trad.getUrl();
 		}
 
+		public UnidadAdministrativaDTO() {
+			
+		}
+		
 		public UnidadAdministrativaDTO(UnidadAdministrativa ua, String idioma) {
 			this (ua, idioma, true);
 		}

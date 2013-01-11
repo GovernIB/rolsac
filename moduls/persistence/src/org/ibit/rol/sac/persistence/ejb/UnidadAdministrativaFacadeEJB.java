@@ -22,6 +22,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.axis.utils.StringUtils;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.lucene.indra.model.TraModelFilterObject;
@@ -54,6 +55,8 @@ import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * SessionBean para mantener y consultar Unidades Administrativas.
  *
@@ -72,9 +75,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 	private static final long serialVersionUID = 6954366130820517158L;
 	
-	/** Nom pel govern de les illes a la taula d'unitats org�niques */
-    public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";    
-    private static String idioma_per_defecte ="ca";
+	/** Nom pel govern de les illes a la taula d'unitats orgàniques */
+    public static final String NOM_GOVERN_ILLES = "Govern de les Illes Balears";
+    
+    /** ID comodín de unidad administrativa */
+    public static final String EMPTY_ID = "-1";
     
     /**
      * Obtiene refer�ncia al ejb de control de Acceso.
@@ -1093,12 +1098,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             session.flush();
             }
         } catch (HibernateException he) {
-            throw new EJBException("El sistema est� actualizando los datos, espere unos minutos.");
+            throw new EJBException("El sistema está actualizando los datos, espere unos minutos.");
         } finally {
             close(session);
         }
     }
-    
     
     /**
 	 * Borra una unidad administrativa.
@@ -1913,8 +1917,6 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         
 	}
 	
-	
-	
     /* ================================================ */
     /* ==  M�TODOS PRIVADOS  ========================== */
     /* ================================================ */
@@ -1986,13 +1988,43 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             }
         }
 
-        if (aux.length() > 0) {
-            aux = "where " + aux;
-        }
-
         return aux;
     }
 
+    /**
+     * Construye el query de búsqueda multiidioma en todos los campos
+     */
+    private String i18nPopulateQuery(Map traducciones, List params) {
+        String aux = "";
+
+        for (Iterator iterTraducciones = traducciones.keySet().iterator(); iterTraducciones.hasNext();) {
+        	
+            String key = (String) iterTraducciones.next();
+            Object value = traducciones.get(key);
+            
+            if (value != null) {
+            	if (aux.length() > 0) aux = aux + " or ";
+                if (value instanceof String) {
+                    String sValue = (String) value;
+                    if (sValue.length() > 0) {
+                        if (sValue.startsWith("\"") && sValue.endsWith("\"")) {
+                            sValue = sValue.substring(1, (sValue.length() - 1));
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add(sValue);
+                        } else {
+                            aux = aux + " upper( trad." + key + " ) like ? ";
+                            params.add("%"+sValue+"%");
+                        }
+                    }
+                } else {
+                    aux = aux + " trad." + key + " = ? ";
+                    params.add(value);
+                }
+            }
+        }
+
+        return aux;
+    }        
 
     /**
     * Carga las unidades hijas de una unidad de manera recursiva
@@ -2866,6 +2898,157 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		return mollapa;
 	}		
 
+	/**
+	 * Devuelve las unidades administrativas que coinciden con los criterios  de búsqueda
+     * @return ResultadoBusqueda 
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */	
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) {
+		
+		Session session = getSession();
+		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
+		
+		try {
+			
+			if (!userIsOper()) {
+				parametros.put("validacion", Validacion.PUBLICA);
+			}
+
+			List params = new ArrayList();
+			String i18nQuery = "";
+			
+			if ( traduccion.get("idioma") != null ) {	
+				i18nQuery = populateQuery(parametros, traduccion, params);
+			} else {
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				if (paramsQuery.length() == 0) {
+					i18nQuery += "";
+				} else {
+					i18nQuery += paramsQuery + " and ";
+				}				
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ")";
+			}			
+			
+			String select   = "select new UnidadAdministrativa( unidad.id, unidad.codigoEstandar, trad.nombre, unidad.orden, index(trad) ) ";
+			String from     = "from UnidadAdministrativa as unidad, unidad.traducciones trad ";
+			String where   = "where " + i18nQuery + " and unidad.padre = " + id + " ";			
+			String orderBy = "order by unidad.orden";
+			
+			if ( userIsSystem() ) {
+				
+				if ( id == null ) {										
+					where =  "where " + i18nQuery + (uaFilles ? "" : " and unidad.padre is null "); 
+				} else if ( uaMeves && uaFilles ) {
+					where   = "where " + i18nQuery;					
+				} else if ( uaFilles ){ 
+					where = " where " + i18nQuery + " and unidad.padre in (" + cargarArbolUnidadId(id).toString().replaceAll("\\[|\\]", "") + ")";					 
+				}
+				
+			} else {
+				String cadenaFiltro = obtenerCadenaFiltroUA(id, uaFilles, uaMeves);
+				if ( StringUtils.isEmpty(cadenaFiltro) ) {
+					cadenaFiltro = EMPTY_ID;
+				}
+				where = where.replaceFirst("and unidad.padre = " + id, "");
+				where += "and (unidad.id in(" + cadenaFiltro + ") " +
+							 (id != null ? "or unidad.padre = " + id : "" )  + ") " +							 
+							 (id != null ? "and unidad.id != " + id + " " : "");
+			}
+						
+			Query query = session.createQuery( select + from + where + orderBy);
+			
+			// Asignar parámetros
+			for (int i = 0; i < params.size(); i++) {
+				String o = (String) params.get(i);
+				query.setString(i, o);
+			}			
+			
+			int resultadosMax = new Integer(resultats).intValue();
+			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+			
+			listaUnidadesAdministrativas = castList(UnidadAdministrativa.class, query.list());
+
+			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}				
+			
+			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+			
+			resultadoBusqueda.setListaResultados(listaUnidadesAdministrativas);
+			resultadoBusqueda.setTotalResultados(listaUnidadesAdministrativas.size());			
+			
+			return resultadoBusqueda;
+		
+		} catch (DelegateException ex) {
+				log.warn("[obtenerCadenaFiltroUA: " + id + "] No se ha podido llamar al método. " + ex.getMessage());
+				throw new EJBException(ex);
+		} catch (HibernateException he) {
+			throw new EJBException(he);
+		} finally {
+			close(session);
+		}	
+	}	
+	
+    /**
+     * Asigna a una unidad administratival un nuevo orden y reordena los elementos afectados.
+     * 
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin}"
+     */	
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) {
+    	
+        Session session = getSession();
+        List<UnidadAdministrativa> listaUAs = new ArrayList<UnidadAdministrativa>();
+        String where = "where ua.padre is null ";
+        
+        try {
+        	if (idPadre != null)
+        		where = "where ua.padre = " + idPadre + " ";
+        	
+        	Query query = session.createQuery("select ua " +
+        													"from UnidadAdministrativa as ua " +
+        													where +
+        													"order by ua.orden asc" );			        
+        	
+        	listaUAs = castList(UnidadAdministrativa.class, query.list());
+        	
+        	// Modificar sólo los elementos entre la posición del elemento que cambia 
+        	// de orden y su nueva posición 
+        	int ordenMayor = ordenNuevo > ordenAnterior ? ordenNuevo : ordenAnterior;
+        	int ordenMenor = ordenMayor == ordenNuevo ? ordenAnterior : ordenNuevo;
+        	
+        	// Si el nuevo orden es mayor que el anterior, desplazar los elementos 
+        	// intermedios hacia arriba (-1), en caso contrario, hacia abajo (+1)
+        	int incremento = ordenNuevo > ordenAnterior ? -1 : 1;        			
+        	        	
+        	for (UnidadAdministrativa unidadAdministrativa: listaUAs ) {        		    
+        		
+        		long orden = unidadAdministrativa.getOrden();
+        		
+        		if (orden >= ordenMenor && orden <= ordenMayor) {
+        			
+        			if ( id.equals(unidadAdministrativa.getId() ) ) {
+        				unidadAdministrativa.setOrden( ordenNuevo );
+        			} else {
+        				unidadAdministrativa.setOrden( orden + incremento );
+        			}        			
+        		}
+        		
+        		// Actualizar todo para asegurar que no hay duplicados ni huecos
+        		session.saveOrUpdate(unidadAdministrativa); 
+        	}
+        	
+        	session.flush();
+        	
+        } catch (HibernateException he) {
+        	throw new EJBException(he);
+        } finally {
+        	close(session);
+        }    	    	    	
+    }
 	
 	/**
 	 * Método que devuelve una cadena csv de ids de unidades administrativas según los 
@@ -2946,19 +3129,18 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                {"l�L"  , "l�l"}
                 };
 		
-		
-		       // evitam nullPointerExceptions
-		       if (texte == null) return null;
-		       
-		       StringBuffer buf = new StringBuffer(texte);
-		       initAllTab(buf);
-		       String original = buf.toString();
-		       for (int i=0; i < canvis.length; i++) {
-		          replace(original, buf, canvis[i][0], canvis[i][1] );
-		       }
-		       
-		       return buf.toString();
-		   }        		
+	       // evitam nullPointerExceptions
+	       if (texte == null) return null;
+	       
+	       StringBuffer buf = new StringBuffer(texte);
+	       initAllTab(buf);
+	       String original = buf.toString();
+	       for (int i=0; i < canvis.length; i++) {
+	          replace(original, buf, canvis[i][0], canvis[i][1] );
+	       }
+	       
+	       return buf.toString();
+	}        		
 
 	private void initAllTab (StringBuffer texte) {
 	    
@@ -3010,71 +3192,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			throw new EJBException(he);
 		} finally {
 			close(session);
-		}
-		
-	}
-
-	/**
-	 * Buscador de unidades administrativas para el caso en que no haya
-	 * ninguna unidad administrativa seleccionada (i.e. desde Inicio)
-	 *  
-	 * @return Lista de unidades administrativas resultantes según los criterios de búsqueda
-	 */
-	private List<UnidadAdministrativa> buscadorUnidadesAdministrativasInicio() {
-		
-		Session session = getSession();
-		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
-		
-		if ( userIsSystem() ) {
-			//Listar todas las UAs raíz y las hijas de primer orden
-		} else {
-			//Listar las UA de este usuario somente
-			
-		}
-		
-		try {
-			//id, nombre, fecha, orden
-			Query query = session.createQuery("select new UnidadAdministrativa( ua.id, ua.codigoEstandar, trad.nombre, ua.orden ) " +
-														    "from UnidadAdministrativa ua, ua.traducciones trad " +
-														    "where ua.id in (:listaIdsUA) and index(trad) = :idioma ");
-			
-			//query.setParameter("listaIdsUA", listaIdsUA);
-			//query.setParameter("idioma", idioma);
-			
-		} catch (HibernateException he) {
-			throw new EJBException(he);
-		} finally {
-			close(session);
-		}
-		
-	    /**
-	     * 
-	     */
-//	    public List<Long> listarIdsHijos(Long id) {
-//	    	Session session = getSession();
-//	    	List<Long> result = new ArrayList<Long>();
-//	    	try {
-//	    		Query query = session.createQuery("select ua.id from UnidadAdministrativa as ua where ua.id in (:listaIds)");
-//	    		
-//	    	} catch (HibernateException he) {
-//	    		throw new EJBException(he); 
-//	    	} finally {
-//	    		close(session);
-//	    	}
-//	    }
-	    		
-		return null;
-	}
-	
-	/**
-	 * Buscador de unidades administrativas para el caso en el que haya
-	 * una seleccionada (id)
-	 * 
-	 * @param id Id de la UA sobre la que se realizará la búsqueda
-	 * @return Lista de unidades administrativas resultantes sergún los criterios de búsqueda
-	 */
-	private List<UnidadAdministrativa> buscadorUnidadesAdministrativas(long id) {
-		return null;
+		}		
 	}
 	
 }

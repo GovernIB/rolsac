@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -689,6 +690,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         					}
 
         					int pos = 0;
+        					
         					for (Long idFichaUA : listaIdFichasUA ) {
         						String[] orden = { String.valueOf(pos) };
         						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden);
@@ -873,7 +875,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
             
             resultadoBusqueda = fitxaDelegate.buscarFichas( paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null, pagPag, pagRes );           
             
-            for (Ficha fitxa : (ArrayList<Ficha>) resultadoBusqueda.getListaResultados() ) {
+            for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados()) ) {
             	
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
                 llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
@@ -935,7 +937,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	        resultats.put("nodes", listaSeccionesDTO);        			
 			
 		} catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
+			
+            if ( dEx.isSecurityException() ) {
                 resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
                 resultats.put("id", -1);
             } else {
@@ -944,52 +947,133 @@ public class UnitatAdmBackController extends PantallaBaseController {
             	log.error(ExceptionUtils.getStackTrace(dEx));
             }
 		}
-		
 		return resultats;
 	} 
+	
+	@RequestMapping(value = "/reordenarUAs.do", method = POST) 
+    public @ResponseBody IdNomDTO reordenarUAs(HttpServletRequest request) {
+    	IdNomDTO resultatStatus = new IdNomDTO();
+    	
+		try {
+			
+			Long id = new Long(request.getParameter("id")); 
+			Integer ordenNuevo = new Integer(request.getParameter("orden"));
+			Integer ordenAnterior = new Integer(request.getParameter("ordenAnterior"));
+			
+			String tmpId = request.getParameter("idPadre");
+			Long idPadre = null;
+			
+			if ( !"".equals(tmpId) && StringUtils.isNumeric(tmpId) )
+				idPadre = new Long(tmpId);
+			
+			UnidadAdministrativaDelegate unidadAdministrativaDelegate = DelegateUtil.getUADelegate();
+			unidadAdministrativaDelegate.reordenar(id, ordenNuevo, ordenAnterior, idPadre);
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				resultatStatus.setId(-1l);
+			} else {
+				resultatStatus.setId(-2l);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+		} catch (NumberFormatException nfEx) {
+			resultatStatus.setId(-3l);
+			log.error("Error: Id de UA no numèrica: " + ExceptionUtils.getStackTrace(nfEx));
+		}
+		
+		return resultatStatus;
+    }    
 	
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> listarUnidadesAdministrativas(HttpServletRequest request, HttpSession session) {
 		
-		List<UnidadAdministrativaDTO> listaUnidadAdministrativaDTO = new ArrayList<UnidadAdministrativaDTO>();
-
-		Map<String, Object> resultats = new HashMap<String, Object>();
+		List<UnidadAdministrativaDTO> listaUnidadesAdministrativasDTO = new ArrayList<UnidadAdministrativaDTO>();
+		
+		Map<String, Object> resultats   = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
-		Map<String, String> tradMap = new HashMap<String, String>();
-
+		Map<String, String> tradMap     = new HashMap<String, String>();
+		
+		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 		String lang = getRequestLanguage(request);
+		String codigoEstandar = request.getParameter("codi");
+
+		int resultadosDescartados  = 0;
+								
+		String espacioTerritorial = request.getParameter("espacio_territorial");
+		String tratamiento = request.getParameter("tratamiento");
 		
-//		UnidadAdministrativa ua = null;
+		if ( !"".equals(espacioTerritorial) && StringUtils.isNumeric(espacioTerritorial) ) {
+			paramMap.put("espacioTerrit", espacioTerritorial);
+		}
 		
-//		if (getUAFromSession(session) != null) {
-//			ua = (UnidadAdministrativa) getUAFromSession(session);
-//		}
+		if ( !"".equals(tratamiento) && StringUtils.isNumeric(tratamiento) ) {
+			paramMap.put("tratamiento", tratamiento);
+		}
 		
-//		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		if (StringUtils.isNotEmpty(codigoEstandar)) {					
+			paramMap.put("codigoEstandar", codigoEstandar.toUpperCase());
+		}
+		
+		// Textes (en todos los campos todos los idiomas)
+		String textes = request.getParameter("textes");
+		if (textes != null && !"".equals(textes)) {
+			textes = textes.toUpperCase();
+			 
+			tradMap.put("nombre", textes);
+			tradMap.put("presentacion", textes);
+			tradMap.put("abreviatura", textes);
+			tradMap.put("url", textes);
+			tradMap.put("cvResponsable", textes);
+		} else {
+			tradMap.put("idioma", lang);
+		}
+		
+		UnidadAdministrativa ua = null;
+		
+		if (getUAFromSession(session) != null) {
+			ua = (UnidadAdministrativa) getUAFromSession(session);
+		}
+		
+		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));		
+		
+		//Información de paginación
+		String pagPag = request.getParameter("pagPag");		
+		String pagRes = request.getParameter("pagRes");
+		
+		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagRes == null) pagRes = String.valueOf(10);
+
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 				
-//		try {
+		try {						
+			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, pagPag, pagRes);
+			String idiomaPorDefecto = request.getLocale().getLanguage();
 			
-		/*
-		select 
-			una_codi, una_coduna, tun_nombre
-		from 
-			rsc_uniadm, rsc_trauna
-		where tun_coduna = una_codi 
-			and tun_codidi = 'ca' 
-			and (una_codi in (select una_codi from rsc_uniadm where una_coduna is null) or 
-			una_coduna in (select una_codi from rsc_uniadm where una_coduna is null) )
-		order by una_codi; 
-		*/
-			
-//		} catch (DelegateException dEx) {
-//			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-//			resultats.put("id", -2);
-//			log.error(ExceptionUtils.getStackTrace(dEx));
-//		} 
-//		
-		return null;
+			for ( UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados()) ) {
+					if  ( idiomaPorDefecto.equals( uniAdm.getIdioma() )) {
+						UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO( uniAdm.getId(), uniAdm.getCodigoEstandar(), 
+								uniAdm.getNombre(), uniAdm.getOrden());
+						
+						listaUnidadesAdministrativasDTO.add(dto);
+					} else {
+						resultadosDescartados++;
+					}
+			}
+							
+		} catch (DelegateException dEx) {
+			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+			resultats.put("id", -2);
+			log.error(ExceptionUtils.getStackTrace(dEx));
+		} 
+		
+		//Total de registros
+		resultats.put("total", resultadoBusqueda.getTotalResultados() - resultadosDescartados);
+		resultats.put("nodes", listaUnidadesAdministrativasDTO);
+		
+		return resultats;		
 	}	
-//	
+	
 	/**
      * Método que comprueba si hay microsites para una Unidad Orgánica
      * @param idua identificador de la unidad organica
@@ -999,16 +1083,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 //    	boolean retorno=false;
 //    	try {
 //	    	String value = System.getProperty("es.caib.rolsac.microsites");
-//	    	if ("Y".equals(value)) {
-//	    		retorno = tieneMicrosites(idua);
-//	    	} else {
-//	            retorno = false;
-//	    	}    	
+//    		return "Y".equals(value) ? tieneMicrosites(idua) : false;    	    		
 //		} catch (Exception e) {
 //			log.error("Error al determinar si la ua " + idua + " tiene microsites: " + ExceptionUtils.getStackTrace(e));
 //			retorno = true; //para evitar inconsistencias
 //		}
-//    	return retorno;
     	return false;
     }
     
@@ -1060,7 +1139,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	return "unitatadm.esborrat.incorrecte.personal";
         else if(!ua.getUnidadesMaterias().isEmpty())        	
         	return "unitatadm.esborrat.incorrecte.materies";
-        else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ){
+        else if(!boolProcedIsEmpty || !ua.getNormativas().isEmpty() ) {
        	
         	List <Long> idsList=new ArrayList<Long>();
 
@@ -1071,13 +1150,16 @@ public class UnitatAdmBackController extends PantallaBaseController {
         	    	
         	Iterator<Long> iter = idsList.iterator();
         	int count = 0;
-        	while(iter.hasNext()){
+        	
+        	while( iter.hasNext() ) {
+        		
         		Long id = iter.next();
-        		if (ids.equals("")){
+        		
+        		if ( ids.equals("") ) {
           			ids = id.toString();
           			count++;
-        		}else{
-          			if ((count % 10) == 0)
+        		} else {
+          			if ( (count % 10) == 0 )
           				ids = ids + ",<BR> " + id.toString();
           			else
           				ids = ids + ", " + id.toString();

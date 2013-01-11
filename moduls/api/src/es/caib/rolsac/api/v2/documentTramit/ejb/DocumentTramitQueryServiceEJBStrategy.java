@@ -38,8 +38,7 @@ public class DocumentTramitQueryServiceEJBStrategy implements DocumentTramitQuer
             return documentTramitQueryServiceDelegate.obtenirCatalegDocuments(idCatalegDocuments);
         } catch (DelegateException e) {
             throw new StrategyException(e);
-        }
-		
+        }		
 	}
 
 	public ExcepcioDocumentacioDTO obtenirExcepcioDocumentacio(
@@ -50,5 +49,4 @@ public class DocumentTramitQueryServiceEJBStrategy implements DocumentTramitQuer
 			throw new StrategyException(e);
 		}
 	}
-
 }

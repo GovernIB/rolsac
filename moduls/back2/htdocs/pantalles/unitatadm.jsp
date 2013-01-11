@@ -89,16 +89,22 @@
 	                                <div class="control select">
 	                                    <select id="uahija_espacioTerritorial" name="espacio_territorial">
 	                                        <option value=""><spring:message code='camp.tria.opcio'/></option>
+                                            <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
+                                                <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
+                                            </c:forEach>
 	                                    </select>               
 	                                </div>
 	                            </div>                        
-	                            <div class="element t25">
+	                            <div class="element t35">
 	                                <div class="etiqueta">
 	                                    <label for="uahija_tratamiento"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>
 	                                </div>
 	                                <div class="control select">
 	                                    <select id="uahija_tratamiento" name="tratamiento">
 	                                        <option value=""><spring:message code='camp.tria.opcio'/></option>	                                        
+                                        	<c:forEach items="${llistaTractaments}" var="tractament">
+                                            	<option value='<c:out value="${tractament.id}" />'><c:out value="${tractament.nom}" /></option>
+                                        	</c:forEach>
 	                                    </select>
 	                                </div>
 	                            </div>
@@ -1212,12 +1218,10 @@
 		var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
 		
 		// dsanchez: URL para ordenar el listado de UA hijas. 
-		var pagOrdenarUAHijas = ''; 
+		var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';
         
 		var urlPrevisualizarUA = '<c:out value="${urlPrevisualitzacio}"/>';
-		
-		// @todo Rellenar con la ULR correcta.
-		var urlListaUAs = '';
+		var urlListaUAs = '<c:url value="/unitatadm/llistat.do" />';
 		
         // texts
         var txtEspere = "<spring:message code='txt.esperi'/>";

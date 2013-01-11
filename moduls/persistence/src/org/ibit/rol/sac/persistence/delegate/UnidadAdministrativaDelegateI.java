@@ -5,17 +5,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 public interface UnidadAdministrativaDelegateI {
 
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException;	
+	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#crearUnidadAdministrativaRaiz(org.ibit.rol.sac.model.UnidadAdministrativa)
 	 */
@@ -540,7 +541,10 @@ public interface UnidadAdministrativaDelegateI {
     
     public void eliminarUaSinRelaciones(Long idUA)
     		throws DelegateException;
-    
+  
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) 
+    		throws DelegateException;
+    	
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadAdministrativaPM(java.lang.Long)
 	 */
@@ -553,5 +557,4 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract String obtenerCadenaFiltroUA(Long ua,
 			boolean uaFilles, boolean uaMeves)
 			throws DelegateException;    
-    
 }

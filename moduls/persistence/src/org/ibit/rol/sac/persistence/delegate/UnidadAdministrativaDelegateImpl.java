@@ -10,9 +10,6 @@ import javax.ejb.CreateException;
 import javax.ejb.Handle;
 import javax.naming.NamingException;
 
-import net.sf.hibernate.HibernateException;
-import net.sf.hibernate.Session;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
@@ -22,12 +19,19 @@ import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacade;
 import org.ibit.rol.sac.persistence.intf.UnidadAdministrativaFacadeHome;
 import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 
+import es.caib.rolsac.utils.ResultadoBusqueda;
+
 /**
  * Business delegate para manipular Unidades Administrativas.
  */
 public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, UnidadAdministrativaDelegateI {
 
-    /* ========================================================= */
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 234459285681808474L;
+
+	/* ========================================================= */
     /* ======================== M�TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
@@ -1021,10 +1025,18 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 	        } catch (RemoteException e) {
 	            throw new DelegateException(e);
 	        }
-
      }
-	 
-	 	/**
+
+     public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre) 
+    		 throws DelegateException {
+     	try {
+     		getFacade().reordenar(id, ordenNuevo, ordenAnterior, idPadre);
+     	} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+     }
+     
+	 /**
 	 * Obtiene una Unidad Administrativa {PORMAD}
 	 * */
     public UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) throws DelegateException {
@@ -1033,8 +1045,16 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
-    }    
+    }
     
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException {
+		try {
+			return getFacade().buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, pagina, resultats);
+		} catch (RemoteException e) {
+			throw new DelegateException(e);
+		}
+	}        
+	
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -1058,5 +1078,5 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
             throw new DelegateException(e);
         }
     }
-    
+
 }

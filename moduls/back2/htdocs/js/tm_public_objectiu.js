@@ -60,7 +60,7 @@ function CLlistat(){
 		this.carregar({});
 	}
 	
-	this.finCargaListado = function(opcions,data){
+	this.finCargaListado = function(opcions,data) {
 		// total
 		resultats_total = parseInt(data.total,10);
 		

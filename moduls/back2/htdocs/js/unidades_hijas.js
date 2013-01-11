@@ -66,7 +66,7 @@ function CEscritorioUnidadesHijas() {
 			ordre_T = this.tipoOrden;
 			ordre_C = this.campoOrden;
 			ordre_c1 = (ordre_C == "nombre") ? " " + ordre_T : "";		
-			ordre_c2 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			//ordre_c2 = (ordre_C == "fecha") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -76,8 +76,6 @@ function CEscritorioUnidadesHijas() {
 				
 				if (ordre_C == "nombre") {
 					txt_per = txtNombre;
-				}else if( ordre_C == "fecha" ){
-					txt_per = txtData;
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
@@ -87,12 +85,11 @@ function CEscritorioUnidadesHijas() {
 			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNombre + "</a></div>";
-			codi_cap2 = "<div class=\"th fecha" + ordre_c2 + "\" role=\"columnheader\">" + txtData + "</a></div>";
 			
 			if( !modoBuscador ){
-				codi_cap3 = "<div class=\"th orden\" role=\"columnheader\">" + txtOrdre + "</a></div>";	
+				codi_cap2 = "<div class=\"th orden\" role=\"columnheader\">" + txtOrdre + "</a></div>";	
 			}else{
-				codi_cap3 = '';
+				codi_cap2 = '';
 			}
 			
 			// codi taula
@@ -101,7 +98,7 @@ function CEscritorioUnidadesHijas() {
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 				codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-					codi_taula += codi_cap1 + codi_cap2 + codi_cap3;
+					codi_taula += codi_cap1 + codi_cap2;
 				codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -115,17 +112,14 @@ function CEscritorioUnidadesHijas() {
 					
 					codi_taula += "<div class=\"td nom\" role=\"gridcell\">";
 						codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
-						codi_taula += "<a class=\"uahija_"+dada_node.id+"\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
+						codi_taula += "<span style='visibility: hidden;' class=\"ordre\">" + (printStringFromNull(dada_node.orden, txtSinValor) + 1) + "</span>";						
+						codi_taula += "<a class=\"uahija_" + dada_node.id + "\" href=\"javascript:;\" class=\"nom\">" + dada_node.nombre + "</a>";
 					codi_taula += "</div>";
 					
-					codi_taula += "<div class=\"td fecha\" role=\"gridcell\">" + dada_node.fecha + "</div>";
-					
-					if( !modoBuscador ){
+					if( !modoBuscador ) {
 						
 						codi_taula += "<div class=\"td orden\" role=\"gridcell\">";
-					
-							codi_taula += that.getHtmlSelectorOrdenacion("uaHija_"+dada_node.id, dada_node.ordre, resultats_total );
-					
+						codi_taula += that.getHtmlSelectorOrdenacion("uaHija_"+dada_node.id, dada_node.orden, resultats_total );
 						codi_taula += "</div>";
 						
 					}
@@ -153,7 +147,7 @@ function CEscritorioUnidadesHijas() {
 		} else {
 			
 			// no hi ha items
-			codi_final = "<p class=\"noItems\">" + txtNoHiHaEdificis + ".</p>";
+			codi_final = "<p class=\"noItems\">" + txtNoHiHaUnitats + ".</p>";
 			
 		}
 		
@@ -178,13 +172,17 @@ function CEscritorioUnidadesHijas() {
 					
 					var itemID = jQuery(this).attr("id").split("_")[1];
 					var orden = jQuery(this).val();
+					var idPadre = $("#formGuardar #item_id").val();
+										
+					// Obtenemos el valor del orden anterior para saber en qué dirección reordenar los elementos
+					var ordenAnterior = jQuery(".uahija_" + itemID).prev().html() -1;					
 					
-					//var dataVars = "id=" + itemID;
-					var dataVars = "id=" + itemID+"&orden="+orden;
+					var dataVars = "id=" + itemID+"&orden="+orden+ "&ordenAnterior=" + ordenAnterior +"&idPadre=" + (idPadre == undefined ? "" : idPadre);										
 					
 					$.ajax({
 						type: "POST",
-						url: pagPujar,
+						//url: pagPujar,
+						url: pagOrdenarUAHijas,
 						data: dataVars,
 						dataType: "json",
 						error: function(){
@@ -203,10 +201,7 @@ function CEscritorioUnidadesHijas() {
 	}
 
 	this.carregar = function(opcions) {		
-		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)
-		var modoBuscador = (typeof opcions.cercador != "undefined" && opcions.cercador == "si");
-		var modoListado = !modoBuscador;
-		
+		// opcions: ajaxPag (integer), ordreTipus (ASC, DESC), ordreCamp (tipus, carrec, tractament)		
 		var $inputPagPagina, $inputOrdreTipus, $inputOrdreCamp;
 		
 		dataVars = "";
@@ -227,12 +222,12 @@ function CEscritorioUnidadesHijas() {
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
 			dataVars_cercador += "&espacio_territorial=" + $("#uahija_espacioTerritorial").val();
-			dataVars_cercador += "&materia=" + $("#uahija_tratamiento").val();
+			dataVars_cercador += "&tratamiento=" + $("#uahija_tratamiento").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();
 			dataVars_cercador += "&uaMeves=" + uaMevesVal;
 			dataVars_cercador += "&uaFilles=" + uaFillesVal;
 			
-		}else{
+		} else {
 			
 			$inputPagPagina = $obj.find(".resultats.L input.pagPagina");
 			$inputOrdreTipus = $obj.find(".resultats.L input.ordreTipus");
@@ -250,7 +245,6 @@ function CEscritorioUnidadesHijas() {
 		}
 		
 		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt($inputPagPagina.val(),10);
 		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();
 			
 		// ordre
@@ -258,76 +252,33 @@ function CEscritorioUnidadesHijas() {
 		ordre_Camp = $inputOrdreCamp.val();
 			
 		// variables
-		dataVars += "pagPagina=" + pag_Pag + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
+		dataVars += "pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;
 		
-		// @todo Descomentar una vez fijada la variable urlListaUAs.
-		// ajax
-		/*if ( ( modoListado && !Llistat.cacheDatosListado ) || modoBuscador ){
-			$.ajax({
-				type: "POST",
-				url: pagLlistat,
-				data: dataVars,
-				dataType: "json",
-				error: function() {
-					
-					if (!a_enllas) {
-						// missatge
-						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
-						// error
-						Error.llansar();
-					}
-					
-				},
-				success: function(data) {				
-					Llistat.finCargaListado(opcions,data);
-					
-					if( modoListado ){											
-						Llistat.cacheDatosListado = data;
-					}
+		// ajax			
+		$.ajax({
+			type: "POST",
+			url: urlListaUAs,
+			data: dataVars,
+			dataType: "json",
+			error: function() {
+				
+				if (!a_enllas) {
+					// missatge
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					// error
+					Error.llansar();
 				}
-			});
-		}else{
-			Llistat.finCargaListado(opcions,Llistat.cacheDatosListado);
-		}*/
-		// (MAQUETACI�N) Llamamos al m�todo para actualizar el listado directamente.
-		var datos = {
-			total: 27,
-			nodes:[
-				{id: 1, nombre: "Presidencia",	fecha: "06/01/2010"},
-				{id: 2, nombre: "Conseller&iacute;a de Presidencia", fecha: "06/02/2010"},
-				{id: 3, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 4, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 5, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 6, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 7, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 8, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 9, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 10, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 11, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 12, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 13, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 14, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 15, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 16, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 17, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 18, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 19, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 20, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 21, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 22, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 23, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 24, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 25, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 26, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"},
-				{id: 27, nombre: "Conseller&iacute;a d&apos;Econom&iacute;a i Hisenda", fecha: "07/03/2010"}
-				],
-			};				
-		that.finCargaListado(opcions,datos);
-			
+				
+			},
+			success: function(data) {				
+				that.finCargaListado(opcions,data);				
+			}
+		});
 	}
 	
 	// M�todo sobreescrito.
 	this.nuevaFicha = function(){
 		alert("Implementar");
+		//jQuery("#escriptori_detall").show();		
 	}
 };

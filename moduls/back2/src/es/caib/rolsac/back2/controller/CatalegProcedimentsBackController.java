@@ -201,18 +201,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			paramMap.put("fechaPublicacion", fechaPublicacion);
 		}
 		
-		
 		Date fechaActualizacion = DateUtils.parseDate(request.getParameter("fechaActualizacion"));
 		if (fechaActualizacion != null) {
 			paramMap.put("fechaActualizacion", fechaActualizacion);
 		}
 
-		
 		String ventanillaUnica = request.getParameter("finestreta");
 		if ("1".equals(ventanillaUnica)) {
 			paramMap.put("ventanillaUnica", 1);
 		}
-
 		
 		String taxa = request.getParameter("taxa");
 		if ("1".equals(taxa)) {
@@ -227,7 +224,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		} else if ("0".equals(indicador)) {
 			paramMap.put("indicador", 0);
 		}
-
 		
 		try {
 			String estat = request.getParameter("estat");
@@ -237,14 +233,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException e) {
 		}
-
 		
 		String responsable = request.getParameter("responsable");
 		if (responsable != null && !"".equals(responsable)) {
 			paramMap.put("responsable", responsable.toUpperCase());
 		}
 
-		
 		try {
 			String familia = request.getParameter("familia");
 			Integer familiaId = Integer.parseInt(familia);
@@ -253,7 +247,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException e) {
 		}
-
 		
 		try {
 			String iniciacion = request.getParameter("iniciacio");
@@ -263,7 +256,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException e) {
 		}
-
 		
 		String tramite = request.getParameter("tramit");
 		if (tramite != null && !"".equals(tramite)) {
@@ -298,7 +290,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 		}
 
-		// Par�metres ordenaci�
+		// Paràmetres ordenació
 		String ordreCamp = request.getParameter("ordreCamp");
 		if (ordreCamp != null && !"".equals(ordreCamp)) {
 			paramMap.put("ordreCamp", ordreCamp);

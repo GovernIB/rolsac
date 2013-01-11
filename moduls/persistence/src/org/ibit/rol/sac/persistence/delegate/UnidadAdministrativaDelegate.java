@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.hibernate.Session;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+
+import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /*
  * ejaen@dgtic  - u92770
@@ -32,7 +32,6 @@ public class UnidadAdministrativaDelegate {
 	public void setImpl(UnidadAdministrativaDelegateI impl) {
 		this.impl = impl;
     }
-
 
 	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad,
 			Long padreId) throws DelegateException {
@@ -169,7 +168,7 @@ public class UnidadAdministrativaDelegate {
 	public List<Ficha> listarFichSecHV(Long idUA, Long idHV, String ceSec,
 			boolean caducados) throws DelegateException {
 		return impl.listarFichSecHV(idUA, idHV, ceSec, caducados);
-        }
+    }
 
 	public List<Ficha> listarFichSecMat(Long idUA, Long idMat, String ceSec,
 			boolean caducados) throws DelegateException {
@@ -338,5 +337,13 @@ public class UnidadAdministrativaDelegate {
 			boolean uaFilles, boolean uaMeves) throws DelegateException {
 		return impl.obtenerCadenaFiltroUA(ua, uaFilles, uaMeves);
 	}
+
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException {
+		return impl.buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, pagina, resultats);
+	}	
+	
+    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre) throws DelegateException {
+    	impl.reordenar(id, ordenNuevo, ordenAnterior, idPadre);
+    }
 
 }

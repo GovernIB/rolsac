@@ -22,8 +22,51 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	 */
 	private static final long serialVersionUID = 372155523459384201L;
 
-	// Constructores
+    private Long id;
+    private String businessKey;
+    private String claveHita;
+    private String dominio;
+    private long orden;
+    private Integer validacion;
+    private String responsable;
+    private String telefono;
+    private String fax;
+    private String email;
+    private Integer sexoResponsable;
+    private Integer numfoto1;
+    private Integer numfoto2;
+    private Integer numfoto3;
+    private Integer numfoto4;
+    private Archivo fotop;
+    private Archivo fotog;
+    private Archivo logoh;
+    private Archivo logov;
+    private Archivo logos;
+    private Archivo logot;
+    private String codigoEstandar;
 
+    private UnidadAdministrativa padre;
+    private List<UnidadAdministrativa> hijos;
+    private Tratamiento tratamiento;
+    private Set<Edificio> edificios;
+    private Set<Personal> personal;
+    private Set<Normativa> normativas;
+    private Set<ProcedimientoLocal> procedimientos;
+    private Set<Tramite> tramites;
+    private Set<UnidadMateria> unidadesMaterias;
+    private Set usuarios = new HashSet();
+    private List<FichaUA> fichasUA;
+    private EspacioTerritorial espacioTerrit;
+    private Date fechaUltimaActualizacion;
+
+    public final static int HOMBRE = 1;
+    public final static int MUJER = 2;    
+    
+    //Campos especiales para optimizar la bÃºsqueda    
+    private String nombre;
+    private String idioma;
+    
+	// Constructores
 	public UnidadAdministrativa() {
 		super();
 	}
@@ -32,9 +75,29 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 		super();
 		this.id = id;
 	}
-	
+		
+	public UnidadAdministrativa(Long id, String codigoEstandar, String nombre, long orden, String idioma) {
+		super();
+		
+		this.id = id;
+		this.codigoEstandar = codigoEstandar;
+		this.nombre = nombre;
+		this.orden = orden;		
+		this.idioma = idioma;		
+	}
+		
 	// get & set
+	public String getIdioma() {
+		return idioma;
+	}
 	
+	public void setIdioma(String idioma) {
+		this.idioma = idioma;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
 
 	public Long getId() {
         return id;
@@ -356,7 +419,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 
     }
     
-    //Añadido para mostrar según el campo orden
+    //Aï¿½adido para mostrar segï¿½n el campo orden
     public Map getMapSeccionFichasUAConOrden() {
     	
         Map result = new TreeMap();
@@ -411,7 +474,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
     }    
     
 
-    /* Gestión del organigrama */
+    /* Gestiï¿½n del organigrama */
 
     public boolean isRaiz() {
         return padre == null;
@@ -458,51 +521,6 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         this.codigoEstandar = codigoEstandar;
     }
 
-
-    
-    private Long id;
-    private String businessKey;
-    private String claveHita;
-    private String dominio;
-    private long orden;
-    private Integer validacion;
-    private String responsable;
-    private String telefono;
-    private String fax;
-    private String email;
-    private Integer sexoResponsable;
-    private Integer numfoto1;
-    private Integer numfoto2;
-    private Integer numfoto3;
-    private Integer numfoto4;
-    private Archivo fotop;
-    private Archivo fotog;
-    private Archivo logoh;
-    private Archivo logov;
-    private Archivo logos;
-    private Archivo logot;
-    private String codigoEstandar;
-
-
-
-    private UnidadAdministrativa padre;
-    private List<UnidadAdministrativa> hijos;
-    private Tratamiento tratamiento;
-    private Set<Edificio> edificios;
-    private Set<Personal> personal;
-    private Set<Normativa> normativas;
-    private Set<ProcedimientoLocal> procedimientos;
-    private Set<Tramite> tramites;
-    private Set<UnidadMateria> unidadesMaterias;
-    private Set usuarios = new HashSet();
-    private List<FichaUA> fichasUA;
-    private EspacioTerritorial espacioTerrit;
-    private Date fechaUltimaActualizacion;
-
-    public final static int HOMBRE = 1;
-    public final static int MUJER = 2;
-
-    
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UnidadAdministrativa)) return false;
@@ -577,7 +595,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	}
  
      /**
-     * Método que devuelve una Lista con los Ids de los Procedimientos relacionados con la UA. 
+     * Mï¿½todo que devuelve una Lista con los Ids de los Procedimientos relacionados con la UA. 
      * @author Indra
      * @return Devuelve un Lista con Ids de los Procedimientos relacionados
      */
@@ -592,7 +610,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	}
 	
     /**
-     * Método que devuelve una Lista con los Ids de las Normativas relacionados con la UA. 
+     * Mï¿½todo que devuelve una Lista con los Ids de las Normativas relacionados con la UA. 
      * @author Indra
      * @return Devuelve un Lista con Ids de los Normativas relacionados
      */

@@ -63,7 +63,6 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Usuario;
-import org.ibit.rol.sac.model.Validable;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.model.webcaib.Traduccio;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
