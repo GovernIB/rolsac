@@ -8,15 +8,11 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_tramits.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
-<script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
@@ -768,7 +764,7 @@
                                                 <label for="item_nom_<c:out value="${lang}" />"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_ca" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou" />
                                             </div>
                                         </div>
                                         <div id="caja_item_clave_primaria" class="element t25p">
@@ -1798,7 +1794,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirTramit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
