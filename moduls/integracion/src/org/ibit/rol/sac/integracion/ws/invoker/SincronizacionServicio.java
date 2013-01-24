@@ -48,6 +48,8 @@ public class SincronizacionServicio extends StandardInvoker{
         registerTypeMapping(NormativaTransferible.class);
         registerTypeMapping(TraduccionNormativaTransferible.class);
         registerTypeMapping(DocumentoTransferible.class);
+        registerTypeMapping(TipoTransferible.class);
+        registerTypeMapping(TraduccionTipoTransferible.class);
 
     }
 
