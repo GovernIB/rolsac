@@ -92,7 +92,7 @@ public class QueryBuilder {
     public Query createQuery(Session session) throws HibernateException {
         Query query = session.createQuery(getHQL());
         prepareQuery(query);
-        log.info(this.toString());
+        log.debug(this.toString());
         return query;
     }
 
