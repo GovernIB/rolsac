@@ -129,7 +129,18 @@ public abstract class NormativaExternaRemotaFacadeEJB extends HibernateEJB {
         try {
 			Query query = session.createQuery("select elements(proc.normativas) from ProcedimientoLocal as proc where proc.id="+idProcedimiento);
 
-			return (List<Normativa>)query.list();
+            List<Normativa> normativas = query.list();
+            for( Normativa normativa : normativas){
+
+                for (final String idioma : normativa.getLangs()){
+			        	log.debug("entra: "+normativa.getId());
+		                final TraduccionNormativa traduccion = (TraduccionNormativa)normativa.getTraduccion(idioma);
+		                 if(traduccion!=null){
+				            Hibernate.initialize(traduccion.getArchivo());
+		                 }
+		            }
+            }
+			return normativas;
         } catch (HibernateException he) {
             throw new EJBException(he);
         } finally {
