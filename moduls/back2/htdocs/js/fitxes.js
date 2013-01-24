@@ -504,31 +504,26 @@ function CDetall(){
 			$("#modulLateral p.baix:first").removeClass("iCaducat").addClass("iPublicat");
 		}
 		*/
-		$("#item_titol_ca").val(printStringFromNull(dada_node.ca.titulo));
-		$("#item_des_curta_ca").val(printStringFromNull(dada_node.ca.descAbr));
-		$("#item_des_llarga_ca").val(printStringFromNull(dada_node.ca.descripcion));
-		$("#item_url_ca").val(printStringFromNull(dada_node.ca.url));
-		
-		$("#item_titol_es").val(printStringFromNull(dada_node.es.titol));
-		$("#item_des_curta_es").val(printStringFromNull(dada_node.es.descAbr));
-		$("#item_des_llarga_es").val(printStringFromNull(dada_node.es.descripcion));
-		$("#item_url_es").val(printStringFromNull(dada_node.es.url));
-		
-		$("#item_titol_en").val(printStringFromNull(dada_node.en.titol));
-		$("#item_des_curta_en").val(printStringFromNull(dada_node.en.descAbr));
-		$("#item_des_llarga_en").val(printStringFromNull(dada_node.en.descripcion));
-		$("#item_url_en").val(printStringFromNull(dada_node.en.url));
-		
-		$("#item_titol_de").val(printStringFromNull(dada_node.de.titol));
-		$("#item_des_curta_de").val(printStringFromNull(dada_node.de.descAbr));
-		$("#item_des_llarga_de").val(printStringFromNull(dada_node.de.descripcion));
-		$("#item_url_de").val(printStringFromNull(dada_node.de.url));
-		
-		$("#item_titol_de").val(printStringFromNull(dada_node.fr.titol));
-		$("#item_des_curta_de").val(printStringFromNull(dada_node.fr.descAbr));
-		$("#item_des_llarga_de").val(printStringFromNull(dada_node.fr.descripcion));
-		$("#item_url_de").val(printStringFromNull(dada_node.fr.url));
-		
+
+		// Bloque de pestanyas de idiomas
+        for (var i in idiomas) {
+            var idioma = idiomas[i];
+
+            $("#item_titol_" + idioma).val(printStringFromNull(dada_node[idioma].titulo));
+            $("#item_url_" + idioma).val(printStringFromNull(dada_node[idioma].url));
+            
+            // El plugin de JQuery para TinyMCE parece que tiene un bug y a veces y en segun que navegador 
+            // no carga bien el contenido ni en el textarea ni en el editor.
+            var descAbr = printStringFromNull(dada_node[idioma].descAbr);
+            var descripcion = printStringFromNull(dada_node[idioma].descripcion);
+            
+            document.getElementById("item_des_curta_" + idioma).value = descAbr;
+            document.getElementById("item_des_llarga_" + idioma).value = descripcion;
+            
+            $("#item_des_curta_" + idioma).val(descAbr);
+            $("#item_des_llarga_" + idioma).val(descripcion);
+        }
+        // Fin bloque de pestanyas de idiomas		
 		
 		// Icona
 			

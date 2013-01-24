@@ -12,7 +12,6 @@
 
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/fitxes.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
