@@ -36,13 +36,13 @@ $(document).ready(function() {
 		EscriptoriTramit.iniciar();
 	}
 	
-	// Evento para el botón de volver al detalle    
+	// Evento para el botï¿½n de volver al detalle    
     $("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
     
-    // Evento para el botón de guardar
+    // Evento para el botï¿½n de guardar
     $("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
     
-    // Evento para el botón de eliminar
+    // Evento para el botï¿½n de eliminar
     $("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
     
     // Sincronizar campos sin idioma en zona multi-idioma.   
@@ -99,7 +99,7 @@ function CModulTramit(){
 			multilang: false
 			});
 		
-		// one al botó de gestionar
+		// one al botï¿½ de gestionar
 		modul_tramits_elm.find("a.gestiona").one("click", function() { ModulTramit.gestiona(); } );		
 	}	
     
@@ -119,8 +119,8 @@ function CModulTramit(){
 		// animacio
 		escriptori_detall_elm.fadeOut(300, function() {			
 			escriptori_tramits_elm.fadeIn(300, function() {
-				//Ocultar el botón "eliminar" en la creación
-				// y los módulos de documentos y formularios
+				//Ocultar el botï¿½n "eliminar" en la creaciï¿½n
+				// y los mï¿½dulos de documentos y formularios
 				escriptori_tramits_elm.find(".btnEliminar").hide();
 				escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
 				escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();				
@@ -135,8 +135,8 @@ function CModulTramit(){
     
     this.inicializarTramites = function( listaTramites ){
     
-    	// Añadimos a los nombres de los trámites el tag <a> para que enlacen
-    	// a la edición del trámite en cuestión.
+    	// Aï¿½adimos a los nombres de los trï¿½mites el tag <a> para que enlacen
+    	// a la ediciï¿½n del trï¿½mite en cuestiï¿½n.
     	for ( i in listaTramites )
     		listaTramites[i].nom = "<a href='#' class='tramit_id'>" + listaTramites[i].nom + "</a>";    	
     	
@@ -169,7 +169,7 @@ function CModulTramit(){
 		});
 	}
     
-	// Devuelve un string con el formato tramitsProcediment=n1,n2,...,nm donde n son codigos de trámites.
+	// Devuelve un string con el formato tramitsProcediment=n1,n2,...,nm donde n son codigos de trï¿½mites.
 	this.listaTramites = function (){
 		var listaTramites = "tramitsProcediment=";
 		var separador = "";
@@ -232,7 +232,7 @@ function CEscriptoriTramit(){
                         "&" + ModulFormularisTramit.listarFormularios() + 
                         "&" + ModulTaxesTramit.listarTasas();           
         
-        //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+        //Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
         $("#formTramits").ajaxSubmit({
             type: "POST",
             url: pagGuardarTramit + paramsUrl,                       
@@ -257,7 +257,7 @@ function CEscriptoriTramit(){
                             nom: "<a href='#' class='tramit_id' id='" + idTramit + "'>" + data.nom + "</a>",                                                                   
                             orden: 0
                         });
-                        // Asignamos la función de edición al nuevo enlace creado
+                        // Asignamos la funciï¿½n de ediciï¿½n al nuevo enlace creado
                         nouTramit = $("#" + idTramit).parent().parent();
                         nouTramit.unbind("click").bind("click", function() {that.editarTramit(nouTramit)});
                         
@@ -283,7 +283,7 @@ function CEscriptoriTramit(){
 	        
 	        dataVars = "id=" + idTramit + "&idProcediment=" + idProcediment;
 	        
-	        //Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+	        //Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
 	        $.ajax({
 	        	type: "POST",        	
 	            url: pagEsborrarTramit,
@@ -358,8 +358,8 @@ function CEscriptoriTramit(){
     
     this.pintar = function( datos ){    
         
-        // Importante mantener el id del trámite que estamos mostrando.
-        $("#id_tramit_actual").val(datos.idTramit);
+        // Importante mantener el id del trï¿½mite que estamos mostrando.
+//        $("#id_tramit_actual").val(datos.idTramit);
                          
         $("#id_tramit_actual").val(datos.id_tramit_actual);
         $("#id_procediment_tramit").val(datos.id_procediment_tramit);
@@ -398,15 +398,15 @@ function CEscriptoriTramit(){
 			if (datos[idiomaUA] != null) 
 				$("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));			
 		}		
-		// Fin bloque de pestañas de idiomas
+		// Fin bloque de pestaï¿½as de idiomas
 		
-		// Mostrar bloque de ventanilla única según la información del procedimiento
+		// Mostrar bloque de ventanilla ï¿½nica segï¿½n la informaciï¿½n del procedimiento
 		if (datos.item_finestreta_unica == "1")
 			escriptori_tramits_elm.find(".modulFinestretaUnica").show();
 		else
 			escriptori_tramits_elm.find(".modulFinestretaUnica").hide();		
 			
-		// Mostrar módulo de tasas según la información del procedimiento
+		// Mostrar mï¿½dulo de tasas segï¿½n la informaciï¿½n del procedimiento
 //		if (datos.item_taxes == "1")
 //			escriptori_tramits_elm.find("#modul_taxes_tramits").show();
 //		else

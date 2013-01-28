@@ -1,3 +1,21 @@
+/* Definir objeto console en caso de que no existan para evitar errores en IE. 
+ * Obtenido del codigo fuente de Twitter.
+ */
+if ( ! window.console ) {
+    (function() {
+      var names = ["log", "debug", "info", "warn", "error",
+          "assert", "dir", "dirxml", "group", "groupEnd", "time",
+          "timeEnd", "count", "trace", "profile", "profileEnd"],
+          i, l = names.length;
+
+      window.console = {};
+
+      for ( i = 0; i < l; i++ ) {
+        window.console[ names[i] ] = function() {};
+      }
+    }());
+}
+
 // CERRAR Y MENSAJES	
 $(document).ready(function(){
 	
@@ -1011,15 +1029,9 @@ var Error = {
 	}
 };
 
-//Convierte los null en ''
+//Convierte los null en defaultValue o ''
 function printStringFromNull(data, defaultValue) {
-	if (data == null){
-        if (defaultValue != null && defaultValue != undefined){
-            return defaultValue;
-        }
-	    return '';
-	}
-    return data;
+    return data == null ? defaultValue || '' : data;
 }
 
 //Lanza un popup

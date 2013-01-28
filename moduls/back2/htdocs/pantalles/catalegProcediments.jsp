@@ -8,15 +8,11 @@
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/modul_tramits.css"/>" media="screen" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/jquery-ui.css"/>" />
 
-<script type="text/javascript" src="<c:url value='/js/jquery-1.6.4.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/seekAttention.min.jquery.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/jquery.maskedinput-1.2.2.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/autoresize.jquery.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/jquery.ui.datepicker-ca.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/procediments.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/lista_ordenable.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_documents_tramits.js'/>"></script>
@@ -764,7 +760,7 @@
                                                 <label for="item_nom_<c:out value="${lang}" />"><spring:message code='camp.nomProcediment'/></label>
                                             </div>
                                             <div class="control">
-                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_ca" type="text" class="nou" />
+                                                <input id="item_nom_<c:out value="${lang}" />" name="item_nom_<c:out value="${lang}" />" type="text" class="nou" />
                                             </div>
                                         </div>
                                         <div id="caja_item_clave_primaria" class="element t25p">
@@ -958,42 +954,102 @@
 					<legend><spring:message code='camp.canalsPresentacio'/></legend>
 					<div class="modul_continguts mostrat">
 						<div class="fila">
-							<div class="element t99p">
-								<div class="etiqueta">
-									<label for="item_presentacio"><spring:message code='camp.presentacio'/></label>
-								</div>
-								<div class="control">
-									<input id="item_presentacio" name="item_presentacio" type="text" class="nou" />
-								</div>
-							</div>                            
-						</div>
-						<div class="fila">		                    
-							<div class="element t99p">
-								<div class="etiqueta">
-									<label for="item_url_tramit"><spring:message code='camp.urlTramitExtern'/></label>
-								</div>
-								<div class="control">
-									<input id="item_url_tramit" name="item_url_tramit" type="text" class="nou" />
-								</div>
-							</div>
-						</div>
+                            <div class="element t99p multilang">
+                                <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">                        
+                                        <div class='campoIdioma <c:out value="${lang}"/>'>
+                                            <div class="etiqueta">
+                                                <label for='item_presentacio_<c:out value="${lang}"/>'>                                             
+                                                    <c:choose>
+                                                        <c:when test="${lang eq 'ca'}">
+                                                            <spring:message code='camp.presentacio'/> (CA)
+                                                        </c:when>
+                                                        
+                                                        <c:when test="${lang eq 'es'}">
+                                                            <spring:message code='camp.presentacio'/> (ES)
+                                                        </c:when>
+                                                        
+                                                        <c:when test="${lang eq 'en'}">
+                                                            <spring:message code='camp.presentacio'/> (EN)
+                                                        </c:when>                                       
+    
+                                                        <c:when test="${lang eq 'fr'}">
+                                                            <spring:message code='camp.presentacio'/> (FR)
+                                                        </c:when>                                       
+    
+                                                        <c:when test="${lang eq 'de'}">
+                                                            <spring:message code='camp.presentacio'/> (DE)
+                                                        </c:when>                                                       
+                                                    </c:choose>                                             
+                                                </label>
+                                            </div>                                  
+                                            <div class="control">
+                                                <input id='item_presentacio_<c:out value="${lang}"/>' name='item_presentacio_<c:out value="${lang}"/>' type="text" class="nou" />
+                                            </div>                                  
+                                        </div>                                              
+                                </c:forEach>                        
+                            </div>
+                        </div>
+						
+                        <div class="fila">
+                            <div class="element t50p multilang">                        
+                                <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">                            
+                                    <div class='campoIdioma <c:out value="${lang}"/>'>
+                                        <div class="etiqueta">
+                                            <label for='item_lloc_<c:out value="${lang}"/>'>                                        
+                                                <c:choose>
+                                                    <c:when test="${lang eq 'ca'}">
+                                                        <spring:message code='camp.lloc'/> (CA)
+                                                    </c:when>
+                                                    
+                                                    <c:when test="${lang eq 'es'}">
+                                                        <spring:message code='camp.lloc'/> (ES)
+                                                    </c:when>
+                                                    
+                                                    <c:when test="${lang eq 'en'}">
+                                                        <spring:message code='camp.lloc'/> (EN)
+                                                    </c:when>                                       
+    
+                                                    <c:when test="${lang eq 'fr'}">
+                                                        <spring:message code='camp.lloc'/> (FR)
+                                                    </c:when>                                       
+    
+                                                    <c:when test="${lang eq 'de'}">
+                                                        <spring:message code='camp.lloc'/> (DE)
+                                                    </c:when>                                                       
+                                                </c:choose>
+                                            </label>
+                                        </div>
+                                        <div class="control">
+                                            <input id='item_lloc_<c:out value="${lang}"/>' name='item_lloc_<c:out value="${lang}"/>' type="text" class="nou" />
+                                        </div>
+                                    </div>                                                                                  
+                                </c:forEach>
+                                <div class="element t50p">
+                                    <div class="etiqueta">
+                                        <label for="item_url"><spring:message code='camp.urlTramitExtern'/></label>
+                                    </div>
+                                    <div class="control">
+                                        <input id="item_url" name="item_url" type="text" class="nou" />
+                                    </div>
+                                </div>                          
+                            </div>
+                        </div>
 						
 						<div class="fila">
 							<div class="element t50p">
 								<div class="etiqueta">
-									<label for="item_tramite_tramit"><spring:message code='camp.idTramit'/></label>
+									<label for="item_tramite"><spring:message code='camp.idTramit'/></label>
 								</div>
 								<div class="control">
-									<input id="item_tramite_tramit" name="item_tramite_tramit" type="text" class="nou" />
+									<input id="item_tramite" name="item_tramite" type="text" class="nou" />
 								</div>
 							</div>
-							
 							<div class="element t50p">
 								<div class="etiqueta">
-									<label for="item_version_tramit"><spring:message code='camp.versioTramit'/></label>
+									<label for="item_version"><spring:message code='camp.versioTramit'/></label>
 								</div>
 								<div class="control">
-									<input id="item_version_tramit" name="item_version_tramit" type="text" class="nou" />
+									<input id="item_version" name="item_version" type="text" class="nou" />
 								</div>
 							</div>
 						</div>		                    
@@ -1752,7 +1808,7 @@
 									</a></li>									
 								</c:forEach>
 								
-                                <li class="traduix btnGenerico" id="botoTraduirProcediment">
+                                <li class="traduix btnGenerico" id="botoTraduirTramit">
                                     <a href="javascript:;" class="btn traduix"><span><span><spring:message code='txt.idioma.tradueix'/></span></span></a>
                                 </li>
                             </ul>
