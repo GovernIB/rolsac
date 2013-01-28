@@ -263,13 +263,21 @@ span.sep { margin:0 1.5em; }
     text-decoration: underline;
 }
 #mollaPa_contingut ul.molla li.seleccionat { 
-    font-weight:bold;
+    font-weight:bold;    
 }
 #mollaPa_contingut ul.molla li.uaHijas a{
     background-color: white;
     border: 1px solid #C7C7C7;
     background: url(../img/mollaPa/flecha_uahijas.gif) 93% 50% no-repeat;
     padding-right: 25px;
+}
+#mollaPa_contingut ul.molla li.ua a{
+	background: url(../img/mollaPa/flecha_ua_padre.png) #F0F0F0 93% 50% no-repeat;
+	padding-right: 28px;
+	border: 1px solid #C7C7C7;
+}
+#mollaPa_contingut ul.molla li.ua.seleccionat a{
+	background-color: White;
 }
 #mollaPa_contingut ul.molla li a.uaFilles.desplegado{
     border-radius: 5px 5px 0 0;
@@ -1701,15 +1709,15 @@ div.modulLateral div.seleccionat ul {
 
 /* Módulo lateral Relació Orgànica */
 
-#modulRelacioOrganica input#item_pare,
-#modulRelacioOrganica input#item_ua_nom{
+.modulRelacioOrganica input.item_pare,
+.modulRelacioOrganica input#item_ua_nom{
     height: 23px;
     width: 100%;
 }
-#modulRelacioOrganica .borrar{
+.modulRelacioOrganica .borrar{
     float:right;
 }
-#modulRelacioOrganica  .botonera .btn.borrar > span > span{
+.modulRelacioOrganica  .botonera .btn.borrar > span > span{
     background: url(../img/botons/iconos/borrar.png) 15px 50% no-repeat;
     padding-left : 35px;
 }

@@ -134,22 +134,88 @@ var MollaPa = {
 		ua_codi = "<ul id=\"uas\"></ul>";
 		mollaPa_elm.append(ua_codi);
 		uas_elm = $("#uas");			
-		
-		//mollaPa_contingut_elm.bind("click",MollaPa.llansar);		
+
 		mollaPa_elm.find(".uaHijas a").bind("click",MollaPa.despliegaUnidades);
+		jQuery("#mollaPa li.ua a").bind("click",MollaPa.despliegaUnidades);
 		
 		$('#mollapaHome').bind("click", function() {			
             document.location.href = cambioMollaPa + "?redirectTo=" + document.location.href.split('?', 1)[0];
 		});
-	},			
+	},
 	
 	despliegaUnidades: function(e){
-	//llansar: function(e) {
-
+		var $target = jQuery(e.target);
+		var $itemLista = $target.parents("li.ua");
+		var claveUA = $target.data("clave_ua_padre");
+		
+		elm = $target;
+		
+		uas_elm.html("<li><span class=\"carregant\">" + txtCarregantMollaFills + "</span></li>")
+				
+		a_T = elm.position().top-2;
+		//a_L = elm.position().left;
+		a_L = elm.parents("li").position().left;
+		a_H = elm.outerHeight();
+		
+		uas_elm.css({ top: (a_T + a_H) + "px", left: a_L + "px" }).fadeIn(300, function() {					
+			
+			dataVars = "id=" + claveUA;
+	
+			// ajax
+			$.ajax({
+				type: "POST",
+				url: pagMollaPa,
+				data: dataVars,
+				dataType: "json",
+				error: function() {
+					
+					// missatge
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+					// error
+					Error.llansar();
+					
+				},
+				success: function(data) {								
+					error = false;
+					error_msg = "";
+					nodes_codi = "";								
+					
+					$(data).each(function() {
+						node_ua = this;
+						if (node_ua.id < 0) {
+							error = true;
+							error_msg = node_ua.nom;
+						} else {
+							nodes_codi += "<li><a href=\"" + cambioMollaPa;
+							nodes_codi += "?ua=" + node_ua.id;
+							nodes_codi += "&redirectTo=" + document.location.href.split('?', 1)[0];
+							nodes_codi += "\" class=\"n\">";
+							nodes_codi += node_ua.nom + "</a></li>";
+						}
+					});
+					
+					uas_elm.slideUp(300, function() {
+						//pare_anterior_ID = pare_ID;
+						$(this).html(nodes_codi).slideDown(300, function() {
+							$(window).bind("click",MollaPa.amagar);
+							As.iniciar("#uas");
+						});
+					});
+					
+					if (error) {
+						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: error_msg});
+					}
+				}
+			});				
+		});
+		
+		return false;
+	},
+	
+	/*despliegaUnidades: function(e){
+		
 		elm = $(e.target);
 				
-		//if (elm.is("SPAN") && elm.parent().parent().is("A") && elm.parent().parent().hasClass("btn")) {
-									
 		btn_elm = elm.parents("a.btn:first");
 		
 		if (btn_elm.hasClass("uaFilles")) {
@@ -225,7 +291,7 @@ var MollaPa = {
 			}			
 		}
 		//}
-	},
+	},*/
 	amagar: function(e) {
 		elm = $(e.target);
 		if (!elm.hasClass("n")) {
