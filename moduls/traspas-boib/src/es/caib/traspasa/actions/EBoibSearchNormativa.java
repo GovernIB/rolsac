@@ -87,10 +87,10 @@ SearchNormativa {
 	public void makeSearch() {
 
 		/*
-		 * 1.- buscar el BOIB por fecha o número en RSS
-		 * 		- buscar por número: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009
+		 * 1.- buscar el BOIB por fecha o nï¿½mero en RSS
+		 * 		- buscar por nï¿½mero: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009
 		 * 		- buscar por fecha: /filtrerss.do?lang=ca&resultados=20&fec_ini=01/01/2009&fec_fin=08/01/2009
-		 * 2.- dada la url RDF del BOIB, buscar los edictos. Si hay num reg en la búsqueda, filtrar por él.
+		 * 2.- dada la url RDF del BOIB, buscar los edictos. Si hay num reg en la bï¿½squeda, filtrar por ï¿½l.
 		 */
 
 		List<BoibResult> boibRdfUrls = this.getBoibRdfUrls();
@@ -98,9 +98,9 @@ SearchNormativa {
 		
 		if (boibRdfUrls.size() < 1) {
 			numeroregistros=-1;
-			mensajeavisobean.setCabecera("ERROR EN ELS PARÀMETRES");
-			mensajeavisobean.setSubcabecera("Els paràmetres de cerca tenen inconsistències. Son erronis.");
-			mensajeavisobean.setDescripcion("Las causes probables d'aquest error són que o bé el número del boib introduït o la data són incorrectes. Es possible que el número de registre contengui un valor incorrecte.");
+			mensajeavisobean.setCabecera("ERROR EN ELS PARï¿½METRES");
+			mensajeavisobean.setSubcabecera("Els parï¿½metres de cerca tenen inconsistï¿½ncies. Son erronis.");
+			mensajeavisobean.setDescripcion("Las causes probables d'aquest error sï¿½n que o bï¿½ el nï¿½mero del boib introduï¿½t o la data sï¿½n incorrectes. Es possible que el nï¿½mero de registre contengui un valor incorrecte.");
 		}
 		for (BoibResult rdf : boibRdfUrls) {
 			populateBoibResult(rdf);
@@ -119,8 +119,8 @@ SearchNormativa {
 	                boolean estaInsertadoEnSac = isInsertSAC(Integer.parseInt(rdf.numBoib), Integer.parseInt(numregboib));
 	                if (estaInsertadoEnSac) {
 	                    numeroregistros=-1;
-	                    mensajeavisobean.setCabecera("ERROR EN ELS PARÀMETRES");
-	                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introduïts en el SAC");
+	                    mensajeavisobean.setCabecera("ERROR EN ELS PARï¿½METRES");
+	                    mensajeavisobean.setSubcabecera("El boib i el registre JA ESTAN introduï¿½ts en el SAC");
 	                }
 	                traza("ENCONTRADO REGISTRO EN BOIB. REGISTRO: " + numregboib);
 	                normativabean = normativa;
@@ -128,7 +128,7 @@ SearchNormativa {
 			}
 		}
 		
-		if (numeroregistros == 0) { //Si todavía no está fijado, calculamos numeroregistros
+		if (numeroregistros == 0) { //Si todavï¿½a no estï¿½ fijado, calculamos numeroregistros
 			if (normativabean == null) {
 				this.numeroregistros = this.getListadonormativas().size();
 			} else {
@@ -146,7 +146,7 @@ SearchNormativa {
 		TrNormativaLocalBean normbean = new TrNormativaLocalBean();
 		Model m = loadRdf (inputFileName);
 
-		//CATALÀ
+		//CATALï¿½
 		Resource res = m.getResource(inputFileName.substring(0, inputFileName.length()-4));
 
 		normbean.setNumeroboib(rdf.numBoib);
@@ -155,11 +155,11 @@ SearchNormativa {
 		normbean.setValorRegistro("" + res.getProperty(RdfProperties.NUM_REGISTRE).getString());
 
 		/*
-		 agarcia: el tipo no está disponible por RDF
+		 agarcia: el tipo no estï¿½ disponible por RDF
 		//String tipo_sac = "" + tipusNorma.getTipusNormesArticle(registre.getRegistre());
 		//normbean.setIdTipo(tipo_sac);
 		if (!tipo_sac.equals("0")){
-		//el tipo está codificado en el web.xml con un punto (.)
+		//el tipo estï¿½ codificado en el web.xml con un punto (.)
 		String txnombretipo=Configuracion.getPropiedad("norma_"+tipo_sac);
 		txnombretipo = txnombretipo.substring(txnombretipo.indexOf(".")+1,txnombretipo.length());
 
@@ -170,7 +170,7 @@ SearchNormativa {
 		 }
 		 */
 
-		java.text.SimpleDateFormat diamesanyo = new java.text.SimpleDateFormat("dd-MM-yyyy");
+		java.text.SimpleDateFormat diamesanyo = new java.text.SimpleDateFormat("dd/MM/yyyy");
 		java.text.SimpleDateFormat anyomesdia = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		try {
 			normbean.setTextoFechaBoletin(diamesanyo.format(  anyomesdia.parse(res.getProperty(RdfProperties.DATE).getString() ) ) );
@@ -178,7 +178,7 @@ SearchNormativa {
 			throw new IllegalArgumentException( "Data: " + res.getProperty(RdfProperties.DATE).getString() + " incorrecta");
 		}
 
-		//català
+		//catalï¿½
 		normbean.setTra_titulo_c( limpiaSumario(res.getProperty(RdfProperties.SUMARI).getString()));
 		normbean.setTra_apartado_c( getSeccioCA(res.getProperty(RdfProperties.SECCIO).getResource().getURI()) );
 		normbean.setTra_paginaInicial_c(res.getProperty(RdfProperties.NUM_PAG_INICIAL).getString());
@@ -232,7 +232,7 @@ SearchNormativa {
 		rdf2.enviaments = new ArrayList<String>();
 		Model m = loadRdf(rdf2.rdfUrl);
 
-		//Obtenemos los datos de num butlletí
+		//Obtenemos los datos de num butlletï¿½
 		Resource but = m.getResource(rdf2.url);
 		rdf2.num = but.getProperty(RdfProperties.NUMERO).getString();
 		String dataPublicacio = but.getProperty(RdfProperties.DATA_PUBLICACIO).getString();
@@ -255,8 +255,8 @@ SearchNormativa {
 
 	}	
 
-	/** buscar el BOIB por fecha o número en RSS<br/>
-	 * 		- buscar por número: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009<br/>
+	/** buscar el BOIB por fecha o nï¿½mero en RSS<br/>
+	 * 		- buscar por nï¿½mero: /filtrerss.do?lang=ca&resultados=20&num_ini=1&num_fin=1&any_ini=2009&any_fin=2009<br/>
 	 * 		- buscar por fecha: /filtrerss.do?lang=ca&resultados=20&fec_ini=01/01/2009&fec_fin=08/01/2009<br/>
 	 * @return
 	 */
