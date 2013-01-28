@@ -96,8 +96,20 @@ div.file span {
 	height: 25px;
 	background-color: White;
 }
-.submenuUA li strong{
+.submenuUA li a{
+	color: #A0A0A0;
+	text-decoration: none;	
+}
+.submenuUA li.activo a{
 	color: black;	
+	font-weight: bold;
+	text-decoration: none;
+}
+.submenuUA li:hover{
+	border-color: #C8C8C8;
+}
+.submenuUA li:hover a{
+	color: Black;
 }
 .submenuUA li.activo span{
 	position: absolute;
@@ -108,17 +120,7 @@ div.file span {
 	width: 100%;
 	background: url(../img/menu/flecha_submenu.gif) 50% 0 no-repeat;	
 }
-.submenuUA li a{
-	color: #A0A0A0;
-	text-decoration: none;	
-}
-.submenuUA li.activo,
-.submenuUA li.inactivo:hover{
-	border-color: #C8C8C8;
-}
-.submenuUA li.inactivo:hover a{
-	color: Black;
-}
+
 
 
 /* Escritorio unidades hijas */

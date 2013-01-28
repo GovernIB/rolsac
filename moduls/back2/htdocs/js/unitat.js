@@ -38,6 +38,12 @@ function CDetall(soloFicha){
 
 	var materias = "";
 	
+	// Unidad administrativa general (la primera que se carga).
+	this.uaGeneral = null;
+	
+	// Datos de la última UA cargada.
+	this.actualUA = null;
+	
 	this.iniciar = function() {
 		
 		ModulSeccions = new CModulSeccio();
@@ -216,7 +222,7 @@ function CDetall(soloFicha){
 			
 	// MÃ©todo sobreescrito.
 	this.carregar = function(itemID) {
-			
+		
 	    if (itemID == undefined) {
             itemID = itemAEditar();
         }
@@ -242,6 +248,12 @@ function CDetall(soloFicha){
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 			},
 			success: function(dada) {
+				
+				that.actualUA = dada;
+				if( !that.uaGeneral ){
+					that.uaGeneral = dada;	
+				}
+				
 				if (dada.id == -1) {
 					$("#carregantDetall").fadeOut(300, function() {
                         Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos, text: "<p>" + dada.error + "</p>"});

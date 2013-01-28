@@ -1,15 +1,32 @@
 // Mï¿½dulo de unidades hijas.
 $(document).ready(function() {
+	
+	// Acción para mostrar la ficha de UA
 	jQuery(".submenuUA .detalle").click(function(){
-		jQuery("#escritorioUnidadesHijas").hide();
-		jQuery("#escriptori_detall").show();
+		
+		if( !jQuery(this).hasClass("activo") ){
+			jQuery("#escritorioUnidadesHijas").hide();
+			jQuery("#escritorioNuevaUA").hide();
+			jQuery("#escriptori_detall").show();
+		
+			jQuery(".submenuUA .hijas").toggleClass("activo",false);
+			jQuery(".submenuUA .detalle").toggleClass("activo",true);
+		}
 	});
 	
+	// Acción para mostrar las unidades hijas
 	jQuery(".submenuUA .hijas").click(function(){
-		jQuery("#escritorioUnidadesHijas").show();
-		jQuery("#escriptori_detall").hide();
 		
-		escritorioUnidadesHijas.inicia();
+		if( !jQuery(this).hasClass("activo") ){
+			jQuery("#escritorioUnidadesHijas").show();
+			jQuery("#escritorioNuevaUA").hide();
+			jQuery("#escriptori_detall").hide();
+		
+			jQuery(".submenuUA .hijas").toggleClass("activo",true);
+			jQuery(".submenuUA .detalle").toggleClass("activo",false);
+		
+			escritorioUnidadesHijas.inicia();
+		}
 	});
 	
 	escritorioUnidadesHijas = new CEscritorioUnidadesHijas();
@@ -34,7 +51,7 @@ function CEscritorioUnidadesHijas() {
 		this.carregar({});
 	}
 	
-	// Cambia de pï¿½gina.
+	// Cambia de página.
 	this.cambiaPagina = function( pag ){
 		multipagina.setPaginaActual(pag-1);
 		pag_Pag = pag;
@@ -162,7 +179,12 @@ function CEscritorioUnidadesHijas() {
 			// pintem
 			dades_elm.html(codi_final).fadeIn(300, function() {
 			
-				$obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function(){escritorioUnidadesHijas.ficha(this);});
+				$obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function(){
+					escritorioUnidadesHijas.ficha(this);
+					jQuery("#escritorioUnidadesHijas").hide();
+					jQuery(".submenuUA .hijas").toggleClass("activo",false);
+					jQuery(".submenuUA .detalle").toggleClass("activo",true);
+				});
                 
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
                 jQuery("#resultadosUnidadesHijas .table .th a").unbind("click").click(function(){
@@ -282,9 +304,12 @@ function CEscritorioUnidadesHijas() {
 		});
 	}
 	
-	// Mï¿½todo sobreescrito.
+	// Método sobreescrito.
 	this.nuevaFicha = function(){
-		alert("Implementar");
-		//jQuery("#escriptori_detall").show();		
+		jQuery("#escritorioUnidadesHijas").hide();
+		jQuery("#escritorioNuevaUA").hide();
+		jQuery("#escritorioNuevaUA").show();
+		
+		NuevaUADetall.nuevaUAHija();
 	}
 };

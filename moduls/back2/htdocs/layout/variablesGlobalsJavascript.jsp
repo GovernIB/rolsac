@@ -34,6 +34,7 @@
     // molla pa
     var txtCarregantMollaFills = '<spring:message code="mollapa.unitats.carregant"/>';
     var pagMollaPa = '<c:url value="/unidadAdministrativa/listarHijos.do"/>';
+    
     var cambioMollaPa = '<c:url value="/unidadAdministrativa/cambiarUA.do"/>';
     // planificacio
     var txtAvui = '<spring:message code="planificacio.avui"/>';

@@ -17,12 +17,20 @@
         <p class="executant"><spring:message code='unitatadm.carregant_unitatadm'/></p>
     </div>
     
+    <c:if test="${idUA != null}">
+    	<ul class="submenuUA">
+			<li class="detalle activo"><span></span><a href="javascript:void(0)">Detall de la UA</a></li>
+			<li class="hijas"><span></span><a href="javascript:void(0)">Unitats filles</a></li>
+		</ul>
+	</c:if>
+    
     <!-- Escritorio unidades hijas -->
     <div id="escritorioUnidadesHijas">
-    	<ul class="submenuUA">
+    	
+    	<!--<ul class="submenuUA">
 			<li class="detalle inactivo"><a href="javascript:void(0)">Detall de la UA</a></li>
 			<li class="hijas activo"><span></span><strong>Unitats filles</strong></li>
-		</ul>
+		</ul>-->
     	
     	<ul id="opcionesUnidadesHijas" class="tabOpciones">
 	        <li class="opcio L actiu">
@@ -136,11 +144,6 @@
     <!-- escriptori_detall -->
     <div id="escriptori_detall" class="escriptori_detall">
     	
-    	<ul class="submenuUA">
-			<li class="detalle activo"><span></span><strong>Detall de la UA</strong></li>
-			<li class="hijas inactivo"><a href="javascript:void(0)">Unitats filles</a></li>
-		</ul>
-    	    	
         <form id="formGuardar" action="" method="post">
         <input id="item_id" name="item_id" type="hidden" value='<c:out value="${idUA}" />' />       
         <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
@@ -747,7 +750,7 @@
             <!-- /modul -->
             
             <!-- modul -->
-            <div class="modul" id="modulRelacioOrganica">
+            <div class="modul modulRelacioOrganica" id="modulRelacioOrganica">
                 <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
                     <legend><spring:message code='txt.RELACIO_ORGANICA'/></legend>
@@ -757,7 +760,7 @@
                             <div class="element t50p">
                                 <div class="etiqueta"><label for="item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
                                 <div class="control">
-                                    <input id="item_pare" name="item_pare" type="text" readonly="readonly" />
+                                    <input id="item_pare" class="item_pare" name="item_pare" type="text" readonly="readonly" />
                                     <input id="item_pare_id" name="item_pare_id" type="hidden" />                                                
                                 </div>                                          
                             </div>            
@@ -1186,6 +1189,686 @@
     </div>
     <!-- /escriptori_edificis -->
     
+    <!-- Escritorio nueva unidad hija -->
+    <div id="escritorioNuevaUA" class="escriptori_detall">
+		<form id="nuevaUA_formGuardar" action="" method="post">
+	        <input id="nuevaUA_item_id" name="item_id" type="hidden" value='' />       
+	        <p><spring:message code='txt.recordi_dades_asterisc'/> (<span class="obligatori">*</span>) <spring:message code='txt.son_obligatories'/></p>                    
+	        <!-- modulPrincipal -->     
+	        <div class="grupoModulosFormulario modulPrincipal">            
+	            <!-- modul -->
+	            <div class="modul">     
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='txt.llegenda_dades'/></legend>
+	                    <div class="modul_continguts mostrat">
+	                        <!-- fila -->
+	                        <div class="fila">
+	                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
+	                            <ul class="idiomes">
+									<c:forEach items="${idiomes_aplicacio}" var="lang">
+									<li class="idioma">
+										<a href="javascript:;" class="<c:out value='${lang}'/>">
+										<c:choose>
+											<c:when test="${lang eq 'ca'}">
+												<spring:message code='txt.idioma.ca'/>			
+											</c:when>
+											<c:when test="${lang eq 'es'}">
+												<spring:message code='txt.idioma.es'/>			
+											</c:when>
+											<c:when test="${lang eq 'en'}">
+												<spring:message code='txt.idioma.en'/>			
+											</c:when>
+											<c:when test="${lang eq 'fr'}">
+												<spring:message code='txt.idioma.fr'/>			
+											</c:when>
+											<c:when test="${lang eq 'de'}">
+												<spring:message code='txt.idioma.de'/>			
+											</c:when>										
+										</c:choose>
+										</a>
+									</li>								
+									</c:forEach>
+	                            </ul>
+	                            <div class="idiomes">															
+									<c:forEach items="${idiomes_aplicacio}" var="lang">
+	                                <div class="idioma <c:out value='${lang}'/>"> 
+	                                    <div class="fila">
+	                                        <div class="element t50p">                                      
+	                                            <div class="etiqueta"><label for="nuevaUA_item_codi_estandar"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
+	                                            <div class="control">
+	                                                <input id="nuevaUA_item_codi_estandar" name="item_codi_estandar" type="text" />
+	                                            </div>                                          
+	                                        </div>                                      
+	                                    </div>
+	                                    <div class="fila">
+	                                        <div class="element t75p">
+	                                            <div class="etiqueta">
+	                                                <label for="nuevaUA_item_nom_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.nom'/></label>
+	                                            </div>
+	                                            <div class="control">
+	                                                <input id="nuevaUA_item_nom_<c:out value='${lang}'/>" name="item_nom_<c:out value='${lang}'/>" type="text" />
+	                                            </div>
+	                                        </div>
+	                                        <%--<div id="nuevaUA_caja_item_clave_primaria" class="element t25p">
+	                                            <div class="etiqueta">
+	                                                <label for="nuevaUA_item_clave_primaria"><spring:message code='camp.clau_primaria'/></label>                                                
+	                                            </div>
+	                                            <div class="control">
+	                                                <input id="nuevaUA_item_clave_primaria" name="item_clave_primaria" type="text" readonly="readonly"/>
+	                                            </div>
+	                                        </div>--%>
+	                                    </div>
+	                                    <div class="fila">
+	                                        <div class="element t99p">
+	                                            <div class="etiqueta"><label for="nuevaUA_item_presentacio_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.presentacio'/></label></div>
+	                                            <div class="control">
+	                                                <textarea id="nuevaUA_item_presentacio_<c:out value='${lang}'/>" name="item_presentacio_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+	                                            </div>
+	                                        </div>
+	                                    </div>  
+	                                    <div class="fila">
+	                                        <div class="element t50p">
+	                                            <div class="etiqueta"><label for="nuevaUA_item_abreviatura_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
+	                                            <div class="control">
+	                                                <input id="nuevaUA_item_abreviatura_<c:out value='${lang}'/>" name="item_abreviatura_<c:out value='${lang}'/>" type="text" />
+	                                            </div>
+	                                        </div>
+	                                        <div class="element t50p">										
+	                                            <div class="etiqueta"><label for="nuevaUA_item_url_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.url'/></label></div>
+	                                            <div class="control">
+	                                                <input id="nuevaUA_item_url_<c:out value='${lang}'/>" name="item_url_<c:out value='${lang}'/>" type="text" />
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                    <div class="fila">
+	                                        <div class="element t50p">                                      
+	                                            <div class="etiqueta"><label for="nuevaUA_item_espai_territorial"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
+	                                            <div class="control select">                                                
+	                                                <select id="nuevaUA_item_espai_territorial" name="item_espai_territorial">
+	                                                    <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+	                                                    <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
+	                                                        <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
+	                                                    </c:forEach>
+	                                                </select>
+	                                            </div>
+	                                        </div>                                          
+	                                    </div>      
+	                                </div>
+									</c:forEach>
+	                            </div>
+	                        </div>
+	                        <!-- /fila -->
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	            
+	            <!-- modul -->
+	            <div class="modul">
+	                <fieldset>  
+	                    <a class="modul amagat"><spring:message code='txt.mostra'/></a>
+	                    <legend><spring:message code='unitatadm.formulari.responsable'/></legend>
+	                    <div class="modul_continguts"><%-- style="display:block;" hasta que funcione el jquery --%>
+	                        <!-- fila -->
+	                        <div class="fila">
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_responsable"><spring:message code='unitatadm.formulari.responsable.nom'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_responsable" name="item_responsable" type="text" />
+	                                </div>  
+	                            </div>
+	                            <div class="element t50p">
+	                                <div class="etiqueta">
+	                                    <label for="nuevaUA_item_responsable_sexe"><spring:message code='unitatadm.formulari.responsable.sexe'/></label>	                                    
+	                                </div>
+	                                <div class="control select">
+	                                    <select id="nuevaUA_item_responsable_sexe" name="item_responsable_sexe">
+	                                        <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+	                                        <option value="1"><spring:message code='txt.sexe.masculi'/></option>
+	                                        <option value="2"><spring:message code='txt.sexe.femeni'/></option>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <!-- /fila -->
+	                        <!-- fila -->
+	                        <div class="fila">
+		                        <div class="element t50p campoImagen">	                                     
+	                                <div class="thumbnail"></div>
+	                                <div class="etiqueta"><label for="nuevaUA_item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
+	                                <div class="control archivo">                                                                           
+	                                    <div id="nuevaUA_grup_item_responsable_foto_petita" class="file">                                        
+	                                        <span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                        <a href="#" target="_blank"></a>
+	                                        <input type="checkbox" name="item_responsable_foto_petita_delete" id="nuevaUA_item_responsable_foto_petita_delete" value="1"/>
+	                                        <label for="nuevaUA_item_responsable_foto_petita_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                    </div>
+	                                </div>                                
+		                        </div>    	                        
+		                        <div class="element t50p">
+		                            <div class="etiqueta"><label for="nuevaUA_item_responsable_foto_petita"><spring:message code='unitatadm.formulari.responsable.foto.petita'/></label></div>
+		                            <div class="control">                                      		
+		                                <input id="nuevaUA_item_responsable_foto_petita" name="item_responsable_foto_petita" type="file" class="nou" />
+		                            </div>
+		                        </div>                                                                                      
+	                        </div>
+	                        <!-- /fila -->
+	                        <!-- fila -->
+	                        <div class="fila">
+		                        <div class="element t50p campoImagen">
+	                                <div class="thumbnail"></div>
+		                            <div class="etiqueta"><label for="nuevaUA_item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
+		                            <div class="control archivo">   
+		                            	<div id="nuevaUA_grup_item_responsable_foto_gran" class="file">
+		                            		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+		                            		<a href="#" target="_blank"></a>
+		                            		<input type="checkbox" name="item_responsable_foto_gran_delete" id="nuevaUA_item_responsable_foto_gran_delete" value="1"/>
+		                            		<label for="nuevaUA_item_responsable_foto_gran_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+		                            	</div>
+		                            </div>
+		                        </div>    
+		                        
+		                        <div class="element t50p">
+		                            <div class="etiqueta"><label for="nuevaUA_item_responsable_foto_gran"><spring:message code='unitatadm.formulari.responsable.foto.gran'/></label></div>
+		                            <div class="control">                                      		
+		                                <input id="nuevaUA_item_responsable_foto_gran" name="item_responsable_foto_gran" type="file" class="nou" />
+		                            </div>
+		                        </div>                                                                                      
+	                        </div>
+	                        <!-- /fila -->
+	                        <!-- fila -->
+	                        <div class="fila">
+	                            <div class="element t50p">
+	                                <div class="etiqueta">
+	                                    <label for="nuevaUA_item_tractament"><spring:message code='unitatadm.formulari.responsable.tractament'/></label>                                    
+	                                </div>
+	                                <div class="control select">
+	                                    <select id="nuevaUA_item_tractament" name="item_tractament">
+	                                        <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+	                                        <c:forEach items="${llistaTractaments}" var="tractament">
+	                                            <option value='<c:out value="${tractament.id}" />'><c:out value="${tractament.nom}" /></option>
+	                                        </c:forEach>
+	                                    </select>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <!-- /fila -->
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	            
+	            <!-- modul -->
+	            <div class="modul">                         
+	                <fieldset>                                  
+	                    <a class="modul amagat"><spring:message code='txt.mostra'/></a>                             
+	                    <legend><spring:message code='txt.llegenda_contacte'/></legend>                              
+	                    <div class="modul_continguts" style="display:block;">                               
+	                    
+	                        <!-- fila -->
+	                        <div class="fila">                              
+	                            <div class="element t50p">                                  
+	                                <div class="etiqueta"><label for="nuevaUA_item_telefon"><spring:message code='unitatadm.formulari.telefon'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_telefon" name="item_telefon" type="text" />
+	                                </div>                                      
+	                            </div>  
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_fax"><spring:message code='unitatadm.formulari.fax'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_fax" name="item_fax" type="text" />
+	                                </div>                                          
+	                            </div>                                      
+	                        </div>
+	                        <!-- /fila -->     
+	                        
+	                        <!-- fila -->
+	                        <div class="fila">
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_email" name="item_email" type="text" />
+	                                </div>                                          
+	                            </div>
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="item_domini"><spring:message code='unitatadm.formulari.domini'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_domini" name="item_domini" type="text" />
+	                                </div>                                          
+	                            </div>
+	                        </div>
+	                        <!-- /fila -->
+	                    
+	                        <!-- fila -->
+	                        <%--<div class="fila">                                  
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_clau_hita"><spring:message code='unitatadm.formulari.clau_hita'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_clau_hita" name="item_clau_hita" type="text" />
+	                                </div>                                          
+	                            </div>
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_codi_estandar"><spring:message code='unitatadm.formulari.codi_estandar'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_codi_estandar" name="item_codi_estandar" type="text" />
+	                                </div>                                          
+	                            </div>
+	                        </div>--%>
+	                        <!-- /fila -->                                  
+	                        <!-- fila -->
+	                        <%--<div class="fila">                                      
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_domini"><spring:message code='unitatadm.formulari.domini'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_domini" name="item_domini" type="text" />
+	                                </div>                                          
+	                            </div>
+	                            <div class="element t50p">
+	                                <div class="etiqueta">
+	                                    <label for="nuevaUA_item_validacio"><spring:message code='unitatadm.formulari.validacio'/></label>
+	                                    
+	                                </div>
+	                                <div class="control select">
+	                                    <select id="nuevaUA_item_validacio" name="item_validacio">
+	                                        <option value="" selected="selected"><spring:message code='txt.escolliu_opcio'/></option>
+	                                        <option value="1"><spring:message code='unitatadm.formulari.validacio.publica'/></option>
+	                                        <option value="2"><spring:message code='unitatadm.formulari.validacio.interna'/></option>
+	                                    </select>
+	                                </div>
+	                            </div>                                      
+	                        </div>--%>
+	                        <!-- /fila -->                                  
+	                         
+	                        <!-- fila -->
+	                        <%--<div class="fila">                          
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_email"><spring:message code='unitatadm.formulari.email'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_email" name="item_email" type="text" />
+	                                </div>                                          
+	                            </div>                            
+	                            <div class="element t50p">                                      
+	                                <div class="etiqueta"><label for="nuevaUA_item_espai_territorial"><spring:message code='unitatadm.formulari.espai_territorial'/></label></div>
+	                                <div class="control select">                                    
+	                                    <select id="nuevaUA_item_espai_territorial" name="item_espai_territorial">
+	                                        <option value=""><spring:message code='txt.escolliu_opcio'/></option>
+	                                        <c:forEach items="${llistaEspaiTerritorial}" var="espaiTerritorial">
+	                                            <option value='<c:out value="${espaiTerritorial.id}" />'><c:out value="${espaiTerritorial.nom}" /></option>
+	                                        </c:forEach>
+	                                    </select>
+	                                </div>
+	                            </div>                              
+	                        </div>--%>
+	                        <!-- /fila -->
+	                        
+	                    </div>                              
+	                </fieldset>                         
+	            </div>
+	            <!-- /modul -->                 
+	            
+	            <!-- modul -->
+	            <div class="modul">
+	                <fieldset>  
+	                    <a class="modul amagat"><spring:message code='txt.mostra'/></a>
+	                    <legend><spring:message code='unitatadm.formulari.logotipus'/></legend>
+	                    <div class="modul_continguts" style="display:block;">
+	                    	<!-- fila -->
+	                    	<div class="fila">
+	                            <div class="element t50p campoImagen">	                                     
+	                                <div class="thumbnail"></div>                            
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
+	                                <div class="control archivo">   
+	                                	<div id="nuevaUA_grup_item_logo_horizontal" class="file">
+	                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                		<a href="#" target="_blank"></a>
+	                                		<input type="checkbox" name="item_logo_horizontal_delete" id="nuevaUA_item_logo_horizontal_delete" value="1"/>
+	                                		<label for="nuevaUA_item_logo_horizontal_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                	</div>
+	                                </div>
+	                            </div>                                
+	                            
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_logo_horizontal" name="item_logo_horizontal" type="file" class="nou" />
+	                                </div>
+	                            </div>                                                                                      
+	                     	</div>
+	                     	<!-- /fila -->
+	                     	<!-- fila -->
+	                     	<div class="fila">
+	                            <div class="element t50p campoImagen">	                                     
+	                                <div class="thumbnail"></div>
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical'/></label></div>
+	                                <div class="control archivo">   
+	                                	<div id="nuevaUA_grup_item_logo_vertical" class="file">
+	                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                		<a href="#" target="_blank"></a>
+	                                		<input type="checkbox" name="item_logo_vertical_delete" id="nuevaUA_item_logo_vertical_delete" value="1"/>
+	                                		<label for="nuevaUA_item_logo_vertical_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                	</div>
+	                                </div>
+	                            </div>    
+	                            
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_logo_vertical" name="item_logo_vertical" type="file" class="nou" />
+	                                </div>
+	                            </div>                                                                                      
+	                     	</div>
+	                        <!-- /fila -->
+	                        <!-- fila -->
+	                     	<div class="fila">
+	                            <div class="element t50p campoImagen">	                                     
+	                                <div class="thumbnail"></div>
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
+	                                <div class="control archivo">   
+	                                	<div id="nuevaUA_grup_item_logo_salutacio_horizontal" class="file">
+	                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                		<a href="#" target="_blank"></a>
+	                                		<input type="checkbox" name="item_logo_salutacio_horizontal_delete" id="nuevaUA_item_logo_salutacio_horizontal_delete" value="1"/>
+	                                		<label for="nuevaUA_item_logo_salutacio_horizontal_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                	</div>
+	                                </div>
+	                            </div>    
+	                                                        
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_salutacio_horizontal"><spring:message code='unitatadm.formulari.logotipus.horitzontal.salutacio'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_logo_salutacio_horizontal" name="item_logo_salutacio_horizontal" type="file" class="nou" />
+	                                </div>
+	                            </div>                                                                                      
+	                     	</div>
+	                        <!-- /fila -->
+	                        <!-- fila -->
+	                     	<div class="fila">
+	                            <div class="element t50p campoImagen">	                                     
+	                                <div class="thumbnail"></div>
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_salutacio_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical.salutacio'/></label></div>
+	                                <div class="control archivo">   
+	                                	<div id="nuevaUA_grup_item_logo_salutacio_vertical" class="file">
+	                                		<span><spring:message code='txt.no_arxiu_assignat'/></span>
+	                                		<a href="#" target="_blank"></a>
+	                                		<input type="checkbox" name="item_logo_salutacio_vertical_delete" id="nuevaUA_item_logo_salutacio_vertical_delete" value="1"/>
+	                                		<label for="nuevaUA_item_logo_salutacio_vertical_delete" class="eliminar"><spring:message code='boto.elimina'/></label>
+	                                	</div>
+	                                </div>
+	                            </div>    
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_logo_salutacio_vertical"><spring:message code='unitatadm.formulari.logotipus.vertical.salutacio'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_logo_salutacio_vertical" name="item_logo_salutacio_vertical" type="file" class="nou" />
+	                                </div>
+	                            </div>                                                                                      
+	                     	</div>
+	                        <!-- /fila -->             	
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	            <!-- modul -->
+	            <div class="modul">
+	                <fieldset>
+	                    <a class="modul amagat"><spring:message code='txt.mostra'/></a>
+	                    <legend><spring:message code='unitatadm.formulari.fitxes'/></legend>
+	                    <div class="modul_continguts" style="display:block;">
+	                        <div class="fila">
+	                            <div class="element t25p">
+	                                <div class="etiqueta"><label for="item_nivell_1"><abbr title="Primer"><spring:message code='unitatadm.formulari.fitxes.nivell.1'/></abbr><spring:message code='unitatadm.formulari.fitxes.nivell'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_nivell_1" name="item_nivell_1" type="text" class="t6 nou" />
+	                                </div>
+	                            </div>
+	                            <div class="element t25p">
+	                                <div class="etiqueta"><label for="item_nivell_2"><abbr title="Segon"><spring:message code='unitatadm.formulari.fitxes.nivell.2'/></abbr><spring:message code='unitatadm.formulari.fitxes.nivell'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_nivell_2" name="item_nivell_2" type="text" class="t6 nou" />
+	                                </div>
+	                            </div>
+	                            <div class="element t25p">
+	                                <div class="etiqueta"><label for="item_nivell_3"><abbr title="Tercer"><spring:message code='unitatadm.formulari.fitxes.nivell.3'/></abbr><spring:message code='unitatadm.formulari.fitxes.nivell'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_nivell_3" name="item_nivell_3" type="text" class="t6 nou" />
+	                                </div>
+	                            </div>
+	                            <div class="element t25p">
+	                                <div class="etiqueta"><label for="item_nivell_4"><spring:message code='unitatadm.formulari.fitxes.nivell.4'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_nivell_4" name="item_nivell_4" type="text" class="t6 nou" />
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	
+	            <!-- modul -->
+	            <div id="modulEstadistiques" class="modul">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='txt.ESTADISTIQUES'/></legend> 
+	                    <div class="modul_continguts mostrat"></div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	
+			    <c:if test="${rolAdmin}">
+			        <!-- modul -->
+			        <div id="modulAuditories" class="modul auditorias">                
+	                    <fieldset>
+	                        <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                        <legend><spring:message code='txt.AUDITORIES'/></legend>
+	                        <div class="modul_continguts amagat">
+	                           <p class="executant"><spring:message code='txt.carregant'/></p>
+	                        </div>
+	                    </fieldset>
+			        </div>
+			        <!-- /modul -->
+		        </c:if>
+	            
+	        </div>
+	        <!-- /modulPrincipal -->
+	        
+	        <!-- modulLateral -->
+	        <div class="modulLateral">
+	            <!-- modul -->
+	            <div class="modul publicacio">
+	                <fieldset>
+	                    <legend><spring:message code='boto.publicacio'/></legend>
+	                    
+	                      <div class="element right">
+	                          <div class="etiqueta">
+	                              <label for="nuevaUA_item_validacio"><spring:message code='camp.validacio'/></label>
+	                          </div>
+	                          <div class="control">
+	                              <select id="nuevaUA_item_validacio" name="item_validacio">
+	                              
+	                                  <c:set var="rolSuper"><rol:userIsSuper/></c:set>
+	                                  <c:choose>
+	                                      <c:when test="${rolSuper}" >
+	                                          <option value="1" selected="selected"><spring:message code='txt.validacio.publica'/></option>
+	                                          <option value="2"><spring:message code='txt.validacio.interna'/></option>
+	                                          <option value="3"><spring:message code='txt.validacio.reserva'/></option>                                                                                   
+	                                      </c:when>
+	                                      <c:otherwise>
+	                                          <option value="2" selected="selected"><spring:message code='txt.validacio.interna'/></option>
+	                                      </c:otherwise>
+	                                  </c:choose>                                                               
+	                              </select>
+	                          </div>
+	                    </div>
+	                    
+	                    <div class="modul_continguts mostrat">
+	                        <!-- botonera dalt -->
+	                        <div class="botonera dalt">
+	                          <ul>
+	                              <li class="btnGuardar impar">
+	                                  <a id="nuevaUA_btnGuardar" href="javascript:;" class="btn guarda important"><span><span><spring:message code='boto.guarda_exclamacio'/></span></span></a>
+	                              </li>
+	                              <li class="btnVolver par">
+	                                  <a id="nuevaUA_btnVolver" href="javascript:;" class="btn volver"><span><span><spring:message code='boto.torna'/></span></span></a>
+	                              </li>
+	                              <!--<li class="btnPrevisualizar par">
+	                                  <a id="nuevaUA_btnPrevisualizar" href="javascript:;" class="btn previsualitza"><span><span><spring:message code='boto.previsualitza'/></span></span></a>
+	                              </li>
+	                              <li class="e btnEliminar impar">
+	                                  <a id="nuevaUA_btnEliminar" href="javascript:;" class="btn elimina"><span><span><spring:message code='boto.elimina'/></span></span></a>
+	                              </li>-->
+	                          </ul>
+	                        </div>
+	                        <!-- /botonera dalt -->
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	            
+	            <!-- modul -->
+	            <div id="nuevaUA_modulRelacioOrganica" class="modul modulRelacioOrganica">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='txt.RELACIO_ORGANICA'/></legend>
+	                    <div class="modul_continguts mostrat">
+	                    
+	                        <div class="fila">
+	                            <div class="element t50p">
+	                                <div class="etiqueta"><label for="nuevaUA_item_pare"><spring:message code='unitatadm.formulari.pare'/></label></div>
+	                                <div class="control">
+	                                    <input id="nuevaUA_item_pare" class="item_pare" name="item_pare" type="text" readonly="readonly" />
+	                                    <input id="nuevaUA_item_pare_id" name="item_pare_id" type="hidden" />                                                
+	                                </div>                                          
+	                            </div>            
+	                        </div>
+	                        <!-- Botonera -->                        
+	                        <div class="botonera">
+	                            <div class="boton btnGenerico" style="margin-left: 0px;">
+									<a href="javascript:carregarArbreUAExpand('<c:url value="/pantalles/popArbreUAExpandir.do"/>','popUA','nuevaUA_item_pare_id', 'nuevaUA_item_pare');" class="btn consulta">                                
+	                                    <span><span><spring:message code='boto.canviarUAPare'/></span></span>
+	                                </a>
+	                            </div>
+	                            <div class="boton btnGenerico borrar">
+	                                <a href="javascript:EliminaArbreUA('nuevaUA_item_pare','nuevaUA_item_pare_id');" class="btn borrar">
+	                                    <span><span><spring:message code='boto.borrar'/></span></span>
+	                                </a>
+	                            </div>
+	                        </div>                        
+	                        <!-- /Botonera -->
+	                        
+	                    </div>
+	                </fieldset>
+	            </div>
+	            <!-- /modul -->
+	            
+	            <!-- modul -->
+	            <%--
+	            <div class="modul" id="nuevaUA_modul_materies">
+	                <fieldset>
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+	                    <legend><spring:message code='unitatadm.formulari.materies'/></legend>
+	                    <div class="modul_continguts mostrat">
+	                                                                        
+	                        <!-- modulMateries -->
+	                        <div class="modulMateries selectorChecks">
+	                        
+	                            <input name="modulo_materias_modificado" type="hidden" value="0" />
+	                        
+	                            <div class="seleccionats">
+	                                <p class="info"><spring:message code='unitatadm.formulari.materies.noInfo'/></p>
+	                                <div class="listaOrdenable"></div>
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.materies.gestiona'/></span></span></a>                 
+	                                </div>                          
+	                            </div>                          
+	                            <div class="llistat">                                       
+	                                <ul>                                                        
+	                                    <c:forEach items="${llistaMateries}" var="materia" varStatus="i">
+	                                        <c:choose>
+	                                            <c:when test="${(i.count) % 2 == 0}">
+	                                                <li class="par">
+	                                            </c:when>
+	                                            <c:otherwise>
+	                                               <li class="impar">
+	                                            </c:otherwise>
+	                                        </c:choose>                                     
+	                                          <label><span><c:out value="${materia.nom}" /></span><input type="checkbox" value="<c:out value='${materia.id}' />" /></label>
+	                                        </li>                                                                                                               
+	                                    </c:forEach>                                
+	                                </ul>                                           
+	                                <div class="botonera">
+	                                    <div class="btnGenerico">
+	                                       <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+	                                    </div>
+	                                    <div class="btnGenerico">
+	                                       <a href="javascript:;" class="cancela"><span><span><spring:message code='boto.cancela'/></span></span></a>
+	                                    </div>
+	                                </div>                                      
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulMateries -->
+	                        
+	                    </div>                              
+	                </fieldset>                     
+	            </div>
+	            <!-- /modul -->
+	                                 
+	            <!-- modul -->
+	            <div class="modul" id="nuevaUA_modul_seccions">                 
+	                <fieldset>                                  
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+	                    <legend><spring:message code='unitatadm.formulari.seccions'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulSeccions -->
+	                        <div class="modulSeccions">                                     
+	                            <input name="modulo_secciones_modificado" type="hidden" value="0" />
+	                            <div class="seleccionats">                                          
+	                                <p class="info"><spring:message code='unitatadm.formulari.seccions.noInfo'/></p>
+	                                <div class="listaOrdenable"></div>
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestionaSeccions" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.seccions.gestiona'/></span></span></a>                 
+	                                </div>                                                                           
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulSeccions -->                                 
+	                    </div>                              
+	                </fieldset>                     
+	            </div>
+	            <!-- /modul -->   
+	                              
+	            <!-- modul -->
+	            <div class="modul" id="nuevaUA_modul_edificis">                     
+	                <fieldset>                                  
+	                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+	                    <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
+	                    <div class="modul_continguts mostrat">                                  
+	                        <!-- modulEdificis -->
+	                        <div class="modulEdificis">
+	                            <div class="seleccionats">
+	                                <input name="modulo_edificios_modificado" type="hidden" value="0" />
+	                                <div class="seleccionat">
+	                                    <p class="info"><spring:message code='unitatadm.formulari.edificis.noInfo'/></p>
+	                                    <div class="listaOrdenable"></div>
+	                                </div>
+	                                <div class="btnGenerico">
+	                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.edificis.gestiona'/></span></span></a>
+	                                </div>
+	                            </div>                                  
+	                        </div>
+	                        <!-- /modulEdificis -->                                 
+	                    </div>                              
+	                </fieldset>                     
+	            </div>
+	            <!-- /modul --> 
+	            --%>
+	                                
+	        </div>
+	        <!-- /modulLateral -->      
+	    </div>
+	    </form>
+	</div>
+	<!-- /Escritorio nueva unidad hija -->
+    
     <script type="text/javascript" src="<c:url value='/js/tiny_mce/jquery.tinymce.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/pxem.jQuery.js'/>"></script>  
     <script type="text/javascript" src="<c:url value='/js/jquery-ui.min.js'/>"></script>
@@ -1197,6 +1880,7 @@
     <script type="text/javascript" src="<c:url value='/js/modul_edificis.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>    
     <script type="text/javascript" src="<c:url value='/js/unitat.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/nueva_ua.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
@@ -1342,7 +2026,6 @@
         var txtNoEsCorrecte = "<spring:message code='txt.data_no_correcte'/>";
 
         var txtItemEliminar= "<spring:message code='txt.eliminar'/> <spring:message code='txt.item'/>";
-        
     </script>
     
     <script type="text/javascript">
@@ -1523,4 +2206,184 @@
             }
         ];
     -->
-    </script>    
+    </script>
+    
+    <script type="text/javascript">
+    <!--
+       // Formulario de nueva unidad administrativa.
+        var NuevaUAFormulariDades = [ // OBLIGATORIS
+            { // Nom en catala
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_nom_ca",
+                "obligatori": "si",
+                "tipus": "alfanumeric",
+                "caracters":
+                    {
+                        "maxim": 150,
+                        "mostrar": "no",
+                        "abreviat": "no"
+                    },
+                "error":
+                    {
+                        "obligatori": "<spring:message code='unitatadm.formulari.nom.obligatori'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.nom.no_nomes_numeros'/>"
+                    }
+            }, // Validacio
+            {
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_validacio",
+                "obligatori": "si",
+                "tipus": "numeric",         
+                "error":
+                    {
+                        "obligatori": "<spring:message code='unitatadm.formulari.validacio.obligatori'/>"                   
+                    }
+            },{ // Sexe Responsable
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_responsable_sexe",
+                "obligatori": "si",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "obligatori": "<spring:message code='unitatadm.formulari.sexeResponsable.obligatori'/>",
+                    }
+            },{ // Tractament
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_tractament",
+                "obligatori": "si",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "obligatori": "<spring:message code='unitatadm.formulari.tractament.obligatori'/>",
+                    }
+            } // NO OBLIGATORIS 
+            ,{ // Clau hita
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_clau_hita",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.clauHita'/>",
+                    }
+            },{ // Codi estandar
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_codi_estandar",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.codiEstandar'/>",
+                    }
+            },{ // Domini
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_domini",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.domini'/>",
+                    }
+            },{ // Telefon
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_telefon",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 9,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.telefon'/>",
+                    }
+            },{ // Fax
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_fax",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "caracters":
+                {
+                    "maxim": 9,
+                    "mostrar": "no",
+                    "abreviat": "no"
+                },
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.fax'/>",
+                    }
+            },{ // Email
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_email",
+                "obligatori": "no",
+                "tipus": "email",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>",
+                    }
+            },{ // Responsable
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_responsable",
+                "obligatori": "no",
+                "tipus": "alfanumeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>",
+                    }
+            },{ // nivell 1
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_nivell_1",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell1'/>",
+                    }
+            },{ // nivell 2
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_nivell_2",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell2'/>",
+                    }
+            },{ // nivell 1
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_nivell_3",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell3'/>",
+                    }
+            },{ // nivell 1
+                "modo": "individual",
+                "etiqueta": "id",
+                "etiquetaValor": "nuevaUA_item_nivell_4",
+                "obligatori": "no",
+                "tipus": "numeric",
+                "error":
+                    {
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell4'/>",
+                    }
+            }
+        ];
+    -->
+    </script>  

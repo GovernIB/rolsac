@@ -42,10 +42,25 @@ jQuery(document).ready(function(){
 /**
  * @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
  * @param array reglasFormulario: Lista de reglas a validar para guardar el formulario, por defecto FormulariDades.
+ * @param object identificadores: Identificadores de botones de acción, etc.
  */
-function DetallBase(soloFicha, reglasFormulario){
+function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	var that = this;
 	var soloFicha = soloFicha || false;
+	var ids = {
+		btnGuardar: "btnGuardar",
+		form: "formGuardar"
+	};
+	
+	if( identificadores ){
+		
+		ids.btnGuardar = identificadores.btnGuardar || "btnGuardar";
+		ids.form = identificadores.form || "formGuardar";
+
+	}
+	
+	jQuery("#"+ids.btnGuardar).parent().addClass("off");
+	jQuery("#"+ids.form+" input,#"+ids.form+" select,#"+ids.form+" textarea").bind("change",function(){that.modificado();});
     
     this.idiomas = ["es","ca","en","de","fr"];
     //this.idiomas = idiomas; 
@@ -95,7 +110,7 @@ function DetallBase(soloFicha, reglasFormulario){
 		// missatge
 		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
 
-		dataForm = $("#formGuardar").serialize();
+		dataForm = $("#"+ids.form).serialize();
 
 		if (typeof dataVars != 'undefined' && dataVars.length > 0) {
 			dataForm += "&" + dataVars;
@@ -133,8 +148,8 @@ function DetallBase(soloFicha, reglasFormulario){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el botï¿½n de guardar.
-		jQuery("#btnGuardar").unbind("click").bind("click",function(){Detall.guarda();}).parent().removeClass("off");
+		// Habilitamos el botón de guardar.
+		jQuery("#"+ids.btnGuardar).unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 
 	this.publica = function(){
@@ -158,14 +173,14 @@ function DetallBase(soloFicha, reglasFormulario){
 	 */
 	this.eliminar = function() {
 		Missatge.llansar({tipus: "confirmacio", modo: "atencio", fundit: "si", titol: txtItemEliminar, funcio: function() {
-			Detall.elimina();
+			that.elimina();
 		}});
 	}
 
 	this.carregar = function(itemID){
 
 		// Deshabilitamos inicialmente el botï¿½n de guardar.
-		jQuery("#btnGuardar").unbind("click").parent().removeClass("off").addClass("off");
+		jQuery("#"+ids.btnGuardar).unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();
 
@@ -194,7 +209,7 @@ function DetallBase(soloFicha, reglasFormulario){
 						if (typeof data.error != 'undefined') {
 							Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.error + "</p>"});
 						} else {
-							Detall.pintar(data);
+							that.pintar(data);
 							if (that.tipusAuditoria != null && typeof Auditoria.busca != 'undefined') { 
 								//Existe auditoria para el detalle y se ha cargado el objeto de auditorï¿½as
 								Auditoria.busca(that.tipusAuditoria, itemID);

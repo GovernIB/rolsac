@@ -28,6 +28,7 @@ function FormulariComprovar(reglesValidacio) {
 	this.formComprovacio = true;
     
     this.iniciar = function() {
+    	
 		$(reglesValidacio).each(function() {
 		
 			dada = this;
