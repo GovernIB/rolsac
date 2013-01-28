@@ -15,7 +15,7 @@ var Seccions_Arbre = {
 		ua_arbre_codi = "<p class=\"executant\">" + txtCarregantArrel + ".</p>";
 		
 		escriptori_seccions_arbre_elm = $("div.escriptori_seccions_arbre:first");
-		escriptori_seccions_arbre_elm.html(ua_arbre_codi);
+		escriptori_seccions_arbre_elm.html(ua_arbre_codi);	
 		
 		Seccions_Arbre.carregar({ nivell: 0 });
 		
@@ -152,10 +152,13 @@ var Seccions_Arbre = {
 						
 						data_seccio_node = this;
 						
+						// Si nos viene la abreviatura la usamos como nombre.
+						var nombre = data_seccio_node.abreviatura ? data_seccio_node.abreviatura : data_seccio_node.nom;
+						
 						codi_secc_arbre += "<li>";
 						codi_secc_arbre += "<div>";
 						codi_secc_arbre += "<input type=\"hidden\" value=\"" + data_seccio_node.id + "\" class=\"id\"/>";
-						codi_secc_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + data_seccio_node.nom + "</a>";
+						codi_secc_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + nombre + "</a>";
 						if (data_seccio_node.filles == true) {
 							codi_secc_arbre += "<a class=\"btn fills\" href=\"javascript:;\"></a>";
 						}

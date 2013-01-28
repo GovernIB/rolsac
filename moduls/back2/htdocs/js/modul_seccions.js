@@ -38,7 +38,7 @@ $(document).ready(function() {
 });
 
 function CModulSeccio() {
-
+	
 	var that = this;
 	var params;
 	var paramsFicha;
@@ -983,7 +983,7 @@ function CEscriptoriSeccio() {
 			});
 			
 		});
-	}		
+	}	
 };
 
 function CEscriptoriSeccioFitxes() {

@@ -36,7 +36,8 @@ div.escriptori_items_llistat {
 #escriptori_seccions_ua div.escriptori_items_llistat { 
     overflow:hidden; 
     float:left; 
-    width: 42em;
+    /*width: 42em;*/
+    width: 50em;
 	padding:1em 1em 2em 1em; 
 	margin-right:1em; 
 	margin-bottom:1em;
@@ -46,9 +47,17 @@ div.escriptori_items_llistat {
 
 #escriptori_seccions_ua div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
 
-div.escriptori_selector_seccions { overflow:hidden; float:left; width:20em; }
+div.escriptori_selector_seccions { 
+	overflow:hidden; 
+	float:left; 
+	width:24em;
+}
 
-div.escriptori_selector_uas { overflow:hidden; float:right; width:20em; }
+div.escriptori_selector_uas { 
+	overflow:hidden; 
+	float:right; 
+	width:24em;
+}
 
 div.escriptori_selector_seccions h3, div.escriptori_selector_uas h3 { margin-top:0; }
 #escriptori_seccions_ua p.executant { font-style:italic; padding-left:1.8em; background:transparent url(../img/executant.gif) no-repeat left .1em; }
@@ -78,7 +87,8 @@ div.escriptori_items_seleccionats ul li span.ua { font-style:italic; }
     margin-bottom: 33px;    
     position: relative;
     border-radius: 15px 15px 15px 15px;     
-    width: 34em;
+    /*width: 34em;*/
+    width: 25em; 
     font: 13px Arial, Helvetica, Sans-serif;
 }
 #escriptori_seccions_ua div.escriptori_items_seleccionats .interior{

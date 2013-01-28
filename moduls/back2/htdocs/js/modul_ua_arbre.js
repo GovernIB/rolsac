@@ -146,7 +146,7 @@ var UA_Arbre = {
 				
 			},
 			success: function(data) {
-					
+				
 					data_unitat = data.llistaUnitats;
 					
 					codi_ua_arbre = "<ul class=\"nivell n" + opcions.nivell + "\">";
@@ -154,10 +154,14 @@ var UA_Arbre = {
 						
 						data_unitat_node = this;
 						
+						// Si nos viene la abreviatura la usamos como nombre.
+						var nombre = data_unitat_node.abreviatura ? data_unitat_node.abreviatura : data_unitat_node.nom;
+						
 						codi_ua_arbre += "<li>";
 						codi_ua_arbre += "<div>";
 						codi_ua_arbre += "<input type=\"hidden\" value=\"" + data_unitat_node.id + "\" class=\"id\"/>";
-						codi_ua_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + data_unitat_node.nom + "</a>";
+						codi_ua_arbre += "<a class=\"selecciona\" href=\"javascript:;\">" + nombre + "</a>";
+						
 						if (data_unitat_node.filles == true) {							
 							codi_ua_arbre += "<a class=\"btn fills\" href=\"javascript:;\"></a>";
 						}
