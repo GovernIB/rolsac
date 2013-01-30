@@ -163,9 +163,11 @@ function CEscritorioUnidadesHijas() {
 		
 			//TODO Corregir esta parte (carga el detalle pero acumula escritorios)			
 			//PROBAR Detall.recarregar(itemID)
-			$("#escritorioUnidadesHijas").find("div.uahijas a").unbind("click").bind("click", 
-					function() { jQuery("#escritorioUnidadesHijas").hide(); escritorioUnidadesHijas.ficha(this); 
-			});
+			/*$("#escritorioUnidadesHijas").find("div.uahijas a").unbind("click").bind("click",
+				function() { 
+					//jQuery("#escritorioUnidadesHijas").hide(); escritorioUnidadesHijas.ficha(this);
+				}
+			);*/
 			
 		} else {
 			
@@ -311,5 +313,14 @@ function CEscritorioUnidadesHijas() {
 		jQuery("#escritorioNuevaUA").show();
 		
 		NuevaUADetall.nuevaUAHija();
+	}
+	
+	/**
+	 * Método sobreescrito.
+	 */
+	this.ficha = function( link ){
+		// Obtenemos el id del item a partir del id del enlace.
+		var id = jQuery(link).attr("id").split("_")[1];
+		location.href = pagLlistat + "?itemId=" + id;
 	}
 };
