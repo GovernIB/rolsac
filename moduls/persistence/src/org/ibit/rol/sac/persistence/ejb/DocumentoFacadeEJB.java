@@ -159,7 +159,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
             }           
             
             
-            //TODO añadir if para el tramite
+            //TODO aï¿½adir if para el tramite
             
             return documento.getId();
         } catch (HibernateException he) {
@@ -322,7 +322,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     }
     
     /**
-     * Obtiene el archivo de un documento de trámite.
+     * Obtiene el archivo de un documento de trï¿½mite.
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
@@ -349,7 +349,7 @@ public abstract class DocumentoFacadeEJB extends HibernateEJB {
     
     /**
      * 
-     * Actualiza los ordenes de los documentos de una sección de una Ficha
+     * Actualiza los ordenes de los documentos de una secciï¿½n de una Ficha
 	 *
      * FIXME enric@dgtic: este metodo lo pondria en procedimientoFacadeEJB 
      *  
