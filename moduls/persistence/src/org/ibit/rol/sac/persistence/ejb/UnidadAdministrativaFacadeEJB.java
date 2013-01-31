@@ -91,6 +91,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -2881,10 +2882,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				String ua_texto=Cadenas.initTab(ua_sbuf.toString()); // articulos a minusculas
 
 				if (idua.equals(uniadm.getId())) {
-					mollapa.insert(0, "<li class=\"seleccionat\">" + ua_texto + " </li>");
+					mollapa.insert(0, "<li class=\"ua seleccionat\">" + ua_texto + " </li>");
 				} else {
-					String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
-					mollapa.insert(0, "<li><a href=\"" + uaURL + "\">" + ua_texto + "</a>" + " </li>");
+//					String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
+//					mollapa.insert(0, "<li><a href=\"" + uaURL + "\">" + ua_texto + "</a>" + " </li>");
+					mollapa.insert(0, "<li class=\"ua\"><a href=\"javascript:void(0);\" data-clave_ua_padre=\"" +
+					        uniadm.getId() + "\">" + ua_texto + "</a>" + " </li>");
 				}
 
 				uniadm = uniadm.getPadre();
