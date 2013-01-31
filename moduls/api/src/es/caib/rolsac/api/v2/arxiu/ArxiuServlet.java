@@ -32,7 +32,13 @@ public class ArxiuServlet extends HttpServlet {
         try {
             long id = Long.parseLong(idParam);
             session = HibernateUtils.getSessionFactory().openSession();
-            Archivo archivo = (Archivo) session.load(Archivo.class, id);
+            Archivo archivo = (Archivo) session.get(Archivo.class, id);
+            
+            if (archivo == null) {
+                log.error("El id " + idParam + " no existe.");
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
 
             response.setContentType(archivo.getMime());
             response.setHeader("Content-Disposition", "attachment;filename=" + archivo.getNombre());
@@ -43,8 +49,8 @@ public class ArxiuServlet extends HttpServlet {
             out.close(); 
 
         } catch (NumberFormatException e) {
-            log.error("El id " + idParam + " no existe o no es numerico.");
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            log.error("El id " + idParam + " no es numerico.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         } catch (HibernateException e) {
             log.error("Error obteniendo session de Hibernate.");
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
