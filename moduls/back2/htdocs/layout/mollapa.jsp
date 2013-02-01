@@ -4,28 +4,43 @@
 <div id="mollaPa">
 	<div id="mollaPa_contingut">
 		<ul class="molla">    		
-    		<li class="ua"><a data-clave_ua_padre="" id="mollapaHome" href="javascript:void(0)"><spring:message code="mollapa.inici" /></a></li>
-            <ua:crearMollapa/>    		
+    		<li class="ua inicio">
+    			<div>
+    				<a data-clave_ua_padre="" id="mollapaHome" href="javascript:void(0)"><spring:message code="mollapa.inici" /></a>
+				</div>
+			</li>
+				
+            <ua:crearMollapa/>
     		
-            <%--
+    		<%--
     		<!-- dsanchez: MAQUETACIï¿½N ESTï¿½TICA -->
+    		
     		<li class="ua">
-		    	<a href="javascript:void(0)">Govern de les Illes Balears</a>
+    			<div>
+	    			<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=1&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Govern de les Illes Balears</a>
+	    			<a class="desplegar" href="javascript:void(0)"></a>
+    			</div>
 	    	</li>
-	    	
-	    	<li class="ua seleccionat">
-	    		<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, 
-	    			 en este ejemplo "Govern de les Illes Balears" (1) -->
-	    		<a data-clave_ua_padre="1" href="javascript:void(0)">Presidï¿½ncia</a>
+
+			<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, 
+	    			 en este ejemplo "Govern de les Illes Balears" (1) -->	    	
+	    	<li class="ua seleccionat" data-clave_ua_padre="1">
+	    		<div>
+			 		<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=2&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Presidéncia</a>
+			 		<a class="desplegar" href="javascript:void(0)"></a>
+		 		</div>
     		</li> 
-		    	
-	    	<li class="uaHijas">
-	    		<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, 
-	    			 en este ejemplo "Presidï¿½ncia" (2)-->
-	    		<a data-clave_ua_padre="2" class="btn uaFilles" href="javascript:void(0)">Unitats filles</a>
+
+			<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, 
+	    			 en este ejemplo "Presidï¿½ncia" (2)-->		    	
+	    	<li class="uaHijas" data-clave_ua_padre="2">
+	    		<div>
+		    		<a class="btn uaFilles" href="javascript:void(0)">Unitats filles</a>
+	    		</div>
     		</li>
 		    <!-- /MAQUETACIï¿½N ESTï¿½TICA -->
 		    --%>
+		    
 		</ul>								
 	</div>	
 </div>

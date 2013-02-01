@@ -251,12 +251,13 @@ span.sep { margin:0 1.5em; }
     text-decoration: none;  
     height: 23px;
 }
-#mollaPa_contingut ul.molla li a{
+#mollaPa_contingut ul.molla li div{
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    padding: 0 9px;
+    padding-left: 9px;
     background-color: #F0F0F0;
+    border: 1px solid #C7C7C7;
     display:block;  
 }
 #mollaPa_contingut ul.molla li a:hover{
@@ -265,19 +266,40 @@ span.sep { margin:0 1.5em; }
 #mollaPa_contingut ul.molla li.seleccionat { 
     font-weight:bold;    
 }
-#mollaPa_contingut ul.molla li.uaHijas a{
-    background-color: white;
-    border: 1px solid #C7C7C7;
-    background: url(../img/mollaPa/flecha_uahijas.gif) 93% 50% no-repeat;
-    padding-right: 25px;
+#mollaPa_contingut ul.molla li.ua div{
+	background-color: #F0F0F0;
+	overflow: hidden;	
 }
-#mollaPa_contingut ul.molla li.ua a{
-	background: url(../img/mollaPa/flecha_ua_padre.png) #F0F0F0 93% 50% no-repeat;
-	padding-right: 28px;
-	border: 1px solid #C7C7C7;
+#mollaPa_contingut ul.molla li.ua div a.ua{
+	float: left;
 }
-#mollaPa_contingut ul.molla li.ua.seleccionat a{
+#mollaPa_contingut ul.molla li.ua div a.desplegar{
+	width: 10px;
+	height: 19px;
+	margin: 2px 2px 2px 3px;
+	padding: 0 6px;
+	border-radius: 5px;
+	float: right;
+	background: url(../img/mollaPa/flecha_ua_padre.png) 50% 50% no-repeat;
+}
+#mollaPa_contingut ul.molla li.ua div a.desplegar:hover{
 	background-color: White;
+}
+#mollaPa_contingut ul.molla li.ua.seleccionat div a.desplegar:hover{
+	background-color: #F0F0F0;
+}
+#mollaPa_contingut ul.molla li.ua:first-child div{
+	border: none;
+	background-image: none;
+	padding-right: 9px;
+}
+#mollaPa_contingut ul.molla li.ua.seleccionat div{
+	background-color: White;
+}
+#mollaPa_contingut ul.molla li.uaHijas div{
+	padding-right: 28px;
+	background: url(../img/mollaPa/flecha_uahijas.gif) White 93% 50% no-repeat;
+	cursor: pointer;
 }
 #mollaPa_contingut ul.molla li a.uaFilles.desplegado{
     border-radius: 5px 5px 0 0;

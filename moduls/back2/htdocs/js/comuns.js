@@ -135,8 +135,8 @@ var MollaPa = {
 		mollaPa_elm.append(ua_codi);
 		uas_elm = $("#uas");			
 
-		mollaPa_elm.find(".uaHijas a").bind("click",MollaPa.despliegaUnidades);
-		jQuery("#mollaPa li.ua a").bind("click",MollaPa.despliegaUnidades);
+		mollaPa_elm.find(".uaHijas div,.uaHijas a").bind("click",MollaPa.despliegaUnidades);
+		jQuery("#mollaPa li.ua a.desplegar").bind("click",MollaPa.despliegaUnidades);
 		
 		$('#mollapaHome').bind("click", function() {			
             document.location.href = cambioMollaPa + "?redirectTo=" + document.location.href.split('?', 1)[0];
@@ -145,15 +145,17 @@ var MollaPa = {
 	
 	despliegaUnidades: function(e){
 		var $target = jQuery(e.target);
-		var $itemLista = $target.parents("li.ua");
-		var claveUA = $target.data("clave_ua_padre");
+		var $itemLista = $target.parents("li");
+		var claveUA = $itemLista.data("clave_ua_padre");
 		
-		elm = $target;
+		elm = $target.parents("li").find("div");
+		
+		// dsanchez: Esto es solo provisional mientras se termina el ticket 305 pero no afecta.
+		if(!elm.length){ elm = $target; }
 		
 		uas_elm.html("<li><span class=\"carregant\">" + txtCarregantMollaFills + "</span></li>")
 				
-		a_T = elm.position().top-2;
-		//a_L = elm.position().left;
+		a_T = elm.position().top-3;
 		a_L = elm.parents("li").position().left;
 		a_H = elm.outerHeight();
 		
