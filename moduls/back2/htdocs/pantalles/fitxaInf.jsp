@@ -1015,31 +1015,24 @@
 
                             <div class="seleccionats">
                                 <%-- dsanchez: multiidioma --%>
-                                <div class="seleccionat cajaIdioma <c:out value='${lang}'/>">
-                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>
-                                <div class="<c:out value='${lang}'/> cajaIdioma">
-                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>
-                                <div class="<c:out value='${lang}'/> cajaIdioma">
-                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
-                                <div class="<c:out value='${lang}'/> cajaIdioma">
-                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
-                                <div class="<c:out value='${lang}'/> cajaIdioma">
-                                    <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
-                                    <div class="listaOrdenable"></div>
-                                </div>                                
+                                <c:forEach items="${idiomes_aplicacio}" var="lang" varStatus="loop">
+                                    <c:choose>
+                                        <c:when test="${loop.first}">
+                                          <div class="seleccionat cajaIdioma <c:out value='${lang}'/>">                             
+                                        </c:when>
+                                        <c:when test="${!loop.first}">
+                                          <div class="<c:out value='${lang}'/> cajaIdioma">                             
+                                        </c:when>                                   
+                                    </c:choose>
+                                        <p class="info"><spring:message code='txt.noHiHaDocumentsRelacionats'/>.</p>
+                                        <div class="listaOrdenable"></div>                          
+                                    </div>                                  
+                                </c:forEach>                                
                                 
                                 <div class="btnGenerico">
                                     <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='boto.afegeixDocument'/></span></span></a>
                                 </div>
-                            </div>                                  
+                            </div>                        
                         </div>
                         <!-- /modulDocuments -->                                 
                     </div>    
