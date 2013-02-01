@@ -13,6 +13,7 @@
 	   es.caib.rolsac.vuds.endpoint=http://89.140.20.218:65003/ServiciosExternos/sistemaInformacionWS
 	   es.caib.rolsac.idiomaDefault=ca
 	   es.caib.rolsac.traspasboib=Y
+	   es.caib.rolsac.permisosSuperAdicionales=N
 	   
 	   <!-- mode de connexió amb el boib: [boib|eBoib] 
 	   		boib - boib antic (EJB)

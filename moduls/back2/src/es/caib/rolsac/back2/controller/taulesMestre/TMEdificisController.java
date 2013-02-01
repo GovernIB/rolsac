@@ -55,8 +55,14 @@ public class TMEdificisController extends PantallaBaseController {
         model.put("submenu", "layout/submenu/submenuTMEdificis.jsp");
         
         RolUtil rolUtil= new RolUtil(request);
-        if (rolUtil.userIsAdmin()) {
-        	model.put("escriptori", "pantalles/taulesMestres/tmEdificis.jsp");
+    	loadIndexModel (model, request);
+		Boolean permisosSuperAddicionals = (Boolean) model.get("permisosSuperAddicionals");
+        if (rolUtil.userIsAdmin() || permisosSuperAddicionals) {
+        	 model.put("escriptori", "pantalles/taulesMestres/tmEdificis.jsp");
+	       	 if (request.getSession().getAttribute("unidadAdministrativa")!=null){
+	             model.put("idUA",((UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa")).getId());
+	             model.put("nomUA",((UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));
+	    	 }
         } else {
         	model.put("error", "permisos");
         }
@@ -66,7 +72,7 @@ public class TMEdificisController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatEdifici(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistatEdifici(HttpServletRequest request, HttpSession session) {
 	
 		List<Map<String, Object>> llistaEdificiDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> edificiDTO;
@@ -74,8 +80,14 @@ public class TMEdificisController extends PantallaBaseController {
 
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> tradMap = new HashMap<String, String>();
-
+		Map<String, Object> model= new HashMap<String, Object>();
+		
 		String lang = request.getLocale().getLanguage();
+		Long idUABase=null;
+		
+    	loadIndexModel (model, request);
+		Boolean permisosSuperAddicionals = (Boolean) model.get("permisosSuperAddicionals");
+		
 		// Parametres de cerca
 		
 		String direccio = request.getParameter("direccio");
@@ -108,6 +120,17 @@ public class TMEdificisController extends PantallaBaseController {
 			paramMap.put("email", email.toUpperCase());
 		}
 		
+		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));	
+		
+		String idUA = request.getParameter("idUA");
+		if (idUA != null && !"".equals(idUA)) {
+			idUABase=Long.valueOf(idUA);
+		}else if (permisosSuperAddicionals){ //Només mostra els edificis de les UAs autoritzades a l'usuari
+			uaFilles=true;
+    		uaMeves=true;
+		}
+			
 		// Textes (en todos los campos todos los idiomas)
 		String descripcio = request.getParameter("descripcio");
 		if (descripcio != null && !"".equals(descripcio)) {
@@ -127,37 +150,32 @@ public class TMEdificisController extends PantallaBaseController {
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();								
 		
 		try {
-			
-			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			
-			resultadoBusqueda = edificiDelegate.listarEdificios(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
-			
-			for (Object o : resultadoBusqueda.getListaResultados()) {
 
-				Long id = (Long) ((Object[]) o)[0];
-				String adressa = (String) ((Object[]) o)[1];
-				String descripcioEdifici = ((Object[]) o)[2] == null ? "" : (String) ((Object[]) o)[2];
-				
+			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
+			
+			resultadoBusqueda = edificiDelegate.buscarEdificios(paramMap, tradMap, idUABase, uaFilles, uaMeves, pagPag, pagRes);
+			
+			for (Edificio edf : castList(Edificio.class, resultadoBusqueda.getListaResultados() ) ) {
+                TraduccionEdificio tedf = (TraduccionEdificio) edf.getTraduccion(request.getLocale().getLanguage());
 				edificiDTO = new HashMap<String, Object>();
-				edificiDTO.put("id", id);
-				edificiDTO.put("direccio", adressa);
-				edificiDTO.put("descripcio", descripcioEdifici);
+				edificiDTO.put("id", edf.getId());
+				edificiDTO.put("direccio", edf.getDireccion());
+				edificiDTO.put("descripcio", tedf == null ? null : tedf.getDescripcion());
 				
 				llistaEdificiDTO.add(edificiDTO);
-				
-			}			
+            }
+			resultats.put("total", resultadoBusqueda.getTotalResultados());
+			resultats.put("nodes", llistaEdificiDTO);
 			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
+                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+                resultats.put("id", -1);
 				log.error("Permisos insuficients: " + dEx.getMessage());
 			} else {
 				log.error("Error: " + dEx.getMessage());
 			}
 		}
-
-		resultats.put("total", resultadoBusqueda.getTotalResultados());
-		resultats.put("nodes", llistaEdificiDTO);
 
 		return resultats;
 	}
@@ -404,8 +422,11 @@ public class TMEdificisController extends PantallaBaseController {
                 }
                 
                 edifici.setUnidadesAdministrativas(unitatAdmNoves);                                                 
+            }else {
+                String error = messageSource.getMessage("edifici.formulari.unitat_administrativa.minim", null, request.getLocale());
+                result = new IdNomDTO(-3l, error);
+                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);  
             }
-			
 			
             edificiDelegate.grabarEdificio(edifici);
             

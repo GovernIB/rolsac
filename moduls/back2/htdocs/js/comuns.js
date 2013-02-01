@@ -1165,7 +1165,7 @@ function carregarArbreUAExpand(url, idDiv, id_ua, id_ua_texte) {
 		id_select = 1;	
 	
 	if ($('#' + idDiv).length == 0 ) {
-		$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe id="iframeUA" src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idSelect='  + id_select + '&idHidden=' + id_ua +'" id="iframe" style="width:550px; height:450px;" /></div>');
+		$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px;"><iframe id="iframeUA" src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idSelect='  + id_select + '&idHidden=' + id_ua +'" id="iframe" style="width:550px; height:450px;" /></div>');
 		
 		// Marcar la UA actual y mostrarla en la ventana al abrir la lista
 		$('#iframeUA').load(function() {			
@@ -1189,7 +1189,7 @@ function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 	// Aseguram que no estigui creat
 	if ($('#' + idDiv).length == 0 ) {
 		if (typeof llocOnPintar == 'undefined') {
-			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px; z-index:2;"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
 		} else {
 			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'"  /></div>');
 		}

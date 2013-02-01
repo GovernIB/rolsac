@@ -7,6 +7,7 @@
     <!-- Ejemplo para consultar el permiso para saber si mostrar opciones del menu o no -->
     <!-- p>sacsystem: <%= request.isUserInRole("sacsystem")%></p -->
 
+ 	<c:set var="rolSuper"><rol:userIsSuper/></c:set>
  	<c:set var="rolSystem"><rol:userIsSystem/></c:set>
  	<c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
 
@@ -26,6 +27,28 @@
                     </li>
                 </c:otherwise>
             </c:choose>
+            <c:if test="${rolSuper && !rolAdmin && permisosSuperAddicionals}" >
+            	<c:choose>
+	                <c:when test="${menu==1}">                                        
+	                    <li class="seleccionat desplegable">
+	                </c:when>
+	                <c:otherwise>
+	                    <li class="desplegable">
+	                </c:otherwise>
+	            </c:choose>
+            	<a id="taules_mestre" href="javascript:;"><spring:message code="menu.administracio" /></a>
+				<span class="cueta"></span>		
+				<ul id="taulesMestre">
+					<li>
+						<span class="titol"><spring:message code="menu.unitat_organica" /></span>
+						<ul>
+							<li>
+								<a href="<c:url value="/edifici/edifici.do"/>"><spring:message code="menu.edificis" /></a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+            </c:if>
 		    <c:if test="${rolSystem || rolAdmin}" >	
 			    <c:choose>
 	                <c:when test="${menu==1}">                                        

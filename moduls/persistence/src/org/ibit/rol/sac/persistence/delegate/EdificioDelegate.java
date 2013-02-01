@@ -65,7 +65,13 @@ public class EdificioDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
-
+    public ResultadoBusqueda buscarEdificios(Map parametros, Map traduccion, Long idUA, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException {
+        try {
+            return getFacade().buscarEdificios(parametros, traduccion, idUA, uaFilles, uaMeves, pagina, resultats);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
     public Archivo obtenerFotoPequenyaEdificio(Long id) throws DelegateException {
         try {
             return getFacade().obtenerFotoPequenyaEdificio(id);

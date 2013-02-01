@@ -57,6 +57,15 @@ function CLlistat(){
 	this.iniciar = function() {
 		this.carregar({});
 	}
+
+	//Sobreescriptura de la funció limpia per netejar camp UA
+	this._limpia = this.limpia;	
+	this.limpia = function() {
+			
+		this._limpia();
+		$("#cerca_ua").val("");
+		$("#cerca_ua_id").val("");		
+	}
 	
 	this.finCargaListado = function(opcions,data){
 		// total
@@ -201,7 +210,10 @@ function CLlistat(){
 			pagPagina_elm = pagPagina_cercador_elm;
 			ordreTipus_elm = ordreTipus_cercador_elm;
 			ordreCamp_elm = ordreCamp_cercador_elm;
-
+			
+			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
+			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
+			
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&descripcio=" + $("#cerca_descripcio").val();
 			dataVars_cercador += "&direccio=" + $("#cerca_direccio").val();
@@ -210,6 +222,11 @@ function CLlistat(){
 			dataVars_cercador += "&telefon=" + $("#cerca_telefon").val();
 			dataVars_cercador += "&fax=" + $("#cerca_fax").val();
 			dataVars_cercador += "&email=" + $("#cerca_email").val();
+			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val();
+			dataVars_cercador += "&nomUA=" + $("#cerca_ua").val();
+			dataVars_cercador += "&uaMeves=" + uaMevesVal;
+			dataVars_cercador += "&uaFilles=" + uaFillesVal;
+
 			
 		} else {
 			pagPagina_elm = pagPagina_llistat_elm;
@@ -250,7 +267,10 @@ function CLlistat(){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
 				}
 			},
-			success: function(data) {				
+			success: function(data) {	
+				if (data.id == -1) {
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+				}
 				Llistat.finCargaListado(opcions,data);
 			}
 		});

@@ -17,9 +17,12 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -168,7 +171,66 @@ public abstract class EdificioFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
-    
+    /**
+     * Busca todos los edificios que cumplen los criterios de busqueda del nuevo back (sacback2). 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public ResultadoBusqueda buscarEdificios(Map parametros, Map traduccion,
+			Long idUA, boolean uaFilles, boolean uaMeves,
+			String pagina,String resultats) {
+		
+        Session session = getSession();
+        
+        try {           
+            List params = new ArrayList();
+            String i18nQuery = "";
+          
+            String mainQuery = "select distinct edificio from Edificio as edificio , edificio.traducciones as trad, edificio.unidadesAdministrativas edua where ";
+            
+            if (traduccion.get("idioma") != null) {
+                i18nQuery = populateQuery(parametros, traduccion, params);
+            } else {
+				String paramsQuery = populateQuery(parametros, new HashMap(), params);
+				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ") ";
+            }
+            
+			String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );                        
+            
+            if ( !StringUtils.isEmpty(uaQuery) )            	
+            	uaQuery = " and edua.id in (" + uaQuery + ") ";
+            
+            Query query = session.createQuery(mainQuery + i18nQuery + uaQuery);
+            
+            for (int i = 0; i < params.size(); i++) {
+                Object o = params.get(i);
+                query.setParameter(i, o);
+            }
+     
+			int resultadosMax = new Integer(resultats).intValue();
+			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+			
+			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+            
+            resultadoBusqueda.setTotalResultados( query.list().size() );
+            
+			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}            
+        	
+			resultadoBusqueda.setListaResultados(query.list());
+
+            return resultadoBusqueda;
+            
+		} catch (DelegateException de) {
+			throw new EJBException(de);            
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    } 
     /**
      * Obtiene una lista de edificios
      * @ejb.interface-method

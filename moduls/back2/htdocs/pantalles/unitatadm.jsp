@@ -1105,7 +1105,21 @@
                                 </div>                                  
                             </div>                              
                         </div>
-                        
+		                        <div class="fila">
+									<div class="element t75">    
+		           	               		<div class="etiqueta"><label for="item_organ"><spring:message code='camp.unitat_administrativa'/></label>    </div>
+		                           		<div class="control">
+		                               		<input id="cerca_edificis_organ_id" name="cerca_edificis_organ_id" value='<c:out value="${idUA}" />'type="hidden" />
+		                               	    <input id="cerca_edificis_organ" name="cerca_edificis_organ" value='<c:out value="${nomUA}" />'type="text" class="nou" readonly="readonly" />
+		                               	</div>
+		                            </div>                                                                                
+				                    <div class="btnCambiar boton btnGenerico" style="margin-top:15px">
+		        		                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','cerca_edificis_organ_id','cerca_edificis_organ');" class="btn consulta">
+		                		           	<span><span><spring:message code='boto.canviarUA'/></span></span>
+		                        		</a>
+		                           	</div>
+		                        </div> 
+
                         <div class="botonera">
                             <div class="boton btnGenerico"><a id="btnLimpiarForm" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a></div>
                             <div class="boton btnGenerico"><a id="btnBuscarForm" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a></div>

@@ -160,63 +160,96 @@
         <div class="resultats C">
             <div id="cercador">
                 <div id="cercador_contingut">
-                    <h2><spring:message code='tab.cercador'/></h2>                 
-                        <div class="fila">
-                            <div class="element t50">
-                                <div class="etiqueta"><label for="cerca_descripcio"><spring:message code='edifici.formulari.descripcio'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_descripcio" name="cerca_descripcio" type="text" maxlength="250" />
-                                </div>
-                            </div>
-                            <div class="element t50">
-                                <div class="etiqueta"><label for="cerca_direccio"><spring:message code='edifici.formulari.direccio'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_direccio" name="cerca_direccio" type="text" maxlength="250" />
-                                </div>
-                            </div>
+	                    <h2><spring:message code='tab.cercador'/></h2>
+		                   <div class="opcionesBusqueda">
+		                        <h2><spring:message code='txt.OPCIONS_CERCA'/></h2>                    
+		                        <div class="fila">
+		                            <div class="element checkbox">                                
+		                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
+		                                <input id="cerca_uaFilles" type="checkbox" name="cerca_uaFilles" value="1" />                           
+		                            </div>
+		                        </div>
+		                        <div class="fila">
+		                            <div class="element checkbox">                                
+		                                <label for="cerca_uaMeves"><spring:message code='camp.cerca_totes_unitats'/></label>                                
+		                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
+		                            </div>
+		                        </div>                      
+		                    </div>
+		                    <div class="busquedaBasica">                 
+		                        <div class="fila">
+		                            <div class="element t50">
+		                                <div class="etiqueta"><label for="cerca_descripcio"><spring:message code='edifici.formulari.descripcio'/></label></div>
+		                                <div class="control">                           
+		                                    <input id="cerca_descripcio" name="cerca_descripcio" type="text" maxlength="250" />
+		                                </div>
+		                            </div>
+		                            <div class="element t50">
+		                                <div class="etiqueta"><label for="cerca_direccio"><spring:message code='edifici.formulari.direccio'/></label></div>
+		                                <div class="control">                           
+		                                    <input id="cerca_direccio" name="cerca_direccio" type="text" maxlength="250" />
+		                                </div>
+		                            </div>
+	                        	</div>
+	                        <div class="filla">
+	                            <div class="element t21">
+	                                <div class="etiqueta"><label for="cerca_codiPostal"><spring:message code='edifici.formulari.codi_postal'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_codiPostal" name="cerca_codiPostal" type="text" maxlength="250" />
+	                                </div>    
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta"><label for="cerca_poblacio"><spring:message code='edifici.formulari.poblacio'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_poblacio" name="cerca_poblacio" type="text" maxlength="250" />
+	                                </div>    
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta"><label for="cerca_telefon"><spring:message code='edifici.formulari.telefon'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_telefon" name="cerca_telefon" type="text" maxlength="250" />
+	                                </div>    
+	                            </div>
+	                            <div class="element t21">
+	                                <div class="etiqueta"><label for="cerca_fax"><spring:message code='edifici.formulari.fax'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_fax" name="cerca_fax" type="text" maxlength="250" />
+	                                </div>    
+	                            </div>
+	                        </div>
+	                        <div class="filla">
+	                            <div class="element t50">
+	                                <div class="etiqueta"><label for="cerca_email"><spring:message code='edifici.formulari.email'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" />
+	                                </div>
+	                            </div>
+	                            <div class="element t50">
+	                                <div class="etiqueta"><label for="cerca_ua"><spring:message code='edifici.formulari.unitat_administrativa'/></label></div>
+	                                <div class="control">                           
+	                                    <input id="cerca_ua" name="cerca_ua" type="text" maxlength="250" class="ua" value='<c:out value="${nomUA}" />' readonly="readonly"/>
+	                                    <input id="cerca_ua_id" name="cerca_ua_id" type="hidden" value='<c:out value="${idUA}" />'/>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="filla">
+		      					<div class="botonera noClear">
+		                            <a class="btn consulta" href="javascript:carregarArbreUA('/sacback2/pantalles/popArbreUA.do','popUA','item_organ_responsable_id', 'item_organ_responsable');"></a>                       
+		                      	    <div class="btnCambiar boton btnGenerico">
+		      		     	           <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','cerca_ua_id','cerca_ua');" class="btn consulta">
+		              			           	<span><span><spring:message code='boto.canviarUA'/></span></span>
+		                      			</a>
+		                         	</div>
+		                            <div class="boton btnGenerico">
+		                              <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
+		                            </div>
+		                            <div class="boton btnGenerico">
+		                             <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
+		                            </div>
+                        		</div>
+	                        </div>
                         </div>
-                        <div class="filla">
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_codiPostal"><spring:message code='edifici.formulari.codi_postal'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_codiPostal" name="cerca_codiPostal" type="text" maxlength="250" />
-                                </div>    
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_poblacio"><spring:message code='edifici.formulari.poblacio'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_poblacio" name="cerca_poblacio" type="text" maxlength="250" />
-                                </div>    
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_telefon"><spring:message code='edifici.formulari.telefon'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_telefon" name="cerca_telefon" type="text" maxlength="250" />
-                                </div>    
-                            </div>
-                            <div class="element t21">
-                                <div class="etiqueta"><label for="cerca_fax"><spring:message code='edifici.formulari.fax'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_fax" name="cerca_fax" type="text" maxlength="250" />
-                                </div>    
-                            </div>
-                        </div>
-                        <div class="filla">
-                            <div class="element t50">
-                                <div class="etiqueta"><label for="cerca_email"><spring:message code='edifici.formulari.email'/></label></div>
-                                <div class="control">                           
-                                    <input id="cerca_email" name="cerca_email" type="text" maxlength="250" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="botonera">
-                            <div class="boton btnGenerico">
-                              <a id="btnLimpiarForm" href="javascript:void(0)" class="btn borrar"><span><span><spring:message code='boto.borrar'/></span></span></a>
-                            </div>
-                            <div class="boton btnGenerico">
-                             <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
-                            </div>
-                        </div>
+                        
                 </div>
             </div>
             <div class="dades"></div>               
@@ -513,7 +546,7 @@
             	<input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
                 <fieldset>                                  
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                    <legend><spring:message code='unitatAdministrativa.uaRelacionatsAbr'/></legend>                               
+                    <legend><spring:message code='unitatAdministrativa.uaRelacionatsAbr'/><span class="obligatori"> * </span></legend>                               
                     <div class="modul_continguts mostrat">                                  
                         <!-- modulUnitatAdministrativa -->
                         <div class="modulUnitatAdministratives">

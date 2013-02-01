@@ -63,8 +63,11 @@ public abstract class PantallaBaseController {
 	    
 	    model.put("capNomLlinatges", nomLlinatges);
 	    model.put("capUrlSortir", System.getProperty("es.caib.rolsac.back2.urlSortir"));
-		
+	    
+	    String permisosSuperAddicionals = ""+System.getProperty("es.caib.rolsac.permisosSuperAddicionals");
+	    model.put("permisosSuperAddicionals", permisosSuperAddicionals.equalsIgnoreCase("Y"));
 	}
+
 	
 	/**
 	 * Devuelve el idioma actual.

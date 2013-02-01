@@ -112,11 +112,11 @@
     var txtTraductorAvisTitol = "<spring:message code='traductor.avis.titol'/>";
     
     // Textos navegador multipágina.
-    var txtDe = "de";
-    var txtInicio = "Inicio";
-    var txtAnterior = "Anterior";
-    var txtSiguiente = "Seguent";
-    var txtMostrar = "Mostrar";
-    var txtTodos = "Tots";
-    var txtItemsPagina = "elements per p�gina"
+    var txtDe = "<spring:message code='txt.de'/>";
+    var txtInicio = "<spring:message code='txt.inici'/>";
+    var txtAnterior = "<spring:message code='txt.anterior'/>";
+    var txtSiguiente = "<spring:message code='txt.seguent'/>";
+    var txtMostrar = "<spring:message code='txt.mostrar'/>";
+    var txtTodos = "<spring:message code='txt.tots'/>";
+    var txtItemsPagina = "<spring:message code='txt.items_pagina'/>";
 </script>

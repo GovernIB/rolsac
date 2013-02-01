@@ -62,7 +62,7 @@ function CModulEdifici(){
 		
 		// one al botó de gestionar
 		modul_edificis_elm.find("a.gestiona").one("click", function(){ModulEdifici.gestiona();} );
-		
+		EscriptoriEdifici.carregar({});
 	}
     
     // Marcar el módulo como modificado.    
@@ -198,7 +198,8 @@ function CEscriptoriEdifici(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			//$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).each(function(i) {
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -271,6 +272,7 @@ function CEscriptoriEdifici(){
 		dataVars_cercador = "&adresa=" + $("#cerca_edificis_adresa").val();
 		dataVars_cercador += "&cp=" + $("#cerca_edificis_cp").val();
 		dataVars_cercador += "&poblacio=" + $("#cerca_edificis_poblacio").val();
+		dataVars_cercador += "&idUA=" + $("#cerca_edificis_organ_id").val();
 			
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {
