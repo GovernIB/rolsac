@@ -13,4 +13,3 @@ La versió vàlida és a partir de la 10.2.0.5.0 (és la que transforma clobs a 
 
 Baixar el fitxer chartbuilder.zip de http://www.tusc.com/oracle/download/misc.html, descomprimir i copiar el fitxer
 chartbuilder.jar a lib/chartbuilder.jar
-
