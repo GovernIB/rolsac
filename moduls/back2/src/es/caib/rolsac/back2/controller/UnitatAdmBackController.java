@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
@@ -1014,6 +1015,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			paramMap.put("codigoEstandar", codigoEstandar.toUpperCase());
 		}
 		
+		try {
+            String estat = request.getParameter("estat");
+            Integer validacion = Integer.parseInt(estat);
+            if (validacion > 0 && validacion < 4) {
+                paramMap.put("validacion", validacion);
+            }
+        } catch (NumberFormatException e) {
+        }
+		
 		// Textes (en todos los campos todos los idiomas)
 		String textes = request.getParameter("textes");
 		if (textes != null && !"".equals(textes)) {
@@ -1037,6 +1047,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
 		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));		
 		
+		Long materia = null;
+        String materiaString = request.getParameter("materia");
+        if (materiaString != null) {
+            Scanner scanner = new Scanner(materiaString);
+            if (scanner.hasNextLong()) {
+                materia = scanner.nextLong();
+            }
+        }
+		
 		//Información de paginación
 		String pagPag = request.getParameter("pagPag");		
 		String pagRes = request.getParameter("pagRes");
@@ -1047,7 +1066,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 				
 		try {						
-			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, pagPag, pagRes);
+			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, materia, pagPag, pagRes);
 			String idiomaPorDefecto = request.getLocale().getLanguage();
 			
 			for ( UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados()) ) {

@@ -120,7 +120,8 @@ public class UnidadAdministrativaDelegate {
 		impl.eliminarEdificio(edificioId, uaId);
     }
 
-	public boolean equals(Object obj) {
+	@Override
+    public boolean equals(Object obj) {
 		return impl.equals(obj);
     }
 
@@ -139,7 +140,8 @@ public class UnidadAdministrativaDelegate {
 		return impl.getUaMollaBack2(idua, idioma, url, uaIdPlaceholder);
 	}
 		
-	public int hashCode() {
+	@Override
+    public int hashCode() {
 		return impl.hashCode();
     }
     
@@ -329,7 +331,8 @@ public class UnidadAdministrativaDelegate {
 		impl.repararOrdenFichasUA();
 	}	
     
-	public String toString() {
+	@Override
+    public String toString() {
 		return impl.toString();
 	}
 	
@@ -338,8 +341,8 @@ public class UnidadAdministrativaDelegate {
 		return impl.obtenerCadenaFiltroUA(ua, uaFilles, uaMeves);
 	}
 
-	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException {
-		return impl.buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, pagina, resultats);
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) throws DelegateException {
+		return impl.buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, materia, pagina, resultats);
 	}	
 	
     public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre) throws DelegateException {

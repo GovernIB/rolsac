@@ -15,7 +15,7 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 public interface UnidadAdministrativaDelegateI {
 
-	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException;	
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) throws DelegateException;	
 	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#crearUnidadAdministrativaRaiz(org.ibit.rol.sac.model.UnidadAdministrativa)

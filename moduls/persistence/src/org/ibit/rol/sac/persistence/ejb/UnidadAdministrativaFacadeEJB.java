@@ -2908,7 +2908,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */	
-	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) {
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) {
 		
 		Session session = getSession();
 		List<UnidadAdministrativa> listaUnidadesAdministrativas = new ArrayList<UnidadAdministrativa>();
@@ -2939,6 +2939,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			String where   = "where " + i18nQuery + " and unidad.padre = " + id + " ";			
 			String orderBy = "order by unidad.orden";
 			
+			if ( materia != null ) {
+                where += " and unidad.id in (select uam.unidad.id " +
+                                                "from UnidadMateria as uam " +
+                                                "where uam.materia.id = " + materia + ") ";
+			}
+			
 			if ( userIsSystem() ) {
 				
 				if ( id == null ) {										
@@ -2954,7 +2960,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				if ( StringUtils.isEmpty(cadenaFiltro) ) {
 					cadenaFiltro = EMPTY_ID;
 				}
-				where = where.replaceFirst("and unidad.padre = " + id, "");
+				where = where.replaceFirst("and unidad.padre = " + id, " ");
 				where += "and (unidad.id in(" + cadenaFiltro + ") " +
 							 (id != null ? "or unidad.padre = " + id : "" )  + ") " +							 
 							 (id != null ? "and unidad.id != " + id + " " : "");

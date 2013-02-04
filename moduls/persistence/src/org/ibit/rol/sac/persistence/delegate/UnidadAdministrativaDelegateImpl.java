@@ -1047,9 +1047,9 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         }
     }
     
-	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, String pagina, String resultats) throws DelegateException {
+	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) throws DelegateException {
 		try {
-			return getFacade().buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, pagina, resultats);
+			return getFacade().buscadorUnidadesAdministrativas(parametros, traduccion, id, idioma, uaFilles, uaMeves, materia, pagina, resultats);
 		} catch (RemoteException e) {
 			throw new DelegateException(e);
 		}
