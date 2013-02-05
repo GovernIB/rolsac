@@ -35,7 +35,7 @@ public class UATags extends TagSupport {
             MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(
                     pageContext.getServletContext());
 
-            String mollapa = "";
+            StringBuffer mollapa = new StringBuffer();
             String textoBotonCargarHijos;
             Object reqUA = pageContext.getSession().getAttribute("unidadAdministrativa");
 
@@ -51,18 +51,19 @@ public class UATags extends TagSupport {
                 url.append("&redirectTo=");
                 url.append(httpRequest.getRequestURL());
                 UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-                mollapa = uaDelegate.getUaMollaBack2(ua.getId(), locale.getLanguage(), url.toString(),
-                        UA_ID_PLACEHOLDER).toString();
-
+                mollapa.append(uaDelegate.getUaMollaBack2(ua.getId(), locale.getLanguage(), url.toString(), UA_ID_PLACEHOLDER));
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.filles.label", null, locale);
             } else {
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.arrel.label", null, locale);
             }
 
-            mollapa += "<li class=\"uaHijas\"><a data-clave_ua_padre=\"" + (ua != null ? ua.getId() : "")
-                    + "\" href=\"javascript:void(0);\" class=\"btn uaFilles\">" + textoBotonCargarHijos + "</a></li>";
+            mollapa.append("<li class=\"uaHijas\" data-clave_ua_padre=\"")
+                    .append(ua != null ? ua.getId() : "")
+                    .append("\"><div><a class=\"btn uaFilles\" href=\"javascript:void(0);\">")
+                    .append(textoBotonCargarHijos)
+                    .append("</a></div></li>");
 
-            pageContext.getOut().print(mollapa);
+            pageContext.getOut().print(mollapa.toString());
 
         } catch (IOException ioe) {
             log.error(ioe);

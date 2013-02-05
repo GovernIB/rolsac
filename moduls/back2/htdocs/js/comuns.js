@@ -146,7 +146,7 @@ var MollaPa = {
 	despliegaUnidades: function(e){
 		var $target = jQuery(e.target);
 		var $itemLista = $target.parents("li");
-		var claveUA = $itemLista.data("clave_ua_padre");
+		var claveUA = $itemLista.data("clave_ua_padre") || "";
 		
 		elm = $target.parents("li").find("div");
 		

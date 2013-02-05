@@ -2877,19 +2877,28 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 		    boolean tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
 
 		    while (uniadm!=null && tieneAcceso) {
-				StringBuffer ua_sbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
-				Cadenas.initAllTab(ua_sbuf); //primera letra en mayusculas
-				String ua_texto=Cadenas.initTab(ua_sbuf.toString()); // articulos a minusculas
+				StringBuffer uaSbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
+				Cadenas.initAllTab(uaSbuf); //primera letra en mayusculas
+				
+				String uaTexto = Cadenas.initTab(uaSbuf.toString()); // articulos a minusculas
+				String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
 
+				StringBuffer mollaUA = new StringBuffer("<li class=\"ua");
+				
 				if (idua.equals(uniadm.getId())) {
-					mollapa.insert(0, "<li class=\"ua seleccionat\">" + ua_texto + " </li>");
-				} else {
-//					String uaURL  = url.replaceFirst(uaIdPlaceholder, uniadm.getId().toString());
-//					mollapa.insert(0, "<li><a href=\"" + uaURL + "\">" + ua_texto + "</a>" + " </li>");
-					mollapa.insert(0, "<li class=\"ua\"><a href=\"javascript:void(0);\" data-clave_ua_padre=\"" +
-					        uniadm.getId() + "\">" + ua_texto + "</a>" + " </li>");
-				}
-
+				    mollaUA.append(" seleccionat");
+				} 
+				
+				mollaUA.append("\" data-clave_ua_padre=\"")
+				        .append(uniadm.getId())
+				        .append("\"><div><a class=\"ua\" href=\"")
+				        .append(uaURL)
+				        .append("\">")
+				        .append(uaTexto)
+				        .append("</a><a class=\"desplegar\" href=\"javascript:void(0);\"></a></div></li>");
+				
+				mollapa.insert(0, mollaUA);
+				
 				uniadm = uniadm.getPadre();
 				if (uniadm != null) {
 					tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);

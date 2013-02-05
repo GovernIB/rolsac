@@ -22,11 +22,11 @@
     			</div>
 	    	</li>
 
-			<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, 
-	    			 en este ejemplo "Govern de les Illes Balears" (1) -->	    	
+			<!-- dsanchez: El campo data-clave_ua_padre debe contener la clave de la UA padre, en este ejemplo "Govern de les Illes Balears" (1) -->
+                     	    	
 	    	<li class="ua seleccionat" data-clave_ua_padre="1">
 	    		<div>
-			 		<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=2&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Presidéncia</a>
+			 		<a class="ua" href="/sacback2/unidadAdministrativa/cambiarUA.do?ua=2&redirectTo=http://caibrolsac.in.at4.net:8080/sacback2/quadreControl/quadreControl.do">Presidï¿½ncia</a>
 			 		<a class="desplegar" href="javascript:void(0)"></a>
 		 		</div>
     		</li> 
@@ -38,6 +38,7 @@
 		    		<a class="btn uaFilles" href="javascript:void(0)">Unitats filles</a>
 	    		</div>
     		</li>
+
 		    <!-- /MAQUETACIï¿½N ESTï¿½TICA -->
 		    --%>
 		    
