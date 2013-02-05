@@ -521,6 +521,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         this.codigoEstandar = codigoEstandar;
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UnidadAdministrativa)) return false;
@@ -532,6 +533,7 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
         return true;
     }
 
+    @Override
     public int hashCode() {
         return (id != null ? id.hashCode() : 0);
     }
@@ -625,14 +627,24 @@ public class UnidadAdministrativa extends Traducible implements Indexable, Valid
 	}
 
 	public String getNombreUnidadAdministrativa(String idioma) {
-		TraduccionUA tua = (TraduccionUA) getTraduccion(idioma);
-		return tua == null ? null : tua.getNombre();
-	}
-	
-	public String getNombreUnidadAdministrativa() {
-		TraduccionUA tua = (TraduccionUA) getTraduccion();
-		return tua == null ? null : tua.getNombre();
-	}
+        TraduccionUA tua = (TraduccionUA) getTraduccion(idioma);
+        return tua == null ? null : tua.getNombre();
+    }
+    
+    public String getNombreUnidadAdministrativa() {
+        TraduccionUA tua = (TraduccionUA) getTraduccion();
+        return tua == null ? null : tua.getNombre();
+    }
+    
+    public String getAbreviaturaUnidadAdministrativa(String idioma) {
+        TraduccionUA tua = (TraduccionUA) getTraduccion(idioma);
+        return tua == null ? null : tua.getAbreviatura();
+    }
+    
+    public String getAbreviaturaUnidadAdministrativa() {
+        TraduccionUA tua = (TraduccionUA) getTraduccion();
+        return tua == null ? null : tua.getAbreviatura();
+    }
  
  
 /*

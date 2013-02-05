@@ -1094,10 +1094,10 @@ public class FitxaInfBackController extends PantallaBaseController {
             for (Seccion seccio: llistaSeccions){
                 TraduccionSeccion tse = (TraduccionSeccion) seccio.getTraduccion(lang);
                 llistaSeccionsDTO.add(new SeccionDTO(seccio.getId(),
-                                                                tse == null ? "" : tse.getNombre().length() > 25 ? tse.getNombre().substring(0, 21)+"..." : tse.getNombre(),
-                                                                seccio.getPadre() == null ? null : seccio.getPadre().getId(),                                                                        
-                                                                seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false                                                                
-                                                               ));
+                                        tse == null ? "" : tse.getNombre(),
+                                        seccio.getPadre() == null ? null : seccio.getPadre().getId(),                                                                        
+                                        seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false                                                                
+                ));
             }
 
             resultats.put("llistaSeccions", llistaSeccionsDTO);
@@ -1136,11 +1136,14 @@ public class FitxaInfBackController extends PantallaBaseController {
             
             for (UnidadAdministrativa unitat: llistaUnitats){
                 String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
+                String abreviatura = unitat.getAbreviaturaUnidadAdministrativa(lang);
+               
                 llistaUnitatsDTO.add(new UnidadDTO(unitat.getId(),
-                                                                nomUnitat == null ? "" : nomUnitat.length() > 25 ? nomUnitat.substring(0, 21)+"..." : nomUnitat,
-                                                                unitat.getPadre() == null ? null : unitat.getPadre().getId(),                                                                        
-                                                                unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false                                                                
-                                                               ));
+                                        nomUnitat == null ? "" : nomUnitat,
+                                        abreviatura == null ? "" : abreviatura,
+                                        unitat.getPadre() == null ? null : unitat.getPadre().getId(),                                                                        
+                                        unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false                                                                
+                ));
             }
 
             resultats.put("llistaUnitats", llistaUnitatsDTO);
