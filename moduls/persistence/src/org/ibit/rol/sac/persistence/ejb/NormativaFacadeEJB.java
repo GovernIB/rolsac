@@ -87,6 +87,7 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
      * @ejb.create-method
      * @ejb.permission unchecked="true"
      */
+    @Override
     public void ejbCreate() throws CreateException {
         super.ejbCreate();
     }
@@ -308,32 +309,55 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             	}
             	sQuery += "(" + populateQuery(traduccion, params) + ")";
             }            
+            
+            String nombreBoletin = "";
+            String fromBoletin = "";
+            if (parametros.containsKey("boletin")) {
+                nombreBoletin = ", boletin.nombre";
+                fromBoletin = ", normativa.boletin as boletin";
+            }
+            
+            String nombreTipo = "";
+            String fromTipo = "";
+            String whereTipo = "";
+            if (parametros.containsKey("tipo")) { 
+                nombreTipo = ", traTipo.nombre";
+                fromTipo = ", normativa.tipo as tipo, tipo.traducciones as traTipo";
+                if (traduccion.get("idioma") != null) {
+                    whereTipo = " and index(traTipo) = '" + traduccion.get("idioma") + "' "; 
+                } else {
+                    whereTipo = " and index(traTipo) = '"  + idioma_per_defecte + "'";
+                }
+            }
 
             String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
             
             Query query;
-            
-            String whereTraduccionTipo = traduccion.get("idioma") != null ? " and index(traTipo) = '" + traduccion.get("idioma") + "' " : " and index(traTipo) = '"  + idioma_per_defecte + "'"; 
-            
             if ("local".equals(tipo)) {
             
-            	String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+                String select = "select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
+                        "normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " +
+                        nombreBoletin + ", index(trad), normativa.unidadAdministrativa) ";
+                
+                String from = " from NormativaLocal as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
             	
-                if ( !StringUtils.isEmpty(uaQuery) )            	
-                	uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
-            	
-                query = session.createQuery("select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
-									                		"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, trad.titulo, boletin.nombre, " +
-									                		"index(trad), normativa.unidadAdministrativa) " +
-								                		"from NormativaLocal as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
-								                		"normativa.boletin as boletin where "+ sQuery + uaQuery + whereTraduccionTipo + orderBy);
+                String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+                if ( !StringUtils.isEmpty(uaQuery) ) {
+                    uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
+                }
+                
+                query = session.createQuery(select + from + " where " + sQuery + uaQuery + whereTipo + orderBy);
                
             } else { // "externa".equals(tipo))
-            	query = session.createQuery("select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
-            												"normativa.fechaBoletin, traTipo.nombre, normativa.validacion, " +
-            												"trad.titulo, boletin.nombre, index(trad) ) " +
-            											"from NormativaExterna as normativa, normativa.traducciones as trad, normativa.tipo as tipo, tipo.traducciones as traTipo, " +
-            												"normativa.boletin as boletin where " + sQuery + whereTraduccionTipo + orderBy);            	
+
+                String select = "select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
+                        "normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " + 
+                        nombreBoletin + ", index(trad) ) ";
+                
+                String from =  " from NormativaExterna as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
+                
+                query = session.createQuery(select + from + " where " + sQuery + whereTipo + orderBy);
+                
             }
             
             for ( int i = 0; i < params.size(); i++ ) {

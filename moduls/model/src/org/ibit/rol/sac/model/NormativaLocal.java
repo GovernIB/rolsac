@@ -6,34 +6,84 @@ import java.util.Date;
 
 public class NormativaLocal extends Normativa implements Indexable {
 
-	private static final long serialVersionUID = -2873594389705741463L;
-			
-	private UnidadAdministrativa unidadAdministrativa;
+    private static final long serialVersionUID = -2873594389705741463L;
+
+    private UnidadAdministrativa unidadAdministrativa;
+
+    public NormativaLocal() {
+        super();
+    }
+
+    // Contructores para optimizar las búsquedas
     
-	public NormativaLocal() {
-		super();
-	}
-	
-	// Contructor para optimizar las búsquedas
-	public NormativaLocal(Long id, Long numero, Date fecha, Date fechaBoletin, 
-			String nombreTipo, Integer validacion, String traduccionTitulo, String nombreBoletin, 
-			String idioma, UnidadAdministrativa unidadAdministrativa) {
-		
-		super();
-		
-		setId(id != null ? id : 0);
-		setNumero(numero != null ? numero : -1l );
-		setFecha(fecha);
-		setFechaBoletin(fechaBoletin);
-		setValidacion(validacion);
-		setNombreTipo(nombreTipo != null ? nombreTipo : "");
-		setTraduccionTitulo( traduccionTitulo != null ? traduccionTitulo : "");
-		setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");
-		setIdioma(idioma);
-		
-		this.unidadAdministrativa = unidadAdministrativa;
-	}
-	
+    public NormativaLocal(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            String nombreTipo, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String nombreBoletin, 
+            String idioma, 
+            UnidadAdministrativa unidadAdministrativa) {
+
+        super();
+
+        setId(id != null ? id : 0);
+        setNumero(numero != null ? numero : -1l);
+        setFecha(fecha);
+        setFechaBoletin(fechaBoletin);
+        setValidacion(validacion);
+        setNombreTipo(nombreTipo != null ? nombreTipo : "");
+        setTraduccionTitulo(traduccionTitulo != null ? traduccionTitulo : "");
+        setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");
+        setIdioma(idioma);
+
+        this.unidadAdministrativa = unidadAdministrativa;
+    }
+
+    public NormativaLocal(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin,
+            Integer validacion,
+            String traduccionTitulo,
+            String nombreBoletin,
+            String idioma, 
+            UnidadAdministrativa unidadAdministrativa) {
+        
+        this(id, numero, fecha, fechaBoletin, "", validacion, traduccionTitulo, nombreBoletin, idioma, unidadAdministrativa);
+    }
+
+    public NormativaLocal(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin,
+            String nombreTipo,
+            Integer validacion, 
+            String traduccionTitulo, 
+            String idioma, 
+            UnidadAdministrativa unidadAdministrativa) {
+        
+        this(id, numero, fecha, fechaBoletin, nombreTipo, validacion, traduccionTitulo, "", idioma, unidadAdministrativa);
+    }
+
+    public NormativaLocal(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String idioma, 
+            UnidadAdministrativa unidadAdministrativa) {
+        
+        this(id, numero, fecha, fechaBoletin, "", validacion, traduccionTitulo, "", idioma, unidadAdministrativa);
+    }
+
     public UnidadAdministrativa getUnidadAdministrativa() {
         return unidadAdministrativa;
     }

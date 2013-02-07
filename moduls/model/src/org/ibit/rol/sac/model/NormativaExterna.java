@@ -4,26 +4,74 @@ package org.ibit.rol.sac.model;
 import java.util.Date;
 
 public class NormativaExterna extends Normativa implements Indexable {
-	private static final long serialVersionUID = -7439674331843874347L;
-	
-	public NormativaExterna() {
-		super();
-	}
-	
-	// Contructor para optimizar las búsquedas
-	public NormativaExterna(Long id, Long numero, Date fecha, Date fechaBoletin, 
-			String nombreTipo, Integer validacion, String traduccionTitulo, String nombreBoletin ) {
-	
-		super();
-		
-		setId(id == null ? 0 : id);
-		setNumero(numero == null ? -1l : numero);
-		setFecha(fecha);
-		setFechaBoletin(fechaBoletin);
-		setValidacion(validacion);
-		setNombreTipo(nombreTipo != null ? nombreTipo : "");
-		setTraduccionTitulo( traduccionTitulo != null ? traduccionTitulo : "");
-		setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");		
-	}
-	
+    private static final long serialVersionUID = -7439674331843874347L;
+
+    public NormativaExterna() {
+        super();
+    }
+
+    // Contructores para optimizar las búsquedas
+    
+    public NormativaExterna(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            String nombreTipo, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String nombreBoletin,
+            String idioma) {
+
+        super();
+
+        setId(id == null ? 0 : id);
+        setNumero(numero == null ? -1l : numero);
+        setFecha(fecha);
+        setFechaBoletin(fechaBoletin);
+        setValidacion(validacion);
+        setNombreTipo(nombreTipo != null ? nombreTipo : "");
+        setTraduccionTitulo(traduccionTitulo != null ? traduccionTitulo : "");
+        setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");
+        setIdioma(idioma);
+    }
+
+    public NormativaExterna(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String nombreBoletin,
+            String idioma) {
+        
+        this(id, numero, fecha, fechaBoletin, "", validacion, traduccionTitulo, nombreBoletin, idioma);
+    }
+    
+    public NormativaExterna(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            String nombreTipo, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String idioma) {
+        
+        this(id, numero, fecha, fechaBoletin, nombreTipo, validacion, traduccionTitulo, "", idioma);
+    }
+    
+    public NormativaExterna(
+            Long id, 
+            Long numero, 
+            Date fecha, 
+            Date fechaBoletin, 
+            Integer validacion,
+            String traduccionTitulo, 
+            String idioma) {
+        
+        this(id, numero, fecha, fechaBoletin, "", validacion, traduccionTitulo, "", idioma);
+    }
+
 }
