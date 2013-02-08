@@ -731,24 +731,53 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
     }
   
     /**
-	 * Dice si existe un procedimiento Local.   PSALUT
-	 * @ejb.interface-method
-	 * @ejb.permission unchecked="true"
-	 */
-	public boolean existeProcedimiento(Long id) {
-	    Session session = getSession();
-	    try {
-	       // ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
-	        Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
-	        criteri.add(Expression.eq("id", id));
-	        ProcedimientoLocal procedimiento = (ProcedimientoLocal)criteri.uniqueResult();
-	        return procedimiento != null;
-	    } catch (HibernateException he) {
-	        throw new EJBException(he);
-	    } finally {
-	        close(session);
-	    }
-	}
+     * Dice si existe un procedimiento Local.   PSALUT
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public boolean existeProcedimiento(Long id) {
+        Session session = getSession();
+        try {
+           // ProcedimientoLocal procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+            Criteria criteri = session.createCriteria(ProcedimientoLocal.class);
+            criteri.add(Expression.eq("id", id));
+            ProcedimientoLocal procedimiento = (ProcedimientoLocal)criteri.uniqueResult();
+            return procedimiento != null;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
+    
+    /**
+     * Dice si existe un tramite de inicio distinto a tramiteId para el procedimiento Local procId.
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public boolean existeOtroTramiteInicioProcedimiento(Long procId, Long tramiteId) {
+        Session session = getSession();
+        try {
+            String sql = "select count(t.id) from Tramite t where t.procedimiento.id = :procId and t.fase = :fase";
+            if (tramiteId != null) {
+                sql += " and t.id != :tramiteId"; 
+            }
+
+            Query query = session.createQuery(sql);
+            query.setLong("fase", 1); // 1 = fase de inicio o inicializacion.
+            query.setLong("procId", procId);
+            if (tramiteId != null) {
+                query.setLong("tramiteId", tramiteId);
+            }
+
+            Integer numTramites = (Integer) query.uniqueResult();
+            return numTramites > 0;
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+    }
 
 	/**
      * Busca todas los Procedimientos que cumplen los criterios de b�squeda

@@ -64,6 +64,8 @@ function CModulTramit(){
         $("#tramit_item_data_publicacio").datepicker({ dateFormat: 'dd/mm/yy' });       
         $("#tramit_item_data_caducitat").datepicker({ dateFormat: 'dd/mm/yy' });
         $("#tramit_item_data_vuds").datepicker({ dateFormat: 'dd/mm/yy' });             
+        $("#tramit_item_data_inici").datepicker({ dateFormat: 'dd/mm/yy' });
+        $("#tramit_item_data_tancament").datepicker({ dateFormat: 'dd/mm/yy' });
         
         tramits_seleccionats_elm = escriptori_tramits_elm.find("div.escriptori_items_seleccionats:first");
         escriptori_tramits_elm.find("div.botonera").each(function() {
@@ -95,7 +97,7 @@ function CModulTramit(){
             nombre: "tramit",
             nodoOrigen: modul_tramits_elm.find(".listaOrdenable"),
             nodoDestino: modul_tramits_elm.find(".listaOrdenable"),
-            atributos: ["id", "nom", "orden"],  // Campos que queremos que aparezcan en las listas.
+            atributos: ["id", "nom", "orden", "moment"],  // Campos que queremos que aparezcan en las listas.
             multilang: false
             });
         
@@ -109,6 +111,8 @@ function CModulTramit(){
         
         $("#tramit_item_data_publicacio").val("");
         $("#tramit_item_data_caducitat").val("");
+        $("#tramit_item_data_inici").val("");
+        $("#tramit_item_data_tancament").val("");
                 
         $("#id_procediment_tramit").attr("value",  $("#item_id").val() );
         $("#nom_procediment_tramit").text( $("input#item_nom_ca").val());
@@ -183,17 +187,28 @@ function CModulTramit(){
         return listaTramites;
     }
     
+    this.hayTramiteInicializacion = function (){
+        return modul_tramits_elm.find('div.listaOrdenable input.tramit_moment[value="1"]').length > 0;
+    }
+    
     // Actualiza el nombre.
     this.actualitzaNomTramit = function(tramit) {
         var tramitInput = jQuery("#tramit_nom_" + tramit.id)
         tramitInput.val("<a href='#' class='tramit_id'>" + tramit.nom + "</a>");
-        tramitInput.next().children().first().text(tramit.nom);         
+        tramitInput.next().children().first().text(tramit.nom);
+        
+        if (tramit["moment"] != undefined) {
+            jQuery("#tramit_moment_" + tramit.id).val(tramit.moment);
+        }
     }
 };
 
 function CEscriptoriTramit(){   
     this.extend = DetallBase;
-    this.extend(null,FormulariTramits);
+    this.extend(null,FormulariTramits, {
+        btnGuardar: "btnGuardarTramit",
+        form: "formTramits"
+    });
     
     var that = this;    
     
@@ -228,7 +243,10 @@ function CEscriptoriTramit(){
         } else {
             $("#fitxaId").val($("#item_id").val());
         }
-                
+
+        var moment = $('#item_moment_tramit');
+        moment = moment.length > 0 ? moment.val() : undefined; 
+        
         var paramsUrl = "?" + ModulDocumentsTramit.listarDocumentos() + 
                         "&" + ModulFormularisTramit.listarFormularios() +
                         "&" + ModulDocumentsRequerits.listarDocumentosRequeridos() +
@@ -247,6 +265,7 @@ function CEscriptoriTramit(){
                 if (data.id < 0) {
                     Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
                 } else {        
+                    data.moment = moment;
                     var idTramit = $("#id_tramit_actual").val();                    
                     if (idTramit != "" && idTramit != undefined) {
                         Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: txtTramitModificatCorrecte});
@@ -257,7 +276,8 @@ function CEscriptoriTramit(){
                         ModulTramit.agregaItem({
                             id:  data.id, 
                             nom: "<a href='#' class='tramit_id' id='" + idTramit + "'>" + data.nom + "</a>",                                                                   
-                            orden: 0
+                            orden: 0,
+                            moment: moment
                         });
                         // Asignamos la funci�n de edici�n al nuevo enlace creado
                         nouTramit = $("#" + idTramit).parent().parent();
@@ -368,7 +388,9 @@ function CEscriptoriTramit(){
         $("#nom_procediment_tramit").text(datos.nom_procediment_tramit);        
         $("#tramit_item_data_actualitzacio").val(datos.tramit_item_data_actualitzacio);     
         $("#tramit_item_data_publicacio").val(datos.tramit_item_data_publicacio);
-        $("#tramit_item_data_caducitat").val(datos.tramit_item_data_caducitat);        
+        $("#tramit_item_data_caducitat").val(datos.tramit_item_data_caducitat);
+        $("#tramit_item_data_inici").val(datos.tramit_item_data_inici);
+        $("#tramit_item_data_tancament").val(datos.tramit_item_data_tancament);
         
         $("#item_tramite_tramit").val(datos.item_tramite_tramit);
         $("#item_url_tramit").val(datos.item_url_tramit );

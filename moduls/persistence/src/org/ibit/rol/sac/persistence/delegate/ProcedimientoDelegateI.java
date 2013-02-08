@@ -84,6 +84,9 @@ public interface ProcedimientoDelegateI {
 	public abstract List listarProcedimientosPublicosHechoVital(Long id)
 			throws DelegateException;
 
+	public abstract boolean existeOtroTramiteInicioProcedimiento(Long procId, Long tramiteId)
+	        throws DelegateException;
+	
 	/* PORMAD */
 	@SuppressWarnings("unchecked")
 	public abstract List<ProcedimientoLocal> listarProcedimientosPublicosUAHVMateria(
@@ -127,6 +130,6 @@ public interface ProcedimientoDelegateI {
 
 	public int buscarProcedimientosActivos(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException; 
     
-	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;	
+	public int buscarProcedimientosCaducados(List<Long> listaUnidadAdministrativaId, Date fechaCaducidad) throws DelegateException;
 	
 }

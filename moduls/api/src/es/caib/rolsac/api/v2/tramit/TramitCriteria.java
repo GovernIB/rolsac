@@ -22,6 +22,10 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
 
     private java.lang.String dataActualitzacio;
 
+    private java.lang.String dataInici;
+
+    private java.lang.String dataTancament;
+
     private java.lang.String codiVuds;
 
     private java.lang.String descCodiVuds;
@@ -62,6 +66,8 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
            java.lang.String dataCaducitat,
            java.lang.String dataPublicacio,
            java.lang.String dataActualitzacio,
+           java.lang.String dataInici,
+           java.lang.String dataTancament,
            java.lang.String codiVuds,
            java.lang.String descCodiVuds,
            java.lang.String idTraTel,
@@ -87,6 +93,8 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         this.dataCaducitat = dataCaducitat;
         this.dataPublicacio = dataPublicacio;
         this.dataActualitzacio = dataActualitzacio;
+        this.dataInici = dataInici;
+        this.dataTancament = dataTancament;
         this.codiVuds = codiVuds;
         this.descCodiVuds = descCodiVuds;
         this.idTraTel = idTraTel;
@@ -239,6 +247,46 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
      */
     public void setDataActualitzacio(java.lang.String dataActualitzacio) {
         this.dataActualitzacio = dataActualitzacio;
+    }
+
+
+    /**
+     * Gets the dataInici value for this TramitCriteria.
+     * 
+     * @return dataInici
+     */
+    public java.lang.String getDataInici() {
+        return dataInici;
+    }
+
+
+    /**
+     * Sets the dataInici value for this TramitCriteria.
+     * 
+     * @param dataInici
+     */
+    public void setDataInici(java.lang.String dataInici) {
+        this.dataInici = dataInici;
+    }
+
+
+    /**
+     * Gets the dataTancament value for this TramitCriteria.
+     * 
+     * @return dataTancament
+     */
+    public java.lang.String getDataTancament() {
+        return dataTancament;
+    }
+
+
+    /**
+     * Sets the dataTancament value for this TramitCriteria.
+     * 
+     * @param dataTancament
+     */
+    public void setDataTancament(java.lang.String dataTancament) {
+        this.dataTancament = dataTancament;
     }
 
 
@@ -514,6 +562,12 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
             ((this.dataActualitzacio==null && other.getDataActualitzacio()==null) || 
              (this.dataActualitzacio!=null &&
               this.dataActualitzacio.equals(other.getDataActualitzacio()))) &&
+            ((this.dataInici==null && other.getDataInici()==null) || 
+             (this.dataInici!=null &&
+              this.dataInici.equals(other.getDataInici()))) &&
+            ((this.dataTancament==null && other.getDataTancament()==null) || 
+             (this.dataTancament!=null &&
+              this.dataTancament.equals(other.getDataTancament()))) &&
             ((this.codiVuds==null && other.getCodiVuds()==null) || 
              (this.codiVuds!=null &&
               this.codiVuds.equals(other.getCodiVuds()))) &&
@@ -581,6 +635,12 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         }
         if (getDataActualitzacio() != null) {
             _hashCode += getDataActualitzacio().hashCode();
+        }
+        if (getDataInici() != null) {
+            _hashCode += getDataInici().hashCode();
+        }
+        if (getDataTancament() != null) {
+            _hashCode += getDataTancament().hashCode();
         }
         if (getCodiVuds() != null) {
             _hashCode += getCodiVuds().hashCode();
@@ -667,6 +727,18 @@ public class TramitCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataActualitzacio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dataActualitzacio"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("dataInici");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "dataInici"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("dataTancament");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "dataTancament"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

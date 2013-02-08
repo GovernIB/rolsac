@@ -39,6 +39,10 @@ public class ProcedimientoDelegate {
             return impl.autorizaModificarProcedimiento(idProcedimiento);
     }     
     
+    public boolean existeOtroTramiteInicioProcedimiento(Long procId, Long tramiteId) throws DelegateException {
+        return impl.existeOtroTramiteInicioProcedimiento(procId, tramiteId);
+    }
+    
     public List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma) throws DelegateException {
         return impl.buscarProcedimientosUATexto(idUnidad, texto, idioma);
     }    

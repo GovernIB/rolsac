@@ -807,6 +807,8 @@
 							<element name="dataCaducitat" nillable="true" type="xsd:string" />
 							<element name="dataPublicacio" nillable="true" type="xsd:string" />
 							<element name="dataActualitzacio" nillable="true" type="xsd:string" />
+                            <element name="dataInici" nillable="true" type="xsd:string" />
+                            <element name="dataTancament" nillable="true" type="xsd:string" />
 							<element name="codiVuds" nillable="true" type="xsd:string" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />
 							<element name="idTraTel" nillable="true" type="xsd:string" />
@@ -833,6 +835,8 @@
 								type="xsd:string" />
 							<element name="dataCaducitat" nillable="true" type="xsd:dateTime" />
 							<element name="dataPublicacio" nillable="true" type="xsd:dateTime" />
+                            <element name="dataInici" nillable="true" type="xsd:dateTime" />
+                            <element name="dataTancament" nillable="true" type="xsd:dateTime" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />
 							<element name="descripcion" nillable="true" type="xsd:string" />
 							<element name="documentacion" nillable="true" type="xsd:string" />

@@ -93,6 +93,8 @@ public class TramiteBackController {
     		resultats.put("tramit_item_data_actualitzacio", DateUtils.formatDate(tramite.getDataActualitzacio()));
     		resultats.put("tramit_item_data_publicacio", DateUtils.formatDate(tramite.getDataPublicacio()));
     		resultats.put("tramit_item_data_caducitat", DateUtils.formatDate(tramite.getDataCaducitat()));
+    		resultats.put("tramit_item_data_inici", DateUtils.formatDate(tramite.getDataInici()));
+    		resultats.put("tramit_item_data_tancament", DateUtils.formatDate(tramite.getDataTancament()));
     		resultats.put("item_moment_tramit", tramite.getFase());
     		resultats.put("item_validacio_tramit", tramite.getValidacio());
     		resultats.put("item_url_tramit", tramite.getUrlExterna());
@@ -201,7 +203,6 @@ public class TramiteBackController {
     }
     
 	@RequestMapping(value = "/guardarTramit.do", method = POST)
-    //public ResponseEntity<String> guardarTramite(HttpSession session, HttpServletRequest request) {
 	public @ResponseBody ResponseEntity<String> guardarTramite(HttpSession session, HttpServletRequest request) {		
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -223,7 +224,7 @@ public class TramiteBackController {
 			
 			if ( !edicion ) {
 				if ( !tramiteDelegate.autorizaCrearTramite(idProcedimiento) )
-					throw new SecurityException("Avís: no té permis per a crear el tràmit");
+					throw new SecurityException("Avï¿½s: no tï¿½ permis per a crear el trï¿½mit");
 				
 				tramite = new Tramite();
 				tramite.setOperativa(Tramite.Operativa.CREA);
@@ -234,7 +235,7 @@ public class TramiteBackController {
 				tramite = tramiteDelegate.obtenerTramite( new Long(idTramite) );
 
 				if ( !tramiteDelegate.autorizaModificarTramite( tramite.getId() ) )				
-					throw new SecurityException("Avís: no té permis per a crear el tràmit");
+					throw new SecurityException("Avï¿½s: no tï¿½ permis per a crear el trï¿½mit");
 				
 				tramite.setOperativa(Tramite.Operativa.MODIFICA);
 			}
@@ -244,17 +245,30 @@ public class TramiteBackController {
 			tramite.setUrlExterna( request.getParameter("item_url_tramit"));
 			tramite.setIdTraTel( request.getParameter("item_tramite_tramit"));
 			
-			//1 - Inicialización
-			//2 - Instrucción
-			//3 - Finalización
-			tramite.setFase( Integer.parseInt(request.getParameter("item_moment_tramit")) );
+			//1 - Inicializaciï¿½n
+			//2 - Instrucciï¿½n
+			//3 - Finalizaciï¿½n
+			int fase = Integer.parseInt(request.getParameter("item_moment_tramit"));
+			if (fase == 1 && procedimientoDelegate.existeOtroTramiteInicioProcedimiento(idProcedimiento, tramite.getId())) {
+			    error = messageSource.getMessage("error.tramit_inici_ja_existeix", null, request.getLocale());
+	            result = new IdNomDTO(-2l, error);
+	            return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.ACCEPTED);
+			} else {
+			    tramite.setFase( Integer.parseInt(request.getParameter("item_moment_tramit")) );
+			}
 			
-			//1 - Pública
+			//1 - Pï¿½blica
 			//2 - Interna
 			//3 - Reserva
 			tramite.setValidacio( new Long(request.getParameter("item_validacio_tramit")) );
 			
 			// Rellenar los campos
+			Date fechaInicio = DateUtils.parseDate(request.getParameter("tramit_item_data_inici"));
+            tramite.setDataInici(fechaInicio);
+            
+            Date fechaCierre= DateUtils.parseDate(request.getParameter("tramit_item_data_tancament"));
+            tramite.setDataTancament(fechaCierre);
+            
 			Date fechaPublicacion = DateUtils.parseDate(request.getParameter("tramit_item_data_publicacio"));
 			tramite.setDataPublicacio(fechaPublicacion);
 			
@@ -297,7 +311,7 @@ public class TramiteBackController {
 				traduccionTramite.setDocumentacion( request.getParameter("item_documentacio_tramit_" + lang));				
 				traduccionTramite.setPlazos( request.getParameter("item_termini_tramit_" + lang));
 				
-				//Este campo no existe en la tabla pero se deja por si se añade en futuras implementaciones)
+				//Este campo no existe en la tabla pero se deja por si se aï¿½ade en futuras implementaciones)
 				//traduccionTramite.setObservaciones( request.getParameter("item_observacions_tramit_" + lang) );
 				traduccionTramite.setLugar( request.getParameter("item_lloc_tramit_" + lang));
 								
@@ -310,7 +324,7 @@ public class TramiteBackController {
 			String idOrganCompetent = request.getParameter("tramits_item_organ_id");			
 			tramite.setProcedimiento( procedimiento );
 			
-			//Si no se recibe ningún valor se asigna por defecto la actual			
+			//Si no se recibe ningï¿½n valor se asigna por defecto la actual			
 			tramiteDelegate.grabarTramite(tramite, !"".equals(idOrganCompetent) ? new Long(idOrganCompetent) : procedimiento.getUnidadAdministrativa().getId() );
 			
         	if ( !edicion ) {
@@ -399,7 +413,7 @@ public class TramiteBackController {
         		Set<DocumentTramit> listaFormulariosOld = tramiteOld.getFormularios();
         		Set<DocumentTramit> listaDocumentsReqOld = tramiteOld.getDocsRequerits();
         		
-            //Combinamos las tres listas para hacerlo todo en una misma operación
+            //Combinamos las tres listas para hacerlo todo en una misma operaciï¿½n
             listaDocumentosOld.addAll(listaFormulariosOld);
             listaDocumentosOld.addAll(listaDocumentsReqOld);
             
@@ -491,7 +505,7 @@ public class TramiteBackController {
 	    } catch (ActualizacionVudsException e) {
 	    	
 	    	try {
-		    	//Ha fallado la actualización pero el trámite ha sido creado correctamente, así que se añade al procedimiento
+		    	//Ha fallado la actualizaciï¿½n pero el trï¿½mite ha sido creado correctamente, asï¿½ que se aï¿½ade al procedimiento
 		    	ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();	    	
 		    	procedimientoDelegate.anyadirTramite(tramite.getId(), idProcedimiento);
 		
@@ -533,7 +547,7 @@ public class TramiteBackController {
         	result.setNom( ((TraduccionTramite) tramite.getTraduccion("ca")).getNombre() );        
         }
         
-		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);		
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 	}
 	
 	@RequestMapping(value = "/esborrarTramit.do", method = POST)	

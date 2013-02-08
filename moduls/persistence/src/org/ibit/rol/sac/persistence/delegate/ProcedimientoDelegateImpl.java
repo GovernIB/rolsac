@@ -469,6 +469,14 @@ public class ProcedimientoDelegateImpl implements StatelessDelegate, Procedimien
        }
     }
     
+    public boolean existeOtroTramiteInicioProcedimiento(Long procId, Long tramiteId) throws DelegateException {
+        try {
+            return getFacade().existeOtroTramiteInicioProcedimiento(procId, tramiteId);
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
     public ProcedimientoLocal obtenerProcedimientoPM(Long id) throws DelegateException {
         try {
             return getFacade().obtenerProcedimientoPM(id);

@@ -31,10 +31,7 @@ $(document).ready(function() {
 	CAMPOS_TRADUCTOR_PROCEDIMIENTO = [
         "item_nom_",
 		"item_objecte_",
-        "item_presentacio_",
-        "item_lloc_",
         "item_destinataris_",
-        "item_requisits_",
         "item_notificacio_",
         "item_observacions_",
         "item_resolucio_",
@@ -349,12 +346,16 @@ function CDetall(){
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-		urlParams = ModulNormativa.listaNormativas();
-		urlParams += "&" + ModulMateries.listaMaterias();
-		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
-		urlParams += "&" + ModulPublicObjectiu.listaPublics();
-		urlParams += "&" + ModulTramit.listaTramites();
-		that.guardaGenerico(urlParams);
+	    if (ModulTramit.hayTramiteInicializacion()) {
+    		urlParams = ModulNormativa.listaNormativas();
+    		urlParams += "&" + ModulMateries.listaMaterias();
+    		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
+    		urlParams += "&" + ModulPublicObjectiu.listaPublics();
+    		urlParams += "&" + ModulTramit.listaTramites();
+    		that.guardaGenerico(urlParams);
+	    } else {
+	        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+	    }
 	}
 	
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
@@ -516,14 +517,10 @@ function CDetall(){
 			$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
 			$("#item_objecte_" + idioma).val(printStringFromNull(dada_node[idioma]["resumen"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
-			$("#item_requisits_" + idioma).val(printStringFromNull(dada_node[idioma]["requisitos"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
-            
-            $("#item_presentacio_" + idioma).val(printStringFromNull(dada_node[idioma]["plazos"]));
-            $("#item_lloc_" + idioma).val(printStringFromNull(dada_node[idioma]["lugar"]));
 		}
 		// Fin bloque de pestanyas de idiomas
 		
@@ -569,14 +566,6 @@ function CDetall(){
 			$("#item_familia").val(dada_node.item_familia_nom);
 		}
 		
-		$("#item_tramite").val(dada_node.item_tramite);
-		
-		if (dada_node.item_version != undefined) {
-			$("#item_version").val(dada_node.item_version);
-		}
-		
-		$("#item_url").val(dada_node.item_url);
-		
 		if (dada_node.item_fi_vida_administrativa != undefined) {
 			jQuery('#item_fi_vida_administrativa').attr('checked', dada_node.item_fi_vida_administrativa);                        
             jQuery("#item_fi_vida_administrativa").change();
@@ -597,14 +586,6 @@ function CDetall(){
 		$("#item_notes").val(dada_node.item_notes);
 
         ModulTramit.inicializarTramites(dada_node.tramites);
-        /*
-        // debug
-        ModulTramit.inicializarTramites(
-            [
-                {id:1,nombre:"Tramite inicial 1",orden:0},
-                {id:2,nombre:"Tramite inicial 2",orden:1}
-            ]);        
-            */
 		ModulDocuments.inicializarDocuments(dada_node.documents);
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);

@@ -44,6 +44,8 @@
         <property name="versio" column="TRA_VERSIO"/>
         <property name="urlExterna" column="TRA_URLEXTE"/>
         <property name="dataActualitzacioVuds" column="TRA_DATACTUVUDS"/>
+        <property name="dataInici" column="TRA_DATINICI"/>
+        <property name="dataTancament" column="TRA_DATTANCAMENT"/>
         
         <many-to-one name="organCompetent" column="TRA_ORGCOMP" foreign-key="RSC_ORGCOMP_FK"/>
         

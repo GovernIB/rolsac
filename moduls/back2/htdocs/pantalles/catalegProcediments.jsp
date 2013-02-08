@@ -751,7 +751,7 @@
                                     <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta">                                            
-                                                <label for="item_codigo_pro"><spring:message code='txt.codi'/>/</label>
+                                                <label for="item_codigo_pro"><spring:message code='txt.codi'/></label>
                                             </div>
                                             <div class="control">
                                                 <input id="item_codigo_pro" name="item_codigo_pro" type="text" value=""/>
@@ -795,17 +795,6 @@
                                             <div class="control">
                                                 <textarea id="item_destinataris_<c:out value="${lang}" />"
                                                     name="item_destinataris_<c:out value="${lang}" />" cols="50" rows="2" class="nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta">
-                                                <label for="item_requisits_<c:out value="${lang}" />"><spring:message code='camp.requisits'/></label>
-                                            </div>
-                                            <div class="control">
-                                                <textarea id="item_requisits_<c:out value="${lang}" />" name="item_requisits_<c:out value="${lang}" />"
-                                                    cols="50" rows="2" class="nou"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -926,7 +915,15 @@
                                             <div class="etiqueta">
                                                 <label for="item_taxa"><spring:message code='camp.taxa'/></label>
                                             </div>                                            
-                                        </div>                                        
+                                        </div>                      
+                                        <div class="element checkbox">
+                                            <div class="control">
+                                                <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
+                                            </div>
+                                            <div class="etiqueta">
+                                                <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnica'/></label>
+                                            </div>                                            
+                                        </div>                  
                                     </div>
                                     
                                     <div class="fila">
@@ -951,7 +948,7 @@
             </div>
             <!-- /modul -->
             			
-			<!-- modul -->			
+			<!-- modul >			
 			<div class="modul">
 				<fieldset>
 					<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
@@ -1057,18 +1054,6 @@
                                 </div>
                             </div>
                         </div>
-						
-						<div class="fila">                        
-	                        <div class="element checkbox">
-	                            <div class="control">
-	                                <input id="item_finestreta_unica" name="item_finestreta_unica" type="checkbox" class="nou" />
-	                            </div>
-	                            <div class="etiqueta">
-	                                <label for="item_finestreta_unica"><spring:message code='camp.finestretaUnica'/></label>
-	                            </div>                                            
-	                        </div>
-						</div>	
-						
 					</div>
 				</fieldset>
 			</div>			
@@ -1801,7 +1786,7 @@
 							
 				            <div class="idiomes">
 								<c:forEach items="${idiomes_aplicacio}" var="lang">
-								<!-- ooooo -->							
+
 				                <div class='idioma <c:out value="${lang}"/>'>		
 								
 									<div class="fila">
@@ -1863,17 +1848,17 @@
 										</div>
 									</div>	
 		
-									<div class="fila">
-										<div class="element t75p">
-											<div class="etiqueta">
-												<label for='item_lloc_tramit_<c:out value="${lang}"/>'><spring:message code='camp.lloc'/></label>
-											</div>
-		                                        <div class="campo">                                           
-		                                            <input id='item_lloc_tramit_<c:out value="${lang}"/>' name='item_lloc_tramit_<c:out value="${lang}"/>' type="text" class="nou" />
-		                                        </div>
-										</div>
-									</div>																	
-									
+                                    <div class="fila">
+                                        <div class="element t75p">
+                                            <div class="etiqueta">
+                                                <label for='item_lloc_tramit_<c:out value="${lang}"/>'><spring:message code='camp.lloc'/></label>
+                                            </div>
+                                                <div class="campo">                                           
+                                                    <input id='item_lloc_tramit_<c:out value="${lang}"/>' name='item_lloc_tramit_<c:out value="${lang}"/>' type="text" class="nou" />
+                                                </div>
+                                        </div>
+                                    </div>
+                            
 		                            <div class="fila">
 		                                <div class="element organoCompetente">
 		                                    <div class="etiqueta">
@@ -1913,16 +1898,6 @@
 		                <a class="modul mostrat"><spring:message code='txt.amaga'/></a>
 		                <legend><spring:message code='camp.canalsPresentacio'/></legend>
 		                <div class="modul_continguts mostrat">
-		                    <div class="fila">
-		                        <div class="element t99p">
-		                            <div class="etiqueta">
-		                                <label for="item_presentacio"><spring:message code='camp.presentacio'/></label>
-		                            </div>
-		                            <div class="control">
-		                                <input id="item_presentacio" name="item_presentacio" type="text" class="nou" />
-		                            </div>
-		                        </div>                            
-		                    </div>
 							<div class="fila">		                    
 		                        <div class="element t99p">
 		                            <div class="etiqueta">
@@ -2039,23 +2014,41 @@
 		                    <!-- /fila -->
 		                    <!-- fila -->
 		                    <div class="fila">
-		                        <div class="element left">
-		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_publicacio"><spring:message code='camp.dataPublicacio'/></label>
-		                            </div>
-		                            <div class="control">
-		                                <input type="text" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
-		                            </div>
-		                        </div>
-		                        <div class="element right">
-		                            <div class="etiqueta">
-		                                <label for="tramit_item_data_caducitat"><spring:message code='camp.dataCaducitat'/></label>
-		                            </div>
-		                            <div class="control">
-		                                <input type="text" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
-		                            </div>
-		                        </div>
-		                    </div>                        
+                                <div class="element left">
+                                    <div class="etiqueta">
+                                        <label for="tramit_item_data_publicacio"><spring:message code='camp.dataPublicacio'/></label>
+                                    </div>
+                                    <div class="control">
+                                        <input type="text" class="nou" name="tramit_item_data_publicacio" id="tramit_item_data_publicacio">
+                                    </div>
+                                </div>
+                                <div class="element right">
+                                    <div class="etiqueta">
+                                        <label for="tramit_item_data_caducitat"><spring:message code='camp.dataCaducitat'/></label>
+                                    </div>
+                                    <div class="control">
+                                        <input type="text" class="nou" name="tramit_item_data_caducitat" id="tramit_item_data_caducitat">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fila">
+                                <div class="element left">
+                                    <div class="etiqueta">
+                                        <label for="tramit_item_data_inici"><spring:message code='camp.dataInici'/></label>
+                                    </div>
+                                    <div class="control">
+                                        <input type="text" class="nou" name="tramit_item_data_inici" id="tramit_item_data_inici">
+                                    </div>
+                                </div>
+                                <div class="element right">
+                                    <div class="etiqueta">
+                                        <label for="tramit_item_data_tancament"><spring:message code='camp.dataTancament'/></label>
+                                    </div>
+                                    <div class="control">
+                                        <input type="text" class="nou" name="tramit_item_data_tancament" id="tramit_item_data_tancament">
+                                    </div>
+                                </div>
+                            </div>                        
 		                    <!-- /fila -->
 		                    <!-- botonera dalt -->
 		                    <div class="botonera dalt">
@@ -2064,7 +2057,7 @@
 		                              <a href="javascript:;"><span><span><spring:message code='boto.torna'/></span></span></a>
 		                          </li>
 		                          <li class="btnGuardar par">
-		                              <a class="btnGuardar" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a>
+		                              <a id="btnGuardarTraimt" class="btnGuardar" href="javascript:;"><span><span><spring:message code='boto.guarda'/></span></span></a>
 		                          </li>
 		                          <li style="" class="btnEliminar impar">
 		                              <a class="btnEliminar" href="javascript:;"><span><span><spring:message code='boto.elimina'/></span></span></a>

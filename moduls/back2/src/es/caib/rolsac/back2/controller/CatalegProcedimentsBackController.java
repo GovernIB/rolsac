@@ -45,6 +45,7 @@ import org.ibit.rol.sac.model.TraduccionTramite;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
+import org.ibit.rol.sac.model.dto.ListadoModuloTramiteDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoLocalDTO;
 import org.ibit.rol.sac.model.dto.ProcedimientoNormativaDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
@@ -467,16 +468,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
             // Fin documentos relacionados
            			
 			// Tr�mites relacionados
-			List<IdNomDTO> listaTramitesDTO = null;
+			List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
 			
 			if ( proc.getTramites() != null ) {
 				
-				listaTramitesDTO = new ArrayList<IdNomDTO>();
+				listaTramitesDTO = new ArrayList<ListadoModuloTramiteDTO>();
 				
 				for( Tramite tramite : proc.getTramites() ) {	
 					if (tramite != null) {
 						String nombreTramite = ((TraduccionTramite) tramite.getTraduccion( request.getLocale().getLanguage())).getNombre();
-						listaTramitesDTO.add( new IdNomDTO( tramite.getId(), nombreTramite ) );
+						listaTramitesDTO.add( new ListadoModuloTramiteDTO( tramite.getId(), nombreTramite, tramite.getFase() ) );
 					}
 				}								
 			} 	
@@ -971,7 +972,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				tpl.setNombre(request.getParameter("item_nom_" + lang));
 				tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
 				tpl.setResumen(request.getParameter("item_objecte_" + lang));
-				tpl.setRequisitos(request.getParameter("item_requisits_" + lang));
 				tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
 				tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
 				tpl.setSilencio(request.getParameter("item_silenci_" + lang));
@@ -1219,9 +1219,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 			if (StringUtils.isNotEmpty(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 				traduccioOrigen.setDestinatarios(request.getParameter("item_destinataris_" + IDIOMA_ORIGEN_TRADUCTOR));
-			}
-			if (StringUtils.isNotEmpty(request.getParameter("item_requisits_" + IDIOMA_ORIGEN_TRADUCTOR))) {
-				traduccioOrigen.setRequisitos(request.getParameter("item_requisits_" + IDIOMA_ORIGEN_TRADUCTOR));
 			}
 			if (StringUtils.isNotEmpty(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 				traduccioOrigen.setNotificacion(request.getParameter("item_notificacio_" + IDIOMA_ORIGEN_TRADUCTOR));

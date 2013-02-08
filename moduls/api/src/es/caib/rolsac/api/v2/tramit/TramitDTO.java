@@ -18,6 +18,10 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
 
     private java.util.Calendar dataPublicacio;
 
+    private java.util.Calendar dataInici;
+
+    private java.util.Calendar dataTancament;
+
     private java.lang.String descCodiVuds;
 
     private java.lang.String descripcion;
@@ -64,6 +68,8 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
            java.lang.String dataActualitzacioVuds,
            java.util.Calendar dataCaducitat,
            java.util.Calendar dataPublicacio,
+           java.util.Calendar dataInici,
+           java.util.Calendar dataTancament,
            java.lang.String descCodiVuds,
            java.lang.String descripcion,
            java.lang.String documentacion,
@@ -90,6 +96,8 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
         this.dataActualitzacioVuds = dataActualitzacioVuds;
         this.dataCaducitat = dataCaducitat;
         this.dataPublicacio = dataPublicacio;
+        this.dataInici = dataInici;
+        this.dataTancament = dataTancament;
         this.descCodiVuds = descCodiVuds;
         this.descripcion = descripcion;
         this.documentacion = documentacion;
@@ -207,6 +215,46 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
      */
     public void setDataPublicacio(java.util.Calendar dataPublicacio) {
         this.dataPublicacio = dataPublicacio;
+    }
+
+
+    /**
+     * Gets the dataInici value for this TramitDTO.
+     * 
+     * @return dataInici
+     */
+    public java.util.Calendar getDataInici() {
+        return dataInici;
+    }
+
+
+    /**
+     * Sets the dataInici value for this TramitDTO.
+     * 
+     * @param dataInici
+     */
+    public void setDataInici(java.util.Calendar dataInici) {
+        this.dataInici = dataInici;
+    }
+
+
+    /**
+     * Gets the dataTancament value for this TramitDTO.
+     * 
+     * @return dataTancament
+     */
+    public java.util.Calendar getDataTancament() {
+        return dataTancament;
+    }
+
+
+    /**
+     * Sets the dataTancament value for this TramitDTO.
+     * 
+     * @param dataTancament
+     */
+    public void setDataTancament(java.util.Calendar dataTancament) {
+        this.dataTancament = dataTancament;
     }
 
 
@@ -576,6 +624,12 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
             ((this.dataPublicacio==null && other.getDataPublicacio()==null) || 
              (this.dataPublicacio!=null &&
               this.dataPublicacio.equals(other.getDataPublicacio()))) &&
+            ((this.dataInici==null && other.getDataInici()==null) || 
+             (this.dataInici!=null &&
+              this.dataInici.equals(other.getDataInici()))) &&
+            ((this.dataTancament==null && other.getDataTancament()==null) || 
+             (this.dataTancament!=null &&
+              this.dataTancament.equals(other.getDataTancament()))) &&
             ((this.descCodiVuds==null && other.getDescCodiVuds()==null) || 
              (this.descCodiVuds!=null &&
               this.descCodiVuds.equals(other.getDescCodiVuds()))) &&
@@ -648,6 +702,12 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
         }
         if (getDataPublicacio() != null) {
             _hashCode += getDataPublicacio().hashCode();
+        }
+        if (getDataInici() != null) {
+            _hashCode += getDataInici().hashCode();
+        }
+        if (getDataTancament() != null) {
+            _hashCode += getDataTancament().hashCode();
         }
         if (getDescCodiVuds() != null) {
             _hashCode += getDescCodiVuds().hashCode();
@@ -733,6 +793,18 @@ public class TramitDTO  extends es.caib.rolsac.api.v2.general.EntitatRemota  imp
         elemField = new org.apache.axis.description.ElementDesc();
         elemField.setFieldName("dataPublicacio");
         elemField.setXmlName(new javax.xml.namespace.QName("", "dataPublicacio"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("dataInici");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "dataInici"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("dataTancament");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "dataTancament"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "dateTime"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

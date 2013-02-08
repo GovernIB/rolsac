@@ -1,9 +1,9 @@
 
 package org.ibit.rol.sac.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Comparator;
 import java.util.Set;
 
 
@@ -24,6 +24,10 @@ public class Tramite extends Ordenable implements Comparator {
     Date dataCaducitat;  //DATE
     Date dataPublicacio; //DATE 
     Date dataActualitzacio;  //DATE
+    
+    Date dataInici;  //DATE
+    Date dataTancament;  //DATE
+    
     //private String idOrganCompetent;	//NUMBER(19)
     UnidadAdministrativa organCompetent;
     
@@ -92,6 +96,7 @@ public class Tramite extends Ordenable implements Comparator {
      * @deprecated usar removeDocument
      * @param form
      */
+    @Deprecated
     public void removeFormulario(Formulario form) {
         form.setTramite(null);
         formularios.remove(form);
@@ -120,6 +125,22 @@ public class Tramite extends Ordenable implements Comparator {
 	public void setDataActualitzacio(Date dataActualitzacio) {
 		this.dataActualitzacio = dataActualitzacio;
 	}
+	
+	public Date getDataInici() {
+        return dataInici;
+    }
+
+    public void setDataInici(Date dataInici) {
+        this.dataInici = dataInici;
+    }
+    
+    public Date getDataTancament() {
+        return dataTancament;
+    }
+
+    public void setDataTancament(Date dataTancament) {
+        this.dataTancament = dataTancament;
+    }
 
 	public UnidadAdministrativa getOrganCompetent() {
 		return organCompetent;
@@ -160,7 +181,7 @@ public class Tramite extends Ordenable implements Comparator {
 	
 	
 	/** 
-	 * L'ordre es refà en el TramiteFacadebEJB
+	 * L'ordre es refï¿½ en el TramiteFacadebEJB
 	 * @param doc
 	 */
     public void removeDocument(Document doc) {
@@ -247,11 +268,13 @@ public class Tramite extends Ordenable implements Comparator {
 	}
 
 
-	public Long getId() {
+	@Override
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	@Override
+    public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -287,7 +310,7 @@ public class Tramite extends Ordenable implements Comparator {
 		this.dataActualitzacioVuds = dataActualitzacioVuds;
 	}
 
-	//u92770[enric] añadido equals para que procedimiento pueda ser testeable con easyMock.
+	//u92770[enric] aï¿½adido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Tramite)) return false; 
@@ -301,7 +324,7 @@ public class Tramite extends Ordenable implements Comparator {
 				", codiVuds=" + codiVuds + 
 				", descCodiVuds=" + descCodiVuds +
 				", validacio=" + validacio+
-				", dataActualització=" + dataActualitzacio +
+				", dataActualitzaciï¿½=" + dataActualitzacio +
 				", dataCaducitat=" + dataCaducitat + 
 			//	", taxes=" + taxes +
 				", dataPublicacio=" + dataPublicacio + 

@@ -36,6 +36,8 @@
 								type="xsd:string" />
 							<element name="dataCaducitat" nillable="true" type="xsd:dateTime" />
 							<element name="dataPublicacio" nillable="true" type="xsd:dateTime" />
+                            <element name="dataInici" nillable="true" type="xsd:dateTime" />
+                            <element name="dataTancament" nillable="true" type="xsd:dateTime" />
 							<element name="descCodiVuds" nillable="true" type="xsd:string" />
 							<element name="descripcion" nillable="true" type="xsd:string" />
 							<element name="documentacion" nillable="true" type="xsd:string" />

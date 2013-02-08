@@ -834,6 +834,8 @@ create table RSC_TRAMIT (
    TRA_DATCADU date,
    TRA_DATPUBL date,
    TRA_DATACTU date,
+   TRA_DATINICI date,
+   TRA_DATTANCAMENT date,
    TRA_DESCTAXA varchar2(255),
    TRA_CODTAXA varchar2(255),
    TRA_FORPAGTAXA varchar2(255),

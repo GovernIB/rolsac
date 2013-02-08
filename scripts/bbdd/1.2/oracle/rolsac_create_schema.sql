@@ -950,6 +950,8 @@ create table RSC_TRAMIT (
    TRA_DATCADU date,
    TRA_DATPUBL date,
    TRA_DATACTU date,
+   TRA_DATINICI date,
+   TRA_DATTANCAMENT date,
    TRA_IDTRAMTEL varchar2(255),
    TRA_VERSIO number(10,0),
    TRA_URLEXTE varchar2(255),
