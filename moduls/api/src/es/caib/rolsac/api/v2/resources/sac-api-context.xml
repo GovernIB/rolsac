@@ -342,15 +342,15 @@
 	<bean id="excepcioDocumentacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ejb.ExcepcioDocumentacioQueryServiceEJBLocator" />
 		
     <!-- WS -->
-    <bean id="excepcioDocumentacioServiceWSAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioServiceAdapter" scope="prototype">
-        <property name="excepcioDocumentacioServiceStrategy" ref="excepcioDocumentacioServiceWSStrategy" />
+    <bean id="excepcioDocumentacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioQueryServiceAdapter" scope="prototype">
+        <property name="excepcioDocumentacioQueryServiceStrategy" ref="excepcioDocumentacioQueryServiceWSStrategy" />
     </bean>
 
-    <bean id="excepcioDocumentacioServiceWSStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioWSStrategy">
+    <bean id="excepcioQueryDocumentacioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceWSStrategy">
         <property name="gateway" ref="gatewayExcepcioDocumentacio" />
     </bean>
 
-	<bean id="gatewayExcepcioDocumentacio" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioServiceGateway" />	        
+	<bean id="gatewayExcepcioDocumentacio" class="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioQueryServiceGateway" />	        
 				
 	<!-- ExcepcioDocumentacioQueryService beans --> 
 	   
