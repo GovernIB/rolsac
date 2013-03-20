@@ -1313,9 +1313,9 @@
                                         </div>
                                         <div class="fila">
 	                                        <div class="element t99p">
-	                                            <div class="etiqueta"><label for="item_cvResponsable_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.cvresponsable'/></label></div>
+	                                            <div class="etiqueta"><label for="nuevaUA_item_cvResponsable_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.cvresponsable'/></label></div>
 	                                            <div class="control">
-	                                                <textarea id="item_cvResponsable_<c:out value='${lang}'/>" name="item_cvResponsable_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+	                                                <textarea id="nuevaUA_item_cvResponsable_<c:out value='${lang}'/>" name="item_cvResponsable_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
 	                                            </div>
 	                                        </div>
 	                                    </div>
