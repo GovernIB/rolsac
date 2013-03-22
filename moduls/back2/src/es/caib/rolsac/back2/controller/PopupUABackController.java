@@ -1,7 +1,6 @@
 package es.caib.rolsac.back2.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +20,6 @@ import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 
-import org.ibit.rol.sac.model.dto.IdNomDTO;
-
-import es.caib.rolsac.back2.customJSTLTags.PrintRolTag;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
@@ -54,7 +50,7 @@ public class PopupUABackController {
             
             try {
 
-                List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
+                List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null, false);
 
                 model.put("raizOptions", raices);
 
@@ -89,11 +85,13 @@ public class PopupUABackController {
         return "pantalles/popArbreUA";
     }
 
-    private List<UnidadAdministrativa> buscarRaicesUnidadesAdministrativas(boolean padre) throws DelegateException {
+    private List<UnidadAdministrativa> buscarRaicesUnidadesAdministrativas(boolean padre, boolean todas) throws DelegateException {
 
         UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
 
-        List<UnidadAdministrativa> raices = (List<UnidadAdministrativa>) uaDelegate.listarUnidadesAdministrativasRaiz();
+        List<UnidadAdministrativa> raices = (todas) 
+        		? (List<UnidadAdministrativa>)uaDelegate.listarTodasUnidadesAdministrativasRaiz()
+        		: (List<UnidadAdministrativa>)uaDelegate.listarUnidadesAdministrativasRaiz();
 
         // u92770(enric@dgtic) cas en que volem llistar els pares de les arrels:
         if (padre) {
@@ -116,9 +114,12 @@ public class PopupUABackController {
         List tieneHijos = new ArrayList();
         
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
-        request.setAttribute("idSelect", request.getParameter("idSelect"));                	
+        request.setAttribute("idSelect", request.getParameter("idSelect"));
+        request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
+        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(
+        		request.getParameter("padres") != null, 
+        		"1".equals(request.getParameter("totes")));
         
         model.put("raizOptions", raices);
         
@@ -180,8 +181,10 @@ public class PopupUABackController {
         List tieneHijos = new ArrayList();
 
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
+        request.setAttribute("totes", request.getParameter("totes"));
 
-        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null);
+        List<UnidadAdministrativa> raices = buscarRaicesUnidadesAdministrativas(request.getParameter("padres") != null,
+        		"1".equals(request.getParameter("totes")));
 
         UnidadAdministrativaDelegate uaDelegate = null == this.uaDelegate ? DelegateUtil.getUADelegate() : this.uaDelegate;
 

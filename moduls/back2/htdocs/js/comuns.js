@@ -1186,6 +1186,34 @@ function carregarArbreUAExpand(url, idDiv, id_ua, id_ua_texte) {
 	
 }
 
+// Carga un arbol con todas las UAs disponibles (parámetro totes=1)
+function carregarArbreTotesUAExpand(url, idDiv, id_ua, id_ua_texte) {
+	
+	id_select = $("#" + id_ua).val();
+	
+	if ( id_select == "" || id_ua == undefined)	
+		id_select = 1;	
+	
+	if ($('#' + idDiv).length == 0 ) {
+		$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px;"><iframe id="iframeUA" src="' + url + '?totes=1&idUA=0&idInput='+ id_ua_texte + '&idSelect='  + id_select + '&idHidden=' + id_ua +'" id="iframe" style="width:550px; height:450px;" /></div>');
+		
+		// Marcar la UA actual y mostrarla en la ventana al abrir la lista
+		$('#iframeUA').load(function() {			
+			
+			el = $("#iframeUA").contents().find("a#" + id_select);
+			el.css("font-weight", "bold");
+			el.css("color", "#F18F12");			
+			
+			ajustVertical = 125;
+			topPos = el.offset().top;
+			
+			$("#iframeUA").contents().find("div.modul").scrollTop(topPos - ajustVertical);
+		});
+		
+	}
+	
+}
+
 function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 	
 	// Aseguram que no estigui creat

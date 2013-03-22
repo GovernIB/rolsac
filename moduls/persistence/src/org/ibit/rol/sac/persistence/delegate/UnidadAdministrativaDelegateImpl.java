@@ -137,6 +137,32 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
             throw new DelegateException(e);
         }
     }
+    
+    
+    
+    
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    public List listarTodasUnidadesAdministrativasRaiz() throws DelegateException {
+        try {
+            return getFacade().listarTodasUnidadesAdministrativasRaiz();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+        
+    
+    
+    
+    
 
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerPrimeraUnidadAdministrativaRaiz()

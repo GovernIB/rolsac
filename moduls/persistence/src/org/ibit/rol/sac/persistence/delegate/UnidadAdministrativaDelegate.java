@@ -231,6 +231,10 @@ public class UnidadAdministrativaDelegate {
 			throws DelegateException {
 		return impl.listarUnidadesAdministrativasRaiz(publicadas);
     }
+	
+	public List listarTodasUnidadesAdministrativasRaiz() throws DelegateException {
+		return impl.listarTodasUnidadesAdministrativasRaiz();
+    }
     
    /**
      * Autorizaci�n eliminar Unidad Administrativa.Devuleve true si tiene acceso.

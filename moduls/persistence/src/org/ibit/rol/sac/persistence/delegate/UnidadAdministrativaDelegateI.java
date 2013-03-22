@@ -70,7 +70,28 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List listarUnidadesAdministrativasRaiz()
 			throws DelegateException;
+	
+	
+	
+	
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+	public abstract List listarTodasUnidadesAdministrativasRaiz()
+			throws DelegateException;
+	
+	
+	
 
+	
+	
+	
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerPrimeraUnidadAdministrativaRaiz()
 	 */
