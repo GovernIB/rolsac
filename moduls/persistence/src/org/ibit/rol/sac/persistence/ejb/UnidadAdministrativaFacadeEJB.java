@@ -284,6 +284,31 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
             close(session);
         }
     }
+    
+    /**
+     * Lista todas las unidades Administrativas raiz del organigrama.
+     * @ejb.interface-method
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
+     */
+    public List listarTodasUnidadesAdministrativasRaiz() {
+    	
+        Session session = getSession();
+        
+        try {
+            
+        	return session.createCriteria(UnidadAdministrativa.class).add(Expression.isNull("padre")).list();
+           
+        } catch (HibernateException he) {
+        	
+            throw new EJBException(he);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+        
+    }
 
     /**
      * Obtiene la primera unidad Administrativas raiz de un usuario.

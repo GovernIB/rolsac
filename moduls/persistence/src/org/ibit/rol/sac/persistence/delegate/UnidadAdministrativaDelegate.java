@@ -22,7 +22,6 @@ public class UnidadAdministrativaDelegate {
 
 	UnidadAdministrativaDelegateI impl = null;
 
-
 	public UnidadAdministrativaDelegateI getImpl() {
 		return impl;
     }
@@ -30,7 +29,6 @@ public class UnidadAdministrativaDelegate {
 	public void setImpl(UnidadAdministrativaDelegateI impl) {
 		this.impl = impl;
     }
-
 
 	public void actualizarUnidadAdministrativa(UnidadAdministrativa unidad,
 			Long padreId) throws DelegateException {
@@ -223,6 +221,10 @@ public class UnidadAdministrativaDelegate {
 	public List listarUnidadesAdministrativasRaiz() throws DelegateException {
 		return impl.listarUnidadesAdministrativasRaiz();
     }
+	
+	public List listarTodasUnidadesAdministrativasRaiz() throws DelegateException {
+		return impl.listarTodasUnidadesAdministrativasRaiz();
+    }
 
 	public List listarUnidadesAdministrativasRaiz(boolean publicadas)
 			throws DelegateException {
@@ -230,7 +232,7 @@ public class UnidadAdministrativaDelegate {
     }
     
    /**
-     * Autorización eliminar Unidad Administrativa.Devuleve true si tiene acceso.
+     * Autorizaciï¿½n eliminar Unidad Administrativa.Devuleve true si tiene acceso.
      */
     public boolean autorizarEliminarUA(Long idUa) throws DelegateException {
     		return impl.autorizarEliminarUA(idUa);
@@ -331,4 +333,5 @@ public class UnidadAdministrativaDelegate {
 	public String toString() {
 		return impl.toString();
 	}
+	
 }

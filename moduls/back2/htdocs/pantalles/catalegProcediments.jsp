@@ -864,7 +864,7 @@
                                                 </div>
                                                 <div class="botones">
                                                     <div class="btnCambiar boton btnGenerico">
-                                                        <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
+                                                        <a href="javascript:carregarArbreTotesUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','item_organ_id', 'item_organ');" class="btn consulta">
                                                             <span><span><spring:message code='boto.canviarOrgan'/></span></span>
                                                         </a>
                                                     </div>
@@ -1900,7 +1900,7 @@
 		                                        </div>
 		                                        <div class="botones">
 		                                            <div class="btnCambiar boton btnGenerico">
-		                                                <a href="javascript:carregarArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_<c:out value="${lang}"/>');" class="btn consulta">		                                                
+		                                                <a href="javascript:carregarArbreTotesUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA','tramits_item_organ_id', 'tramits_item_organ_<c:out value="${lang}"/>');" class="btn consulta">		                                                
 		                                                    <span><span><spring:message code='boto.canviarOrgan'/></span></span>
 		                                                </a>
 		                                            </div>

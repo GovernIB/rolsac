@@ -1102,6 +1102,21 @@ function carregarArbreUA (url, idDiv, id_ua, id_ua_texte, llocOnPintar ){
 	}
 }
 
+function carregarArbreTotesUA( url, idDiv, id_ua, id_ua_texte, llocOnPintar ) {
+	
+	// Aseguram que no estigui creat
+	if ( $('#' + idDiv).length == 0 ) {
+		
+		if (typeof llocOnPintar == 'undefined') {
+			$('body').append('<div id="'+ idDiv + '" class="falsePopUp" style="left:'+(($(document).width() / 2) - 275)+'px"><iframe src="' + url + '?totes=1&idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'" style="width:550px; height:450px;" /></div>');
+		} else {
+			$(llocOnPintar).append('<div id="'+ idDiv + '"><iframe src="' + url + '?idUA=0&idInput='+ id_ua_texte + '&idHidden=' + id_ua +'"  /></div>');
+		}
+		
+	}
+	
+}
+
 function carregarArbreET(url, idDiv, item_id, id_et, id_et_texte, llocOnPintar) {
 	var id = $("#" + item_id).val();
 	// Aseguram que no estigui creat

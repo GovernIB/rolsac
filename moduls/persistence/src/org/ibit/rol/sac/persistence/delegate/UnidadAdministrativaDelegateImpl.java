@@ -25,7 +25,7 @@ import org.ibit.rol.sac.persistence.util.UnidadAdministrativaFacadeUtil;
 public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, UnidadAdministrativaDelegateI {
 
     /* ========================================================= */
-    /* ======================== MÉTODOS DE NEGOCIO ============= */
+    /* ======================== Mï¿½TODOS DE NEGOCIO ============= */
     /* ========================================================= */
 
     /* (non-Javadoc)
@@ -126,6 +126,23 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
     public List listarUnidadesAdministrativasRaiz() throws DelegateException {
         try {
             return getFacade().listarUnidadesAdministrativasRaiz();
+        } catch (RemoteException e) {
+            throw new DelegateException(e);
+        }
+    }
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegateI#listarTodasUnidadesAdministrativasRaiz()
+	 */
+    public List listarTodasUnidadesAdministrativasRaiz() throws DelegateException {
+        try {
+            return getFacade().listarTodasUnidadesAdministrativasRaiz();
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }
