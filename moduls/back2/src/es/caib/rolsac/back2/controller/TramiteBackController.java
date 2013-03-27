@@ -50,6 +50,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.indra.rol.sac.integracion.traductor.Traductor;
 
@@ -304,16 +305,16 @@ public class TramiteBackController {
 				
 				if ( traduccionTramite == null )
 					traduccionTramite = new TraduccionTramite();
-				
-				traduccionTramite.setNombre( request.getParameter("item_nom_tramit_" + lang) );
-				traduccionTramite.setDescripcion( request.getParameter("item_descripcio_tramit_" + lang));
-				traduccionTramite.setRequisits( request.getParameter("item_requisits_tramit_" + lang));
-				traduccionTramite.setDocumentacion( request.getParameter("item_documentacio_tramit_" + lang));				
-				traduccionTramite.setPlazos( request.getParameter("item_termini_tramit_" + lang));
+								
+				traduccionTramite.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_tramit_" + lang)) );
+				traduccionTramite.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_tramit_" + lang)) );
+				traduccionTramite.setRequisits( RolUtil.limpiaCadena(request.getParameter("item_requisits_tramit_" + lang)) );
+				traduccionTramite.setDocumentacion( RolUtil.limpiaCadena(request.getParameter("item_documentacio_tramit_" + lang)) );				
+				traduccionTramite.setPlazos( RolUtil.limpiaCadena(request.getParameter("item_termini_tramit_" + lang)) );
+				traduccionTramite.setLugar( RolUtil.limpiaCadena(request.getParameter("item_lloc_tramit_" + lang)) );
 				
 				//Este campo no existe en la tabla pero se deja por si se a�ade en futuras implementaciones)
 				//traduccionTramite.setObservaciones( request.getParameter("item_observacions_tramit_" + lang) );
-				traduccionTramite.setLugar( request.getParameter("item_lloc_tramit_" + lang));
 								
 				traducciones.put(lang, traduccionTramite);				
 			}

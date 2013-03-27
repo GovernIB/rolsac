@@ -2,6 +2,8 @@ package org.ibit.rol.sac.model.dto;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 public class IdNomDTO implements Serializable {
 
 	private static final long serialVersionUID = -1227937193155485933L;
@@ -36,7 +38,7 @@ public class IdNomDTO implements Serializable {
 	}
 	
 	public String getJson() {
-		return "{\"id\" : \"" + id + "\", \"nom\" : \"" + nom + "\" }";
+		return "{\"id\" : \"" + id + "\", \"nom\" : \"" + StringEscapeUtils.escapeHtml(nom) + "\" }";
 	}
 	
 }

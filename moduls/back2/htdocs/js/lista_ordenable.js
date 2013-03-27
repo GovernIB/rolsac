@@ -51,6 +51,7 @@ function ListaOrdenable(){
 	 * Obtiene el html de un item de la lista.
 	 */
 	this.getHtmlItem = function( item, btnEliminar, idioma ){
+		
 		var sufijoIdioma = "";
 		var idiomaAtributo = "";
 		var partesAtributo;
@@ -84,7 +85,9 @@ function ListaOrdenable(){
 						
 					case "nombre":
                     case "nom":
-						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + valor + "\" type=\"hidden\" />";
+                    	// Dentro del atributo value del elemento <input> sustituimos entidades HTML del valor usando $("<div/>").html(valor).text()
+                    	// Visto en http://stackoverflow.com/questions/1147359/how-to-decode-html-entities-using-jquery
+						html += "<input class=\"" + params.nombre + "_" + atributo + sufijoIdioma + "\" id=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" name=\"" + params.nombre + "_" + atributo + sufijoIdioma + "_" + item.id + "\" value=\"" + $("<div/>").html(valor).text() + "\" type=\"hidden\" />";
 						if (jQuery.trim(valor) == "") valor = "&nbsp;";
 						html += "<span class=\"" + params.nombre + "\">" + valor + "</span>";
 						break;			

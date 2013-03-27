@@ -195,7 +195,7 @@ function CModulTramit(){
     this.actualitzaNomTramit = function(tramit) {
         var tramitInput = jQuery("#tramit_nom_" + tramit.id)
         tramitInput.val("<a href='#' class='tramit_id'>" + tramit.nom + "</a>");
-        tramitInput.next().children().first().text(tramit.nom);
+        tramitInput.next().children().first().text($("<div/>").html(tramit.nom).text());
         
         if (tramit["moment"] != undefined) {
             jQuery("#tramit_moment_" + tramit.id).val(tramit.moment);

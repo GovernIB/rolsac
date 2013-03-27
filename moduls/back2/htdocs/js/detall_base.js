@@ -30,6 +30,10 @@ jQuery(document).ready(function(){
 			theme_advanced_statusbar_location : "bottom",
 			theme_advanced_resizing : true,
 			theme_advanced_resize_horizontal: false,
+			
+			// Todos los caracteres (que hagan falta) se convertirÃ¡n en entidades numÃ©ricas.
+			// DocumentaciÃ³n: http://www.tinymce.com/wiki.php/Configuration:entity_encoding
+			entity_encoding : "numeric",
 
 			onchange_callback: function(){Detall.modificado();}
 		});
@@ -42,7 +46,7 @@ jQuery(document).ready(function(){
 /**
  * @param boolean soloFicha: Indica si es un asociado a un listado, por defecto no.
  * @param array reglasFormulario: Lista de reglas a validar para guardar el formulario, por defecto FormulariDades.
- * @param object identificadores: Identificadores de botones de acción, etc.
+ * @param object identificadores: Identificadores de botones de acciï¿½n, etc.
  */
 function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	var that = this;
@@ -148,7 +152,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		jQuery("#"+ids.btnGuardar).unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 

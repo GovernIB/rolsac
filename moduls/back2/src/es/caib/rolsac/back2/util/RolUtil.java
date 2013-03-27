@@ -3,7 +3,7 @@ package es.caib.rolsac.back2.util;
 import javax.servlet.http.HttpServletRequest;
 
 /*
- * Los roles de usuario s�n inclusivos. Los m�todos de esta clase permiten 
+ * Los roles de usuario s�n inclusivos. Los m�todos de esta clase permiten 
  * saber si un usuario tiene los permisos de un determinado rol, bien porque 
  * sea su rol, o porque tenga uno superior. 
  */
@@ -116,5 +116,46 @@ public class RolUtil {
 	public void setRequest(HttpServletRequest request) {
     	this.request = request;
     }
+	
+	/**
+	 * Limpia caracteres no traducibles (normalmente de windows-1252, pegando desde MS Word) de UTF-8 a ISO-8859-1 de una cadena.
+	 * @param s cadena a tratar.
+	 * @return cadena tratada.
+	 */
+	public static String limpiaCadena(String s) {
+
+		StringBuilder b = new StringBuilder();
+				
+		for (int i = 0; i < s.length(); i++) {
+				
+			// Debug
+			// System.out.println(i + ": " + s.charAt(i) + " => " + Integer.toHexString(s.charAt(i)));
+			
+			// Comillas simples: ‘ y ’ => '
+			if ( s.charAt(i) == 0x2018 || s.charAt(i) == 0x2019 || s.charAt(i) == 0x201a )
+				b.append((char)0x0027);
+				
+			// Comillas dobles: “ y ” => " 
+			else if ( s.charAt(i) == 0x201c || s.charAt(i) == 0x201d || s.charAt(i) == 0x201e
+				   || s.charAt(i) == 0x2039 || s.charAt(i) == 0x203a )
+				b.append((char)0x0022);
+			
+			// Punto central: • => ·
+			else if ( s.charAt(i) == 0x2022 )
+				b.append((char)0x00b7);
+			
+			// Acento circunflejo 
+			else if ( s.charAt(i) == 0x02c6 )
+				b.append((char)0x005e);
+			
+			// Cualquier otro caso.
+			else
+				b.append(s.charAt(i));
+			
+		}
+			
+		return b.toString();
+		
+	}
 	
 }

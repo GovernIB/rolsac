@@ -1,5 +1,7 @@
 package org.ibit.rol.sac.model.dto;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 
 public class ListadoModuloTramiteDTO extends IdNomDTO {
 
@@ -26,7 +28,7 @@ public class ListadoModuloTramiteDTO extends IdNomDTO {
 	
 	@Override
     public String getJson() {
-		return "{\"id\" : \"" + getId() + "\", \"nom\" : \"" + getNom() + ", \"moment\": \"" + moment + "\"}";
+		return "{\"id\" : \"" + getId() + "\", \"nom\" : \"" + StringEscapeUtils.escapeHtml(getNom()) + ", \"moment\": \"" + moment + "\"}";
 	}
 	
 }
