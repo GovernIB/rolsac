@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.lang.StringUtils;
@@ -31,9 +33,7 @@ public class BasicUtils {
     
     private static String[] GETTERS_INVALIDS = {"getSerializer","getDeserializer", "getTypeDesc"};
     private static String[] SETTERS_INVALIDS = {"setSerializer", "setDeserializer", "setTypeDesc"};    
-    
-    private BasicUtils() {
-    }
+
 
     public static List<CriteriaObject> parseCriterias(Class<?> criteriaClass, String entityAlias,
             BasicCriteria basicCriteria) throws CriteriaObjectParseException {
@@ -245,6 +245,30 @@ public class BasicUtils {
                 i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
                 value = i18nGetter.invoke(trad);
             }
+            
+            if (value == null) {
+            	//No hemos encontrado valor en la traduccion principal, buscamos en las traducciones alternativas
+            	String[] langAlternates = getLangAlternates(lang);
+            	if (langAlternates != null) {
+            		for ( String altLang : langAlternates) {
+            			altLang = altLang.trim();
+            			i18nGetter = entity.getClass().getMethod("getTraduccion", altLang.getClass());
+                        trad = (Traduccion) i18nGetter.invoke(entity, altLang);
+            			
+                        if (trad != null) {
+                            i18nGetter = trad.getClass().getMethod("get" + StringUtils.capitalize(property));
+                            value = i18nGetter.invoke(trad);
+                        }
+                        if (value != null) {
+                        	break; //Encontrado valor
+                        }
+            			
+            		}
+            	}
+            	
+            }
+                
+
         } catch (NoSuchMethodException e) {
         }
 
@@ -310,7 +334,18 @@ public class BasicUtils {
         }
     }
 
-    public static String booleanToString(Boolean value) {
+    private static String[] getLangAlternates(String lang) {
+
+    	if (StringUtils.isBlank(lang)) lang = getDefaultLanguage();
+    	String alternates = System.getProperty("es.caib.rolsac.api.v2.alternativesIdioma_" + lang);
+    	if (alternates == null) {
+            log.error("No hay definidas alternativas de idioma para " + lang + ". Usando ca,es,en");
+            return new String[]{"ca", "es", "en"};
+    	}
+		return alternates.split(",");
+	}
+
+	public static String booleanToString(Boolean value) {
         if (value == null) {
             return null;
         }

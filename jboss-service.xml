@@ -35,7 +35,13 @@
 	   
 	   <!-- API -->
        es.caib.rolsac.api.v2.idiomaPerDefecte=ca
+       es.caib.rolsac.api.v2.alternativesIdioma_ca=es,en
+       es.caib.rolsac.api.v2.alternativesIdioma_es=ca,en
+       es.caib.rolsac.api.v2.alternativesIdioma_en=ca,es
+       es.caib.rolsac.api.v2.alternativesIdioma_de=en,ca,es
+       es.caib.rolsac.api.v2.alternativesIdioma_fr=en,ca,es
        es.caib.rolsac.api.v2.urlArxius=http://localhost:8080/sacws-api/arxiu/apiArxiuServlet?id=<!-- FIXME: cambiar por la url adecuada para produccion -->
+       
 	   
 	   <!-- valors sense confirmar -->
 	   	es.caib.rolsac.microsites=Y
