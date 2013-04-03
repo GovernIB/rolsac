@@ -123,35 +123,39 @@ public class RolUtil {
 	 * @return cadena tratada.
 	 */
 	public static String limpiaCadena(String s) {
-
+		
 		StringBuilder b = new StringBuilder();
+		
+		if (s != null) {
 				
-		for (int i = 0; i < s.length(); i++) {
+			for (int i = 0; i < s.length(); i++) {
+					
+				// Debug
+				// System.out.println(i + ": " + s.charAt(i) + " => " + Integer.toHexString(s.charAt(i)));
 				
-			// Debug
-			// System.out.println(i + ": " + s.charAt(i) + " => " + Integer.toHexString(s.charAt(i)));
-			
-			// Comillas simples: ‘ y ’ => '
-			if ( s.charAt(i) == 0x2018 || s.charAt(i) == 0x2019 || s.charAt(i) == 0x201a )
-				b.append((char)0x0027);
+				// Comillas simples: ‘ y ’ => '
+				if ( s.charAt(i) == 0x2018 || s.charAt(i) == 0x2019 || s.charAt(i) == 0x201a )
+					b.append((char)0x0027);
+					
+				// Comillas dobles: “ y ” => " 
+				else if ( s.charAt(i) == 0x201c || s.charAt(i) == 0x201d || s.charAt(i) == 0x201e
+					   || s.charAt(i) == 0x2039 || s.charAt(i) == 0x203a )
+					b.append((char)0x0022);
 				
-			// Comillas dobles: “ y ” => " 
-			else if ( s.charAt(i) == 0x201c || s.charAt(i) == 0x201d || s.charAt(i) == 0x201e
-				   || s.charAt(i) == 0x2039 || s.charAt(i) == 0x203a )
-				b.append((char)0x0022);
-			
-			// Punto central: • => ·
-			else if ( s.charAt(i) == 0x2022 )
-				b.append((char)0x00b7);
-			
-			// Acento circunflejo 
-			else if ( s.charAt(i) == 0x02c6 )
-				b.append((char)0x005e);
-			
-			// Cualquier otro caso.
-			else
-				b.append(s.charAt(i));
-			
+				// Punto central: • => ·
+				else if ( s.charAt(i) == 0x2022 )
+					b.append((char)0x00b7);
+				
+				// Acento circunflejo 
+				else if ( s.charAt(i) == 0x02c6 )
+					b.append((char)0x005e);
+				
+				// Cualquier otro caso.
+				else
+					b.append(s.charAt(i));
+				
+			}
+		
 		}
 			
 		return b.toString();

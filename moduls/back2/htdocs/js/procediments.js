@@ -346,16 +346,42 @@ function CDetall(){
 	//Se anyaden los campos que no se van a serializar directamente mediante .serialize()	
 	//this._baseGuarda = this.guarda;	
 	this.guarda = function() {
-	    if (ModulTramit.hayTramiteInicializacion()) {
-    		urlParams = ModulNormativa.listaNormativas();
+				
+		// Si el estado de publicación del procedimiento es distinto a 1 (Pública),
+		// no comprobamos que existe un trámite de inicialización. Guardamos directamente.
+		if ( ($('#item_estat').val() != 1) ) {
+
+			urlParams = ModulNormativa.listaNormativas();
     		urlParams += "&" + ModulMateries.listaMaterias();
     		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
     		urlParams += "&" + ModulPublicObjectiu.listaPublics();
     		urlParams += "&" + ModulTramit.listaTramites();
+    		
     		that.guardaGenerico(urlParams);
-	    } else {
-	        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
-	    }
+			
+		}
+		
+		// En cambio, si el estado de publicación es 1 (Pública), hacemos la comprobación
+		// en el if. Si todo está OK, ejecutamos el mismo código anterior (lo dejo duplicado
+		// porque considero que ha de estar comentado de este modo para que el próximo que
+		// tenga que mantener esto lo entienda.
+		else if ( ($('#item_estat').val() == 1 && ModulTramit.hayTramiteInicializacion()) ) {
+			
+			urlParams = ModulNormativa.listaNormativas();
+    		urlParams += "&" + ModulMateries.listaMaterias();
+    		urlParams += "&" + ModulFetsVitals.listaHechosVitales();
+    		urlParams += "&" + ModulPublicObjectiu.listaPublics();
+    		urlParams += "&" + ModulTramit.listaTramites();
+    		
+    		that.guardaGenerico(urlParams);
+		
+		// Si no hay trámite de inicialización con estado de publicación 1, lanzamos mensaje de error.
+		} else {
+			
+			Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + txtErrorTramitIniciObligatori + "</p>"});
+			
+		}
+
 	}
 	
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
