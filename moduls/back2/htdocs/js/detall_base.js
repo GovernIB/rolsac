@@ -411,15 +411,19 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 	
 	this.traduir = function (url, inputs, datos) {
+		
         Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
         
         var dataVars = "";
         for (var i in inputs) {
             var campo = inputs[i] + LANG_TRADUCTOR;
-            var and = i == 0 ? "" : "&";
-            dataVars += and + campo + "=" + jQuery("#" + campo).val();
+            var and = (i == 0) ? "" : "&";
+            // Escapamos cada valor de los campos a traducir con encodeURIComponent(),
+            // ya que si el texto contenía alguna "&", se consideraría ya otro campo en la llamada AJAX.
+            // Luego tocará decodificar cada campo en el servlet que reciba la petición.
+            dataVars += and + campo + "=" + encodeURIComponent( jQuery("#" + campo).val() );
         }
-        
+                
         $.ajax({
             type: "POST",
             url: url,
