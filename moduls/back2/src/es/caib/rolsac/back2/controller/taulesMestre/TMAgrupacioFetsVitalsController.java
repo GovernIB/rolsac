@@ -275,9 +275,9 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			Map traduccions = new HashMap(langs.size());
 			for (String lang: langs) {
 				TraduccionAgrupacionHV tafv = new TraduccionAgrupacionHV();
-				tafv.setNombre(valoresForm.get("item_nom_"+  lang ));
-				tafv.setDescripcion(valoresForm.get("item_descripcio_"+  lang ));
-				tafv.setPalabrasclave(valoresForm.get("item_paraules_clau_"+  lang ));
+				tafv.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang )) );
+				tafv.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_"+  lang )) );
+				tafv.setPalabrasclave( RolUtil.limpiaCadena(valoresForm.get("item_paraules_clau_"+  lang )) );
 				
 				traduccions.put(lang, tafv);
 			}

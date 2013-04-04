@@ -62,6 +62,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -616,6 +617,7 @@ public class NormativaBackController extends PantallaBaseController {
         	//Obtener campos por idioma
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	for (String idioma : idiomas) {
+        		
         		TraduccionNormativa traNorm = normativaOld != null ? (TraduccionNormativa)normativaOld.getTraduccion(idioma) : null;
         		        		
         		if (traNorm != null) {
@@ -630,9 +632,10 @@ public class NormativaBackController extends PantallaBaseController {
         			normativa.setTraduccion(idioma, traNorm);
         		}
 
-        		traNorm.setTitulo(valoresForm.get("item_titol_" + idioma));
-        		traNorm.setEnlace(valoresForm.get("item_enllas_" + idioma));
-        		traNorm.setApartado(valoresForm.get("item_apartat_" + idioma));
+        		traNorm.setTitulo( RolUtil.limpiaCadena(valoresForm.get("item_titol_" + idioma)) );
+        		traNorm.setEnlace( RolUtil.limpiaCadena(valoresForm.get("item_enllas_" + idioma)) );
+        		traNorm.setApartado( RolUtil.limpiaCadena(valoresForm.get("item_apartat_" + idioma)) );
+        		
         		if (valoresForm.get("item_pagina_inicial_" + idioma) != null && !"".equals(valoresForm.get("item_pagina_inicial_" + idioma)))
         			traNorm.setPaginaInicial(ParseUtil.parseInt(valoresForm.get("item_pagina_inicial_" + idioma)));
 
@@ -644,7 +647,7 @@ public class NormativaBackController extends PantallaBaseController {
 
         		//Responsable s�lo en normativa externa
         		if (!normativaLocal) {        				
-        			((TraduccionNormativaExterna)traNorm).setResponsable(valoresForm.get("item_responsable_" + idioma));
+        			((TraduccionNormativaExterna)traNorm).setResponsable( RolUtil.limpiaCadena(valoresForm.get("item_responsable_" + idioma)) );
         		}
 
         		//Archivo

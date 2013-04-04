@@ -255,8 +255,8 @@ public class TMPerfilsController extends PantallaBaseController {
 					tp = new TraduccionPerfilCiudadano();
 				}
 
-				tp.setNombre(request.getParameter("item_nom_" + lang));
-				tp.setDescripcion(request.getParameter("item_descripcio_" + lang));
+				tp.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
+				tp.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_" + lang)) );
 				perfil.setTraduccion(lang, tp);
 			}
 			// Fin idiomas

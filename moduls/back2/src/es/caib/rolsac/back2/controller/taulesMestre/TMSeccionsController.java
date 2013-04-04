@@ -393,8 +393,8 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
         	Map traduccions = new HashMap(idiomas.size());
         	for (String idioma : idiomas) {
         		TraduccionSeccion traSec = new TraduccionSeccion();
-        		traSec.setNombre(valoresForm.get("item_nom_" + idioma));
-        		traSec.setDescripcion(valoresForm.get("item_descripcio_" + idioma));
+        		traSec.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_" + idioma)) );
+        		traSec.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_" + idioma)) );
         		
         		traduccions.put(idioma, traSec);
         		

@@ -235,8 +235,8 @@ public class TMFamiliaController extends PantallaBaseController {
 					tf = new TraduccionFamilia();
 				}
 
-				tf.setNombre(request.getParameter("item_nom_" + lang));
-				tf.setDescripcion(request.getParameter("item_descripcio_" + lang));
+				tf.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
+				tf.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_" + lang)) );
 				familia.setTraduccion(lang, tf);
 			}
 			// Fin idiomas

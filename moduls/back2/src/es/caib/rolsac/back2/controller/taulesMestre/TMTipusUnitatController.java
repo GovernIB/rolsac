@@ -195,11 +195,11 @@ public class TMTipusUnitatController extends PantallaBaseController {
 					tu = new TraduccionTratamiento();
 				}
 
-				tu.setTipo(request.getParameter("item_tipus_" + lang));
-				tu.setCargoF(request.getParameter("item_carreg_femeni_" + lang));
-				tu.setCargoM(request.getParameter("item_carreg_masculi_" + lang));
-				tu.setTratamientoF(request.getParameter("item_tractament_femeni_" + lang));
-				tu.setTratamientoM(request.getParameter("item_tractament_masculi_" + lang));
+				tu.setTipo( RolUtil.limpiaCadena(request.getParameter("item_tipus_" + lang)) );
+				tu.setCargoF( RolUtil.limpiaCadena(request.getParameter("item_carreg_femeni_" + lang)) );
+				tu.setCargoM( RolUtil.limpiaCadena(request.getParameter("item_carreg_masculi_" + lang)) );
+				tu.setTratamientoF( RolUtil.limpiaCadena(request.getParameter("item_tractament_femeni_" + lang)) );
+				tu.setTratamientoM( RolUtil.limpiaCadena(request.getParameter("item_tractament_masculi_" + lang)) );
 				
 				unitat.setTraduccion(lang, tu);
 			}

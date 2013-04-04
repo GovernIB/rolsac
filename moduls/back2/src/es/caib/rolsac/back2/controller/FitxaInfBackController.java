@@ -66,6 +66,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.Parametros;
 import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -651,9 +652,9 @@ public class FitxaInfBackController extends PantallaBaseController {
                     tfi = new TraduccionFicha();
                 }
 
-                tfi.setTitulo(valoresForm.get("item_titol_" + lang));
-                tfi.setDescAbr(valoresForm.get("item_des_curta_" + lang));
-                tfi.setDescripcion(valoresForm.get("item_des_llarga_" + lang));
+                tfi.setTitulo( RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)) );
+                tfi.setDescAbr( RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)) );
+                tfi.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)) );
                 tfi.setUrl(valoresForm.get("item_url_" + lang));
                 
                 fitxa.setTraduccion(lang, tfi);

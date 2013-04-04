@@ -33,6 +33,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.RolUtil;
+
 @Controller
 @RequestMapping("/taxa/")
 public class TasaTramiteBackController {
@@ -138,9 +140,9 @@ public class TasaTramiteBackController {
 				if ( traduccionTaxa == null ) 
 					traduccionTaxa = new TraduccionTaxa();
 				
-				traduccionTaxa.setCodificacio( request.getParameter("taxa_tramit_codi_" + lang));
-				traduccionTaxa.setDescripcio( request.getParameter("taxa_tramit_descripcio_" + lang));
-				traduccionTaxa.setFormaPagament( request.getParameter("taxa_tramit_forma_pagament_" + lang));
+				traduccionTaxa.setCodificacio( RolUtil.limpiaCadena(request.getParameter("taxa_tramit_codi_" + lang)) );
+				traduccionTaxa.setDescripcio( RolUtil.limpiaCadena(request.getParameter("taxa_tramit_descripcio_" + lang)) );
+				traduccionTaxa.setFormaPagament( RolUtil.limpiaCadena(request.getParameter("taxa_tramit_forma_pagament_" + lang)) );
 				
 				traducciones.put(lang, traduccionTaxa);				
 			}

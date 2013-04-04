@@ -363,9 +363,9 @@ public class TMMateriesController extends PantallaBaseController {
         			materia.setTraduccion(idioma, traMat);
         		}
 
-        		traMat.setDescripcion(valoresForm.get("item_descripcio_" + idioma));
-        		traMat.setNombre(valoresForm.get("item_nom_" + idioma));
-        		traMat.setPalabrasclave(valoresForm.get("item_paraules_clau_" + idioma));
+        		traMat.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_" + idioma)) );
+        		traMat.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_" + idioma)) );
+        		traMat.setPalabrasclave( RolUtil.limpiaCadena(valoresForm.get("item_paraules_clau_" + idioma)) );
         		
         		// Archivos
         		fileItem = ficherosForm.get("item_distribucion_" + idioma);

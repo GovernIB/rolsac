@@ -357,7 +357,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
     				espacio.setTraduccion(idioma, traEsp);
         		}
 
-        		traEsp.setNombre(valoresForm.get("item_nom_" + idioma));
+        		traEsp.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_" + idioma)) );
         		
         	}
         	

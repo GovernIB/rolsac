@@ -179,9 +179,9 @@ public class TMPublicObjectiuController extends PantallaBaseController {
 					tpo = new TraduccionPublicoObjetivo();
 				}
 
-				tpo.setTitulo(request.getParameter("item_titol_" + lang));
-				tpo.setDescripcion(request.getParameter("item_descripcio_" + lang));
-				tpo.setPalabrasclave(request.getParameter("item_paraules_clau_" + lang));
+				tpo.setTitulo( RolUtil.limpiaCadena(request.getParameter("item_titol_" + lang)) );
+				tpo.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_" + lang)) );
+				tpo.setPalabrasclave( RolUtil.limpiaCadena(request.getParameter("item_paraules_clau_" + lang)) );
 				
 				publicObjectiu.setTraduccion(lang, tpo);
 			}

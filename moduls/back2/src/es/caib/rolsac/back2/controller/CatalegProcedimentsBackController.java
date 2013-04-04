@@ -71,6 +71,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import es.caib.rolsac.back2.util.HtmlUtils;
 import es.caib.rolsac.back2.util.LlistatUtil;
 import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
 import es.indra.rol.sac.integracion.traductor.Traductor;
@@ -969,15 +970,15 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					tpl = new TraduccionProcedimientoLocal();
 				}
 
-				tpl.setNombre(request.getParameter("item_nom_" + lang));
-				tpl.setDestinatarios(request.getParameter("item_destinataris_" + lang));
-				tpl.setResumen(request.getParameter("item_objecte_" + lang));
-				tpl.setResolucion(request.getParameter("item_resolucio_" + lang));
-				tpl.setNotificacion(request.getParameter("item_notificacio_" + lang));
-				tpl.setSilencio(request.getParameter("item_silenci_" + lang));
-				tpl.setObservaciones(request.getParameter("item_observacions_" + lang));
-				tpl.setPlazos(request.getParameter("item_presentacio_" + lang));
-				tpl.setLugar(request.getParameter("item_lloc_" + lang));
+				tpl.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
+				tpl.setDestinatarios( RolUtil.limpiaCadena(request.getParameter("item_destinataris_" + lang)) );
+				tpl.setResumen( RolUtil.limpiaCadena(request.getParameter("item_objecte_" + lang)) );
+				tpl.setResolucion( RolUtil.limpiaCadena(request.getParameter("item_resolucio_" + lang)) );
+				tpl.setNotificacion( RolUtil.limpiaCadena(request.getParameter("item_notificacio_" + lang)) );
+				tpl.setSilencio( RolUtil.limpiaCadena(request.getParameter("item_silenci_" + lang)) );
+				tpl.setObservaciones( RolUtil.limpiaCadena(request.getParameter("item_observacions_" + lang)) );
+				tpl.setPlazos( RolUtil.limpiaCadena(request.getParameter("item_presentacio_" + lang)) );
+				tpl.setLugar( RolUtil.limpiaCadena(request.getParameter("item_lloc_" + lang)) );
 				
 				procediment.setTraduccion(lang, tpl);
 			}

@@ -64,6 +64,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.api.v1.UnidadAdministrativaDTO;
 import es.caib.rolsac.back2.util.ParseUtil;
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 import es.caib.rolsac.utils.DateUtils;
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -464,11 +465,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			Map traduccions = new HashMap(langs.size());
 			for (String lang: langs) {
 				TraduccionUA tUA = new TraduccionUA();
-				tUA.setNombre(valoresForm.get("item_nom_"+  lang ));
-				tUA.setPresentacion(valoresForm.get("item_presentacio_" + lang));
-				tUA.setCvResponsable(valoresForm.get("item_cvResponsable_" + lang));
-				tUA.setAbreviatura(valoresForm.get("item_abreviatura_" + lang));
-				tUA.setUrl(valoresForm.get("item_url_" + lang));				
+				tUA.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang)) );
+				tUA.setPresentacion( RolUtil.limpiaCadena(valoresForm.get("item_presentacio_" + lang)) );
+				tUA.setCvResponsable( RolUtil.limpiaCadena(valoresForm.get("item_cvResponsable_" + lang)) );
+				tUA.setAbreviatura( RolUtil.limpiaCadena(valoresForm.get("item_abreviatura_" + lang)) );
+				tUA.setUrl( RolUtil.limpiaCadena(valoresForm.get("item_url_" + lang)) );
 				traduccions.put(lang, tUA);
 			}
 			unitatAdministrativa.setTraduccionMap(traduccions);

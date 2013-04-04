@@ -59,7 +59,7 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController {
        List<IdNomDTO> llistaExcepcio = new ArrayList<IdNomDTO>();
        Map<String,Object> resultats = new HashMap<String,Object>();
 
-       //Información de paginación
+       //Informaciï¿½n de paginaciï¿½n
        String pagPag = request.getParameter("pagPag");   
        String pagRes = request.getParameter("pagRes");
        
@@ -183,8 +183,8 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController {
 					te = new TraduccionExcepcioDocumentacio();
 				}
 
-				te.setNombre(request.getParameter("item_nom_" + lang));
-				te.setDescripcion(request.getParameter("item_descri_" + lang));
+				te.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
+				te.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descri_" + lang)) );
 				excepcio.setTraduccion(lang, te);
 			}
 			// Fin idiomas
@@ -230,7 +230,7 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController {
 			}
 		} catch (NumberFormatException nfEx) {
 			resultatStatus.setId(-3l);
-			log.error("Error: Id d'excepcio de documentació no númeric: " + ExceptionUtils.getStackTrace(nfEx));
+			log.error("Error: Id d'excepcio de documentaciï¿½ no nï¿½meric: " + ExceptionUtils.getStackTrace(nfEx));
 		}
 		return resultatStatus;
 	}

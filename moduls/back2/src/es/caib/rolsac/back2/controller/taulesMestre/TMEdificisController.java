@@ -389,7 +389,7 @@ public class TMEdificisController extends PantallaBaseController {
 			Map traduccions = new HashMap(langs.size());
 			for (String lang: langs) {
 				TraduccionEdificio tp = new TraduccionEdificio();
-				tp.setDescripcion(valoresForm.get("item_descripcio_"+  lang ));		
+				tp.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_"+  lang )) );		
 				traduccions.put(lang, tp);
 			}
 			edifici.setTraduccionMap(traduccions);

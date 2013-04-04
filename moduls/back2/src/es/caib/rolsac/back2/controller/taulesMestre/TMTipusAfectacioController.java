@@ -181,7 +181,7 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 					tpa = new TraduccionTipoAfectacion();
 				}
 
-				tpa.setNombre(request.getParameter("item_nom_" + lang));
+				tpa.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
 				tipusAfectacio.setTraduccion(lang, tpa);
 			}
 			// Fin idiomas

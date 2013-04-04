@@ -250,7 +250,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			Map traduccions = new HashMap(langs.size());
 			for (String lang: langs) {
 				TraduccionAgrupacionM tam = new TraduccionAgrupacionM();
-				tam.setNombre(valoresForm.get("item_nom_"+  lang ));
+				tam.setNombre( RolUtil.limpiaCadena(valoresForm.get("item_nom_"+  lang )) );
 				
 				traduccions.put(lang, tam);
 			}

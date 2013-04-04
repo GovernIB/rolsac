@@ -184,7 +184,7 @@ public class TMTipusNormativesController extends PantallaBaseController {
 					tp = new TraduccionTipo();
 				}
 
-				tp.setNombre(request.getParameter("item_nom_" + lang));
+				tp.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
 				tipus.setTraduccion(lang, tp);
 			}
 			// Fin idiomas

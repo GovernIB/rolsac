@@ -195,7 +195,7 @@ public class TMTipusIniciacioController extends PantallaBaseController {
 					ti = new TraduccionIniciacion();
 				}
 
-				ti.setNombre(request.getParameter("item_nom_" + lang));
+				ti.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
 				iniciacio.setTraduccion(lang, ti);
 			}
 			// Fin idiomas

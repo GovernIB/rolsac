@@ -35,10 +35,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
 /**
- * Servlet para la gestión de documentos y formularios de un trámite.
+ * Servlet para la gestiï¿½n de documentos y formularios de un trï¿½mite.
  */
 @Controller
 @RequestMapping("/documentsTramit/")
@@ -98,7 +99,7 @@ public class DocumentTramitBackController extends ArchivoController {
 			resultats.put("id", doc.getId());
 			
 		} catch (NumberFormatException nfe) {
-			log.error("El id del document no es númeric: " + nfe.toString());
+			log.error("El id del document no es nï¿½meric: " + nfe.toString());
 			resultats.put("id", -3);
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
@@ -117,9 +118,9 @@ public class DocumentTramitBackController extends ArchivoController {
 	public ResponseEntity<String> guardarDocument(HttpServletRequest request, HttpSession session)  {
 				
 		/* Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */		
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -135,8 +136,8 @@ public class DocumentTramitBackController extends ArchivoController {
 				
 		try {
 			
-			//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-			//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+			//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+			//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 			
 			for (FileItem item : items) {
@@ -185,8 +186,8 @@ public class DocumentTramitBackController extends ArchivoController {
 			for (String lang: langs) {
 				
 				traduccionDocumento = new TraduccionDocumento();
-				traduccionDocumento.setTitulo(valoresForm.get(tituloTag + lang));
-				traduccionDocumento.setDescripcion(valoresForm.get(descripcionTag + lang));				
+				traduccionDocumento.setTitulo( RolUtil.limpiaCadena(valoresForm.get(tituloTag + lang)) );
+				traduccionDocumento.setDescripcion( RolUtil.limpiaCadena(valoresForm.get(descripcionTag + lang)) );				
 				
 				// Archivo
 				FileItem fileItem = ficherosForm.get(archivoTag + lang);

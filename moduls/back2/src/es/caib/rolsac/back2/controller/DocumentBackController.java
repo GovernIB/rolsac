@@ -33,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import es.caib.rolsac.back2.util.RolUtil;
 import es.caib.rolsac.back2.util.UploadUtil;
 
 
@@ -53,9 +54,9 @@ public class DocumentBackController extends ArchivoController {
 	@RequestMapping(value = "/guardarDocument.do", method = POST)
 	public ResponseEntity<String> guardarDocument(HttpServletRequest request, HttpSession session)  {
 		/* Forzar content type en la cabecera para evitar bug en IE y en Firefox.
-		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petición.
-		 * Esto se debe a que como esta petición es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
-		 * un descargable o fichero vinculado a una aplicación. 
+		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la peticiï¿½n.
+		 * Esto se debe a que como esta peticiï¿½n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
+		 * un descargable o fichero vinculado a una aplicaciï¿½n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
@@ -68,8 +69,8 @@ public class DocumentBackController extends ArchivoController {
 		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
 		
 		try {
-			//Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-			//Iremos recopilando los parámetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+			//Aquï¿½ nos llegarï¿½ un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+			//Iremos recopilando los parï¿½metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
 			List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
 			for (FileItem item : items) {
 				if (item.isFormField()) {
@@ -94,14 +95,16 @@ public class DocumentBackController extends ArchivoController {
 				doc.setOrden(docOld.getOrden());
 			}
 			
+			// Idiomas
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> langs = idiomaDelegate.listarLenguajes();
 			TraduccionDocumento tradDoc;
 			
 			for (String lang: langs) {
+				
 				tradDoc = new TraduccionDocumento();
-				tradDoc.setTitulo(valoresForm.get("doc_titol_" + lang));
-				tradDoc.setDescripcion(valoresForm.get("doc_descripcio_" + lang));
+				tradDoc.setTitulo( RolUtil.limpiaCadena(valoresForm.get("doc_titol_" + lang)) );
+				tradDoc.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("doc_descripcio_" + lang)) );
 				
 				// Archivo
         		FileItem fileItem = ficherosForm.get("doc_arxiu_" + lang);
@@ -120,6 +123,7 @@ public class DocumentBackController extends ArchivoController {
         		}
 				
 				doc.setTraduccion(lang, tradDoc);
+				
 			}
 			
 			if (valoresForm.get("procId") != null && !"".equals(valoresForm.get("procId"))) {
@@ -213,7 +217,7 @@ public class DocumentBackController extends ArchivoController {
 			resultats.put("id", doc.getId());
 			
 		} catch (NumberFormatException nfe) {
-			log.error("El id del document no es númeric: " + nfe.toString());
+			log.error("El id del document no es nï¿½meric: " + nfe.toString());
 			resultats.put("id", -3);
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {

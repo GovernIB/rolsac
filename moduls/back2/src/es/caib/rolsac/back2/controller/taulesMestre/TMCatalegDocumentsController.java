@@ -232,8 +232,8 @@ public class TMCatalegDocumentsController extends PantallaBaseController {
 					tc = new TraduccionCatalegDocuments();
 				}
 
-				tc.setNombre(request.getParameter("item_nom_" + lang));
-				tc.setDescripcion(request.getParameter("item_descripcio_" + lang));
+				tc.setNombre( RolUtil.limpiaCadena(request.getParameter("item_nom_" + lang)) );
+				tc.setDescripcion( RolUtil.limpiaCadena(request.getParameter("item_descripcio_" + lang)) );
 				
 				docCataleg.setTraduccion(lang, tc);
 			}
