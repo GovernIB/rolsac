@@ -110,6 +110,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	}
 
 	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
+		
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 2);
@@ -117,23 +118,28 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 		
 		String lang = getRequestLanguage(request);
+		
 		try {
+			
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
 			model.put("llistaFetsVitals", LlistatUtil.llistarHechosVitales(lang));
 			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
-	    model.put("excepcions", llistarExcepcionsDocumentacio(lang));
-	    model.put("cataleg", llistarCatalegDocuments(lang));
+		    model.put("excepcions", llistarExcepcionsDocumentacio(lang));
+		    model.put("cataleg", llistarCatalegDocuments(lang));
 
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");
 				logException(log, dEx);
 			}
+			
 		}
+		
 	}
 
 	@RequestMapping(value = "/llistat.do", method = POST)

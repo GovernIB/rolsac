@@ -32,23 +32,20 @@ $(document).ready(function() {
         "item_nom_",
 		"item_objecte_",
         "item_destinataris_",
-        "item_notificacio_",
-        "item_observacions_",
         "item_resolucio_",
-        "item_silenci_"
+        "item_notificacio_",
+        "item_silenci_",
+        "item_observacions_"
     ];
     
     DATOS_TRADUCIDOS_PROCEDIMIENTO = [
 	    "nombre",
 	    "resumen",
-	    "plazos",
-	    "lugar",
 	    "destinatarios",
-	    "requisitos",
-	    "notificacion",
-	    "observaciones",
 	    "resolucion",
-	    "silencio"
+	    "notificacion",
+	    "silencio",
+	    "observaciones"
     ];
     
 	// INICIEM
@@ -468,10 +465,17 @@ function CDetall(){
 	}
 		
 	this.nou = function() {
+		
         //Ocultar paneles
 		jQuery("#modul_documents, #modul_tramits").hide();
         jQuery("#modulAuditories, #modulEstadistiques").hide();
         jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
+        
+        // Borrar del desplegable de estado de publicación las opciones no válidas al crear un nuevo procedimiento:
+        // (1 = Pública, 3 = Reserva).
+        $("#item_estat option[value=]").remove(); // Opción por defecto, sin valor. La borramos también.
+        $("#item_estat option[value=1]").remove();
+        $("#item_estat option[value=3]").remove();
         
 		ModulMateries.nuevo();
 		ModulFetsVitals.nuevo();
@@ -515,12 +519,14 @@ function CDetall(){
 		}
 		
 		$("#modulLateral p.baix:first").removeClass("iCaducat").removeClass("iPublicat");
+		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar				
 				itemID_ultim = 0;
 			});
 		});
+		
 		this.actualizaEventos();
 	}		
 	

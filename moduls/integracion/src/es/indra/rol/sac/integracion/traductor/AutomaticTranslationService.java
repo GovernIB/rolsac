@@ -15,7 +15,7 @@ import es.indra.rol.sac.integracion.ws.traductor.AutomaticTranslationServiceStub
 import es.indra.rol.sac.integracion.ws.traductor.AutomaticTranslationServiceStub.TaskE;
 
 /**
- * Clase que parametriza la petición de traducción y la envía al web-service Lucy
+ * Clase que parametriza la peticiï¿½n de traducciï¿½n y la envï¿½a al web-service Lucy
  * @author Indra
  *
  */
@@ -37,8 +37,8 @@ public class AutomaticTranslationService {
 							_markAlternatives = INACTIVE;
 
 	/**
-	 * Método que guarda los parámetros de la petición de traducción y el texto a traducir, 
-	 * envía la petición y devuelve el texto traducido
+	 * Mï¿½todo que guarda los parï¿½metros de la peticiï¿½n de traducciï¿½n y el texto a traducir, 
+	 * envï¿½a la peticiï¿½n y devuelve el texto traducido
 	 * 
 	 * @param input	texto a traducir
 	 * @return	String	texto traducido
@@ -46,36 +46,34 @@ public class AutomaticTranslationService {
 	 */
 	protected String translate(String input) throws Exception {
 		
-				
-		try 
-		{
-		AutomaticTranslationServiceStub stub =
-			new AutomaticTranslationServiceStub(_translationServerUrl);
-
-		TaskE task13=(TaskE)getObject(TaskE.class);
-
-		Task task = (Task)getObject(Task.class);
-		task.setService(SERVICE_NAME);
-		task.setVerbose(true);
-		
-		ParamListType params=(ParamListType)getObject(ParamListType.class);
-
-		params.addParam(setTranslationDirection(_translationDirection));
-		params.addParam(setSubjectArea(_areaGV));
-		params.addParam(setColorMarkups(_colorMarkups));
-		params.addParam(setMarkUnknowns(_markUnknowns));
-		params.addParam(setMarkConstants(_markConstants));
-		params.addParam(setMarkCompounds(_markCompounds));
-		params.addParam(setMarkAlternatives(_markAlternatives));
-		params.addParam(setInput(input));
-
-		task.setInputParams(params);
-		task13.setTask(task);
-
-		task13 = stub.translate(task13);
-		params = task13.getTask().getOutputParams();
-
-		return manageColors(convertStreamToString(getOutput(params)));
+		try {
+			
+			AutomaticTranslationServiceStub stub = new AutomaticTranslationServiceStub(_translationServerUrl);
+	
+			TaskE task13 = (TaskE)getObject(TaskE.class);
+	
+			Task task = (Task)getObject(Task.class);
+			task.setService(SERVICE_NAME);
+			task.setVerbose(true);
+			
+			ParamListType params = (ParamListType)getObject(ParamListType.class);
+	
+			params.addParam(setTranslationDirection(_translationDirection));
+			params.addParam(setSubjectArea(_areaGV));
+			params.addParam(setColorMarkups(_colorMarkups));
+			params.addParam(setMarkUnknowns(_markUnknowns));
+			params.addParam(setMarkConstants(_markConstants));
+			params.addParam(setMarkCompounds(_markCompounds));
+			params.addParam(setMarkAlternatives(_markAlternatives));
+			params.addParam(setInput(input));
+	
+			task.setInputParams(params);
+			task13.setTask(task);
+	
+			task13 = stub.translate(task13);
+			params = task13.getTask().getOutputParams();
+			
+			return manageColors(convertStreamToString(getOutput(params)));
 	
 		} catch (Exception e) {
 			
@@ -83,19 +81,20 @@ public class AutomaticTranslationService {
 			throw new Exception(e); 
 			
 		}
+		
 	}
 
 	/**
-	 * Método que guarda el parámetro TRANSLATION_DIRECTION del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro TRANSLATION_DIRECTION del traductor Lucy
 	 * 
-	 * @param translationDirection	dirección de traducción
-	 * @return Param				devuelve el parámetro con el texto y el valor
+	 * @param translationDirection	direcciï¿½n de traducciï¿½n
+	 * @return Param				devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setTranslationDirection(String translationDirection) throws Exception {
 		
 		String transDirName = "TRANSLATION_DIRECTION";
-		String eMessage = "Error al carregar el la direcció de traducció";
+		String eMessage = "Error al carregar el la direcciï¿½ de traducciï¿½";
 		
 	try {	
 		Param param=(Param)getObject(Param.class); 
@@ -113,16 +112,16 @@ public class AutomaticTranslationService {
 	}	
 	
 	/**
-	 * Método que guarda el parámetro SUBJECT_AREAS del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro SUBJECT_AREAS del traductor Lucy
 	 * 
-	 * @param subjectArea	area de traducción
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @param subjectArea	area de traducciï¿½n
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setSubjectArea(String subjectArea) throws Exception {
 	
 		String subjectAreaName = "SUBJECT_AREAS";
-		String eMessage = "Error al carregar l' àrea de traducció";
+		String eMessage = "Error al carregar l' ï¿½rea de traducciï¿½";
 		
 	try {	
 		Param param=(Param)getObject(Param.class); 
@@ -140,10 +139,10 @@ public class AutomaticTranslationService {
 	}
 	
 	/**
-	 * Método que guarda el parámetro INPUT del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro INPUT del traductor Lucy
 	 * 
-	 * @param input		input de traducción (texto a traducir)
-	 * @return Param	devuelve el parámetro con el texto y el valor
+	 * @param input		input de traducciï¿½n (texto a traducir)
+	 * @return Param	devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setInput(String input) throws Exception {
@@ -167,16 +166,16 @@ public class AutomaticTranslationService {
 	}
 	
 	/**
-	 * Método que guarda el parámetro COLOR_MARKUPS del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro COLOR_MARKUPS del traductor Lucy
 	 * 
 	 * @param colorMarkups	Marcadores de color (Si/no)
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setColorMarkups(String colorMarkups) throws Exception {
 		
 		String inputName = "COLOR_MARKUPS";
-		String eMessage = "Error al carregar el paràmetre COLOR_M";
+		String eMessage = "Error al carregar el parï¿½metre COLOR_M";
 		
 	try {	
 		Param param =(Param)getObject(Param.class); 
@@ -194,16 +193,16 @@ public class AutomaticTranslationService {
 	}	
 
 	/**
-	 * Método que guarda el parámetro MARK_UNKNOWNS del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro MARK_UNKNOWNS del traductor Lucy
 	 * 
 	 * @param markUnknowns	Marcar las palabras desconocidas (Si/no)
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setMarkUnknowns(String markUnknowns) throws Exception {
 		
 		String inputName = "MARK_UNKNOWNS";
-		String eMessage = "Error al carregar el paràmetre M_UNKN";
+		String eMessage = "Error al carregar el parï¿½metre M_UNKN";
 		
 	try {	
 		Param param =(Param)getObject(Param.class); 
@@ -221,16 +220,16 @@ public class AutomaticTranslationService {
 	}
 	
 	/**
-	 * Método que guarda el parámetro MARK_CONSTANTS del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro MARK_CONSTANTS del traductor Lucy
 	 * 
 	 * @param markConstants	Marcar las constantes (Si/no)
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setMarkConstants(String markConstants) throws Exception {
 		
 		String inputName = "MARK_CONSTANTS";
-		String eMessage = "Error al carregar el paràmetre M_CONS";
+		String eMessage = "Error al carregar el parï¿½metre M_CONS";
 		
 	try {	
 		Param param =(Param)getObject(Param.class); 
@@ -248,16 +247,16 @@ public class AutomaticTranslationService {
 	}
 	
 	/**
-	 * Método que guarda el parámetro MARK_COMPOUNDS del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro MARK_COMPOUNDS del traductor Lucy
 	 * 
 	 * @param markCompounds	Marcar las palabras desconocidas (Si/no)
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setMarkCompounds(String markCompounds) throws Exception {
 		
 		String inputName = "MARK_COMPOUNDS";
-		String eMessage = "Error al carregar el paràmetre M_COMP";
+		String eMessage = "Error al carregar el parï¿½metre M_COMP";
 		
 	try {	
 		Param param =(Param)getObject(Param.class); 
@@ -275,16 +274,16 @@ public class AutomaticTranslationService {
 	}
 	
 	/**
-	 * Método que guarda el parámetro MARK_ALTERNATIVES del traductor Lucy
+	 * Mï¿½todo que guarda el parï¿½metro MARK_ALTERNATIVES del traductor Lucy
 	 * 
-	 * @param markAlternatives	Marcar las palabras con más de una acepción (Si/no)
-	 * @return Param		devuelve el parámetro con el texto y el valor
+	 * @param markAlternatives	Marcar las palabras con mï¿½s de una acepciï¿½n (Si/no)
+	 * @return Param		devuelve el parï¿½metro con el texto y el valor
 	 * @throws Exception
 	 */
 	private Param setMarkAlternatives(String markAlternatives) throws Exception {
 		
 		String inputName = "MARK_ALTERNATIVES";
-		String eMessage = "Error al carregar el paràmetre M_ALTE";
+		String eMessage = "Error al carregar el parï¿½metre M_ALTE";
 		
 	try {	
 		Param param =(Param)getObject(Param.class); 
@@ -302,9 +301,9 @@ public class AutomaticTranslationService {
 	}	
 	
 	/**
-	 * Método que devuelve Stream con los datos traducidos del traductor Lucy
+	 * Mï¿½todo que devuelve Stream con los datos traducidos del traductor Lucy
 	 * 
-	 * @param params		Listado de parámetros de traductor
+	 * @param params		Listado de parï¿½metros de traductor
 	 * @return InputStream	devuelve los datos traducidos en un Stream
 	 * @throws Exception
 	 */
@@ -335,7 +334,7 @@ public class AutomaticTranslationService {
 	}
     	
 	/**
-	 * Método que crea una nueva instancia org.apache.axis2.databinding.ADBBean
+	 * Mï¿½todo que crea una nueva instancia org.apache.axis2.databinding.ADBBean
 	 * 
 	 * @param type
 	 * @return	ADBBean
@@ -347,7 +346,7 @@ public class AutomaticTranslationService {
 
     
     /**
-     * Método que convierte el Stream de datos traducidos en un String
+     * Mï¿½todo que convierte el Stream de datos traducidos en un String
      * @param is	Stream de datos traducidos por el traductor Lucy
      * @return	String	texto traducido de tipo String
      */
@@ -372,7 +371,7 @@ public class AutomaticTranslationService {
     }
     
     /**
-     * Método que reemplaza los tags de color rojo por defecto de las palabras desconocidas 
+     * Mï¿½todo que reemplaza los tags de color rojo por defecto de las palabras desconocidas 
      * del traductor en color azul
      * 
      * @param input	texto traducido por el traductor Lucy
