@@ -7,6 +7,7 @@ public class BeanUtils {
 
     public static enum STRATEGY {EJB, WS};
     
+    private static final String INSERT_INFIX = "InsertService";
     private static final String ADAPTER_INFIX = "QueryService";
     private static final String ADAPTER_SUFIX = "Adapter";
     private static final String SPRING_CONTEXT_CLASSPATH = "classpath*:es/caib/rolsac/api/v2/resources/sac-api-context.xml";
@@ -41,7 +42,13 @@ public class BeanUtils {
     public static Object getAdapter(String adapterPrefix, STRATEGY strategy, Object... params) {
         // return null if dto is null
         if (params.length > 0 && params[0] == null) {return null;}
-        return getBean(adapterPrefix + ADAPTER_INFIX + strategy + ADAPTER_SUFIX, params);
+        if (adapterPrefix.equals("estadistica")) {
+        	//El nombre del adapter de estadistica, sigue un patrón diferente
+            return getBean(adapterPrefix + INSERT_INFIX + strategy + ADAPTER_SUFIX, params);
+        } else {
+            return getBean(adapterPrefix + ADAPTER_INFIX + strategy + ADAPTER_SUFIX, params);
+        }
     }
 
+    
 }
