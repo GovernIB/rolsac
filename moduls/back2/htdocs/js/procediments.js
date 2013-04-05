@@ -332,6 +332,7 @@ var Items_arr = new Array();
 
 // detall
 function CDetall(){
+	
 	this.extend = DetallBase;
 	this.extend();
 	
@@ -382,6 +383,42 @@ function CDetall(){
 	}
 	
 	this.urlPrevisualizar = urlPrevisualizarProcedimiento;
+	
+	// Sobrecargo método para preview personalizado.
+	// Se espera una URL de la forma:
+	// - http://www.caib.es/govern/sac/visor_proc.do?lang=__lang__&amp;codi=__id__&amp;previ=__previ__  
+	// - http://www.caib.es/seucaib/__lang__/__po_id__/__po_nombre__/tramites/tramite/__id__
+	// - Etc.
+	this.previsualitza = function() {
+		
+		var url = this.urlPrevisualizar;
+				
+		escriptori_detall_elm.fadeOut(300, function() {
+			
+			var idiomaSeleccionat = escriptori_detall_elm.find("ul.idiomes li.seleccionat span").attr("class");
+			var id = escriptori_detall_elm.find("#item_id").val();
+			
+			// Si la URL tiene parámetros separamos por &amp;, pasamos las entidades a &.
+			url = url.replace(/&amp;/g, "&");
+			
+			// Obtenemos público objetivo, por si hay que mostrar previsualización en la SEU.
+			var codigoPO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child input[type=hidden]").val();
+			var nombrePO = $(".ModulPublicObjectiu .seleccionats .listaOrdenable ul li:first-child").text().toLowerCase();
+			
+			// Después, sustituimos el resto de parámetros.
+			url = url.replace("__lang__", idiomaSeleccionat);
+			url = url.replace("__id__", id);
+			url = url.replace("__previ__", "s");
+			url = url.replace("__po_id__", codigoPO);
+			url = url.replace("__po_nombre__", nombrePO);
+
+			escriptori_previsualitza_elm.find("iframe").attr("src", url).end().fadeIn(300, function() {
+				$(this).find("a.dePrevisualitzar").one("click", that.previsualitzaTorna);
+			});
+			
+		});
+		
+	}
 
 	this.iniciar = function() {	
 		// dates
