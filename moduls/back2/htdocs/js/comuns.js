@@ -130,7 +130,9 @@ var TaulesMestre = {
 var pare_anterior_ID = 0;
 
 var MollaPa = {
+		
 	iniciar: function() {
+		
 		ua_codi = "<ul id=\"uas\"></ul>";
 		mollaPa_elm.append(ua_codi);
 		uas_elm = $("#uas");			
@@ -141,21 +143,24 @@ var MollaPa = {
 		$('#mollapaHome').bind("click", function() {			
             document.location.href = cambioMollaPa + "?redirectTo=" + document.location.href.split('?', 1)[0];
 		});
+		
 	},
 	
-	despliegaUnidades: function(e){
+	despliegaUnidades: function(e) {
+		
 		var $target = jQuery(e.target);
 		var $itemLista = $target.parents("li");
 		var claveUA = $itemLista.data("clave_ua_padre") || "";
 		
 		elm = $target.parents("li").find("div");
 		
+		// TODO: ¿por qué no se ha borrado entonces este if?
 		// dsanchez: Esto es solo provisional mientras se termina el ticket 305 pero no afecta.
-		if(!elm.length){ elm = $target; }
+		if (!elm.length) { elm = $target; }
 		
 		uas_elm.html("<li><span class=\"carregant\">" + txtCarregantMollaFills + "</span></li>")
 				
-		a_T = elm.position().top-3;
+		a_T = elm.position().top - 3;
 		a_L = elm.parents("li").position().left;
 		a_H = elm.outerHeight();
 		
@@ -177,13 +182,16 @@ var MollaPa = {
 					Error.llansar();
 					
 				},
-				success: function(data) {								
+				success: function(data) {
+					
 					error = false;
 					error_msg = "";
 					nodes_codi = "";								
 					
 					$(data).each(function() {
+						
 						node_ua = this;
+						
 						if (node_ua.id < 0) {
 							error = true;
 							error_msg = node_ua.nom;
@@ -194,6 +202,7 @@ var MollaPa = {
 							nodes_codi += "\" class=\"n\">";
 							nodes_codi += node_ua.nom + "</a></li>";
 						}
+						
 					});
 					
 					uas_elm.slideUp(300, function() {
@@ -207,11 +216,14 @@ var MollaPa = {
 					if (error) {
 						Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: error_msg});
 					}
+					
 				}
+				
 			});				
 		});
 		
 		return false;
+		
 	},
 	
 	/*despliegaUnidades: function(e){

@@ -2897,12 +2897,16 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * @ejb.permission unchecked="true"
      */
 	public StringBuffer getUaMollaBack2(Long idua, String idioma, String url, String uaIdPlaceholder) {
+		
 		StringBuffer mollapa = new StringBuffer(" ");
+		
 		try {
+			
 		    UnidadAdministrativa uniadm = obtenerUnidadAdministrativa(idua);
 		    boolean tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
 
-		    while (uniadm!=null && tieneAcceso) {
+		    while ( uniadm != null && tieneAcceso ) {
+		    	
 				StringBuffer uaSbuf = new StringBuffer( ((TraduccionUA)uniadm.getTraduccion(idioma)).getNombre() );
 				Cadenas.initAllTab(uaSbuf); //primera letra en mayusculas
 				
@@ -2913,10 +2917,20 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				
 				if (idua.equals(uniadm.getId())) {
 				    mollaUA.append(" seleccionat");
-				} 
-				
+				}
+
+				// Obtenemos todos los padres de la jerarquía.
+		    	List padres = listarPadresUnidadAdministrativa(uniadm.getId());
+		    	String padreUAId = "";
+		    			    		
+	    		if (padres.size() > 1) {
+		    		// El penúltimo elemento es el padre directo de la UA
+		    		UnidadAdministrativa padre = (UnidadAdministrativa)padres.get( padres.size() - 2 );
+		    		padreUAId = Long.toString(padre.getId());
+	    		}
+                
 				mollaUA.append("\" data-clave_ua_padre=\"")
-				        .append(uniadm.getId())
+				        .append(padreUAId)
 				        .append("\"><div><a class=\"ua\" href=\"")
 				        .append(uaURL)
 				        .append("\">")
@@ -2929,11 +2943,17 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				if (uniadm != null) {
 					tieneAcceso = getAccesoManager().tieneAccesoUnidad(uniadm.getId(), false);
 				}
+				
 			}
+		    
 		} catch (EJBException e) {
-			mollapa = new StringBuffer("&nbsp;");			
-		} 
+			
+			mollapa = new StringBuffer("&nbsp;");
+			
+		}
+		
 		return mollapa;
+		
 	}		
 
 	/**

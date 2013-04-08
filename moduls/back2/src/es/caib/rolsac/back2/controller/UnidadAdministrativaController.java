@@ -42,20 +42,20 @@ public class UnidadAdministrativaController {
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 
 		try {
-		    if (uaId != null) {
-                uaHijos = uaDelegate.listarHijosUA(uaId);
-		    } else if (session.getAttribute("unidadAdministrativa") != null) {
-				UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-				uaHijos = uaDelegate.listarHijosUA(ua.getId());
-			} else {
-				uaHijos = uaDelegate.listarUnidadesAdministrativasRaiz();
-			}
 			
+			if ( uaId == null ) {
+				uaHijos = uaDelegate.listarUnidadesAdministrativasRaiz();
+			} else {
+				uaHijos = uaDelegate.listarHijosUA(uaId);
+			}
+            			
 			String lang = locale.getLanguage();
 			for (UnidadAdministrativa ua: uaHijos) {
 				uaHijosJSON.add(new IdNomDTO(ua.getId(), ua.getNombreUnidadAdministrativa(lang)));
 			}
+			
 		} catch (DelegateException dEx) {
+			
 			MessageSource messages = WebApplicationContextUtils.getRequiredWebApplicationContext(session.getServletContext());
 			if (dEx.isSecurityException()) {
 				String error = messages.getMessage("error.permisos", null, locale);
@@ -65,9 +65,11 @@ public class UnidadAdministrativaController {
 				uaHijosJSON.add(new IdNomDTO(-2l, error));
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
+			
 		}
 
 		return uaHijosJSON;
+		
 	}
 
 

@@ -29,6 +29,7 @@ public class UATags extends TagSupport {
 
     /** Breadcrumbs de unidades administrativas.*/
     private void crearMollapa() {
+    	
         try {
 
             Locale locale = pageContext.getRequest().getLocale();
@@ -40,10 +41,12 @@ public class UATags extends TagSupport {
             Object reqUA = pageContext.getSession().getAttribute("unidadAdministrativa");
 
             UnidadAdministrativa ua = null;
+            
             if (reqUA != null) {
-                ua = (UnidadAdministrativa) reqUA;
+            	
+                ua = (UnidadAdministrativa)reqUA;
 
-                HttpServletRequest httpRequest = (HttpServletRequest) pageContext.getRequest();
+                HttpServletRequest httpRequest = (HttpServletRequest)pageContext.getRequest();
 
                 StringBuilder url = new StringBuilder("../unidadAdministrativa/cambiarUA.do?ua=");
                 String UA_ID_PLACEHOLDER = "__UAID__";
@@ -53,10 +56,14 @@ public class UATags extends TagSupport {
                 UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
                 mollapa.append(uaDelegate.getUaMollaBack2(ua.getId(), locale.getLanguage(), url.toString(), UA_ID_PLACEHOLDER));
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.filles.label", null, locale);
+                                
             } else {
+            	
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.arrel.label", null, locale);
+                
             }
 
+            // Crea el desplegable con las UAs hijas de la seleccionada.
             mollapa.append("<li class=\"uaHijas\" data-clave_ua_padre=\"")
                     .append(ua != null ? ua.getId() : "")
                     .append("\"><div><a class=\"btn uaFilles\" href=\"javascript:void(0);\">")
@@ -66,9 +73,15 @@ public class UATags extends TagSupport {
             pageContext.getOut().print(mollapa.toString());
 
         } catch (IOException ioe) {
+        	
             log.error(ioe);
+            
         } catch (DelegateException de) {
+        	
             log.error(de);
+            
         }
+        
     }
+    
 }
