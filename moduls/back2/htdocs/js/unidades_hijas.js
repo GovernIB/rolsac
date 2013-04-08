@@ -25,11 +25,11 @@ $(document).ready(function() {
             jQuery(".submenuUA .hijas").toggleClass("activo",true);
             jQuery(".submenuUA .detalle").toggleClass("activo",false);
         
-            escritorioUnidadesHijas.inicia();
+            controlEscritorioUnidadesHijas.inicia();
         }
     });
-    
-    escritorioUnidadesHijas = new CEscritorioUnidadesHijas();
+      
+    controlEscritorioUnidadesHijas = new CEscritorioUnidadesHijas();
     
     multipagina = new Multipagina();
 });
@@ -153,7 +153,7 @@ function CEscritorioUnidadesHijas() {
                 total: resultats_total,
                 itemsPorPagina: pag_Res,
                 paginaActual: pag_Pag,
-                funcionPagina: "escritorioUnidadesHijas.cambiaPagina"
+                funcionPagina: "controlEscritorioUnidadesHijas.cambiaPagina"
             });
             
             codi_navegacio = multipagina.getHtml();
@@ -182,7 +182,7 @@ function CEscritorioUnidadesHijas() {
             dades_elm.html(codi_final).fadeIn(300, function() {
             
                 $obj.find(".resultats .llistat .tbody a").unbind("click").bind("click",function(){
-                    escritorioUnidadesHijas.ficha(this);
+                    controlEscritorioUnidadesHijas.ficha(this);
                     jQuery("#escritorioUnidadesHijas").hide();
                     jQuery(".submenuUA .hijas").toggleClass("activo",false);
                     jQuery(".submenuUA .detalle").toggleClass("activo",true);
@@ -190,7 +190,7 @@ function CEscritorioUnidadesHijas() {
                 
                 // Asociamos el evento onclick a las cabeceras del listado para que sea ordenable.
                 jQuery("#resultadosUnidadesHijas .table .th a").unbind("click").click(function(){
-                    escritorioUnidadesHijas.ordena(this,opcions);
+                    controlEscritorioUnidadesHijas.ordena(this,opcions);
                 });                
                             
                 // cercador

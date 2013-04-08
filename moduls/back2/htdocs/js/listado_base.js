@@ -15,7 +15,7 @@
  */
 function ListadoBase(idOpciones, idResultados, idBuscador, idBuscadorContenido, idTabListado, idTabBuscador, idBtnNuevo, idBtnBuscadorForm, idBtnLimpiarForm){
 
-	// Valores por defecto por compatibilidad con implementacion anterior.
+    // Valores por defecto por compatibilidad con implementacion anterior.
 	if (typeof idOpciones == "undefined" || idOpciones == "") idOpciones = "#opcions";
 	if (typeof idResultados == "undefined" || idResultados == "") idResultados = "#resultats";
 	if (typeof idBuscador == "undefined" || idBuscador == "") idBuscador = "#cercador";
