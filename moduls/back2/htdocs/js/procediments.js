@@ -31,6 +31,7 @@ $(document).ready(function() {
 	CAMPOS_TRADUCTOR_PROCEDIMIENTO = [
         "item_nom_",
 		"item_objecte_",
+		"item_resultat_",
         "item_destinataris_",
         "item_resolucio_",
         "item_notificacio_",
@@ -41,6 +42,7 @@ $(document).ready(function() {
     DATOS_TRADUCIDOS_PROCEDIMIENTO = [
 	    "nombre",
 	    "resumen",
+	    "resultat",
 	    "destinatarios",
 	    "resolucion",
 	    "notificacion",
@@ -582,14 +584,18 @@ function CDetall(){
 		
 		// Bloque de pestanyas de idiomas
 		for (var i in idiomas) {
+			
 			var idioma = idiomas[i];
+			
 			$("#item_nom_" + idioma).val(printStringFromNull(dada_node[idioma]["nombre"]));
 			$("#item_objecte_" + idioma).val(printStringFromNull(dada_node[idioma]["resumen"]));
+			$("#item_resultat_" + idioma).val(printStringFromNull(dada_node[idioma]["resultat"]));
 			$("#item_destinataris_" + idioma).val(printStringFromNull(dada_node[idioma]["destinatarios"]));
 			$("#item_resolucio_" + idioma).val(printStringFromNull(dada_node[idioma]["resolucion"]));
 			$("#item_notificacio_" + idioma).val(printStringFromNull(dada_node[idioma]["notificacion"]));
 			$("#item_silenci_" + idioma).val(printStringFromNull(dada_node[idioma]["silencio"]));
 			$("#item_observacions_" + idioma).val(printStringFromNull(dada_node[idioma]["observaciones"]));
+			
 		}
 		// Fin bloque de pestanyas de idiomas
 		
