@@ -68,10 +68,10 @@ function CDetall(soloFicha){
 			
 		}
 		
-		//redigirimos el mÃ©todo que guarda porque en este caso tambiÃ©n hacemos un upload de archivos				
+		// Redigirimos el método que guarda porque en este caso también hacemos un upload de archivos				
 		this.guarda = this.guarda_upload;
 				
-		// idioma
+		// Idioma
 		if (escriptori_detall_elm.find("div.idiomes").size() != 0) {
 			
 			// Esconder todos menos el primero
@@ -90,6 +90,25 @@ function CDetall(soloFicha){
 			div_idiomes_elm = escriptori_detall_elm.find("div.idiomes:first");			
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
 			ul_idiomes_elm.bind("click",Detall.idioma);
+			
+			// Mostramos DIV con el primer idioma en la sección de idiomas del responsable de la UA.
+			$('div.idioma:eq(5)').show();
+			
+			// Repetimos mismo proceso anterior proporcionando funcionalidad.
+			ul_idiomes_elm2 = escriptori_detall_elm.find("ul.idiomes:eq(1)");
+			
+			a_primer_elm2 = ul_idiomes_elm2.find("a:first");
+			a_primer_elm2.parent().addClass("seleccionat");
+			
+			a_primer_elm_class2 = a_primer_elm2.attr("class");
+			a_primer_elm_text2 = a_primer_elm2.text();
+			
+			a_primer_elm2.parent().html("<span class=\"" + a_primer_elm_class2 + "\">" + a_primer_elm_text2 + "</span>");
+			
+			div_idiomes_elm2 = escriptori_detall_elm.find("div.idiomes:eq(1)");	
+			div_idiomes_elm2.find("div." + a_primer_elm2.attr("class")).addClass("seleccionat");
+			ul_idiomes_elm2.bind("click", Detall.idioma); 
+			
 		}
 		
 		// moduls

@@ -41,7 +41,7 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 	
 	this.iniciar = function() {
 		
-		// Evento del botón de volver.		
+		// Evento del botï¿½n de volver.		
 		jQuery("#nuevaUA_btnVolver").unbind("click").bind("click",function(){
 			jQuery("#escritorioNuevaUA").hide();
 			jQuery("#escritorioUnidadesHijas").show();			
@@ -69,7 +69,26 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 			
 			div_idiomes_elm = nuevaUA_escriptori_detall_elm.find("div.idiomes:first");			
 			div_idiomes_elm.find("div." + a_primer_elm.attr("class")).addClass("seleccionat");
-			ul_idiomes_elm.bind("click",NuevaUADetall.idioma);
+			ul_idiomes_elm.bind("click", NuevaUADetall.idioma);
+			
+			// Mostramos DIV con el primer idioma en la secciÃ³n de idiomas del responsable de la UA.
+			$('#escritorioNuevaUA div.idioma:eq(5)').show();
+			
+			// Repetimos mismo proceso anterior proporcionando funcionalidad.
+			ul_idiomes_elm2 = nuevaUA_escriptori_detall_elm.find("ul.idiomes:eq(1)");
+			
+			a_primer_elm2 = ul_idiomes_elm2.find("a:first");
+			a_primer_elm2.parent().addClass("seleccionat");
+			
+			a_primer_elm_class2 = a_primer_elm2.attr("class");
+			a_primer_elm_text2 = a_primer_elm2.text();
+			
+			a_primer_elm2.parent().html("<span class=\"" + a_primer_elm_class2 + "\">" + a_primer_elm_text2 + "</span>");
+			
+			div_idiomes_elm2 = nuevaUA_escriptori_detall_elm.find("div.idiomes:eq(1)");	
+			div_idiomes_elm2.find("div." + a_primer_elm2.attr("class")).addClass("seleccionat");
+			ul_idiomes_elm2.bind("click", Detall.idioma); 
+			
 		}
 		
 		// moduls
@@ -124,7 +143,7 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 		
 	}
 	
-	// Método para iniciar el formulario para crear una nueva UA hija.
+	// Mï¿½todo para iniciar el formulario para crear una nueva UA hija.
 	this.nuevaUAHija = function(){
 		var nomUAPadre = "";
 		var idUAPadre = null;
@@ -133,20 +152,20 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 		if( Detall.uaGeneral && Detall.uaGeneral.id != 0 ){
 			idUAPadre = Detall.uaGeneral.id;
 			
-			// @todo De momento sacamos el nombre de la UA padre del texto en catalán, pero lo suyo es que al cargar una UA, venga 
+			// @todo De momento sacamos el nombre de la UA padre del texto en catalï¿½n, pero lo suyo es que al cargar una UA, venga 
 			// un campo con el nombre del idioma actual.
 			nomUAPadre = Detall.uaGeneral.ca.nombre;
 		}
 		
-		// Rellenamos el módulo de Relación Orgánica.
+		// Rellenamos el mï¿½dulo de Relaciï¿½n Orgï¿½nica.
 		jQuery("#nuevaUA_item_pare_id").val(idUAPadre);
 		jQuery("#nuevaUA_item_pare").val(nomUAPadre);
 	}
 	
-	// Método sobreescrito.
+	// Mï¿½todo sobreescrito.
 	this.busca = function(){}
 			
-	// Método sobreescrito.
+	// Mï¿½todo sobreescrito.
 	this.carregar = function(itemID) {}
 	this.recarregar = function() {}
 	this.pintar = function(dades) {}
