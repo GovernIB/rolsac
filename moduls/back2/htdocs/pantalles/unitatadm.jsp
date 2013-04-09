@@ -96,14 +96,6 @@
                                         </div>
                                     </div>
                                     <div class="fila">
-                                        <div class="element t99p">
-                                            <div class="etiqueta"><label for="item_cvResponsable_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.cvresponsable'/></label></div>
-                                            <div class="control">
-                                                <textarea id="item_cvResponsable_<c:out value='${lang}'/>" name="item_cvResponsable_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fila">
                                         <div class="element t50p">
                                             <div class="etiqueta"><label for="item_abreviatura_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.abreviatura'/></label></div>
                                             <div class="control">
@@ -169,6 +161,62 @@
                             </div>
                         </div>
                         <!-- /fila -->
+                        
+                        
+                        
+                        
+                        
+                        
+                        <!-- fila -->
+                        <div class="fila">
+                            <p class="introIdiomas"><spring:message code='txt.idioma.idioma'/></p>
+                            
+                            <ul class="idiomes">
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+								<li class="idioma">
+									<a href="javascript:;" class="<c:out value='${lang}'/>">
+									<c:choose>
+										<c:when test="${lang eq 'ca'}">
+											<spring:message code='txt.idioma.ca'/>			
+										</c:when>
+										<c:when test="${lang eq 'es'}">
+											<spring:message code='txt.idioma.es'/>			
+										</c:when>
+										<c:when test="${lang eq 'en'}">
+											<spring:message code='txt.idioma.en'/>			
+										</c:when>
+										<c:when test="${lang eq 'fr'}">
+											<spring:message code='txt.idioma.fr'/>			
+										</c:when>
+										<c:when test="${lang eq 'de'}">
+											<spring:message code='txt.idioma.de'/>			
+										</c:when>										
+									</c:choose>
+									</a>
+								</li>								
+								</c:forEach>
+                            </ul>
+	                        <div class="idiomes">															
+								<c:forEach items="${idiomes_aplicacio}" var="lang">
+	                                <div class="idioma <c:out value='${lang}'/>"> 
+				                        <div class="fila">
+				                            <div class="element t99p">
+				                                <div class="etiqueta"><label for="item_cvResponsable_<c:out value='${lang}'/>"><spring:message code='unitatadm.formulari.cvresponsable'/></label></div>
+				                                <div class="control">
+				                                    <textarea id="item_cvResponsable_<c:out value='${lang}'/>" name="item_cvResponsable_<c:out value='${lang}'/>" style="width:100%" rows="6" class="rich complexe nou"></textarea>
+				                                </div>
+				                            </div>
+				                        </div>
+			                        </div>
+								</c:forEach>
+							</div>
+						</div>
+						
+						
+						
+						
+                        
+                        
                         <!-- fila -->
                         <div class="fila">
 	                        <div class="element t50p campoImagen">	                                     
