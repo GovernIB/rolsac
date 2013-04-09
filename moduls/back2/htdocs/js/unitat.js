@@ -293,23 +293,30 @@ function CDetall(soloFicha){
 			$("#item_nom_ca").val(printStringFromNull(dada_node.ca.nombre));
 			$("#item_presentacio_ca").val(printStringFromNull(dada_node.ca.presentacion));
 			$("#item_abreviatura_ca").val(printStringFromNull(dada_node.ca.abreviatura));
+			$("#item_cvResponsable_ca").val(printStringFromNull(dada_node.ca.cvResponsable));
 
 			$("#item_nom_es").val(printStringFromNull(dada_node.es.nombre));
 			$("#item_presentacio_es").val(printStringFromNull(dada_node.es.presentacion));
 			$("#item_abreviatura_es").val(printStringFromNull(dada_node.es.abreviatura));
+			$("#item_cvResponsable_es").val(printStringFromNull(dada_node.es.cvResponsable));
 			
 			$("#item_nom_en").val(printStringFromNull(dada_node.en.nombre));
 			$("#item_presentacio_en").val(printStringFromNull(dada_node.en.presentacion));
 			$("#item_abreviatura_en").val(printStringFromNull(dada_node.en.abreviatura));
+			$("#item_cvResponsable_en").val(printStringFromNull(dada_node.en.cvResponsable));
 			
 			$("#item_nom_de").val(printStringFromNull(dada_node.de.nombre));
 			$("#item_presentacio_de").val(printStringFromNull(dada_node.de.presentacion));
 			$("#item_abreviatura_de").val(printStringFromNull(dada_node.de.abreviatura));
+			$("#item_cvResponsable_de").val(printStringFromNull(dada_node.de.cvResponsable));
+			
+			// TODO: ¿qué hace esto en el bloque de idiomas?
 			$("#item_url_de").val(printStringFromNull(dada_node.de.url));
 			
 			$("#item_nom_fr").val(printStringFromNull(dada_node.fr.nombre));
 			$("#item_presentacio_fr").val(printStringFromNull(dada_node.fr.presentacion));
 			$("#item_abreviatura_fr").val(printStringFromNull(dada_node.fr.abreviatura));
+			$("#item_cvResponsable_fr").val(printStringFromNull(dada_node.fr.cvResponsable));
 			
 			//Configuracion / gestion
 			

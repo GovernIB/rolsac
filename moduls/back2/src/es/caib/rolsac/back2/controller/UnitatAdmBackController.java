@@ -465,6 +465,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				TraduccionUA tUA = new TraduccionUA();
 				tUA.setNombre(valoresForm.get("item_nom_"+  lang ));
 				tUA.setPresentacion(valoresForm.get("item_presentacio_" + lang));
+				tUA.setCvResponsable(valoresForm.get("item_cvResponsable_" + lang));
 				tUA.setAbreviatura(valoresForm.get("item_abreviatura_" + lang));
 				tUA.setUrl(valoresForm.get("item_url_" + lang));				
 				traduccions.put(lang, tUA);
