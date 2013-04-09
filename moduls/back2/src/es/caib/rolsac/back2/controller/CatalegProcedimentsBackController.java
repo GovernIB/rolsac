@@ -1283,9 +1283,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 
 	@RequestMapping(value = "/traduir.do")
 	public @ResponseBody Map<String, Object> traduir(HttpServletRequest request) {
+		
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
+			
 			TraduccionProcedimientoLocal traduccioOrigen = new TraduccionProcedimientoLocal();
 			
 			if (StringUtils.isNotEmpty(request.getParameter("item_nom_" + IDIOMA_ORIGEN_TRADUCTOR))) {
@@ -1296,6 +1298,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}
 			if (StringUtils.isNotEmpty(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 				traduccioOrigen.setResumen(request.getParameter("item_objecte_" + IDIOMA_ORIGEN_TRADUCTOR));
+			}
+			if (StringUtils.isNotEmpty(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR))) {
+				traduccioOrigen.setResultat(request.getParameter("item_resultat_" + IDIOMA_ORIGEN_TRADUCTOR));
 			}
 			if (StringUtils.isNotEmpty(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR))) {
 				traduccioOrigen.setLugar(request.getParameter("item_lloc_" + IDIOMA_ORIGEN_TRADUCTOR));
@@ -1321,11 +1326,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			Map<String, Object> traduccio;
 			List<Map<String, Object>> traduccions = new LinkedList<Map<String, Object>>();
 	        
-	        for (String lang: langs){
+	        for (String lang: langs) {
 	        	if (!IDIOMA_ORIGEN_TRADUCTOR.equalsIgnoreCase(lang)) {
 	        		TraduccionProcedimientoLocal traduccioDesti = new TraduccionProcedimientoLocal();
 	        		traductor.setDirTraduccio(IDIOMA_ORIGEN_TRADUCTOR, lang);
-	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)){
+	        		if (traductor.traducir(traduccioOrigen, traduccioDesti)) {
 	        			traduccio = new HashMap<String, Object>();
 	        			traduccio.put("lang", lang);
 	        			traduccio.put("traduccio", traduccioDesti);
@@ -1355,6 +1360,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		
 		return resultats;
+		
 	}
 	
 	   /**

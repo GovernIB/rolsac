@@ -141,37 +141,41 @@ public class Traductor extends AutomaticTranslationService implements Traduccion
     
 	
 	/**
-	 * M�todo que traduce las propiedades de un bean TraduccionProcedimientoLocal origen
+	 * Método que traduce las propiedades de un bean TraduccionProcedimientoLocal origen
 	 * y las guarda en un bean TraduccionProcedimientoLocal destino
 	 * 
-	 * @param procOrigen	bean de traducci�n de procedimiento origen
-	 * @param procDesti		bean de traducci�n de procedimiento destino
-	 * @return	boolean		devuelve verdadero si la traducci�n finaliza correctamente. Si no devuelve falso.
+	 * @param procOrigen	bean de traducción de procedimiento origen
+	 * @param procDesti		bean de traducción de procedimiento destino
+	 * @return boolean		devuelve verdadero si la traducción finaliza correctamente. Si no devuelve falso.
 	 * @throws Exception
 	 */
 	public boolean traducir(TraduccionProcedimientoLocal procOrigen, TraduccionProcedimientoLocal procDesti) throws Exception {
+		
 		try {
 
-			if(null!=procOrigen.getNombre())			procDesti.setNombre(traducir(procOrigen.getNombre(),MODE_TXT));
-	    	if(null!=procOrigen.getPlazos())			procDesti.setPlazos(traducir(procOrigen.getPlazos(),MODE_TXT));
-	    	if(null!=procOrigen.getResumen())			procDesti.setResumen(traducir(procOrigen.getResumen(),MODE_TXT));
-	    	if(null!=procOrigen.getResultat())			procDesti.setResultat(traducir(procOrigen.getResultat(),MODE_TXT));
-	    	if(null!=procOrigen.getLugar())				procDesti.setLugar(traducir(procOrigen.getLugar(),MODE_TXT));
-	    	if(null!=procOrigen.getDestinatarios())		procDesti.setDestinatarios(traducir(procOrigen.getDestinatarios(),MODE_TXT));
-	    	if(null!=procOrigen.getNotificacion())		procDesti.setNotificacion(traducir(procOrigen.getNotificacion(),MODE_TXT));
-	    	if(null!=procOrigen.getRequisitos())		procDesti.setRequisitos(traducir(procOrigen.getRequisitos(),MODE_TXT));
-	    	if(null!=procOrigen.getObservaciones())		procDesti.setObservaciones(traducir(procOrigen.getObservaciones(),MODE_TXT));
-	    	if(null!=procOrigen.getRecursos())			procDesti.setRecursos(traducir(procOrigen.getRecursos(),MODE_TXT));
-	    	if(null!=procOrigen.getResolucion())		procDesti.setResolucion(traducir(procOrigen.getResolucion(),MODE_TXT));
-	    	if(null!=procOrigen.getSilencio())			procDesti.setSilencio(traducir(procOrigen.getSilencio(),MODE_TXT));
+			if (null != procOrigen.getNombre())			procDesti.setNombre(traducir(procOrigen.getNombre(), MODE_TXT));
+	    	if (null != procOrigen.getPlazos())			procDesti.setPlazos(traducir(procOrigen.getPlazos(), MODE_TXT));
+	    	if (null != procOrigen.getResumen())		procDesti.setResumen(traducir(procOrigen.getResumen(), MODE_TXT));
+	    	if (null != procOrigen.getResultat())		procDesti.setResultat(traducir(procOrigen.getResultat(), MODE_TXT));
+	    	if (null != procOrigen.getLugar())			procDesti.setLugar(traducir(procOrigen.getLugar(), MODE_TXT));
+	    	if (null != procOrigen.getDestinatarios())	procDesti.setDestinatarios(traducir(procOrigen.getDestinatarios(), MODE_TXT));
+	    	if (null != procOrigen.getNotificacion())	procDesti.setNotificacion(traducir(procOrigen.getNotificacion(), MODE_TXT));
+	    	if (null != procOrigen.getRequisitos())		procDesti.setRequisitos(traducir(procOrigen.getRequisitos(), MODE_TXT));
+	    	if (null != procOrigen.getObservaciones())	procDesti.setObservaciones(traducir(procOrigen.getObservaciones(), MODE_TXT));
+	    	if (null != procOrigen.getRecursos())		procDesti.setRecursos(traducir(procOrigen.getRecursos(), MODE_TXT));
+	    	if (null != procOrigen.getResolucion())		procDesti.setResolucion(traducir(procOrigen.getResolucion(), MODE_TXT));
+	    	if (null != procOrigen.getSilencio())		procDesti.setSilencio(traducir(procOrigen.getSilencio(), MODE_TXT));
 			
 		} catch (Exception e) {
 			
 			e.printStackTrace();
 			log.error(e.getMessage());
 			return false;
+			
 		}
+		
     	return true;
+    	
 	}
 	
 	/**
