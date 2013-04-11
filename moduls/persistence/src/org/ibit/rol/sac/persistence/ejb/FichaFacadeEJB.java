@@ -197,8 +197,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
             // Eliminado "left join fetch" por problemas en el cache de traducciones. 
             Query query = session.createQuery("select distinct ficha from Ficha as ficha " +
-                    ", ficha.traducciones as trad " +
-                    "where " + sQuery);
+                    ", ficha.traducciones as trad " + sQuery);
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
                 query.setParameter(i, o);
