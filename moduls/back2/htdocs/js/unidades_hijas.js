@@ -323,6 +323,6 @@ function CEscritorioUnidadesHijas() {
     this.ficha = function( link ){
         // Obtenemos el id del item a partir del id del enlace.
         var id = jQuery(link).attr("id").split("_")[1];
-        location.href = pagLlistat + "?itemId=" + id;
+        location.href = pagLlistat2 + "?ua=" + id + "&redirectTo=" + document.location.href.split('?', 1)[0];
     }
 };

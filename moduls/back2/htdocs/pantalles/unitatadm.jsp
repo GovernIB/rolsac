@@ -2012,6 +2012,7 @@
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
         var pagLlistat = '<c:url value="/unitatadm/unitatadm.do" />';
+        var pagLlistat2 = '<c:url value="/unidadAdministrativa/cambiarUA.do" />';
         
         var pagDetall = '<c:url value="/unitatadm/pagDetall.do" />';
         var pagEdificis = '<c:url value="/edificis/llistat.do" />';        

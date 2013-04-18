@@ -793,10 +793,18 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	    	
             	String errorElementosRelacionados = validarElementosRelacionados(unitatAdministrativa);
             	
-            	if ( "".equals(errorElementosRelacionados ) )
+            	if ( "".equals(errorElementosRelacionados ) ) {
+            		
+            		// Esborrar els edificis actuals
+            		EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();
+            		Set<Edificio> edificiosActuales = edificioDelegate.listarEdificiosUnidad(unitatAdministrativa.getId());
+    				for (Edificio edificio : edificiosActuales)
+    					edificioDelegate.eliminarUnidad(unitatAdministrativa.getId(), edificio.getId());
+    				
             		unidadAdministrativaDelegate.eliminarUaSinRelaciones(id);                	            	
-            	else
+            	} else {
             		return new IdNomDTO(-1l, messageSource.getMessage(errorElementosRelacionados, null, request.getLocale()));
+            	}
             	
 	    	} else 
 	    		return new IdNomDTO(id, messageSource.getMessage("unitatadm.esborrat.incorrecte.microsites", null, request.getLocale()));	    	
