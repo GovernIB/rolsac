@@ -918,19 +918,29 @@ public class NormativaBackController extends PantallaBaseController {
 	 * Obtiene una lista de NormativaDTO a partir de una lista de Normativa.
 	 * @param llistaNormatives Lista de Normativa.
 	 * @param idioma Idioma seleccionado por el usuario.
+	 * @throws DelegateException 
 	 */
-	private List<NormativaDTO> pasarListaNormativasADTO(List<Normativa> llistaNormatives, String idioma) {
+	private List<NormativaDTO> pasarListaNormativasADTO(List<Normativa> llistaNormatives, String idioma) throws DelegateException {
 		
 		List<NormativaDTO> llistaNormativesDTO = new ArrayList<NormativaDTO>();
 		
 		for (Normativa normativa : llistaNormatives) {
 			
-			TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
-			if (traNor == null)
-				traNor = (TraduccionNormativa)normativa.getTraduccion();
+			//TraduccionNormativa traNor = (TraduccionNormativa)normativa.getTraduccion(idioma);
+			//if (traNor == null)
+				//traNor = (TraduccionNormativa)normativa.getTraduccion();
+			String traNor = normativa.getTraduccionTitulo();
+			if (traNor == null) {
+				NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+		        Normativa norm = normativaDelegate.obtenerNormativa(normativa.getId());
+		        TraduccionNormativa traduc = (TraduccionNormativa)norm.getTraduccion();
+		        traNor = traduc.getTitulo();
+			}
+				
+			
 							
 			//Retirar posible enlace incrustado en titulo
-			String titulo = traNor != null ? obtenerTituloDeEnlaceHtml(traNor.getTitulo()) : "";	
+			String titulo = traNor != null ? obtenerTituloDeEnlaceHtml(traNor) : "";	
 			
 			TraduccionTipo traTip = normativa.getTipo() != null ? (TraduccionTipo)normativa.getTipo().getTraduccion(idioma) : null;
 
