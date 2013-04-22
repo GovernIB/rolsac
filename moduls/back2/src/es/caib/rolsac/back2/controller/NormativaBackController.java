@@ -818,7 +818,9 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		//TODO obtener la ordenaci�n por par�metro
 		String campoOrdenacion = "fecha";
-		String orden = "desc";		
+		String orden = "desc";
+		
+		int totalNormativas = 0;
 		
 		try {
 			//Obtener par�metros de b�squeda					
@@ -843,25 +845,21 @@ public class NormativaBackController extends PantallaBaseController {
 			}						
 
 			//Información de paginación
-			String pagPag = request.getParameter("pagPag");		
+			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
 			
 			if (pagPag == null) pagPag = String.valueOf(0); 
-			if (pagRes == null) pagRes = String.valueOf(10);                			
+			if (pagRes == null) pagRes = String.valueOf(10);
 			
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
-			ResultadoBusqueda resultadoBusquedaLocales = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden, pagPag, pagRes); 
-			ResultadoBusqueda resultadoBusquedaExternas = normativaDelegate.buscarNormativas(paramMap, paramTrad, "externa", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+			ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
+			resultats.put("total", resultadoBusqueda.getTotalResultados());
 			
-			llistaNormatives.addAll( (List<Normativa>) resultadoBusquedaLocales.getListaResultados() );
-			llistaNormatives.addAll( (List<Normativa>) resultadoBusquedaExternas.getListaResultados() );
+			llistaNormatives.addAll( (List<Normativa>) resultadoBusqueda.getListaResultados() );
 			
 			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
-			
-			//Ordenar lista (por fecha descendente)		
-			Collections.sort(llistaNormativesDTO);
 			
 		} catch (ParseException e) {			
 			log.error("Error: " + e.getMessage());
@@ -874,7 +872,6 @@ public class NormativaBackController extends PantallaBaseController {
             }
 		}
 		
-		resultats.put("total", llistaNormativesDTO.size());
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
@@ -947,7 +944,7 @@ public class NormativaBackController extends PantallaBaseController {
 			String tipus  = traTip != null ? traTip.getNombre() : "";
 			
 			boolean local = NormativaLocal.class.isInstance(normativa);
-				
+			
 			llistaNormativesDTO.add(
 						new NormativaDTO(
 								normativa.getId() != null ? normativa.getId().longValue() : 0, 

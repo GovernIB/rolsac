@@ -3,6 +3,7 @@ package org.ibit.rol.sac.persistence.ejb;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -329,26 +330,34 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                     whereTipo = " and index(traTipo) = '"  + idioma_per_defecte + "'";
                 }
             }
-
+            
             String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
             
-            Query query;
-            if ("local".equals(tipo)) {
-            
-                String select = "select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
-                        "normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " +
-                        nombreBoletin + ", index(trad), normativa.unidadAdministrativa) ";
-                
-                String from = " from NormativaLocal as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
+            Query queryLocal;
+            Query queryExterna;
+            List normativas = new ArrayList<Normativa>();
+            if ("local".equals(tipo) || "todas".equals(tipo)) {
             	
-                String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
-                if ( !StringUtils.isEmpty(uaQuery) ) {
-                    uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
-                }
-                
-                query = session.createQuery(select + from + " where " + sQuery + uaQuery + whereTipo + orderBy);
-               
-            } else { // "externa".equals(tipo))
+            	String select = "select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
+            			"normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " +
+            			nombreBoletin + ", index(trad), normativa.unidadAdministrativa) ";
+            	
+            	String from = " from NormativaLocal as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
+            	
+            	String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+            	if ( !StringUtils.isEmpty(uaQuery) ) {
+            		uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
+            	}
+            	queryLocal = session.createQuery(select + from + " where " + sQuery + uaQuery + whereTipo + orderBy);
+            	 for ( int i = 0; i < params.size(); i++ ) {
+                     Object o = params.get(i);
+                     queryLocal.setParameter(i, o);
+                 }
+            	 List normativasLocales = queryLocal.list();
+            	 normativas.addAll(normativasLocales);
+            }
+            
+            if ("externa".equals(tipo) || "todas".equals(tipo)) { // "externa".equals(tipo))
 
                 String select = "select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
                         "normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " + 
@@ -356,15 +365,17 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
                 
                 String from =  " from NormativaExterna as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
                 
-                query = session.createQuery(select + from + " where " + sQuery + whereTipo + orderBy);
+                queryExterna = session.createQuery(select + from + " where " + sQuery + whereTipo + orderBy);
+                for ( int i = 0; i < params.size(); i++ ) {
+                    Object o = params.get(i);
+                    queryExterna.setParameter(i, o);
+                }
+                List normativasExternas = queryExterna.list();
+                normativas.addAll(normativasExternas);
+                
                 
             }
             
-            for ( int i = 0; i < params.size(); i++ ) {
-                Object o = params.get(i);
-                query.setParameter(i, o);
-            }            
-
             boolean ignorarPaginacion = true; 
             
             int resultadosMax = 0;
@@ -378,7 +389,10 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             
             ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
             
-            List normativas = query.list();
+            if ("todas".equals(tipo)) {
+            	Collections.sort(normativas, comparator);
+            }
+            
             List normativasAcceso = new ArrayList<Normativa>();
             Usuario usuario = getUsuario(session);
                
@@ -389,14 +403,16 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             int normativasInsertadas = 0;
             int iteraciones = 0;
             
-            Class<?> clazz = "local".equals(tipo) ? NormativaLocal.class : NormativaExterna.class;
-            
             for ( int i = 0; i < normativas.size(); i++ ) {
             
             	if ( tieneAcceso(usuario, (Normativa) normativas.get(i) ) )  {
             		
             		if ( ignorarPaginacion || (normativasInsertadas != resultadosMax && iteraciones >= primerResultado) ) {
-            			normativasAcceso.add(  clazz.cast(normativas.get(i) ) );
+            			if (normativas.get(i).getClass().equals(NormativaLocal.class))
+            				normativasAcceso.add(  NormativaLocal.class.cast(normativas.get(i) ) );
+            			else
+            				normativasAcceso.add(  NormativaExterna.class.cast(normativas.get(i) ) );
+            			
             			normativasInsertadas++;
             		}
             		
@@ -421,7 +437,21 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         }
     }    
     
-    
+	
+	Comparator<Normativa> comparator = new Comparator<Normativa>() {
+		
+		public int compare(Normativa o1, Normativa o2) {
+			if (o1.getFecha() != null && o2.getFecha() != null) {
+				if (o1.getFecha().before(o2.getFecha()))
+					return 1;
+				else
+					return 0;
+			
+			}
+			return 1;
+		}
+	};
+	
     /**
      * Construye el query de búsqueda multiidioma en todos los campos
      */

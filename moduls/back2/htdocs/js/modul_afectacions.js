@@ -360,8 +360,8 @@ function CEscriptoriAfectacions() {
 				pag_Pag = ultimaPag;
 			}							
 			
-			resultatInici = ((pag_Pag*pag_Res)+1);
-			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
+			resultatInici = 1;// ((pag_Pag*pag_Res)+1);
+			resultatFinal = 10;// ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
 			
 			// ordenacio
 			ordre_T = ordre_Tipus;
@@ -420,7 +420,7 @@ function CEscriptoriAfectacions() {
 				codi_taula += "<div class=\"tr" + parClass + "\" role=\"row\">";
 				
 				codi_taula += "<div class=\"td titol\" role=\"gridcell\">";
-				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />";
+				codi_taula += "<input type=\"hidden\" value=\"" + dada_node.id + "\" class=\"id\" />" + dada_node.id;
 				codi_taula += "<a href=\"javascript:;\" class=\"titol\">" + dada_node.titulo + "</a>";
 				codi_taula += "</div>";
 				
