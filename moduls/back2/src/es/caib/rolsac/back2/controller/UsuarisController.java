@@ -214,7 +214,6 @@ public class UsuarisController extends PantallaBaseController {
 				usuariOld = usuariDelegate.obtenerUsuario(id);
 				// Mantenemos los valores originales que tiene el usuario.
 				usuari.setId(id);
-				usuari.setUnidadesAdministrativas(usuariOld.getUnidadesAdministrativas());
 				edicion = true;
 			} catch (NumberFormatException nfe) {
 				usuariOld = null;
