@@ -73,22 +73,7 @@ function CNuevaUADetall(soloFicha,reglasFormulario,ids){
 			
 			// Mostramos DIV con el primer idioma en la sección de idiomas del responsable de la UA.
 			$('#escritorioNuevaUA div.idioma:eq(5)').show();
-			
-			// Repetimos mismo proceso anterior proporcionando funcionalidad.
-			ul_idiomes_elm2 = nuevaUA_escriptori_detall_elm.find("ul.idiomes:eq(1)");
-			
-			a_primer_elm2 = ul_idiomes_elm2.find("a:first");
-			a_primer_elm2.parent().addClass("seleccionat");
-			
-			a_primer_elm_class2 = a_primer_elm2.attr("class");
-			a_primer_elm_text2 = a_primer_elm2.text();
-			
-			a_primer_elm2.parent().html("<span class=\"" + a_primer_elm_class2 + "\">" + a_primer_elm_text2 + "</span>");
-			
-			div_idiomes_elm2 = nuevaUA_escriptori_detall_elm.find("div.idiomes:eq(1)");	
-			div_idiomes_elm2.find("div." + a_primer_elm2.attr("class")).addClass("seleccionat");
-			ul_idiomes_elm2.bind("click", Detall.idioma); 
-			
+						
 		}
 		
 		// moduls

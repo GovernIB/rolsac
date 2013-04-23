@@ -298,6 +298,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 
 	this.idioma = function(e) {
+		
     	var elm = $(e.target);
 
 		if (elm.is("A")) {
@@ -305,7 +306,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
             // Determinar si hay que cambiar los modulos laterales muldiidioma (por defecto se cambian).
             var cambiarModulosLaterales;
             if (typeof e.data != 'undefined' && typeof e.data.actualizarIdiomasModulosLaterales != 'undefined') {
-                cambiarModulosLaterales = Boolean (e.data.actualizarIdiomasModulosLaterales);
+                cambiarModulosLaterales = Boolean(e.data.actualizarIdiomasModulosLaterales);
             } else {
                 cambiarModulosLaterales = true;
             }
@@ -337,30 +338,43 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 					});
 
 				});
-                
+				
+				// Si hay más de una sección de idiomas, ocultarlo todo y mostrar el
+				// DIV con el idioma solicitado.
+				if (escriptori_detall_elm.find("div.idiomes").size() > 1) {
+					
+					$('div.idiomes:gt(0) div.idioma').hide();
+					$('div.idiomes:gt(0) div.idioma.' + a_clicat_class).show();
+					
+				}
+
                 // Actualizamos los campos multi-idioma independientes.
                 escriptori_detall_elm.find(".element.multilang .campoIdioma").hide();
-                escriptori_detall_elm.find(".element.multilang ."+a_clicat_class).show();
+                escriptori_detall_elm.find(".element.multilang ." + a_clicat_class).show();
 
                 if (cambiarModulosLaterales) {
+                	
                     var modulos = jQuery(".modulLateral .modul .multilang");
                     modulos.find("li.seleccionat:first").removeClass("seleccionat");
                     modulos.find("li." + a_clicat_class).addClass("seleccionat");
-                    modulos.find("div.seleccionats div.seleccionat").slideUp(300,function(){
+                    
+                    modulos.find("div.seleccionats div.seleccionat").slideUp(300,function() {
                         var $this = jQuery(this);
                         $this.removeClass("seleccionat");
                         $this.hide();
-                        $this.siblings("div." + a_clicat_class).slideDown(300,function(){
+                        $this.siblings("div." + a_clicat_class).slideDown(300,function() {
                             jQuery(this).addClass("seleccionat");
                         });
                     });
+                    
 				}
 
-			} else{
+			} else {
 
 				if (!elm.hasClass("on")) {
 
 					ul_idiomes_elm.find("li:not(.desplegar)").css("display","none");
+					
 					div_idiomes_elm.find("div.idioma").each(function(i) {
 						var text_idioma = ul_idiomes_elm.find("li:eq(" + i + ")").text();
 						var div_idioma_elm = $(this);
@@ -369,6 +383,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 						}
 						div_idioma_elm.prepend("<h3>" + text_idioma + "</h3>").slideDown(300);
 					});
+					
 					elm.addClass("on").text(txtPlega);
 
 				} else {
@@ -380,14 +395,18 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 						}
 						div_idioma_elm.find("h3:first").remove().end().slideUp(300);
 					});
+					
 					elm.removeClass("on").text(txtDesplega);
 					ul_idiomes_elm.find("li:not(.desplegar)").css("display","block");
 
 				}
 
 				ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': cambiarModulosLaterales}, that.idioma);
+				
 			}
+			
 		}
+		
 	}
 
 	this.previsualitza = function() {
