@@ -16,12 +16,16 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Order;
 
 import org.ibit.rol.sac.model.Archivo;
+import org.ibit.rol.sac.model.Auditoria;
+import org.ibit.rol.sac.model.Historico;
+import org.ibit.rol.sac.model.HistoricoMateria;
 import org.ibit.rol.sac.model.IconoMateria;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
+import org.ibit.rol.sac.persistence.ws.Actualizador;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
  
@@ -257,6 +261,12 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
             if(procedimientos.size()!= 0|| fichas.size()!= 0){
                 throw new EJBException("La materia contiene registros asociados");
             }
+            
+            addOperacion(session, materia, Auditoria.BORRAR);
+            Historico historico = getHistorico(session, materia);
+            ((HistoricoMateria) historico).setMateria(null);
+            Actualizador.borrar(materia);
+            
             session.delete(materia);
             session.flush();
         } catch (HibernateException he) {

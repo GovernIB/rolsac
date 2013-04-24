@@ -407,6 +407,16 @@ public abstract class HibernateEJB implements SessionBean {
         session.save(aud);
         session.flush();
     }
+    
+    protected void addOperacion(Session session, Materia materia, int operacion) throws HibernateException {
+    	Auditoria aud = new Auditoria();
+        aud.setUsuario(ctx.getCallerPrincipal().getName());
+        aud.setFecha(new Date());
+        aud.setCodigoOperacion(operacion);
+        aud.setHistorico(getHistorico(session, materia));
+        session.save(aud);
+        session.flush();
+    }
 
     // Metodes de seguretat.
 

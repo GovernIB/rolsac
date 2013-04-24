@@ -1006,7 +1006,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 		String lang = getRequestLanguage(request);
-		String codigoEstandar = request.getParameter("codi");
+		String id = request.getParameter("codi");
 
 		int resultadosDescartados  = 0;
 								
@@ -1021,8 +1021,27 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			paramMap.put("tratamiento", tratamiento);
 		}
 		
-		if (StringUtils.isNotEmpty(codigoEstandar)) {					
-			paramMap.put("codigoEstandar", codigoEstandar.toUpperCase());
+		if (StringUtils.isNotEmpty(id)) {
+			UnidadAdministrativa uni;
+			UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
+			
+			try {
+				uni = unitatDelegate.consultarUnidadAdministrativa(Long.parseLong(id));
+				TraduccionUA traUA = (TraduccionUA)uni.getTraduccion(lang);
+				resultats.put("total", 1);
+				UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO(uni.getId(), uni.getCodigoEstandar(), traUA.getNombre(), uni.getOrden());
+				listaUnidadesAdministrativasDTO.add(dto);
+				resultats.put("nodes", listaUnidadesAdministrativasDTO);
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DelegateException e) {
+				uni = null;
+				resultats.put("total", 0);
+			}
+			
+			return resultats;
+			//paramMap.put("id", id.toUpperCase());
 		}
 		
 		try {
