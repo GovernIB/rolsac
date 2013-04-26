@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 
@@ -303,15 +304,20 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
-        Set<FitxaDTO> fitxaDTOSet = new HashSet<FitxaDTO>();
+    	
+    	List<FitxaDTO> fitxaDTOSet = new Vector<FitxaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
+        
+        try {
+        	
             criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FILLES_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+            
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_SECCIO_CLASS, HQL_SECCIO_ALIAS));
             entities.add(new FromClause(HQL_SECCIO_FITXA_CLASS, HQL_SECCIO_FITXA_ALIAS));
             entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
+            
             QueryBuilder qb = new QueryBuilder(HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
@@ -323,20 +329,31 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
             session = getSession();
             Query query = qb.createQuery(session);
             List<Ficha> fitxaResult = (List<Ficha>) query.list();
+                        
             for (Ficha fitxa : fitxaResult) {
-                fitxaDTOSet.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class,  fitxa, fitxaCriteria.getIdioma()));
+            	fitxaDTOSet.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class,  fitxa, fitxaCriteria.getIdioma()));
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return new ArrayList<FitxaDTO>(fitxaDTOSet);
+        
     }
 
     /**
