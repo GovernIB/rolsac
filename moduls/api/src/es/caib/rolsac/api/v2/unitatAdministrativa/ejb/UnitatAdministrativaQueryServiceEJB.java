@@ -1,9 +1,8 @@
 package es.caib.rolsac.api.v2.unitatAdministrativa.ejb;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 
@@ -568,10 +567,13 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
-        Set<FitxaDTO> fitxaDTOSet = new HashSet<FitxaDTO>();
+    	
+        List<FitxaDTO> fitxaDTOSet = new Vector<FitxaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
+        
+        try {
+        	
             if (StringUtils.isBlank(fitxaCriteria.getOrdenacio())) {
                 fitxaCriteria.setOrdenacio(HQL_FITXA_UA_ALIAS + ".orden");
             }
@@ -593,19 +595,33 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<Ficha> fichaResult = (List<Ficha>) query.list();
             for (Ficha fitxa : fichaResult) {
-                fitxaDTOSet.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class,  fitxa, fitxaCriteria.getIdioma()));
+                fitxaDTOSet.add((FitxaDTO)BasicUtils.entityToDTO(
+                		FitxaDTO.class,  
+                		fitxa, 
+                		fitxaCriteria.getIdioma())
+                );
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return new ArrayList<FitxaDTO>(fitxaDTOSet);
+        
     }
 
     /**
@@ -619,10 +635,13 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) {
-        Set<SeccioDTO> seccioDTOSet = new HashSet<SeccioDTO>();
+    	
+        List<SeccioDTO> seccioDTOList = new Vector<SeccioDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
+        
+        try {
+        	
             if (StringUtils.isBlank(seccioCriteria.getOrdenacio())) {
                 seccioCriteria.setOrdenacio(HQL_FITXA_UA_ALIAS + ".ordenseccion");
             }
@@ -644,19 +663,33 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<Seccion> seccionResult = (List<Seccion>) query.list();
             for (Seccion seccio : seccionResult) {
-                seccioDTOSet.add((SeccioDTO) BasicUtils.entityToDTO(SeccioDTO.class,  seccio, seccioCriteria.getIdioma()));
+                seccioDTOList.add((SeccioDTO)BasicUtils.entityToDTO(
+                		SeccioDTO.class,  
+                		seccio, 
+                		seccioCriteria.getIdioma())
+                );
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
-        return new ArrayList<SeccioDTO>(seccioDTOSet);
+        return new ArrayList<SeccioDTO>(seccioDTOList);
+        
     }
 
     /**

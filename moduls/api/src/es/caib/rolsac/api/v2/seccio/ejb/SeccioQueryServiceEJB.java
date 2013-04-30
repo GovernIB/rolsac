@@ -1,9 +1,7 @@
 package es.caib.rolsac.api.v2.seccio.ejb;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.ejb.CreateException;
@@ -367,10 +365,13 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        Set<UnitatAdministrativaDTO> uaDTOSet = new HashSet<UnitatAdministrativaDTO>();
+    	
+        List<UnitatAdministrativaDTO> uaDTOList = new Vector<UnitatAdministrativaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
+        
+        try {
+        	
             criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_FILLES_ALIAS, HQL_TRADUCCIONES_ALIAS, unitatAdministrativaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_SECCIO_CLASS, HQL_SECCIO_ALIAS));
@@ -388,19 +389,33 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<UnidadAdministrativa> uaResult = (List<UnidadAdministrativa>) query.list();
             for (UnidadAdministrativa unitatAdministrativa : uaResult) {
-                uaDTOSet.add((UnitatAdministrativaDTO) BasicUtils.entityToDTO(UnitatAdministrativaDTO.class,  unitatAdministrativa, unitatAdministrativaCriteria.getIdioma()));
+                uaDTOList.add((UnitatAdministrativaDTO)BasicUtils.entityToDTO(
+                		UnitatAdministrativaDTO.class,  
+                		unitatAdministrativa, 
+                		unitatAdministrativaCriteria.getIdioma())
+                );
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
         
-        return new ArrayList<UnitatAdministrativaDTO>(uaDTOSet);
+        return new ArrayList<UnitatAdministrativaDTO>(uaDTOList);
+        
     }
     
     /**

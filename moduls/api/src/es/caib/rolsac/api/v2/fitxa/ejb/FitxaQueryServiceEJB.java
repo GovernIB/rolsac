@@ -1,9 +1,8 @@
 package es.caib.rolsac.api.v2.fitxa.ejb;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 
@@ -243,11 +242,13 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<UnitatAdministrativaDTO> llistarUnitatsAdministratives(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) {
-        Set<UnitatAdministrativaDTO> unitatADministrativaDTOSet = new HashSet<UnitatAdministrativaDTO>();
+    	
+        List<UnitatAdministrativaDTO> unitatADministrativaDTOList = new Vector<UnitatAdministrativaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
 
-        try {          
+        try {
+        	
             criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, HQL_TRADUCCIONES_ALIAS, unitatAdministrativaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
@@ -263,21 +264,35 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<UnidadAdministrativa> unitatAdministrativaResult = (List<UnidadAdministrativa>) query.list();
+            List<UnidadAdministrativa> unitatAdministrativaResult = (List<UnidadAdministrativa>)query.list();
             for (UnidadAdministrativa unitatAdministrativa : unitatAdministrativaResult) {
-                unitatADministrativaDTOSet.add((UnitatAdministrativaDTO) BasicUtils.entityToDTO(UnitatAdministrativaDTO.class,  unitatAdministrativa, unitatAdministrativaCriteria.getIdioma()));
+                unitatADministrativaDTOList.add((UnitatAdministrativaDTO)BasicUtils.entityToDTO(
+        				UnitatAdministrativaDTO.class, 
+        				unitatAdministrativa, 
+        				unitatAdministrativaCriteria.getIdioma())
+        		);
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
-        return new ArrayList<UnitatAdministrativaDTO>(unitatADministrativaDTOSet);
+        return new ArrayList<UnitatAdministrativaDTO>(unitatADministrativaDTOList);
+        
     }
    
     /**
@@ -291,10 +306,13 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<SeccioDTO> llistarSeccions(long id, SeccioCriteria seccioCriteria) {
-        Set<SeccioDTO> seccioDTOSet = new HashSet<SeccioDTO>();
+    	
+        List<SeccioDTO> seccioDTOList = new Vector<SeccioDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
-        try {            
+        
+        try {
+        	
             criteris = BasicUtils.parseCriterias(SeccioCriteria.class, HQL_SECCION_ALIAS, HQL_TRADUCCIONES_ALIAS, seccioCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FICHA_CLASS, HQL_FICHA_ALIAS));
@@ -312,19 +330,33 @@ public class FitxaQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<Seccion> seccionResult = (List<Seccion>) query.list();
             for (Seccion seccio : seccionResult) {
-                seccioDTOSet.add((SeccioDTO) BasicUtils.entityToDTO(SeccioDTO.class,  seccio, seccioCriteria.getIdioma()));
+                seccioDTOList.add((SeccioDTO)BasicUtils.entityToDTO(
+                		SeccioDTO.class,  
+                		seccio, 
+                		seccioCriteria.getIdioma())
+        		);
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
-        return new ArrayList<SeccioDTO>(seccioDTOSet);
+        return new ArrayList<SeccioDTO>(seccioDTOList);
+        
     }
     
     /**
