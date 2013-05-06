@@ -13,6 +13,7 @@ public abstract class Document extends Ordenable {
 	public static final int FORMULARI=1;
 	//public static final int DOCPRESENTAR=2;
 	public static final int REQUERIT=2;
+	public static final int MODELCOMU=3;
 	
 	
 	private Archivo archivo;

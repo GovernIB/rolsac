@@ -3,7 +3,7 @@ package org.ibit.rol.sac.persistence.delegate;
 
 
 /**
- * Define métodos estáticos para obtener delegates.
+ * Define mï¿½todos estï¿½ticos para obtener delegates.
  */
 public final class DelegateUtil {
 
@@ -253,4 +253,8 @@ public final class DelegateUtil {
     public static ExcepcioDocumentacioDelegate getExcepcioDocumentacioDelegate() {
       return (ExcepcioDocumentacioDelegate) DelegateFactory.getDelegate(ExcepcioDocumentacioDelegate.class);
     }
+    
+    public static ModelsComunsDelegate geModelsComunsDelegate() {
+        return (ModelsComunsDelegate) DelegateFactory.getDelegate(ModelsComunsDelegate.class);
+      }
 }

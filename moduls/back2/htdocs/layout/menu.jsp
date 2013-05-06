@@ -108,6 +108,9 @@
 							<li>
 								<a href="<c:url value="/excepcioDocumentacio/excepcioDocumentacio.do"/>"><spring:message code="menu.excepcio_documentacio" /></a>
 							</li>
+							<li>
+								<a href="<c:url value="/modelsComuns/modelsComuns.do"/>"><spring:message code="menu.models_comuns" /></a>
+							</li>
 						</ul>
 					</li>
 					<li>
