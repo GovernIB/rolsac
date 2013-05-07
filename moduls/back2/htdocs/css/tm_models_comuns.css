@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+#submenu_contingut ul li.seleccionat {
+    border: 0 none;
+}
+
+/* llistats table */
+
+.llistat .thead .enllas,
+.llistat .tbody .td.enllas{    
+    text-align: right;
+    width: 135px;
+}
+.ordre {
+	padding-right: 10px;
+}
+
+.llistat div.nom { 
+    width: 25%;
+    padding-left: 21px;
+}
+.llistat div.tbody div.nom {
+    width: 25%;
+}
+.llistat div.descripcio { 
+    width: 50%;
+    padding-left: 21px;
+}
+.llistat div.tbody div.descripcio {
+    width: 50%;
+}
