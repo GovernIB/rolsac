@@ -689,6 +689,7 @@ div.table div.tbody div.td select.ordenacion{
 }
 .paginacio a.inicio span,
 .paginacio a.retroceder span{
+    float: left;
 	width: 10px;
 	height: 12px;
 	background: url(../img/paginador/retroceder.gif) 0 0 no-repeat;		

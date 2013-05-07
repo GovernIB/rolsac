@@ -20,8 +20,16 @@ div.ua_arbre ul.mollaPa li {
 div.ua_arbre div.nivells { 
 	height:3em; 
 	/*white-space:nowrap;*/
+	
+	overflow: hidden;	
+	position: relative;	
 }
-div.ua_arbre div.nivells_contingut { position:relative; left:0; width:10000em; }
+div.ua_arbre div.nivells_contingut { 
+    position:relative; 
+    left:0; 
+    width:10000em;    
+    height: 100%;
+}
 
 div.ua_arbre div.nivells ul.nivell { 
 	float:left;

@@ -2050,6 +2050,7 @@
         var txtMateria = "<spring:message code='txt.materia'/>";
         var txtMateries = "<spring:message code='txt.materies'/>";
         var txtNoHiHaMateries = txtNoHiHa + " " + txtMateries;
+        
         var txtNoHiHaMateriesSeleccionades = txtNoHiHa + " " + txtMateries + " " + txtSeleccionades.toLowerCase();
         
         // modul seccions
@@ -2141,7 +2142,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "obligatori": "<spring:message code='unitatadm.formulari.sexeResponsable.obligatori'/>",
+                        "obligatori": "<spring:message code='unitatadm.formulari.sexeResponsable.obligatori'/>"
                     }
             },{ // Tractament
                 "modo": "individual",
@@ -2151,7 +2152,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "obligatori": "<spring:message code='unitatadm.formulari.tractament.obligatori'/>",
+                        "obligatori": "<spring:message code='unitatadm.formulari.tractament.obligatori'/>"
                     }
             } // NO OBLIGATORIS 
             ,{ // Clau hita
@@ -2162,7 +2163,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.clauHita'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.clauHita'/>"
                     }
             },{ // Codi estandar
                 "modo": "individual",
@@ -2172,7 +2173,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.codiEstandar'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.codiEstandar'/>"
                     }
             },{ // Domini
                 "modo": "individual",
@@ -2182,7 +2183,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.domini'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.domini'/>"
                     }
             },{ // Telefon
                 "modo": "individual",
@@ -2198,7 +2199,7 @@
                 },
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.telefon'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.telefon'/>"
                     }
             },{ // Fax
                 "modo": "individual",
@@ -2214,7 +2215,7 @@
                 },
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.fax'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.fax'/>"
                     }
             },{ // Email
                 "modo": "individual",
@@ -2224,7 +2225,7 @@
                 "tipus": "email",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>"
                     }
             },{ // Responsable
                 "modo": "individual",
@@ -2234,7 +2235,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2244,7 +2245,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell1'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell1'/>"
                     }
             },{ // nivell 2
                 "modo": "individual",
@@ -2254,7 +2255,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell2'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell2'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2264,7 +2265,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell3'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell3'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2274,7 +2275,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell4'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell4'/>"
                     }
             }
         ];
@@ -2321,7 +2322,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "obligatori": "<spring:message code='unitatadm.formulari.sexeResponsable.obligatori'/>",
+                        "obligatori": "<spring:message code='unitatadm.formulari.sexeResponsable.obligatori'/>"
                     }
             },{ // Tractament
                 "modo": "individual",
@@ -2331,7 +2332,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "obligatori": "<spring:message code='unitatadm.formulari.tractament.obligatori'/>",
+                        "obligatori": "<spring:message code='unitatadm.formulari.tractament.obligatori'/>"
                     }
             } // NO OBLIGATORIS 
             ,{ // Clau hita
@@ -2342,7 +2343,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.clauHita'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.clauHita'/>"
                     }
             },{ // Codi estandar
                 "modo": "individual",
@@ -2352,7 +2353,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.codiEstandar'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.codiEstandar'/>"
                     }
             },{ // Domini
                 "modo": "individual",
@@ -2362,7 +2363,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.domini'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.domini'/>"
                     }
             },{ // Telefon
                 "modo": "individual",
@@ -2378,7 +2379,7 @@
                 },
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.telefon'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.telefon'/>"
                     }
             },{ // Fax
                 "modo": "individual",
@@ -2394,7 +2395,7 @@
                 },
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.fax'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.fax'/>"
                     }
             },{ // Email
                 "modo": "individual",
@@ -2404,7 +2405,7 @@
                 "tipus": "email",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.email'/>"
                     }
             },{ // Responsable
                 "modo": "individual",
@@ -2414,7 +2415,7 @@
                 "tipus": "alfanumeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.responsable'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2424,7 +2425,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell1'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell1'/>"
                     }
             },{ // nivell 2
                 "modo": "individual",
@@ -2434,7 +2435,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell2'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell2'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2444,7 +2445,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell3'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell3'/>"
                     }
             },{ // nivell 1
                 "modo": "individual",
@@ -2454,7 +2455,7 @@
                 "tipus": "numeric",
                 "error":
                     {
-                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell4'/>",
+                        "tipus": "<spring:message code='unitatadm.formulari.tipus.nivell4'/>"
                     }
             }
         ];

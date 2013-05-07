@@ -75,3 +75,15 @@
     float:right;    
     margin-top: -18px;
 }
+
+/* Molla pa */
+#mollaPa ul li{
+    height: auto;    
+}
+#mollaPa ul li div{
+    float: left;    
+    height: auto;    
+}
+#mollaPa_contingut ul.molla li.ua div a.desplegar{
+    float: none;
+}

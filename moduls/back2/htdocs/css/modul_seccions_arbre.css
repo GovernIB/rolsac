@@ -7,7 +7,13 @@ div.escriptori_seccions_arbre { padding-top:1.5em; }
 div.seccions_arbre ul.mollaPa { list-style:none; padding-left:.5em; margin-bottom:1em; background-color:#f7f7f7; }
 div.seccions_arbre ul.mollaPa li { display:inline; padding-right:1.2em; padding-left:.8em; background:transparent url(../img/botons/mollaPa.gif) no-repeat right center; }
 
-div.seccions_arbre div.nivells { /*height:3em;*/ white-space:nowrap; /*border-right:1px solid #ccc; border-left:1px solid #ccc; */}
+div.seccions_arbre div.nivells { 
+    /*height:3em;*/ 
+    white-space:nowrap; 
+    /*border-right:1px solid #ccc; border-left:1px solid #ccc; */
+    overflow: hidden;    
+    position: relative;
+}
 div.seccions_arbre div.nivells_contingut { position:relative; left:0; width:10000em; }
 
 div.seccions_arbre div.nivells ul.nivell { 

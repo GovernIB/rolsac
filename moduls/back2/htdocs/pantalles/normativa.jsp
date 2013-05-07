@@ -270,7 +270,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -283,7 +283,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -296,7 +296,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -309,7 +309,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -322,7 +322,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -335,7 +335,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -348,7 +348,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -361,7 +361,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -374,7 +374,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -387,7 +387,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -400,7 +400,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -413,7 +413,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -426,7 +426,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -439,7 +439,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -452,7 +452,7 @@
                         "maxim": 480,
                         "mostrar": "no",
                         "abreviat": "no"
-                    },
+                    }
             },
             {
                 "modo": "individual",
@@ -698,7 +698,7 @@
                     "maxim": 230,
                     "mostrar": "no",
                     "abreviat": "no"
-                },
+                }
             },           
 
             {
