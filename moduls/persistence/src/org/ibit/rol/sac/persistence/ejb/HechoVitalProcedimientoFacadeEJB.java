@@ -40,7 +40,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     /**
      * Crea o actualiza un HechoVitalProcedimiento.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
     public Long grabarHechoVitalProcedimiento(HechoVitalProcedimiento hvp, Long hecho_id, Long procedimiento_id) {
         Session session = getSession();
@@ -69,7 +69,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     /**
      * Crea o actualiza los HechoVitalProcedimiento de una coleccion.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
     public void grabarHechoVitalProcedimientos(Collection<HechoVitalProcedimiento> hvpsAGrabar) {
         Session session = getSession();
@@ -114,7 +114,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     /**
      * Incrementa el orden de un hecho vital - procedimiento.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
     public void subirOrden(Long id) {
         Session session = getSession();
@@ -145,7 +145,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     /**
      * Borra un HechoVitalProcedimiento.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
     public void borrarHechoVitalProcedimiento(Long id) {
         Session session = getSession();
@@ -170,7 +170,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
     /**
      * Borra una coleccion de HechoVitalProcedimiento.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */
     public void borrarHechoVitalProcedimientos(Collection<Long> hvpsABorrar) {
         Session session = getSession();
