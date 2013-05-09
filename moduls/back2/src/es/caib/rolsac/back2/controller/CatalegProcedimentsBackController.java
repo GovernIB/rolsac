@@ -1095,8 +1095,12 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				}
 			
 				procediment.setResponsable(request.getParameter("item_responsable"));
-				procediment.setTramite(request.getParameter("item_tramite"));
-				procediment.setUrl(request.getParameter("item_url"));
+				/* Provisional, hasta que este activada la SEU */
+				//procediment.setTramite(request.getParameter("item_tramite"));
+				procediment.setTramite(procedimentOld.getTramite());
+				//procediment.setUrl(request.getParameter("item_url"));
+				procediment.setUrl(procedimentOld.getUrl());
+				/*---------------------------------------------*/
 				
 				// TODO: Implementar setPublico()
 				// TODO: ¿Seguro? Ya existe el método public void setPublicosObjetivo(Set<PublicoObjetivo> publicosObjetivo)
@@ -1108,6 +1112,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 					if (versionStr != null && !"".equals(versionStr)) {
 						Long version = Long.parseLong(versionStr);
 						procediment.setVersion(version);
+					} else { /* Provisional, hasta que este activada la SEU */
+						procediment.setVersion(procedimentOld.getVersion());
 					}
 					
 				} catch (NumberFormatException e) {
