@@ -34,7 +34,7 @@ import java.util.Map;
 public abstract class UsuarioFacadeEJB extends HibernateEJB {
 
     /**
-     * Obtiene referència al ejb de control de Acceso.
+     * Obtiene referï¿½ncia al ejb de control de Acceso.
      * @ejb.ejb-ref ejb-name="sac/persistence/AccesoManager"
      */
     protected abstract AccesoManagerLocal getAccesoManager();
@@ -55,7 +55,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
     public void grabarUsuario(Usuario usuario) {
         Session session = getSession();
         try {
-            if (!userIsSystem() && !getUsuario(session).hasRaizAccess()) {
+            if (!userIsAdmin() && !getUsuario(session).hasRaizAccess()) {
                 throw new SecurityException("No puede administrar usuarios");
             }
 
@@ -152,7 +152,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Asigna la administración de una unidad a un usuario.
+     * Asigna la administraciï¿½n de una unidad a un usuario.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
@@ -178,7 +178,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Desasigna la administración de una unidad a un usuario.
+     * Desasigna la administraciï¿½n de una unidad a un usuario.
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
      */
@@ -278,7 +278,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Añade una nueva unidad
+     * Aï¿½ade una nueva unidad
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
