@@ -101,27 +101,30 @@ var TaulesMestre = {
 	},
 	llansar: function() {
 		
-		taules_mestre_btn.unbind("click",TaulesMestre.llansar);
+		console.log("llansar");
+		
+		taules_mestre_btn.unbind("click",TaulesMestre.llansar);		
 		
 		/*elm_pos_T = taules_mestre_btn.offset().top;
 		elm_pos_L = taules_mestre_btn.offset().left;*/
-		// dsanchez: Restamos 3 p�xels por cuestiones de dise�o.
+		// dsanchez: Restamos 5 p�xels por cuestiones de dise�o.
 		elm_H = taules_mestre_btn.outerHeight()-5;
 				
 		//taulesMestre_elm.css({ top: elm_pos_T + elm_H + "px", left: elm_pos_L + "px" }).slideToggle(300, function() {
 		taulesMestre_elm.css({ top: elm_H + "px" }).slideToggle(300, function() {
-		
+				    		
 			taules_mestre_btn.bind("click",TaulesMestre.llansar);
 			
-			if (taulesMestre_elm.css("display") == "block") {
-				$(window).one("click", TaulesMestre.tancar);
+			if (taulesMestre_elm.css("display") == "block") {			    
+				//$(window).one("click", TaulesMestre.tancar);
+				jQuery(document.body).one("click", TaulesMestre.tancar);
 			}
 			
 		});
 		
 	},
 	
-	tancar : function() {				
+	tancar : function() {					    
 		taulesMestre_elm.slideUp(300);
 	}
 };
