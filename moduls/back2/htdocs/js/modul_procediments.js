@@ -279,7 +279,7 @@ function CEscriptoriProcediment(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).slice(0,pag_Res).each(function(i) {
 				dada_node = this;
 				
 				parClass = (i%2) ? " par": "";
@@ -385,14 +385,17 @@ function CEscriptoriProcediment(){
 			
 		// paginacio
 		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_procediment_elm.val(),10);
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
+		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();		
 			
 		// ordre
 		ordre_Tipus = ordreTipus_procediment_elm.val();
 		ordre_Camp = ordreCamp_procediment_elm.val();
 			
 		// variables
-		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
+		if (pag_Pag != 0) {
+			pag_Pag = pag_Pag - 1;
+		}
+		dataVars += "&pagPag=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp;		
 		
 		// ajax
 		$.ajax({

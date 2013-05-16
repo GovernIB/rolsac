@@ -82,7 +82,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
 	                Hibernate.initialize(proc.getHechosVitalesProcedimientos());
 	                hecho.addHechoVitalProcedimientoRespetandoOrden(hvp);
 	                proc.addHechoVitalProcedimiento(hvp);  // siempre respeta orden
-	                Actualizador.actualizar(proc);
+	                //Actualizador.actualizar(proc);
 	            } else {
 	                session.update(hvp);
 	            }
@@ -184,7 +184,7 @@ public abstract class HechoVitalProcedimientoFacadeEJB extends HibernateEJB {
 	            Hibernate.initialize(procedimiento.getHechosVitalesProcedimientos());
 	            procedimiento.removeHechoVitalProcedimiento(hechovp);
 	            session.delete(hechovp);
-	            Actualizador.actualizar(procedimiento);
+	            //Actualizador.actualizar(procedimiento);
         	}
             session.flush();
         } catch (HibernateException he) {

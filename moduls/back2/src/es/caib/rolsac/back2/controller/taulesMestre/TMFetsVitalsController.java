@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +33,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalProcedimientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
+import org.ibit.rol.sac.persistence.delegate.ProcedimientoDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -176,7 +178,12 @@ public class TMFetsVitalsController extends PantallaBaseController {
 
 			//Procedimientos
 			List<ProcedimientoLocalDTO> procedimientos = new LinkedList<ProcedimientoLocalDTO>();
-	        List<HechoVitalProcedimiento> listaProcedimientos = castList(HechoVitalProcedimiento.class, fetsVitals.getHechosVitalesProcedimientos());
+	        List<HechoVitalProcedimiento> lista = castList(HechoVitalProcedimiento.class, fetsVitals.getHechosVitalesProcedimientos());
+	        List<HechoVitalProcedimiento> listaProcedimientos = new LinkedList<HechoVitalProcedimiento>();
+	        for (HechoVitalProcedimiento hechoProc: lista) {
+	        	if (hechoProc != null)
+	        		listaProcedimientos.add(hechoProc);
+	        }
 	        Collections.sort(listaProcedimientos);
 	        for (HechoVitalProcedimiento hvProc : listaProcedimientos) {
 	        	if (hvProc != null) {
@@ -293,7 +300,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
                 fetVital.setId(id);
                 fetVital.setFichas(fetVitalOld.getFichas());
                 fetVital.setHechosVitalesAgrupacionHV(fetVitalOld.getHechosVitalesAgrupacionHV());
-                fetVital.setHechosVitalesProcedimientos(fetVitalOld.getHechosVitalesProcedimientos());
+                //fetVital.setHechosVitalesProcedimientos(fetVitalOld.getHechosVitalesProcedimientos());
                 fetVital.setOrden(fetVitalOld.getOrden());
                 fetVital.setFoto(fetVitalOld.getFoto());
                 fetVital.setIcono(fetVitalOld.getIcono());
@@ -377,44 +384,34 @@ public class TMFetsVitalsController extends PantallaBaseController {
             // Procediments relacionats
             if (edicion) {
             	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
+            	ProcedimientoDelegate procDelegate = DelegateUtil.getProcedimientoDelegate();
             	List<Long> hvProcIds = new LinkedList<Long>();
+            	List<HechoVitalProcedimiento> hvpAGrabar = new LinkedList<HechoVitalProcedimiento>();
             	
-            	// Guardar los que recibimos
-	            for (String key: valoresForm.keySet()) {
-	            	if (key.startsWith("procediment_id_")) {
-	            		long procHvId = Long.parseLong(valoresForm.get(key));
-	            		HechoVitalProcedimiento hvp;
-	            		if (procHvId < 0) {
-	            			hvp = new HechoVitalProcedimiento();
-	            		} else {
-	            			hvp = hvpDelegate.obtenerHechoVitalProcedimiento(procHvId);
-	            		}
-	            		int orden = Integer.parseInt(valoresForm.get("procediment_orden_" + procHvId));
-            			hvp.setOrden(orden);
+            	// Recogemos los id de los campos que queremos borrar y los eliminamos
+            	for (HechoVitalProcedimiento hvProc: (List<HechoVitalProcedimiento>) fetVitalOld.getHechosVitalesProcedimientos()) {
+            		if (hvProc != null)
+            			hvProcIds.add(hvProc.getId());
+            	}
+            	hvpDelegate.borrarHechoVitalProcedimientos(hvProcIds);
+            	
+            	// Escribimos la nueva selección
+            	for (String key: valoresForm.keySet()) {
+            		if (key.startsWith("procediment_id_")) {
+            			long procHvId = Long.parseLong(valoresForm.get(key));
             			long procedimientoId = Long.parseLong(valoresForm.get("procediment_idProcedimiento_" + procHvId));
-	            		hvpDelegate.grabarHechoVitalProcedimiento(hvp, fetVital.getId(), procedimientoId);
-	            		hvProcIds.add(hvp.getId());
-	            	}
-	            }
-	            
-	            // Eliminar los que ya no estan
-	            Set<Long> hvpsABorrar = new HashSet<Long>();
-	            Boolean hvpTrobat;
-	            for (HechoVitalProcedimiento hvProc: (List<HechoVitalProcedimiento>) fetVitalOld.getHechosVitalesProcedimientos()) {
-	            	hvpTrobat = Boolean.FALSE;
-	            	for (Long hvProcId: hvProcIds) {
-	            		if (hvProc != null && hvProc.getId().equals(hvProcId)) {
-	            			hvpTrobat = Boolean.TRUE;
-	            			break;
-	            		}
-	            	}
-	            	if (hvProc != null && !hvpTrobat) {
-	            		hvpsABorrar.add(hvProc.getId());
-	            	}
-	            }
-	            hvpDelegate.borrarHechoVitalProcedimientos(hvpsABorrar);
+            			
+	            		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
+	            		hvp.setHechoVital(fetVitalOld);
+	            		hvp.setOrden(Integer.parseInt(valoresForm.get("procediment_orden_" + procHvId)));
+	            		hvp.setProcedimiento(procDelegate.obtenerProcedimiento(procedimientoId));
+	            		
+	            		hvpAGrabar.add(hvp);
+            		}
+            	}
+            	hvpDelegate.grabarHechoVitalProcedimientos(hvpAGrabar);
             }
-
+            
             result = new IdNomDTO(fetVital.getId(), messageSource.getMessage("fetVital.guardat.correcte", null, request.getLocale()) );
             
         } catch (DelegateException dEx) {
