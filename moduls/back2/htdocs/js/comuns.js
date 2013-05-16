@@ -101,8 +101,6 @@ var TaulesMestre = {
 	},
 	llansar: function() {
 		
-		console.log("llansar");
-		
 		taules_mestre_btn.unbind("click",TaulesMestre.llansar);		
 		
 		/*elm_pos_T = taules_mestre_btn.offset().top;

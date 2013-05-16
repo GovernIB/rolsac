@@ -39,3 +39,10 @@ div.listaOrdenable div.fitxaNoCaducat {
     background: url("../img/taula_llistat/fitxa.gif") no-repeat scroll 0px 0px transparent;
     padding-left: 20px;
 }
+
+#modul_fitxes .listaOrdenable li span.fitxa{
+    cursor: pointer;    
+}
+#modul_fitxes .listaOrdenable li span.fitxa:hover{
+    text-decoration: underline;
+}

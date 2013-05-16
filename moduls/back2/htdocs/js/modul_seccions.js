@@ -135,7 +135,7 @@ function CModulSeccio() {
 		fitxes_cercador_elm.css({"border-radius": "1em", "-moz-border-radius": "1em", "-webkit-border-radius": "1em"});*/
 				
 		// enllassos
-		modul_seccions_elm.bind("click", CModulSeccio.cerca);
+	    modul_seccions_elm.bind("click", CModulSeccio.cerca);
 				
 		var _atributos = ordenar_secciones ? ["id", "nombre", "orden"] : ["id", "nombre"];  // Campos que queremos que aparezcan en las listas.
 		params = {
@@ -218,7 +218,7 @@ function CModulSeccio() {
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );		
 	}
 	
-	this.gestionaSeccio = function() {
+	this.gestionaSeccio = function() {	    
 		Detall.nou($("#item_id").val(), $("#item_nom_ca").val());
 	}
     
@@ -460,7 +460,7 @@ function CModulSeccio() {
 			seccions_llistat_seccions.find("p.info").html( txtHiHa + "<strong> " + numSecciones + " " + txt_seccions + ""  + "</strong>");
 		
 		this.activaEnllasosFitxes();
-				
+						
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
 		
@@ -521,11 +521,13 @@ function CModulSeccio() {
 	}
 	
 	this.activaEnllasosFitxes = function() {		
-		$(".enllasGestioFitxa").each( function() {
+		
+		//debug
+		/*$(".enllasGestioFitxa").each( function() {
 			$(this).bind("click", function() {					
 				return that.mostraFitxes( this ); 
 			});
-		});
+		});*/
 	}
 	
 	////////////***********//////////
@@ -602,10 +604,13 @@ function CModulSeccio() {
 			var urlUA = pagUADetall  + "?itemId=" + idUA;
 			$(this).append(" [<a id=\""+idUA+"\" href=\"javascript:;\" class=\"fitxa_inf\">" + printStringFromNull(nomUA, txtSinValor) + "</a>]");
 			
-			// Evento click Ficha informativa
-            $(this).unbind("click").bind("click", function() {                        
+			// Evento click Ficha informativa			
+            //$(this).unbind("click").bind("click", function() {
+            // dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la edición de la ficha.
+            $(this).find("span.fitxa").unbind("click").bind("click", function() {                        
                                         
-                var fitxaId = $(this).find("input.fitxa_id").val();
+                //var fitxaId = $(this).find("input.fitxa_id").val();
+                var fitxaId = $(this).parent().find("input.fitxa_id").val();
                 
                 Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtCarregantFitxa});
                 $.ajax({
