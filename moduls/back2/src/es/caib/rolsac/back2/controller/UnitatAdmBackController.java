@@ -667,7 +667,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     					//Obtener las fichas de la secci�n actual y preparar la ordenaci�n si ha habido cambios en la seccion
     					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
     					if (isSeccionModificada(idSeccion, valoresForm)) {
-        				
+    						
     					    List<Long> listaIdFichasUA = new ArrayList<Long>();
         					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
         
@@ -709,7 +709,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(parametros, actualizadorFichasUA);
     			long execTime = new Date().getTime() - startTrace.getTime();
                 log.debug("Temps d'execucio de actualizarOrdenFichasUA(): " + execTime + " milisegons.");
-    			
+                
 			}			
 			
 			// Sobre escrivim la unitat administrativa de la mollapa

@@ -12,16 +12,20 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import es.caib.rolsac.back2.util.RolUtil;
 
 /**
  *  Gestiona las UAs de la miga de pan.
@@ -34,12 +38,14 @@ public class UnidadAdministrativaController {
 	
 	@SuppressWarnings("unchecked")
     @RequestMapping(value = "/listarHijos.do")
-	public @ResponseBody List<IdNomDTO> llistatHijos(HttpSession session, Locale locale, 
+	public @ResponseBody List<IdNomDTO> llistatHijos(HttpSession session, HttpServletRequest request, Locale locale, 
 	        @RequestParam(value = "id", required = false) Long uaId) {
 		
 		List<IdNomDTO> uaHijosJSON = new ArrayList<IdNomDTO>();
 		List<UnidadAdministrativa> uaHijos;
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+		RolUtil rolUtil = new RolUtil(request);
 
 		try {
 			
@@ -50,8 +56,21 @@ public class UnidadAdministrativaController {
 			}
             			
 			String lang = locale.getLanguage();
+			Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
 			for (UnidadAdministrativa ua: uaHijos) {
-				uaHijosJSON.add(new IdNomDTO(ua.getId(), ua.getNombreUnidadAdministrativa(lang)));
+				// Miramos que el padre sea visible por el usuario
+				boolean padreAceptable = false;
+				UnidadAdministrativa uaPadre = ua.getPadre();
+				
+				while (!padreAceptable && uaPadre != null) {
+					if (usuari.getUnidadesAdministrativas().contains(uaPadre))
+						padreAceptable = true;
+					
+					uaPadre = uaPadre.getPadre();
+				}
+				
+				if (usuari.getUnidadesAdministrativas().contains(ua) || rolUtil.userIsAdmin() || padreAceptable)
+					uaHijosJSON.add(new IdNomDTO(ua.getId(), ua.getNombreUnidadAdministrativa(lang)));
 			}
 			
 		} catch (DelegateException dEx) {

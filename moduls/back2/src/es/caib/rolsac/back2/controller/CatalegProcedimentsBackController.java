@@ -28,6 +28,7 @@ import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
 import org.ibit.rol.sac.model.Familia;
+import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.HechoVitalProcedimiento;
 import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
@@ -864,7 +865,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	            	String[] codisFetsVitals = request.getParameter("fetsVitals").split(",");
 	            	HechoVitalDelegate hvDelegate = DelegateUtil.getHechoVitalDelegate();
 	            	HechoVitalProcedimientoDelegate hvpDelegate = DelegateUtil.getHechoVitalProcedimientoDelegate();
-	
+	            	
 	            	// Eliminamos los hecho vital procedimiento existentes
 	            	List<Long> hvpIds = new LinkedList<Long>();
 	            	if (procediment.getHechosVitalesProcedimientos() != null) {
@@ -876,15 +877,25 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	            	procediment.setHechosVitalesProcedimientos(new HashSet<HechoVitalProcedimiento>());
 	            	
 	            	// Guardamos los nuevos
-	            	int orden = 0;
 	            	Set<HechoVitalProcedimiento> hvpsAGuardar = new HashSet<HechoVitalProcedimiento>();
 	            	for (int i = 0; i < codisFetsVitals.length; i++) {
 	                	Long hvId = ParseUtil.parseLong(codisFetsVitals[i]);
 	                	if (hvId != null) {
-	                		HechoVitalProcedimiento hvp = new HechoVitalProcedimiento();
-	                		hvp.setOrden(orden++);
+	                		HechoVitalProcedimiento hvp = null;
+	                		HechoVital hv = hvDelegate.obtenerHechoVital(hvId);
+	                		hvp = new HechoVitalProcedimiento();
 	                		hvp.setProcedimiento(procediment);
-	                		hvp.setHechoVital(hvDelegate.obtenerHechoVital(hvId));
+	                		hvp.setHechoVital(hv);
+	                		int maxOrden = 0;
+	                		for (HechoVitalProcedimiento hechoVitalProcedimiento: (List<HechoVitalProcedimiento>) hv.getHechosVitalesProcedimientos()) {
+	                			if (hechoVitalProcedimiento != null) {
+	                				if (maxOrden < hechoVitalProcedimiento.getOrden())
+	                					maxOrden = hechoVitalProcedimiento.getOrden();
+	                			}
+	                		}
+	                		maxOrden++;
+	                		hvp.setOrden(maxOrden);
+	                		
 	                		hvpsAGuardar.add(hvp);
 	                	}
 	                }
