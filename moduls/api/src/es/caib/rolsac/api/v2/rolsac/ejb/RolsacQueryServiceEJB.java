@@ -444,11 +444,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         // Comprobamos si solicitan registros visibles.
-        boolean registrosVisibles = false;
-        if ( procedimentCriteria.getVisible() != null 
-        		&& procedimentCriteria.getVisible().booleanValue() ) {
-        	registrosVisibles = true;
-        }
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
         // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
         procedimentCriteria.setVisible(null);
 
@@ -476,8 +473,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
             if (procedimentLocal != null) {
                 
-                if ( (registrosVisibles && procedimentLocal.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-    					|| !registrosVisibles ) {							// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+                if ( (soloRegistrosVisibles && procedimentLocal.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+    					|| !soloRegistrosVisibles ) {							// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
             		
                 	procedimentDTO = (ProcedimentDTO)BasicUtils.entityToDTO(
                             ProcedimentDTO.class, 
@@ -531,11 +528,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         // Comprobamos si solicitan registros visibles.
-        boolean registrosVisibles = false;
-        if ( procedimentCriteria.getVisible() != null 
-        		&& procedimentCriteria.getVisible().booleanValue() ) {
-        	registrosVisibles = true;
-        }
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
         // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
         procedimentCriteria.setVisible(null);
 
@@ -564,8 +558,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
 			for (ProcedimientoLocal procediment : procedimentsResult) {
 
-				if ( (registrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !registrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+				if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
 					
 					procedimentDTOList.add(
 						(ProcedimentDTO)BasicUtils.entityToDTO(
@@ -1100,11 +1094,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         // Comprobamos si solicitan registros visibles.
-        boolean registrosVisibles = false;
-        if ( fitxaCriteria.getVisible() != null 
-        		&& fitxaCriteria.getVisible().booleanValue() ) {
-        	registrosVisibles = true;
-        }
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() ); 
         // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
         fitxaCriteria.setVisible(null);
 
@@ -1131,8 +1122,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
             if (fitxa != null) {
             	
-                if ( (registrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-    					|| !registrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+    					|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
             		
                 	fitxaDTO = (FitxaDTO)BasicUtils.entityToDTO(FitxaDTO.class, fitxa, fitxaCriteria.getIdioma());
             		
@@ -1181,11 +1172,9 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         // Comprobamos si solicitan registros visibles.
-        boolean registrosVisibles = false;
-        if ( fitxaCriteria.getVisible() != null 
-        		&& fitxaCriteria.getVisible().booleanValue() ) {
-        	registrosVisibles = true;
-        }
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() );  
+
         // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
         fitxaCriteria.setVisible(null);
 
@@ -1212,8 +1201,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
             for (Ficha ficha: fitxaResult) {
             	
-            	if ( (registrosVisibles && ficha.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !registrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+            	if ( (soloRegistrosVisibles && ficha.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
             		
             		fitxaDTOList.add(
             			(FitxaDTO)BasicUtils.entityToDTO(
