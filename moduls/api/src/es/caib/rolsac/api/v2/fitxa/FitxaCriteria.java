@@ -38,6 +38,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
 
     private java.lang.String seccion;
 
+    private java.lang.Boolean visible;
+
     public FitxaCriteria() {
     }
 
@@ -61,7 +63,8 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
            java.lang.String urlVideo,
            java.lang.String validacion,
            java.lang.String publicoObjetivo,
-           java.lang.String seccion) {
+           java.lang.String seccion,
+           java.lang.Boolean visible) {
         super(
             id,
             idioma,
@@ -83,6 +86,7 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.validacion = validacion;
         this.publicoObjetivo = publicoObjetivo;
         this.seccion = seccion;
+        this.visible = visible;
     }
 
 
@@ -385,6 +389,26 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         this.seccion = seccion;
     }
 
+
+    /**
+     * Gets the visible value for this FitxaCriteria.
+     * 
+     * @return visible
+     */
+    public java.lang.Boolean getVisible() {
+        return visible;
+    }
+
+
+    /**
+     * Sets the visible value for this FitxaCriteria.
+     * 
+     * @param visible
+     */
+    public void setVisible(java.lang.Boolean visible) {
+        this.visible = visible;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof FitxaCriteria)) return false;
@@ -441,7 +465,10 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
               this.publicoObjetivo.equals(other.getPublicoObjetivo()))) &&
             ((this.seccion==null && other.getSeccion()==null) || 
              (this.seccion!=null &&
-              this.seccion.equals(other.getSeccion())));
+              this.seccion.equals(other.getSeccion()))) &&
+            ((this.visible==null && other.getVisible()==null) || 
+             (this.visible!=null &&
+              this.visible.equals(other.getVisible())));
         __equalsCalc = null;
         return _equals;
     }
@@ -497,6 +524,9 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         }
         if (getSeccion() != null) {
             _hashCode += getSeccion().hashCode();
+        }
+        if (getVisible() != null) {
+            _hashCode += getVisible().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -596,6 +626,12 @@ public class FitxaCriteria  extends es.caib.rolsac.api.v2.general.BasicCriteria 
         elemField.setFieldName("seccion");
         elemField.setXmlName(new javax.xml.namespace.QName("", "seccion"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("visible");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "visible"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }

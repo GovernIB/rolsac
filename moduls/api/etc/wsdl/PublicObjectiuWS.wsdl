@@ -78,6 +78,7 @@
                             <element name="textos" nillable="true" type="xsd:string" />
                             <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                             <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
+                            <element name="visible" nillable="true" type="xsd:boolean" />
                         </sequence>
                     </extension>
                 </complexContent>
@@ -103,6 +104,7 @@
                             <element name="validacion" nillable="true" type="xsd:string" />
                             <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                             <element name="seccion" nillable="true" type="xsd:string" />
+                            <element name="visible" nillable="true" type="xsd:boolean" />
                         </sequence>
                     </extension>
                 </complexContent>
