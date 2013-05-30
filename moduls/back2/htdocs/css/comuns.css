@@ -274,6 +274,7 @@ span.sep { margin:0 1.5em; }
 	float: left;
 }
 #mollaPa_contingut ul.molla li.ua div a.desplegar{
+    display: block;
 	width: 10px;
 	height: 19px;
 	margin: 2px 2px 2px 3px;

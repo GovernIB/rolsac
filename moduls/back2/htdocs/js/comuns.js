@@ -209,7 +209,8 @@ var MollaPa = {
 					uas_elm.slideUp(300, function() {
 						//pare_anterior_ID = pare_ID;
 						$(this).html(nodes_codi).slideDown(300, function() {
-							$(window).bind("click",MollaPa.amagar);
+							//$(window).bind("click",MollaPa.amagar);
+							jQuery(document.body).bind("click", MollaPa.amagar);
 							As.iniciar("#uas");
 						});
 					});
