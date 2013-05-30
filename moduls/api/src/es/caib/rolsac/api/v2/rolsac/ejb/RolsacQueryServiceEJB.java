@@ -642,21 +642,19 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
             
+            int cont = 0;
 			for (ProcedimientoLocal procediment : procedimentsResult) {
 				
 				if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos al total de resultados si cumple con ello.
 						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
 					
-					// Contemplar primer valor, ya que se inicializa a -1 y no a 0.
-					if (numResultats == -1)
-						numResultats = 1;
-					// Incremento normal.
-					else
-						numResultats += 1;
+					cont++;
 					
 				}
 			
 			}
+			
+			numResultats = new Integer(cont);
             
         } catch (HibernateException e) {
         	
