@@ -342,11 +342,19 @@ public class MateriaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) {
+    	
         List<ProcedimentDTO> procedimentsDTOList = new ArrayList<ProcedimentDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        procedimentCriteria.setVisible(null);
 
-        try {            
+        try {  
+        	
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTOS_LOCALES_ALIAS, HQL_TRADUCCIONES_ALIAS, procedimentCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_MATERIA_CLASS, HQL_MATERIA_ALIAS));
@@ -361,21 +369,45 @@ public class MateriaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>) query.list();
+            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
+            
             for (ProcedimientoLocal procediment : procedimentsResult) {
-                procedimentsDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class,  procediment, procedimentCriteria.getIdioma()));
+            	                
+                if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+					
+					procedimentsDTOList.add(
+						(ProcedimentDTO)BasicUtils.entityToDTO(
+							ProcedimentDTO.class, 
+							procediment, 
+							procedimentCriteria.getIdioma()
+						)
+					);
+					
+				}
+                
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return procedimentsDTOList;
+        
     }
 
     /**
@@ -388,13 +420,22 @@ public class MateriaQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     @SuppressWarnings("unchecked")
-    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {        
+    public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
+    	
         List<FitxaDTO> fitxesDTOList = new ArrayList<FitxaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() );  
+
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        fitxaCriteria.setVisible(null);
 
         try {            
-            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHAS_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+        
+        	criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHAS_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_MATERIA_CLASS, HQL_MATERIA_ALIAS));
             entities.add(new FromClause(HQL_FICHAS_CLASS, HQL_FICHAS_ALIAS));
@@ -409,20 +450,44 @@ public class MateriaQueryServiceEJB extends HibernateEJB {
             session = getSession();
             Query query = qb.createQuery(session);
             List<Ficha> fitxesResult = (List<Ficha>) query.list();
+            
             for (Ficha fitxa : fitxesResult) {
-                fitxesDTOList.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class,  fitxa, fitxaCriteria.getIdioma()));
+
+                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+            		
+                	fitxesDTOList.add(
+            			(FitxaDTO)BasicUtils.entityToDTO(
+        					FitxaDTO.class,  
+        					fitxa, 
+        					fitxaCriteria.getIdioma()
+            			)
+                	);
+            		
+            	}
+                
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return fitxesDTOList;
+        
     }
 
     /**

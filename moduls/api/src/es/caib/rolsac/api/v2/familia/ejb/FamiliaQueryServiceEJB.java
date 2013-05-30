@@ -115,11 +115,19 @@ public class FamiliaQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<ProcedimentDTO> llistarProcedimentsLocals(long id, ProcedimentCriteria procedimentCriteria) {
-        List<ProcedimentDTO> procedimentDTOList = new ArrayList<ProcedimentDTO>();
+    	
+        List<ProcedimentDTO> procedimentsDTOList = new ArrayList<ProcedimentDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        procedimentCriteria.setVisible(null);
 
         try {
+        	
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMENT_ALIAS, HQL_TRADUCCIONES_ALIAS, procedimentCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FAMILIA_CLASS, HQL_FAMILIA_ALIAS));
@@ -134,21 +142,45 @@ public class FamiliaQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<ProcedimientoLocal> procResult = (List<ProcedimientoLocal>) query.list();
-            for (ProcedimientoLocal proc : procResult) {
-                procedimentDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class, proc, procedimentCriteria.getIdioma()));
+            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
+            
+            for (ProcedimientoLocal procediment : procedimentsResult) {
+                
+                if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+					
+					procedimentsDTOList.add(
+						(ProcedimentDTO)BasicUtils.entityToDTO(
+							ProcedimentDTO.class, 
+							procediment, 
+							procedimentCriteria.getIdioma()
+						)
+					);
+					
+				}
+                
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
-        return procedimentDTOList;
+        return procedimentsDTOList;
+        
     }
 
     /**

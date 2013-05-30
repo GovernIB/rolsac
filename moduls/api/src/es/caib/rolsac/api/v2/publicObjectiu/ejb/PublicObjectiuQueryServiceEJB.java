@@ -159,24 +159,32 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
     /**
      * Obtiene listado de procedimientos del publico objetivo.
      * @param id
-     * @param procCriteria
+     * @param procedimentCriteria
      * @return List<ProcedimentDTO>
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
     @SuppressWarnings("unchecked")
-    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procCriteria) {
-        List<ProcedimentDTO> procDTOList = new ArrayList<ProcedimentDTO>();
+    public List<ProcedimentDTO> llistarProcediments(long id, ProcedimentCriteria procedimentCriteria) {
+    	
+        List<ProcedimentDTO> procedimentsDTOList = new ArrayList<ProcedimentDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        procedimentCriteria.setVisible(null);
 
         try {
-            criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMENT_ALIAS, HQL_TRADUCCIONES_ALIAS, procCriteria);
+        	
+            criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMENT_ALIAS, HQL_TRADUCCIONES_ALIAS, procedimentCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PUBLIC_OBJECTIU_CLASS, HQL_PUBLIC_OBJECTIU_ALIAS));
             entities.add(new FromClause(HQL_PROCEDIMENT_CLASS, HQL_PROCEDIMENT_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_PROCEDIMENT_ALIAS, entities, procCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            QueryBuilder qb = new QueryBuilder(HQL_PROCEDIMENT_ALIAS, entities, procedimentCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
             
             PublicObjectiuCriteria poc = new PublicObjectiuCriteria();
@@ -186,22 +194,45 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<ProcedimientoLocal> procResult = (List<ProcedimientoLocal>) query.list();
-
-            for (ProcedimientoLocal proc : procResult) {
-                procDTOList.add((ProcedimentDTO) BasicUtils.entityToDTO(ProcedimentDTO.class, proc, procCriteria.getIdioma()));
+            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
+            
+            for (ProcedimientoLocal procediment : procedimentsResult) {
+            	                
+                if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+					
+					procedimentsDTOList.add(
+						(ProcedimentDTO)BasicUtils.entityToDTO(
+							ProcedimentDTO.class, 
+							procediment, 
+							procedimentCriteria.getIdioma()
+						)
+					);
+					
+				}
+                
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
-        return procDTOList;
+        return procedimentsDTOList;
+        
     }
     
     /**
@@ -215,11 +246,20 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
      */
     @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
+    	
         List<FitxaDTO> fitxaDTOList = new ArrayList<FitxaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() );  
+
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        fitxaCriteria.setVisible(null);
 
         try {
+        	
             criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PUBLIC_OBJECTIU_CLASS, HQL_PUBLIC_OBJECTIU_ALIAS));
@@ -234,22 +274,45 @@ public class PublicObjectiuQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Ficha> fichaResult = (List<Ficha>) query.list();
+            List<Ficha> fichaResult = (List<Ficha>)query.list();
 
-            for (Ficha ficha : fichaResult) {
-                fitxaDTOList.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class, ficha, fitxaCriteria.getIdioma()));
+            for (Ficha fitxa : fichaResult) {
+
+                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+            		
+                	fitxaDTOList.add(
+            			(FitxaDTO)BasicUtils.entityToDTO(
+        					FitxaDTO.class,  
+        					fitxa, 
+        					fitxaCriteria.getIdioma()
+            			)
+                	);
+            		
+            	}
+                
             }
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return fitxaDTOList;
+        
     }
     
 }

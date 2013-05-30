@@ -303,9 +303,16 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
     @SuppressWarnings("unchecked")
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
     	
-    	List<FitxaDTO> fitxaDTOSet = new Vector<FitxaDTO>();
+    	List<FitxaDTO> fitxesDTOList = new ArrayList<FitxaDTO>();
         List<CriteriaObject> criteris;
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() );  
+
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        fitxaCriteria.setVisible(null);
         
         try {
         	
@@ -326,10 +333,23 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Ficha> fitxaResult = (List<Ficha>) query.list();
+            List<Ficha> fitxesResult = (List<Ficha>)query.list();
                         
-            for (Ficha fitxa : fitxaResult) {
-            	fitxaDTOSet.add((FitxaDTO) BasicUtils.entityToDTO(FitxaDTO.class,  fitxa, fitxaCriteria.getIdioma()));
+            for (Ficha fitxa : fitxesResult) {
+
+                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+            		
+                	fitxesDTOList.add(
+            			(FitxaDTO)BasicUtils.entityToDTO(
+        					FitxaDTO.class,  
+        					fitxa, 
+        					fitxaCriteria.getIdioma()
+            			)
+                	);
+            		
+            	}
+                
             }
             
         } catch (HibernateException e) {
@@ -350,7 +370,7 @@ public class SeccioQueryServiceEJB extends HibernateEJB {
             
         }
 
-        return new ArrayList<FitxaDTO>(fitxaDTOSet);
+        return fitxesDTOList;
         
     }
 
