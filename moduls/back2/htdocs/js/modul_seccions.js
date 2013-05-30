@@ -521,13 +521,11 @@ function CModulSeccio() {
 	}
 	
 	this.activaEnllasosFitxes = function() {		
-		
-		//debug
-		/*$(".enllasGestioFitxa").each( function() {
+		$(".enllasGestioFitxa").each( function() {
 			$(this).bind("click", function() {					
 				return that.mostraFitxes( this ); 
 			});
-		});*/
+		});
 	}
 	
 	////////////***********//////////
