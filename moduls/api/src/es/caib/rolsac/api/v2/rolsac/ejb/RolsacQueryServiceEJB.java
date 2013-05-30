@@ -634,8 +634,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     HQL_PROCEDIMIENTO_ALIAS, 
                     entities, 
                     procedimentCriteria.getIdioma(),
-                    HQL_TRADUCCIONES_ALIAS,
-                    true);
+                    HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
