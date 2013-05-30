@@ -607,11 +607,19 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
      * @ejb.permission unchecked="true"
      */
     public int getNumProcediments(ProcedimentCriteria procedimentCriteria) {
+    	
         Integer numResultats = -1;
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
+        
+        // Comprobamos si solicitan registros visibles.
+        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
+        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
+        procedimentCriteria.setVisible(null);
 
         try {
+        	
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
@@ -632,21 +640,47 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            numResultats = getNumberResults(query);
+            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
+            
+			for (ProcedimientoLocal procediment : procedimentsResult) {
+				
+				if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos al total de resultados si cumple con ello.
+						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
+					
+					// Contemplar primer valor, ya que se inicializa a -1 y no a 0.
+					if (numResultats == -1)
+						numResultats = 1;
+					// Incremento normal.
+					else
+						numResultats += 1;
+					
+				}
+			
+			}
+            
         } catch (HibernateException e) {
+        	
             log.error(e);
             throw new EJBException(e);
+            
         } catch (CriteriaObjectParseException e) {
+        	
             log.error(e);
             throw new EJBException(e);
+            
         } catch (QueryBuilderException e) {
+        	
             log.error(e);
             throw new EJBException(e);
+            
         } finally {
+        	
             close(session);
+            
         }
 
         return numResultats;
+        
     }
 
     /**
