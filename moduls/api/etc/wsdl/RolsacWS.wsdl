@@ -19,6 +19,7 @@
 	xmlns:tns4="http://procediment.v2.api.rolsac.caib.es" xmlns:tns5="http://materia.v2.api.rolsac.caib.es"
 	xmlns:tns6="http://tramit.v2.api.rolsac.caib.es" xmlns:tns7="http://fetVital.v2.api.rolsac.caib.es"
 	xmlns:tns8="http://fitxa.v2.api.rolsac.caib.es" xmlns:tns9="http://documentTramit.v2.api.rolsac.caib.es"
+	xmlns:tns50="http://iniciacio.v2.api.rolsac.caib.es" 
 	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
 	xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.rolsac.v2.api.rolsac.caib.es">
 	<!-- WSDL created by Apache Axis version: 1.4 Built on Apr 22, 2006 (06:55:48 
@@ -220,6 +221,14 @@
 				<complexContent>
 					<restriction base="soapenc:Array">
 						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns4:ProcedimentDTO[]" />
+					</restriction>
+				</complexContent>
+			</complexType>
+			
+			<complexType name="ArrayOfIniciacioDTO">
+				<complexContent>
+					<restriction base="soapenc:Array">
+						<attribute ref="soapenc:arrayType" wsdl:arrayType="tns50:IniciacioDTO[]" />
 					</restriction>
 				</complexContent>
 			</complexType>			
@@ -574,6 +583,65 @@
 				</sequence>
 			</complexType>
 		</schema>
+
+		<schema xmlns="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://iniciacio.v2.api.rolsac.caib.es">
+			<import namespace="http://procediment.v2.api.rolsac.caib.es" />
+			<import namespace="http://tipus.v2.api.rolsac.caib.es" />
+			<import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+			<import namespace="http://usuari.v2.api.rolsac.caib.es" />
+			<import namespace="http://enllac.v2.api.rolsac.caib.es" />
+			<import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
+			<import namespace="http://perfil.v2.api.rolsac.caib.es" />
+			<import namespace="http://document.v2.api.rolsac.caib.es" />
+			<import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
+			<import namespace="http://materia.v2.api.rolsac.caib.es" />
+			<import namespace="http://edifici.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
+			<import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+			<import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
+			<import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
+			<import namespace="http://seccio.v2.api.rolsac.caib.es" />
+			<import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
+			<import namespace="http://familia.v2.api.rolsac.caib.es" />
+			<import namespace="http://tramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://normativa.v2.api.rolsac.caib.es" />
+			<import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
+			<import namespace="http://general.v2.api.rolsac.caib.es" />
+			<import namespace="http://publicObjectiu.v2.api.rolsac.caib.es" />
+			<import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
+			<import namespace="http://taxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://formulari.v2.api.rolsac.caib.es" />
+			<import namespace="http://xml.apache.org/xml-soap" />
+			<import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+			<import namespace="http://fitxaUA.v2.api.rolsac.caib.es" />
+			<import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+			<import namespace="http://personal.v2.api.rolsac.caib.es" />
+			<import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="IniciacioCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />						
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="IniciacioDTO">
+				<sequence>
+					<element name="codigoEstandar" nillable="true" type="xsd:string" />
+					<element name="descripcion" nillable="true" type="xsd:string" />
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://procediment.v2.api.rolsac.caib.es">
 			<import namespace="http://tipus.v2.api.rolsac.caib.es" />
@@ -922,6 +990,7 @@
 				</sequence>
 			</complexType>
 		</schema>
+
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://fitxa.v2.api.rolsac.caib.es">
 			<import namespace="http://tipus.v2.api.rolsac.caib.es" />
@@ -2430,6 +2499,7 @@
 		</schema>
 		
 	</wsdl:types>	
+	
 	<wsdl:message name="llistarUsuarisResponse">
 		<wsdl:part name="llistarUsuarisReturn" type="impl:ArrayOfUsuariDTO" />
 	</wsdl:message>
@@ -2823,9 +2893,22 @@
 	</wsdl:message>					
 	<wsdl:message name="llistarExcepcionsDocumentacioResponse">
 		<wsdl:part name="llistarExcepcionsDocumentacioReturn" type="impl:ArrayOfExcepcioDocumentacioDTO" />
+	</wsdl:message>
+
+	<wsdl:message name="obtenirTipusIniciacioRequest">
+		<wsdl:part name="in0" type="tns50:IniciacioCriteria" />
+	</wsdl:message>			
+	<wsdl:message name="obtenirTipusIniciacioResponse">
+		<wsdl:part name="obtenirTipusIniciacioReturn" type="tns50:IniciacioDTO" />
 	</wsdl:message>	
-	
-	
+		
+	<wsdl:message name="llistarTipusIniciacionsRequest">
+		<wsdl:part name="in0" type="tns50:IniciacioCriteria" />
+	</wsdl:message>					
+	<wsdl:message name="llistarTipusIniciacionsResponse">
+		<wsdl:part name="llistarTipusIniciacionsReturn" type="impl:ArrayOfIniciacioDTO" />
+	</wsdl:message>
+
 	<wsdl:portType name="RolsacQueryServiceEJBRemote">
 		<wsdl:operation name="llistarUnitatsAdministratives"
 			parameterOrder="in0">
@@ -3188,7 +3271,23 @@
 			<wsdl:output message="intf:obtenirExcepcioDocumentacioResponse"
 				name="obtenirExcepcioDocumentacioResponse" />
 		</wsdl:operation>
-						
+		
+		<wsdl:operation name="obtenirTipusIniciacio"
+			parameterOrder="in0">
+			<wsdl:input message="intf:obtenirTipusIniciacioRequest"
+				name="obtenirTipusIniciacioRequest" />
+			<wsdl:output message="intf:obtenirTipusIniciacioResponse"
+				name="obtenirTipusIniciacioResponse" />
+		</wsdl:operation>
+		
+		<wsdl:operation name="llistarTipusIniciacions"
+			parameterOrder="in0">
+			<wsdl:input message="intf:llistarTipusIniciacionsRequest"
+				name="llistarTipusIniciacionsRequest" />
+			<wsdl:output message="intf:llistarTipusIniciacionsResponse"
+				name="llistarTipusIniciacionsResponse" />
+		</wsdl:operation>
+			
 	</wsdl:portType>
 	
 	<wsdl:binding name="RolsacWSSoapBinding" type="intf:RolsacQueryServiceEJBRemote">
@@ -3890,7 +3989,6 @@
 			</wsdl:output>
 		</wsdl:operation>
 		
-		
 		<wsdl:operation name="llistarExcepcionsDocumentacio">
 			<wsdlsoap:operation soapAction="" />
 			<wsdl:input name="llistarExcepcionsDocumentacioRequest">
@@ -3913,6 +4011,30 @@
 					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
 			</wsdl:output>
 		</wsdl:operation>
+
+		<wsdl:operation name="llistarTipusIniciacions">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="llistarTipusIniciacionsRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="llistarTipusIniciacionsResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>		
+		<wsdl:operation name="obtenirTipusIniciacio">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="obtenirTipusIniciacioRequest">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://intf.ejb.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:input>
+			<wsdl:output name="obtenirTipusIniciacioResponse">
+				<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+					namespace="http://ws.rolsac.v2.api.rolsac.caib.es" use="encoded" />
+			</wsdl:output>
+		</wsdl:operation>
+
 	</wsdl:binding>
 	
 	

@@ -29,6 +29,7 @@ import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.IconoFamilia;
 import org.ibit.rol.sac.model.IconoMateria;
+import org.ibit.rol.sac.model.Iniciacion;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.NormativaExterna;
@@ -94,6 +95,8 @@ import es.caib.rolsac.api.v2.perfil.PerfilCriteria;
 import es.caib.rolsac.api.v2.perfil.PerfilDTO;
 import es.caib.rolsac.api.v2.personal.PersonalCriteria;
 import es.caib.rolsac.api.v2.personal.PersonalDTO;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentCriteria;
 import es.caib.rolsac.api.v2.procediment.ProcedimentDTO;
 import es.caib.rolsac.api.v2.procediment.ProcedimentUtils;
@@ -204,6 +207,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
     private static final String HQL_TIPUS_AFECTACIO_ALIAS = "tia";
     private static final String HQL_UNITAT_MATERIA_CLASS = "UnidadMateria";
     private static final String HQL_UNITAT_MATERIA_ALIAS = "um";
+    private static final String HQL_INICIACIO_CLASS = "Iniciacion";
+    private static final String HQL_INICIACIO_ALIAS = "inici";
 
     /**
      * @ejb.create-method
@@ -3693,6 +3698,155 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         }
 
         return tipusAfectacioDTOList;
+    }
+    
+    /**
+     * Obtiene lista de tipos de iniciación.
+     * @param iniciacioCriteria
+     * @return List<IniciacioDTO>
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) {
+    	
+        List<CriteriaObject> criteris;
+        List<IniciacioDTO> iniciacioDTOList = new ArrayList<IniciacioDTO>();
+        Session session = null;
+
+        try {
+        	
+            criteris = BasicUtils.parseCriterias(
+	        		IniciacioCriteria.class, 
+	        		HQL_INICIACIO_ALIAS, 
+	        		HQL_TRADUCCIONES_ALIAS, 
+	        		iniciacioCriteria
+            );
+            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_INICIACIO_CLASS, HQL_INICIACIO_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+            		HQL_INICIACIO_ALIAS, 
+                    entities, 
+                    iniciacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS
+            );
+            
+            
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            List<Iniciacion> iniciacioResult = (List<Iniciacion>)query.list();
+            
+            for (Iniciacion iniciacion: iniciacioResult) {
+                iniciacioDTOList.add((IniciacioDTO)BasicUtils.entityToDTO(
+                		IniciacioDTO.class, 
+                		iniciacion,
+                        iniciacioCriteria.getIdioma()));
+            }
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } catch (CriteriaObjectParseException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } catch (QueryBuilderException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return iniciacioDTOList;
+        
+    }
+    
+    /**
+     * Obtiene un tipo de iniciación.
+     * @param iniciacioCriteria
+     * @return IniciacioDTO
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    @SuppressWarnings("unchecked")
+    public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) {
+    	
+        List<CriteriaObject> criteris;
+        IniciacioDTO iniciacioDTO = null;
+        Session session = null;
+
+        try {
+        	
+            criteris = BasicUtils.parseCriterias(
+	        		IniciacioCriteria.class, 
+	        		HQL_INICIACIO_ALIAS, 
+	        		HQL_TRADUCCIONES_ALIAS, 
+	        		iniciacioCriteria
+            );
+            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_INICIACIO_CLASS, HQL_INICIACIO_ALIAS));
+            
+            QueryBuilder qb = new QueryBuilder(
+            		HQL_INICIACIO_ALIAS, 
+                    entities, 
+                    iniciacioCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS
+            );
+            
+            
+            qb.extendCriteriaObjects(criteris);
+
+            session = getSession();
+            Query query = qb.createQuery(session);
+            Iniciacion iniciacion = (Iniciacion)query.uniqueResult();
+            
+            if (iniciacion != null) {
+            	
+				iniciacion = (Iniciacion)BasicUtils.entityToDTO(
+						Iniciacion.class, 
+						iniciacion,
+						iniciacioCriteria.getIdioma()
+				);
+            	
+            }
+            
+        } catch (HibernateException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } catch (CriteriaObjectParseException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } catch (QueryBuilderException e) {
+        	
+            log.error(e);
+            throw new EJBException(e);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+
+        return iniciacioDTO;
+        
     }
     
 }

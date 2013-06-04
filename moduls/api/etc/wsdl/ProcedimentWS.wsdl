@@ -234,6 +234,64 @@
                 </sequence>
             </complexType>
         </schema>
+
+        <schema xmlns="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://iniciacio.v2.api.rolsac.caib.es">
+            <import namespace="http://tipus.v2.api.rolsac.caib.es" />
+            <import namespace="http://butlleti.v2.api.rolsac.caib.es" />
+            <import namespace="http://usuari.v2.api.rolsac.caib.es" />
+            <import namespace="http://enllac.v2.api.rolsac.caib.es" />
+            <import namespace="http://iconaMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://perfil.v2.api.rolsac.caib.es" />
+            <import namespace="http://document.v2.api.rolsac.caib.es" />
+            <import namespace="http://agrupacioMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://materia.v2.api.rolsac.caib.es" />
+            <import namespace="http://edifici.v2.api.rolsac.caib.es" />
+            <import namespace="http://unitatAdministrativa.v2.api.rolsac.caib.es" />
+            <import namespace="http://procediment.v2.api.rolsac.caib.es" />
+            <import namespace="http://unitatMateria.v2.api.rolsac.caib.es" />
+            <import namespace="http://espaiTerritorial.v2.api.rolsac.caib.es" />
+            <import namespace="http://tipusAfectacio.v2.api.rolsac.caib.es" />
+            <import namespace="http://iconaFamilia.v2.api.rolsac.caib.es" />
+            <import namespace="http://seccio.v2.api.rolsac.caib.es" />
+            <import namespace="http://ws.rolsac.v2.api.rolsac.caib.es" />
+            <import namespace="http://familia.v2.api.rolsac.caib.es" />
+            <import namespace="http://tramit.v2.api.rolsac.caib.es" />
+            <import namespace="http://normativa.v2.api.rolsac.caib.es" />
+            <import namespace="http://materiaAgrupacio.v2.api.rolsac.caib.es" />
+            <import namespace="http://general.v2.api.rolsac.caib.es" />
+            <import namespace="http://fetVital.v2.api.rolsac.caib.es" />
+            <import namespace="http://documentTramit.v2.api.rolsac.caib.es" />
+            <import namespace="http://taxa.v2.api.rolsac.caib.es" />
+            <import namespace="http://formulari.v2.api.rolsac.caib.es" />
+            <import namespace="http://xml.apache.org/xml-soap" />
+            <import namespace="http://fitxa.v2.api.rolsac.caib.es" />
+            <import namespace="http://fitxaUA.v2.api.rolsac.caib.es" />
+            <import namespace="http://agrupacioFetVital.v2.api.rolsac.caib.es" />
+            <import namespace="http://personal.v2.api.rolsac.caib.es" />
+            <import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+			<complexType name="IniciacioCriteria">
+				<complexContent>
+					<extension base="tns2:BasicCriteria">
+						<sequence>
+							<element name="orden" nillable="true" type="xsd:string" />
+							<element name="codigoEstandar" nillable="true" type="xsd:string" />						
+							<element name="t_nombre" nillable="true" type="xsd:string" />
+							<element name="t_descripcion" nillable="true" type="xsd:string" />
+						</sequence>
+					</extension>
+				</complexContent>
+			</complexType>
+			<complexType name="IniciacioDTO">
+				<sequence>
+					<element name="codigoEstandar" nillable="true" type="xsd:string" />
+					<element name="descripcion" nillable="true" type="xsd:string" />
+					<element name="id" nillable="true" type="xsd:long" />
+					<element name="nombre" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+
 		<schema xmlns="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://tramit.v2.api.rolsac.caib.es">
 			<import namespace="http://normativa.v2.api.rolsac.caib.es" />

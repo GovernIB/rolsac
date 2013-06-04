@@ -332,8 +332,18 @@
             returnItemType="tns2:TipusAfectacioDTO" xmlns:tns2="http://tipusAfectacio.v2.api.rolsac.caib.es" soapAction="">
             <parameter qname="in0" type="tns:TipusAfectacioCriteria" xmlns:tns="http://tipusAfectacio.v2.api.rolsac.caib.es" />
         </operation>
+        <operation name="llistarTipusIniciacions" qname="operNS:llistarTipusIniciacions" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+			returnQName="llistarTipusIniciacionsReturn" returnType="rtns:ArrayOfIniciacioDTO" xmlns:rtns="http://ws.rolsac.v2.api.rolsac.caib.es" 
+			returnItemType="tns2:IniciacioDTO" xmlns:tns2="http://iniciacio.v2.api.rolsac.caib.es" soapAction="">
+			<parameter qname="in0" type="tns:IniciacioCriteria" xmlns:tns="http://iniciacio.v2.api.rolsac.caib.es" />
+		</operation>
+		<operation name="obtenirTipusIniciacio" qname="operNS:obtenirTipusIniciacio" xmlns:operNS="http://intf.ejb.rolsac.v2.api.rolsac.caib.es"
+			returnQName="obtenirTipusIniciacioReturn" returnType="rtns:IniciacioDTO" xmlns:rtns="http://iniciacio.v2.api.rolsac.caib.es"
+			soapAction="">
+			<parameter qname="in0" type="tns:IniciacioCriteria" xmlns:tns="http://iniciacio.v2.api.rolsac.caib.es" />
+		</operation>
         <parameter name="allowedMethods"
-            value="getNumProcediments obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris" />
+            value="getNumProcediments obtenirNormativa obtenirDocumentTramit obtenirDocument llistarPerfils llistarDocuments llistarMateries obtenirEnllac obtenirProcediment llistarTramit llistarDocumentTramit obtenirFamilia llistarFormularis obtenirEdifici llistarUnitatsMateries llistarPersonal llistarTaxes obtenirMateria obtenirMateriaAgrupacio obtenirFitxa llistarPublicsObjectius llistarEspaisTerritorials obtenirTaxa llistarButlletins llistarFitxes obtenirSeccio llistarIconesMateries obtenirPersonal llistarTipus obtenirPerfil obtenirEspaiTerritorial llistarTipusAfectacio llistarProcediments obtenirFormulari llistarNormatives obtenirButlleti llistarEnllacos obtenirIconaMateria obtenirAgrupacioFetVital llistarMateriesAgrupacions obtenirUnitatMateria obtenirTipusAfectacio llistarFamilies obtenirPublicObjectiu obtenirUsuari llistarEdificis obtenirAgrupacioMateria llistarIconesFamilies llistarAgrupacionsFetsVitals obtenirFetVital obtenirUnitatAdministrativa llistarUnitatsAdministratives llistarAgrupacionsMateries llistarSeccions obtenirTipus llistarFetsVitals obtenirFitxaUA llistarFitxesUA obtenirTramit obtenirIconaFamilia llistarUsuaris llistarTipusIniciacions obtenirTipusIniciacio" />
 
         <arrayMapping xmlns:ns="http://ws.rolsac.v2.api.rolsac.caib.es" qname="ns:ArrayOfPerfilDTO"
             type="java:es.caib.rolsac.api.v2.perfil.PerfilDTO[]" innerType="cmp-ns:PerfilDTO" xmlns:cmp-ns="http://perfil.v2.api.rolsac.caib.es"
