@@ -3816,8 +3816,8 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
             if (iniciacion != null) {
             	
-				iniciacion = (Iniciacion)BasicUtils.entityToDTO(
-						Iniciacion.class, 
+				iniciacioDTO = (IniciacioDTO)BasicUtils.entityToDTO(
+						IniciacioDTO.class, 
 						iniciacion,
 						iniciacioCriteria.getIdioma()
 				);

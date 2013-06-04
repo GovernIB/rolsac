@@ -995,6 +995,36 @@
     </bean>
 
 	<bean id="gatewayUsuari" class="es.caib.rolsac.api.v2.usuari.ws.UsuariQueryServiceGateway" />	
-    <!-- UsuariQueryService beans -->    
+    <!-- UsuariQueryService beans -->
+
+    <!-- IniciacioQueryService beans -->
+    <!-- EJB -->
+    <bean id="iniciacioQueryServiceEJBAdapter" class="es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter" scope="prototype">
+        <property name="iniciacioQueryServiceStrategy" ref="iniciacioQueryServiceEJBStrategy" />
+    </bean>
+
+    <bean id="iniciacioQueryServiceEJBStrategy" class="es.caib.rolsac.api.v2.iniciacio.ejb.IniciacioQueryServiceEJBStrategy">
+        <property name="iniciacioQueryServiceDelegate" ref="iniciacioQueryServiceDelegate" />
+    </bean>
+
+    <bean id="iniciacioQueryServiceDelegate" class="es.caib.rolsac.api.v2.iniciacio.ejb.IniciacioQueryServiceDelegate">
+        <property name="iniciacioQueryServiceLocator" ref="iniciacioQueryServiceEJBLocator" />
+    </bean>
+
+    <bean id="iniciacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iniciacio.ejb.IniciacioQueryServiceEJBLocator" />
     
+	<!-- WS -->
+	<!-- Esta funcionalidad la proporciona RolsacWS
+	<bean id="usuariQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.usuari.IniciacioQueryServiceAdapter" scope="prototype">
+        <property name="usuariQueryServiceStrategy" ref="usuariQueryServiceWSStrategy" />
+    </bean>
+
+    <bean id="usuariQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.usuari.ws.IniciacioQueryServiceWSStrategy">
+        <property name="gateway" ref="gatewayIniciacio" />
+    </bean>
+
+	<bean id="gatewayIniciacio" class="es.caib.rolsac.api.v2.usuari.ws.IniciacioQueryServiceGateway" />
+	-->
+    <!-- IniciacioQueryService beans -->
+
 </beans>
