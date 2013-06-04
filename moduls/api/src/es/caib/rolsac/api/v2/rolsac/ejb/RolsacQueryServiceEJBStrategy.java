@@ -38,6 +38,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
@@ -593,6 +595,22 @@ public class RolsacQueryServiceEJBStrategy implements RolsacQueryServiceStrategy
     public List<TipusAfectacioDTO> llistarTipusAfectacio(TipusAfectacioCriteria tipusAfectacioCriteria) throws StrategyException {
         try {
             return rolsacQueryServiceDelegate.llistarTipusAfectacio(tipusAfectacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.obtenirTipusIniciacio(iniciacioCriteria);
+        } catch (DelegateException e) {
+            throw new StrategyException(e);
+        }
+    }
+
+    public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws StrategyException {
+        try {
+            return rolsacQueryServiceDelegate.llistarTipusIniciacions(iniciacioCriteria);
         } catch (DelegateException e) {
             throw new StrategyException(e);
         }

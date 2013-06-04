@@ -37,6 +37,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
@@ -201,4 +203,9 @@ public interface RolsacQueryService {
     List<UsuariQueryServiceAdapter> llistarUsuaris(UsuariCriteria usuariCriteria) throws QueryServiceException;
     
     //AfectacioQueryServiceAdapter obtenirAfectacio(AfectacioCriteria afectacioCriteria) throws QueryServiceException;
+    
+    IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
+    
+    List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException;
+    
 }

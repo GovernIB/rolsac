@@ -59,6 +59,9 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaQueryServiceAdapter;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaQueryServiceAdapter;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materia.MateriaQueryServiceAdapter;
@@ -833,6 +836,42 @@ public class RolsacQueryServiceAdapter implements RolsacQueryService {
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
         }
+    }
+    
+    public IniciacioQueryServiceAdapter obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
+    	
+    	try {
+    		
+            IniciacioDTO dto = rolsacQueryServiceStrategy.obtenirTipusIniciacio(iniciacioCriteria);
+            return (IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), dto);
+            
+        } catch (StrategyException e) {
+        	
+            throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "iniciacion.", e);
+            
+        }
+    	
+    }
+    
+    public List<IniciacioQueryServiceAdapter> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws QueryServiceException {
+    	
+    	try {
+    		
+            List<IniciacioDTO> llistaDTO = rolsacQueryServiceStrategy.llistarTipusIniciacions(iniciacioCriteria);
+            List<IniciacioQueryServiceAdapter> llistaQueryServiceAdapter = new ArrayList<IniciacioQueryServiceAdapter>();
+            
+            for (IniciacioDTO uDTO : llistaDTO) {
+                llistaQueryServiceAdapter.add((IniciacioQueryServiceAdapter)BeanUtils.getAdapter("iniciacio", getStrategy(), uDTO));
+            }
+            
+            return llistaQueryServiceAdapter;
+            
+        } catch (StrategyException e) {
+        	
+            throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "usuarios.", e);
+            
+        }
+    	
     }
 
 }

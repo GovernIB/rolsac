@@ -40,6 +40,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
@@ -821,6 +823,30 @@ public class RolsacQueryServiceDelegate {
         try {
             RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
             return ejb.llistarTipusAfectacio(tipusAfectacioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<IniciacioDTO> llistarTipusIniciacions(IniciacioCriteria iniciacioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.llistarTipusIniciacions(iniciacioCriteria);
+        } catch (LocatorException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
+        } catch (RemoteException e) {
+            throw new DelegateException(ExceptionMessages.REMOTE_CALL, e);
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria) throws DelegateException {
+        try {
+            RolsacQueryServiceEJBRemote ejb = rolsacQueryServiceLocator.getRolsacQueryServiceEJB();
+            return ejb.obtenirTipusIniciacio(iniciacioCriteria);
         } catch (LocatorException e) {
             throw new DelegateException(ExceptionMessages.REMOTE_SERVICE, e);
         } catch (RemoteException e) {

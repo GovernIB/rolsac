@@ -45,6 +45,8 @@ import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaCriteria;
 import es.caib.rolsac.api.v2.iconaFamilia.IconaFamiliaDTO;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaCriteria;
 import es.caib.rolsac.api.v2.iconaMateria.IconaMateriaDTO;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioCriteria;
+import es.caib.rolsac.api.v2.iniciacio.IniciacioDTO;
 import es.caib.rolsac.api.v2.materia.MateriaCriteria;
 import es.caib.rolsac.api.v2.materia.MateriaDTO;
 import es.caib.rolsac.api.v2.materiaAgrupacio.MateriaAgrupacioCriteria;
@@ -401,6 +403,15 @@ public class RolsacQueryServiceGateway {
 
 		return excepcioDocumentacioDTO;
 	}
+	
+	public IniciacioDTO obtenirTipusIniciacio(IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException, RemoteException {
+
+		IniciacioDTO iniciacioDTO = new IniciacioDTO();
+		iniciacioDTO = stub.obtenirTipusIniciacio(iniciacioCriteria);
+
+		return iniciacioDTO;
+	}
 
 	public List<AgrupacioFetVitalDTO> llistarAgrupacionsFetsVitals(
 			AgrupacioFetVitalCriteria agrupacioFetVitalCriteria)
@@ -618,6 +629,13 @@ public class RolsacQueryServiceGateway {
 			throws QueryServiceException, RemoteException {
 		
 		return Arrays.asList(stub.llistarCatalegsDocuments(catalegDocumentsCriteria));
+	}
+	
+	public List<IniciacioDTO> llistarTipusIniciacions(
+			IniciacioCriteria iniciacioCriteria)
+			throws QueryServiceException, RemoteException {
+		
+		return Arrays.asList(stub.llistarTipusIniciacions(iniciacioCriteria));
 	}
 	
 }
