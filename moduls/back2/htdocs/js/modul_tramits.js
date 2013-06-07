@@ -119,6 +119,10 @@ function CModulTramit(){
         
         $("#tramits_item_organ_id").val($("#item_organ_id").val());
         $("#tramits_item_organ_ca").val($("#item_organ").val());
+        $("#tramits_item_organ_es").val($("#item_organ").val());
+        $("#tramits_item_organ_en").val($("#item_organ").val());
+        $("#tramits_item_organ_de").val($("#item_organ").val());
+        $("#tramits_item_organ_fr").val($("#item_organ").val());
         
         // animacio
         escriptori_detall_elm.fadeOut(300, function() {         
