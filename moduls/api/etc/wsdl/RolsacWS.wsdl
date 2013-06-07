@@ -1940,7 +1940,8 @@
 					<extension base="tns2:BasicCriteria">
 						<sequence>
 							<element name="orden" nillable="true" type="xsd:string" />
-							<element name="ordenSeccion" nillable="true" type="xsd:string" />						
+							<element name="ordenSeccion" nillable="true" type="xsd:string" />
+							<element name="seccion" nillable="true" type="xsd:string" />						
 						</sequence>
 					</extension>
 				</complexContent>
