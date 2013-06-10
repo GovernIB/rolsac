@@ -245,7 +245,7 @@ function CLlistat() {
 			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
 			dataVars_cercador = "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&textes=" + $("#cerca_textes").val();
-			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
+			dataVars_cercador += "&visibilitat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&publicObjectiu=" + $("#cerca_publicObjectiu").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&fetVital=" + $("#cerca_fetVital").val();

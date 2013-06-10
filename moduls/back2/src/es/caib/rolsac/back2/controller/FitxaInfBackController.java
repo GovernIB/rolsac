@@ -228,6 +228,18 @@ public class FitxaInfBackController extends PantallaBaseController {
         } else {
             tradMap.put("idioma", lang);
         }
+        
+        String visibilitat = request.getParameter("visibilitat");
+		int campoVisible = 0;
+		if (visibilitat != null) {
+			if (visibilitat.equals("1")) {
+				Integer visible = Integer.parseInt(visibilitat);
+				paramMap.put("validacion", visible);
+				campoVisible = 1;
+			} else if (visibilitat.equals("2")) {
+				campoVisible = 2;
+			}
+		}
 
         ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
         
@@ -244,7 +256,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             
 			resultadoBusqueda = fitxaDelegate.buscarFichas(
 					paramMap, tradMap, ua, fetVital, materia, publicObjectiu,					
-					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes);
+					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
 			            
             for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados() ) ) {
                 TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());

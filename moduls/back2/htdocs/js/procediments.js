@@ -267,7 +267,7 @@ function CLlistat(){
 			dataVars_cercador = "&uaMeves=" + uaMevesVal;
 			dataVars_cercador += "&uaFilles=" + uaFillesVal;
 			dataVars_cercador += "&codi=" + $("#cerca_codi").val();
-			dataVars_cercador += "&estat=" + $("#cerca_estat").val();
+			dataVars_cercador += "&visibilitat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&familia=" + $("#cerca_familia").val();
 			dataVars_cercador += "&iniciacio=" + $("#cerca_iniciacio").val();
 			dataVars_cercador += "&tramit=" + $("#cerca_tramit").val();

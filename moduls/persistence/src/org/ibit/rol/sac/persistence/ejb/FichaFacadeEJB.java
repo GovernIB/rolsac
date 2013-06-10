@@ -557,7 +557,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 			UnidadAdministrativa ua, Long idFetVital, Long idMateria,
 			Long idPublic, boolean uaFilles, boolean uaMeves,
 			String campoOrdenacion, String orden, String pagina,
-			String resultats) {
+			String resultats, int campoVisible) {
 		
         Session session = getSession();
         
@@ -584,6 +584,13 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 				}
 				i18nQuery += "(" + i18nPopulateQuery(traduccion, params) + ") ";
             }
+            
+            if (campoVisible == 1) {
+            	i18nQuery += " and (sysdate < ficha.fechaCaducidad or ficha.fechaCaducidad is null) ";
+				i18nQuery += " and (sysdate > ficha.fechaPublicacion or ficha.fechaPublicacion is null) ";
+			} else if (campoVisible == 2){
+				i18nQuery += " and (sysdate > ficha.fechaCaducidad or sysdate < ficha.fechaPublicacion or ficha.validacion = 2 or ficha.validacion = 3) ";
+			}
             
             String orderBy = "";
             if (campoOrdenacion != null && orden != null) orderBy = " order by ficha." + campoOrdenacion + " " + orden;

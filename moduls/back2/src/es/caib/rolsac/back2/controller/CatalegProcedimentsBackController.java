@@ -214,6 +214,18 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (fechaActualizacion != null) {
 			paramMap.put("fechaActualizacion", fechaActualizacion);
 		}
+		
+		String visibilitat = request.getParameter("visibilitat");
+		int campoVisible = 0;
+		if (visibilitat != null) {
+			if (visibilitat.equals("1")) {
+				Integer visible = Integer.parseInt(visibilitat);
+				paramMap.put("validacion", visible);
+				campoVisible = 1;
+			} else if (visibilitat.equals("2")) {
+				campoVisible = 2;
+			}
+		}
 
 		String ventanillaUnica = request.getParameter("finestreta");
 		if ("1".equals(ventanillaUnica)) {
@@ -344,7 +356,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 			
-			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes);
+			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible);
 			String idiomaPorDefecto = request.getLocale().getLanguage();
 
 			for ( ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados() ) ) {

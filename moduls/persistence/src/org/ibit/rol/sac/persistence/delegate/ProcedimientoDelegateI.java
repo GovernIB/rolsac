@@ -40,7 +40,7 @@ public interface ProcedimientoDelegateI {
 	public abstract List buscarProcedimientosUATexto(Long idUnidad, String texto, String idioma)
 			throws DelegateException;
 	
-	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats)
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible)
 			throws DelegateException;
 		
 	public abstract void anyadirNormativa(Long norm_id, Long proc)

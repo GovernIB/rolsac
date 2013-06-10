@@ -884,7 +884,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     		String pagPag = "0";
     		String pagRes = "99999";    		
             
-            resultadoBusqueda = fitxaDelegate.buscarFichas( paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null, pagPag, pagRes );           
+            resultadoBusqueda = fitxaDelegate.buscarFichas( paramMap, tradMap, ua, null, null,null, uaFilles, uaMeves, null, null, pagPag, pagRes, 0);           
             
             for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados()) ) {
             	

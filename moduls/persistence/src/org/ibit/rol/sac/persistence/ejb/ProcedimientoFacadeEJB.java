@@ -852,7 +852,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats) {
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible) {
 		Session session = getSession();
 
 		try {
@@ -898,6 +898,13 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			if ( publicObjectiu != null ) {
 				from += "procedimiento.publicosObjetivo as pubsObj, ";
 				where += " and pubsObj.id = " + publicObjectiu;				
+			}
+			
+			if (visible == 1) {
+				where += " and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
+				where += " and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
+			} else if (visible == 2){
+				where += " and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
 			}
 
 			if ( userIsOper() ) {
