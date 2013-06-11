@@ -15,7 +15,7 @@
   <service name="ExcepcioDocumentacioWS" provider="java:RPC" style="rpc" use="encoded">
       <parameter name="wsdlTargetNamespace" value="http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServiceElement" value="ExcepcioDocumentacioQueryServiceEJBRemoteService"/>
-      <parameter name="schemaUnqualified" value="http://excepcioDocumentacio.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://documentTramit.v2.api.rolsac.caib.es,http://catalegDocuments.v2.api.rolsac.caib.es,http://general.v2.api.rolsac.caib.es,http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es"/>
+      <parameter name="schemaUnqualified" value="http://catalegDocuments.v2.api.rolsac.caib.es,http://excepcioDocumentacio.v2.api.rolsac.caib.es,http://xml.apache.org/xml-soap,http://general.v2.api.rolsac.caib.es,http://ws.excepcioDocumentacio.v2.api.rolsac.caib.es,http://documentTramit.v2.api.rolsac.caib.es"/>
       <parameter name="wsdlServicePort" value="ExcepcioDocumentacioWS"/>
       <parameter name="className" value="es.caib.rolsac.api.v2.excepcioDocumentacio.ws.ExcepcioDocumentacioWSSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="ExcepcioDocumentacioQueryServiceEJBRemote"/>
@@ -34,20 +34,12 @@
         <parameter qname="in0" type="tns:long" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
         <parameter qname="in1" type="tns:CatalegDocumentsCriteria" xmlns:tns="http://catalegDocuments.v2.api.rolsac.caib.es"/>
       </operation>
-      <parameter name="allowedMethods" value="llistarCatalegsDocuments llistarDocumentsTramits getNumDocumentsTramit getNumCatalegsDocuments"/>
+      <parameter name="allowedMethods" value="getNumCatalegsDocuments llistarDocumentsTramits getNumDocumentsTramit llistarCatalegsDocuments"/>
 
       <typeMapping
         xmlns:ns="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
-        qname="ns:ExcepcioDocumentacioCriteria"
-        type="java:es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria"
-        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
-        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
-        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-      />
-      <typeMapping
-        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
-        qname="ns:CatalegDocumentsCriteria"
-        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria"
+        qname="ns:ExcepcioDocumentacioDTO"
+        type="java:es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -60,9 +52,9 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
-        qname="ns:ExcepcioDocumentacioDTO"
-        type="java:es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioDTO"
+        xmlns:ns="http://general.v2.api.rolsac.caib.es"
+        qname="ns:BasicCriteria"
+        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
@@ -76,9 +68,17 @@
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
       />
       <typeMapping
-        xmlns:ns="http://general.v2.api.rolsac.caib.es"
-        qname="ns:BasicCriteria"
-        type="java:es.caib.rolsac.api.v2.general.BasicCriteria"
+        xmlns:ns="http://catalegDocuments.v2.api.rolsac.caib.es"
+        qname="ns:CatalegDocumentsCriteria"
+        type="java:es.caib.rolsac.api.v2.catalegDocuments.CatalegDocumentsCriteria"
+        serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
+        deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
+        encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+      />
+      <typeMapping
+        xmlns:ns="http://excepcioDocumentacio.v2.api.rolsac.caib.es"
+        qname="ns:ExcepcioDocumentacioCriteria"
+        type="java:es.caib.rolsac.api.v2.excepcioDocumentacio.ExcepcioDocumentacioCriteria"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"

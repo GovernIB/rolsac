@@ -14,7 +14,7 @@ public class DocumentTramitDTO  implements java.io.Serializable {
 
     private java.lang.Long id;
 
-    private java.lang.Long ordre;
+    private java.lang.Long orden;
 
     private java.lang.Integer tipus;
 
@@ -22,7 +22,7 @@ public class DocumentTramitDTO  implements java.io.Serializable {
 
     private java.lang.Long tramit;
 
-    private java.lang.Long catalegDocuments;
+    private java.lang.Long docCatalogo;
 
     private java.lang.Long excepcioDocumentacio;
 
@@ -33,20 +33,20 @@ public class DocumentTramitDTO  implements java.io.Serializable {
            java.lang.Long archivo,
            java.lang.String descripcion,
            java.lang.Long id,
-           java.lang.Long ordre,
+           java.lang.Long orden,
            java.lang.Integer tipus,
            java.lang.String titulo,
            java.lang.Long tramit,
-           java.lang.Long catalegDocuments,
+           java.lang.Long docCatalogo,
            java.lang.Long excepcioDocumentacio) {
            this.archivo = archivo;
            this.descripcion = descripcion;
            this.id = id;
-           this.ordre = ordre;
+           this.orden = orden;
            this.tipus = tipus;
            this.titulo = titulo;
            this.tramit = tramit;
-           this.catalegDocuments = catalegDocuments;
+           this.docCatalogo = docCatalogo;
            this.excepcioDocumentacio = excepcioDocumentacio;
     }
 
@@ -112,22 +112,22 @@ public class DocumentTramitDTO  implements java.io.Serializable {
 
 
     /**
-     * Gets the ordre value for this DocumentTramitDTO.
+     * Gets the orden value for this DocumentTramitDTO.
      * 
-     * @return ordre
+     * @return orden
      */
-    public java.lang.Long getOrdre() {
-        return ordre;
+    public java.lang.Long getOrden() {
+        return orden;
     }
 
 
     /**
-     * Sets the ordre value for this DocumentTramitDTO.
+     * Sets the orden value for this DocumentTramitDTO.
      * 
-     * @param ordre
+     * @param orden
      */
-    public void setOrdre(java.lang.Long ordre) {
-        this.ordre = ordre;
+    public void setOrden(java.lang.Long orden) {
+        this.orden = orden;
     }
 
 
@@ -192,22 +192,22 @@ public class DocumentTramitDTO  implements java.io.Serializable {
 
 
     /**
-     * Gets the catalegDocuments value for this DocumentTramitDTO.
+     * Gets the docCatalogo value for this DocumentTramitDTO.
      * 
-     * @return catalegDocuments
+     * @return docCatalogo
      */
-    public java.lang.Long getCatalegDocuments() {
-        return catalegDocuments;
+    public java.lang.Long getDocCatalogo() {
+        return docCatalogo;
     }
 
 
     /**
-     * Sets the catalegDocuments value for this DocumentTramitDTO.
+     * Sets the docCatalogo value for this DocumentTramitDTO.
      * 
-     * @param catalegDocuments
+     * @param docCatalogo
      */
-    public void setCatalegDocuments(java.lang.Long catalegDocuments) {
-        this.catalegDocuments = catalegDocuments;
+    public void setDocCatalogo(java.lang.Long docCatalogo) {
+        this.docCatalogo = docCatalogo;
     }
 
 
@@ -251,9 +251,9 @@ public class DocumentTramitDTO  implements java.io.Serializable {
             ((this.id==null && other.getId()==null) || 
              (this.id!=null &&
               this.id.equals(other.getId()))) &&
-            ((this.ordre==null && other.getOrdre()==null) || 
-             (this.ordre!=null &&
-              this.ordre.equals(other.getOrdre()))) &&
+            ((this.orden==null && other.getOrden()==null) || 
+             (this.orden!=null &&
+              this.orden.equals(other.getOrden()))) &&
             ((this.tipus==null && other.getTipus()==null) || 
              (this.tipus!=null &&
               this.tipus.equals(other.getTipus()))) &&
@@ -263,9 +263,9 @@ public class DocumentTramitDTO  implements java.io.Serializable {
             ((this.tramit==null && other.getTramit()==null) || 
              (this.tramit!=null &&
               this.tramit.equals(other.getTramit()))) &&
-            ((this.catalegDocuments==null && other.getCatalegDocuments()==null) || 
-             (this.catalegDocuments!=null &&
-              this.catalegDocuments.equals(other.getCatalegDocuments()))) &&
+            ((this.docCatalogo==null && other.getDocCatalogo()==null) || 
+             (this.docCatalogo!=null &&
+              this.docCatalogo.equals(other.getDocCatalogo()))) &&
             ((this.excepcioDocumentacio==null && other.getExcepcioDocumentacio()==null) || 
              (this.excepcioDocumentacio!=null &&
               this.excepcioDocumentacio.equals(other.getExcepcioDocumentacio())));
@@ -289,8 +289,8 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         if (getId() != null) {
             _hashCode += getId().hashCode();
         }
-        if (getOrdre() != null) {
-            _hashCode += getOrdre().hashCode();
+        if (getOrden() != null) {
+            _hashCode += getOrden().hashCode();
         }
         if (getTipus() != null) {
             _hashCode += getTipus().hashCode();
@@ -301,8 +301,8 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         if (getTramit() != null) {
             _hashCode += getTramit().hashCode();
         }
-        if (getCatalegDocuments() != null) {
-            _hashCode += getCatalegDocuments().hashCode();
+        if (getDocCatalogo() != null) {
+            _hashCode += getDocCatalogo().hashCode();
         }
         if (getExcepcioDocumentacio() != null) {
             _hashCode += getExcepcioDocumentacio().hashCode();
@@ -336,8 +336,8 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("ordre");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "ordre"));
+        elemField.setFieldName("orden");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "orden"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
@@ -360,8 +360,8 @@ public class DocumentTramitDTO  implements java.io.Serializable {
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
         elemField = new org.apache.axis.description.ElementDesc();
-        elemField.setFieldName("catalegDocuments");
-        elemField.setXmlName(new javax.xml.namespace.QName("", "catalegDocuments"));
+        elemField.setFieldName("docCatalogo");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "docCatalogo"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "long"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);

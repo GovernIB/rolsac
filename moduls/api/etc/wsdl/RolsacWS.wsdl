@@ -1131,11 +1131,11 @@
 					<element name="archivo" nillable="true" type="xsd:long" />
 					<element name="descripcion" nillable="true" type="xsd:string" />
 					<element name="id" nillable="true" type="xsd:long" />
-					<element name="ordre" nillable="true" type="xsd:long" />
+					<element name="orden" nillable="true" type="xsd:long" />
 					<element name="tipus" nillable="true" type="xsd:int" />
 					<element name="titulo" nillable="true" type="xsd:string" />
 					<element name="tramit" nillable="true" type="xsd:long" />
-					<element name="catalegDocuments" nillable="true" type="xsd:long" />					
+					<element name="docCatalogo" nillable="true" type="xsd:long" />					
 					<element name="excepcioDocumentacio" nillable="true" type="xsd:long" />
 				</sequence>
 			</complexType>
