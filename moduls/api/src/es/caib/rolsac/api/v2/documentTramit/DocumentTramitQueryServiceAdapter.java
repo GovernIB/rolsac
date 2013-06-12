@@ -65,10 +65,10 @@ public class DocumentTramitQueryServiceAdapter extends DocumentTramitDTO impleme
 
 	public CatalegDocumentsQueryService obtenirCatalegDocument() throws QueryServiceException {
 		
-		if (this.getCatalegDocuments() == null) { return null; }
+		if (this.getDocCatalogo() == null) { return null; }
 		
 		try {
-			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getCatalegDocuments());
+			CatalegDocumentsDTO dto = documentTramitQueryServiceStrategy.obtenirCatalegDocuments(this.getDocCatalogo());
 			return (CatalegDocumentsQueryServiceAdapter) BeanUtils.getAdapter("catalegDocuments", getStrategy(), dto);
 		} catch (StrategyException e) {
 			throw new QueryServiceException(ExceptionMessages.OBJECT_GETTER + "catálogo documentos.", e);
