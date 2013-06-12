@@ -86,6 +86,7 @@
                             <element name="unidadAdministrativa" nillable="true" type="xsd:string" />
                             <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
                             <element name="visible" nillable="true" type="xsd:boolean" />
+                            <element name="estadoUA" nillable="true" type="xsd:string" />
 						</sequence>
 					</extension>
 				</complexContent>

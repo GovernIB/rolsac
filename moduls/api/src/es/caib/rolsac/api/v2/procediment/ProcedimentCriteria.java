@@ -80,6 +80,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.Boolean visible;
 
+    private java.lang.String estadoUA;
+
     public ProcedimentCriteria() {
     }
 
@@ -124,7 +126,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String textos,
            java.lang.String unidadAdministrativa,
            java.lang.String agrupacionHechoVital,
-           java.lang.Boolean visible) {
+           java.lang.Boolean visible,
+           java.lang.String estadoUA) {
         super(
             id,
             idioma,
@@ -167,6 +170,7 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.unidadAdministrativa = unidadAdministrativa;
         this.agrupacionHechoVital = agrupacionHechoVital;
         this.visible = visible;
+        this.estadoUA = estadoUA;
     }
 
 
@@ -889,6 +893,26 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.visible = visible;
     }
 
+
+    /**
+     * Gets the estadoUA value for this ProcedimentCriteria.
+     * 
+     * @return estadoUA
+     */
+    public java.lang.String getEstadoUA() {
+        return estadoUA;
+    }
+
+
+    /**
+     * Sets the estadoUA value for this ProcedimentCriteria.
+     * 
+     * @param estadoUA
+     */
+    public void setEstadoUA(java.lang.String estadoUA) {
+        this.estadoUA = estadoUA;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -1008,7 +1032,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.agrupacionHechoVital.equals(other.getAgrupacionHechoVital()))) &&
             ((this.visible==null && other.getVisible()==null) || 
              (this.visible!=null &&
-              this.visible.equals(other.getVisible())));
+              this.visible.equals(other.getVisible()))) &&
+            ((this.estadoUA==null && other.getEstadoUA()==null) || 
+             (this.estadoUA!=null &&
+              this.estadoUA.equals(other.getEstadoUA())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1127,6 +1154,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getVisible() != null) {
             _hashCode += getVisible().hashCode();
+        }
+        if (getEstadoUA() != null) {
+            _hashCode += getEstadoUA().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1352,6 +1382,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField.setFieldName("visible");
         elemField.setXmlName(new javax.xml.namespace.QName("", "visible"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("estadoUA");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "estadoUA"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }
