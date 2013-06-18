@@ -1120,9 +1120,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				procediment.setResponsable(request.getParameter("item_responsable"));
 				/* Provisional, hasta que este activada la SEU */
 				//procediment.setTramite(request.getParameter("item_tramite"));
-				procediment.setTramite(procedimentOld.getTramite());
+				if (procedimentOld != null)
+					procediment.setTramite(procedimentOld.getTramite());
 				//procediment.setUrl(request.getParameter("item_url"));
-				procediment.setUrl(procedimentOld.getUrl());
+				if (procedimentOld != null)
+					procediment.setUrl(procedimentOld.getUrl());
 				/*---------------------------------------------*/
 				
 				// TODO: Implementar setPublico()
@@ -1136,7 +1138,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 						Long version = Long.parseLong(versionStr);
 						procediment.setVersion(version);
 					} else { /* Provisional, hasta que este activada la SEU */
-						procediment.setVersion(procedimentOld.getVersion());
+						if (procedimentOld != null)
+							procediment.setVersion(procedimentOld.getVersion());
 					}
 					
 				} catch (NumberFormatException e) {
