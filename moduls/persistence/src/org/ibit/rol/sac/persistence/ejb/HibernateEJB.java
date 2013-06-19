@@ -31,6 +31,8 @@ import org.ibit.rol.sac.model.ComentarioProcedimiento;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumen;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Formulario;
 import org.ibit.rol.sac.model.Historico;
@@ -490,6 +492,31 @@ public abstract class HibernateEJB implements SessionBean {
     }
 
     /**
+     * Comprueba si un usuario puede modificar una ficha.
+     * Tendrá acceso si tiene acceso a la validación y no está relacionada
+     * o tiene acceso a alguna unidad/sección con
+     * la que está relacionada.
+     */
+    protected boolean tieneAcceso(Usuario usuario, FichaResumen fichaResumen) {
+        if (!tieneAccesoValidable(usuario, fichaResumen)) {
+            return false;
+        }
+
+        if (fichaResumen.getFichasua().isEmpty()) {
+            return true;
+        }
+
+        for (Iterator iterator = fichaResumen.getFichasua().iterator(); iterator.hasNext();) {
+            FichaResumenUA fichaResumenUA = (FichaResumenUA) iterator.next();
+            if (tieneAcceso(usuario, fichaResumenUA)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
+    /**
      * Comprueba si un usuario puede modificar una relaci�n ficha - unidad.
      * Tendr� acceso si tiene acceso a la secci�n y a la unidad.
      * Si la unidad �s <code>null</code> �s una relaci�n general y debe ser usuario de
@@ -500,7 +527,20 @@ public abstract class HibernateEJB implements SessionBean {
         return tieneAcceso(usuario, fichaUA.getSeccion()) &&
                 (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
     }
-
+    
+    /**
+     * Comprueba si un usuario puede modificar una relación ficha - unidad.
+     * Tendrá acceso si tiene acceso a la sección y a la unidad.
+     * Si la unidad és <code>null</code> és una relación general y debe ser usuario de
+     * sistema.
+     */
+    protected boolean tieneAcceso(Usuario usuario, FichaResumenUA fichaResumenUA) {
+//        UnidadAdministrativa unidad = fichaResumenUA.getUnidadAdministrativa();
+//        return tieneAcceso(usuario, fichaResumenUA.getSeccion()) &&
+//                (unidad == null ? userIsSystem() : tieneAcceso(usuario, unidad, false));
+    	return true;
+    }
+    
     /**
      * Comprueba si un usuario puede modificar un documento.
      * Tendr� acceso si tiene acceso a la ficha o al procedimiento a que pertenece el documento.

@@ -99,6 +99,13 @@ public final class DelegateUtil {
     	del.setImpl(impl);
     	return del;
     }
+    
+    public static FichaResumenDelegate getFichaResumenDelegate(){
+        FichaResumenDelegateI impl= (FichaResumenDelegateImpl) DelegateFactory.getDelegate(FichaResumenDelegateImpl.class);
+        FichaResumenDelegate del = new FichaResumenDelegate();
+    	del.setImpl(impl);
+    	return del;
+    }
 
     public static NormativaDelegate getNormativaDelegate(){
         return (NormativaDelegate) DelegateFactory.getDelegate(NormativaDelegate.class);
