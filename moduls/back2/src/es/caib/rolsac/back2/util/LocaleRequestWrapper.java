@@ -34,7 +34,6 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 		String lang;
 		
 		try {
-			
 			lang = super.getLocale().getLanguage();
 			if (lang != null) {
 				idioma = lang;
@@ -49,7 +48,7 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 		}
 		// TODO XXX - Fins que totes les traduccions no estiguin disponibles a tots els idiomes 
 		// forsam el catala perque no doni errors. Pensar a comentar o eliminar
-		idioma = "ca";
+		//idioma = "ca";
 		return new Locale(idioma);
     }
 }
