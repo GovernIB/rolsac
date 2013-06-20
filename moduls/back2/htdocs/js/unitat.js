@@ -120,7 +120,10 @@ function CDetall(soloFicha){
 	}
 	
 	// Sobreescribe el método guarda de detall_base, en este caso necesitamos hacer algo especial dado que hay que subir archivos
-	this.guarda_upload = function(e) {    
+	this.guarda_upload = function(e) {
+		
+		escriptori_fitxes_elm = $("#escriptori_fitxes");
+		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
 		
 		// Esta variable nos servirá para detectar si alguna de las secciones a guardar
 		// no tiene fichas asignadas
@@ -154,18 +157,82 @@ function CDetall(soloFicha){
 			$("#llistaSeccions").attr("value", "");
 		}
 		
+		// Esto puede tardar...
+		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+				
 		// Obtener todos los inputs que empiezan por seccio_id_
 		$(".modulSeccions input[name^='seccio_id_']").each( function() {
 			
+			// Avanzamos desde el input hasta el div, 3 elementos después.
+			divFichas = $(this).next().next().next();
+			ulFichas = $(divFichas).children('div').children('ul');
+			numFichas = $(ulFichas).children().size()
+			
+			if ( numFichas == 0 ) {
+				
+				// Petición síncrona, ya que si no, nos salta la alerta de sección sin fichas.
+				$.ajax({
+                    type: "POST",
+                    url: pagFitxesUASeccio,
+                    data: "idseccion=" + $(this).attr("value"),
+                    dataType: "json",
+                    async: false,
+                    error: function() {
+                    	
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                        Error.llansar();
+                        
+                    },
+                    success: function(data) {
+                    	                                                                    
+                        if (data.id == -1) {
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                        } else if (data.id < -1) {
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                        }
+                    	
+                        llistaFitxes = data.fitxes;
+                        
+                    	jQuery.each(llistaFitxes, function() {
+                    		                    		                    		
+                    		paramsFicha = {
+									nombre: "fitxa",
+									nodoOrigen: "",
+									nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
+									atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+									multilang: false
+							}
+                    		
+                    		codi_seccions = "";
+								 
+                    		if ( llistaFitxes != null && llistaFitxes.length > 0 ) {
+                    			
+            					for ( n = 0; n < llistaFitxes.length; n++ ) {
+            						codi_seccions += "<li>";
+            						codi_seccions += "<input class=\"" + paramsFicha.nombre + "_" + paramsFicha.atributos[0] + "\" type=\"hidden\" value=\"" + llistaFitxes[n].id + "\"/><span>" + llistaFitxes[n].titulo + "</span>";  
+            						codi_seccions += "</li>"
+            					}
+            										
+            				}
+                    		
+                    		ulFichas.html(codi_seccions);
+                    		
+                    	});
+                        
+                    }
+                });
+				
+			}
+
 			$("#llistaSeccions").attr("value", $("#llistaSeccions").val() + $(this).attr("value") + "#");
 
-			// Anadir las fichas del edificio actual
+			// Anadir las fichas de la sección actual
 			idSeccio = $(this).val();
 			
 			// Aqui tendremos anadir una validacion extra y comprobar que todas las secciones contienen fichas, 
 			// en caso contrario debera mostrarse un error y devolver "false"
 			if ( !errorSeccionSinFichas && $("#seccio_id_" + idSeccio).parent().find("li").size() == 0 )				
-				errorSeccionSinFichas = true;			
+				errorSeccionSinFichas = true;
 			
 			$("#seccio_id_" + idSeccio).parent().find("li").each( function() {
 				idFitxa = $(this).find("input").val();

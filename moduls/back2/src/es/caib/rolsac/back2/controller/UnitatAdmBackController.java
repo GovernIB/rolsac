@@ -184,7 +184,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
         
 	    Long idUA = new Long(request.getParameter("id"));            
 	    try {
-	        UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativa(idUA);
+	    		        
+	    	UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(idUA);
 	        
 	        resultats.put("id", idUA);
 	        
@@ -312,54 +313,38 @@ public class UnitatAdmBackController extends PantallaBaseController {
             resultats.put("item_nivell_2", uni.getNumfoto2());
             resultats.put("item_nivell_3", uni.getNumfoto3());
             resultats.put("item_nivell_4", uni.getNumfoto4());
-	        
-            //Secciones-Fichas           
-            TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
             
-            List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
+            // Obtenemos las secciones asociadas con la UA.
+            List<SeccionFichaDTO> listaSeccionesDTO = new ArrayList<SeccionFichaDTO>();
+            List<Seccion> listaSecciones = unitatDelegate.listarSeccionesUA(idUA);
             
-        	//Obtenemos el id y el nombre de la secci�n
-        	Set secciones = arbolSecciones.keySet();
-        	
-        	for (Iterator iterator = secciones.iterator(); iterator.hasNext();) {
-        		SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
-        		
-        		String claveSeccion = (String) iterator.next();
-				String datosSeccion[] = claveSeccion.split("#");
-				
-				seccionFichaDTO.setId( new Long(datosSeccion[1]) );
-				seccionFichaDTO.setNom( datosSeccion[2]);
-				
-				List<FichaUA> listaFichasUA = (ArrayList<FichaUA>) arbolSecciones.get(claveSeccion);
-				List<FichaDTO> listaFichasDTO = new ArrayList<FichaDTO>();
-				
-				if (listaFichasUA != null) {
-					
-					for ( Iterator iterator2 = listaFichasUA.iterator(); iterator2.hasNext(); ) {
-						
-						FichaUA fichaUA = (FichaUA) iterator2.next();
-						
-						if (fichaUA.getFicha() != null) {
-						
-    						FichaDTO fichaDTO = new FichaDTO();
-    						
-    						fichaDTO.setId( fichaUA.getFicha().getId() );
-    						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-    						fichaDTO.setOrdre( new Long(fichaUA.getOrden()) );    						
-    						listaFichasDTO.add( fichaDTO );
-						
-						}
-						
-					}
-					
-					seccionFichaDTO.setListaFichas( listaFichasDTO );
-				}
-				
-				listaSecciones.add(seccionFichaDTO);
-			} 
-
-     	resultats.put("seccions", listaSecciones);
-        	
+            Iterator<Seccion> itSeccion = listaSecciones.iterator();
+            while ( itSeccion.hasNext() ) {
+            	
+            	Seccion seccion = itSeccion.next();
+            	SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
+            	
+            	seccionFichaDTO.setId(seccion.getId());
+            	seccionFichaDTO.setNumFichas( unitatDelegate.cuentaFichasSeccionUA(idUA, seccion.getId()) );
+            	
+            	TraduccionSeccion tr = (TraduccionSeccion)seccion.getTraduccion();
+            	seccionFichaDTO.setNom(tr.getNombre());
+            	
+            	listaSeccionesDTO.add(seccionFichaDTO);
+            	
+            }
+            
+            // Ordenamos por nombre, ascendente.
+            Comparator<SeccionFichaDTO> comparatorASC = new Comparator<SeccionFichaDTO>() {
+            	public int compare(SeccionFichaDTO s1, SeccionFichaDTO s2) {
+            		return s1.getNom().compareTo(s2.getNom());
+            	}
+            };
+            
+            Collections.sort(listaSeccionesDTO, comparatorASC);
+            
+            resultats.put("seccions", listaSeccionesDTO);
+                    	        	
             //Materias asociadas           
             if (uni.getUnidadesMaterias() != null) {             
             
@@ -644,10 +629,10 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			
 			Long unitatAdmPareId = ParseUtil.parseLong(valoresForm.get("item_pare_id"));			
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
-			
-			
-			//Secciones-Fichas
-			if(isModuloModificado("modulo_secciones_modificado", valoresForm)) {
+						
+			// Secciones-Fichas
+			if (isModuloModificado("modulo_secciones_modificado", valoresForm)) {
+				
     			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
     			
     			Map actualizadorFichasUA = new HashMap();
@@ -655,6 +640,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
     			String separador = "";
     			
     			if (llistaSeccions != null) {
+    				
     			    log.debug("Inici de crearSeccionesFichas().");
     			    Date startTrace = new Date();
     				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions);
@@ -1033,7 +1019,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				listaUnidadesAdministrativasDTO.add(dto);
 				resultats.put("nodes", listaUnidadesAdministrativasDTO);
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (DelegateException e) {
 				uni = null;
@@ -1225,6 +1210,85 @@ public class UnitatAdmBackController extends PantallaBaseController {
         //return errores;
         return "";
     }
+    
+    /**
+     * Solicita las fichas relacionadas con una UA y una sección.
+     */
+    @RequestMapping(value = "/obtenirFitxesUASeccio.do", method = POST)
+	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(HttpServletRequest request) {
+    			
+		Map<String, Object> resultats = new HashMap<String, Object>();
+				
+		UnidadAdministrativa ua = new UnidadAdministrativa();
+        if ( request.getSession().getAttribute("unidadAdministrativa") == null) {
+        	
+        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put("id", -2);
+        	
+        	log.error("Error de sessi�n: Sessi�n expirada o no inciada");
+        	
+            return resultats; // Si no hay unidad administrativa se devuelve vacio
+            
+        }
+        
+        Long idSeccion = Long.valueOf(request.getParameter("idseccion"));
+        if ( idSeccion == null || "".equals(idSeccion) || idSeccion < 1 ) {
+        	
+        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+        	resultats.put("id", -2);
+        	
+        	log.error("Error de session: Session expirada o no inciada");
+        	
+            return resultats; // Si no hay unidad administrativa se devuelve vacio
+        	
+        }
+        
+        ua = (UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa");	
+        UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+
+        List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
+        
+        try {
+        
+	        List<FichaUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
+			
+			if (listaFichasSeccionUA != null) {
+				
+				Iterator<FichaUA> iterator2 = listaFichasSeccionUA.iterator();
+				
+				while ( iterator2.hasNext() ) {
+					
+					FichaUA ficha = (FichaUA) iterator2.next();
+					
+					if (ficha.getFicha() != null) {
+					
+						FichaDTO fichaDTO = new FichaDTO();
+						
+						fichaDTO.setId( ficha.getFicha().getId() );
+						fichaDTO.setTitulo( ( ((TraduccionFicha) ficha.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
+						fichaDTO.setOrdre( new Long(ficha.getOrden()) );    						
+						listaFichas.add( fichaDTO );
+					
+					}
+					
+				}
+							
+			}
+				
+			resultats.put("fitxes", listaFichas);
+		
+        } catch (DelegateException e) {
+        	
+        	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+			resultats.put("id", -2);
+			log.error(ExceptionUtils.getStackTrace(e));
+        	
+        }
+
+        return resultats;
+		
+	}
+    
     
 	/**
 	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecer�n

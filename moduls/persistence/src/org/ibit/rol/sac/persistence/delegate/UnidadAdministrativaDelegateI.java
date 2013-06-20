@@ -8,7 +8,9 @@ import java.util.Set;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -179,6 +181,12 @@ public interface UnidadAdministrativaDelegateI {
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#consultarUnidadAdministrativa(java.lang.Long)
 	 */
 	public abstract UnidadAdministrativa consultarUnidadAdministrativa(Long id)
+			throws DelegateException;
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#consultarUnidadAdministrativaSinFichas(java.lang.Long)
+	 */
+	public abstract UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id)
 			throws DelegateException;
 
     /* (non-Javadoc)
@@ -577,5 +585,24 @@ public interface UnidadAdministrativaDelegateI {
     
 	public abstract String obtenerCadenaFiltroUA(Long ua,
 			boolean uaFilles, boolean uaMeves)
-			throws DelegateException;    
+			throws DelegateException;
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarSeccionesUA(java.lang.Long)
+	 */
+	public abstract List<Seccion> listarSeccionesUA(final Long idUA)
+			throws DelegateException;
+	
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#cuentaFichasSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+    public abstract Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion)
+    		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+    public abstract List<FichaUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
+    		throws DelegateException;
+	
 }

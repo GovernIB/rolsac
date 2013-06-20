@@ -2,7 +2,9 @@
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="rol" uri="/WEB-INF/rol.tld" %>
+
 <c:set var="rolAdmin"><rol:userIsAdmin/></c:set>
+
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions_fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />        
@@ -41,6 +43,7 @@
             </li>
             <li id="btnNuevaUAhija" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea una nova Unitat Administrativa</span></span></a></li>
         </ul>
+        
         <div id="resultadosUnidadesHijas">
             <div class="resultats L actiu">
                 <div class="dades">
@@ -1971,8 +1974,10 @@
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
         var pagArrel = '<c:url value="/" />';    
-        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
+        var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
+
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         
         // dsanchez: URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';

@@ -1313,60 +1313,79 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
     public void actualizarOrdenFichasUA(Enumeration params, Map valores) {
-    	
+    	    	
     	Session session = getSession();
+    	
         try {
+        	
         	Long id;
-        	int valor_orden=0;
-        	UnidadAdministrativa unidad=null;
-        	Set hermanos= null;
+        	int valor_orden = 0;
+        	UnidadAdministrativa unidad = null;
+        	Set hermanos = null;
         	List fichas_orden = new ArrayList();
         	
-            while(params.hasMoreElements()) {
+            while ( params.hasMoreElements() ) {
+            	
             	String paramName = (String)params.nextElement();
-            	if (paramName.startsWith("orden_fic")) {
-            		id=new Long(paramName.substring(9));
-            		String[] parametros=(String[])valores.get(paramName);
-            		valor_orden= Integer.parseInt(parametros[0]);
+            	if ( paramName.startsWith("orden_fic") ) {
             		
-            		if (!getAccesoManager().tieneAccesoFichaUnidad(id)) {
+            		id = new Long( paramName.substring(9) );
+            		String[] parametros = (String[])valores.get(paramName);
+            		valor_orden = Integer.parseInt(parametros[0]);
+            		
+            		if ( !getAccesoManager().tieneAccesoFichaUnidad(id) ) {
             			throw new SecurityException("No tiene acceso a la relacion");
             		}
-            		FichaUA ficha = (FichaUA) session.load(FichaUA.class, id);
+            		
+            		FichaUA ficha = (FichaUA)session.load(FichaUA.class, id);
 
-            		if (unidad==null) {
+            		if (unidad == null) {
             			unidad = ficha.getUnidadAdministrativa();
             			hermanos = unidad.getTodasfichas();
             		}
+            		
             		ficha.setOrden(valor_orden);
             		hermanos.remove(ficha);
             		hermanos.add(ficha);
             		fichas_orden.add(ficha);
+            		
             	}
+            	
             }
+            
             session.flush();
             
+            // TODO: mejorable. ¿No basta con calcular, en el while anterior, orden = (valor_orden + 1) * 5?
             Collections.sort( fichas_orden, new FichaUAComparator() );
             
-            int contador=5;
-        	
-        	Iterator itfic=fichas_orden.iterator();
-    		FichaUA fic=null;
-    		while (itfic.hasNext()) {
-    			fic=(FichaUA)itfic.next();
+            int contador = 5;
+        	Iterator itfic = fichas_orden.iterator();
+    		FichaUA fic = null;
+    		
+    		while ( itfic.hasNext() ) {
+    			
+    			fic = (FichaUA)itfic.next();
     			fic.setOrden(contador);
     			hermanos.remove(fic);
         		hermanos.add(fic);
-    			contador+=5;
+    			contador += 5;
+    			
     		}
+    		
             session.flush();
             
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
+            
         }
+        
     }
+    
     /**
      * Borrar una ficha Unidad administrativa
      * @ejb.interface-method

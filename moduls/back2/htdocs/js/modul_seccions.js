@@ -74,13 +74,78 @@ function CModulSeccio() {
     
 	this.mostraFitxes = function(e)  {
 		
-		//Mostrar panel de fichas de la seccion actual
-		divFichas = $(e).next().next();
+		fitxes_seleccionats_elm = escriptori_fitxes_elm.find("div.escriptori_items_seleccionats:first");
 		
-		if ($(divFichas).is(":visible"))
+		// Mostrar panel de fichas de la seccion actual.
+		divFichas = $(e).next().next();
+		idSeccion = $(e).prev().val();
+		
+		if ( $(divFichas).is(":visible") ) {
+					
 			divFichas.fadeOut(200);
-		else
+		
+		} else {
+			
+			ulFichas = $(divFichas).children('div').children('ul');
+			numFichas = $(ulFichas).children().size()
+			
+			if ( numFichas == 0 ) {
+				
+                $.ajax({
+                    type: "POST",
+                    url: pagFitxesUASeccio,
+                    data: "idseccion=" + idSeccion,
+                    dataType: "json",
+                    error: function() {
+                    	
+                        Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                        Error.llansar();
+                        
+                    },
+                    success: function(data) {
+                    	                                                                    
+                        if (data.id == -1) {
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                        } else if (data.id < -1) {
+                            Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                        }
+                    	
+                        llistaFitxes = data.fitxes;
+                        
+                    	jQuery.each(llistaFitxes, function() {
+                    		                    		                    		
+                    		paramsFicha = {
+									nombre: "fitxa",
+									nodoOrigen: "",
+									nodoDestino: fitxes_seleccionats_elm.find(".listaOrdenable"),
+									atributos: ["id", "nombre", "orden"],	// Campos que queremos que aparezcan en las listas.
+									multilang: false
+							}
+                    		
+                    		codi_seccions = "";
+								 
+                    		if ( llistaFitxes != null && llistaFitxes.length > 0 ) {
+                    			
+            					for ( n = 0; n < llistaFitxes.length; n++ ) {
+            						codi_seccions += "<li>";
+            						codi_seccions += "<input class=\"" + paramsFicha.nombre + "_" + paramsFicha.atributos[0] + "\" type=\"hidden\" value=\"" + llistaFitxes[n].id + "\"/><span>" + llistaFitxes[n].titulo + "</span>";  
+            						codi_seccions += "</li>"
+            					}
+            										
+            				}
+                    		
+                    		ulFichas.html(codi_seccions);
+                    		
+                    	});
+                        
+                    }
+                });
+				
+			}
+			
 			divFichas.fadeIn(200);
+			
+		}
 		
 		return false;
 	}
@@ -161,44 +226,36 @@ function CModulSeccio() {
 			codi_seccions = "<ul>";
 			
 			$(seccions_nodes).each( function(index) {
+				
 				seccio_node = this;
 				
 				texteFitxes = "(0 fitxes)";
-				llistaFitxes = seccio_node.listaFichas;
+								
+				numFitxes = seccio_node.numFichas;
 				
-				if (llistaFitxes != null)
-					texteFitxes = " (" + llistaFitxes.length  + " " + ( llistaFitxes.length > 1 ? txtFitxes : txtFitxa ) + ")";
-				
+				if (numFitxes != null)
+					texteFitxes = " (" + numFitxes  + " " + ( numFitxes > 1 ? txtFitxes : txtFitxa ) + ")";
+								
 				// crearem una llista per a cada enllass de seccio, que contindraï¿½les fitxes que te assignades
 				codi_seccions += "<li class=\"nodoListaSecciones\">";
                 codi_seccions += '<input type="hidden" name="seccio_modificada_'+ seccio_node.id +'" value="0"/>';
                 codi_seccions += "<input class=\"seccio_orden\" id=\"seccio_orden_"+ seccio_node.id +"\" name=\"seccio_orden_" + seccio_node.id + "\" type=\"hidden\" value=\"" + (index+1) + "\" />";
                 codi_seccions += "<input class=\"seccio_id\" id=\"seccio_id_" + seccio_node.id + "\" name=\"seccio_id_" + seccio_node.id + "\"  type=\"hidden\" value=\"" + seccio_node.id + "\" /><a class=\"enllasGestioFitxa seccio_nombre\" href=\"#\">" + seccio_node.nom + "</a><span>" + texteFitxes + "</span>";                
-				codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
+				
+                codi_seccions += "<div class=\"contenedorFichas\" style=\"margin-top: 10px; display:none;\">";
 				codi_seccions += "<div class=\"listaOrdenable\">";
 				codi_seccions += "<ul>";
-				
-				if ( llistaFitxes != null && llistaFitxes.length > 0 ) {
-	
-					for ( n = 0; n < llistaFitxes.length; n++ ) {
-						codi_seccions += "<li>";
-						codi_seccions += "<input class=\"" + paramsFicha.nombre + "_" + paramsFicha.atributos[0] + "\" type=\"hidden\" value=\"" + llistaFitxes[n].id + "\"/><span>" + llistaFitxes[n].titulo + "</span>";  
-						codi_seccions += "</li>"
-					}
-										
-				} else {
-					codi_seccions += "<span>" + txtNoHiHaFitxes + "</span>";  
-				}
-				
+								
 				codi_seccions += "</ul>";
 				codi_seccions += "</div>";
 				
                 codi_seccions += "<div class=\"btnGenerico\" style=\"float:none; width:145px;\" >";
                 codi_seccions += "<a class=\"btn gestionaFitxes\" href=\"javascript:;\"><span><span>" + txtGestioFitxes + "</span></span></a>";
                 codi_seccions += "</div>";
-                
+				
                 codi_seccions += "</div>";
 				codi_seccions += "</li>";
+				
 			});
 			
 			codi_seccions += "</ul>";
@@ -210,12 +267,14 @@ function CModulSeccio() {
 			seccions_llistat_seccions.find(".listaOrdenable").html(codi_seccions);
 
 			this.activaEnllasosFitxes();
+			
 		}
 						
 		copiaNodesOrigen = modul_seccions_elm.find(".listaOrdenable:first").html();
 		
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );		
+
 	}
 	
 	this.gestionaSeccio = function() {	    
@@ -604,7 +663,7 @@ function CModulSeccio() {
 			
 			// Evento click Ficha informativa			
             //$(this).unbind("click").bind("click", function() {
-            // dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la edición de la ficha.
+            // dsanchez: Cambiamos para que sea clicable el span que hay dentro de la lista para acceder a la ediciï¿½n de la ficha.
             $(this).find("span.fitxa").unbind("click").bind("click", function() {                        
                                         
                 //var fitxaId = $(this).find("input.fitxa_id").val();

@@ -7,7 +7,9 @@ import java.util.Map;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
+import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -93,6 +95,11 @@ public class UnidadAdministrativaDelegate {
 	public UnidadAdministrativa consultarUnidadAdministrativa(Long id)
 			throws DelegateException {
 		return impl.consultarUnidadAdministrativa(id);
+    }
+	
+	public UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id)
+			throws DelegateException {
+		return impl.consultarUnidadAdministrativaSinFichas(id);
     }
 
     public UnidadAdministrativa consultarUnidadAdministrativaPMA(Long id)
@@ -351,6 +358,21 @@ public class UnidadAdministrativaDelegate {
 	
     public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre) throws DelegateException {
     	impl.reordenar(id, ordenNuevo, ordenAnterior, idPadre);
+    }
+    
+    public List<Seccion> listarSeccionesUA(Long idUA) 
+			throws DelegateException {
+    	return impl.listarSeccionesUA(idUA);
+    }
+    
+    public Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion)
+    		throws DelegateException {
+    	return impl.cuentaFichasSeccionUA(idUA, idSeccion);
+    }
+    
+    public List<FichaUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
+			throws DelegateException {
+    	return impl.listarFichasSeccionUA(idUA, idSeccion);
     }
 
 }

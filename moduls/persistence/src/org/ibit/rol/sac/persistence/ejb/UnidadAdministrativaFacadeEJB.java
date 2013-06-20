@@ -584,6 +584,69 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
     }
 
 
+    /**
+     * Obtiene informacion para el front de una Unidad Administrativa
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+    public UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id) {
+    	
+    	Session session = getSession();
+        
+        try {
+        	
+            UnidadAdministrativa ua = (UnidadAdministrativa) session.load(UnidadAdministrativa.class, id);
+            
+            if ( visible(ua) ) {
+            	
+                Hibernate.initialize(ua.getFotop());
+                Hibernate.initialize(ua.getFotog());
+                Hibernate.initialize(ua.getLogoh());
+                Hibernate.initialize(ua.getLogov());
+                Hibernate.initialize(ua.getLogos());
+                Hibernate.initialize(ua.getLogot());
+                Hibernate.initialize(ua.getTratamiento());
+                Hibernate.initialize(ua.getEspacioTerrit());
+                Hibernate.initialize(ua.getEdificios());
+                Hibernate.initialize(ua.getUnidadesMaterias());
+                Hibernate.initialize(ua.getPadre());
+                Hibernate.initialize(ua.getHijos());
+                
+                // No cargamos las fichas ya que, debido a configuraciones de lazy, se cargan 
+                // demasiados datos innecesarios para la pantalla del mantenimiento de una UA.
+                /*
+                Hibernate.initialize(ua.getFichasUA());
+                Hibernate.initialize(ua.getTodasfichas());
+                */
+                
+                Hibernate.initialize(ua.getProcedimientos());
+                Hibernate.initialize(ua.getPersonal());
+                Hibernate.initialize(ua.getNormativas());
+                
+                if (userIsAdmin()) {
+                    Hibernate.initialize(ua.getUsuarios());
+                }
+                
+                return ua;
+                
+            } else {
+            	
+                throw new SecurityException("La unitat administrativa no �s publica con id " + ua.getId() );
+                
+            }
+
+        } catch (HibernateException he) {
+        	
+            throw new EJBException("No s'ha trobat la unitat administrativa sol�licitada", he);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+    	
+    }
+    
 
     /**
      * Obtiene informacion para el front de una Unidad Administrativa
@@ -1764,6 +1827,101 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 
 		return resultado;
 	}
+	
+
+	/**
+	 * Devuelve todas las {@link Seccion} relacionadas con una {@link UnidadAdministrativa}
+     *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public List<Seccion> listarSeccionesUA(final Long idUA) {
+		
+		List<Seccion> resultado = null;
+		
+		if ( idUA != null ) {
+			
+			Session session = getSession();
+			
+	        try {
+	        	
+	        	resultado = new ArrayList<Seccion>();
+	        	
+	        	Query query = session.createQuery(" SELECT DISTINCT seccion FROM FichaUA AS fua, Seccion AS seccion " +
+	        			" WHERE fua.seccion.id = seccion.id AND fua.unidadAdministrativa.id = :idUA ");
+	        	query.setParameter("idUA", idUA);
+	        	
+	        	resultado = query.list();
+	        	
+	        	// Inicializamos hijos para no tener error de lazy al comprobar si el List contiene
+	        	// o no elementos, intentando saber si tiene hijos para crear correctamente el DTO
+	        	// asociado al elemento Seccion (SeccionDTO.fills).
+	        	Iterator<Seccion> itSeccion = resultado.iterator();
+	        	while ( itSeccion.hasNext() ) {
+	        		
+	        		Seccion seccion = itSeccion.next();
+	        		Hibernate.initialize(seccion.getHijos());
+	        		
+	        	}
+
+	        } catch (HibernateException he) {
+	        	
+	            throw new EJBException(he);
+	            
+	        } finally {
+	        	
+	            close(session);
+	            
+	        }
+	        
+		} else {
+			
+			resultado = Collections.emptyList();
+			
+		}
+
+		return resultado;
+		
+	}
+	
+	/**
+	 * Devuelve el número de {@link Ficha} relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
+     *
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion) {
+		
+		Long resultado = Long.valueOf(0);
+		
+		if ( idUA != null && idSeccion != null ) {
+			
+			Session session = getSession();
+			
+	        try {
+	        		        	
+	        	Query query = session.createQuery(" SELECT COUNT(*) FROM FichaUA AS fua " +
+	        			" WHERE fua.unidadAdministrativa.id = :idUA AND fua.seccion.id = :idSeccion");
+	        	query.setParameter("idUA", idUA);
+	        	query.setParameter("idSeccion", idSeccion);
+	        	
+	        	resultado = ((Integer)query.uniqueResult()).longValue();
+
+	        } catch (HibernateException he) {
+	        	
+	            throw new EJBException(he);
+	            
+	        } finally {
+	        	
+	            close(session);
+	            
+	        }
+	        
+		}
+		
+		return resultado;
+		
+	}
 
 	
 	/**
@@ -2445,7 +2603,58 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	  }
 	
 	
-	
+	 /**
+	  * Devuelve un {@link List} de {@link FichaUA}, relacionadas con una {@link UnidadAdministrativa} y una {@link Seccion}.
+	  *
+	  * @param idUA
+	  * @param idSeccion
+	  * @return
+	  *
+	  * @ejb.interface-method
+	  * @ejb.permission unchecked="true"
+	  */
+	 public List<FichaUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
+		  		  
+		 List<FichaUA> fichas = new ArrayList<FichaUA>();
+		 
+	     if ( idUA != null && idSeccion != null ) {
+	    	 
+	         Session session = getSession();
+	         
+	         try {
+	             
+		          //Query que retorna las fichas relacionadas
+		   	      Query query = session.createQuery(
+		   	    		  " select DISTINCT fua From FichaUA as fua, fua.ficha as f " +
+		   	    		  " where fua.unidadAdministrativa.id = :idUA AND fua.seccion.id = :idSeccion " +
+		   	    		  " order by fua.orden asc "
+   	    		  );
+		   	      
+		   	      query.setLong("idUA", idUA);
+		   	      query.setLong("idSeccion", idSeccion);
+		   	      
+		   	      fichas.addAll(query.list());
+	             
+	         } catch (HibernateException he) {
+	        	 
+	             throw new EJBException(he);
+	             
+	         } finally {
+	        	 
+	             close(session);
+	             
+	         }
+	         
+	     } else {
+	    	 
+	         return Collections.emptyList();
+	         
+	     }
+		
+		 return fichas;
+		     
+	 }
+	  	
 	
 	/**
 	  * Devuelve un {@link List} de {@link Ficha}, Relacionadas con el arbol de relaciones de una {@link UnidadAdministrativa},
