@@ -19,10 +19,12 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -427,6 +429,39 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             close(session);
         }
     }
+    
+    
+	/**
+	 * Metodo que devuelve una cadena csv de ids de secciones a las que el usuario tienen acceso
+	 * 	 
+	 * @return
+	 * @throws HibernateException
+	 * @throws DelegateException
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public String obtenerCadenaFiltroSeccion()
+			throws DelegateException {
+	
+		List<String> roles = this.getUserRoles();
+		String rolesStr = "'" + StringUtils.join(roles.toArray(), "','") + "'";
+		
+        Session session = getSession();
+        try {
+            String select = "select s.id from Seccion as s where s.perfil in ( '0', "+ rolesStr +")";
+            Query query = session.createQuery(select);
+            List ids = query.list();
+            return StringUtils.join(ids.toArray(), ",");
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+
+	}	
+	
+    
 
     /**
      * Lista de la raiz hasta la secci�n indicada por el id.

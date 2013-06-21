@@ -165,7 +165,7 @@ public class FitxaInfBackController extends PantallaBaseController {
 
         String lang = request.getLocale().getLanguage();
         
-		//Obtenemos la ordenaci�n por par�metro
+		//Obtenemos la ordenacion por parametro
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		

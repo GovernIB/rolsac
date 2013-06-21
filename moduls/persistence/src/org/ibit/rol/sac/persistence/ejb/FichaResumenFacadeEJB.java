@@ -18,7 +18,6 @@ import net.sf.hibernate.Session;
 import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
@@ -85,7 +84,9 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             String fetVitalQuery = "";            
             String materiaQuery = "";
             String publicQuery = "";
-            String mainQuery = "select distinct ficha from FichaResumen as ficha, ficha.traducciones as trad, ficha.fichasua as fsua ";
+            String selectResults = "select distinct ficha ";
+            String selectCount = "select count (distinct ficha) ";
+            String mainQuery = "from FichaResumen as ficha, ficha.traducciones as trad, ficha.fichasua as fsua ";
             
             if (traduccion.get("idioma") != null) {
                 i18nQuery = populateQuery(parametros, traduccion, params);
@@ -112,8 +113,10 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			Long idUA = (ua != null) ? ua.getId() : null;
             String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );
             
-            if ( !StringUtils.isEmpty(uaQuery) )
+            if ( !StringUtils.isEmpty(uaQuery) ) {
             	uaQuery = " and fsua.idUa in (" + uaQuery + ") ";
+            }
+            
             
             if ( idFetVital != null ) {
             	mainQuery += ",ficha.hechosVitales as hec ";
@@ -132,9 +135,53 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
                 publicQuery = " and pob.id = ? ";
                 params.add(idPublic);
             }
+
+            String accesoQuery = "";
+            if (userIsOper()) {
+            	
+				//Filtrar por las unidades a que el usuario tiene acceso:
+
+				//tieneAccesoValidable
+				if (!userIsSuper()) {
+					accesoQuery += " and ficha.validacion = " + Validacion.INTERNA;
+				}
+
+				// tieneAcceso a fichaUA
+				if (!userIsSystem()) {
+					//debe tener acceso a la UA y a la seccion
+					
+		            if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
+						uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
+			            if ( !StringUtils.isEmpty(uaQuery) ) {        	
+			            	uaQuery = " and fsua.idUa in (" + uaQuery + ") ";
+			            } else {
+			            	//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y 
+			            	//no es system. Por lo que en realidad no hace falta ejecutar nada, sino más bien devolver
+			            	//un resultado vacío
+			    			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
+			    			resultadoBusqueda.setTotalResultados(0);
+			    			resultadoBusqueda.setListaResultados(new ArrayList<FichaResumen>());
+			    			return resultadoBusqueda;			            	
+			            }
+					}
+		            
+		            String seccionList = DelegateUtil.getSeccionDelegate().obtenerCadenaFiltroSeccion();
+		            if ( !StringUtils.isEmpty(seccionList) ) {
+		            	accesoQuery = " and fsua.idSeccio in (" + seccionList + ") ";
+		            } else {
+		            	//Si el usuario no tiene acceso a ninguna sección, entonces no hace falta ejecutar nada, sino más bien 
+		            	//devolver un resultado vacío
+		    			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
+		    			resultadoBusqueda.setTotalResultados(0);
+		    			resultadoBusqueda.setListaResultados(new ArrayList<FichaResumen>());
+		    			return resultadoBusqueda;	            	
+		            }
+		            
+				}
+            }
             
-            Query query = session.createQuery(mainQuery + i18nQuery + uaQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
-//            Query query = session.createQuery(mainQuery + i18nQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
+            Query query = session.createQuery(selectResults + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
+            Query countQuery = session.createQuery(selectCount + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
             
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
@@ -145,47 +192,16 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
 			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
 			
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+
+			resultadoBusqueda.setTotalResultados( (Integer) countQuery.uniqueResult() );
+            
+			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}
+        	
+			resultadoBusqueda.setListaResultados(query.list());
 			
-            if (!userIsOper()) {
-            	
-                resultadoBusqueda.setTotalResultados( query.list().size() );
-                
-    			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
-    				query.setFirstResult(primerResultado);
-    				query.setMaxResults(resultadosMax);
-    			}
-            	
-    			resultadoBusqueda.setListaResultados(query.list());
-                
-            } else {
-            	
-    			List<FichaResumen> fichasResumen = query.list();
-    			
-                List<FichaResumen> fichasAcceso = new ArrayList<FichaResumen>();
-                Usuario usuario = getUsuario(session);
-                
-                // Procesar todas las fichas para saber el total y 
-                // aprovechar el bucle para ir guardando el número 
-                // de fichas solicitadas según los parámetros de paginación.                
-                int contadorTotales = 0;
-                int fichasInsertadas = 0;
-                int iteraciones = 0;
-                
-                for ( FichaResumen fichaResumen : fichasResumen ) {
-                	if ( tieneAcceso(usuario, fichaResumen) ) {
-                		if ( fichasInsertadas != resultadosMax && iteraciones >= primerResultado ) { 
-                			fichasAcceso.add(fichaResumen);
-                			fichasInsertadas++;
-                		}
-                		contadorTotales++;
-                	}
-                	iteraciones++;
-                }
-                
-                resultadoBusqueda.setTotalResultados( contadorTotales );
-                resultadoBusqueda.setListaResultados( fichasAcceso );
-                
-            }
             
             return resultadoBusqueda;
             
