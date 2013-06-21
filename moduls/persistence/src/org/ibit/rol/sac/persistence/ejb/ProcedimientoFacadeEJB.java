@@ -944,16 +944,21 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			String select = "select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, " +
 								    "procedimiento.fechaActualizacion, procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, " +
 								    "tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ";
+			String selectCount = "select count(*) ";
 
-			String queryStr = select + from 
-			        + "procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where  
-			        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			String restoQuery = " procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where  
+	        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			
+			String queryStr = select + from + restoQuery ;
+			String queryCountStr = selectCount + from + restoQuery;
 			
 			Query query = session.createQuery(queryStr);
+			Query queryCount = session.createQuery(queryCountStr);
 			
 			for (int i = 0; i < params.size(); i++) {
 				String o = (String) params.get(i);
 				query.setString(i, o);
+				queryCount.setString(i, o);
 			}
 
 			int resultadosMax = new Integer(resultats).intValue();
@@ -961,7 +966,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
 
-			resultadoBusqueda.setTotalResultados(query.list().size());
+			resultadoBusqueda.setTotalResultados( (Integer) queryCount.uniqueResult() );
 			
 			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
 				query.setFirstResult(primerResultado);
