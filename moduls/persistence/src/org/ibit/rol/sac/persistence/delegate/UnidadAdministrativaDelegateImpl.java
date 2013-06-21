@@ -1107,7 +1107,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
         }
     }
 
-	@Override
 	public UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id)
 			throws DelegateException {
 		
@@ -1119,7 +1118,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
-	@Override
 	public List<Seccion> listarSeccionesUA(Long idUA) 
 			throws DelegateException {
 		
@@ -1131,7 +1129,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
-	@Override
 	public Long cuentaFichasSeccionUA(Long idUA, Long idSeccion)
 			throws DelegateException {
 		
@@ -1143,7 +1140,6 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
-	@Override
 	public List<FichaUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
 			throws DelegateException {
 		
