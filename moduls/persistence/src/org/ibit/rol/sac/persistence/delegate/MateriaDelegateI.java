@@ -6,6 +6,7 @@ import java.util.Set;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
@@ -62,6 +63,9 @@ public interface MateriaDelegateI {
 			final String idioma) throws DelegateException;
 
 	public abstract Materia obtenerMateriaFichasProced(Long id)
+			throws DelegateException;
+	
+	public abstract List<UnidadAdministrativa> listarUAsMateria(Long id)
 			throws DelegateException;
 	
 }

@@ -15,7 +15,8 @@ $(document).ready(function() {
 });
 
 
-function CModulUnitatAdministrativa(){
+function CModulUnitatAdministrativa() {
+	
 	this.extend = ListaOrdenable;
 	this.extend();		
 	
@@ -40,13 +41,16 @@ function CModulUnitatAdministrativa(){
 		// unitatsAdministratives_llistat_elm.add(unitatsAdministratives_seleccionades_elm);							
 		
 		// Configuramos la lista ordenable.
-		this.configurar({
+		params = {
 			nombre: "unitatAdministrativa",
 			nodoOrigen: modul_unitatsAdministratives_elm.find(".listaOrdenable"),
 			nodoDestino: modul_unitatsAdministratives_elm.find(".listaOrdenable"),
 			atributos: ["id", "nombre"],	// Campos que queremos que aparezcan en las listas.
 			multilang: false
-		});
+		}
+		
+		this.configurar(params);
+		
 	}	
 			
 	this.nuevo = function() {       
@@ -96,4 +100,70 @@ function CModulUnitatAdministrativa(){
 		
 		return listaUnidadesAdministrativas;
 	}
+	
+	/**
+	 * Agrega un item a la lista.
+	 * Método sobreescrito del original de ListaOrdenable pero con sólo modificaciones para tener en cuenta si se está o no en el mantenimiento de una materia.
+	 * Si es el caso, hay código adicional que añade un radiobutton de UA principal de la materia.
+	 *
+	 * @return boolean Devuelve true si el item no se encontraba ya en la lista.
+	 */
+	this.agregaItem = function( item ) {
+				
+		var _this = this;
+		var tamLista = jQuery(params.nodoDestino).filter(":first").find("li").size();		
+		var itemYaExiste = false;
+		var html;		
+		var idioma;
+						                                
+		if ( tamLista == 0) {
+						
+			jQuery(params.nodoDestino).html("<ul></ul>");
+			
+		} else {
+			
+			jQuery(params.nodoDestino).find("input." + params.nombre + "_id").each(function() {				
+				
+				if ( jQuery(this).val() == item.id ) {
+					itemYaExiste = true;
+				}			
+				
+			});			
+		}
+		
+		if ( !itemYaExiste ) {
+							
+			if ( params.multilang ) {
+		
+				jQuery( params.nodoDestino ).each(function() {
+					idioma = _this.getIdiomaActivo( jQuery(this) );
+					html = _this.getHtmlItem( item, true, idioma );					
+					jQuery(this).find("ul").append(html);					
+				});		
+				
+			} else {			
+							
+				html = _this.getHtmlItem( item, true );				
+				jQuery( params.nodoDestino ).find("ul").append(html);
+				
+				// Añado radio button de UA si estamos en el mantenimiento de Materias.
+				if ( $('#modul_detall_materies') ) {
+					
+					jQuery('#unitatAdministrativa_id_' + item.id).parent().append(
+						'<p><input id="item_ua_principal_' + item.id + '" type="radio" value="' + item.id + '" name="item_ua_principal">' +
+						'<label for="item_ua_principal_' + item.id + '">Principal?</label></p>'
+					);
+					
+				}
+				
+			}
+						
+			return true;
+			
+		}
+		
+		return false;
+		
+	}
+	
 };

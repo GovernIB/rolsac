@@ -4,6 +4,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +28,7 @@ import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
 import org.ibit.rol.sac.model.TraduccionPerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionUA;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
@@ -34,12 +37,15 @@ import org.ibit.rol.sac.persistence.delegate.IconoMateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
 import org.ibit.rol.sac.persistence.delegate.PerfilDelegate;
+import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import sun.text.Normalizer;
 
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
@@ -139,9 +145,11 @@ public class TMMateriesController extends PantallaBaseController {
     
     @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+    	
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    
 	    try {
+	    	
 	        Long id = new Long(request.getParameter("id"));
 	        MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 	        Materia materia = materiaDelegate.obtenerMateria(id);	        	        
@@ -179,16 +187,68 @@ public class TMMateriesController extends PantallaBaseController {
                 resultats.put("item_icona_gran", "");
             }  
             
-            resultats.put("item_uas_materia", getJSONUnidadesAdministrativas(materia));
+            String lang = request.getLocale().getLanguage();
+            List<UnidadAdministrativa> listaUAs = materiaDelegate.listarUAsMateria(id);
+            
+            // Ordenamos las UAs por nombre, ascendente.
+            Collections.sort(listaUAs, new Comparator<UnidadAdministrativa>() {
+            	
+				public int compare(UnidadAdministrativa o1,
+						UnidadAdministrativa o2) {
+					
+					TraduccionUA tr1 = (TraduccionUA)o1.getTraduccion();
+					TraduccionUA tr2 = (TraduccionUA)o2.getTraduccion();					
+					
+					if (tr1.getNombre() == null) {
+						
+						return -1;
+						
+					} else if (tr2.getNombre() == null) {
+						
+						return 1;
+						
+					} else {				
+					
+						String nombre1 = tr1.getNombre();
+						String nombre2 = tr2.getNombre();
+												
+						// Normalizamos y pasamos a ASCII para ordenar ignorando acentos o resto de caracteres extraños.
+						nombre1 = Normalizer.normalize(nombre1, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
+						nombre2 = Normalizer.normalize(nombre2, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
+						
+						return nombre1.compareToIgnoreCase(nombre2);
+						
+					}
+					
+				}
+				
+			});
+            
+        	List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
+        	
+        	Iterator<UnidadAdministrativa> it = listaUAs.iterator();
+        	while ( it.hasNext() ) {
+        		
+        		UnidadAdministrativa ua = it.next();
+        		Map<String, Object> uaDTO = new HashMap<String, Object>(2);
+				uaDTO.put("id", ua.getId());
+				uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
+				listaUAsDTO.add(uaDTO);      
+        		
+        	}
+        	            
+            resultats.put("uas", listaUAsDTO);
+            
             resultats.put("item_ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
             resultats.put("item_destacada", materia.isDestacada());
             
             // Icones materia
  			if (materia.getIconos() != null) {
+ 				
  				Map<String, Object> iconaDTO;
  				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
 
- 				for(IconoMateria icona: (Set<IconoMateria>) materia.getIconos()) {
+ 				for (IconoMateria icona : (Set<IconoMateria>) materia.getIconos()) {
  					if (icona != null && icona.getIcono() != null) {
  						iconaDTO = new HashMap<String, Object>(3);
  						iconaDTO.put("id", icona.getId());
@@ -198,20 +258,29 @@ public class TMMateriesController extends PantallaBaseController {
  						log.error("La materia " + materia.getId() + " te una icona null o sense arxiu.");
  					}
  	            }
+ 				
  				resultats.put("icones", llistaIcones);
+ 				
  			} else {
+ 				
  	            resultats.put("icones", null);
+ 	            
  	        } 
+ 			
 	    } catch (DelegateException dEx) {
+	    	
 			log.error(ExceptionUtils.getStackTrace(dEx));
+			
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
 		}
 	    
         return resultats;
+        
 	}
     
     
@@ -261,48 +330,26 @@ public class TMMateriesController extends PantallaBaseController {
     
     // Dado un set devolvemos el id de la principal
     private Long getUAPrincipal(Set uas) {
+    	
     	Iterator it = uas.iterator();
     	
     	while (it.hasNext()) {
-    		UnidadMateria unimat = (UnidadMateria) it.next();
-    		if (unimat.getUnidadPrincipal() != null && unimat.getUnidadPrincipal().equals("S"))
-    			return unimat.getId(); 
+    		
+    		UnidadMateria unimat = (UnidadMateria)it.next();
+    		
+    		if ( "S".equals(unimat.getUnidadPrincipal()) )
+    			return unimat.getUnidad().getId(); 
+    		
     	}
+    	
     	return null;
-    }
-    
-    // Dado un set lo actualizamos con la principal seleccionada
-    private Set setUAPrincipal(Set uas, Long id) {
-    	if (id != null) {
-	    	Iterator it=uas.iterator();
-	    	while (it.hasNext()) {
-	    		UnidadMateria unimat= (UnidadMateria)it.next();
-	    		if (unimat.getId().longValue()==id.longValue()) {
-	    			unimat.setUnidadPrincipal("S");
-	    		}
-	    		else {
-	    			unimat.setUnidadPrincipal("N");
-	    		}
-	    	}
-    	}
-    	return uas;
-    }
-    
-    
-    // Devuelve lista de unidades administrativas materias (id uamateria y nombre ua).  
-    private List<IdNomDTO> getJSONUnidadesAdministrativas(Materia materia) {
-    	List<IdNomDTO> uaList = new LinkedList<IdNomDTO>(); 
-    	for (UnidadMateria uam : (Set<UnidadMateria>) materia.getUnidadesmaterias()) {
-    		String nombre = uam.getUnidad().getTraduccion() != null ? ((TraduccionUA)uam.getUnidad().getTraduccion()).getNombre() : "";
-    		Long id = uam.getId();
-    		uaList.add(new IdNomDTO(id, nombre));
-    	}
-    	return uaList;
+    	
     }
 
     
     @RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
+    	
 		/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -337,24 +384,36 @@ public class TMMateriesController extends PantallaBaseController {
     		}
         	
         	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+        	UnidadMateriaDelegate uamDelegate = DelegateUtil.getUnidadMateriaDelegate();
 
         	boolean edicion = valoresForm.get("item_id") != null && !"".equals(valoresForm.get("item_id"));
-        	if (edicion) {      		        		
+        	
+        	if (edicion) {
+        		
 				Long idMateria = ParseUtil.parseLong(valoresForm.get("item_id"));
         		materiaOld = materiaDelegate.obtenerMateria(idMateria);
         	    materia.setId(idMateria);
         	    materia.setProcedimientosLocales(materiaOld.getProcedimientosLocales());
-        		materia.setUnidadesmaterias(materiaOld.getUnidadesmaterias());
+        	            		
         		materia.setFichas(materiaOld.getFichas());
         		materia.setIconos(materiaOld.getIconos());
         		materia.setMateriasAgrupacionM(materiaOld.getMateriasAgrupacionM());
+        		
+        	    Set<UnidadMateria> unidadesMateria = (Set<UnidadMateria>)materiaOld.getUnidadesmaterias();
+        	    Iterator<UnidadMateria> it = unidadesMateria.iterator();
+        	    while ( it.hasNext() )
+        	    	uamDelegate.borrarUnidadMateria( it.next().getId() );
+        		
         	}
+        	
+        	
         	
         	// Obtener campos por idioma
         	TraduccionMateria traMat; 
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
 
         	for (String idioma : idiomas) {
+        		
         		traMat = materiaOld != null ? (TraduccionMateria)materiaOld.getTraduccion(idioma) : null;
         		if (traMat != null) {
             		materia.setTraduccion(idioma, traMat);
@@ -388,9 +447,9 @@ public class TMMateriesController extends PantallaBaseController {
         		} else if (valoresForm.get("item_contenido_" + idioma + "_delete") != null && !"".equals(valoresForm.get("item_contenido_" + idioma + "_delete"))){
         			traMat.setContenido(null);
         		}
+        		
         	}
-        	
-        	
+        	        	
         	// Iconos: o no hay cambios o se han de eliminar algunos (las adiciones se hacen en IconaMateriaBackController).
 			if (edicion) {
 				IconoMateriaDelegate iconaMateriaDelegate = DelegateUtil.getIconoMateriaDelegate();
@@ -434,11 +493,6 @@ public class TMMateriesController extends PantallaBaseController {
         	materia.setCodiHita(valoresForm.get("item_codi_hita"));
         	materia.setCodigoEstandar(valoresForm.get("item_codi_estandard"));
         	materia.setDestacada(valoresForm.get("item_destacada") != null && !"".equals(valoresForm.get("item_destacada")));
-        	if (edicion){
-                // ACTUALIZAMOS LA UA SELECCIONADA COMO UA PRINCIPAL
-                Long uaprincipal = ParseUtil.parseLong(valoresForm.get("item_ua_principal"));
-                materia.setUnidadesmaterias(setUAPrincipal(materiaOld.getUnidadesmaterias(), uaprincipal));        	
-            }
             
 	        // Foto
             fileItem = ficherosForm.get("item_foto");
@@ -471,6 +525,34 @@ public class TMMateriesController extends PantallaBaseController {
     		}
 
         	materiaDelegate.grabarMateria(materia);
+
+        	// Obtener UAs relacionadas con la Materia y crear objetos UnidadMateria asociados a la Materia.
+        	Set<String> paramNames = valoresForm.keySet();
+        	List<String> listaUAs = new ArrayList<String>();
+        	
+        	for ( String paramName : paramNames ) {
+        		
+        		if ( paramName.startsWith("unitatAdministrativa_id_") )
+        			listaUAs.add( valoresForm.get(paramName) );
+        		
+        	}
+        	
+        	Iterator<String> it = listaUAs.iterator();
+        	
+        	while ( it.hasNext() ) {
+        		
+        		String idUA = it.next();
+        		UnidadMateria uam = new UnidadMateria();
+        		
+        		if ( idUA.equals(valoresForm.get("item_ua_principal")) )
+        			uam.setUnidadPrincipal("S");
+        		else
+        			uam.setUnidadPrincipal("N");
+        		
+        		uamDelegate.grabarUnidadMateria(uam, Long.valueOf(idUA), materia.getId());
+        		
+        	}
+        	
         	result = new IdNomDTO(materia.getId(), messageSource.getMessage("materia.guardat.correcte", null, request.getLocale()) );
         	
         } catch (DelegateException dEx) {

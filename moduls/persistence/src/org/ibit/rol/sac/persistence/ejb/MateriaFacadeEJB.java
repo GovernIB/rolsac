@@ -24,6 +24,7 @@ import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.MateriaAgrupacionM;
 import org.ibit.rol.sac.model.PerfilCiudadano;
 import org.ibit.rol.sac.model.TraduccionMateria;
+import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.persistence.util.RemotoUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
 
@@ -524,5 +525,52 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
         }
         
     }
+
+	
+	/**
+     * Lista todas las {@link UnidadAdministrativa} relacionadas con la Materia, vía la tabla RSC_UNAMAT.
+     * 
+     * @param id de la Materia.
+     * 
+     * @return lista de {@link UnidadAdministrativa}
+     * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public List<UnidadAdministrativa> listarUAsMateria(Long id) {
+		
+		List<UnidadAdministrativa> resultado;
+		
+		if ( id != null ) {
+			
+			Session session = getSession();
+			
+			try {
+								
+				Query query = session.createQuery(" SELECT unimat.unidad FROM UnidadMateria AS unimat WHERE unimat.materia.id = :id ");
+				query.setLong("id", id);
+
+				resultado = (List<UnidadAdministrativa>)query.list();
+								
+			} catch (HibernateException he) {
+				
+				throw new EJBException(he);
+				
+			} finally {
+				
+				close(session);
+				
+			}
+			
+		} else {
+			
+			resultado = Collections.emptyList();
+			
+		}
+		
+		return resultado;
+		
+	}
+
 	
 }

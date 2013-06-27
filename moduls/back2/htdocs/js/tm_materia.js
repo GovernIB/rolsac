@@ -324,6 +324,8 @@ function CDetall(){
 		escriptori_detall_elm.find(".botonera li.btnEliminar").hide();
 		escriptori_detall_elm.find("div.fila input.nou, div.fila textarea.nou").val("").end().find("h2:first").text(txtNouTitol);
 		
+		ModulUnitatAdministrativa.nuevo();
+		
 		escriptori_contingut_elm.fadeOut(300, function() {
 			escriptori_detall_elm.fadeIn(300, function() {
 				// activar
@@ -336,10 +338,14 @@ function CDetall(){
 	
 	// Guardar haciendo upload de archivos.
 	this.guarda_upload = function() {
+	
         // Validamos el formulario
         if (!that.formulariValid()) {
             return false;
         }
+        
+        // Guardamos la relación con las UAs.
+        $("#llistaUnitatsAdministratives").val(ModulUnitatAdministrativa.listaUnidadesAdministrativas());
 
 		$("#formGuardar").ajaxSubmit({			
 			url: pagGuardar,
@@ -391,25 +397,24 @@ function CDetall(){
 		pintarArchivo("item_foto", dades);
 		pintarArchivo("item_icona", dades);
 		pintarArchivo("item_icona_gran", dades);
-		
-		// Rellenar y mostrar el select de uas si hay uas
-		if (dades.item_uas_materia.length > 0) {
-			var selected;
-			var $ua_select = $('#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr');
-			$ua_select.find('option').remove();
-			$ua_select.append('<option value="0">' + txtTria + '</option>');
-			for (var i in dades.item_uas_materia) {
-				selected = dades.item_ua_principal == dades.item_uas_materia[i].id ? ' selected="selected"' : '';
-				$ua_select.append('<option value="' + dades.item_uas_materia[i].id + '"' + selected + '>' + dades.item_uas_materia[i].nom + '</option>');
-			}
-			$ua_select.closest("div.fila").show();
-	        $ua_select.change();
-	        $('#item_destacada').attr('checked', dades.item_destacada).change();
-		} else {
-            jQuery("#item_ua_principal,#item_ua_principal_es,#item_ua_principal_en,#item_ua_principal_de,#item_ua_principal_fr").closest("div.fila").hide();
-        }
-		
+						
 		ModulIcones.inicializarIcones(dades.icones);
+		ModulUnitatAdministrativa.inicializarUnidadesAdministrativas(dades.uas);
+				
+		$('.modulUnitatAdministratives .listaOrdenable li div.unitatAdministrativa').each(function() {
+
+			var inputIdUA = $(this).find('.unitatAdministrativa_id:first');
+			var idUAPrincipal = dades.item_ua_principal;
+			var checked = (idUAPrincipal == inputIdUA.val()) ? 'checked="checked"' : '';
+									
+			var inputRadio = '<p>' + 
+				'<input type="radio" id="item_ua_principal_' + inputIdUA.val() + '" name="item_ua_principal" value="' + inputIdUA.val() + '" ' + checked + ' />' + 
+				'<label for="item_ua_principal_' + inputIdUA.val() + '">Principal?</label>' + 
+			'</p>';
+						
+			$(this).append(inputRadio);
+			
+		});
 		
         // mostrem
         $("#modulLateral li.btnEliminar").show();
@@ -459,4 +464,5 @@ function CDetall(){
 			}
 		});
 	}
+	
 };

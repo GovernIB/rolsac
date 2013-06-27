@@ -12,6 +12,7 @@
 <script type="text/javascript" src="<c:url value='/js/tm_materia.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_icones.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/modul_unitats_adminstratives.js'/>"></script>
 
 <script type="text/javascript">
     var pagLlistat = '<c:url value="/materies/llistat.do" />';
@@ -72,6 +73,16 @@
     var txtCercantAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
+
+    // Textes mòdul UAs
+    var txtUnitatAdministrativa = "<spring:message code='unitatAdministrativa.ua'/>";
+    var txtUnitatsAdministratives = "<spring:message code='unitatAdministrativa.uas'/>";
+    var txtNoHiHaUA = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase();
+    var txtNoHiHaUAs = txtNoHiHa + " " + txtUnitatsAdministratives.toLowerCase();
+    var txtSeleccionada =  "<spring:message code='txt.seleccionada'/>";
+    var txtSeleccionades = "<spring:message code='txt.seleccionades'/>";
+    var txtNoHiHaUASeleccionada = txtNoHiHa + " " + txtUnitatAdministrativa.toLowerCase() + " " + txtSeleccionada.toLowerCase();
+    var txtNoHiHaUAsSeleccionades = txtNoHiHa + " " + txtUnitatsAdministratives.toLowerCase() + " " + txtSeleccionades.toLowerCase();
 
     //detall
     var txtCarregantDetall = txtCarregant + " <spring:message code='txt.detall_de_la'/> "+ txtLlistaItem.toLowerCase() + ". " + txtEspere;
@@ -175,7 +186,7 @@
         <!-- modulPrincipal -->
         <div id="modulPrincipal" class="grupoModulosFormulario modulPrincipal">          
             <!-- modul -->
-            <div class="modul">                 
+            <div id="modul_detall_materies" class="modul">                 
                 <fieldset>                              
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                         
                     <legend><spring:message code='txt.dades'/></legend>                          
@@ -323,16 +334,6 @@
                                     
                                     <!-- fila -->
                                     <div class="fila">
-                                        <div class="element t50p">
-                                            <div class="etiqueta">
-                                                <label for="item_ua_principal"><spring:message code='camp.uaPrincipal'/></label>
-                                            </div>
-                                            <div class="control select">
-                                                <select id="item_ua_principal" name="item_ua_principal" class="nou">
-                                                    <option value="0" selected="selected"><spring:message code='camp.tria.opcio'/></option>
-                                                </select>
-                                            </div>
-                                        </div>
                                         <div class="element t50p">
                                             <div class="etiqueta">
                                                 <label for="item_destacada"><spring:message code='camp.destacada'/></label>
@@ -490,6 +491,33 @@
                 </fieldset>
             </div>
             <!-- /modul -->
+            <!-- modul -->
+            <div class="modul">
+                <input type="hidden" id="llistaUnitatsAdministratives" name="unitatsAdministratives" value=""/>                     
+                <fieldset>                                  
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='unitatAdministrativa.uaRelacionats'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulUnitatAdministrativa -->
+                        <div class="modulUnitatAdministratives">
+                            <div class="seleccionats">
+                                <%-- dsanchez: un solo idioma --%>
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='txt.noHiHaUnitatAdministrativaRelacionada'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="boton btnGenerico" style="margin-left: 0px;">
+                                    <a href="javascript:carregarModulArbreUA('<c:url value="/pantalles/popArbreUA.do"/>','popUA');" class="btn consulta">
+                                        <span><span><spring:message code='boto.afegeixUnitatAdminsitrativa'/></span></span>
+                                    </a>
+                                </div>
+                            </div>                                  
+                        </div>
+                        <!-- /modulUnitatAdministrativa -->                                 
+                    </div>                              
+                </fieldset>                     
+            </div>
+            <!-- /modul -->  
         </div>
         <!-- /modulLateral -->
     </form>
@@ -591,6 +619,7 @@
                     </div>
                 </fieldset>
             </div>
+            <!-- /modul -->  
         </div>
         <!-- /modulLateral -->
     </form>
