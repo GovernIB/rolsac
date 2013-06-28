@@ -181,7 +181,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             }
             
             Query query = session.createQuery(selectResults + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
-            Query countQuery = session.createQuery(selectCount + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery + orderBy);
+            Query countQuery = session.createQuery(selectCount + mainQuery + i18nQuery + uaQuery + accesoQuery + fetVitalQuery + materiaQuery + publicQuery);
             
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);

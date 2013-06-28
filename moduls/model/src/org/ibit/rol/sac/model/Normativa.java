@@ -4,7 +4,9 @@ package org.ibit.rol.sac.model;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Normativa extends Traducible implements Indexable, Validable, Comparator {
@@ -24,14 +26,32 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
     private String codiVuds;  	 
     private String descCodiVuds;
 
-//	//Campos usados para optimizar la búsqueda
+//	//Campos usados para optimizar la busqueda
 	private String traduccionTitulo;
 	private String nombreBoletin;
 	private String nombreTipo;    
 	private String idioma;
+    private UnidadAdministrativa unidadAdministrativa;
+
+	
+	private Map<String,Traduccion> traduccionesCombinadas = new HashMap<String,Traduccion>();
+
+    protected Map<String,Traduccion> getTraduccionesCombinadas() {
+        return traduccionesCombinadas;
+    }
+
+    protected void setTraduccionesCombinadas(Map<String,Traduccion> traducciones) {
+        this.traduccionesCombinadas = traducciones;
+    }
+
 	
     public String getTraduccionTitulo() {
-		return traduccionTitulo;
+    	if (traduccionTitulo == null && this.idioma != null && this.getTraduccion(idioma)!=null) {
+    		return ((TraduccionNormativa)this.getTraduccion(idioma)).getTitulo();
+    	} else {
+    		return traduccionTitulo;
+    	}
+		
 	}
 
 	public void setTraduccionTitulo(String traduccionTitulo) {
@@ -39,7 +59,11 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 	}
 
 	public String getNombreBoletin() {
-		return nombreBoletin;
+		if (nombreBoletin == null && this.getBoletin() != null) {
+			return this.getBoletin().getNombre();
+		} else {
+			return nombreBoletin;
+		}
 	}
 
 	public void setNombreBoletin(String nombreBoletin) {
@@ -47,7 +71,11 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 	}
 
 	public String getNombreTipo() {
-		return nombreTipo;
+		if (nombreTipo == null && this.getTipo() != null && this.idioma != null && this.getTipo().getTraduccion(idioma) != null) {
+			return ((TraduccionTipo)this.getTipo().getTraduccion(idioma)).getNombre();
+		} else {
+			return nombreTipo;
+		}
 	}
 
 	public String getIdioma() {
@@ -174,6 +202,14 @@ public class Normativa extends Traducible implements Indexable, Validable, Compa
 		this.descCodiVuds = descCodiVuds;
 	}
 
+    public UnidadAdministrativa getUnidadAdministrativa() {
+        return unidadAdministrativa;
+    }
+
+    public void setUnidadAdministrativa(UnidadAdministrativa unidadAdministrativa) {
+        this.unidadAdministrativa = unidadAdministrativa;
+    }
+	
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Normativa)) return false;

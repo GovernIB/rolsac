@@ -908,7 +908,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if ( userIsOper() ) {
-				//Filtrar por las unidades a que el usuario tiene acceso:
+				//Filtrar por el acceso del usuario
 
 				//tieneAccesoValidable
 				if (!userIsSuper()) {
@@ -946,10 +946,10 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 								    "tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ";
 			String selectCount = "select count(*) ";
 
-			String restoQuery = " procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where  
-	        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			String restoQuery = " procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where;
+			String orderBy = " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
 			
-			String queryStr = select + from + restoQuery ;
+			String queryStr = select + from + restoQuery + orderBy;
 			String queryCountStr = selectCount + from + restoQuery;
 			
 			Query query = session.createQuery(queryStr);

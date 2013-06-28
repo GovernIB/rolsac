@@ -124,7 +124,7 @@ function CLlistat(){
 			ordre_c2 = (ordre_C == "numero") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "tipo") ? " " + ordre_T : "";
 			ordre_c4 = (ordre_C == "unidadAdministrativa.id") ? " " + ordre_T : "";
-			ordre_c5 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c5 = (ordre_C == "fechaBoletin") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -152,18 +152,10 @@ function CLlistat(){
 			codi_totals += this.getHtmlItemsPagina(); 
 			codi_totals += "</p>";
 
-			//De momento no habrá ordenación
-			/*
-			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtLlistaItem + "</a></div>";
-			codi_cap2 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtNumero + "</a></div>";
-			codi_cap3 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtTipus + "</a></div>";
-			codi_cap4 = "<div class=\"th data" + ordre_c4 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtData + "</a></div>";
-			*/
-            
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
-			codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtTipologiaNorma + "</a></div>";			
+			codi_cap2 = "<div class=\"th tipologia" + ordre_c4 + "\" role=\"columnheader\">" + txtTipologiaNorma + "</div>";			
 			codi_cap3 = "<div class=\"th numero" + ordre_c2 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
-			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\"><a class=\"boletin\" href=\"javascript:void(0)\">" + txtBoletin + "</a></div>";			
+			codi_cap4 = "<div class=\"th tipus" + ordre_c3 + "\" role=\"columnheader\">" + txtBoletin + "</div>";			
 			codi_cap5 = "<div class=\"th fecha" + ordre_c5 + "\" role=\"columnheader\"><a class=\"fechaBoletin\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";						
 			
 			
@@ -510,7 +502,7 @@ function CLlistat(){
 			ordre_c1 = (ordre_C == "titol") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "registre") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "butlleti") ? " " + ordre_T : "";
-			ordre_c4 = (ordre_C == "fecha") ? " " + ordre_T : "";
+			ordre_c4 = (ordre_C == "fechaBoletin") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -536,16 +528,10 @@ function CLlistat(){
 			
 			codi_totals = "<p class=\"info\">" + txtTrobades + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + txtDeLa + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
-			/* per ara no hi ha ordenació
-			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\"><a class=\"id\" href=\"javascript:void(0)\">" + txtLlistaItem + "</a></div>";
-			codi_cap2 = "<div class=\"th registre" + ordre_c2 + "\" role=\"columnheader\"><a class=\"tipo\" href=\"javascript:void(0)\">" + txtNumRegistro + "</a></div>";			
-			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\"><a class=\"numero\" href=\"javascript:void(0)\">" + txtNumBoletin + "</a></div>";
-			codi_cap4 = "<div class=\"th fecha" + ordre_c4 + "\" role=\"columnheader\"><a class=\"fecha\" href=\"javascript:void(0)\">" + txtFechaBoletin + "</a></div>";
-			*/						
 			codi_cap1 = "<div class=\"th titol" + ordre_c1 + "\" role=\"columnheader\">" + txtLlistaItem + "</div>";
 			codi_cap2 = "<div class=\"th registre" + ordre_c2 + "\" role=\"columnheader\">" + txtNumRegistro + "</div>";			
 			codi_cap3 = "<div class=\"th numero" + ordre_c3 + "\" role=\"columnheader\">" + txtNumBoletin + "</div>";
-			codi_cap4 = "<div class=\"th fecha" + ordre_c4 + "\" role=\"columnheader\">" + txtFechaBoletin + "</div>";
+			codi_cap4 = "<div class=\"th fechaBoletin" + ordre_c4 + "\" role=\"columnheader\">" + txtFechaBoletin + "</div>";
 			
 			
 			// codi taula
@@ -904,7 +890,7 @@ function CDetall(){
 				$("#grup_arxiu_actual_" + idioma + " span").hide();
 				$("#grup_arxiu_actual_" + idioma + " input").show();
 				$("#grup_arxiu_actual_" + idioma + " label.eliminar").show();
-							
+
 			} else {
 				$("#grup_arxiu_actual_" + idioma + " span").show();
 				$("#grup_arxiu_actual_" + idioma + " input").hide();

@@ -23,6 +23,7 @@
         <property name="codiVuds" column="NOR_CODIVUDS"/>
         <property name="descCodiVuds" column="NOR_DESCCODIVUDS"/>
         
+        <many-to-one name="unidadAdministrativa" column="NOR_CODUNA" foreign-key="RSC_NORUNA_FK"/>
 
         <set name="afectadas" table="RSC_AFECTA" cascade="none" lazy="true">
             <cache usage="read-write"/>
@@ -53,8 +54,25 @@
             <many-to-many class="org.ibit.rol.sac.model.ProcedimientoLocal" column="PRN_CODPRO" foreign-key="RSC_PRNPRO_FK" />
         </set>
 
+		<!--  traducciones combinadas, para poder usar en búsquedas conjuntas -->
+        <map name="traduccionesCombinadas" cascade="none" inverse="true" table="RSC_TRANOR">
+            <cache usage="read-write"/>
+            <key column="TNO_CODNOR" />
+            <index column="TNO_CODIDI" type="string" length="2"/>
+            <composite-element class="org.ibit.rol.sac.model.TraduccionNormativaExterna">
+                <property name="seccion" length="256" column="TNO_SECCIO"/>
+                <property name="apartado" length="256" column="TNO_APARTA"/>
+                <property name="paginaInicial" column="TNO_PAGINI"/>
+                <property name="paginaFinal" column="TNO_PAGFIN"/>
+                <property name="titulo" length="1024" column="TNO_TITULO"/>
+                <property name="enlace" length="512" column="TNO_ENLACE"/>
+                <property name="responsable" length="512" column="TNO_RESPON"/>
+                <many-to-one  cascade="all" name="archivo" column="TNO_CODARC"/>
+                <property name="observaciones" length="4000" column="TNO_OBSERV"/>
+            </composite-element>
+        </map>
+
         <subclass name="org.ibit.rol.sac.model.NormativaLocal" discriminator-value="normativaLocal">
-            <many-to-one name="unidadAdministrativa" column="NOR_CODUNA" foreign-key="RSC_NORUNA_FK"/>
             <map name="traducciones"  cascade="all" table="RSC_TRANOL">
                 <cache usage="read-write"/>
                 <key column="TNL_CODNOR" foreign-key="RSC_TNLNOR_FK"/>
