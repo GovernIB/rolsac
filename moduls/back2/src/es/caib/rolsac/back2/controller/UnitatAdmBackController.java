@@ -664,41 +664,44 @@ public class UnitatAdmBackController extends PantallaBaseController {
     				// Actualizar el orden de las fichas			
     				for (int i = 0; i < llistaSeccions.length; i++) {
     					
-    					//Obtener las fichas de la secci�n actual y preparar la ordenaci�n si ha habido cambios en la seccion
-    					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
-    					if (isSeccionModificada(idSeccion, valoresForm)) {
-    						
-    					    List<Long> listaIdFichasUA = new ArrayList<Long>();
-        					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
-        
-        					// Necesitamos los c�digos de Ficha UA para la ordenaci�n
-        					SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
-        					log.debug("Inici de obtenerFichaUAFichaIds().");
-                            startTrace = new Date();
-        					List<FichaUAFichaIds> idsList = seccionDelegate.obtenerFichaUAFichaIds(unitatAdministrativa.getId(), idSeccion);
-        					execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerFichaUAFichaIds(): " + execTime + " milisegons.");
-                            
-        					for (int j = 0; j < fichasUA.length; j++) {
-        					    Long idFUA = null;
-                                for (FichaUAFichaIds ids: idsList) {
-                                    if (new Long(fichasUA[j]).equals(ids.getFichaId())) {
-                                        idFUA = ids.getFichaUAId();
-                                        listaIdFichasUA.add(ids.getFichaUAId());
-                                        break;
-                                    }
-                                }
-                                fUA += separador + "orden_fic" + idFUA;
-                                separador = ",";
-        					}
-
-        					int pos = 0;
-        					
-        					for (Long idFichaUA : listaIdFichasUA ) {
-        						String[] orden = { String.valueOf(pos) };
-        						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden);
-        						pos++;
-        					}
+    					if (!llistaSeccions[i].equals("")) {
+    						//Obtener las fichas de la secci�n actual y preparar la ordenaci�n si ha habido cambios en la seccion
+    						Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
+    						if (isSeccionModificada(idSeccion, valoresForm)) {
+    							List<Long> listaIdFichasUA = new ArrayList<Long>();
+    							String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
+    							
+    							// Necesitamos los c�digos de Ficha UA para la ordenaci�n
+    							SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
+    							log.debug("Inici de obtenerFichaUAFichaIds().");
+    							startTrace = new Date();
+    							List<FichaUAFichaIds> idsList = seccionDelegate.obtenerFichaUAFichaIds(unitatAdministrativa.getId(), idSeccion);
+    							execTime = new Date().getTime() - startTrace.getTime();
+    							log.debug("Temps d'execucio de obtenerFichaUAFichaIds(): " + execTime + " milisegons.");
+    							
+    							for (int j = 0; j < fichasUA.length; j++) {
+    								Long idFUA = null;
+    								for (FichaUAFichaIds ids: idsList) {
+    									if (new Long(fichasUA[j]).equals(ids.getFichaId())) {
+    										idFUA = ids.getFichaUAId();
+    										listaIdFichasUA.add(ids.getFichaUAId());
+    										break;
+    										
+    									}
+    								}
+    								fUA += separador + "orden_fic" + idFUA;
+    								separador = ",";
+    								
+    							}
+    							int pos = 0;
+    							
+    							for (Long idFichaUA : listaIdFichasUA ) {
+    								String[] orden = { String.valueOf(pos) };
+    								actualizadorFichasUA.put("orden_fic" + idFichaUA, orden);
+    								pos++;
+    								
+    							}
+    						}
     					}
     				}
     			}
