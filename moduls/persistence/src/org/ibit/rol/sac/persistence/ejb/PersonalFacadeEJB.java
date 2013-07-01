@@ -6,10 +6,12 @@ import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Personal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.Validacion;
 import org.ibit.rol.sac.persistence.delegate.DelegateException;
+import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -152,52 +154,55 @@ public abstract class PersonalFacadeEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */ 
-    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultats) {
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultats, boolean uaFilles, boolean uaMeves) {
     	
-		int resultadosMax = new Integer(resultats).intValue();
-		int primerResultado = new Integer(pagina).intValue() * resultadosMax;
-    	
+    	int resultadosMax = new Integer(resultats).intValue();
+    	int primerResultado = new Integer(pagina).intValue() * resultadosMax;
     	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-    	
-        Session session = getSession();
-        try {
-        	
-            if (!userIsOper()) {
-                parametros.put("validacion", Validacion.PUBLICA);
-            }
-
-            List params = new ArrayList();
-            String sQuery = populateQuery(parametros, params);
-            String sql="from Personal perso ";
-            
-            if ( params.size() > 0 ) 
-            	sql += " where " + sQuery;
-            
-            sql += " order by ltrim(perso.nombre) ASC ";
-            
-            Query query = session.createQuery(sql);
-            
-            for (int i = 0; i < params.size(); i++) {
-                Object o = params.get(i);
-                query.setParameter(i, o);
-            }
-
-			resultadoBusqueda.setTotalResultados( query.list().size() );
-			
-			if ( resultadosMax != RESULTATS_CERCA_TOTS ) {
-				query.setFirstResult(primerResultado);
-				query.setMaxResults(resultadosMax);
-			}				
-			
-			resultadoBusqueda.setListaResultados(query.list());
-			
-			return resultadoBusqueda;
-            
-        } catch (HibernateException he) {
-            throw new EJBException(he);
-        } finally {
-            close(session);
-        }
+    	Session session = getSession();
+    	try {
+    		if (!userIsOper())
+    			parametros.put("validacion", Validacion.PUBLICA);
+    		
+    		List params = new ArrayList();
+    		String sQuery = populateQuery(parametros, params);
+    		String sql="from Personal perso ";
+    		if ( params.size() > 0 )
+    			sql += " where " + sQuery;
+    		
+    		Long idUA = (Long) parametros.get("unidadAdministrativa.id");
+    		String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA( idUA, uaFilles, uaMeves );
+    		if ( !StringUtils.isEmpty(uaQuery) ) {
+    			uaQuery = " or perso.unidadAdministrativa in (" + uaQuery + ") ";
+    			sql += uaQuery;
+    		}
+    		
+    		sql += " order by ltrim(perso.nombre) ASC ";
+    		Query query = session.createQuery(sql);
+    		for (int i = 0; i < params.size(); i++) {
+    			Object o = params.get(i);
+    			query.setParameter(i, o);
+    			
+    		}
+    		resultadoBusqueda.setTotalResultados( query.list().size() );
+    		if ( resultadosMax != RESULTATS_CERCA_TOTS ) {
+    			query.setFirstResult(primerResultado);
+    			query.setMaxResults(resultadosMax);
+    			
+    		}
+    		resultadoBusqueda.setListaResultados(query.list());
+    		return resultadoBusqueda;
+    		
+    	} catch (DelegateException de) {
+    		throw new EJBException(de);
+    		
+    	} catch (HibernateException he) {
+    		throw new EJBException(he);
+    		
+    	} finally {
+    		close(session);
+    		
+    	}
     }    	
     
     /**

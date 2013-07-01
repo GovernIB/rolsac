@@ -47,9 +47,9 @@ public class PersonalDelegate implements StatelessDelegate{
        }
     }
 
-    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados) throws DelegateException {
+    public ResultadoBusqueda buscadorListarPersonal(Map parametros, int pagina, int resultados, boolean uaFilles, boolean uaMeves) throws DelegateException {
         try {
-            return getFacade().buscadorListarPersonal(parametros, pagina, resultados);
+            return getFacade().buscadorListarPersonal(parametros, pagina, resultados, uaFilles, uaMeves);
         } catch (RemoteException e) {
             throw new DelegateException(e);
         }

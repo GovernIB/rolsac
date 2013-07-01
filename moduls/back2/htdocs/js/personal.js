@@ -235,6 +235,8 @@ function CLlistat(){
 			ordreCamp_elm = ordreCamp_cercador_elm;
 			
 			// cercador
+			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
+			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
 			dataVars_cercador = "&nom=" + $("#cerca_nom").val();
 			dataVars_cercador += "&username=" + $("#cerca_codi").val();
 			dataVars_cercador += "&idUA=" + $("#cerca_ua_id").val(); //TODO: no te sentit cercar per nom de UA, sino per codi
@@ -247,6 +249,8 @@ function CLlistat(){
 			dataVars_cercador += "&nlpri=" + $("#cerca_nlpri").val();
 			dataVars_cercador += "&em=" + $("#cerca_em").val();
 			dataVars_cercador += "&nlm=" + $("#cerca_nlm").val();
+			dataVars_cercador += "&uaMeves=" + uaMevesVal;
+			dataVars_cercador += "&uaFilles=" + uaFillesVal;
 		
 		} else {
 			

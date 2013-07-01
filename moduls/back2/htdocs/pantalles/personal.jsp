@@ -325,8 +325,28 @@
         <div class="resultats C">
             <div id="cercador"> <%-- style="display:none/block" --%>
                 <div id="cercador_contingut">
-                    <h2><spring:message code='tab.cercador'/></h2>                 
+                	<div class="opcionesBusqueda">
+                        <h2><spring:message code='txt.OPCIONS_CERCA'/></h2>                    
                         <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_uaFilles"><spring:message code='camp.inclouUAFilles'/></label>                                                                
+                                <input id="cerca_uaFilles" type="checkbox" name="cerca_uaFilles" value="1" />
+                                <%--<select id="cerca_uaFilles" name="cerca_uaFilles" class="t8">
+                                    <option value="0" selected="selected"><spring:message code='txt.no'/></option>
+                                    <option value="1"><spring:message code='txt.si'/></option>
+                                </select>--%>                                
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="element checkbox">                                
+                                <label for="cerca_uaMeves"><spring:message code='camp.cerca_totes_unitats'/></label>                                
+                                <input id="cerca_uaMeves" name="cerca_uaMeves" type="checkbox" value="1"/>
+                            </div>
+                        </div>                     
+                    </div>
+                    <div class="busquedaBasica">
+                    	<h2><spring:message code='tab.cercador'/></h2>
+                    	<div class="fila">
                             <div class="element t21">
                                 <div class="etiqueta"><label for="cerca_nom"><spring:message code='camp.nom'/></label></div>
                                 <div class="control">                           
@@ -413,6 +433,7 @@
                              <a id="btnBuscarForm" href="javascript:;" class="btn consulta"><span><span><spring:message code='boto.cercar'/></span></span></a>
                             </div>
                         </div>
+                	</div>
                 </div>
             </div>
             <div class="dades"></div>               

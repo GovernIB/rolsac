@@ -588,7 +588,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             if (campoVisible == 1) {
             	i18nQuery += " and (sysdate < ficha.fechaCaducidad or ficha.fechaCaducidad is null) ";
 				i18nQuery += " and (sysdate > ficha.fechaPublicacion or ficha.fechaPublicacion is null) ";
-			} else if (campoVisible == 2){
+			} else if (campoVisible == 2) {
 				i18nQuery += " and (sysdate > ficha.fechaCaducidad or sysdate < ficha.fechaPublicacion or ficha.validacion = 2 or ficha.validacion = 3) ";
 			}
             
