@@ -132,17 +132,32 @@ function CDetall(soloFicha){
 		}
                 
 		// Preparamos una lista de edificios mas "amigable" para el controlador, con sus id's separados por comas
-		if ( !$("#llistaEdificis").length ) {		
+		if ( !$("#llistaEdificis").length ) {
 			htmlEdificios = '<input type="hidden" id="llistaEdificis" name="llistaEdificis" value="">';
 			$("#formGuardar").append(htmlEdificios);
 		} else {
-			$("#llistaEdificis").attr("value", "");	
+			$("#llistaEdificis").attr("value", "");
+		}
+		
+		// Obtener todos los inputs que empiezan por edifici_id_
+		$(".modulEdificis input[name^='edifici_id_']").each( function() {
+			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");
+		});
+		
+		
+		// Preparamos una lista de usuarios mas "amigable" para el controlador, con sus id's separados por comas
+		if ( !$("#llistaUsuaris").length ) {		
+			htmlUsuarios = '<input type="hidden" id="llistaUsuaris" name="llistaUsuaris" value="">';
+			$("#formGuardar").append(htmlUsuarios);
+		} else {
+			$("#llistaUsuaris").attr("value", "");	
 		}
 				
-		// Obtener todos los inputs que empiezan por edifici_id_ 
-		$(".modulEdificis input[name^='edifici_id_']").each( function() {
-			$("#llistaEdificis").attr("value", $("#llistaEdificis").val() + $(this).attr("value") + ",");			
-		});		
+		// Obtener todos los inputs que empiezan por usuari_id_ 
+		$(".modulUsuaris input[name^='usuari_id_']").each( function() {
+			$("#llistaUsuaris").attr("value", $("#llistaUsuaris").val() + $(this).attr("value") + ",");			
+		});
+		
 		
 		// Preparamos la lista de secciones-ficha
 		// Formato: S1#F1|F2|...|Fs1n,S2#F1|F2|..|Fs2n,....,Sm#F1|F2|...|Fsmn
@@ -436,11 +451,53 @@ function CDetall(soloFicha){
 				
 				txt_edificis = (edificis_nodes_size == 1) ? txtEdifici : txtEdificis;
 				edi_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + edificis_nodes_size + " " + txt_edificis + "</strong>.");				
-			}			
+			}
+			
+			
+			//Usuaris
+			usu_seleccionats_elm = escriptori_detall_elm.find("div.modulUsuaris div.seleccionats");
+			usu_llistat_elm = escriptori_detall_elm.find("div.modulUsuaris div.llistat");
+			usuaris_nodes = dada_node.usuaris;
+			usuaris_nodes_size = usuaris_nodes.length;
+			
+			usu_llistat_elm.find("input").removeAttr("checked");
+									
+			if (usuaris_nodes_size == 0) {
+				
+				usu_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaUsuaris + ".");
+				
+			} else {
+			
+				var itemsLista = [];
+				var i=1;
+				jQuery(usuaris_nodes).each(function(){
+					usuari_node = this;
+
+					// tcerda: Creamos la lista de elementos iniciales.
+					itemsLista.push( {
+						id:usuari_node.id, 
+						nombre: usuari_node.nom,
+						// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
+						/*nombre:{
+							es: edifici_node.nom, 
+							en: edifici_node.nom, 
+							ca: edifici_node.nom, 
+							de: edifici_node.nom, 
+							fr: edifici_node.nom
+							},*/
+						orden: i++	// Si no hay orden, lo calculamos previamente.
+						} );
+				});				
+				ModulUsuari.agregaItems(itemsLista);
+				
+				txt_usuaris = (usuaris_nodes_size == 1) ? txtUsuari : txtUsuaris;
+				usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");				
+			}		
 
 			$("#modul_materies").show();
 			$("#modul_seccions").show();
-			$("#modul_edificis").show();			
+			$("#modul_edificis").show();
+			$("#modul_usuaris").show();
 			
 		} else {
 			//No hay datos que pintar -> estamos en creaciÃ³n de UA
@@ -448,6 +505,7 @@ function CDetall(soloFicha){
 			$("#modul_materies").hide();
 			$("#modul_seccions").hide();
 			$("#modul_edificis").hide();
+			$("#modul_usuaris").hide();
 			//Deshabilitar botÃ³n eliminar
 			$("#btnEliminar").parent().addClass("off");
 			$("#btnEliminar").unbind("click");

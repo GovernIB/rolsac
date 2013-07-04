@@ -6,7 +6,8 @@
     <link href="<c:url value='/css/unitat.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions.css'/>" rel="stylesheet" type="text/css" media="screen" />
     <link href="<c:url value='/css/modul_seccions_fitxes.css'/>" rel="stylesheet" type="text/css" media="screen" />        
-    <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />    
+    <link href="<c:url value='/css/modul_edificis.css'/>" rel="stylesheet" type="text/css" media="screen" />
+    <link href="<c:url value='/css/modul_usuaris.css'/>" rel="stylesheet" type="text/css" media="screen" />
 
     <input type="hidden" id="rolusuario" value="<rol:printRol/>"/>  
                 
@@ -899,7 +900,7 @@
             <!-- /modul -->                     
             <!-- modul -->
             <div class="modul" id="modul_edificis">                     
-                <fieldset>                                  
+                <fieldset>
                     <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
                     <legend><spring:message code='unitatadm.formulari.edificis'/></legend>                               
                     <div class="modul_continguts mostrat">                                  
@@ -960,7 +961,31 @@
                     </div>                              
                 </fieldset>                     
             </div>
-            <!-- /modul -->                     
+            <!-- /modul -->
+            <!-- modul -->
+            <div class="modul" id="modul_usuaris">                     
+                <fieldset>
+                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
+                    <legend><spring:message code='unitatadm.formulari.usuaris'/></legend>                               
+                    <div class="modul_continguts mostrat">                                  
+                        <!-- modulUsuaris -->
+                        <div class="modulUsuaris">
+                            <div class="seleccionats">
+                                <input name="modulo_usuario_modificado" type="hidden" value="0" />
+                                <div class="seleccionat">
+                                    <p class="info"><spring:message code='unitatadm.formulari.usuaris.noInfo'/></p>
+                                    <div class="listaOrdenable"></div>
+                                </div>
+                                <div class="btnGenerico">
+                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.usuaris.gestiona'/></span></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /modulUsuaris -->
+                    </div>
+                </fieldset>
+            </div>
+            <!-- /modul -->
         </div>
         <!-- /modulLateral -->      
     </div>
@@ -1242,6 +1267,105 @@
         <!-- seleccionats -->
     </div>
     <!-- /escriptori_edificis -->
+    
+    <!-- escriptori_usuaris -->
+    <div id="escriptori_usuaris">
+    	<ul id="opcions">
+    		<li class="opcio C actiu"><spring:message code='unitatadm.formulari.usuaris.gestio'/></li>
+    	</ul>
+    	<div id="resultatsUsuaris" class="escriptori_items_llistat">
+    		<div class="resultats C actiu" style="display: block;">
+    			<div id="cercadorUsuaris" class="escriptori_items_cercador">
+    				<div id="cercador_contingut_usuaris" class="cercador_contingut">
+    					<div class="fila">
+    						<div class="element t25">
+    							<div class="etiqueta">
+    								<label for="cerca_usuaris_codi"><spring:message code='unitatadm.formulari.usuaris.codi'/></label>
+    							</div>
+    							<div class="control">
+    								<input id="cerca_usuaris_codi" name="cerca_usuaris_codi" type="text" class="codi" />
+    							</div>
+    						</div>
+    						<div class="element t25">
+    							<div class="etiqueta">
+    								<label for="cerca_usuaris_nom"><spring:message code='unitatadm.formulari.usuaris.nom'/></label>
+    							</div>
+    							<div class="control">
+    								<input id="cerca_usuaris_nom" name="cerca_usuaris_nom" type="text" class="nom" />
+    							</div>
+    						</div>
+    					</div>
+    					<div class="fila">
+    						<div class="element t25">
+    							<div class="etiqueta">
+    								<label for="cerca_usuaris_correu"><spring:message code='unitatadm.formulari.usuaris.correu'/></label>
+    							</div>
+    							<div class="control">
+    								<input id="cerca_usuaris_correu" name="cerca_usuaris_correu" type="text" class="correu" />
+    							</div>
+    						</div>
+    						<div class="element t25">
+    							<div class="etiqueta">
+    								<label for="cerca_usuaris_perfil"><spring:message code='unitatadm.formulari.usuaris.perfil'/></label>
+    							</div>
+    							<div class="control">
+    								<select id="cerca_usuaris_perfil" name="cerca_perfil" class="t25">
+    									<option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+    									<option value="sacadmin"><spring:message code='usuari.sacadmin'/></option>
+    									<option value="sacsuper"><spring:message code='usuari.sacsuper'/></option>
+    									<option value="sacoper"><spring:message code='usuari.sacoper'/></option>
+    									<option value="sacinfo"><spring:message code='usuari.sacinfo'/></option>
+    								</select>
+    							</div>
+    						</div>
+    					<//div>
+    					<div class="fila">
+    						<div class="element t25">
+    							<div class="etiqueta">
+    								<label for="cerca_usuaris_observacions"><spring:message code='unitatadm.formulari.usuaris.observacions'/></label>
+    							</div>
+    							<div class="control">
+    								<input id="cerca_usuaris_observacions" name="cerca_usuaris_observacions" type="text" class="observacions" />
+    							</div>
+    						</div>
+    					</div>
+    					<div class="botonera">
+    						<div class="boton btnGenerico">
+    							<a id="btnLimpiarFormUsuaris" class="btn borrar" href="javascript:;"><span><span><spring:message code='boto.borrar'/></span></span></a>
+    						</div>
+    						<div class="boton btnGenerico">
+    							<a id="btnBuscarUsuarisForm" class="btn consulta" href="javascript:;"><span><span><spring:message code='boto.cercar'/></span></span></a>
+    						</div>
+    						<div class="boton btnGenerico btnVolverDetalle">
+    							<a class="btn torna" href="javascript:;"><span><span><spring:message code='boto.torna_detall'/></span></span></a>
+    						</div>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="dadesUsuaris"></div>
+    			<input type="hidden" value="0" class="pagPagina" />
+    			<input type="hidden" value="DESC" class="ordreTipus" />
+    			<input type="hidden" value="nom" class="ordreCamp" />
+    		</div>
+    	</div>
+    	<div class="modulLateral escriptori_items_seleccionats">
+    		<div class="modul">
+    			<div class="interior">
+    				<div class="seleccionats">
+    					<div class="seleccionat">
+    						<p class="info"><spring:message code='unitatadm.formulari.usuaris.noInfo'/></p>
+    						<div class="listaOrdenable"></div>
+    					</div>
+    					<p class="botonera btnGenerico">
+    						<a id="btnFinalizarUsuaris" href="javascript:;" class="btn finalitza important"><span><span><spring:message code='boto.finalitza'/></span></span></a>
+    					</p>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    	<!-- seleccionats -->
+    </div>
+    <!-- /escriptori_usuaris -->
     
     <!-- Escritorio nueva unidad hija -->
     <div id="escritorioNuevaUA" class="escriptori_detall">
@@ -1956,6 +2080,7 @@
     <script type="text/javascript" src="<c:url value='/js/jquery.form.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_auditories.js'/>"></script>
     <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
+    <script type="text/javascript" src="<c:url value='/js/modul_usuaris.js'/>"></script>
     
     <script type="text/javascript">
         var noUnitat="<spring:message code='unitatadm.noUnitat'/>";
@@ -1963,7 +2088,8 @@
         var pagLlistat2 = '<c:url value="/unidadAdministrativa/cambiarUA.do" />';
         
         var pagDetall = '<c:url value="/unitatadm/pagDetall.do" />';
-        var pagEdificis = '<c:url value="/edificis/llistat.do" />';        
+        var pagEdificis = '<c:url value="/edificis/llistat.do" />';
+        var pagUsuaris = '<c:url value="/usuaris/llistat.do" />';
         var pagSeccions = '<c:url value="/unitatadm/llistatSeccions.do" />';
         var pagSeccionsFitxes = '<c:url value="/unitatadm/llistatFitxesUA.do" />'; 
         var pagGuardar = '<c:url value="/unitatadm/guardar.do" />';
@@ -1974,7 +2100,7 @@
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         
-        // dsanchez: URL para ordenar el listado de UA hijas. 
+        // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';
         
         var urlPrevisualizarUA = '<c:out value="${urlPrevisualitzacio}"/>';
@@ -2001,10 +2127,16 @@
         var txtAscendentment = "<spring:message code='txt.ascendent'/>";
         var txtDescendentment = "<spring:message code='txt.descendentment'/>";
         var txtPer = "<spring:message code='txt.per'/>";
+        var txtDel = "<spring:message code='txt.del'/>";
+        var txtAl = "<spring:message code='txt.al'/>";
         // taula
         var txtNom = "<spring:message code='txt.nom'/>";
         var txtPare = "<spring:message code='txt.pare'/>";
         var txtCercant = "<spring:message code='txt.cercant'/>";
+        var txtNom = "<spring:message code='txt.nom'/>";
+        var txtUsername = "<spring:message code='txt.usuari'/>";
+        var txtPerfil = "<spring:message code='txt.perfil'/>";
+        var txtEmail = "<spring:message code='txt.email'/>";
         var txtCercantUnitats = txtCercant + " " + txtUnitats + " " + txtAdministratives + ". " + txtEspere;
         // paginacio
         var txtTrobat = "<spring:message code='txt.sha_trobat'/>";
@@ -2076,6 +2208,12 @@
         var txtPoblacio = "<spring:message code='unitatadm.formulari.edificis.poblacio'/>";
         var txtNoHiHaEdificis = txtNoHiHa + " " + txtEdificis.toLowerCase();
         var txtNoHiHaEdificisSeleccionats = txtNoHiHa + " " + txtEdificis.toLowerCase() + " " + txtSeleccionats.toLowerCase();
+
+     // modul edificis
+        var txtUsuari = "<spring:message code='txt.usuari'/>";
+        var txtUsuaris = "<spring:message code='txt.usuaris'/>";
+        var txtNoHiHaUsuaris = txtNoHiHa + " " + txtUsuaris.toLowerCase();
+        var txtNoHiHaUsuarisSeleccionats = txtNoHiHa + " " + txtUsuaris.toLowerCase() + " " + txtSeleccionats.toLowerCase();
         
         // error conexio
         var txtCalcularTotal = "<spring:message code='error.conexio.calcular_total'/>";

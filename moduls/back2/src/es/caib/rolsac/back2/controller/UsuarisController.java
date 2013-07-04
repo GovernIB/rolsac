@@ -56,63 +56,64 @@ public class UsuarisController extends PantallaBaseController {
 
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatUsuaris(HttpServletRequest request, HttpSession session) {
-
-		List<UsuariDTO> llistaUsuarisDTO = new ArrayList<UsuariDTO>();
-		Map<String, Object> resultats = new HashMap<String, Object>();
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-
-		String nombre = request.getParameter("nom");
-		if (nombre != null && !"".equals(nombre)) {
-			paramMap.put("nombre", nombre.toUpperCase());
-		}
-
-		String username = request.getParameter("username");
-		if (username != null && !"".equals(username)) {
-			paramMap.put("username", username.toUpperCase());
-		}
-		
-		String perfil = request.getParameter("perfil");
-		if (perfil != null && !"".equals(perfil)) {
-			paramMap.put("perfil", perfil.toUpperCase());
-		}
-		
-		String email = request.getParameter("email");
-		if (email != null && !"".equals(email)) {
-			paramMap.put("email", email.toUpperCase());
-		}
-		
-		String observacions = request.getParameter("observacions");
-		if (observacions != null && !"".equals(observacions)) {
-			paramMap.put("observaciones", observacions.toUpperCase());
-		}
-		
-		try {
-			UsuarioDelegate usuarisDelegate = DelegateUtil.getUsuarioDelegate();
-			List<Usuario> llistaUsuaris = usuarisDelegate.buscarUsuarios(paramMap);
-
-			for (Usuario usuari : llistaUsuaris) {
-				llistaUsuarisDTO.add(new UsuariDTO(
-						usuari.getId(),
-						usuari.getNombre(),
-						usuari.getUsername(),
-						usuari.getPerfil(),
-						usuari.getEmail()
-				 ));
-			}
-		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
-				log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-			} else {
-				log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
-			}
-		}
-
-		resultats.put("total", llistaUsuarisDTO.size());
-		resultats.put("nodes", llistaUsuarisDTO);
-
-		return resultats;
-	}
+    public @ResponseBody Map<String, Object> llistatUsuaris(HttpServletRequest request, HttpSession session) {
+    	
+    	List<UsuariDTO> llistaUsuarisDTO = new ArrayList<UsuariDTO>();
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+    	
+    	String nombre = request.getParameter("nom");
+    	if (nombre != null && !"".equals(nombre)) {
+    		paramMap.put("nombre", nombre.toUpperCase());
+    	}
+    	
+    	String username = request.getParameter("username");
+    	if (username != null && !"".equals(username)) {
+    		paramMap.put("username", username.toUpperCase());
+    	}
+    	
+    	String perfil = request.getParameter("perfil");
+    	if (perfil != null && !"".equals(perfil)) {
+    		paramMap.put("perfil", perfil.toUpperCase());
+    	}
+    	
+    	String email = request.getParameter("email");
+    	if (email != null && !"".equals(email)) {
+    		paramMap.put("email", email.toUpperCase());
+    	}
+    	
+    	String observacions = request.getParameter("observacions");
+    	if (observacions != null && !"".equals(observacions)) {
+    		paramMap.put("observaciones", observacions.toUpperCase());
+    	}
+    	
+    	try {
+    		UsuarioDelegate usuarisDelegate = DelegateUtil.getUsuarioDelegate();
+    		List<Usuario> llistaUsuaris = usuarisDelegate.buscarUsuarios(paramMap);
+    		
+    		for (Usuario usuari : llistaUsuaris) {
+    			llistaUsuarisDTO.add(new UsuariDTO(
+    					usuari.getId(),
+    					usuari.getNombre(),
+    					usuari.getUsername(),
+    					usuari.getPerfil(),
+    					usuari.getEmail()
+    				));
+    		}
+    		
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException()) {
+    			log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+    		} else {
+    			log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
+    		}
+    	}
+    	
+    	resultats.put("total", llistaUsuarisDTO.size());
+    	resultats.put("nodes", llistaUsuarisDTO);
+    	
+    	return resultats;
+    }
     
     
     @RequestMapping(value = "/pagDetall.do")

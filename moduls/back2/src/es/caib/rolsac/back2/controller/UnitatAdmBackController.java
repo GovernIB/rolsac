@@ -39,6 +39,7 @@ import org.ibit.rol.sac.model.TraduccionUA;
 import org.ibit.rol.sac.model.Tratamiento;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
 import org.ibit.rol.sac.model.UnidadMateria;
+import org.ibit.rol.sac.model.Usuario;
 import org.ibit.rol.sac.model.dto.FichaDTO;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.model.dto.SeccionDTO;
@@ -54,6 +55,7 @@ import org.ibit.rol.sac.persistence.delegate.SeccionDelegate;
 import org.ibit.rol.sac.persistence.delegate.TratamientoDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadMateriaDelegate;
+import org.ibit.rol.sac.persistence.delegate.UsuarioDelegate;
 import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -153,257 +155,275 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-        
-	    Map<String,Object> resultats = new HashMap<String,Object>();	    
-	    List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-	    List<IdNomDTO> llistaEdificisDTO = new ArrayList<IdNomDTO>();
-	    
-	    UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
-
-	    if (request.getParameter("id") == null || "".equals(request.getParameter("id")) || "0".equals(request.getParameter("id"))) {
-	    	try {
-		    	if (unitatDelegate.autorizarCrearUA()) {
-		    		resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
-		    	} else {
-		    		resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
-		    		resultats.put("id", -1);
-		    	}
-	    	} catch (DelegateException dEx) {
-	    		if (dEx.isSecurityException()) {
-	    			resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
-	    			resultats.put("id", -1);
-	    		} else {
-	    			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-	            	resultats.put("id", -2);
-	            	log.error(ExceptionUtils.getStackTrace(dEx));
-		    	}
-	    	} 
-	    	return resultats;
-        }
-        
-	    Long idUA = new Long(request.getParameter("id"));            
-	    try {
-	        UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativa(idUA);
-	        
-	        resultats.put("id", idUA);
-	        
-	        //Idiomas
-	        
-	        if (uni.getTraduccion("ca") != null) {
-	            resultats.put("ca",(TraduccionUA)uni.getTraduccion("ca"));  
-	        } else {
-	            resultats.put("ca",new TraduccionUA());  
-	        }
-	        
-	        if (uni.getTraduccion("es") != null) {
-                resultats.put("es",(TraduccionUA)uni.getTraduccion("es"));  
-            } else {
-                resultats.put("es",new TraduccionUA());  
-            }
-	        
-           if (uni.getTraduccion("en") != null) {
-                resultats.put("en",(TraduccionUA)uni.getTraduccion("en"));  
-            } else {
-                resultats.put("en",new TraduccionUA());  
-            }
-           
-           if (uni.getTraduccion("de") != null) {
-                resultats.put("de",(TraduccionUA)uni.getTraduccion("de"));  
-            } else {
-                resultats.put("de",new TraduccionUA());  
-            }
-           
-            if (uni.getTraduccion("fr") != null) {
-                resultats.put("fr",(TraduccionUA)uni.getTraduccion("fr"));  
-            } else {
-                resultats.put("fr",new TraduccionUA());  
-            }
-            
-            //Configuraci�n/gestion
-            
-            //resultats.put("item_clau_hita", uni.getClaveHita());
-            resultats.put("item_codi_estandar", uni.getCodigoEstandar());
-            resultats.put("item_clave_primaria", idUA);
-            resultats.put("item_domini", uni.getDominio());
-            resultats.put("item_validacio", uni.getValidacion());
-            resultats.put("item_telefon", uni.getTelefono());
-            resultats.put("item_fax", uni.getFax());
-            resultats.put("item_email", uni.getEmail());
-            
-            if (uni.getEspacioTerrit() != null) {
-                //resultats.put("item_espai_territorial", uni.getEspacioTerrit().getNombreEspacioTerritorial(request.getLocale().getLanguage()));
-                resultats.put("item_espai_territorial", uni.getEspacioTerrit().getId());
-            } else {
-                resultats.put("item_espai_territorial",null);
-            }
-            
-            if (uni.getPadre() != null) {
-                resultats.put("pareId", uni.getPadre().getId());
-                resultats.put("pareNom", uni.getPadre().getNombreUnidadAdministrativa(request.getLocale().getLanguage()));                                       
-            } else {
-                resultats.put("idPadre", null);
-                resultats.put("pareNom", null);
-            }
-            
-            //Responsable
-            
-            resultats.put("item_responsable", uni.getResponsable());
-            resultats.put("item_responsable_sexe", uni.getSexoResponsable());
-            
-            if (uni.getFotop() != null){
-
-            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=1");
-                resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
-            } else {
-            	resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
-                resultats.put("item_responsable_foto_petita", "");
-            }
-            if (uni.getFotog() != null) {
-            	resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=2");
-                resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
-            } else {
-                resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
-                resultats.put("item_responsable_foto_gran", "");
-            }           
-
-            if (uni.getTratamiento() != null) {
-                resultats.put("item_tractament", uni.getTratamiento().getId());
-            }
-            
-            //Logotipo horizontal            
-            if (uni.getLogoh() != null) {
-            	resultats.put("item_logo_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=3");
-            	resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
-            } else {
-            	resultats.put("item_logo_horizontal_enllas_arxiu", "");
-            	resultats.put("item_log_horizontal", "");
-            }
-            
-            //Logotipo vertical
-            if (uni.getLogov() != null) {
-            	resultats.put("item_logo_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=4");
-            	resultats.put("item_logo_vertical", uni.getLogov().getNombre());
-            } else {
-            	resultats.put("item_log_vertical_enllas_arxiu", "");
-            	resultats.put("item_log_vertical", "");
-            }
-            
-            //Logo saludo horizontal
-            if (uni.getLogos() != null) {
-            	resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=5");            	
-            	resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
-            } else {
-            	resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "");
-            	resultats.put("item_logo_salutacio_horizontal", "");
-            }
-            
-            //Logo saludo vertical
-            if (uni.getLogot() != null) {
-            	resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=6");
-            	resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
-            } else {
-            	resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "");
-            	resultats.put("item_logo_salutacio_vertical", "");
-            }
-            
-            //Fichas de la portada web            
-            resultats.put("item_nivell_1", uni.getNumfoto1());
-            resultats.put("item_nivell_2", uni.getNumfoto2());
-            resultats.put("item_nivell_3", uni.getNumfoto3());
-            resultats.put("item_nivell_4", uni.getNumfoto4());
-	        
-            //Secciones-Fichas           
-            TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
-            
-            List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();                                   
-            
-        	//Obtenemos el id y el nombre de la secci�n
-        	Set secciones = arbolSecciones.keySet();
-        	
-        	for (Iterator iterator = secciones.iterator(); iterator.hasNext();) {
-        		SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
-        		
-        		String claveSeccion = (String) iterator.next();
-				String datosSeccion[] = claveSeccion.split("#");
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+		
+		Map<String,Object> resultats = new HashMap<String,Object>();
+		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+		List<IdNomDTO> llistaEdificisDTO = new ArrayList<IdNomDTO>();
+		List<IdNomDTO> llistaUsuarisDTO = new ArrayList<IdNomDTO>();
+		UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
+		
+		if (request.getParameter("id") == null || "".equals(request.getParameter("id")) || "0".equals(request.getParameter("id"))) {
+			try {
+				if (unitatDelegate.autorizarCrearUA()) {
+					resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
+					
+				} else {
+					resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
+					resultats.put("id", -1);
+					
+				}
+			} catch (DelegateException dEx) {
+				if (dEx.isSecurityException()) {
+					resultats.put("error", messageSource.getMessage("error.permisos.crearUA", null, request.getLocale()));
+					resultats.put("id", -1);
+					
+				} else {
+					resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+					resultats.put("id", -2);
+					log.error(ExceptionUtils.getStackTrace(dEx));
+					
+				}
+			}
+			return resultats;
+		}
+		Long idUA = new Long(request.getParameter("id"));
+		try {
+			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativa(idUA);
+			resultats.put("id", idUA);
+			
+			//Idiomas
+			if (uni.getTraduccion("ca") != null)
+				resultats.put("ca",(TraduccionUA)uni.getTraduccion("ca"));
+			else
+				resultats.put("ca",new TraduccionUA());
+			
+			if (uni.getTraduccion("es") != null)
+				resultats.put("es",(TraduccionUA)uni.getTraduccion("es"));
+			else
+				resultats.put("es",new TraduccionUA());
+			
+			if (uni.getTraduccion("en") != null)
+				resultats.put("en",(TraduccionUA)uni.getTraduccion("en"));
+			else
+				resultats.put("en",new TraduccionUA());
+			
+			if (uni.getTraduccion("de") != null)
+				resultats.put("de",(TraduccionUA)uni.getTraduccion("de"));
+			else
+				resultats.put("de",new TraduccionUA());
+			
+			if (uni.getTraduccion("fr") != null)
+				resultats.put("fr",(TraduccionUA)uni.getTraduccion("fr"));
+			else
+				resultats.put("fr",new TraduccionUA());
+			
+			
+			//Configuración/gestión
+			//resultats.put("item_clau_hita", uni.getClaveHita());
+			resultats.put("item_codi_estandar", uni.getCodigoEstandar());
+			resultats.put("item_clave_primaria", idUA);
+			resultats.put("item_domini", uni.getDominio());
+			resultats.put("item_validacio", uni.getValidacion());
+			resultats.put("item_telefon", uni.getTelefono());
+			resultats.put("item_fax", uni.getFax());
+			resultats.put("item_email", uni.getEmail());
+			if (uni.getEspacioTerrit() != null) {
+				//resultats.put("item_espai_territorial", uni.getEspacioTerrit().getNombreEspacioTerritorial(request.getLocale().getLanguage()));
+				resultats.put("item_espai_territorial", uni.getEspacioTerrit().getId());
 				
+			} else {
+				resultats.put("item_espai_territorial",null);
+				
+			}
+			if (uni.getPadre() != null) {
+				resultats.put("pareId", uni.getPadre().getId());
+				resultats.put("pareNom", uni.getPadre().getNombreUnidadAdministrativa(request.getLocale().getLanguage()));
+				
+			} else {
+				resultats.put("idPadre", null);
+				resultats.put("pareNom", null);
+				
+			}
+			
+			
+			//Responsable
+			resultats.put("item_responsable", uni.getResponsable());
+			resultats.put("item_responsable_sexe", uni.getSexoResponsable());
+			if (uni.getFotop() != null) {
+				resultats.put("item_responsable_foto_petita_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=1");
+				resultats.put("item_responsable_foto_petita", uni.getFotop().getNombre());
+				
+			} else {
+				resultats.put("item_responsable_foto_petita_enllas_arxiu", "");
+				resultats.put("item_responsable_foto_petita", "");
+				
+			}
+			if (uni.getFotog() != null) {
+				resultats.put("item_responsable_foto_gran_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=2");
+				resultats.put("item_responsable_foto_gran", uni.getFotog().getNombre());
+				
+			} else {
+				resultats.put("item_responsable_foto_gran_enllas_arxiu", "");
+				resultats.put("item_responsable_foto_gran", "");
+				
+			}
+			if (uni.getTratamiento() != null)
+				resultats.put("item_tractament", uni.getTratamiento().getId());
+			
+			
+			//Logotipo horizontal
+			if (uni.getLogoh() != null) {
+				resultats.put("item_logo_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=3");
+				resultats.put("item_logo_horizontal", uni.getLogoh().getNombre());
+				
+			} else {
+				resultats.put("item_logo_horizontal_enllas_arxiu", "");
+				resultats.put("item_log_horizontal", "");
+				
+			}
+			
+			
+			//Logotipo vertical
+			if (uni.getLogov() != null) {
+				resultats.put("item_logo_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=4");
+				resultats.put("item_logo_vertical", uni.getLogov().getNombre());
+				
+			} else {
+				resultats.put("item_log_vertical_enllas_arxiu", "");
+				resultats.put("item_log_vertical", "");
+				
+			}
+			
+			
+			//Logo saludo horizontal
+			if (uni.getLogos() != null) {
+				resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=5");
+				resultats.put("item_logo_salutacio_horizontal", uni.getLogos().getNombre());
+				
+			} else {
+				resultats.put("item_logo_salutacio_horizontal_enllas_arxiu", "");
+				resultats.put("item_logo_salutacio_horizontal", "");
+				
+			}
+			
+			
+			//Logo saludo vertical
+			if (uni.getLogot() != null) {
+				resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "unitatadm/archivo.do?id=" + uni.getId() + "&tipus=6");
+				resultats.put("item_logo_salutacio_vertical", uni.getLogot().getNombre());
+				
+			} else {
+				resultats.put("item_logo_salutacio_vertical_enllas_arxiu", "");
+				resultats.put("item_logo_salutacio_vertical", "");
+				
+			}
+			
+			
+			//Fichas de la portada web
+			resultats.put("item_nivell_1", uni.getNumfoto1());
+			resultats.put("item_nivell_2", uni.getNumfoto2());
+			resultats.put("item_nivell_3", uni.getNumfoto3());
+			resultats.put("item_nivell_4", uni.getNumfoto4());
+			
+			
+			//Secciones-Fichas
+			TreeMap arbolSecciones = ordenarArbolSecciones( (TreeMap) uni.getMapSeccionFichasUA() );
+			List<SeccionFichaDTO> listaSecciones = new ArrayList<SeccionFichaDTO>();
+			
+			
+			//Obtenemos el id y el nombre de la sección
+			Set secciones = arbolSecciones.keySet();
+			for (Iterator iterator = secciones.iterator(); iterator.hasNext();) {
+				SeccionFichaDTO seccionFichaDTO = new SeccionFichaDTO();
+				String claveSeccion = (String) iterator.next();
+				String datosSeccion[] = claveSeccion.split("#");
 				seccionFichaDTO.setId( new Long(datosSeccion[1]) );
 				seccionFichaDTO.setNom( datosSeccion[2]);
-				
 				List<FichaUA> listaFichasUA = (ArrayList<FichaUA>) arbolSecciones.get(claveSeccion);
 				List<FichaDTO> listaFichasDTO = new ArrayList<FichaDTO>();
-				
 				if (listaFichasUA != null) {
-					
 					for ( Iterator iterator2 = listaFichasUA.iterator(); iterator2.hasNext(); ) {
-						
 						FichaUA fichaUA = (FichaUA) iterator2.next();
-						
 						if (fichaUA.getFicha() != null) {
-						
-    						FichaDTO fichaDTO = new FichaDTO();
-    						
-    						fichaDTO.setId( fichaUA.getFicha().getId() );
-    						fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-    						fichaDTO.setOrdre( new Long(fichaUA.getOrden()) );    						
-    						listaFichasDTO.add( fichaDTO );
-						
+							FichaDTO fichaDTO = new FichaDTO();
+							fichaDTO.setId( fichaUA.getFicha().getId() );
+							fichaDTO.setTitulo( ( ((TraduccionFicha) fichaUA.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
+							fichaDTO.setOrdre( new Long(fichaUA.getOrden()) );
+							listaFichasDTO.add( fichaDTO );
+							
 						}
-						
 					}
-					
 					seccionFichaDTO.setListaFichas( listaFichasDTO );
+					
 				}
-				
 				listaSecciones.add(seccionFichaDTO);
-			} 
-
-     	resultats.put("seccions", listaSecciones);
-        	
-            //Materias asociadas           
-            if (uni.getUnidadesMaterias() != null) {             
-            
-                for(UnidadMateria unidadMateria : uni.getUnidadesMaterias()){                
-                    llistaMateriesDTO.add(new IdNomDTO(  unidadMateria.getMateria().getId(), 
-                                                                     unidadMateria.getMateria().getNombreMateria(request.getLocale().getLanguage())
-                                                                           ));                
-                   }
-                
-                resultats.put("materies", llistaMateriesDTO);
-            
-            } else {
-                resultats.put("materies", null);
-            }            
-            
-            //Edificios
-            
-            if (uni.getEdificios() != null) {             
-            
-                for(Object edifici : uni.getEdificios()){                
-                    llistaEdificisDTO.add(new IdNomDTO(  ((Edificio)edifici).getId(), 
-                                                                     ((Edificio)edifici).getDireccion())
-                                                                           );                
-                   }
-                
-                resultats.put("edificis", llistaEdificisDTO);
-            
-            } else {
-                resultats.put("edificis", null);
-            } 
-            
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-                resultats.put("id", -1);
-            } else {
-            	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
-            	resultats.put("id", -2);
-            	log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        }
-        
-	    return resultats;
-    }
+				
+			}
+			resultats.put("seccions", listaSecciones);
+			
+			
+			//Materias asociadas
+			if (uni.getUnidadesMaterias() != null) {
+				for(UnidadMateria unidadMateria : uni.getUnidadesMaterias())
+					llistaMateriesDTO.add(new IdNomDTO(unidadMateria.getMateria().getId(), unidadMateria.getMateria().getNombreMateria(request.getLocale().getLanguage())));
+					
+				resultats.put("materies", llistaMateriesDTO);
+				
+			} else {
+				resultats.put("materies", null);
+				
+			}
+			
+			
+			//Edificios
+			if (uni.getEdificios() != null) {
+				for(Object edifici : uni.getEdificios())
+					llistaEdificisDTO.add(new IdNomDTO(((Edificio)edifici).getId(), ((Edificio)edifici).getDireccion()));
+				
+				resultats.put("edificis", llistaEdificisDTO);
+				
+			} else {
+				resultats.put("edificis", null);
+				
+			}
+			
+			
+			// Usuaris
+			if (uni.getUsuarios() != null) {
+				for (Object usuario: uni.getUsuarios())
+					llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
+				
+				resultats.put("usuaris", llistaUsuarisDTO);
+				
+			} else {
+				resultats.put("usuaris", null);
+				
+			}
+			
+			/*
+			List<Usuario> usuarios = new ArrayList<Usuario>();
+			usuarios.addAll(uni.getUsuarios());
+			for (Usuario usuario: usuarios)
+				llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
+			
+			resultats.put("usuaris", llistaUsuarisDTO);
+			*/
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+				resultats.put("id", -1);
+				
+			} else {
+				resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+				resultats.put("id", -2);
+				log.error(ExceptionUtils.getStackTrace(dEx));
+				
+			}
+		}
+		return resultats;
+	}
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
     public ResponseEntity<String> guardarUniAdm(HttpSession session, HttpServletRequest request) {
@@ -590,7 +610,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
             	
 				String[] codisMateriesNoves = valoresForm.get("materies").split(",");				
 				
-				//Si es edici�n s�lo tendremos en cuenta las nuevas materias
+				//Si es edición sólo tendremos en cuenta las nuevas materias
 				if (edicion) {
 										
 					borrarUnidadesMateriaObsoletas(unitatAdministrativa, codisMateriesNoves );
@@ -621,7 +641,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				}
             }
             
-			// Edificios solo en caso de edici�n
+			// Edificios solo en caso de edición
 			if (edicion && isModuloModificado("modulo_edificios_modificado", valoresForm)) {
 				EdificioDelegate edificioDelegate = DelegateUtil.getEdificioDelegate();			
 				
@@ -713,7 +733,29 @@ public class UnitatAdmBackController extends PantallaBaseController {
     			long execTime = new Date().getTime() - startTrace.getTime();
                 log.debug("Temps d'execucio de actualizarOrdenFichasUA(): " + execTime + " milisegons.");
                 
-			}			
+			}
+			
+			// Usuarios
+			if (edicion && isModuloModificado("modulo_usuario_modificado", valoresForm)) {
+				// Recollir els usuaris actuals de la UA i borrar-los
+				UsuarioDelegate usuarioDelegate = DelegateUtil.getUsuarioDelegate();
+				if (unitatAdministrativa.getUsuarios() != null) {
+					for (Object usuario: unitatAdministrativa.getUsuarios())
+						usuarioDelegate.desasignarUnidad(((Usuario)usuario).getId(), unitatAdministrativa.getId());
+				}
+				
+				// Crear una llista amb els edificis assignats de la unitat
+				String[] listaUsuarios = valoresForm.get("llistaUsuaris").replace(",", " ").trim().split(" ");
+				
+				// Grabar en la unidad cada usuario de la lista (parámetro "listaUsuarios")
+				if (!"".equals(listaUsuarios[0])) {
+					for (int i = 0; i < listaUsuarios.length; i++)
+						usuarioDelegate.asignarUnidad(new Long(listaUsuarios[i]), unitatAdministrativa.getId());
+				}
+			}
+			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
+			// Fin Usuarios
+			
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
