@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Documento;
 import org.ibit.rol.sac.model.Enlace;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
@@ -51,6 +52,7 @@ import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.DocumentoDelegate;
 import org.ibit.rol.sac.persistence.delegate.EnlaceDelegate;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
+import org.ibit.rol.sac.persistence.delegate.FichaResumenDelegate;
 import org.ibit.rol.sac.persistence.delegate.HechoVitalDelegate;
 import org.ibit.rol.sac.persistence.delegate.IdiomaDelegate;
 import org.ibit.rol.sac.persistence.delegate.MateriaDelegate;
@@ -252,21 +254,22 @@ public class FitxaInfBackController extends PantallaBaseController {
 		
         try {
         	
-            FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();            
+            FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();            
+
             
-			resultadoBusqueda = fitxaDelegate.buscarFichas(
+			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(
 					paramMap, tradMap, ua, fetVital, materia, publicObjectiu,					
 					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
 			            
-            for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados() ) ) {
-                TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
-                llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
+            for (FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados() ) ) {
+                TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(request.getLocale().getLanguage());
+                llistaFitxesDTO.add(new FichaDTO(fitxaResumen.getId(), 
                                                              tfi == null ? null : tfi.getTitulo(), 
-                                                             DateUtils.formatDate(fitxa.getFechaPublicacion()), 
-                                                             DateUtils.formatDate(fitxa.getFechaCaducidad()),
-                                                             DateUtils.formatDate(fitxa.getFechaActualizacion()),
-                                                             fitxa.isVisible()));
-            }   
+                                                             DateUtils.formatDate(fitxaResumen.getFechaPublicacion()), 
+                                                             DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
+                                                             DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),
+                                                             fitxaResumen.isVisible()));
+            }
             
         } catch (DelegateException dEx) {
             if (dEx.isSecurityException()) {

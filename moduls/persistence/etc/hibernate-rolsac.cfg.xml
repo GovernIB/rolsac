@@ -34,7 +34,9 @@
         <mapping resource="org/ibit/rol/sac/model/Familia.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Iniciacion.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Ficha.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/FichaResumen.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/FichaUA.hbm.xml" />
+        <mapping resource="org/ibit/rol/sac/model/FichaResumenUA.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/Formulario.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/HechoVital.hbm.xml" />
         <mapping resource="org/ibit/rol/sac/model/HechoVitalProcedimiento.hbm.xml" />
