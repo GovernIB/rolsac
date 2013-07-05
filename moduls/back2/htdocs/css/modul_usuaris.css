@@ -50,3 +50,8 @@ div.llistat  div.correu {
     padding: 0 12px;
     width: 250px;
 }
+
+
+#escriptori_usuaris div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
+
+div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }

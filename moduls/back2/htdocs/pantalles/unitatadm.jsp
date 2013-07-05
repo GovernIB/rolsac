@@ -1318,7 +1318,7 @@
     								</select>
     							</div>
     						</div>
-    					<//div>
+    					</div>
     					<div class="fila">
     						<div class="element t25">
     							<div class="etiqueta">
