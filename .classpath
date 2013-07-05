@@ -115,7 +115,6 @@
 	<classpathentry kind="lib" path="lib/jasper/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/jasper/xercesImpl.jar"/>
-	<classpathentry kind="lib" path="lib/jasper/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-apache-module-1.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/xdoclet123/xdoclet-ejb-module-1.2.3.jar"/>
