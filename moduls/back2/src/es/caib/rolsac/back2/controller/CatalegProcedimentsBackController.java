@@ -160,7 +160,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		}
 		
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
-		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));		
+		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
+		boolean enPlazo = "1".equals(request.getParameter("en_plazo"));
+		boolean telematico = "1".equals(request.getParameter("telematico"));
 		
 		int resultadosDescartados = 0;
 		
@@ -356,7 +358,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
 			
-			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible);
+			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible, enPlazo, telematico);
 			String idiomaPorDefecto = request.getLocale().getLanguage();
 
 			for ( ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados() ) ) {

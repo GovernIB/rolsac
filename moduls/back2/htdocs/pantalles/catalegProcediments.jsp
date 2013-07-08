@@ -495,6 +495,14 @@
                                     <input id="cerca_tramit" name="cerca_tramit" type="text"/>
                                 </div>
                             </div>
+                            <div class="element checkbox">
+                            	<input id="enPlazo" name="enPlazo" type="checkbox" value="1"/>
+                            	<label for="enPlazo"><spring:message code='camp.cerca_en_plazo'/></label>
+                            </div>
+                            <div class="element checkbox">
+                            	<input id="telematico" name="telematico" type="checkbox" value="1"/>
+                            	<label for="telematico"><spring:message code='camp.cerca_telematico'/></label>
+                            </div>
                             <%--
                             <div class="element t25">
                                 <div class="etiqueta">

@@ -852,7 +852,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible) {
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, boolean en_plazo, boolean telematico) {
 		Session session = getSession();
 
 		try {
@@ -883,7 +883,19 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 			String from = "from ProcedimientoLocal as procedimiento, ";
 			String where = "";
-
+			
+			if (telematico) {
+				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where ";
+				where += "tra.idTraTel is not null )";
+			}
+			
+			if (en_plazo) {
+				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where ";
+				where += "tra.fase = 1 ";
+				where += "and (sysdate < tra.dataTancament or tra.dataTancament is null) ";
+				where += "and (sysdate > tra.dataInici or tra.dataInici is null) ) ";
+			}
+			
 			if ( materia != null ) {
 				where += " and procedimiento.id in ( select procsLocales.id " +
 																"from Materia as mat, mat.procedimientosLocales as procsLocales " +

@@ -263,6 +263,8 @@ function CLlistat(){
 			// cercador
 			var uaMevesVal = $("#cerca_uaMeves").is(':checked') ? 1 : 0;
 			var uaFillesVal = $("#cerca_uaFilles").is(':checked') ? 1 : 0;
+			var enPlazo = $("#enPlazo").is(':checked') ? 1 : 0;
+			var telematico = $("#telematico").is(':checked') ? 1 : 0;
 			
 			dataVars_cercador = "&uaMeves=" + uaMevesVal;
 			dataVars_cercador += "&uaFilles=" + uaFillesVal;
@@ -277,6 +279,8 @@ function CLlistat(){
 			dataVars_cercador += "&fetVital=" + $("#cerca_fet_vital").val();
 			dataVars_cercador += "&materia=" + $("#cerca_materia").val();
 			dataVars_cercador += "&publicObjectiu=" + $("#cerca_publicObjectiu").val();
+			dataVars_cercador += "&en_plazo=" + enPlazo;
+			dataVars_cercador += "&telematico=" + telematico;
 		} else {
 
 			pagPagina_elm = pagPagina_llistat_elm;
