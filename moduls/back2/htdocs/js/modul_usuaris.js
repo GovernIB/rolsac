@@ -149,7 +149,7 @@ function CEscriptoriUsuari() {
 			ordre_c1 = (ordre_C == "nom") ? " " + ordre_T : "";
 			ordre_c2 = (ordre_C == "username") ? " " + ordre_T : "";
 			ordre_c3 = (ordre_C == "perfil") ? " " + ordre_T : "";
-			ordre_c4 = (ordre_C == "email") ? " " + ordre_T : "";
+//			ordre_c4 = (ordre_C == "email") ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
@@ -180,7 +180,7 @@ function CEscriptoriUsuari() {
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\">" + txtNom + "</div>";
 			codi_cap2 = "<div class=\"th username" + ordre_c2 + "\" role=\"columnheader\">" + txtUsername + "</div>";
 			codi_cap3 = "<div class=\"th perfil" + ordre_c3 + "\" role=\"columnheader\">" + txtPerfil + "</div>";
-			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\">" + txtEmail + "</div>";
+//			codi_cap4 = "<div class=\"th email" + ordre_c4 + "\" role=\"columnheader\">" + txtEmail + "</div>";
 			
 			// codi taula
 			codi_taula = "<div class=\"table llistat\" role=\"grid\" aria-live=\"polite\" aria-atomic=\"true\" aria-relevant=\"text additions\">";
@@ -188,7 +188,7 @@ function CEscriptoriUsuari() {
 			// codi cap + cuerpo
 			codi_taula += "<div class=\"thead\">";
 			codi_taula += "<div class=\"tr\" role=\"rowheader\">";
-			codi_taula += codi_cap1 + codi_cap2 + codi_cap3 + codi_cap4;
+			codi_taula += codi_cap1 + codi_cap2 + codi_cap3;// + codi_cap4;
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			codi_taula += "<div class=\"tbody\">";
@@ -211,7 +211,7 @@ function CEscriptoriUsuari() {
 				caducat_class = "";
 				codi_taula += "<div class=\"td username\" role=\"gridcell\">" + printStringFromNull(dada_node.username) + "</div>";
 				codi_taula += "<div class=\"td perfil\" role=\"gridcell\">" + printStringFromNull(dada_node.perfil) + "</div>";
-				codi_taula += "<div class=\"td email\" role=\"gridcell\">" + printStringFromNull(dada_node.email) + "</div>";
+//				codi_taula += "<div class=\"td email\" role=\"gridcell\">" + printStringFromNull(dada_node.email) + "</div>";
 				
 				codi_taula += "</div>";
 			});

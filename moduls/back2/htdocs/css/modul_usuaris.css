@@ -38,7 +38,7 @@ div.llistat div.tbody div.usuari {
     padding-left: 50px;
     width: 300px;
 }
-div.llistat div.codi {
+div.llistat div.username {
     padding: 0 12px;
     width: 150px;
 }
@@ -55,3 +55,67 @@ div.llistat  div.correu {
 #escriptori_usuaris div.escriptori_items_cercador div.rabillo { clear:both; height:1em; background:transparent url(../img/botonera/rabillo_c_ccd7e2.gif) no-repeat center bottom; }
 
 div.escriptori_items_llistat div.dades p.executant { display:block; font-style:italic; padding:.5em 0 .5em 2.6em; background:#fff url(../img/executant.gif) no-repeat 1em 50%; }
+
+div.escriptori_items_cercador div.t25 { width:15em; }
+div.escriptori_items_cercador div.t25 input, #cercador div.t30 select { width:14em; }
+
+#cercador_contingut_usuaris,
+.cercador_contingut_usuaris { 
+    overflow:hidden;     
+    padding:1em; 
+    margin:0 auto;  
+}
+
+
+/* resultats */
+
+#resultats,
+#resultatsUsuaris{ 
+    clear:both;
+    border: 1px solid #D3D3D3;
+    /*border-top: none;*/
+    border-radius: 0 10px 10px 10px;
+    background-color: White;
+}
+#resultats div.resultats,
+#resultatsUsuaris div.resultats{ 
+	display:none;
+}
+#resultats div.actiu,
+#resultatsUsuaris div.actiu { 
+	display:block !important;
+}
+
+#resultats p.executant,
+#resultatsUsuaris p.executant { 
+    font-size:1.3em; 
+    font-style:italic; 
+    padding:1em 0 1em 1.6em; 
+    margin-left: 1em;
+    background:#fff url(../img/executant.gif) no-repeat 0 1.1em;
+}
+
+#resultats p.info,	
+#resultatsUsuaris p.info{	
+    padding: 10px 21px 0 21px;
+    font: 13px Arial, Helvetica, Sans-serif;
+    color: #333333;
+}
+#resultats p.info .itemsPagina,
+#resultatsUsuaris p.info .itemsPagina{
+	display: block;
+	float: right;
+}
+#resultats p.info .itemsPagina a,
+#resultatsUsuaris p.info .itemsPagina a{
+	color: #2176DE;
+	font-weight: bold;
+}
+
+#resultats p.noItems, 
+#resultatsUsuaris p.noItems { 
+    font-size:1.3em; 
+    padding: 1em 0 1em 2em !important; 
+    margin-left: 1em;
+    background:#fff url(../img/missatge/alerta.gif) no-repeat 0 50%;
+}

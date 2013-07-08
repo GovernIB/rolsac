@@ -1275,7 +1275,7 @@
     	</ul>
     	<div id="resultatsUsuaris" class="escriptori_items_llistat">
     		<div class="resultats C actiu" style="display: block;">
-    			<div id="cercadorUsuaris" class="escriptori_items_cercador">
+    			<div id="cercador" class="escriptori_items_cercador">
     				<div id="cercador_contingut_usuaris" class="cercador_contingut">
     					<div class="fila">
     						<div class="element t25">
