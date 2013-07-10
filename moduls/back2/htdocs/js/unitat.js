@@ -461,39 +461,28 @@ function CDetall(soloFicha){
 			usuaris_nodes_size = usuaris_nodes.length;
 			
 			usu_llistat_elm.find("input").removeAttr("checked");
-									
+			
 			if (usuaris_nodes_size == 0) {
-				
 				usu_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaUsuaris + ".");
 				
 			} else {
-			
 				var itemsLista = [];
 				var i=1;
-				jQuery(usuaris_nodes).each(function(){
+				jQuery(usuaris_nodes).each(function() {
 					usuari_node = this;
-
 					// tcerda: Creamos la lista de elementos iniciales.
 					itemsLista.push( {
-						id:usuari_node.id, 
+						id:usuari_node.id,
 						nombre: usuari_node.nom,
-						// Para listas multi-idioma pasar un objeto con los strings de cada idioma, en lugar de un solo string.
-						/*nombre:{
-							es: edifici_node.nom, 
-							en: edifici_node.nom, 
-							ca: edifici_node.nom, 
-							de: edifici_node.nom, 
-							fr: edifici_node.nom
-							},*/
 						orden: i++	// Si no hay orden, lo calculamos previamente.
-						} );
-				});				
+					} );
+				});
 				ModulUsuari.agregaItems(itemsLista);
 				
 				txt_usuaris = (usuaris_nodes_size == 1) ? txtUsuari : txtUsuaris;
-				usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");				
-			}		
-
+				usu_seleccionats_elm.find("p.info").html(txtHiHa + " <strong>" + usuaris_nodes_size + " " + txt_usuaris + "</strong>.");
+			}
+			
 			$("#modul_materies").show();
 			$("#modul_seccions").show();
 			$("#modul_edificis").show();
@@ -512,7 +501,8 @@ function CDetall(soloFicha){
 			jQuery("#caja_item_clave_primaria, #caja_item_clave_primaria_es, #caja_item_clave_primaria_en, #caja_item_clave_primaria_de, #caja_item_clave_primaria_fr").hide();
 		}
 
-		$("#carregantDetall").fadeOut(300, function() {
+		$("#carregantDetall" +
+				"").fadeOut(300, function() {
 			Detall.array({id: dada_node.id, accio: "guarda", dades: dada_node});
 			escriptori_detall_elm.fadeIn(300);
 		});

@@ -616,7 +616,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
                 Hibernate.initialize(ua.getPersonal());
                 Hibernate.initialize(ua.getNormativas());
                 
-                if (userIsAdmin()) {
+                if (userIsSuper()) {
                     Hibernate.initialize(ua.getUsuarios());
                 }
                 return ua;

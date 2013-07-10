@@ -75,7 +75,7 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
     /**
      * Obtiene una lista de usuarios.
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
     public List buscarUsuarios(Map parametros) {
         Session session = getSession();

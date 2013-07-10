@@ -963,27 +963,29 @@
             </div>
             <!-- /modul -->
             <!-- modul -->
-            <div class="modul" id="modul_usuaris">                     
-                <fieldset>
-                    <a class="modul mostrat"><spring:message code='txt.amaga'/></a>                              
-                    <legend><spring:message code='unitatadm.formulari.usuaris'/></legend>                               
-                    <div class="modul_continguts mostrat">                                  
-                        <!-- modulUsuaris -->
-                        <div class="modulUsuaris">
-                            <div class="seleccionats">
-                                <input name="modulo_usuario_modificado" type="hidden" value="0" />
-                                <div class="seleccionat">
-                                    <p class="info"><spring:message code='unitatadm.formulari.usuaris.noInfo'/></p>
-                                    <div class="listaOrdenable"></div>
-                                </div>
-                                <div class="btnGenerico">
-                                    <a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.usuaris.gestiona'/></span></span></a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /modulUsuaris -->
-                    </div>
-                </fieldset>
+            <div class="modul" id="modul_usuaris">
+            	<fieldset>
+            		<a class="modul mostrat"><spring:message code='txt.amaga'/></a>
+            		<legend><spring:message code='unitatadm.formulari.usuaris'/></legend>
+            		<div class="modul_continguts mostrat">
+            			<!-- modulUsuaris -->
+            			<div class="modulUsuaris">
+            				<div class="seleccionats">
+            					<input name="modulo_usuario_modificado" type="hidden" value="0" />
+            					<div class="seleccionat">
+            						<p class="info"><spring:message code='unitatadm.formulari.usuaris.noInfo'/></p>
+            						<div class="listaOrdenable"></div>
+            					</div>
+            					<c:if test="${rolAdmin}">
+            						<div class="btnGenerico">
+            							<a class="btn gestiona" href="javascript:;"><span><span><spring:message code='unitatadm.formulari.usuaris.gestiona'/></span></span></a>
+            						</div>
+            					</c:if>
+            				</div>
+            			</div>
+            			<!-- /modulUsuaris -->
+            		</div>
+            	</fieldset>
             </div>
             <!-- /modul -->
         </div>

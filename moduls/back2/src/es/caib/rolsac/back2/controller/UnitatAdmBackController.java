@@ -388,27 +388,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				
 			}
 			
-			
 			// Usuaris
 			if (uni.getUsuarios() != null) {
 				for (Object usuario: uni.getUsuarios())
 					llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
 				
 				resultats.put("usuaris", llistaUsuarisDTO);
-				
 			} else {
 				resultats.put("usuaris", null);
-				
 			}
-			
-			/*
-			List<Usuario> usuarios = new ArrayList<Usuario>();
-			usuarios.addAll(uni.getUsuarios());
-			for (Usuario usuario: usuarios)
-				llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
-			
-			resultats.put("usuaris", llistaUsuarisDTO);
-			*/
 			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
