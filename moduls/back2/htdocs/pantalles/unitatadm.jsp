@@ -40,7 +40,9 @@
             <li class="opcio C">
                 <a id="tabBuscador" href="javascript:;"><spring:message code='tab.cercador'/></a>
             </li>
-            <li id="btnNuevaUAhija" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea una nova Unitat Administrativa</span></span></a></li>
+            <c:if test="${nuevaUA}">
+            	<li id="btnNuevaUAhija" class="opcions nuevo"><a href="javascript:;" class="btn nou"><span><span>Crea una nova Unitat Administrativa</span></span></a></li>
+            </c:if>
         </ul>
         <div id="resultadosUnidadesHijas">
             <div class="resultats L actiu">

@@ -91,7 +91,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}       
     
 	@RequestMapping(value = "/unitatadm.do", method = GET)
-	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {	    
+	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
 		
 	    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 	    
@@ -132,6 +132,12 @@ public class UnitatAdmBackController extends PantallaBaseController {
             	log.error(ExceptionUtils.getStackTrace(dEx));
             }
         }
+	    
+	    // Control de si se dan permisos extrar al rol SUPER
+		boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
+		boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
+		boolean acceso = (accesoSuper || accesoOtros) ? true : false;
+		model.put("nuevaUA", acceso);
 	    
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
@@ -999,6 +1005,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
     	IdNomDTO resultatStatus = new IdNomDTO();
     	
 		try {
+			// Control de si se dan permisos extrar al rol SUPER
+			boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
+			boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
+			boolean acceso = (accesoSuper || accesoOtros) ? true : false;
+			if (!acceso) return resultatStatus;
 			
 			Long id = new Long(request.getParameter("id")); 
 			Integer ordenNuevo = new Integer(request.getParameter("orden"));

@@ -1807,12 +1807,12 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	    		
 	    		//OBTENER DIRECCIONES
 	    		if (ua.getEdificios()!=null) {
-		    		iter = ua.getEdificios().iterator();
-		    		while (iter.hasNext()) {
-		    			Edificio edificio = (Edificio)iter.next();
-		    			txtexto += edificio.getDireccion()+" ";
-		    			txtexto += edificio.getTelefono()+" ";
-		    		}
+	   				iter = ua.getEdificios().iterator();
+	   				while (iter.hasNext()) {
+	   					Edificio edificio = (Edificio)iter.next();
+	   					txtexto += edificio.getDireccion()+" ";
+	    				txtexto += edificio.getTelefono()+" ";
+	    			}
 	    		}
 	    		
 	    		filter.setUo_id( (txids.length()==1) ? null: txids);
@@ -3060,7 +3060,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
      * Asigna a una unidad administratival un nuevo orden y reordena los elementos afectados.
      * 
      * @ejb.interface-method
-     * @ejb.permission role-name="${role.system},${role.admin}"
+     * @ejb.permission role-name="${role.system},${role.admin},${role.super}"
      */	
     public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) {
     	
@@ -3100,6 +3100,11 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
         				unidadAdministrativa.setOrden( orden + incremento );
         			}        			
         		}
+        		
+        		// Revisamos si tiene edificios y en caso contrario lo limpiamos
+        		if (unidadAdministrativa.getEdificios().size() == 0) unidadAdministrativa.setEdificios(null);
+        		// Revisamos si tiene materias y en caso contrario lo limpiamos
+        		if (unidadAdministrativa.getUnidadesMaterias().size() == 0) unidadAdministrativa.setUnidadesMaterias(null);
         		
         		// Actualizar todo para asegurar que no hay duplicados ni huecos
         		session.saveOrUpdate(unidadAdministrativa); 
