@@ -898,6 +898,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
            // Historico historico = getHistorico(session, ficha);
            // ((HistoricoFicha) historico).setFicha(null);
 
+            /* agarcia: no es necesario esto, ya lo maneja hibernate
             for (Iterator iterator = ficha.getMaterias().iterator(); iterator.hasNext();) {
                 Materia mat = (Materia) iterator.next();
                 mat.getFichas().remove(ficha);
@@ -914,6 +915,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
                     ua.removeFichaUA(fichaUA);
                 }
             }
+            */
             
             // Borrar comentarios
             session.delete("from ComentarioFicha as cf where cf.ficha.id = ?", id, Hibernate.LONG);
