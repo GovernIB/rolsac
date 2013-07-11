@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mbean code="org.jboss.varia.property.SystemPropertiesService"
+        name="jboss.util:type=Service,name=RolsacProperties">
+        
+    <!-- Set properties using the properties file style. -->
+    <attribute name="Properties">
