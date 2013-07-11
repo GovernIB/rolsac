@@ -89,6 +89,7 @@ function CModulSeccio() {
 			ulFichas = $(divFichas).children('div').children('ul');
 			numFichas = $(ulFichas).children().size()
 			
+			// Sólo realizamos la llamada AJAX si aún no se han obtenido las fichas.
 			if ( numFichas == 0 ) {
 				
                 $.ajax({
@@ -148,6 +149,7 @@ function CModulSeccio() {
 		}
 		
 		return false;
+		
 	}
 
 	this.iniciarFichas = function()  {
@@ -565,7 +567,7 @@ function CModulSeccio() {
 		
 		modul_seccions_elm.find("a.gestionaSeccions").one("click", function() { ModulSeccions.gestiona(); } );
 		modul_seccions_elm.find("a.gestionaFitxes").one("click", function() { ModulSeccions.gestionaFitxes(this); } );
-		
+				
 		return numFitxes;
 		
 	}
@@ -574,9 +576,66 @@ function CModulSeccio() {
 		return this.copiaFinal();		
 	}	
 	
-	this.finalizarFitxes = function() {        
+	this.finalizarFitxes = function() {
+		
         $subModuloModificado.val(1);
-		return this.copiaFinalFitxes();
+        var numFichas = this.copiaFinalFitxes();
+
+        // Petición AJAX para guardar estado fichas-seccion-UA.
+        this.guardaEstadoFichasSeccionUA();
+
+		return numFichas;
+		
+	}
+	
+	this.guardaEstadoFichasSeccionUA = function() {
+		
+		Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
+		
+		// Construimos variable con los datos (idUA, idSeccion, idFicha1, idFicha2, etc.
+		var idUA = $('#item_id').val();
+		var idSeccion = $(paramsFicha.nodoOrigen.parent()).find('.seccio_id').val();
+		var arrayFichas = $(paramsFicha.nodoDestino).find('.fitxa_id');
+		var listaIdFichas = "";
+		var coma = "";
+		
+		for ( var i = 0; i < arrayFichas.length; i++) {
+			
+			var idFicha = $(arrayFichas[i]).val();
+			listaIdFichas += coma + idFicha;
+			
+			// Actualizamos coma...
+			if (coma == "")
+				coma = ",";
+			
+		}
+		
+		// Obviamos parámetro de orden de la ficha. Explicación:
+		// El orden de las fichas lo establece el usuario. Al recorrer las fichas a través del DOM, no es necesario tener una variable/input
+		// que controle el orden de la ficha. El orden es en el que se obtiene leyendo desde el DOM, según ha dejado el listado el usuario.
+		$.ajax({
+            type: "POST",
+            url: pagGuardarFitxesUASeccio,
+            data: "idUA=" + idUA + "&idSeccion=" + idSeccion + "&listaIdFichas=" + listaIdFichas,
+            dataType: "json",
+            error: function() {
+                Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+                Error.llansar();
+            },
+            success: function(data) {
+            	
+                Missatge.cancelar();
+                
+                // Comprobar valor de retorno:
+                if (data.id == -1){
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
+                } else if (data.id < -1){
+                    Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+                }
+                
+            }
+        });
+		
 	}
 	
 	this.activaEnllasosFitxes = function() {		

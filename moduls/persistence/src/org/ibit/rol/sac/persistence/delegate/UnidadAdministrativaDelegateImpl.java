@@ -1151,4 +1151,15 @@ public class UnidadAdministrativaDelegateImpl implements StatelessDelegate, Unid
 		
 	}
 
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion,
+			List<Long> listaIdFichasLong) throws DelegateException {
+		
+		try {
+			getFacade().actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+		} catch (RemoteException e) {
+     		throw new DelegateException(e);
+     	}
+		
+	}
+
 }

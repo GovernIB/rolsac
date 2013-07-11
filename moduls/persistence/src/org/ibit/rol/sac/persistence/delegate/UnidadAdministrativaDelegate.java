@@ -374,5 +374,10 @@ public class UnidadAdministrativaDelegate {
 			throws DelegateException {
     	return impl.listarFichasSeccionUA(idUA, idSeccion);
     }
+    
+    public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+    		throws DelegateException {
+    	impl.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+    }
 
 }

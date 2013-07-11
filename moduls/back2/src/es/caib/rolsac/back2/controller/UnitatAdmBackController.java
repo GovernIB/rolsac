@@ -631,72 +631,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			crearOActualizarUnitatAdministrativa(unitatAdministrativa, unitatAdmPareId);
 						
 			// Secciones-Fichas
-			if (isModuloModificado("modulo_secciones_modificado", valoresForm)) {
-				
-    			String[] llistaSeccions = valoresForm.get("llistaSeccions").split("[,]");						
-    			
-    			Map actualizadorFichasUA = new HashMap();
-    			String fUA = "";
-    			String separador = "";
-    			
-    			if (llistaSeccions != null) {
-    				
-    			    log.debug("Inici de crearSeccionesFichas().");
-    			    Date startTrace = new Date();
-    				DelegateUtil.getFichaDelegate().crearSeccionesFichas(unitatAdministrativa, llistaSeccions);
-    				long execTime = new Date().getTime() - startTrace.getTime();
-    				log.debug("Temps d'execucio de crearSeccionesFichas(): " + execTime + " milisegons.");
-    
-    				// Actualizar el orden de las fichas			
-    				for (int i = 0; i < llistaSeccions.length; i++) {
-    					
-    					//Obtener las fichas de la secci�n actual y preparar la ordenaci�n si ha habido cambios en la seccion
-    					Long idSeccion = new Long(llistaSeccions[i].split("[#]")[0]);
-    					if (isSeccionModificada(idSeccion, valoresForm)) {
-    						
-    					    List<Long> listaIdFichasUA = new ArrayList<Long>();
-        					String[] fichasUA = llistaSeccions[i].split("[#]")[1].split("[|]");
-        
-        					// Necesitamos los c�digos de Ficha UA para la ordenaci�n
-        					SeccionDelegate seccionDelegate = DelegateUtil.getSeccionDelegate();
-        					log.debug("Inici de obtenerFichaUAFichaIds().");
-                            startTrace = new Date();
-        					List<FichaUAFichaIds> idsList = seccionDelegate.obtenerFichaUAFichaIds(unitatAdministrativa.getId(), idSeccion);
-        					execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerFichaUAFichaIds(): " + execTime + " milisegons.");
-                            
-        					for (int j = 0; j < fichasUA.length; j++) {
-        					    Long idFUA = null;
-                                for (FichaUAFichaIds ids: idsList) {
-                                    if (new Long(fichasUA[j]).equals(ids.getFichaId())) {
-                                        idFUA = ids.getFichaUAId();
-                                        listaIdFichasUA.add(ids.getFichaUAId());
-                                        break;
-                                    }
-                                }
-                                fUA += separador + "orden_fic" + idFUA;
-                                separador = ",";
-        					}
-
-        					int pos = 0;
-        					
-        					for (Long idFichaUA : listaIdFichasUA ) {
-        						String[] orden = { String.valueOf(pos) };
-        						actualizadorFichasUA.put("orden_fic" + idFichaUA, orden);
-        						pos++;
-        					}
-    					}
-    				}
-    			}
-    			
-    			StringTokenizer parametros = new StringTokenizer(fUA, ",");
-    			log.debug("Inici de actualizarOrdenFichasUA().");
-                Date startTrace = new Date();
-    			DelegateUtil.getFichaDelegate().actualizarOrdenFichasUA(parametros, actualizadorFichasUA);
-    			long execTime = new Date().getTime() - startTrace.getTime();
-                log.debug("Temps d'execucio de actualizarOrdenFichasUA(): " + execTime + " milisegons.");
-                
-			}			
+			// Funcionalidad trasladada a método guardarFitxesUASeccio().
+			// Se guarda el estado al pulsar el botón "Finalitza".
 			
 			// Sobre escrivim la unitat administrativa de la mollapa
 			UnidadAdministrativaController.actualizarUAMigaPan(session, unitatAdministrativa);
@@ -1289,6 +1225,62 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
     
+    /**
+     * Método que recibe petición AJAX de guardado del estado de las fichasUA de la UA.
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/guardarFitxesUASeccio.do", method = POST)
+	public @ResponseBody Map<String, Object> guardarFitxesUASeccio(HttpServletRequest request) {
+    	
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
+    	// Si alguno es nulo, error.
+    	if ( request.getParameter("idUA") == null 
+    			|| request.getParameter("idSeccion") == null
+    			|| request.getParameter("listaIdFichas") == null ) {
+    		
+    		resultats.put("id", -2);
+			log.error("Falta alguno de los parámetros para completar el guardado de las fichas de la sección");
+			
+    		return resultats;
+    		
+    	}
+    	
+    	Long idUA = Long.parseLong( request.getParameter("idUA") );
+    	Long idSeccion = Long.parseLong( request.getParameter("idSeccion") );
+    	String[] listaIdFichas = request.getParameter("listaIdFichas").split(",");
+    	List<Long> listaIdFichasLong = new ArrayList<Long>();
+    	
+    	for ( String s : listaIdFichas )
+    		listaIdFichasLong.add( Long.parseLong(s) );
+    	
+    	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
+    	
+    	try {
+    		
+			uaDelegate.actualizaFichasSeccionUA(idUA, idSeccion, listaIdFichasLong);
+			
+		} catch (DelegateException e) {
+			
+			if (e.isSecurityException()) {
+				
+                resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+                resultats.put("id", -1);
+                
+            } else {
+            	
+            	resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
+            	resultats.put("id", -2);
+            	log.error(ExceptionUtils.getStackTrace(e));
+            	
+            }
+			
+		}
+    		
+    	return resultats;
+    	
+    }
     
 	/**
 	 * A partir de una lista de la entidad UnidadMateria, borra aquellos elementos que ya no pertenecer�n

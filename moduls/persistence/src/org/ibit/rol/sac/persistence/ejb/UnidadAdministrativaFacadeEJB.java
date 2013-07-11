@@ -31,6 +31,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumen;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Historico;
@@ -3377,7 +3379,76 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			}
 			
 			return uaQuery;			        	
-	}	
+	}
+	
+	/**
+	 * Se encarga de actualizar las fichas de una sección relacionada con una UA.
+	 * 
+	 * @param idUA
+	 * @param idSeccion
+	 * @param listaIdFichasLong
+	 * 
+	 * @throws EJBException
+	 * 
+	 * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong) {
+		
+		Session session = getSession();
+		
+		try {
+			
+			List<FichaResumenUA> listaFichasUA = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
+					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion")
+					.setParameter("idUA", idUA)
+					.setParameter("idSeccion", idSeccion)
+					.list();
+			
+			for (FichaResumenUA fua : listaFichasUA) {  
+				
+				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, fua.getFicha().getId());
+				ficha.removeFichaUA(fua);
+				
+                session.delete(fua);
+                
+			}
+			
+			session.flush();
+			
+			// Creamos nuevas fichas UA/Sección y actualizamos orden a medida que se crean.
+			int orden = 5;
+			
+			for (Long idFicha : listaIdFichasLong) {
+				
+				FichaResumen ficha = (FichaResumen)session.load(FichaResumen.class, idFicha);
+								
+				// Obtenemos ficha para actualizar orden, ya que el método anterior no nos deja especificarlo.
+				FichaResumenUA fichaUA = new FichaResumenUA();
+				fichaUA.setIdUa(idUA);	
+				fichaUA.setIdSeccio(idSeccion);
+				fichaUA.setFicha(ficha);
+				fichaUA.setOrden(orden);
+				
+				session.saveOrUpdate(fichaUA);
+				
+				orden = orden + 5;
+				
+			}
+			
+			session.flush();
+						
+		} catch (HibernateException e) {
+			
+			throw new EJBException(e);
+			
+        } finally {
+        	
+            close(session);
+            
+        }
+		
+	}
 	
 	private String initTab(String texte) {
 		   		      

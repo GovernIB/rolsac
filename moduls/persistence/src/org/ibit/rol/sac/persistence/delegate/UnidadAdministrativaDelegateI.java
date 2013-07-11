@@ -604,5 +604,11 @@ public interface UnidadAdministrativaDelegateI {
 	 */
     public abstract List<FichaUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
     		throws DelegateException;
+    
+    /* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#actualizaFichasSeccionUA(java.lang.Long, java.lang.Long, java.util.List)
+	 */
+    public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+    		throws DelegateException;
 	
 }

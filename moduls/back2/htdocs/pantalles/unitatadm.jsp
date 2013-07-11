@@ -1976,6 +1976,7 @@
         var pagArrel = '<c:url value="/" />';    
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
         var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
+        var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
 
         var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         

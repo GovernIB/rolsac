@@ -31,7 +31,6 @@ public class FichaResumen extends Classificable implements Indexable, Validable 
 	private String responsable;
 	private Set<PublicoObjetivo> publicosObjetivo;
 	 
-
 	//Constructores
 
 	public FichaResumen() {
@@ -215,6 +214,9 @@ public class FichaResumen extends Classificable implements Indexable, Validable 
 		this.publicosObjetivo.remove(publicosObjetivo);
 	}
 	
+	public void removeFichaUA(FichaResumenUA ficha) {
+        fichasua.remove(ficha);
+    }
 	
 	@Override
 	public String toString() {
