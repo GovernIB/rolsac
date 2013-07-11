@@ -625,21 +625,21 @@
     
     
     <!-- ================================================================== -->
-    <!-- Construeix el fitxer jboss-service.xml                                -->
+    <!-- Construeix el fitxer jboss-service.xml                             -->
     <!-- ================================================================== -->
     <target name="make.jboss-service.xml">
         
         <echo message="Desplegando jboss-service.xml ....."/>
         <delete file="${output.dir}/jboss-service.xml"/>
         <echo message="Archivo antigua eliminado ....."/>
-        <concat destfile="${output.dir}/jboss-service.xml" append="true" fixlastline="true">
+        <concat destfile="${output.dir}/01rolsac.jboss-service.xml" append="true" fixlastline="true">
             <filelist dir="${etc}"    files="01.jboss-service.begin.xml"/>
             <filelist dir="${etc}"    files="02.jboss-service.properties.xml"/>
             <filelist dir="${etc}"    files="03.jboss-service.end.xml"/>
         </concat>
         <echo message="Archivo nuevo creado ...."/>
         <echo message="${deploy.dir}"/>
-        <copy verbose="true" file="${output.dir}/jboss-service.xml" todir="${jbossServiceDeploy.dir}"/>
+        <copy verbose="true" file="${output.dir}/01rolsac.jboss-service.xml" todir="${jbossServiceDeploy.dir}"/>
         <echo message="Archivo copiado en el Jboss"/>
         
     </target>
