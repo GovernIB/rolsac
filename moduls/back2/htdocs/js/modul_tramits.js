@@ -39,10 +39,10 @@ $(document).ready(function() {
     // Evento para el bot�nn de volver al detalle    
     $("#escriptori_tramits .menuPublicacion .btnVolver").click(function(){EscriptoriTramit.torna();});    
     
-    // Evento para el bot�n de guardar
+    // Evento para el botón de guardar
     $("#escriptori_tramits .menuPublicacion a.btnGuardar").unbind("click").click(function(){EscriptoriTramit.guardar();});
     
-    // Evento para el bot�n de eliminar
+    // Evento para el botón de eliminar
     $("#escriptori_tramits .menuPublicacion a.btnEliminar").unbind("click").click(function(){EscriptoriTramit.eliminar();});
     
     // Sincronizar campos sin idioma en zona multi-idioma.   
@@ -127,8 +127,8 @@ function CModulTramit(){
         // animacio
         escriptori_detall_elm.fadeOut(300, function() {         
             escriptori_tramits_elm.fadeIn(300, function() {
-                //Ocultar el bot�n "eliminar" en la creaci�n
-                // y los m�dulos de documentos y formularios
+                //Ocultar el botón "eliminar" en la creación
+                // y los módulos de documentos y formularios
                 escriptori_tramits_elm.find(".btnEliminar").hide();
                 escriptori_tramits_elm.find("div#modul_documents_tramits").hide();
                 escriptori_tramits_elm.find("div#modul_formularis_tramits").hide();
@@ -144,8 +144,8 @@ function CModulTramit(){
     
     this.inicializarTramites = function( listaTramites ){
     
-        // A�adimos a los nombres de los tr�mites el tag <a> para que enlacen
-        // a la edici�n del tr�mite en cuesti�n.
+        // Añadimos a los nombres de los trámites el tag <a> para que enlacen
+        // a la edición del trámite en cuestión.
         for ( i in listaTramites )
             listaTramites[i].nom = "<a href='#' class='tramit_id'>" + listaTramites[i].nom + "</a>";        
         
@@ -290,7 +290,7 @@ function CEscriptoriTramit(){
                         that.contaSeleccionats();
                     }
                     
-                    that.torna();
+                    // that.torna(); Se pide que al guardar un tramite no vuelva hacia el procedimiento.
                 }
             }
         });
@@ -384,7 +384,7 @@ function CEscriptoriTramit(){
     
     this.pintar = function( datos ){    
         
-        // Importante mantener el id del tr�mite que estamos mostrando.
+        // Importante mantener el id del trámite que estamos mostrando.
 //        $("#id_tramit_actual").val(datos.idTramit);
                          
         $("#id_tramit_actual").val(datos.id_tramit_actual);
@@ -426,15 +426,15 @@ function CEscriptoriTramit(){
             if (datos[idiomaUA] != null) 
                 $("#tramits_item_organ_" + idioma).val(printStringFromNull(datos[idiomaUA]));           
         }       
-        // Fin bloque de pesta�as de idiomas
+        // Fin bloque de pestañas de idiomas
         
-        // Mostrar bloque de ventanilla �nica seg�n la informaci�n del procedimiento
+        // Mostrar bloque de ventanilla �nica según la información del procedimiento
         if (datos.item_finestreta_unica == "1")
             escriptori_tramits_elm.find(".modulFinestretaUnica").show();
         else
             escriptori_tramits_elm.find(".modulFinestretaUnica").hide();        
             
-        // Mostrar m�dulo de tasas seg�n la informaci�n del procedimiento
+        // Mostrar módulo de tasas según la información del procedimiento
 //      if (datos.item_taxes == "1")
 //          escriptori_tramits_elm.find("#modul_taxes_tramits").show();
 //      else
