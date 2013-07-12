@@ -8,6 +8,7 @@ import java.util.Set;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
@@ -602,7 +603,7 @@ public interface UnidadAdministrativaDelegateI {
     /* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
 	 */
-    public abstract List<FichaUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
+    public abstract List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
     		throws DelegateException;
     
     /* (non-Javadoc)

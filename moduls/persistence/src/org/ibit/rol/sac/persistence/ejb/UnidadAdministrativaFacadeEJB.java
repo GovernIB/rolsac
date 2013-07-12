@@ -2615,27 +2615,21 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	  * @ejb.interface-method
 	  * @ejb.permission unchecked="true"
 	  */
-	 public List<FichaUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
+	 public List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion) {
 		  		  
-		 List<FichaUA> fichas = new ArrayList<FichaUA>();
+		 List<FichaResumenUA> fichas = new ArrayList<FichaResumenUA>();
 		 
 	     if ( idUA != null && idSeccion != null ) {
 	    	 
 	         Session session = getSession();
 	         
 	         try {
-	             
-		          //Query que retorna las fichas relacionadas
-		   	      Query query = session.createQuery(
-		   	    		  " select DISTINCT fua From FichaUA as fua, fua.ficha as f " +
-		   	    		  " where fua.unidadAdministrativa.id = :idUA AND fua.seccion.id = :idSeccion " +
-		   	    		  " order by fua.orden asc "
-   	    		  );
-		   	      
-		   	      query.setLong("idUA", idUA);
-		   	      query.setLong("idSeccion", idSeccion);
-		   	      
-		   	      fichas.addAll(query.list());
+	        	 
+	        	 fichas = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
+	 					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion")
+	 					.setParameter("idUA", idUA)
+	 					.setParameter("idSeccion", idSeccion)
+	 					.list();
 	             
 	         } catch (HibernateException he) {
 	        	 

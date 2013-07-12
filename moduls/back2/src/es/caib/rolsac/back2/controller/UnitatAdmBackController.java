@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
@@ -1186,15 +1187,15 @@ public class UnitatAdmBackController extends PantallaBaseController {
         
         try {
         
-	        List<FichaUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
+	        List<FichaResumenUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
 			
 			if (listaFichasSeccionUA != null) {
 				
-				Iterator<FichaUA> iterator2 = listaFichasSeccionUA.iterator();
+				Iterator<FichaResumenUA> iterator2 = listaFichasSeccionUA.iterator();
 				
 				while ( iterator2.hasNext() ) {
 					
-					FichaUA ficha = (FichaUA) iterator2.next();
+					FichaResumenUA ficha = iterator2.next();
 					
 					if (ficha.getFicha() != null) {
 					

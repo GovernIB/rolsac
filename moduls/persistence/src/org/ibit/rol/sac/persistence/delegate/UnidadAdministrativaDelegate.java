@@ -7,6 +7,7 @@ import java.util.Map;
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.Seccion;
@@ -370,7 +371,7 @@ public class UnidadAdministrativaDelegate {
     	return impl.cuentaFichasSeccionUA(idUA, idSeccion);
     }
     
-    public List<FichaUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
+    public List<FichaResumenUA> listarFichasSeccionUA(Long idUA, Long idSeccion)
 			throws DelegateException {
     	return impl.listarFichasSeccionUA(idUA, idSeccion);
     }
