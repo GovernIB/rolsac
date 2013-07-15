@@ -4,19 +4,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import org.ibit.lucene.indra.model.ModelFilterObject;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
-
+import org.ibit.rol.sac.model.Seccion;
 import es.caib.rolsac.utils.ResultadoBusqueda;
+import org.ibit.rol.sac.model.FichaResumenUA;
 
 public interface UnidadAdministrativaDelegateI {
 
 	public ResultadoBusqueda buscadorUnidadesAdministrativas(Map<String, Object> parametros, Map<String, String> traduccion, Long id, String idioma, boolean uaFilles, boolean uaMeves, Long materia, String pagina, String resultats) throws DelegateException;	
-	
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#crearUnidadAdministrativaRaiz(org.ibit.rol.sac.model.UnidadAdministrativa)
 	 */
@@ -43,7 +43,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract void actualizarUnidadAdministrativa(
 			UnidadAdministrativa unidad, Long padre_id)
-			throws DelegateException;
+					throws DelegateException;
 
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarHijosUA(java.lang.Long)
@@ -70,13 +70,13 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List listarUnidadesAdministrativasRaiz()
 			throws DelegateException;
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarTodasUnidadesAdministrativasRaiz()
 	 */
@@ -85,13 +85,13 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List listarTodasUnidadesAdministrativasRaiz()
 			throws DelegateException;
-	
-	
-	
 
-	
-	
-	
+
+
+
+
+
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerPrimeraUnidadAdministrativaRaiz()
 	 */
@@ -181,7 +181,14 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract UnidadAdministrativa consultarUnidadAdministrativa(Long id)
 			throws DelegateException;
 
-    /* (non-Javadoc)
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#consultarUnidadAdministrativaSinFichas(java.lang.Long)
+	 */
+	public abstract UnidadAdministrativa consultarUnidadAdministrativaSinFichas(Long id)
+			throws DelegateException;	
+
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#consultarUnidadAdministrativaPMA(java.lang.Long)
 	 */
 	/* (non-Javadoc)
@@ -310,8 +317,8 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract UnidadAdministrativa obtenerUnidadPorBusinessKey(String bk)
 			throws DelegateException;
-	
-	
+
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#borrarUnidadAdministrativa(java.lang.Long)
 	 */
@@ -319,9 +326,9 @@ public interface UnidadAdministrativaDelegateI {
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#borrarUnidadAdministrativa(java.lang.Long)
 	 */
 	public abstract void borrarUnidadAdministrativa(Long id) 
-	 		throws DelegateException;
-	
-	
+			throws DelegateException;
+
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#borrarUnidadAdministrativaRaiz(java.lang.Long)
 	 */
@@ -391,7 +398,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List<UnidadAdministrativa> buscarUnidadesAdministrativasPorAmbito(
 			Long ambito, final String busqueda, final String idioma)
-			throws DelegateException;
+					throws DelegateException;
 
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarUAEspacioTerritorial(java.lang.Long)
@@ -410,7 +417,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract UnidadAdministrativa obtenerUnidadesAdministrativasArbreTerritorial(
 			Long idEspacio, String tipo, List UAOpcionales)
-			throws DelegateException;
+					throws DelegateException;
 
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadesAdministrativasArbreTerritorial(java.lang.Long, java.lang.String)
@@ -447,7 +454,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List<Ficha> listarFichSecMat(final Long idUA,
 			final Long idMat, final String ceSec, boolean caducados)
-			throws DelegateException;
+					throws DelegateException;
 
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarProcMat(java.lang.Long, java.lang.Long, java.lang.String[], boolean, boolean)
@@ -476,7 +483,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract List<Ficha> listarFichSecHV(final Long idUA,
 			final Long idHV, final String ceSec, boolean caducados)
-			throws DelegateException;
+					throws DelegateException;
 
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#listarProcHV(java.lang.Long, java.lang.Long, java.lang.String[], boolean, boolean)
@@ -497,7 +504,7 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract List<ProcedimientoLocal> buscarProcedimientosUA(
 			final Long idUA, final String busqueda, final String idioma,
 			final Date dataInici, final Date dataFi) throws DelegateException;
-	
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#buscarFichasUA(java.lang.String, java.lang.String, java.util.Date, java.util.Date)
 	 */
@@ -541,7 +548,7 @@ public interface UnidadAdministrativaDelegateI {
 	 */
 	public abstract StringBuffer getUaMolla(Long idua, String _idioma)
 			throws DelegateException;
-	
+
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#getUaMollaBack2(java.lang.Long, java.lang.String, java.lang.String, java.lang.String)
 	 */
@@ -551,31 +558,54 @@ public interface UnidadAdministrativaDelegateI {
 	public abstract StringBuffer getUaMollaBack2(Long idua, String _idioma, String url, String uaIdPlaceholder)
 			throws DelegateException;
 
-	
-    public boolean autorizarEliminarUA(Long idUa)
-    		throws DelegateException;
 
-    /* (non-Javadoc)
+	public boolean autorizarEliminarUA(Long idUa)
+			throws DelegateException;
+
+	/* (non-Javadoc)
 	 * Descripcion: Comprobar si el usuario tiene privilegios para crear una UA.
 	 */
 	public Boolean autorizarCrearUA() throws DelegateException;
-    
-    public void eliminarUaSinRelaciones(Long idUA)
-    		throws DelegateException;
-  
-    public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) 
-    		throws DelegateException;
-    	
-    /* (non-Javadoc)
+
+	public void eliminarUaSinRelaciones(Long idUA)
+			throws DelegateException;
+
+	public void reordenar( Long id, Integer ordenNuevo, Integer ordenAnterior, Long idPadre ) 
+			throws DelegateException;
+
+	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadAdministrativaPM(java.lang.Long)
 	 */
 	/* (non-Javadoc)
 	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate2#obtenerUnidadAdministrativaPM(java.lang.Long)
 	 */
-    public abstract UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) 
-    		throws DelegateException;
-    
-	public abstract String obtenerCadenaFiltroUA(Long ua,
-			boolean uaFilles, boolean uaMeves)
+	public abstract UnidadAdministrativa obtenerUnidadAdministrativaPM(Long id) 
+			throws DelegateException;
+
+	public abstract String obtenerCadenaFiltroUA(Long ua, boolean uaFilles, boolean uaMeves)
 			throws DelegateException;    
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarSeccionesUA(java.lang.Long)
+	 */
+	public abstract List<Seccion> listarSeccionesUA(final Long idUA)
+			throws DelegateException;
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#cuentaFichasSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+	public abstract Long cuentaFichasSeccionUA(final Long idUA, final Long idSeccion)
+			throws DelegateException;
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#listarFichasSeccionUA(java.lang.Long, java.lang.Long)
+	 */
+	public abstract List<FichaResumenUA> listarFichasSeccionUA(final Long idUA, final Long idSeccion)
+			throws DelegateException;
+
+	/* (non-Javadoc)
+	 * @see org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate#actualizaFichasSeccionUA(java.lang.Long, java.lang.Long, java.util.List)
+	 */
+	public abstract void actualizaFichasSeccionUA(Long idUA, Long idSeccion, List<Long> listaIdFichasLong)
+			throws DelegateException;
 }

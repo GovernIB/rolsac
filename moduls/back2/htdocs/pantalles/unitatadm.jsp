@@ -2101,8 +2101,10 @@
         var pagAuditories = '<c:url value="/auditories/llistat.do" />';
         var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
         var pagArrel = '<c:url value="/" />';    
-        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         var pagFitxes = '<c:url value="/fitxainf/llistat.do" />';
+        var pagFitxesUASeccio = '<c:url value="/unitatadm/obtenirFitxesUASeccio.do" />';
+        var pagGuardarFitxesUASeccio = '<c:url value="/unitatadm/guardarFitxesUASeccio.do" />';
+        var txtEsborrarCorrecte = "<spring:message code='unitatadm.esborrat.correcte'/>";        
         
         // URL para ordenar el listado de UA hijas. 
         var pagOrdenarUAHijas = '<c:url value="/unitatadm/reordenarUAs.do" />';
