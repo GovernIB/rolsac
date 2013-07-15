@@ -2626,7 +2626,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	         try {
 	        	 
 	        	 fichas = (List<FichaResumenUA>)session.createQuery("FROM FichaResumenUA AS fichaUA " +
-	 					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion")
+	 					"WHERE fichaUA.idUa = :idUA AND fichaUA.idSeccio = :idSeccion ORDER BY fichaUA.orden")
 	 					.setParameter("idUA", idUA)
 	 					.setParameter("idSeccion", idSeccion)
 	 					.list();
