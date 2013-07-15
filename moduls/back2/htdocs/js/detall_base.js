@@ -440,7 +440,11 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
             // Escapamos cada valor de los campos a traducir con encodeURIComponent(),
             // ya que si el texto contenía alguna "&", se consideraría ya otro campo en la llamada AJAX.
             // Luego tocará decodificar cada campo en el servlet que reciba la petición.
-            dataVars += and + campo + "=" + encodeURIComponent( jQuery("#" + campo).val() );
+            var texto = jQuery("#" + campo).val();
+            // TinyMCE, aún forzando a que escape a entidades numéricas, no contempla el caso del tanto por ciento %.
+            // Toca hacerlo de forma explícita antes de codificar completamente la cadena con encodeURIComponent().
+            texto = texto.replace(/%/g, "&#37;")
+            dataVars += and + campo + "=" + encodeURIComponent( texto );
         }
                 
         $.ajax({
