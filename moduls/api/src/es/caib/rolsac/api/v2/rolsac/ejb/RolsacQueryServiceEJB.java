@@ -105,6 +105,9 @@ import es.caib.rolsac.api.v2.publicObjectiu.PublicObjectiuDTO;
 import es.caib.rolsac.api.v2.query.FromClause;
 import es.caib.rolsac.api.v2.query.QueryBuilder;
 import es.caib.rolsac.api.v2.query.QueryBuilderException;
+import es.caib.rolsac.api.v2.query.Restriction;
+import es.caib.rolsac.api.v2.query.Restriction.LOGIC;
+import es.caib.rolsac.api.v2.query.Restriction.OPERATION;
 import es.caib.rolsac.api.v2.seccio.SeccioCriteria;
 import es.caib.rolsac.api.v2.seccio.SeccioDTO;
 import es.caib.rolsac.api.v2.taxa.TaxaCriteria;
@@ -536,16 +539,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-        
-        // Guardamos el estado de la UA para que no influya en la query
-        String estadoUA = procedimentCriteria.getEstadoUA();
-        procedimentCriteria.setEstadoUA(null);
-        
         // Guardamos el tamanyo a consultar para realizar el filtrado posterior
         int tamany = Integer.parseInt(procedimentCriteria.getTamany());
         procedimentCriteria.setTamany(null);
@@ -559,7 +552,11 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         
         try {
         	
-            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
+            boolean soloRegistrosVisibles = ProcedimentUtils.parseVisible(procedimentCriteria);
+            Integer estadoUA = ProcedimentUtils.parseEstadoUA(procedimentCriteria);
+            Restriction telematicoVigente = ProcedimentUtils.ParseTelematicoVigente(procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
+            
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
@@ -574,8 +571,12 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     entities, 
                     procedimentCriteria.getIdioma(),
                     HQL_TRADUCCIONES_ALIAS);
+            
             qb.extendCriteriaObjects(criteris);
-
+            
+            if (telematicoVigente != null)
+            	qb.addRestriction(telematicoVigente);
+            
             session = getSession();
             Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
@@ -585,7 +586,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
             	if ( (soloRegistrosVisibles && procediment.getIsVisible()) || !soloRegistrosVisibles ) {
             		// Filtro según el estado de la UA
-            		if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion() == Integer.parseInt(estadoUA)) {
+            		if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion().equals(estadoUA)) {
             			procedimentsBons.add(procediment);
             		}
             	}
@@ -647,20 +648,14 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         Integer numResultats = -1;
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
-        
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-        
-        // Guardamos el estado de la UA para que no influya en la query
-        String estadoUA = procedimentCriteria.getEstadoUA();
-        procedimentCriteria.setEstadoUA(null);
 
         try {
         	
-            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
+            boolean soloRegistrosVisibles = ProcedimentUtils.parseVisible(procedimentCriteria);
+            Integer estadoUA = ProcedimentUtils.parseEstadoUA(procedimentCriteria);
+            Restriction telematicoVigente = ProcedimentUtils.ParseTelematicoVigente(procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
+            
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
@@ -675,8 +670,12 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     entities, 
                     procedimentCriteria.getIdioma(),
                     HQL_TRADUCCIONES_ALIAS);
+            
             qb.extendCriteriaObjects(criteris);
-
+            
+            if (telematicoVigente != null)
+            	qb.addRestriction(telematicoVigente);
+            
             session = getSession();
             Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
@@ -687,7 +686,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 				if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos al total de resultados si cumple con ello.
 						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
 					
-					if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion() == Integer.parseInt(estadoUA)) {
+					if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion().equals(estadoUA)) {
 						cont++;
 					}
 				}

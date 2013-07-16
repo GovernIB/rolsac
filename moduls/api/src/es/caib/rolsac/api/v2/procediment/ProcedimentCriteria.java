@@ -82,6 +82,10 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
 
     private java.lang.String estadoUA;
 
+    private java.lang.Boolean vigente;
+
+    private java.lang.Boolean telematico;
+
     public ProcedimentCriteria() {
     }
 
@@ -127,7 +131,9 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
            java.lang.String unidadAdministrativa,
            java.lang.String agrupacionHechoVital,
            java.lang.Boolean visible,
-           java.lang.String estadoUA) {
+           java.lang.String estadoUA,
+           java.lang.Boolean vigente,
+           java.lang.Boolean telematico) {
         super(
             id,
             idioma,
@@ -171,6 +177,8 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.agrupacionHechoVital = agrupacionHechoVital;
         this.visible = visible;
         this.estadoUA = estadoUA;
+        this.vigente = vigente;
+        this.telematico = telematico;
     }
 
 
@@ -913,6 +921,46 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         this.estadoUA = estadoUA;
     }
 
+
+    /**
+     * Gets the vigente value for this ProcedimentCriteria.
+     * 
+     * @return vigente
+     */
+    public java.lang.Boolean getVigente() {
+        return vigente;
+    }
+
+
+    /**
+     * Sets the vigente value for this ProcedimentCriteria.
+     * 
+     * @param vigente
+     */
+    public void setVigente(java.lang.Boolean vigente) {
+        this.vigente = vigente;
+    }
+
+
+    /**
+     * Gets the telematico value for this ProcedimentCriteria.
+     * 
+     * @return telematico
+     */
+    public java.lang.Boolean getTelematico() {
+        return telematico;
+    }
+
+
+    /**
+     * Sets the telematico value for this ProcedimentCriteria.
+     * 
+     * @param telematico
+     */
+    public void setTelematico(java.lang.Boolean telematico) {
+        this.telematico = telematico;
+    }
+
     private java.lang.Object __equalsCalc = null;
     public synchronized boolean equals(java.lang.Object obj) {
         if (!(obj instanceof ProcedimentCriteria)) return false;
@@ -1035,7 +1083,13 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
               this.visible.equals(other.getVisible()))) &&
             ((this.estadoUA==null && other.getEstadoUA()==null) || 
              (this.estadoUA!=null &&
-              this.estadoUA.equals(other.getEstadoUA())));
+              this.estadoUA.equals(other.getEstadoUA()))) &&
+            ((this.vigente==null && other.getVigente()==null) || 
+             (this.vigente!=null &&
+              this.vigente.equals(other.getVigente()))) &&
+            ((this.telematico==null && other.getTelematico()==null) || 
+             (this.telematico!=null &&
+              this.telematico.equals(other.getTelematico())));
         __equalsCalc = null;
         return _equals;
     }
@@ -1157,6 +1211,12 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         }
         if (getEstadoUA() != null) {
             _hashCode += getEstadoUA().hashCode();
+        }
+        if (getVigente() != null) {
+            _hashCode += getVigente().hashCode();
+        }
+        if (getTelematico() != null) {
+            _hashCode += getTelematico().hashCode();
         }
         __hashCodeCalc = false;
         return _hashCode;
@@ -1388,6 +1448,18 @@ public class ProcedimentCriteria  extends es.caib.rolsac.api.v2.general.BasicCri
         elemField.setFieldName("estadoUA");
         elemField.setXmlName(new javax.xml.namespace.QName("", "estadoUA"));
         elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "string"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("vigente");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "vigente"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
+        elemField.setNillable(true);
+        typeDesc.addFieldDesc(elemField);
+        elemField = new org.apache.axis.description.ElementDesc();
+        elemField.setFieldName("telematico");
+        elemField.setXmlName(new javax.xml.namespace.QName("", "telematico"));
+        elemField.setXmlType(new javax.xml.namespace.QName("http://www.w3.org/2001/XMLSchema", "boolean"));
         elemField.setNillable(true);
         typeDesc.addFieldDesc(elemField);
     }

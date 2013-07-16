@@ -222,6 +222,8 @@
                             <element name="agrupacionHechoVital" nillable="true" type="xsd:string" />
                             <element name="visible" nillable="true" type="xsd:boolean" />
                             <element name="estadoUA" nillable="true" type="xsd:string" />
+                            <element name="vigente" nillable="true" type="xsd:boolean" />
+                            <element name="telematico" nillable="true" type="xsd:boolean" />
 						</sequence>
 					</extension>
 				</complexContent>
