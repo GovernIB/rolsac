@@ -433,7 +433,7 @@
         
         <fail unless="project.author" message="Et falta definir la propietat project.author"/>
         <fail unless="deploy.dir" message="Et falta definir la propietat deploy.dir"/>
-        <fail unless="jbossServiceDeploy.dir" message="Et falta definir la propietat deploy.dir"/>
+        <fail unless="jbossServiceDeploy.dir" message="Et falta definir la propietat jbossServiceDeploy.dir"/>
         
         <echo>
             Version: ${rolsac.target}
