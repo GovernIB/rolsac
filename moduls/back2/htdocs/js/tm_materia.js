@@ -459,7 +459,7 @@ function CDetall(){
 				} else if (data.id == -1){
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorPermisos});
 				} else if (data.id < -1){
-					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacio});
+					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtErrorOperacioMateries});
 				}
 			}
 		});

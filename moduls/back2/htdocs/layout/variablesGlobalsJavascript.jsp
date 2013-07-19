@@ -101,6 +101,7 @@
     var txtFuncionsFins = '<spring:message code="error.conexio.fins"/>';
     var txtErrorPermisos = '<spring:message code="error.permisos"/>';
     var txtErrorOperacio = '<spring:message code="error.operacio_fallida"/>';
+    var txtErrorOperacioMateries = '<spring:message code="error.operacio_fallida_materies"/>';
     var txtErrorTramitIniciObligatori = '<spring:message code="error.tramit_inici_obligatori" />';
         
     // Errores de validaci�n
