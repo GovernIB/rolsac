@@ -200,7 +200,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 		try {
 			ProcedimientoDelegate procedimientosDelegate = DelegateUtil.getProcedimientoDelegate();
-			String lang = request.getLocale().getLanguage();
 			// Realizamos la búsqueda de los procedimientos
 			resultadoBusqueda = procedimientosDelegate.buscadorProcedimientos(paramMap, tradMap, ua, uaFilles, uaMeves, materia, fetVital, publicObjectiu, pagPag, pagRes, campoVisible, enPlazo, telematico);
 			// Los transformamos en procedimientos locales DTO

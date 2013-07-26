@@ -154,140 +154,154 @@ public class FitxaInfBackController extends PantallaBaseController {
 		loadIndexModel (model, request);	
         return "index";
     }
-
+    
+    
     @RequestMapping(value = "/llistat.do", method = POST)
-    public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session) {
-        
-        //List<Ficha> llistaFitxes = new ArrayList<Ficha>();
-        List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
-        Map<String, Object> resultats = new HashMap<String, Object>();
-        Map<String, Object> paramMap = new HashMap<String, Object>();
-        Map<String, String> tradMap = new HashMap<String, String>();
-
-        String lang = request.getLocale().getLanguage();
-        
-		//Obtenemos la ordenaci�n por par�metro
-		String campoOrdenacion = request.getParameter("ordreCamp");
-		String orden = request.getParameter("ordreTipus");
+    public @ResponseBody Map<String, Object> llistatFitxes(HttpServletRequest request, HttpSession session)
+    {
+    	Map<String, Object> paramMap = new HashMap<String, Object>();
+    	Map<String, String> tradMap = new HashMap<String, String>();
+    	List<FichaDTO> llistaFitxesDTO = new ArrayList<FichaDTO>();
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
+    	UnidadAdministrativa ua = null;
+    	if (session.getAttribute("unidadAdministrativa") != null)
+    		ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
+    	
+    	// Recuperamos los campos directamente des de el request
+    	String campoOrdenacion = request.getParameter("ordreCamp");					// Recuperamos el parametro de ordenación por campo
+    	String orden = request.getParameter("ordreTipus");							// Recuperamos el parametro de ordenación por tipo
+    	boolean uaFilles = "1".equals(request.getParameter("uaFilles"));			// Recuperamos si se debe buscar en las UAs hijas
+        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));				// Recuperamos si se debe buscar en las UAs propias
+    	
+        Long materia = recuperarFitxaParametroId(request,"materia");				// Recuperamos el id de la materia
+        Long fetVital = recuperarFitxaParametroId(request, "fetVital");				// Recuperamos el id del hecho vital
+        Long publicObjectiu = recuperarFitxaParametroId(request, "publicObjectiu");	// Recuperamos el id del público objetivo
+		String pagPag = recuperarFitxaPaginacion(request, "pagPag");				// Recuperamos la página actual
+		String pagRes = recuperarFitxaPaginacion(request, "pagRes");				// Recuperamos los resultados por página
 		
-        UnidadAdministrativa ua = null;
-        Long fetVital = null;
-        Long materia = null;
-        Long publicObjectiu = null;
-        
-        if (session.getAttribute("unidadAdministrativa") != null) {
-        	ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-        }
-        
-		String idStr = request.getParameter("codi");
-		Long id = -1l;
-								
-		if ( idStr != null && StringUtils.isNumeric(idStr.trim()) )
-			id = ParseUtil.parseLong( idStr.trim() );
+		int campoVisible = recuperarFitxaVisibilidad(request, paramMap);			// Recuperamos la visibilidad de la ficha
 		
-		paramMap.put("id", idStr != null ? id : null );
+		recuperarFitxaCodigo(request, paramMap);									// Recuperamos el parametro del código
+        recuperarFitxaTexto(request, tradMap);										// Recuperamos el texto y lo buscamos en todos los idiomas
+        recuperarFitxaValidacio(request, paramMap);									// Recuperamos si es válido
         
-        if (request.isUserInRole("sacoper")) {
-            paramMap.put("validacion", ""); // En el back antiguo estaba asi.
-        } else {
-            String estat = request.getParameter("estat");
-            try {
-                Integer validacion = Integer.parseInt(estat);
-                paramMap.put("validacion", validacion);
-            } catch (NumberFormatException e) {
-            }
-        }
-        
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
         try {
-            materia = Long.parseLong(request.getParameter("materia"));
-        } catch (NumberFormatException e){}
-        
-        try {
-            fetVital = Long.parseLong(request.getParameter("fetVital"));
-        } catch (NumberFormatException e){}
-        
-        try {
-        	publicObjectiu = Long.parseLong(request.getParameter("publicObjectiu"));
-        } catch (NumberFormatException e){}
-
-        boolean uaFilles = "1".equals(request.getParameter("uaFilles"));
-        boolean uaMeves = "1".equals(request.getParameter("uaMeves"));
-        
-        // Textes (en todos los campos todos los idiomas)
-        String textes = request.getParameter("textes");
-        
-        if ( textes != null && !"".equals(textes) ) {
+        	FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();
         	
-            textes = textes.toUpperCase();
-            
-            if (tradMap.get("titulo") == null) {
-                tradMap.put("titulo", textes);
-            }
-            
-            tradMap.put("descAbr", textes);
-            tradMap.put("descripcion", textes);
-            tradMap.put("url", textes);
-            
-        } else {
-            tradMap.put("idioma", lang);
-        }
-        
-        String visibilitat = request.getParameter("visibilitat");
-		int campoVisible = 0;
-		if (visibilitat != null) {
-			if (visibilitat.equals("1")) {
-				Integer visible = Integer.parseInt(visibilitat);
-				paramMap.put("validacion", visible);
-				campoVisible = 1;
-			} else if (visibilitat.equals("2")) {
-				campoVisible = 2;
-			}
-		}
-
-        ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-        
-		//Información de paginación
-		String pagPag = request.getParameter("pagPag");		
-		String pagRes = request.getParameter("pagRes");
-		
-		if (pagPag == null) pagPag = String.valueOf(0); 
-		if (pagRes == null) pagRes = String.valueOf(10);                
-		
-        try {
+        	resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
         	
-            FichaResumenDelegate fitxaResumenDelegate = DelegateUtil.getFichaResumenDelegate();            
-
-            
-			resultadoBusqueda = fitxaResumenDelegate.buscarFichas(
-					paramMap, tradMap, ua, fetVital, materia, publicObjectiu,					
-					uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
-			            
-            for (FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados() ) ) {
-                TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(request.getLocale().getLanguage());
-                llistaFitxesDTO.add(new FichaDTO(fitxaResumen.getId(), 
-                                                             tfi == null ? null : tfi.getTitulo(), 
-                                                             DateUtils.formatDate(fitxaResumen.getFechaPublicacion()), 
-                                                             DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
-                                                             DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),
-                                                             fitxaResumen.isVisible()));
-            }
-            
+        	for (FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados() ) ) {
+        		TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(request.getLocale().getLanguage());
+        		llistaFitxesDTO.add(new FichaDTO(
+        				fitxaResumen.getId(),
+        				tfi == null ? null : tfi.getTitulo(),
+        				DateUtils.formatDate(fitxaResumen.getFechaPublicacion()),
+        				DateUtils.formatDate(fitxaResumen.getFechaCaducidad()),
+        				DateUtils.formatDate(fitxaResumen.getFechaActualizacion()),
+        				fitxaResumen.isVisible()));
+        		}
+        	
         } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                // model.put("error", "permisos");
-            	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-            } else {
-                // model.put("error", "altres");
-            	log.error(ExceptionUtils.getStackTrace(dEx));
-            }
+        	if (dEx.isSecurityException())
+        		log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+        	else
+        		log.error(ExceptionUtils.getStackTrace(dEx));
         }
-        
         resultats.put("total",  resultadoBusqueda.getTotalResultados());
         resultats.put("nodes", llistaFitxesDTO);
         
         return resultats;
-    
     }
+    
+    /*
+	 * Recuperamos el campo del código
+	 */
+	private void recuperarFitxaCodigo(HttpServletRequest request, Map<String, Object> paramMap)
+	{
+		String idStr = request.getParameter("codi");
+		Long id = -1l;
+		if (idStr != null && StringUtils.isNumeric(idStr.trim()))
+			id = ParseUtil.parseLong( idStr.trim() );
+		paramMap.put("id", idStr != null ? id : null );
+	}
+    
+    /*
+	 * Recuperamos el estado de la ficha para la validación
+	 */
+	private void recuperarFitxaValidacio(HttpServletRequest request, Map<String, Object> paramMap)
+	{
+		if (request.isUserInRole("sacoper")) {
+			paramMap.put("validacion", ""); // En el back antiguo estaba asi.
+		} else {
+			String estat = request.getParameter("estat");
+			try {
+				Integer validacion = Integer.parseInt(estat);
+				paramMap.put("validacion", validacion);
+			} catch (NumberFormatException e) {}
+		}
+	}
+    
+    /*
+     * Recuperar id por parametro del request
+     */
+    private Long recuperarFitxaParametroId(HttpServletRequest request, String parametro)
+    {
+    	try {
+    		return Long.parseLong(request.getParameter(parametro));
+    	} catch (NumberFormatException e){
+    		return null;
+    	}
+    }
+    
+    /*
+     * Recuperamos el campo texto para las traducciones
+     */
+    private void recuperarFitxaTexto(HttpServletRequest request, Map<String, String> tradMap)
+    {
+    	String textes = request.getParameter("textes");
+    	if (textes != null && !"".equals(textes)) {
+    		textes = textes.toUpperCase();
+    		if (tradMap.get("titulo") == null)
+    			tradMap.put("titulo", textes);
+    		
+    		tradMap.put("descAbr", textes);
+    		tradMap.put("descripcion", textes);
+    		tradMap.put("url", textes);
+    	} else {
+    		tradMap.put("idioma", request.getLocale().getLanguage());
+    	}
+    }
+    
+    /*
+     * Recuperamos la visibilidad del request
+     */
+    private int recuperarFitxaVisibilidad(HttpServletRequest request, Map<String, Object> paramMap)
+    {
+    	String visibilitat = request.getParameter("visibilitat");
+    	if (visibilitat != null) {
+    		if (visibilitat.equals("1")) {
+    			Integer visible = Integer.parseInt(visibilitat);
+    			paramMap.put("validacion", visible);
+    			return 1;
+    		} else if (visibilitat.equals("2")) {
+    			return 2;
+    		}
+    	}
+    	return 0;
+    }
+    
+    /*
+	 * Recuperamos parametros de paginación
+	 */
+	private String recuperarFitxaPaginacion(HttpServletRequest request, String parametro)
+	{
+		String pagina = request.getParameter(parametro);
+		if (pagina == null) pagina = String.valueOf(0);
+		return pagina;
+		
+	}
     
     
     @RequestMapping(value = "/pagDetall.do", method = POST)
