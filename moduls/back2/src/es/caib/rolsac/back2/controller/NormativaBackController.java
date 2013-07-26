@@ -94,64 +94,85 @@ public class NormativaBackController extends PantallaBaseController {
         }
         model.put("traspasboib", traspasboib);
         
-        //Listas para el buscador
-        try {
-        	//Las pasamos a DTO
+        // Listas para el buscador.
+        // Las pasamos a DTO.
+        try {        	
         	
-        	//Boletines
-        	List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
-        	List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
-        	
-        	for (Boletin boletin : listaBoletines) {        		       		
-        		IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
-        		listaBoletinesDTO.add(bol);
-        	}
-        	
-        	model.put("llistaButlletins", listaBoletinesDTO);
-        	
-        	//Tipos normativa
-        	List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
-        	List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
-        	for (Tipo tipo : listaTiposNormativa) {
-        		TraduccionTipo traTipo = (TraduccionTipo)tipo.getTraduccion(idioma);
-        		if (traTipo == null) {
-        			traTipo = (TraduccionTipo)tipo.getTraduccion();        			
-        		}
-        		IdNomDTO tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
-        		listaTiposNormativaDTO.add(tipoTran);
-        	}        	
-        	model.put("llistaTipusNormativa", listaTiposNormativaDTO);
-        	
-        	//Tipos afectacion
-        	List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
-        	List<IdNomDTO> listaTiposAfectacionDTO = new ArrayList<IdNomDTO>();
-        	for (TipoAfectacion tipoAfec : listaTiposAfectacion) {
-        		TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion(idioma);
-        		if (traTipAfec == null)
-        			traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion();
-        		
-        		IdNomDTO tipAfecTran = new IdNomDTO(tipoAfec.getId(), traTipAfec.getNombre());
-        		listaTiposAfectacionDTO.add(tipAfecTran);
-        	}
-        	model.put("llistaTipusAfectacio", listaTiposAfectacionDTO);
+        	// Boletines.
+        	model.put("llistaButlletins", getListaBoletinesDTO());
+        	// Tipos normativa.
+        	model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));        	
+        	// Tipos afectación.
+        	model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
         	        	
         } catch (DelegateException e) {
+        	
             if (e.isSecurityException()) {
                 model.put("error", "permisos");
             } else {
                 model.put("error", "altres");
                 log.error(ExceptionUtils.getStackTrace(e));
-            }        	
+            }
+            
         }
 		
-		loadIndexModel (model, request);	
+		loadIndexModel (model, request);
+		
 		return "index";
+		
 	}
 	
+	private List<IdNomDTO> getListaTiposAfectacionDTO(String idioma) throws DelegateException {
+
+		List<TipoAfectacion> listaTiposAfectacion = DelegateUtil.getTipoAfectacionDelegate().listarTiposAfectaciones();
+    	List<IdNomDTO> listaTiposAfectacionDTO = new ArrayList<IdNomDTO>();
+    	for (TipoAfectacion tipoAfec : listaTiposAfectacion) {
+    		TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion(idioma);
+    		if (traTipAfec == null)
+    			traTipAfec = (TraduccionTipoAfectacion)tipoAfec.getTraduccion();
+    		
+    		IdNomDTO tipAfecTran = new IdNomDTO(tipoAfec.getId(), traTipAfec.getNombre());
+    		listaTiposAfectacionDTO.add(tipAfecTran);
+    	}
+    	
+		return listaTiposAfectacionDTO;
+		
+	}
+
+	private List<IdNomDTO> getListaTiposNormativaDTO(String idioma) throws DelegateException {
+		
+		List<Tipo> listaTiposNormativa = DelegateUtil.getTipoNormativaDelegate().listarTiposNormativas();
+    	List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
+    	for (Tipo tipo : listaTiposNormativa) {
+    		TraduccionTipo traTipo = (TraduccionTipo)tipo.getTraduccion(idioma);
+    		if (traTipo == null) {
+    			traTipo = (TraduccionTipo)tipo.getTraduccion();        			
+    		}
+    		IdNomDTO tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+    		listaTiposNormativaDTO.add(tipoTran);
+    	}
+    	
+		return listaTiposNormativaDTO;
+		
+	}
+
+	private List<IdNomDTO> getListaBoletinesDTO() throws DelegateException {
+		
+		List<Boletin> listaBoletines = DelegateUtil.getBoletinDelegate().listarBoletines();
+    	List<IdNomDTO> listaBoletinesDTO = new ArrayList<IdNomDTO>();
+    	for (Boletin boletin : listaBoletines) {        		       		
+    		IdNomDTO bol = new IdNomDTO(boletin.getId(), boletin.getNombre());
+    		listaBoletinesDTO.add(bol);
+    	}
+    	
+    	return listaBoletinesDTO;
+		
+	}
+
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 
-		//Listar las normativas de la unidad administrativa
+		// Listar las normativas de la unidad administrativa.
 		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
 		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
@@ -163,14 +184,14 @@ public class NormativaBackController extends PantallaBaseController {
         ResultadoBusqueda resultadoBusquedaLocal = new ResultadoBusqueda();
         ResultadoBusqueda resultadoBusquedaExterna = new ResultadoBusqueda();
 		
-		//Obtenemos la ordenaci�n por par�metro
+		// Obtenemos la ordenación por parámetro.
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
-		//Determinar si el usuario ha marcado el checkbox de buscar en normaticas externas
+		// Determinar si el usuario ha marcado el checkbox de buscar en normaticas externas.
 		boolean buscaExternas = "true".equals(request.getParameter("cercaExternes"));
 		
-		//Determinar si ha marcado el checkbox "Cerar a totes les meves unitats"
+		// Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
 		boolean meves = "true".equals(request.getParameter("totesUnitats"));
         boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
 		
@@ -183,7 +204,8 @@ public class NormativaBackController extends PantallaBaseController {
 		}
 		
 		try {
-			//Obtener par�metros de b�squeda
+			
+			// Obtener parámetros de búsqueda.
 			String idStr = request.getParameter("id");
 			Long id = -1l;
 									
@@ -191,58 +213,14 @@ public class NormativaBackController extends PantallaBaseController {
 				id = ParseUtil.parseLong( idStr.trim() );
 			
 			paramMap.put("id", idStr != null ? id : null );
-									    
-			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-				Date data = df.parse(request.getParameter("data"));
-				paramMap.put("fecha", data);
-			}
 			
-			if (request.getParameter("data_butlleti") != null && !request.getParameter("data_butlleti").equals("")) {
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-				Date dataButlleti = df.parse(request.getParameter("data_butlleti"));
-				paramMap.put("fechaBoletin", dataButlleti);
-			}
-			
-			if (request.getParameter("numero") != null && !"".equals(request.getParameter("numero")) )
-				paramMap.put("numero", ParseUtil.parseLong(request.getParameter("numero")));
-			
-			if (request.getParameter("tipus") != null && !"".equals(request.getParameter("tipus")) )
-				paramMap.put("tipo", ParseUtil.parseLong(request.getParameter("tipus")));
-			
-			if (request.getParameter("butlleti") != null && !"".equals(request.getParameter("butlleti")) )
-				paramMap.put("boletin", ParseUtil.parseLong(request.getParameter("butlleti")));
-
-			if (request.getParameter("registre") != null && !"".equals(request.getParameter("registre")) )
-				paramMap.put("registro", request.getParameter("registre"));
-
-			if (request.getParameter("llei") != null && !"".equals(request.getParameter("llei")) )
-				paramMap.put("ley", request.getParameter("llei"));			
-			
-            if (request.isUserInRole("sacoper")){
-            	paramMap.put("validacion", "");
-            } else {
-                paramMap.put("validacion", request.getParameter("validacio"));
-            }			
-			
-			// Textes (en todos los campos todos los idiomas)
-			String text = request.getParameter("text");
-			
-			if (text != null && !"".equals(text)) {
-				text = text.toUpperCase();
-
-				paramTrad.put("titulo", text);
-				paramTrad.put("seccion", text);
-				paramTrad.put("apartado", text);
-				paramTrad.put("observaciones", text);
-			} else {
-				paramTrad.put("idioma", idioma);
-			}			
+			// Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+			procesarParametrosBusqueda(request, paramMap, paramTrad, idioma);
 						
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
-			//Información de paginación
+			// Información de paginación.
 			String pagPag = request.getParameter("pagPag");		
 			String pagRes = request.getParameter("pagRes");
 			
@@ -261,7 +239,7 @@ public class NormativaBackController extends PantallaBaseController {
 						paramMap, paramTrad, "externa", idUA, meves, uaFilles,
 						campoOrdenacion, orden, pagPag, pagRes);
 				
-				List<NormativaExterna> listaExternas = castList(NormativaExterna.class, resultadoBusquedaExterna.getListaResultados());				
+				List<NormativaExterna> listaExternas = castList(NormativaExterna.class, resultadoBusquedaExterna.getListaResultados());
 				llistaNormatives.addAll(listaExternas);
 				
 			}
@@ -272,8 +250,8 @@ public class NormativaBackController extends PantallaBaseController {
 							
 				boolean local = NormativaLocal.class.isInstance(normativa);
 				
-				//Sólo guardar registros del idioma por defecto (para evitar registros repetidos en
-				//búsquedas por texto multi-idioma
+				// Sólo guardar registros del idioma por defecto (para evitar registros repetidos en
+				// búsquedas por texto multi-idioma
 				if ( idiomaPorDefecto.equals(normativa.getIdioma() ) ) {					
 					llistaNormativesDTO.add( new NormativaDTO(
 								normativa.getId(), 
@@ -288,11 +266,14 @@ public class NormativaBackController extends PantallaBaseController {
 					);
 					
 				} else {
+					
 					resultadosDescartados++;
-				}									
+					
+				}
+				
 			}
 			
-			//Ordenar lista si se combinan locales y externas
+			// Ordenar lista si se combinan locales y externas.
 			if (buscaExternas) {
 				
 				Collections.sort(llistaNormativesDTO);
@@ -300,7 +281,7 @@ public class NormativaBackController extends PantallaBaseController {
 				if ("DESC".equals(orden))
 					Collections.reverse(llistaNormativesDTO);
 				
-				//Reajustar la lista a las que se han pedido (quitar de ella los que sobran)							
+				// Reajustar la lista a las que se han pedido (quitar de ella los que sobran).						
 				int registrosPag = Integer.parseInt(pagRes);
 				int indice = registrosPag;												
 				
@@ -311,20 +292,89 @@ public class NormativaBackController extends PantallaBaseController {
 			}
 			
 		} catch (ParseException e) {
+			
 			log.error(ExceptionUtils.getStackTrace(e));
 					
 		} catch (DelegateException dEx) {
+			
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
             	log.error("Error: " + dEx.getMessage());
             }
+			
 		}
 		
 		resultats.put("total",   resultadoBusquedaLocal.getTotalResultados() + resultadoBusquedaExterna.getTotalResultados() - resultadosDescartados);
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
+		
+	}
+
+	/**
+	 * Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+	 * 
+	 * @param request
+	 * @param paramMap
+	 * @param paramTrad
+	 * @param idioma
+	 * @throws ParseException
+	 */
+	private void procesarParametrosBusqueda(HttpServletRequest request, Map<String, Object> paramMap,
+			Map<String, String> paramTrad, String idioma) throws ParseException {
+		
+		if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			Date data = df.parse(request.getParameter("data"));
+			paramMap.put("fecha", data);
+		}
+		
+		if (request.getParameter("data_butlleti") != null && !request.getParameter("data_butlleti").equals("")) {
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+			Date dataButlleti = df.parse(request.getParameter("data_butlleti"));
+			paramMap.put("fechaBoletin", dataButlleti);
+		}
+		
+		if (request.getParameter("numero") != null && !"".equals(request.getParameter("numero")) )
+			paramMap.put("numero", ParseUtil.parseLong(request.getParameter("numero")));
+		
+		if (request.getParameter("tipus") != null && !"".equals(request.getParameter("tipus")) )
+			paramMap.put("tipo", ParseUtil.parseLong(request.getParameter("tipus")));
+		
+		if (request.getParameter("butlleti") != null && !"".equals(request.getParameter("butlleti")) )
+			paramMap.put("boletin", ParseUtil.parseLong(request.getParameter("butlleti")));
+
+		if (request.getParameter("registre") != null && !"".equals(request.getParameter("registre")) )
+			paramMap.put("registro", request.getParameter("registre"));
+
+		if (request.getParameter("llei") != null && !"".equals(request.getParameter("llei")) )
+			paramMap.put("ley", request.getParameter("llei"));			
+		
+        if (request.isUserInRole("sacoper")) {
+        	paramMap.put("validacion", "");
+        } else {
+            paramMap.put("validacion", request.getParameter("validacio"));
+        }			
+		
+		// Textes (en todos los campos todos los idiomas).
+		String text = request.getParameter("text");
+		
+		if (text != null && !"".equals(text)) {
+			
+			text = text.toUpperCase();
+
+			paramTrad.put("titulo", text);
+			paramTrad.put("seccion", text);
+			paramTrad.put("apartado", text);
+			paramTrad.put("observaciones", text);
+			
+		} else {
+			
+			paramTrad.put("idioma", idioma);
+			
+		}
+		
 	}
 
 	@RequestMapping(value = "/cercaBoib.do", method = POST)
@@ -408,10 +458,7 @@ public class NormativaBackController extends PantallaBaseController {
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
 			
-	    Map<String, Object> normativaDetall = new HashMap<String, Object>();
-	    List<Object> afectadas = new ArrayList<Object>();
-	    List<Object> procedimientos = new ArrayList<Object>();
-	    
+	    Map<String, Object> normativaDetall = new HashMap<String, Object>();	    
 	    String idiomaUsuario = request.getLocale().getLanguage();
 	    
 	    try {
@@ -437,33 +484,13 @@ public class NormativaBackController extends PantallaBaseController {
 	        normativaDetall.put("id", normativa.getId());
 	        normativaDetall.put("data_norma", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");	   	        
 	        
-        	//Campos por idioma
+        	// Campos por idioma.
         	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
         	for (String idioma : idiomas) {
-        		TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
         		
-    	        normativaDetall.put("idioma_" + idioma + "_titol", traNorm != null ? traNorm.getTitulo() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_pagini", traNorm != null ? traNorm.getPaginaInicial() : "");
-    	        normativaDetall.put("idioma_" + idioma + "_pagfin", traNorm != null ? traNorm.getPaginaFinal() : "");
-    	        if (normativaLocal)
-    	        	normativaDetall.put("idioma_" + idioma + "_responsable", "");	
-    	        else {
-    	        	TraduccionNormativaExterna normExt = (TraduccionNormativaExterna)traNorm;
-    	        	normativaDetall.put("idioma_" + idioma + "_responsable", normExt != null ? normExt.getResponsable() : "");
-    	        }
-    	        	
-    	        normativaDetall.put("idioma_" + idioma + "_observacions", traNorm != null ? traNorm.getObservaciones() : "");
+        		TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
+        		agregarTraduccionNormativaADetalle(traNorm, idioma, normativaDetall, normativaLocal, normativa);
     	        
-    	        //archivo
-    	        if (traNorm != null && traNorm.getArchivo() != null) {
-    	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "normativa/archivo.do?id=" + normativa.getId() + "&lang=" + idioma);
-    	        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", traNorm.getArchivo().getNombre());
-    	        } else {
-    	        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "");
-    	        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", "");
-    	        }    	        
         	}
 	        
 	        normativaDetall.put("numero", normativa.getNumero());	        
@@ -475,50 +502,101 @@ public class NormativaBackController extends PantallaBaseController {
 	        normativaDetall.put("tipus", normativa.getTipo() != null ? normativa.getTipo().getId() : null);	        
 	        normativaDetall.put("validacio", normativa.getValidacion());
 	        
-	        //Normativas afectadas
-	        Set<Afectacion> listaAfectadas = normativa.getAfectadas();	        
-	        for (Afectacion afec : listaAfectadas) {
-	        	Normativa normativaAfectada = afec.getNormativa();	        	        		        		       
-	        	AfectacionDTO afeTran = new AfectacionDTO();	        	
-	        	afeTran.setAfectacioId(afec.getTipoAfectacion().getId());
-	        	
-	        	TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
-	        	if (traTipAfec == null)
-	        		traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion();
-	        	
-	        	afeTran.setAfectacioNom(traTipAfec.getNombre());
-	        	afeTran.setNormaId(normativaAfectada.getId());
-	        	
-	        	TraduccionNormativa traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion(idiomaUsuario);
-	        	if (traNormAfectada == null)
-	        		traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion();
-	        	
-	        	afeTran.setNormaNom(traNormAfectada != null ? obtenerTituloDeEnlaceHtml(traNormAfectada.getTitulo()) : "");
-	        	afectadas.add(afeTran);
-	        }	        
-	        normativaDetall.put("afectacions", afectadas);
+	        // Normativas afectadas.
+	        normativaDetall.put("afectacions", getNormativasAfectadasDTO(normativa, idiomaUsuario));
 	        
-	        //Procedimientos
-	        Set<ProcedimientoLocal> listaProcedimientos = normativa.getProcedimientos();
-	        for (ProcedimientoLocal proc : listaProcedimientos) {
-	        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario); 
-	        	procedimientos.add(new ProcedimientoLocalDTO(proc.getId(), null, traProc != null ? traProc.getNombre() : "", null, null, null, null));
-	        }
-	        normativaDetall.put("procediments", procedimientos);
-	        
+	        // Procedimientos asociados a la normativa.
+	        normativaDetall.put("procediments", getProcedimientosNormativaDTO(normativa, idiomaUsuario));
 	        
 	    } catch (DelegateException dEx) {
+	    	
 	    	log.error("Error: " + dEx.getMessage());
+	    	
 			if (dEx.isSecurityException()) {
 				normativaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 			} else {
 				normativaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
+			
         }
 	    
         return normativaDetall;
+        
 	}
 	
+	private List<ProcedimientoLocalDTO> getProcedimientosNormativaDTO(Normativa normativa, String idiomaUsuario) {
+		
+        Set<ProcedimientoLocal> listaProcedimientos = normativa.getProcedimientos();
+        List<ProcedimientoLocalDTO> procedimientos = new ArrayList<ProcedimientoLocalDTO>();
+        
+        for (ProcedimientoLocal proc : listaProcedimientos) {
+        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)proc.getTraduccion(idiomaUsuario); 
+        	procedimientos.add(new ProcedimientoLocalDTO(proc.getId(), null, traProc != null ? traProc.getNombre() : "", null, null, null, null));
+        }
+        
+		return procedimientos;
+		
+	}
+
+	private List<AfectacionDTO> getNormativasAfectadasDTO(Normativa normativa, String idiomaUsuario) {
+		
+		Set<Afectacion> listaAfectadas = normativa.getAfectadas();
+        List<AfectacionDTO> afectadas = new ArrayList<AfectacionDTO>();
+        
+        for (Afectacion afec : listaAfectadas) {
+        	
+        	Normativa normativaAfectada = afec.getNormativa();	        	        		        		       
+        	AfectacionDTO afeTran = new AfectacionDTO();	        	
+        	afeTran.setAfectacioId(afec.getTipoAfectacion().getId());
+        	
+        	TraduccionTipoAfectacion traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion(idiomaUsuario);
+        	if (traTipAfec == null)
+        		traTipAfec = (TraduccionTipoAfectacion)afec.getTipoAfectacion().getTraduccion();
+        	
+        	afeTran.setAfectacioNom(traTipAfec.getNombre());
+        	afeTran.setNormaId(normativaAfectada.getId());
+        	
+        	TraduccionNormativa traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion(idiomaUsuario);
+        	if (traNormAfectada == null)
+        		traNormAfectada = (TraduccionNormativa)normativaAfectada.getTraduccion();
+        	
+        	afeTran.setNormaNom(traNormAfectada != null ? obtenerTituloDeEnlaceHtml(traNormAfectada.getTitulo()) : "");
+        	afectadas.add(afeTran);
+        	
+        }
+        
+        return afectadas;
+        
+	}
+
+	private void agregarTraduccionNormativaADetalle(TraduccionNormativa traNorm, String idioma,
+			Map<String, Object> normativaDetall, boolean normativaLocal, Normativa normativa) {
+		
+		normativaDetall.put("idioma_" + idioma + "_titol", traNorm != null ? traNorm.getTitulo() : "");
+        normativaDetall.put("idioma_" + idioma + "_enllac", traNorm != null ? traNorm.getEnlace() : "");
+        normativaDetall.put("idioma_" + idioma + "_apartat", traNorm != null ? traNorm.getApartado() : "");
+        normativaDetall.put("idioma_" + idioma + "_pagini", traNorm != null ? traNorm.getPaginaInicial() : "");
+        normativaDetall.put("idioma_" + idioma + "_pagfin", traNorm != null ? traNorm.getPaginaFinal() : "");
+        if (normativaLocal)
+        	normativaDetall.put("idioma_" + idioma + "_responsable", "");	
+        else {
+        	TraduccionNormativaExterna normExt = (TraduccionNormativaExterna)traNorm;
+        	normativaDetall.put("idioma_" + idioma + "_responsable", normExt != null ? normExt.getResponsable() : "");
+        }
+        	
+        normativaDetall.put("idioma_" + idioma + "_observacions", traNorm != null ? traNorm.getObservaciones() : "");
+        
+        //archivo
+        if (traNorm != null && traNorm.getArchivo() != null) {
+        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "normativa/archivo.do?id=" + normativa.getId() + "&lang=" + idioma);
+        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", traNorm.getArchivo().getNombre());
+        } else {
+        	normativaDetall.put("idioma_" + idioma + "_enllas_arxiu", "");
+        	normativaDetall.put("idioma_" + idioma + "_nom_arxiu", "");
+        }
+		
+	}
+
 	@RequestMapping(value = "/guardar.do", method = POST)
 	public ResponseEntity<String> guardar(HttpSession session, HttpServletRequest request) {	
 		
@@ -998,4 +1076,5 @@ public class NormativaBackController extends PantallaBaseController {
     private boolean isModuloModificado(String modulo, Map<String, String> valoresForm) {
         return "1".equals(valoresForm.get(modulo));
     }
+    
 }

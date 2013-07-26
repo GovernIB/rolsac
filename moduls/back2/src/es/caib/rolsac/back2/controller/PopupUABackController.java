@@ -25,11 +25,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @Controller
 @RequestMapping("/pantalles/")
 public class PopupUABackController {
-
+	
 	private static Log log = LogFactory.getLog(PopupUABackController.class);
-		
     private MessageSource messageSource = null;
-
     private UnidadAdministrativaDelegate uaDelegate = null;
 
     @Autowired
@@ -64,25 +62,21 @@ public class PopupUABackController {
                 }
 
             } catch (DelegateException dEx) {
+            	
                 if (dEx.isSecurityException()) {
                 	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-                    // model.put("error", "permisos");
                 } else {
-                    // model.put("error", "altres");
                 	log.error(ExceptionUtils.getStackTrace(dEx));
                 }
+                
             }
-            /*
-             * if (request.getParameter("ficha") != null){
-             * request.setAttribute("ficha", "true"); }
-             */
+
             model.put("tieneHijos", tieneHijos);
 
-        } else {
-            // return mapping.findForward("fail");
         }
-
+        
         return "pantalles/popArbreUA";
+        
     }
 
     private List<UnidadAdministrativa> buscarRaicesUnidadesAdministrativas(boolean padre, boolean todas) throws DelegateException {
@@ -104,13 +98,14 @@ public class PopupUABackController {
             }
             raices = raicesPadre;
         }
+        
         return raices;
+        
     }
     
     @RequestMapping(value = "/popArbreUAExpandir.do")
     public String expandir(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        //log.info("Entramos en expandir");
         List tieneHijos = new ArrayList();
         
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
@@ -157,27 +152,18 @@ public class PopupUABackController {
                 }
 
             }
-/*
-            if (request.getParameter("ficha") != null) {
-                request.setAttribute("ficha", "true");
-            }
-*/
+
         }
-        /* else {
-            return mapping.findForward("fail");
-        }*/
 
         model.put("tieneHijos", tieneHijos);
-      
-       
 
         return "pantalles/popArbreUA";
+
     }
 
     @RequestMapping(value = "/popArbreUAContreure.do")
     public String contraer(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        //log.info("Entramos en contraer");
         List tieneHijos = new ArrayList();
 
         request.setAttribute("idUA", new Long(request.getParameter("idUA")));
@@ -218,15 +204,8 @@ public class PopupUABackController {
                 }
 
             }
-/*
-            if (request.getParameter("ficha") != null) {
-                request.setAttribute("ficha", "true");
-            }
-*/
+
         } 
-        /*else {
-            return mapping.findForward("fail");
-        }*/
 
         model.put("tieneHijos", tieneHijos);
         
@@ -234,5 +213,7 @@ public class PopupUABackController {
         model.put("id_hidden", request.getParameter("idHidden"));        
 
         return "pantalles/popArbreUA";
+        
     }
+    
 }

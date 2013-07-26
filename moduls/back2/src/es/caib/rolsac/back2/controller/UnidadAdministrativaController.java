@@ -91,7 +91,6 @@ public class UnidadAdministrativaController {
 		
 	}
 
-
 	@RequestMapping(value = "/cambiarUA.do")
 	public String cambiarUA(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
 		try {
@@ -120,8 +119,8 @@ public class UnidadAdministrativaController {
 		return "redirect:" + redirectTo;
 	}
 	
-	
 	public static void actualizarUAMigaPan(HttpSession session, UnidadAdministrativa ua) {
 		session.setAttribute("unidadAdministrativa", ua);		
 	}
+	
 }

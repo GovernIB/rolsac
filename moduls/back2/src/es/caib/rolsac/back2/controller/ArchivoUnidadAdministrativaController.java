@@ -34,10 +34,10 @@ public class ArchivoUnidadAdministrativaController extends ArchivoController {
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segÃºn el parÃ¡metro "t" (tipo)		
 		switch (tipo) {
 		
-			//Foto responsable pequeña
+			//Foto responsable pequeÃ±a
 			case 1:
 				archivo = uaDelegate.obtenerFotoPequenyaUA(id);
 				break;

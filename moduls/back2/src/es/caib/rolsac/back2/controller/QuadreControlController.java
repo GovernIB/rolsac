@@ -54,11 +54,11 @@ public class QuadreControlController extends PantallaBaseController {
 
 		GregorianCalendar dataActual = new GregorianCalendar();
 		
-		//Afegim un dia mes per no haver de mirar les hores i minuts al between
+		// Afegim un dia mes per no haver de mirar les hores i minuts al between.
 		dataActual.add(Calendar.DATE, +1);
 		UnidadAdministrativa unitatAdministrativa = new UnidadAdministrativa();
 
-		// Comprobamos si tenemos que recorrer todos los nodos
+		// Comprobamos si tenemos que recorrer todos los nodos.
 		List<Long> llistaUnitatAdministrativaId = new ArrayList<Long>();
 		
 		try {
@@ -88,17 +88,18 @@ public class QuadreControlController extends PantallaBaseController {
 					
 				} else {
 					
-					// Sólo se mostrarán datos si el usuario tiene acceso a la UA o si es administrador
+					// SÃ³lo se mostrarÃ¡n datos si el usuario tiene acceso a la UA o si es administrador.
 					if (usuari.getUnidadesAdministrativas().contains(unitatAdministrativa)  || usuariSuper ) { 
 						llistaUnitatAdministrativaId.add(unitatAdministrativa.getId());
-					} 
+					}
+					
 				}
 							
 			} else {
 		        
 		        UnidadAdministrativaDelegate unitatAdministrativaDelegate = DelegateUtil.getUADelegate();
 		        
-		     // Filtrar sólo por las UAs del usuario
+		        // Filtrar sï¿½lo por las UAs del usuario
 	            for (UnidadAdministrativa unitat: (Set<UnidadAdministrativa>)usuari.getUnidadesAdministrativas()) 
 	                llistaUnitatAdministrativaId.addAll(unitatAdministrativaDelegate.cargarArbolUnidadId(unitat.getId()));
 	            
@@ -182,6 +183,7 @@ public class QuadreControlController extends PantallaBaseController {
 		loadIndexModel (model, request);
 		
 		return "index";		
+		
 	}
 	
 }

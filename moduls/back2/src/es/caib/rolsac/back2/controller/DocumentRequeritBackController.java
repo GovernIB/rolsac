@@ -4,7 +4,6 @@ import static es.caib.rolsac.utils.LogUtils.logException;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.CatalegDocuments;
 import org.ibit.rol.sac.model.DocumentTramit;
 import org.ibit.rol.sac.model.ExcepcioDocumentacio;
-import org.ibit.rol.sac.model.Taxa;
 import org.ibit.rol.sac.model.TraduccionCatalegDocuments;
 import org.ibit.rol.sac.model.TraduccionDocumento;
-import org.ibit.rol.sac.model.TraduccionTaxa;
 import org.ibit.rol.sac.model.Tramite;
 import org.ibit.rol.sac.model.dto.IdNomDTO;
 import org.ibit.rol.sac.persistence.delegate.CatalegDocumentsDelegate;
@@ -54,67 +51,68 @@ public class DocumentRequeritBackController {
 	private MessageSource messageSource = null;
 	private static final long DOC_CATALEG = 1;
 	private static final long DOC_ESPECIFIC = 2;
-	
-    @Autowired
-    public void setMessageSource(MessageSource messageSource){
-        this.messageSource = messageSource;
-    }
-        
-    @RequestMapping(value = "/documentsRequerits.do", method = GET)
-    public void obtenerTramite(HttpServletRequest request, HttpServletResponse response) {}    
-    
-    @RequestMapping(value = "/carregarDocumentRequerit.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {    
-    	    	
+
+	@Autowired
+	public void setMessageSource(MessageSource messageSource){
+		this.messageSource = messageSource;
+	}
+
+	@RequestMapping(value = "/documentsRequerits.do", method = GET)
+	public void obtenerTramite(HttpServletRequest request, HttpServletResponse response) {}    
+
+	@RequestMapping(value = "/carregarDocumentRequerit.do", method = POST)
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {    
+
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-    	
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
 		try {
+			
 			Long id = new Long(request.getParameter("id"));
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();								
-			
+
 			DocumentTramit doc = tramiteDelegate.obtenirDocument(id);
 
 			Map<String, Object> mapDoc = new HashMap<String, Object>();
-			
+
 			Long tipusDocRequerit=null;
 			if (doc.getDocCatalogo() != null){
-			  tipusDocRequerit=DOC_CATALEG;
+				tipusDocRequerit=DOC_CATALEG;
 			} else {
-			  tipusDocRequerit=DOC_ESPECIFIC;
+				tipusDocRequerit=DOC_ESPECIFIC;
 			}
-			
-      String idDocCat = "";
-      String idExcDoc = "" ;
-      if (tipusDocRequerit==DOC_CATALEG){
-        idDocCat = "" + doc.getDocCatalogo().getId();
-        CatalegDocumentsDelegate catalegDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-        CatalegDocuments catDoc = catalegDelegate.obtenirDocumentoCataleg(doc.getDocCatalogo().getId());
-        ExcepcioDocumentacio excepcio=catDoc.getExcepcioDocumentacio();
-        if (excepcio!=null){
-          idExcDoc = "" + excepcio.getId();
-        } 
-      } else { // DOCUMENT ESPEC�FIC
-          if (doc.getExcepcioDocumentacio()!=null){
-            idExcDoc = "" + doc.getExcepcioDocumentacio().getId();
-            ExcepcioDocumentacioDelegate excDocDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
-            ExcepcioDocumentacio excepcio = excDocDelegate.obtenirExcepcioDocumentacio(doc.getExcepcioDocumentacio().getId());
-            if (excepcio!=null){
-              idExcDoc = "" + excepcio.getId();
-            }
-          }
-      }
-      mapDoc.put("item_tipdoc", tipusDocRequerit);
-      mapDoc.put("item_id", doc.getId());      
-      mapDoc.put("cataleg_id", idDocCat);
-      mapDoc.put("excepcio_id", idExcDoc);
-      
+
+			String idDocCat = "";
+			String idExcDoc = "" ;
+			if (tipusDocRequerit==DOC_CATALEG){
+				idDocCat = "" + doc.getDocCatalogo().getId();
+				CatalegDocumentsDelegate catalegDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+				CatalegDocuments catDoc = catalegDelegate.obtenirDocumentoCataleg(doc.getDocCatalogo().getId());
+				ExcepcioDocumentacio excepcio=catDoc.getExcepcioDocumentacio();
+				if (excepcio!=null){
+					idExcDoc = "" + excepcio.getId();
+				} 
+			} else { // DOCUMENT ESPEC�FIC
+				if (doc.getExcepcioDocumentacio()!=null){
+					idExcDoc = "" + doc.getExcepcioDocumentacio().getId();
+					ExcepcioDocumentacioDelegate excDocDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+					ExcepcioDocumentacio excepcio = excDocDelegate.obtenirExcepcioDocumentacio(doc.getExcepcioDocumentacio().getId());
+					if (excepcio!=null){
+						idExcDoc = "" + excepcio.getId();
+					}
+				}
+			}
+			mapDoc.put("item_tipdoc", tipusDocRequerit);
+			mapDoc.put("item_id", doc.getId());      
+			mapDoc.put("cataleg_id", idDocCat);
+			mapDoc.put("excepcio_id", idExcDoc);
+
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> idiomas = idiomaDelegate.listarLenguajes();
 			TraduccionDocumento traDoc;
-			
+
 			for (String idioma: idiomas) {
 				traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
 				if (traDoc != null) {
@@ -123,7 +121,7 @@ public class DocumentRequeritBackController {
 					} else {
 						mapDoc.put("idioma_titol_" + idioma, "");
 					}
-					
+
 					if (traDoc.getDescripcion() != null) {
 						mapDoc.put("idioma_descripcio_" + idioma, traDoc.getDescripcion());
 					} else {
@@ -131,11 +129,11 @@ public class DocumentRequeritBackController {
 					}
 				}
 			}
-						  
+
 			resultats.put("documentRequerit", mapDoc);
 			resultats.put("id", doc.getId());
-    		
-    	} catch (DelegateException dEx) {
+
+		} catch (DelegateException dEx) {
 			logException(log, dEx);
 
 			if (dEx.isSecurityException()) {
@@ -143,17 +141,18 @@ public class DocumentRequeritBackController {
 			} else {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}            
-    	} catch (NumberFormatException nFEx) {
-    		logException(log, nFEx);
-    		resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));    		
-    	}
-    	
-    	return resultats;    	
-    }
-    
+		} catch (NumberFormatException nFEx) {
+			logException(log, nFEx);
+			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));    		
+		}
+
+		return resultats;
+		
+	}
+
 	@RequestMapping(value = "/guardarDocumentRequerit.do", method = POST)
 	public @ResponseBody ResponseEntity<String> guardarDocumentRequerit(HttpSession session, HttpServletRequest request) {		
-		
+
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=UTF-8");
 
@@ -164,13 +163,12 @@ public class DocumentRequeritBackController {
 		TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();	
 
 		try {
-			
+
 			Tramite tramite = tramiteDelegate.obtenerTramite( new Long(request.getParameter("docReqTramitId")) );			
-			
+
 			String docReqId = request.getParameter("docReqId"); 
 			Long tipusDocRequerit = Long.parseLong(request.getParameter("item_tipdoc_ca"));
-			
-			
+
 			boolean edicion = !"".equals(docReqId);
 			if ( !edicion ) {
 				docTramit = new DocumentTramit();
@@ -178,114 +176,116 @@ public class DocumentRequeritBackController {
 			} else{
 				docTramit = DelegateUtil.getTramiteDelegate().obtenirDocument(new Long(docReqId));
 			}
-				
-			
+
 			// Idiomas
 			TraduccionDocumento traduccionDoc;			
 			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 			List<String> langs = idiomaDelegate.listarLenguajes();
 			Map traducciones = new HashMap(langs.size());
-			
+
 			for (String lang: langs) {
-				
+
 				traduccionDoc = (TraduccionDocumento)docTramit.getTraduccion(lang);
 				if ( traduccionDoc == null ){ 
 					traduccionDoc = new TraduccionDocumento();
 				}
-				
+
 				String titolDoc = null;	
 				if (tipusDocRequerit == DOC_ESPECIFIC){
 					titolDoc = request.getParameter("doc_requerit_titol_" + lang);
 				}
-				
+
 				traduccionDoc.setTitulo( RolUtil.limpiaCadena(titolDoc) );
 				traduccionDoc.setDescripcion( RolUtil.limpiaCadena(request.getParameter("doc_requerit_descripcio_" + lang)) );
+
+				traducciones.put(lang, traduccionDoc);
 				
-				traducciones.put(lang, traduccionDoc);			
 			}
-			
+
 			docTramit.setTraduccionMap(traducciones);
 			// Fin idiomas
-			
-		    CatalegDocuments catDoc=null;
+
+			CatalegDocuments catDoc=null;
 			ExcepcioDocumentacio excepcioDoc=null;
-						
+
 			if (tipusDocRequerit==DOC_CATALEG){
-	 		  try {
-				  Long IdDocCataleg = Long.parseLong(request.getParameter("item_cataleg_ca"));
-				  CatalegDocumentsDelegate catDocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-				  catDoc  = catDocDelegate.obtenirDocumentoCataleg(IdDocCataleg);
-		      nomDoc =((TraduccionCatalegDocuments)catDoc.getTraduccion("ca")).getNombre();
-			 } catch (NumberFormatException e) {
-				  error = messageSource.getMessage("error.numeracio", null, request.getLocale());
-				  throw new NumberFormatException();
-			 }
+				try {
+					Long IdDocCataleg = Long.parseLong(request.getParameter("item_cataleg_ca"));
+					CatalegDocumentsDelegate catDocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+					catDoc  = catDocDelegate.obtenirDocumentoCataleg(IdDocCataleg);
+					nomDoc =((TraduccionCatalegDocuments)catDoc.getTraduccion("ca")).getNombre();
+				} catch (NumberFormatException e) {
+					error = messageSource.getMessage("error.numeracio", null, request.getLocale());
+					throw new NumberFormatException();
+				}
 
-		  } else { //DOCUMENT ESPEC�FIC
-		    String item_excepcio = request.getParameter("item_excepcio_ca");
-		    String item_check_excepcio = request.getParameter("item_check_excepcio_ca");
-		    
-		    if (item_excepcio!=null && item_excepcio.equalsIgnoreCase("") && item_check_excepcio!=null ){
-		      try{
-		        throw new Exception(messageSource.getMessage("document_requerit.formulari_docreq_tramit.causes_excepcio.obligatori", null, request.getLocale()));
-		      }catch (Exception e){
-		        result = new IdNomDTO(-3l, e.getMessage());
-		      }
-		    }
-		    else if (item_excepcio!=null && !item_excepcio.equalsIgnoreCase("")){
-		      try{
-		        Long idExcepcioDoc = Long.parseLong(item_excepcio);
-		        ExcepcioDocumentacioDelegate excDocDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
-		        excepcioDoc = excDocDelegate.obtenirExcepcioDocumentacio(idExcepcioDoc);
-		      } catch (NumberFormatException e) {
-            error = messageSource.getMessage("error.numeracio", null, request.getLocale());
-            throw new NumberFormatException();
-          }
-		    } 
-		    nomDoc =((TraduccionDocumento) docTramit.getTraduccion("ca")).getTitulo();
-  		}
-			
-      docTramit.setDocCatalogo(catDoc);
-      docTramit.setExcepcioDocumentacio(excepcioDoc);
-      docTramit.setTipus(new Integer(request.getParameter("tipDoc"))); //TIPUS DOCUMENT TR�MIT (FORM,INFO,REQ)
-			
-      tramiteDelegate.grabarDocument(docTramit, tramite.getId());
+			} else { //DOCUMENT ESPECÍFIC
+				String item_excepcio = request.getParameter("item_excepcio_ca");
+				String item_check_excepcio = request.getParameter("item_check_excepcio_ca");
 
+				if (item_excepcio!=null && item_excepcio.equalsIgnoreCase("") && item_check_excepcio!=null ){
+					try{
+						throw new Exception(messageSource.getMessage("document_requerit.formulari_docreq_tramit.causes_excepcio.obligatori", null, request.getLocale()));
+					}catch (Exception e){
+						result = new IdNomDTO(-3l, e.getMessage());
+					}
+				}
+				else if (item_excepcio!=null && !item_excepcio.equalsIgnoreCase("")){
+					try{
+						Long idExcepcioDoc = Long.parseLong(item_excepcio);
+						ExcepcioDocumentacioDelegate excDocDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+						excepcioDoc = excDocDelegate.obtenirExcepcioDocumentacio(idExcepcioDoc);
+					} catch (NumberFormatException e) {
+						error = messageSource.getMessage("error.numeracio", null, request.getLocale());
+						throw new NumberFormatException();
+					}
+				} 
+				nomDoc =((TraduccionDocumento) docTramit.getTraduccion("ca")).getTitulo();
+			}
 
-        } catch (DelegateException dEx) {
-        	
-            if (dEx.isSecurityException()) {
-                error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomDTO(-1l, error);
-            } else {
-                error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getStackTrace(dEx)); 
-            }		
-        }
-        
-        if (result == null) {
-        	result = new IdNomDTO();
-        	result.setId(docTramit.getId());
-        	result.setNom(nomDoc);        
-        }
-        
-		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);		
+			docTramit.setDocCatalogo(catDoc);
+			docTramit.setExcepcioDocumentacio(excepcioDoc);
+			docTramit.setTipus(new Integer(request.getParameter("tipDoc"))); //TIPUS DOCUMENT TR�MIT (FORM,INFO,REQ)
+
+			tramiteDelegate.grabarDocument(docTramit, tramite.getId());
+
+		} catch (DelegateException dEx) {
+
+			if (dEx.isSecurityException()) {
+				error = messageSource.getMessage("error.permisos", null, request.getLocale());
+				result = new IdNomDTO(-1l, error);
+			} else {
+				error = messageSource.getMessage("error.altres", null, request.getLocale());
+				result = new IdNomDTO(-2l, error);
+				log.error(ExceptionUtils.getStackTrace(dEx)); 
+			}		
+		}
+
+		if (result == null) {
+			result = new IdNomDTO();
+			result.setId(docTramit.getId());
+			result.setNom(nomDoc);        
+		}
+
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+		
 	}
-	
+
 	@RequestMapping(value = "/esborrarDocumentRequerit.do", method = POST)	
 	public @ResponseBody IdNomDTO esborrarDocumentRequerit(HttpServletRequest request) {
+		
 		IdNomDTO resultatStatus = new IdNomDTO();
-		
+
 		Long docReqId = new Long(request.getParameter("docReqId"));
-		
+
 		try {
+			
 			TramiteDelegate tramiteDelegate = DelegateUtil.getTramiteDelegate();
 			tramiteDelegate.borrarDocument(docReqId);
-		
+
 			resultatStatus.setId(1l);
 			resultatStatus.setNom("correcte");
-			
+
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				resultatStatus.setId(-1l);
@@ -296,63 +296,69 @@ public class DocumentRequeritBackController {
 		}
 
 		return resultatStatus;
+		
 	}	
-	
-  @RequestMapping(value = "/recuperaExcepcionsDocumentacio.do", method = POST)
-  public @ResponseBody Map<String, Object> recuperaExcepcionsDocumentacio(HttpSession session, HttpServletRequest request) {    
-          
-  HttpHeaders responseHeaders = new HttpHeaders();
-  responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-    
-    Map<String, Object> resultats = new HashMap<String, Object>();
-    
-  try {
-    Long id = new Long(request.getParameter("id"));
-    
-    CatalegDocumentsDelegate catalegDelegate = DelegateUtil.getCatalegDocumentsDelegate();
-    
-    CatalegDocuments catDoc = catalegDelegate.obtenirDocumentoCataleg(id);
-    
-    ExcepcioDocumentacio excepcio=catDoc.getExcepcioDocumentacio();
-    if (excepcio!=null){
-      resultats.put("excepcio_id", excepcio.getId());
-    } else {
-      resultats.put("excepcio_id", "");
-    }
-    resultats.put("id", catDoc.getId());
-    } catch (DelegateException dEx) {
-    logException(log, dEx);
 
-    if (dEx.isSecurityException()) {
-      resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-    } else {
-      resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-    }            
-    } catch (NumberFormatException nFEx) {
-      logException(log, nFEx);
-      resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));        
-    }
-    
-    return resultats;     
-  }
-  /*private Map actuailizaCampsMultiidioma (HttpServletRequest request) {
+	@RequestMapping(value = "/recuperaExcepcionsDocumentacio.do", method = POST)
+	public @ResponseBody Map<String, Object> recuperaExcepcionsDocumentacio(HttpSession session, HttpServletRequest request) {    
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+
+		Map<String, Object> resultats = new HashMap<String, Object>();
+
+		try {
+			Long id = new Long(request.getParameter("id"));
+
+			CatalegDocumentsDelegate catalegDelegate = DelegateUtil.getCatalegDocumentsDelegate();
+
+			CatalegDocuments catDoc = catalegDelegate.obtenirDocumentoCataleg(id);
+
+			ExcepcioDocumentacio excepcio=catDoc.getExcepcioDocumentacio();
+			if (excepcio!=null){
+				resultats.put("excepcio_id", excepcio.getId());
+			} else {
+				resultats.put("excepcio_id", "");
+			}
+			resultats.put("id", catDoc.getId());
+		} catch (DelegateException dEx) {
+			logException(log, dEx);
+
+			if (dEx.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			} else {
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}            
+		} catch (NumberFormatException nFEx) {
+			logException(log, nFEx);
+			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));        
+		}
+
+		return resultats;    
+		
+	}
+	
+	/*
+		TODO: pendiente de confirmación para borrado.
+	*/
+	/*private Map actuailizaCampsMultiidioma (HttpServletRequest request) {
     // Idiomas
     TraduccionDocumento traduccionDoc;      
     IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
     List<String> langs = idiomaDelegate.listarLenguajes();
-  
+
     Map traducciones = new HashMap(langs.size());     
-    
+
     for (String lang: langs) {
-      
+
       traduccionDoc = (TraduccionDocumento) docTramit.getTraduccion(lang);
-      
+
       if ( traduccionDoc == null ) 
         traduccionDoc = new TraduccionDocumento();
-      
+
       traduccionDoc.setTitulo(request.getParameter("doc_requerit_titol_" + lang));
       traduccionDoc.setDescripcion(request.getParameter("doc_requerit_descripcio_" + lang));
-      
+
       traducciones.put(lang, traduccionDoc);
       return traducciones;
     }

@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.persistence.delegate.DelegateUtil;
 import org.ibit.rol.sac.persistence.delegate.FichaDelegate;
-import org.ibit.rol.sac.persistence.delegate.NormativaDelegate;
-import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -36,7 +34,7 @@ public class ArchivoFichaController extends ArchivoController {
 		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
 		Archivo archivo = null;
 		
-		//Obtener archivo según el parametro "t" (tipo)		
+		//Obtener archivo segï¿½n el parametro "t" (tipo)		
 		switch (tipo) {
 		
 			// Icona
