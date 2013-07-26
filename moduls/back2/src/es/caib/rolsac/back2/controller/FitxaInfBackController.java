@@ -32,6 +32,7 @@ import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
+import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
@@ -287,243 +288,290 @@ public class FitxaInfBackController extends PantallaBaseController {
         return resultats;
     
     }
-
+    
+    
     @RequestMapping(value = "/pagDetall.do", method = POST)
-    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-
-        Map<String, Object> resultats = new HashMap<String, Object>();
-        List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-        List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
-        List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
-        List<FichaUADTO> llistaFichaUADTO = new ArrayList<FichaUADTO>();
-        List<EnlaceDTO> llistaEnllassosDTO = new ArrayList<EnlaceDTO>();
-        
-        FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-        
-        Long id = new Long(request.getParameter("id"));
-        String lang = request.getLocale().getLanguage();
-        
-        try {
-        
-            Ficha fitxa = fitxaDelegate.obtenerFicha(id);
-        
-            resultats.put("item_id", fitxa.getId());
-
-            resultats.put("item_estat", fitxa.getValidacion());
-
-            resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
-
-            resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
-
-            //resultats.put("caducat","S");
-            
-            // Idiomas
-            if (fitxa.getTraduccion("ca") != null) {
-                resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion("ca"));
-            } else {
-                resultats.put("ca", new TraduccionFicha());
-            }
-
-            if (fitxa.getTraduccion("es") != null) {
-                resultats.put("es", (TraduccionFicha) fitxa.getTraduccion("es"));
-            } else {
-                resultats.put("es", new TraduccionFicha());
-            }
-
-            if (fitxa.getTraduccion("en") != null) {
-                resultats.put("en", (TraduccionFicha) fitxa.getTraduccion("en"));
-            } else {
-                resultats.put("en", new TraduccionFicha());
-            }
-
-            if (fitxa.getTraduccion("de") != null) {
-                resultats.put("de", (TraduccionFicha) fitxa.getTraduccion("de"));
-            } else {
-                resultats.put("de", new TraduccionFicha());
-            }
-
-            if (fitxa.getTraduccion("fr") != null) {
-                resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion("fr"));
-            } else {
-                resultats.put("fr", new TraduccionFicha());
-            }
-            // Fin idiomas
-            
-            // Documentos relacionados
-			if (fitxa.getDocumentos() != null) {
-				Map<String, Object> mapDoc;
-				List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
-			
-				for(Documento doc: fitxa.getDocumentos()) {
-					if (doc != null) {
-						// Montar map solo con los campos 'titulo' de las traducciones del documento.
-						Map<String, String> titulos = new HashMap<String, String>();
-						IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-						List<String> idiomas = idiomaDelegate.listarLenguajes();
-						String nombre;
-						TraduccionDocumento traDoc;
-						
-						for (String idioma: idiomas) {
-							traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
-							if (traDoc != null && traDoc.getTitulo() != null) {
-								nombre = traDoc.getTitulo();
-							} else {
-								nombre = "";
-							}
-							titulos.put(idioma, nombre);
-						}
-		
-						mapDoc = new HashMap<String, Object>(3);
-						mapDoc.put("id", doc.getId());
-						mapDoc.put("orden", doc.getOrden());
-						mapDoc.put("nombre", titulos);
-						
-		                llistaDocuments.add(mapDoc);
-					} else {
-						log.error("La fitxa " + fitxa.getId() + " te un document null.");
-					}
-	            }
-				
-				resultats.put("documents", llistaDocuments);
-			} else {
-	            resultats.put("documents", null);
-	        } 
-            // Fin documentos relacionados
-            
-            
-            // Icona
-            if (fitxa.getIcono() != null){
-            	resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=1");
-                resultats.put("item_icona", fitxa.getIcono().getNombre());
-            } else {
-            	resultats.put("item_icona_enllas_arxiu", "");
-                resultats.put("item_icona", "");
-            }
-            
-            // Banner
-            if (fitxa.getBaner() != null) {
-            	resultats.put("item_banner_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=2");
-                resultats.put("item_banner", fitxa.getBaner().getNombre());
-            } else {
-                resultats.put("item_banner_enllas_arxiu", "");
-                resultats.put("item_banner", "");
-            }  
-            
-            // Imatge
-            if (fitxa.getImagen() != null) {
-            	resultats.put("item_imatge_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=3");
-            	resultats.put("item_imatge", fitxa.getImagen().getNombre());
-            } else {
-            	resultats.put("item_imatge_enllas_arxiu", "");
-            	resultats.put("item_imatge", "");
-            }
-            
-            resultats.put("item_youtube", fitxa.getUrlVideo());
-            
-            resultats.put("item_forum", fitxa.getUrlForo());           
-
+    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	
+    	try {
+            String lang = request.getLocale().getLanguage();
+            Long id = new Long(request.getParameter("id"));
+        	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+        	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
+        	
+        	resultats.put("item_id", fitxa.getId());
+        	resultats.put("item_estat", fitxa.getValidacion());
+        	resultats.put("item_data_publicacio", DateUtils.formatDateSimpleTime(fitxa.getFechaPublicacion()));
+        	resultats.put("item_data_caducitat", DateUtils.formatDateSimpleTime(fitxa.getFechaCaducidad()));
+        	resultats.put("item_youtube", fitxa.getUrlVideo());
+            resultats.put("item_forum", fitxa.getUrlForo());
             resultats.put("item_responsable", fitxa.getResponsable());
-            
             resultats.put("item_notes", fitxa.getInfo());
-            
-            //Materias asociadas
-            
-            if (fitxa.getMaterias() != null) {             
-            
-                for(Materia materia : fitxa.getMaterias()){                
-                	llistaMateriesDTO.add(new IdNomDTO(  materia.getId(), 
-                                                                     materia.getNombreMateria(lang)
-                                                                           ));                
-                   }
-                
-                resultats.put("materies", llistaMateriesDTO);
-            
-            } else {
-                resultats.put("materies", null);
-            } 
-           
-            //Fets vitals
-            
-            if (fitxa.getHechosVitales() != null) {             
-                
-                for(HechoVital fetVital : fitxa.getHechosVitales()){
-                    TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-                    llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
-                                                                     thv == null ? "" : thv.getNombre()                                                                       
-                                                                     ));                
-                   }
-                
-                resultats.put("fetsVitals", llistaFetsVitalsDTO);
-            
-            } else {
-                resultats.put("fetsVitals", null);
-            }
-            
-            //Publics Objectiu
-            
-            if (fitxa.getPublicosObjetivo() != null) {             
-                
-                for(PublicoObjetivo publicObj : fitxa.getPublicosObjetivo()){
-                	TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) publicObj.getTraduccion(lang);
-                    llistaPublicObjectiuDTO.add(new IdNomDTO(publicObj.getId(), 
-                    		tpob == null ? "" : tpob.getTitulo()));                
-                   }
-                
-                resultats.put("publicsObjectiu", llistaPublicObjectiuDTO);
-            
-            } else {
-                resultats.put("publicsObjectiu", null);
-            }
-            
-            //Relaci� Ficha-Seccio-UA
-            
-            if (fitxa.getFichasua() != null){
-                for(FichaUA fichaUA : fitxaDelegate.listFichasUA(fitxa.getId())){
-                    TraduccionSeccion tse = (TraduccionSeccion) fichaUA.getSeccion().getTraduccion(lang);
-                    llistaFichaUADTO.add(new FichaUADTO(fichaUA.getId(),
-                                                                    fichaUA.getUnidadAdministrativa().getId(),
-                                                                    fichaUA.getUnidadAdministrativa().getNombreUnidadAdministrativa(lang),
-                                                                    fichaUA.getSeccion().getId(),
-                                                                    tse == null ? "" : tse.getNombre(),
-                                                                    null,
-                                                                    null,
-                                                                    fichaUA.getOrden(),
-                                                                    fichaUA.getOrdenseccion())
-                                                                    );                    
-                }
-                resultats.put("seccUA", llistaFichaUADTO);
-            } else {
-                resultats.put("seccUA", null);
-            }
-           
-            //Enlla�os
-            if (fitxa.getEnlaces() != null){
-                for (Enlace enllas : fitxa.getEnlaces()){
-                	if (enllas != null) {
-						llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(),
-								enllas.getOrden(), enllas.getTraduccionMap()));
-                	}
-                    
-                }
-                resultats.put("enllassos", llistaEnllassosDTO);
-            } else {
-                resultats.put("enllassos", null);
-            }
-            
+        	//resultats.put("caducat","S");
+        	
+        	recuperaFitxaIdioma(resultats, fitxa);				// Recuperar las fichas según el idioma.
+        	recuperaFitxaDocs(resultats, fitxa);				// Recuperar los documentos asociados a una ficha.
+        	recuperaFitxaIcono(resultats, fitxa);				// Recuperar el icono de una ficha.
+        	recuperaFitxaBanner(resultats, fitxa);				// Recuperar los banners de una ficha.
+        	recuperaFitxaImatge(resultats, fitxa);				// Recuperar la imagen de una ficha.
+        	recuperaFitxaMateries(resultats, fitxa, lang);		// Recuperar las materias asociadas a una ficha.
+        	recuperaFitxaFetsVitals(resultats, fitxa, lang);	// Recuperar los hechos vitales asociados a una ficha.
+        	recuperaFitxaPO(resultats, fitxa, lang);			// Recuperar los públicos objetiovs de una ficha.
+        	recuperaFitxaRelacio(resultats, fitxa, lang);		// Recuperar las relaciones ficha-sección-UA
+        	recuperaFitxaEnllasos(resultats, fitxa);			// Recuperar los enlaces de una ficha.
+        	
         } catch (DelegateException dEx) {
         	log.error("Error: " + ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-        }    
-                
-        return resultats;
+        	if (dEx.isSecurityException())
+        		resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+        	else
+        		resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+        }
+    	return resultats;
     }
-
+    
+    /*
+     * Función que recupera el contenido de las fichas según el idioma
+     */
+    private void recuperaFitxaIdioma(Map<String, Object> resultats, Ficha fitxa)
+    {
+    	String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
+    	
+    	if (fitxa.getTraduccion("ca") != null) {
+            resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion("ca"));
+        } else {
+        	if (fitxa.getTraduccion(langDefault) != null)
+        		resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	else
+        		resultats.put("ca", new TraduccionFicha());
+        }
+    	
+    	if (fitxa.getTraduccion("es") != null) {
+            resultats.put("es", (TraduccionFicha) fitxa.getTraduccion("es"));
+        } else {
+        	if (fitxa.getTraduccion(langDefault) != null)
+        		resultats.put("es", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	else
+        		resultats.put("es", new TraduccionFicha());
+        }
+    	
+    	if (fitxa.getTraduccion("en") != null) {
+            resultats.put("en", (TraduccionFicha) fitxa.getTraduccion("en"));
+        } else {
+        	if (fitxa.getTraduccion(langDefault) != null)
+        		resultats.put("en", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	else
+        		resultats.put("en", new TraduccionFicha());
+        }
+    	
+    	if (fitxa.getTraduccion("de") != null) {
+            resultats.put("de", (TraduccionFicha) fitxa.getTraduccion("de"));
+        } else {
+        	if (fitxa.getTraduccion(langDefault) != null)
+        		resultats.put("de", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	else
+        		resultats.put("de", new TraduccionFicha());
+        }
+    	
+    	if (fitxa.getTraduccion("fr") != null) {
+            resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion("fr"));
+        } else {
+        	if (fitxa.getTraduccion(langDefault) != null)
+        		resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	else
+        		resultats.put("fr", new TraduccionFicha());
+        }
+    }
+    
+    /*
+	 * Función para recuperar los documentos relaciohnados con la ficha.
+	 */
+	private void recuperaFitxaDocs(Map<String, Object> resultats, Ficha fitxa) throws DelegateException
+	{
+		if (fitxa.getDocumentos() != null) {
+			Map<String, Object> mapDoc;
+			List<Map<String, Object>> llistaDocuments = new ArrayList<Map<String, Object>>();
+			for (Documento doc: fitxa.getDocumentos()) {
+				if (doc != null) {
+					// Montar map solo con los campos 'titulo' de las traducciones del documento.
+					Map<String, String> titulos = new HashMap<String, String>();
+					IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+					List<String> idiomas = idiomaDelegate.listarLenguajes();
+					String nombre;
+					TraduccionDocumento traDoc;
+					for (String idioma: idiomas) {
+						traDoc = (TraduccionDocumento) doc.getTraduccion(idioma);
+						if (traDoc != null && traDoc.getTitulo() != null)
+							nombre = traDoc.getTitulo();
+						
+						else
+							nombre = "";
+						
+						titulos.put(idioma, nombre);
+						
+					}
+					mapDoc = new HashMap<String, Object>(3);
+					mapDoc.put("id", doc.getId());
+					mapDoc.put("orden", doc.getOrden());
+					mapDoc.put("nombre", titulos);
+					llistaDocuments.add(mapDoc);
+					
+				} else {
+					log.error("La fitxa " + fitxa.getId() + " te un document null.");
+					
+				}
+			}
+			resultats.put("documents", llistaDocuments);
+			
+		} else {
+			resultats.put("documents", null);
+			
+		}
+	}
+	
+	/*
+	 * Función para recuperar el icono.
+	 */
+	private void recuperaFitxaIcono(Map<String, Object> resultats, Ficha fitxa)
+	{
+		if (fitxa.getIcono() != null) {
+			resultats.put("item_icona_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=1");
+			resultats.put("item_icona", fitxa.getIcono().getNombre());
+		} else {
+			resultats.put("item_icona_enllas_arxiu", "");
+			resultats.put("item_icona", "");
+		}
+	}
+	
+	/*
+	 * Función para recuperar el banner
+	 */
+	private void recuperaFitxaBanner(Map<String, Object> resultats, Ficha fitxa)
+	{
+		if (fitxa.getBaner() != null) {
+			resultats.put("item_banner_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=2");
+			resultats.put("item_banner", fitxa.getBaner().getNombre());
+		} else {
+			resultats.put("item_banner_enllas_arxiu", "");
+			resultats.put("item_banner", "");
+		}
+	}
+	
+	/*
+	 * Función para recuperar la imagen de una ficha.
+	 */
+	private void recuperaFitxaImatge(Map<String, Object> resultats, Ficha fitxa)
+	{
+		if (fitxa.getImagen() != null) {
+			resultats.put("item_imatge_enllas_arxiu", "fitxainf/archivo.do?id=" + fitxa.getId() + "&tipus=3");
+			resultats.put("item_imatge", fitxa.getImagen().getNombre());
+		} else {
+			resultats.put("item_imatge_enllas_arxiu", "");
+			resultats.put("item_imatge", "");
+		}
+	}
+	
+	/*
+	 * Función para recuperar las materias asociadas a una ficha
+	 */
+	private void recuperaFitxaMateries(Map<String, Object> resultats, Ficha fitxa, String lang)
+	{
+		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+		if (fitxa.getMaterias() != null) {
+			for (Materia materia : fitxa.getMaterias())
+				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+			
+			resultats.put("materies", llistaMateriesDTO);
+		} else {
+			resultats.put("materies", null);
+		}
+	}
+	
+	/*
+	 * Función para recuperar los hechos vitales de una ficha
+	 */
+	private void recuperaFitxaFetsVitals(Map<String, Object> resultats, Ficha fitxa, String lang)
+	{
+		List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+		if (fitxa.getHechosVitales() != null) {
+			for (HechoVital fetVital : fitxa.getHechosVitales()) {
+				TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+				llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), thv == null ? "" : thv.getNombre()));
+			}
+			resultats.put("fetsVitals", llistaFetsVitalsDTO);
+		} else {
+			resultats.put("fetsVitals", null);
+		}
+	}
+	
+	/*
+	 * Función para recuperar el público objetivo
+	 */
+	private void recuperaFitxaPO(Map<String, Object> resultats, Ficha fitxa, String lang)
+	{
+		List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
+		if (fitxa.getPublicosObjetivo() != null) {
+			for (PublicoObjetivo publicObj : fitxa.getPublicosObjetivo()) {
+				TraduccionPublicoObjetivo tpob = (TraduccionPublicoObjetivo) publicObj.getTraduccion(lang);
+				llistaPublicObjectiuDTO.add(new IdNomDTO(publicObj.getId(), tpob == null ? "" : tpob.getTitulo()));
+			}
+			resultats.put("publicsObjectiu", llistaPublicObjectiuDTO);
+		} else {
+			resultats.put("publicsObjectiu", null);
+		}
+	}
+	
+	/*
+	 * Función para recuperar la relación Ficha-Sección-UA
+	 */
+	private void recuperaFitxaRelacio(Map<String, Object> resultats, Ficha fitxa, String lang) throws DelegateException
+	{
+		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+		List<FichaUADTO> llistaFichaUADTO = new ArrayList<FichaUADTO>();
+		if (fitxa.getFichasua() != null) {
+			for (FichaUA fichaUA : fitxaDelegate.listFichasUA(fitxa.getId())) {
+				TraduccionSeccion tse = (TraduccionSeccion) fichaUA.getSeccion().getTraduccion(lang);
+				llistaFichaUADTO.add(new FichaUADTO(
+						fichaUA.getId(),
+						fichaUA.getUnidadAdministrativa().getId(),
+						fichaUA.getUnidadAdministrativa().getNombreUnidadAdministrativa(lang),
+						fichaUA.getSeccion().getId(),
+						tse == null ? "" : tse.getNombre(),
+						null,
+						null,
+						fichaUA.getOrden(),
+						fichaUA.getOrdenseccion())
+				);
+			}
+			resultats.put("seccUA", llistaFichaUADTO);
+		} else {
+			resultats.put("seccUA", null);
+		}
+	}
+	
+	/*
+	 * Función para recuperar los enlaces de una ficha.
+	 */
+	private void recuperaFitxaEnllasos(Map<String, Object> resultats, Ficha fitxa)
+	{
+		List<EnlaceDTO> llistaEnllassosDTO = new ArrayList<EnlaceDTO>();
+		if (fitxa.getEnlaces() != null) {
+			for (Enlace enllas : fitxa.getEnlaces()) {
+				if (enllas != null)
+					llistaEnllassosDTO.add(new EnlaceDTO(enllas.getId(), enllas.getOrden(), enllas.getTraduccionMap()));
+			}
+			resultats.put("enllassos", llistaEnllassosDTO);
+		} else {
+			resultats.put("enllassos", null);
+		}
+	}
+    
+    
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request) {
+    public ResponseEntity<String> guardarFicha(HttpSession session, HttpServletRequest request)
+    {
     	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
@@ -533,560 +581,661 @@ public class FitxaInfBackController extends PantallaBaseController {
 		 */
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-
-		IdNomDTO result = null;
-        
-        Integer validacion = null;
-        
-        String error = null;
-
-        Map<String, String> valoresForm = new HashMap<String, String>();
-		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
-        
-        try {      
-        	
-        	//Aqui nos llegar�a un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
-    		
-    		List<FileItem> items = castList(FileItem.class, UploadUtil.obtenerServletFileUpload().parseRequest(request));
-
-    		Set<String> enllasos = new HashSet<String>();
-    		Set<String> docsIds = new HashSet<String>();
-    		for (FileItem item : items) {
-    			if (item.isFormField()) {
-    				if (item.getFieldName().startsWith("enllas_")){
-    					enllasos.add(item.getFieldName());
-    				} 
-    				if (item.getFieldName().startsWith("documents_id_")){
-    					docsIds.add(item.getFieldName());
-    				} 
-    				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
-    			} else {
-    				ficherosForm.put(item.getFieldName(), item);    				
-    			}
-    		}
-
-    		FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
-    		Ficha fitxa = new Ficha();
-    		
-            
-            // Comprovam camps obligatoris 
-    		String titolCatala = valoresForm.get("item_titol_ca");
-//            UnidadAdministrativa ua = (UnidadAdministrativa) session.getAttribute("unidadAdministrativa");
-//            if ( ua == null || titolCatala == null || "".equals(titolCatala)) {
-    		if (titolCatala == null || "".equals(titolCatala)) {
-            	error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-            }
-            if (valoresForm.get("seccUA") == null || valoresForm.get("seccUA").split("#").length < 1) {
-            	error = messageSource.getMessage("fitxes.missatge.es_necessari", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-            }
-            if (valoresForm.get("publicsObjectiu") == null || valoresForm.get("publicsObjectiu").equals("")) {
-            	error = messageSource.getMessage("fitxes.missatge.es_necessari_public", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
-            }
-            // Tiempos para trazas
-            Date startTrace;
-            long execTime;
-            
-            
-            Ficha fitxaOld = null;
-            boolean edicion;
-            Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
-			if (id != null) {
-			    log.debug("Inici de obtenerFicha(" + id + ")");
-			    startTrace = new Date();
-				fitxaOld = fitxaDelegate.obtenerFicha(id);
-				execTime = new Date().getTime() - startTrace.getTime();
-                log.debug("Temps d'execucio de obtenerFicha(" + id + "): " + execTime + " milisegons.");
-				edicion = true;
-			} else {									
-				fitxaOld = null;
-				edicion = false;
-			}
-    		
+		
+		IdNomDTO result;
+		String error = null;
+		
+		try {
+			// Aqui nos llegaría un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+			// Iremos recopilando los parametros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+			Map<String, String> valoresForm = new HashMap<String, String>();
+			Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
+			Set<String> enllasos = new HashSet<String>();
+			Set<String> docsIds = new HashSet<String>();
 			
-			// Es comprova que l'estat es un estat permes
-            try {
-				validacion = Integer.parseInt(valoresForm.get("item_estat"));
-				// Comprobar que no se haya cambiado la validacion/estado siendo operador
-            	if (request.isUserInRole("sacoper") && fitxaOld != null && !fitxaOld.getValidacion().equals(validacion)) {
-            		throw new DelegateException(new SecurityException());
-            	}
-            	fitxa.setValidacion(validacion);
-			} catch (NumberFormatException e) {
-				error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
-				throw new NumberFormatException();
+			List<FileItem> items = castList(FileItem.class, UploadUtil.obtenerServletFileUpload().parseRequest(request));
+			for (FileItem item : items) {
+				if (item.isFormField()) {
+					if (item.getFieldName().startsWith("enllas_"))
+						enllasos.add(item.getFieldName());
+					
+					if (item.getFieldName().startsWith("documents_id_"))
+						docsIds.add(item.getFieldName());
+					
+					valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
+				} else {
+					ficherosForm.put(item.getFieldName(), item);
+				}
 			}
 			
+			// Comprovam camps obligatoris
+			result = guardarFitxaControlCampos(request, valoresForm);
+			if (result != null) return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
 			
-			if (edicion) {
-				// Mantenim els valors que te la fitxa.
-				fitxa.setId(fitxaOld.getId());
-                fitxa.setBaner(fitxaOld.getBaner());
-                fitxa.setIcono(fitxaOld.getIcono());
-                fitxa.setImagen(fitxaOld.getImagen());                    
-                fitxa.setResponsable(fitxaOld.getResponsable());
-                fitxa.setForo_tema(fitxaOld.getForo_tema());                    
-                fitxa.setFichasua(fitxaOld.getFichasua());
-                fitxa.setDocumentos(fitxaOld.getDocumentos());
-                fitxa.setEnlaces(fitxaOld.getEnlaces());
-                fitxa.setMaterias(fitxaOld.getMaterias());
-                fitxa.setHechosVitales(fitxaOld.getHechosVitales());
-                fitxa.setPublicosObjetivo(fitxaOld.getPublicosObjetivo());
-			} 
+			Ficha fitxaOld = guardarFitxaEdicion(valoresForm);	// Recuperamos la ficha antigua
+			// Comprobación de si se trata de una edición de una ficha ya existente o de una nueva ficha
+			boolean edicion;
+			if (fitxaOld != null)
+				edicion = true;		// Ficha ya existente
+			else
+				edicion = false;	// Nueva ficha
 			
-			if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
-	            Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
-	            if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
-	            fitxa.setFechaPublicacion(data_publicacio);
-			}
+			Ficha fitxa = new Ficha();
+			
+			// Recuperación de los nuevos valores de una ficha, tanto si es edición como una ficha nueva
+			fitxa = guardarFitxaValidacion(request, fitxa, fitxaOld, valoresForm);			// Es comprova que l'estat es un estat permes i es recupera
+			fitxa = guardarFitxaAntiguo(edicion, fitxa, fitxaOld);							// Guardamos los campos de la ficha en caso de que sea una edición y no una ficha nueva 
+			fitxa = guardarFitxaFechaPublicacion(fitxa, valoresForm);						// Recuperamos y controlamos el valor de la fecha de publicación
+			fitxa = guardarFitxaFechaCaducidad(fitxa, valoresForm);							// Recuperamos y controlamos el valor de la fecha de caducidad
+			fitxa = guardarFitxaIdiomas(edicion, fitxa, valoresForm);						// Recuperamos y controlamos las traducciones de la ficha
+			fitxa = guardarFitxaIcono(fitxa, valoresForm, ficherosForm);					// Controlamos los cambios del icono
+			fitxa = guardarFitxaBanner(fitxa, valoresForm, ficherosForm);					// Controlamos los cambios del banner
+			fitxa = guardarFitxaImatge(fitxa, valoresForm, ficherosForm);					// Controlamos los cambios de la imagen
+			fitxa = guardarFitxaMaterias(edicion, fitxa, fitxaOld, valoresForm);			// Controlamos las materias modificadas o incluidas
+            fitxa = guardarFitxaHechosVitales(edicion, fitxa, fitxaOld, valoresForm);		// Controlamos los hechos vitales modificados o incluidos
+            fitxa = guardarFitxaPO(edicion, fitxa, fitxaOld, valoresForm);					// Controlamos los públicos objetivos modificados o incluidos
+            fitxa = guardarFitxaDocs(edicion, fitxa, fitxaOld, valoresForm, docsIds);		// Controlamos los documentos asociados a una ficha
+			fitxa.setFechaActualizacion(new Date());										// Guardamos la fecha actual al ser la última actualización
+			fitxa.setUrlForo(valoresForm.get("item_forum"));								// Guardamos el valor de la URL del foro
+            fitxa.setUrlVideo(valoresForm.get("item_youtube"));								// Guardamos el valor de la URL del video
+            fitxa.setResponsable(valoresForm.get("item_responsable"));						// Guardamos el responsable de la ficha
+            fitxa.setInfo(valoresForm.get("item_notes"));									// Guardamos el campo de la información
+            // Fin recuperación de los valores
             
-			if (!StringUtils.isEmpty(valoresForm.get("item_data_caducitat"))) {
-	            Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
-	            if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
-	            fitxa.setFechaCaducidad(data_caducitat);
-			}
+            Long idFitxa = guardarFitxaGrabar(fitxa);										// Guardar los cambios de una ficha
             
-            // Idiomas
-            TraduccionFicha tfi;
-            IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-            List<String> langs = idiomaDelegate.listarLenguajes();
-
-            for (String lang: langs) {
-                if (edicion) {
-                    tfi = (TraduccionFicha) fitxa.getTraduccion(lang);
-                    if (tfi == null) {
-                        tfi = new TraduccionFicha();
-                    }
-                } else {
-                    tfi = new TraduccionFicha();
-                }
-
-                tfi.setTitulo( RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)) );
-                tfi.setDescAbr( RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)) );
-                tfi.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)) );
-                tfi.setUrl(valoresForm.get("item_url_" + lang));
-                
-                fitxa.setTraduccion(lang, tfi);
-            }
-            // Fin idiomas
-            
-            
-            fitxa.setFechaActualizacion(new Date());
-            
-            // Icona
-    		FileItem fileIcona = ficherosForm.get("item_icona");
-    		if (fileIcona != null && fileIcona.getSize() > 0 ) {
-    			fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
-    		} else
-    		// borrar fichero si se solicita
-    		if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))){
-    			fitxa.setIcono(null);
-    		}
-            
-    		// Banner
-    		FileItem fileBanner = ficherosForm.get("item_banner");
-    		if (fileBanner != null && fileBanner.getSize() > 0 ) {
-    			fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
-    		} else
-    		// borrar fichero si se solicita
-    		if (valoresForm.get("item_banner_delete") != null && !"".equals(valoresForm.get("item_banner_delete"))){
-    			fitxa.setBaner(null);
-    		}
-    		
-    		// Imatge
-    		FileItem fileImatge = ficherosForm.get("item_imatge");
-    		if (fileImatge != null && fileImatge.getSize() > 0 ) {
-    			fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_imatge_delete") != null && !"".equals(valoresForm.get("item_imatge_delete"))){
-    			fitxa.setImagen(null);
-    		}
-    		
-    		
-            fitxa.setUrlForo(valoresForm.get("item_forum"));
-            
-            fitxa.setUrlVideo(valoresForm.get("item_youtube"));
-            
-            fitxa.setResponsable(valoresForm.get("item_responsable"));
-            
-            fitxa.setInfo(valoresForm.get("item_notes"));
-
-            
-            //Materies
-            
-            //Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
-            //probable que se repitan la mayoria de materias.
-            if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
-                if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))){
-                    MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-                    Set<Materia> materiesNoves = new HashSet<Materia>();
-                    String[] codisMateriaNous = valoresForm.get("materies").split(",");
-                    
-                    if (edicion){
-                        for (int i = 0; i < codisMateriaNous.length; i++) {
-                            for (Materia materia : fitxaOld.getMaterias()) {
-                                if(materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))){//materia ya existente
-                                    materiesNoves.add(materia);
-                                    codisMateriaNous[i] = null;
-                                    break;
-                                }
-                            }                            
-                        }                         
-                    }                    
-                    
-                    for (String codiMateria: codisMateriaNous){
-                        if (codiMateria != null){
-                            Long codi = ParseUtil.parseLong(codiMateria);
-                            log.debug("Inici de obtenerMateria(" + codi + ")");
-                            startTrace = new Date();
-                            materiesNoves.add(materiaDelegate.obtenerMateria(codi));
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerMateria(" + codi + "): " + execTime + " milisegons.");
-                        }                        
-                    }
-                    
-                  fitxa.setMaterias(materiesNoves);                                                 
-                } else {
-                    fitxa.setMaterias(new HashSet<Materia>());
-                }
-            }
-            
-            //Fets vitals
-                
-            if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
-                if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))){
-                    HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
-                    Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
-                    String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
-                    
-                    if (edicion){
-                        for (int i = 0; i<codisFetsNous.length; i++){
-                            for (HechoVital fetVital: fitxaOld.getHechosVitales()){
-                                if(fetVital.getId().equals(ParseUtil.parseLong(codisFetsNous[i]))){
-                                    fetsVitalsNous.add(fetVital);
-                                    codisFetsNous[i] = null;
-                                    break;
-                                }
-                            }                            
-                        }                         
-                    }                    
-                    
-                    for (String codiFetVital: codisFetsNous){
-                        if (codiFetVital != null){
-                            Long codi = ParseUtil.parseLong(codiFetVital);
-                            log.debug("Inici de obtenerHechoVital(" + codi + ")");
-                            startTrace = new Date();
-                            fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de obtenerHechoVital(" + codi + "): " + execTime + " milisegons.");
-                        }                        
-                    }
-                    
-                    fitxa.setHechosVitales(fetsVitalsNous);                                                 
-                } else {
-                    fitxa.setHechosVitales(new HashSet<HechoVital>());
-                }
-            }
-
-            //Public Objectiu
-            
-            if (isModuloModificado("modul_public_modificat", valoresForm)){
-            	if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))){
-	            	PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
-	                Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
-	                String[] codisPublicsNous = valoresForm.get("publicsObjectiu").split(",");
-	                
-	                if (edicion){
-	                    for (int i = 0; i<codisPublicsNous.length; i++){
-	                        for (PublicoObjetivo pob: fitxaOld.getPublicosObjetivo()){
-	                            if(pob.getId().equals(ParseUtil.parseLong(codisPublicsNous[i]))){
-	                            	publicsNous.add(pob);
-	                            	codisPublicsNous[i] = null;
-	                                break;
-	                            }
-	                        }                            
-	                    }                         
-	                }                    
-	                
-	                for (String codiPublic: codisPublicsNous){
-	                    if (codiPublic != null){
-	                        Long codi = ParseUtil.parseLong(codiPublic);
-	                        log.debug("Inici de ObtenirPublicObjectiu(" + codi + ")");
-	                        startTrace = new Date();
-	                        publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(codi));
-	                        execTime = new Date().getTime() - startTrace.getTime();
-	                        log.debug("Temps d'execucio de ObtenirPublicObjectiu(" + codi + "): " + execTime + " milisegons.");
-	                    }                        
-	                }
-	                
-	                fitxa.setPublicosObjetivo(publicsNous);                                                 
-	            }else {
-	                fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
-	            }
-            }
-           // Documents
-	        Documento document;
-	        DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
-	        List<Documento> documents = new ArrayList<Documento>();
-	        Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
-	
-	        // obtenim  els documents i els seus ordres
-            for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
-        	    String docParameter = (String)iterator.next();
-                String[] elements = docParameter.split("_");
-              
-          	    Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx                	
-          	    if (idDoc != null) {
-              	    log.debug("Inici de obtenerDocumento(" + idDoc + ")");
-                    startTrace = new Date();
-                    document = docDelegate.obtenerDocumento(idDoc);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de obtenerDocumento(" + idDoc + "): " + execTime + " milisegons.");
-              	    documents.add(document);
-                    // Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
-                    String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
-                    actulitzadorMap.put("orden_doc" + idDoc, orden);
-            	} else {
-            		log.warn("S'ha rebut un id de document no n�meric: " + idDoc);
-            	}
-            }
-	          
-	        // actualitzam ordres
-            log.debug("Inici de actualizarOrdenDocs()");
-            startTrace = new Date();
-	        docDelegate.actualizarOrdenDocs(actulitzadorMap);
-	        execTime = new Date().getTime() - startTrace.getTime();
-            log.debug("Temps d'execucio de actualizarOrdenDocs(): " + execTime + " milisegons.");
-	        
-	        // assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
-	        fitxa.setDocumentos(documents);
-	        if (edicion){
-	            List<Documento> docsOld = fitxaOld.getDocumentos();                                    
-	              
-	            for(Documento doc: documents){
-	                for (Iterator<Documento> it = docsOld.iterator(); it.hasNext(); ){
-	                	Documento currentDoc = it.next();
-	                    if (currentDoc != null && currentDoc.getId().equals(doc.getId())){
-	                        it.remove();
-	                    }
-	                }
-	            }                    
-	             
-	            for (Documento doc: docsOld){
-	            	if (doc != null) {
-	            	    Long codi = doc.getId();
-	                    log.debug("Inici de borrarDocumento(" + codi + ")");
-	                    startTrace = new Date();
-	            	    docDelegate.borrarDocumento(codi);
-	            	    execTime = new Date().getTime() - startTrace.getTime();
-	                    log.debug("Temps d'execucio de borarDocumento(" + codi + "): " + execTime + " milisegons.");
-	            	}
-	            }
-	        } 
-	        // Fi documents 
-            
-	        
-	        // Guardar
-	        log.debug("Inici de grabarFicha()");
-            startTrace = new Date();
-            Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
-            execTime = new Date().getTime() - startTrace.getTime();
-            log.debug("Temps d'execucio de grabarFicha(" + idFitxa + "): " + execTime + " milisegons.");
-                
-            //Asociacion de ficha con Unidad administrativa
-            
-            if(isModuloModificado("modulo_seccionesua_modificado", valoresForm)){
-            
-                String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");                                      
-                boolean esborrarFichaUA = true;
-                
-                if (edicion){
-                    for (FichaUA fichaUA: fitxaOld.getFichasua()){
-                        esborrarFichaUA = true;
-                        for (int i = 0; i<codisSeccUaNous.length; i++){
-                            if (codisSeccUaNous[i] != null){//Per a no repetir cerques
-                                String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
-                                if(fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))){
-                                    esborrarFichaUA = false;
-                                    codisSeccUaNous[i] = null;
-                                    break;
-                                }    
-                            }
-                        }
-                        if (esborrarFichaUA){
-                            Long codi = fichaUA.getId();
-                            log.debug("Inici de borrarFichaUA(" + codi + ")");
-                            startTrace = new Date();
-                            fitxaDelegate.borrarFichaUA(codi);
-                            execTime = new Date().getTime() - startTrace.getTime();
-                            log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
-                        }                            
-                    }
-                }
-                    
-                //Tots els que tenen id = -1, son nous i se poden afegir directament
-                for (String codiSeccUa: codisSeccUaNous){
-                    if (codiSeccUa != null){
-                        String[] seccUA = codiSeccUa.split("#");
-                        Long idSeccion = ParseUtil.parseLong(seccUA[1]);
-                        Long idUA = ParseUtil.parseLong(seccUA[2]);
-    
-                        log.debug("Inici de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + ")");
-                        startTrace = new Date();
-                        fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
-    
-                        String pidip = System.getProperty("es.caib.rolsac.pidip");
-                        if(!((pidip == null) || pidip.equals("N"))) {
-                            // Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
-                            if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue())
-                            {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
-                                int existe=0;
-                                Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
-                                
-                                log.debug("Inici de listarFichasSeccionTodas(" + portadas + ")");
-                                startTrace = new Date();
-                                List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
-                                execTime = new Date().getTime() - startTrace.getTime();
-                                log.debug("Temps d'execucio de listarFichasSeccionTodas(" + portadas + "): " + execTime + " milisegons.");
-                                
-                                Iterator iter = listac.iterator();
-                                while (iter.hasNext())
-                                {
-                                    Ficha ficac=(Ficha)iter.next();
-                                    if((""+ficac.getId()).equals(""+idFitxa))
-                                        existe=1;
-                                }
-                                if (existe==0) {
-                                    log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
-                                    startTrace = new Date();
-                                    fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
-                                    execTime = new Date().getTime() - startTrace.getTime();
-                                    log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + "): " + execTime + " milisegons.");
-                                }
-                            }
-                        }                                                
-                    }
-                }
-            }
-            
-            //Tractament d'enllassos
-            
-            if (isModuloModificado("modulo_enlaces_modificado", valoresForm)){
-            
-                List<Enlace> enllassosNous = new ArrayList<Enlace>();
-                
-                for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
-    				String nomParameter = (String)iterator.next();
-    			               
-                    String[] elements = nomParameter.split("_");
-                    
-                    if (elements[0].equals("enllas") && elements[1].equals("id")){
-                        //En aquest cas, elements[2] es igual al id del enllas                                                 
-                                     
-                        Enlace enllas = new Enlace();                                           
-                        
-                        if (elements[2].charAt(0) == 't'){//Element nou, amb id temporal
-                            enllas.setId(null);                            
-                        } else {
-                            enllas.setId(ParseUtil.parseLong(valoresForm.get(nomParameter)));
-                        }
-                        
-                        enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));                        
-                        
-                        for (String lang: langs){
-                         
-                            TraduccionEnlace traduccio = new TraduccionEnlace();
-                            
-                            traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
-                            traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
-                            
-                            enllas.setTraduccion(lang, traduccio);
-                            
-                        }
-                        
-                        enllas.setFicha(fitxa);
-                        
-                        enllassosNous.add(enllas);
-                    
-                    }                                                            
-                }
-                    
-                EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
-                
-                for (Enlace enllas: enllassosNous){
-                    log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
-                    startTrace = new Date();
-                    enllasDelegate.grabarEnlace(enllas, null, idFitxa);
-                    execTime = new Date().getTime() - startTrace.getTime();
-                    log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
-                }                
-                
-                //Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no                
-                if (edicion){
-                    
-                    List<Enlace> enllassosEliminar = fitxaOld.getEnlaces();                                    
-                    
-                    for(Enlace enllas: enllassosNous){
-                        for (Iterator<Enlace> it = enllassosEliminar.iterator(); it.hasNext(); ){
-                            if (it.next().getId().equals(enllas.getId())){
-                                it.remove();
-                            }
-                        }
-                    }                    
-                    
-                    for (Enlace enllas: enllassosEliminar){
-                        Long codi = enllas.getId();
-                        log.debug("Inici de borrarEnlace(" + codi + ")");
-                        startTrace = new Date();
-                        enllasDelegate.borrarEnlace(codi);
-                        execTime = new Date().getTime() - startTrace.getTime();
-                        log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
-                    }                    
-                }            
-            }
-            // Fi enllassos
-            
+            // Guardado de las relaciones de una ficha con otras entidades
+            guardarFitxaSecciosUA(edicion, fitxaOld, valoresForm, idFitxa);					// Guardamos las relaciones de la ficha con las secciones y las UAs
+            guardarFitxaEnlaces(edicion, fitxa, fitxaOld, valoresForm, idFitxa, enllasos);	// Guardamos llas relaciones con los enlaces
+            // Fin guardado relaciones
             
             // Finalitzat correctament
-            result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()) );
+            result = new IdNomDTO(fitxa.getId(), messageSource.getMessage("fitxes.guardat.correcte", null, request.getLocale()));
             
         } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomDTO(-1l, error);
-            } else {
-                error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getStackTrace(dEx)); 
-            }
+        	if (dEx.isSecurityException()) {
+        		error = messageSource.getMessage("error.permisos", null, request.getLocale());
+        		result = new IdNomDTO(-1l, error);
+        	} else {
+        		error = messageSource.getMessage("error.altres", null, request.getLocale());
+        		result = new IdNomDTO(-2l, error);
+        		log.error(ExceptionUtils.getStackTrace(dEx));
+        	}
         } catch (FileUploadException e) {
-			error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
-			result = new IdNomDTO(-3l, error);
-			log.error(ExceptionUtils.getStackTrace(e));
-			
-		} catch (UnsupportedEncodingException e) {
-			error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomDTO(-2l, error);
-			log.error(ExceptionUtils.getStackTrace(e));
-		} catch (NumberFormatException nfe) {
-			result = new IdNomDTO(-3l, error);
-		} catch (ParseException pe) {
-			error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
-			result = new IdNomDTO(-4l, error);
-		}
-
-        //return result;
-        return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+        	error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
+        	result = new IdNomDTO(-3l, error);
+        	log.error(ExceptionUtils.getStackTrace(e));
+        } catch (UnsupportedEncodingException e) {
+        	error = messageSource.getMessage("error.altres", null, request.getLocale());
+        	result = new IdNomDTO(-2l, error);
+        	log.error(ExceptionUtils.getStackTrace(e));
+        } catch (NumberFormatException nfe) {
+        	error = messageSource.getMessage("proc.error.estat.incorrecte", null, request.getLocale());
+        	result = new IdNomDTO(-3l, error);
+        } catch (ParseException pe) {
+        	error = messageSource.getMessage(pe.getMessage(), null, request.getLocale());
+        	result = new IdNomDTO(-4l, error);
+        }
+		
+		return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
     }
+    
+    /*
+	 * Función que comprueba los campos obligatorios
+	 */
+	private IdNomDTO guardarFitxaControlCampos(HttpServletRequest request, Map<String, String> valoresForm)
+	{
+		String error;
+		String titolCatala = valoresForm.get("item_titol_ca");
+		if (titolCatala == null || "".equals(titolCatala)) {
+			error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
+			return new IdNomDTO(-3l, error);
+		}
+		if (valoresForm.get("seccUA") == null || valoresForm.get("seccUA").split("#").length < 1) {
+			error = messageSource.getMessage("fitxes.missatge.es_necessari", null, request.getLocale());
+			return new IdNomDTO(-3l, error);
+		}
+		if (valoresForm.get("publicsObjectiu") == null || valoresForm.get("publicsObjectiu").equals("")) {
+			error = messageSource.getMessage("fitxes.missatge.es_necessari_public", null, request.getLocale());
+			return new IdNomDTO(-3l, error);
+		}
+		return null;
+	}
+    
+    /*
+	 * Controlamos si se trata de una nueva ficha o es la edición de una ya existente
+	 */
+	private Ficha guardarFitxaEdicion(Map<String, String> valoresForm) throws DelegateException
+	{
+		// Tiempos para trazas
+		Date startTrace;
+		long execTime;
+		Ficha fitxaOld = null;
+		Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
+		if (id != null) {
+			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+			log.debug("Inici de obtenerFicha(" + id + ")");
+			startTrace = new Date();
+			fitxaOld = fitxaDelegate.obtenerFicha(id);
+			execTime = new Date().getTime() - startTrace.getTime();
+			log.debug("Temps d'execucio de obtenerFicha(" + id + "): " + execTime + " milisegons.");
+		} else {
+			fitxaOld = null;
+		}
+		return fitxaOld;
+	}
+	
+	/*
+	 * Recuperación y comprobación de si una ficha esta en un estado valido, es decir que este en un estado permitido
+	 */
+	private Ficha guardarFitxaValidacion(HttpServletRequest request, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
+	{
+		Integer validacion = Integer.parseInt(valoresForm.get("item_estat"));
+		// Comprobar que no se haya cambiado la validacion/estado siendo operador
+		if (request.isUserInRole("sacoper") && fitxaOld != null && !fitxaOld.getValidacion().equals(validacion))
+			throw new DelegateException(new SecurityException());
+		
+		fitxa.setValidacion(validacion);
+		return fitxa;
+	}
+	
+	/*
+	 * Guardamos la ficha anterior si se trata de una edición. 
+	 */
+	private Ficha guardarFitxaAntiguo(boolean edicion, Ficha fitxa, Ficha fitxaOld)
+	{
+		if (edicion) {
+			// Mantenim els valors que te la fitxa.
+			fitxa.setId(fitxaOld.getId());
+			fitxa.setBaner(fitxaOld.getBaner());
+			fitxa.setIcono(fitxaOld.getIcono());
+			fitxa.setImagen(fitxaOld.getImagen());
+			fitxa.setResponsable(fitxaOld.getResponsable());
+			fitxa.setForo_tema(fitxaOld.getForo_tema());
+			fitxa.setFichasua(fitxaOld.getFichasua());
+			fitxa.setDocumentos(fitxaOld.getDocumentos());
+			fitxa.setEnlaces(fitxaOld.getEnlaces());
+			fitxa.setMaterias(fitxaOld.getMaterias());
+			fitxa.setHechosVitales(fitxaOld.getHechosVitales());
+			fitxa.setPublicosObjetivo(fitxaOld.getPublicosObjetivo());
+		}
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos las modificaciones en la fecha de publicación
+	 */
+	private Ficha guardarFitxaFechaPublicacion(Ficha fitxa, Map<String, String> valoresForm) throws ParseException
+	{
+		if (!StringUtils.isEmpty(valoresForm.get("item_data_publicacio"))) {
+			Date data_publicacio = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_publicacio"));
+			if (data_publicacio == null) throw new ParseException("error.data_publicacio", 0);
+			fitxa.setFechaPublicacion(data_publicacio);
+		}
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos los cambios en la fecha de caducidad
+	 */
+	private Ficha guardarFitxaFechaCaducidad(Ficha fitxa, Map<String, String> valoresForm) throws ParseException
+	{
+		if (!StringUtils.isEmpty(valoresForm.get("item_data_caducitat"))) {
+			Date data_caducitat = DateUtils.parseDateSimpleTime(valoresForm.get("item_data_caducitat"));
+			if (data_caducitat == null) throw new ParseException("error.data_caducitat", 0);
+			fitxa.setFechaCaducidad(data_caducitat);
+		}
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos los diferentes idiomas de una ficha
+	 */
+	private Ficha guardarFitxaIdiomas(boolean edicion, Ficha fitxa, Map<String, String> valoresForm) throws DelegateException
+	{
+		TraduccionFicha tfi;
+		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		List<String> langs = idiomaDelegate.listarLenguajes();
+		
+		for (String lang: langs) {
+			if (edicion) {
+				tfi = (TraduccionFicha) fitxa.getTraduccion(lang);
+				if (tfi == null)
+					tfi = new TraduccionFicha();
+				
+			} else {
+				tfi = new TraduccionFicha();
+				
+			}
+			tfi.setTitulo( RolUtil.limpiaCadena(valoresForm.get("item_titol_" + lang)) );
+			tfi.setDescAbr( RolUtil.limpiaCadena(valoresForm.get("item_des_curta_" + lang)) );
+			tfi.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_des_llarga_" + lang)) );
+			tfi.setUrl(valoresForm.get("item_url_" + lang));
+			fitxa.setTraduccion(lang, tfi);
+		}
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos el icono de la ficha
+	 */
+	private Ficha guardarFitxaIcono(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm)
+	{
+		FileItem fileIcona = ficherosForm.get("item_icona");
+		if (fileIcona != null && fileIcona.getSize() > 0 )
+			fitxa.setIcono(UploadUtil.obtenerArchivo(fitxa.getIcono(), fileIcona));
+		else if (valoresForm.get("item_icona_delete") != null && !"".equals(valoresForm.get("item_icona_delete"))) // borrar fichero si se solicita
+			fitxa.setIcono(null);
+		
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos las modificaciones del banner
+	 */
+	private Ficha guardarFitxaBanner(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm)
+	{
+		FileItem fileBanner = ficherosForm.get("item_banner");
+		if (fileBanner != null && fileBanner.getSize() > 0 )
+			fitxa.setBaner(UploadUtil.obtenerArchivo(fitxa.getBaner(), fileBanner));
+		else if (valoresForm.get("item_banner_delete") != null && !"".equals(valoresForm.get("item_banner_delete"))) // borrar fichero si se solicita
+			fitxa.setBaner(null);
+		
+		return fitxa;
+	}
+	
+	/*
+	 * Controlamos las modificaciones de la imagen
+	 */
+	private Ficha guardarFitxaImatge(Ficha fitxa, Map<String, String> valoresForm, Map<String, FileItem> ficherosForm)
+	{
+		FileItem fileImatge = ficherosForm.get("item_imatge");
+		if (fileImatge != null && fileImatge.getSize() > 0 )
+			fitxa.setImagen(UploadUtil.obtenerArchivo(fitxa.getImagen(), fileImatge));
+		else if (valoresForm.get("item_imatge_delete") != null && !"".equals(valoresForm.get("item_imatge_delete"))) //borrar fichero si se solicita
+			fitxa.setImagen(null);
+		
+		return fitxa;
+	}
+	
+	/*
+     * Para hacer menos accesos a BBDD se comprueba si es edicion o no, en el primer caso, es bastante
+     * probable que se repitan la mayoria de materias.
+     */
+    private Ficha guardarFitxaMaterias(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	if (isModuloModificado("modulo_materias_modificado", valoresForm)) {
+    		if (valoresForm.get("materies") != null && !"".equals(valoresForm.get("materies"))) {
+    			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+    			Set<Materia> materiesNoves = new HashSet<Materia>();
+    			String[] codisMateriaNous = valoresForm.get("materies").split(",");
+    			
+    			if (edicion) {
+    				for (int i = 0; i < codisMateriaNous.length; i++) {
+    					for (Materia materia : fitxaOld.getMaterias()) {
+    						if (materia.getId().equals(ParseUtil.parseLong(codisMateriaNous[i]))) { //materia ya existente
+    							materiesNoves.add(materia);
+    							codisMateriaNous[i] = null;
+    							break;
+    						}
+    					}
+    				}
+    			}
+    			
+    			for (String codiMateria: codisMateriaNous) {
+    				if (codiMateria != null) {
+    					Long codi = ParseUtil.parseLong(codiMateria);
+    					log.debug("Inici de obtenerMateria(" + codi + ")");
+    					startTrace = new Date();
+    					materiesNoves.add(materiaDelegate.obtenerMateria(codi));
+    					execTime = new Date().getTime() - startTrace.getTime();
+    					log.debug("Temps d'execucio de obtenerMateria(" + codi + "): " + execTime + " milisegons.");
+    				}
+    			}
+    			fitxa.setMaterias(materiesNoves);
+    			
+    		} else {
+    			fitxa.setMaterias(new HashSet<Materia>());
+    			
+    		}
+    	}
+    	return fitxa;
+    }
+    
+    /*
+     * Controlamos los hechos vitales modificados o incluidos
+     */
+    private Ficha guardarFitxaHechosVitales(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	if (isModuloModificado("modulo_hechos_modificado", valoresForm)) {
+    		if (valoresForm.get("fetsVitals") != null && !"".equals(valoresForm.get("fetsVitals"))) {
+    			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+    			Set<HechoVital> fetsVitalsNous = new HashSet<HechoVital>();
+    			String[] codisFetsNous = valoresForm.get("fetsVitals").split(",");
+    			
+    			if (edicion) {
+    				for (int i = 0; i<codisFetsNous.length; i++) {
+    					for (HechoVital fetVital: fitxaOld.getHechosVitales()) {
+    						if(fetVital.getId().equals(ParseUtil.parseLong(codisFetsNous[i]))) {
+    							fetsVitalsNous.add(fetVital);
+    							codisFetsNous[i] = null;
+    							break;
+    						}
+    					}
+    				}
+    			}
+    			
+    			for (String codiFetVital: codisFetsNous) {
+    				if (codiFetVital != null) {
+    					Long codi = ParseUtil.parseLong(codiFetVital);
+    					log.debug("Inici de obtenerHechoVital(" + codi + ")");
+    					startTrace = new Date();
+    					fetsVitalsNous.add(fetVitalDelegate.obtenerHechoVital(codi));
+    					execTime = new Date().getTime() - startTrace.getTime();
+    					log.debug("Temps d'execucio de obtenerHechoVital(" + codi + "): " + execTime + " milisegons.");
+    				}
+    			}
+    			fitxa.setHechosVitales(fetsVitalsNous);
+    			
+    		} else {
+    			fitxa.setHechosVitales(new HashSet<HechoVital>());
+    			
+    		}
+    	}
+    	return fitxa;
+    }
+    
+    /*
+     * Controlamos los públicos objetivos modificados o incluidos
+     */
+    private Ficha guardarFitxaPO(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	if (isModuloModificado("modul_public_modificat", valoresForm)) {
+    		if (valoresForm.get("publicsObjectiu") != null && !"".equals(valoresForm.get("publicsObjectiu"))) {
+    			PublicoObjetivoDelegate publicObjDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+    			Set<PublicoObjetivo> publicsNous = new HashSet<PublicoObjetivo>();
+    			String[] codisPublicsNous = valoresForm.get("publicsObjectiu").split(",");
+    			
+    			if (edicion) {
+    				for (int i = 0; i<codisPublicsNous.length; i++) {
+    					for (PublicoObjetivo pob: fitxaOld.getPublicosObjetivo()) {
+    						if (pob.getId().equals(ParseUtil.parseLong(codisPublicsNous[i]))) {
+    							publicsNous.add(pob);
+    							codisPublicsNous[i] = null;
+    							break;
+    						}
+    					}
+    				}
+    			}
+    			
+    			for (String codiPublic: codisPublicsNous) {
+    				if (codiPublic != null) {
+    					Long codi = ParseUtil.parseLong(codiPublic);
+    					log.debug("Inici de ObtenirPublicObjectiu(" + codi + ")");
+    					startTrace = new Date();
+    					publicsNous.add(publicObjDelegate.obtenerPublicoObjetivo(codi));
+    					execTime = new Date().getTime() - startTrace.getTime();
+    					log.debug("Temps d'execucio de ObtenirPublicObjectiu(" + codi + "): " + execTime + " milisegons.");
+    				}
+    			}
+    			fitxa.setPublicosObjetivo(publicsNous);
+    			
+    		} else {
+    			fitxa.setPublicosObjetivo(new HashSet<PublicoObjetivo>());
+    			
+    		}
+    	}
+    	return fitxa;
+    }
+    
+    /*
+     * Función para recuperar y controlas los documendos asociados
+     */
+    private Ficha guardarFitxaDocs(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Set<String> docsIds) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	Documento document;
+    	DocumentoDelegate docDelegate = DelegateUtil.getDocumentoDelegate();
+    	List<Documento> documents = new ArrayList<Documento>();
+    	Map <String,String[]> actulitzadorMap = new HashMap<String, String[]>();
+    	
+    	// Obtenim  els documents i els seus ordres
+    	for (Iterator<String> iterator = docsIds.iterator(); iterator.hasNext();) {
+    		String docParameter = (String)iterator.next();
+    		String[] elements = docParameter.split("_");
+    		
+    		Long idDoc = ParseUtil.parseLong(elements[2]);	// documents_id_xxx
+    		if (idDoc != null) {
+    			log.debug("Inici de obtenerDocumento(" + idDoc + ")");
+    			startTrace = new Date();
+    			document = docDelegate.obtenerDocumento(idDoc);
+    			execTime = new Date().getTime() - startTrace.getTime();
+    			log.debug("Temps d'execucio de obtenerDocumento(" + idDoc + "): " + execTime + " milisegons.");
+    			documents.add(document);
+    			// Se coge el orden de la web. Si se quisiesen poner del 0 al x, hacer que orden valga 0 e ir incrementandolo.
+    			String[] orden = {valoresForm.get("documents_orden_" + elements[2])};
+    			actulitzadorMap.put("orden_doc" + idDoc, orden);
+    			
+    		} else {
+    			log.warn("S'ha rebut un id de document no n�meric: " + idDoc);
+    			
+    		}
+    	}
+    	
+    	// Actualitzam ordres
+    	log.debug("Inici de actualizarOrdenDocs()");
+    	startTrace = new Date();
+    	docDelegate.actualizarOrdenDocs(actulitzadorMap);
+    	execTime = new Date().getTime() - startTrace.getTime();
+    	log.debug("Temps d'execucio de actualizarOrdenDocs(): " + execTime + " milisegons.");
+    	
+    	// Assignar els documents a la fitxa i eliminar els que ja no estiguin seleccionats.
+    	fitxa.setDocumentos(documents);
+    	if (edicion) {
+    		List<Documento> docsOld = fitxaOld.getDocumentos();
+    		for (Documento doc: documents) {
+    			for (Iterator<Documento> it = docsOld.iterator(); it.hasNext();) {
+    				Documento currentDoc = it.next();
+    				if (currentDoc != null && currentDoc.getId().equals(doc.getId()))
+    					it.remove();
+    			}
+    		}
+    		for (Documento doc: docsOld) {
+    			if (doc != null) {
+    				Long codi = doc.getId();
+    				log.debug("Inici de borrarDocumento(" + codi + ")");
+    				startTrace = new Date();
+    				docDelegate.borrarDocumento(codi);
+    				execTime = new Date().getTime() - startTrace.getTime();
+    				log.debug("Temps d'execucio de borarDocumento(" + codi + "): " + execTime + " milisegons.");
+    			}
+    		}
+    	}
+    	return fitxa;
+    }
+    
+    /*
+     * Función de grabar() la ficha
+     */
+    private Long guardarFitxaGrabar(Ficha fitxa) throws DelegateException
+    {
+    	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	log.debug("Inici de grabarFicha()");
+    	startTrace = new Date();
+    	Long idFitxa = fitxaDelegate.grabarFicha(fitxa);
+    	execTime = new Date().getTime() - startTrace.getTime();
+    	log.debug("Temps d'execucio de grabarFicha(" + idFitxa + "): " + execTime + " milisegons.");
+    	return idFitxa;
+    }
+    
+    /*
+     * Función que asocia la ficha con la UA y las secciones
+     */
+    private void guardarFitxaSecciosUA(boolean edicion, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
+    	if (isModuloModificado("modulo_seccionesua_modificado", valoresForm)) {
+    		String[] codisSeccUaNous = valoresForm.get("seccUA").split(",");
+    		boolean esborrarFichaUA = true;
+    		
+    		if (edicion) {
+    			for (FichaUA fichaUA: fitxaOld.getFichasua()) {
+    				esborrarFichaUA = true;
+    				for (int i = 0; i<codisSeccUaNous.length; i++) {
+    					if (codisSeccUaNous[i] != null) { //Per a no repetir cerques
+    						String[] seccUA = codisSeccUaNous[i].split("#"); //En cas d'edicio es necesari verificar si les relacions anteriors se mantenen
+    						if (fichaUA.getId().equals(ParseUtil.parseLong(seccUA[0]))) {
+    							esborrarFichaUA = false;
+    							codisSeccUaNous[i] = null;
+    							break;
+    						}
+    					}
+    				}
+    				if (esborrarFichaUA) {
+    					Long codi = fichaUA.getId();
+    					log.debug("Inici de borrarFichaUA(" + codi + ")");
+    					startTrace = new Date();
+    					fitxaDelegate.borrarFichaUA(codi);
+    					execTime = new Date().getTime() - startTrace.getTime();
+    					log.debug("Temps d'execucio de borrarFichaUA(" + codi + "): " + execTime + " milisegons.");
+    				}
+    			}
+    		}
+    		
+    		// Tots els que tenen id = -1, son nous i se poden afegir directament
+    		for (String codiSeccUa: codisSeccUaNous) {
+    			if (codiSeccUa != null) {
+    				String[] seccUA = codiSeccUa.split("#");
+    				Long idSeccion = ParseUtil.parseLong(seccUA[1]);
+    				Long idUA = ParseUtil.parseLong(seccUA[2]);
+    				
+    				log.debug("Inici de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + ")");
+    				startTrace = new Date();
+    				fitxaDelegate.crearFichaUA(idUA, idSeccion, idFitxa);
+    				execTime = new Date().getTime() - startTrace.getTime();
+    				log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + idSeccion + ", " + idFitxa + "): " + execTime + " milisegons.");
+    				
+    				String pidip = System.getProperty("es.caib.rolsac.pidip");
+    				if (!((pidip == null) || pidip.equals("N"))) {
+    					// Si se anyade una ficha a la seccion Actualidad, se a�ade tambien a Portada Actualidad (PIDIP)
+    					if (idSeccion.longValue()== new Long(Parametros.ESDEVENIMENTS).longValue()) {   //comprobamos  antes si ya exite la ficha en actualidad  en portada en cuyo caso no la insertamos para no duplicarla.
+    						int existe=0;
+    						Long portadas = new Long(Parametros.PORTADAS_ACTUALIDAD);
+    						
+    						log.debug("Inici de listarFichasSeccionTodas(" + portadas + ")");
+    						startTrace = new Date();
+    						List listac = fitxaDelegate.listarFichasSeccionTodas(portadas);
+    						execTime = new Date().getTime() - startTrace.getTime();
+    						log.debug("Temps d'execucio de listarFichasSeccionTodas(" + portadas + "): " + execTime + " milisegons.");
+    						
+    						Iterator iter = listac.iterator();
+    						while (iter.hasNext()) {
+    							Ficha ficac=(Ficha)iter.next();
+    							if ((""+ficac.getId()).equals(""+idFitxa))
+    								existe=1;
+    						}
+    						if (existe==0) {
+    							log.debug("Inici de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + ")");
+    							startTrace = new Date();
+    							fitxaDelegate.crearFichaUA(idUA, portadas, idFitxa);
+    							execTime = new Date().getTime() - startTrace.getTime();
+    							log.debug("Temps d'execucio de crearFichaUA(" + idUA + ", " + portadas + ", " + idFitxa + "): " + execTime + " milisegons.");
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    /*
+     * Función para controlar y guardar los enñaces de una ficha
+     */
+    private void guardarFitxaEnlaces(boolean edicion, Ficha fitxa, Ficha fitxaOld, Map<String, String> valoresForm, Long idFitxa, Set<String> enllasos) throws DelegateException
+    {
+    	// Tiempos para trazas
+    	Date startTrace;
+    	long execTime;
+    	
+    	IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+    	List<String> langs = idiomaDelegate.listarLenguajes();
+    	if (isModuloModificado("modulo_enlaces_modificado", valoresForm)) {
+    		List<Enlace> enllassosNous = new ArrayList<Enlace>();
+    		for (Iterator<String> iterator = enllasos.iterator(); iterator.hasNext();) {
+    			String nomParameter = (String)iterator.next();
+    			String[] elements = nomParameter.split("_");
+    			if (elements[0].equals("enllas") && elements[1].equals("id")) {
+    				// En aquest cas, elements[2] es igual al id del enllas
+    				Enlace enllas = new Enlace();
+    				if (elements[2].charAt(0) == 't') // Element nou, amb id temporal
+    					enllas.setId(null);
+    				else
+    					enllas.setId(ParseUtil.parseLong(valoresForm.get(nomParameter)));
+    				
+    				enllas.setOrden(ParseUtil.parseLong(valoresForm.get("enllas_orden_" + elements[2])));
+    				for (String lang: langs) {
+    					TraduccionEnlace traduccio = new TraduccionEnlace();
+    					traduccio.setTitulo(valoresForm.get("enllas_nombre_" + lang + "_" + elements[2]));
+    					traduccio.setEnlace(valoresForm.get("enllas_url_" + lang + "_" + elements[2]));
+    					enllas.setTraduccion(lang, traduccio);
+    					
+    				}
+    				enllas.setFicha(fitxa);
+    				enllassosNous.add(enllas);
+    			}
+    		}
+    		EnlaceDelegate enllasDelegate = DelegateUtil.getEnlaceDelegate();
+    		for (Enlace enllas: enllassosNous) {
+    			log.debug("Inici de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + ")");
+    			startTrace = new Date();
+    			enllasDelegate.grabarEnlace(enllas, null, idFitxa);
+    			execTime = new Date().getTime() - startTrace.getTime();
+    			log.debug("Temps d'execucio de grabarEnlace(" + enllas + ", " + null + ", " + idFitxa + "): " + execTime + " milisegons.");
+    		}
+    		
+    		// Cal triar dels enllassos antics que pogues haver, quins se conserven i quins no
+    		if (edicion) {
+    			List<Enlace> enllassosEliminar = fitxaOld.getEnlaces();
+    			for (Enlace enllas: enllassosNous) {
+    				for (Iterator<Enlace> it = enllassosEliminar.iterator(); it.hasNext();) {
+    					if (it.next().getId().equals(enllas.getId()))
+    						it.remove();
+    				}
+    			}
+    			for (Enlace enllas: enllassosEliminar) {
+    				Long codi = enllas.getId();
+    				log.debug("Inici de borrarEnlace(" + codi + ")");
+    				startTrace = new Date();
+    				enllasDelegate.borrarEnlace(codi);
+    				execTime = new Date().getTime() - startTrace.getTime();
+    				log.debug("Temps d'execucio de borrarEnlace(" + codi + "): " + execTime + " milisegons.");
+    			}
+    		}
+    	}
+    }
+    
     
     @RequestMapping(value = "/seccions.do", method = POST)
     public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request) {

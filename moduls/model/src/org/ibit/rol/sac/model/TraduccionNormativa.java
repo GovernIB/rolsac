@@ -77,4 +77,15 @@ public class TraduccionNormativa implements Traduccion {
     private String enlace;
     private Archivo archivo;
     private String observaciones;
+    
+    public TraduccionNormativa() {}
+    
+    public TraduccionNormativa(String titulo, String enlace, String apartado, Integer paginaInicial, Integer paginaFinal, String observaciones) {
+    	this.titulo = titulo;
+    	this.enlace = enlace;
+    	this.apartado = apartado;
+    	this.paginaInicial = paginaInicial;
+    	this.paginaFinal = paginaFinal;
+    	this.observaciones = observaciones;
+    }
 }

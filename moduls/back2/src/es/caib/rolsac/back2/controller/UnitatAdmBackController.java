@@ -195,34 +195,55 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		try {
 			UnidadAdministrativa uni = unitatDelegate.consultarUnidadAdministrativaSinFichas(idUA);
 			resultats.put("id", idUA);
-
+			String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
+			
 			//Idiomas
-			if (uni.getTraduccion("ca") != null)
+			if (uni.getTraduccion("ca") != null) {
 				resultats.put("ca",(TraduccionUA)uni.getTraduccion("ca"));
-			else
-				resultats.put("ca",new TraduccionUA());
-
-			if (uni.getTraduccion("es") != null)
+			} else {
+				if (uni.getTraduccion(langDefault) != null)
+					resultats.put("ca",(TraduccionUA)uni.getTraduccion(langDefault));
+				else
+					resultats.put("ca", new TraduccionUA());
+			}
+			
+			if (uni.getTraduccion("es") != null) {
 				resultats.put("es",(TraduccionUA)uni.getTraduccion("es"));
-			else
-				resultats.put("es",new TraduccionUA());
-
-			if (uni.getTraduccion("en") != null)
+			} else {
+				if (uni.getTraduccion(langDefault) != null)
+					resultats.put("es",(TraduccionUA)uni.getTraduccion(langDefault));
+				else
+					resultats.put("es", new TraduccionUA());
+			}
+			
+			if (uni.getTraduccion("en") != null) {
 				resultats.put("en",(TraduccionUA)uni.getTraduccion("en"));
-			else
-				resultats.put("en",new TraduccionUA());
-
-			if (uni.getTraduccion("de") != null)
+			} else {
+				if (uni.getTraduccion(langDefault) != null)
+					resultats.put("en",(TraduccionUA)uni.getTraduccion(langDefault));
+				else
+					resultats.put("en", new TraduccionUA());
+			}
+			
+			if (uni.getTraduccion("de") != null) {
 				resultats.put("de",(TraduccionUA)uni.getTraduccion("de"));
-			else
-				resultats.put("de",new TraduccionUA());
-
-			if (uni.getTraduccion("fr") != null)
+			} else {
+				if (uni.getTraduccion(langDefault) != null)
+					resultats.put("de",(TraduccionUA)uni.getTraduccion(langDefault));
+				else
+					resultats.put("de", new TraduccionUA());
+			}
+			
+			if (uni.getTraduccion("fr") != null) {
 				resultats.put("fr",(TraduccionUA)uni.getTraduccion("fr"));
-			else
-				resultats.put("fr",new TraduccionUA());
-
-
+			} else {
+				if (uni.getTraduccion(langDefault) != null)
+					resultats.put("fr",(TraduccionUA)uni.getTraduccion(langDefault));
+				else
+					resultats.put("fr", new TraduccionUA());
+			}
+			
+			
 			//Configuración/gestión
 			//resultats.put("item_clau_hita", uni.getClaveHita());
 			resultats.put("item_codi_estandar", uni.getCodigoEstandar());

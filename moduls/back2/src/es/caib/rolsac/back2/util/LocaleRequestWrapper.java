@@ -30,25 +30,24 @@ public class LocaleRequestWrapper extends HttpServletRequestWrapper {
 
     public Locale getLocale() {
 		IdiomaDelegate id = DelegateUtil.getIdiomaDelegate();
-		String idioma;
 		String lang;
 		
 		try {
 			lang = super.getLocale().getLanguage();
-			if (lang != null) {
-				idioma = lang;
-			} else {
-				idioma = id.lenguajePorDefecto();
-				if (idioma == null) idioma = "ca";
+			
+			if (lang == null)
+				lang = System.getProperty("es.caib.rolsac.idiomaDefault");
+			
+			if (lang == null) {
+				lang = id.lenguajePorDefecto();
+				if (lang == null) lang = "ca";
 			}
 			
 		} catch (DelegateException e) {
-			idioma = "ca";
+			lang = "ca";
 			log.error(ExceptionUtils.getStackTrace(e));
 		}
-		// TODO XXX - Fins que totes les traduccions no estiguin disponibles a tots els idiomes 
-		// forsam el catala perque no doni errors. Pensar a comentar o eliminar
-		//idioma = "ca";
-		return new Locale(idioma);
+		
+		return new Locale(lang);
     }
 }

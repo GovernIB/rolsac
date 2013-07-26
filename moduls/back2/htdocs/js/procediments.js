@@ -271,7 +271,7 @@ function CLlistat(){
 			dataVars_cercador += "&codi=" + $("#cerca_codi").val();
 			dataVars_cercador += "&visibilitat=" + $("#cerca_estat").val();
 			dataVars_cercador += "&familia=" + $("#cerca_familia").val();
-			dataVars_cercador += "&iniciacio=" + $("#cerca_iniciacio").val();
+			dataVars_cercador += "&iniciacion=" + $("#cerca_iniciacio").val();
 			dataVars_cercador += "&tramit=" + $("#cerca_tramit").val();
 			dataVars_cercador += "&indicador=" + $("#cerca_indicador").val();
 			dataVars_cercador += "&finestreta=" + $("#cerca_finestreta").val();

@@ -359,7 +359,7 @@ function CEscriptoriProcediment(){
 		dataVars = "codi=" + $("#cerca_codi").val();
 		dataVars += "&estat=" + $("#cerca_estat").val();
 		dataVars += "&familia=" + $("#cerca_familia").val();
-		dataVars += "&iniciacio=" + $("#cerca_iniciacio").val();
+		dataVars += "&iniciacion=" + $("#cerca_iniciacio").val();
 		dataVars += "&tramit=" + $("#cerca_tramit").val();
 		dataVars += "&versio=" + $("#cerca_versio").val();
 		dataVars += "&url=" + $("#cerca_url").val();
