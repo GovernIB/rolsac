@@ -193,6 +193,19 @@ public class HechoVitalDelegate implements StatelessDelegate {
     	}
     }
     
+    public List<HechoVital> listarHechosVitales(Set<?> publicosObjetivo, String idioma) throws DelegateException {
+    	
+        try {
+        	
+            return getFacade().listarHechosVitales(publicosObjetivo, idioma);
+            
+        } catch (RemoteException e) {
+        	
+            throw new DelegateException(e);
+        }
+        
+    }
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */
@@ -216,4 +229,5 @@ public class HechoVitalDelegate implements StatelessDelegate {
             throw new DelegateException(e);
         }
     }
+    
 }

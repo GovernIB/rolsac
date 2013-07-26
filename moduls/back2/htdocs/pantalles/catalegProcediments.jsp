@@ -30,6 +30,7 @@
 <script type="text/javascript" src="<c:url value='/js/modul_estadistiques.js'/>"></script>
 
 <script type="text/javascript">
+
     var idUAMollapa = '<c:out value="${idUA}"/>';
     var nomUAMollapa = '<c:out value="${nomUA}"/>';
 
@@ -54,7 +55,7 @@
     var pagEstadistiques = '<c:url value="/estadistiques/grafica.do" />';
     var pagTraduir = '<c:url value="/catalegProcediments/traduir.do" />';
     var pagTraduirTramit = '<c:url value="/tramit/traduir.do" />';
-
+    var pagListarHechosVitales = '<c:url value="/catalegProcediments/listarHechosVitales.do" />';
     var urlPrevisualizarProcedimiento = '<c:out value="${urlPrevisualitzacio}"/>';
 
     //texts
@@ -164,6 +165,7 @@
     var txtCercantAnteriors = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtAnteriors.toLowerCase() + ". " + txtEspere;
     var txtCercantSeguents = txtCercant + " " + txtLlistaItems.toLowerCase() + " " + txtSeguents.toLowerCase() + ". " + txtEspere;
     var txtCercantElements = txtCercant + " <spring:message code='txt.elements'/>" + ". " + txtEspere;
+    
 </script>
 <script type="text/javascript" src="<c:url value='/js/formulari.js'/>"></script>
 <script type="text/javascript">
@@ -1467,20 +1469,7 @@
                                 </div>
                             </div>
                             <div class="llistat">
-                                <ul>
-                                    <c:forEach items="${llistaFetsVitals}" var="fetVital" varStatus="i">
-                                        <c:choose>
-                                            <c:when test="${(i.count) % 2 == 0}">
-                                                <li class="par">
-                                            </c:when>
-                                            <c:otherwise>
-                                               <li class="impar">
-                                            </c:otherwise>
-                                        </c:choose>                                     
-                                          <label><span><c:out value="${fetVital.nom}" /></span><input type="checkbox" value="<c:out value='${fetVital.id}' />" /></label>
-                                        </li>                                                                                                               
-                                    </c:forEach>
-                                </ul>
+                                <ul></ul>
                                 <div class="botonera">
                                     <div class="btnGenerico">
                                         <a class="btn finalitza" href="javascript:;"><span><span><spring:message code='boto.finalitza'/></span></span></a>

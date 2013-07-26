@@ -142,7 +142,7 @@ function CModulFormularisTramit(){
         // botons        
         $("#btnVolver_formularis_tramit").bind("click", that.torna);
 
-        // El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+        // El botÃ³n de guardar estÃ¡ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
     	$("#formGuardarFormTramit input, #formGuardarFormTramit select, #formGuardarFormTramit textarea").bind("change", function(){that.modificado();});
     	
 		// idioma
@@ -165,7 +165,7 @@ function CModulFormularisTramit(){
 			ul_idiomes_elm.bind("click", {'actualizarIdiomasModulosLaterales': false}, that.idioma);
 		}
 		
-		// Redifinimos el método que guarda porque en este caso también hacemos un upload de archivos.
+		// Redifinimos el mï¿½todo que guarda porque en este caso tambiï¿½n hacemos un upload de archivos.
 		this.guarda = this.guarda_upload;
 	}
 	
@@ -183,11 +183,11 @@ function CModulFormularisTramit(){
             return false;
         }
         
-        // Coger el id del trámite
+        // Coger el id del trï¿½mite
         var tramitId = $("#tramitIdform");         
         tramitId.val($("#id_tramit_actual").val());
 
-		//Enviamos el formulario mediante el método ajaxSubmit del plugin $.form
+		//Enviamos el formulario mediante el mï¿½todo ajaxSubmit del plugin $.form
 		$("#formGuardarFormTramit").ajaxSubmit({			
 			url: pagGuardarDocTramit,
 			dataType: 'json',
@@ -224,7 +224,7 @@ function CModulFormularisTramit(){
 	}
 	
 	this.modificado = function(){
-		// Habilitamos el botón de guardar.
+		// Habilitamos el botï¿½n de guardar.
 		$("#btnGuardar_formularis_tramit").unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
 	}
 	
@@ -239,7 +239,7 @@ function CModulFormularisTramit(){
 		$("#tramitId").attr("value", $("#id_tramit_actual").val());		
 		$("#procId").attr("value", $("#id_procediment_tramit").val());
 		
-		// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario.
+		// El botï¿½n de guardar estï¿½ inicialmente deshabilitado hasta que se realice un cambio en el formulario.
 		$("#btnGuardar_formularis_tramit").parent().addClass("off");
         
 		if (!edicion) {
@@ -373,7 +373,7 @@ function CModulFormularisTramit(){
 		});
 	}
 	
-	// Devuelve un string con el formato formularisTramit=n1,n2,...,nm donde n son codigos de formularios de un trámite.
+	// Devuelve un string con el formato formularisTramit=n1,n2,...,nm donde n son codigos de formularios de un trï¿½mite.
 	this.listarFormularios = function (){
 		var listaFormularios = "formularisTramit=";
 		var separador = "";

@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import org.ibit.rol.sac.model.FichaResumen;
-import org.ibit.rol.sac.model.FichaResumenUA;
+
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+
 import net.sf.hibernate.Criteria;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -21,6 +21,7 @@ import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
+
 import org.apache.axis.utils.StringUtils;
 import org.ibit.lucene.indra.model.Catalogo;
 import org.ibit.lucene.indra.model.ModelFilterObject;
@@ -30,6 +31,8 @@ import org.ibit.rol.sac.model.Archivo;
 import org.ibit.rol.sac.model.Auditoria;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumen;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Historico;
@@ -53,6 +56,7 @@ import org.ibit.rol.sac.persistence.intf.AccesoManagerLocal;
 import org.ibit.rol.sac.persistence.util.Cadenas;
 import org.ibit.rol.sac.persistence.util.DateUtils;
 import org.ibit.rol.sac.persistence.ws.Actualizador;
+
 import es.caib.rolsac.utils.ResultadoBusqueda;
 
 /**

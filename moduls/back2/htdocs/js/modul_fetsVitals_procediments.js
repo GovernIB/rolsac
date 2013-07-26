@@ -140,46 +140,63 @@ function CModulFetsVitals(){
 			}).css({cursor:"move"});
 		}
 	}
+	
 
 	this.inicializarHechosVitales = function(listaHechos) {
-    
-        $moduloModificado.val(0);
-            
-		// Vaciar lista
+
+		$moduloModificado.val(0);
+        
+		// Vaciar lista.
         modul_fets_elm.find(".listaOrdenable").empty();		
 		if (typeof listaHechos != 'undefined' && listaHechos != null && listaHechos.length > 0) {
 			that.agregaItems(listaHechos);
 		}
         
-        // Seleccionar checks
-        var listaChecks = fets_llistat_elm.find("li input[type=checkbox]");
-        var checksSize = listaChecks.length;
-        var hechosSize = listaHechos.length;
-        var hechoEncontrado;
-        var input;
-        for (i = 0; i < checksSize; i++) {
-            hechoEncontrado = false;
-            for (j = 0; j < hechosSize; j++) {
-                if (listaHechos[j].id == listaChecks[i].value) {
-                    input = listaChecks.filter('[value=' + listaChecks[i].value + ']:first');
-                    input.attr('checked', 'checked');
-                    input.addClass(fetVitalDefaultClass);
-                    hechoEncontrado = true;
-                }
-            }
-            if (!hechoEncontrado) {
-                input = listaChecks.filter('[value=' + listaChecks[i].value + ']:first');
-                input.removeAttr('checked');
-                input.removeClass(fetVitalDefaultClass);
-            }
-        }
-        
+		/* Seleccionar checks */
+		for ( var int = 0 ; int < listaHechos.length ; int++ ) {
+			
+			var input = "#HV_" + listaHechos[int].id;
+			var htmlHechoVital = "";
+			var existeHechoVital = $(input).length;
+			var cantidadHechosVitales = $('#fetsVitals .llistat > ul > li').length;
+
+			// Se comprueba si es un hecho vital que pertenece a algún público objetivo asignado.
+			if ( existeHechoVital == 0 ) {
+				
+				switch ( cantidadHechosVitales % 2 ) {
+        		
+    				case 0:
+    				
+    					htmlHechoVital += "<li class='impar'>";	
+    					break;
+
+    				default:
+    				
+    					htmlHechoVital += "<li class='par'>" ;
+    					break;
+    				
+            	}
+            	
+            	var idHechoVital = listaHechos[int].id;
+            	htmlHechoVital += "<label><span>" + listaHechos[int].nom + "</span><input id='HV_" + idHechoVital + "' type='checkbox' value='" + idHechoVital + "' /></label></li>"
+            	$("#fetsVitals .llistat > ul").append(htmlHechoVital);
+            	
+			} //End if
+			
+			$(input).addClass(fetVitalDefaultClass);
+			$(input).attr('checked','checked');
+			
+		} //End for
+		
 		that.contaSeleccionats();		
 		$("#fetsVitals").show();
+		
 	}
 	
-	//devuelve un string con el formato fetsVitals=n1,n2,...,nm donde n son codigos de hechos vitales
-	this.listaHechosVitales = function (){
+	
+	// Devuelve un string con el formato fetsVitals=n1,n2,...,nm donde n son codigos de hechos vitales.
+	this.listaHechosVitales = function () {
+	
 		var llistaFets = "fetsVitals=";
 		
 		$("div.modulFetsVitals div.seleccionats div.listaOrdenable input.fetsVitals_id").each(function() {
@@ -191,12 +208,67 @@ function CModulFetsVitals(){
 		}
 		
 		return llistaFets;
+		
 	}
 	
-	//Al acceder al formulario de creacion, limpia las listas de hechos vitales, desmarca los checkboxes y se oculta el modulo
+	// Al acceder al formulario de creación, limpia las listas de hechos vitales, desmarca los checkboxes y se oculta el módulo.
 	this.nuevo = function() {
 		$("#fetsVitals").hide();
 		fets_seleccionats_elm.find("ul").remove().end().find("p.info").text(txtNoHiHaFetsSeleccionats + ".");
 		$("div.modulFetsVitals div.llistat input[type=checkbox]").removeAttr('checked').removeClass(fetVitalDefaultClass);
-	}		
+	}
+	
+	this.obtenerSeleccionados = function() {
+		
+		var hechosVitalesSeleccionados = new Array();
+		var htmlhechosVitalesSeleccionados = $('.modulFetsVitals .llistat input:checked');
+		var cantidadHechosVitalesChecked = htmlhechosVitalesSeleccionados.length;
+		
+		if ( cantidadHechosVitalesChecked > 0 ) {
+			
+			for ( var int = 0; int < cantidadHechosVitalesChecked; int++) {
+				
+				var htmlElement = htmlhechosVitalesSeleccionados[int];
+				hechosVitalesSeleccionados.push( $(htmlElement).val() );
+				
+			}
+			
+		}
+
+		return hechosVitalesSeleccionados;
+		
+	} //End obtener seleccionados
+	
+	
+	// Pinta los hechos vitales que están relacionados con los Públicos objetivos asignados a un procedimiento.
+	this.pintar = function(listaHechosVitales) {
+		
+		var htmlHechosVitales = "";
+		
+		for ( var int = 0 ; int < listaHechosVitales.length ; int++ ) {
+			
+			var hechoVital = listaHechosVitales[int];
+			
+			switch ( int % 2 ) {
+			
+				case 0:
+					
+					htmlHechosVitales += "<li class='impar'>";	
+					break;
+
+				default:
+					
+					htmlHechosVitales += "<li class='par'>" ;
+					break;
+			}
+			
+			var idHechoVital = hechoVital.id;
+			htmlHechosVitales += "<label><span>" + hechoVital.nom + "</span><input id='HV_" + idHechoVital + "' type='checkbox' value='" + idHechoVital + "' /></label></li>"
+			
+		}
+		
+		$("#fetsVitals .llistat > ul").html(htmlHechosVitales);
+		
+	} //End pintar
+	
 }	

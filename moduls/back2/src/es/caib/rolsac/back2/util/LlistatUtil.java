@@ -3,6 +3,7 @@ package es.caib.rolsac.back2.util;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.ibit.rol.sac.model.Familia;
 import org.ibit.rol.sac.model.HechoVital;
@@ -81,4 +82,23 @@ public class LlistatUtil {
 		}
 		return publicObjDTOList;
 	}
+	
+
+	public static List<IdNomDTO> llistarHechosVitales(Set<?> publicosObjetivo, String lang) throws DelegateException {
+		
+		HechoVitalDelegate hechoVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+		List<IdNomDTO> fetsDTOList = new ArrayList<IdNomDTO>();
+		List<HechoVital> llistaFetsVitals = hechoVitalDelegate.listarHechosVitales(publicosObjetivo, lang);
+		TraduccionHechoVital tfv;
+		
+		for (HechoVital fetVital : llistaFetsVitals) {
+			
+			tfv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+			fetsDTOList.add( new IdNomDTO( fetVital.getId() , tfv.getNombre() ) );
+		}
+		
+		return fetsDTOList;
+		
+	}
+	
 }

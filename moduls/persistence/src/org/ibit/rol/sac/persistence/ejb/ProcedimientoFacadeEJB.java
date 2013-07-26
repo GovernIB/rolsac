@@ -513,116 +513,159 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
      * @ejb.permission unchecked="true"
      */
     public ProcedimientoLocal obtenerProcedimiento(Long id) {
+    	
         Session session = getSession();
         ProcedimientoLocal procedimiento = null;
+        
         try {
+        	
             procedimiento = (ProcedimientoLocal) session.load(ProcedimientoLocal.class, id);
+            
             if (visible(procedimiento)) {
+            	
             	Hibernate.initialize(procedimiento.getDocumentos());
-            	for( Documento d : procedimiento.getDocumentos() )
-            	{
-            		if (d==null) {
+            	
+            	for( Documento d : procedimiento.getDocumentos() ) {
+            		
+            		if (d == null) {
             			continue; //por alg�n motivo, en ocasiones los documentos en la colecci�n son nulos 
             		}
+            		
             		Map<String, Traduccion> mapaTraduccions = d.getTraduccionMap();
                 	Set<String> idiomes = mapaTraduccions.keySet();
-                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
-                	{
+                	
+                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
+                		
                 		TraduccionDocumento trad = ( TraduccionDocumento )d.getTraduccion( i.next() );
+                		
                 		if (trad != null) {
+                			
                 			Hibernate.initialize( trad.getArchivo() );
                 		}
                 		
                 	}
-            	}            	
+                	
+            	}    
+            	
                 Hibernate.initialize(procedimiento.getMaterias());
                 Hibernate.initialize(procedimiento.getPublicosObjetivo());
                 Hibernate.initialize(procedimiento.getNormativas());
-                for( Normativa n : procedimiento.getNormativas() )
-                {
+                
+                for ( Normativa n : procedimiento.getNormativas() ) {
+                	
                 	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
                 	Set<String> idiomes = mapaTraduccions.keySet();
-                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
-                	{
+                	
+                	for ( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
+                		
                 		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
+                		
                 		if (trad != null) {
+                			
                 			Hibernate.initialize( trad.getArchivo() );
                 		}
+                		
                 	}
+                	
                 }       
+                
                 Hibernate.initialize( procedimiento.getUnidadAdministrativa() );
                 Hibernate.initialize( procedimiento.getUnidadAdministrativa().getHijos() );
                 Hibernate.initialize( procedimiento.getOrganResolutori() );
+                
                 if (procedimiento.getOrganResolutori() != null) {
+                	
                 	Hibernate.initialize( procedimiento.getOrganResolutori().getHijos() );
                 }
 
                 Hibernate.initialize( procedimiento.getUnidadAdministrativa().getNormativas() );
                 Hibernate.initialize( procedimiento.getUnidadAdministrativa().getEdificios() );
-                for( Normativa n : procedimiento.getUnidadAdministrativa().getNormativas() )
-                {
+                
+                for ( Normativa n : procedimiento.getUnidadAdministrativa().getNormativas() ) {
+                	
                 	Map<String, Traduccion> mapaTraduccions = n.getTraduccionMap();
                 	Set<String> idiomes = mapaTraduccions.keySet();
-                	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
-                	{
+                	
+                	for ( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
+                		
                 		TraduccionNormativa trad = ( TraduccionNormativa )n.getTraduccion( i.next() );
-                		if (trad != null) {
+                		
+                		if (trad != null)
                 			Hibernate.initialize( trad.getArchivo() );
-                		}
                 		
                 	}
+                	
                 }
                 
                 Hibernate.initialize( procedimiento.getTramites() );
-                for ( Tramite t : procedimiento.getTramites() ) 
-                {
+                
+                for ( Tramite t : procedimiento.getTramites() ) {
+                	
                 	if (t == null) continue;
                 	
                 	Hibernate.initialize( t.getFormularios() ); 
                     Hibernate.initialize( t.getDocsInformatius() );
                     Hibernate.initialize( t.getTaxes() );
                     Hibernate.initialize( t.getOrganCompetent() );
-                    for( DocumentTramit dt : t.getDocsInformatius() )
-                    {
+                    
+                    for( DocumentTramit dt : t.getDocsInformatius() ) {
+                    	
                     	Hibernate.initialize( dt.getArchivo() );
 
                     	Map<String, Traduccion> mapaTraduccions = dt.getTraduccionMap();
                     	Set<String> idiomes = mapaTraduccions.keySet();
-                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
-                    	{
+                    	
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
+                    		
                     		TraduccionDocumento trad = ( TraduccionDocumento )dt.getTraduccion( i.next() );
-                    		if (trad != null) {
+                    		
+                    		if (trad != null) 
                     			Hibernate.initialize( trad.getArchivo() );
-                    		}
                     		
                     	}
+                    	
                     }
 
-                    for( DocumentTramit df : t.getFormularios() )
-                    {
+                    
+                    for ( DocumentTramit df : t.getFormularios() ) {
+                    	
                     	Hibernate.initialize( df.getArchivo() );
                     	Map<String, Traduccion> mapaTraduccions = df.getTraduccionMap();
                     	Set<String> idiomes = mapaTraduccions.keySet();
-                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); )
-                    	{
+                    	
+                    	for( Iterator<String> i = idiomes.iterator(); i.hasNext(); ) {
+                    		
                     		TraduccionDocumento trad = ( TraduccionDocumento )df.getTraduccion( i.next() );
-                    		if (trad != null) {
+                    		
+                    		if (trad != null)
                     			Hibernate.initialize( trad.getArchivo() );
-                    		}
+                    		
                     	}
+                    	
                     }
+                    
                 }
+                
                 Hibernate.initialize( procedimiento.getHechosVitalesProcedimientos() );
                 Hibernate.initialize( procedimiento.getIniciacion() );
                 Hibernate.initialize( procedimiento.getFamilia() );
+                
             } else {
+            	
                 throw new SecurityException("El procedimiento no es visible");
+                
             }
+            
         } catch (HibernateException he) {
+        	
             throw new EJBException(he);
+            
         } finally {
+        	
             close(session);
         }
+        
+        
    		//Esto no est� funcionando bien...
         //----------------------------------------------------------------------
         //ArrayList listaOrdenada = new ArrayList(procedimiento.getDocumentos());
@@ -2622,4 +2665,54 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			
 		return resultado;
 	}
+	
+	
+	 /**
+     * Buscamos el numero de procedimientos activos des de la fecha actual
+     * 
+     * @param List<Long> listaUnidadAdministrativaId
+     * @param Date fechaCaducidad
+     * @return Booleano que indica si un procedimiento tiene asignados hechos vitales relacionados a un determinado Publico objetivo
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     */
+	public boolean hasHechosVitalesAsignadosByPublicosObjetivo(Long idProcedimiento, Long idPublicoObjetivo) {
+
+		Session session = getSession();
+        try {
+        	
+        	String subQuery = " select hvp.hechoVital.id from HechoVitalProcedimiento as hvp where hvp.procedimiento.id = :idProcedimiento ";
+
+        	Query query = session.createQuery("select hechoVital.id " +
+        	
+    				"from HechoVital hechoVital, " +
+    				"	AgrupacionHechoVital as agrHechoVital, " +
+    				"	HechoVitalAgrupacionHV as hva, " +
+    				"	PublicoObjetivo as po  " +
+    				
+    				"where ( hva.agrupacion.id = agrHechoVital.id ) " +
+    				"	and ( hva.hechoVital.id = hechoVital.id ) and ( agrHechoVital.publico.id = po.id ) " +
+    				"	and po.id = :idPublicoObjetivo" +
+    				"	and ( hechoVital.id in ( " + subQuery + " ) ) " +
+    				
+    				"order by hechoVital.orden asc ");
+        	
+        	
+    		query.setParameter("idProcedimiento", idProcedimiento);
+    		query.setParameter("idPublicoObjetivo", idPublicoObjetivo);
+    		
+    		
+			return  query.list().size()  >  0  ?  true  :  false;			
+            
+			
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+            
+        } finally {
+        	
+            close(session);
+        }
+	}
+	
+	
 }

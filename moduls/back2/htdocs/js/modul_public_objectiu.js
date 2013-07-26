@@ -97,13 +97,16 @@ function CModulPublicObjectiu(){
 			li_elm = $(this);
 			input_elm = li_elm.find("input");
 					
-			if (input_elm.attr("checked") == "checked") {
+			if ( input_elm.attr("checked") == "checked" ) {
+				
 				codi_llistat += "<li><input type=\"hidden\" value=\"" + input_elm.val() + "\" />" + li_elm.find("span").text() + "</li>";
 				nombre_llistat++;
-				
 				input_elm.addClass(publicObjectiuDefaultClass);
+				
 			} else {
+				
 				input_elm.removeClass(publicObjectiuDefaultClass);
+				
 			}
 			
 		});

@@ -1,4 +1,5 @@
 // CATALEG PROCEDIMENTS
+var hechosVitalesAsignados = null;
 
 $(document).ready(function() {
 	// elements
@@ -65,15 +66,88 @@ $(document).ready(function() {
 	}
     Llistat.iniciar();
     // Cercador.iniciar();
-});
+    
+    
+    /*Listar hechos vitales al cambiar los publicos objetivos*/
+    $('.ModulPublicObjectiu .finalitza').click(function(){
+    	
+    	var idProcedimiento = $('#item_clave_primaria').val();
+    	
+    	/* En el momento de crear un procedimiento no se asignan hechos vitales, solo durante la edición, 
+    	 * por lo tanto si no hay id de procedimiento significa que estamos creando un nuevo procedimiento y 
+		 * no debe realizar la petición de carga del listado de hechos vitales */
+    	if ( idProcedimiento != "" ) {
+    		
+        	var publicosObjectivosSeleccionados = new Array()
+        	var htmlPublicosObjetivosSeleccionados = $('.ModulPublicObjectiu .llistat input:checked');
+        	var cantidadPOChecked = htmlPublicosObjetivosSeleccionados.length;
+        	var hechosVitalesSeleccionados = ModulFetsVitals.obtenerSeleccionados();
+        	
+        	//Se realiza la petición ajax si hay algún Público Objetivo seleccionado
+        	if ( cantidadPOChecked > 0 ) {
+        		
+        		//Guarda en una array auxiliar los públicos objetivos asignados
+        		for ( var int = 0; int < cantidadPOChecked; int++) {
+            		
+            		var htmlElement = htmlPublicosObjetivosSeleccionados[int];
+            		publicosObjectivosSeleccionados.push( $(htmlElement).val() );
+            		
+        		}
+            	
+        		var dataVars = "&publicosObjectivosSeleccionados=" + publicosObjectivosSeleccionados;
 
+                $.ajax({
+            		type: "POST",
+            		url: pagListarHechosVitales,
+            		data: dataVars,
+            		dataType: "json",
+            		error: function() {
+            			
+            			if (!a_enllas) {
+            				
+            				// missatge
+            				Missatge.llansar({tipus: "missatge", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+            				
+            				// error
+            				Error.llansar();
+            				
+            			}
+            		},
+            		success: function(data) {				
+
+            			ModulFetsVitals.pintar( data.listadoHechosVitales );
+               			ModulFetsVitals.inicializarHechosVitales( hechosVitalesAsignados );
+               			
+            		} // Fin success
+            		
+            	}); //Fin ajax 
+                
+        	//Si no se realiza la petición se muestran únicamente los hechos vitales asignados        		
+        	} else {
+
+        		$("#fetsVitals .llistat > ul").empty();
+        		ModulFetsVitals.inicializarHechosVitales( hechosVitalesAsignados );
+
+        	} //End if
+    		
+    	} //end if
+    	
+    }); //Fin evento click
+
+    /*Evento que inicializa la variable de hechos vitales asignados cuando se abandona la ficha de un procedimiento*/
+    $('.btnVolver').click(function() {
+    	
+    	hechosVitalesAsignados = "";
+    	
+    });
+    
+}); //Fin $(document).ready
 
 // idioma
 var pag_idioma = $("html").attr("lang");
 
 var Cercador = {
-	iniciar: function() {		
-	}
+	iniciar: function() {}
 };
 
 // minim cercador
@@ -362,7 +436,7 @@ function CDetall(){
     		urlParams += "&" + ModulTramit.listaTramites();
     		
     		that.guardaGenerico(urlParams);
-			
+
 		}
 		
 		// En cambio, si el estado de publicación es 1 (Pública), hacemos la comprobación
@@ -574,7 +648,7 @@ function CDetall(){
 	}		
 	
 	this.pintar = function(dades) {
-        
+		
 		// Mostrar paneles
 		jQuery("#modul_documents").show();
         jQuery("#modul_tramits").show();
@@ -583,7 +657,9 @@ function CDetall(){
 		escriptori_detall_elm.find("a.elimina, a.previsualitza").show().end().find("h2:first").text(txtDetallTitol);
 		
 		dada_node = dades;
-
+		
+		ModulFetsVitals.pintar( dada_node.listadoHechosVitales );
+		
 		$("#item_id").val(dada_node.item_id);
 		
 		// Bloque de pestanyas de idiomas
@@ -663,12 +739,14 @@ function CDetall(){
 		$("#item_responsable").val(dada_node.item_responsable);
 		
 		$("#item_notes").val(dada_node.item_notes);
+		
+		hechosVitalesAsignados = dada_node.fetsVitals;
 
         ModulTramit.inicializarTramites(dada_node.tramites);
 		ModulDocuments.inicializarDocuments(dada_node.documents);
 		ModulMateries.inicializarMaterias(dada_node.materies);
 		ModulPublicObjectiu.inicializarPublics(dada_node.publicsObjectiu);
-		ModulFetsVitals.inicializarHechosVitales(dada_node.fetsVitals);
+		ModulFetsVitals.inicializarHechosVitales(hechosVitalesAsignados);
 		ModulNormativa.inicializarNormativas(dada_node.normatives);
 		
         // mostrem

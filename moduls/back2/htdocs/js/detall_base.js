@@ -5,7 +5,7 @@ jQuery(document).ready(function(){
 	jQuery("#btnEliminar").bind("click",function(){Detall.eliminar();});
 	jQuery("#btnPrevisualizar").bind("click",function(){Detall.previsualitza();});
 
-	// El bot�n de guardar est� inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
+	// El botón de guardar está inicialmente deshabilitado hasta que se realice un cambio en el formulario (ver DetallBase.modificado)
 	jQuery("#btnGuardar").parent().addClass("off");
 	//jQuery("#btnGuardar").bind("click",function(){Detall.guarda();});
 
@@ -129,6 +129,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 			error: function() {
 				// missatge
 				Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtAjaxError, text: "<p>" + txtIntenteho + "</p>"});
+				
 			},
 			success: function(data) {
 
@@ -136,15 +137,22 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 
 				if (data.id < 0) {
 					Missatge.llansar({tipus: "alerta", modo: "error", fundit: "si", titol: txtGenericError, text: "<p>" + data.nom + "</p>"});
+					
 				} else {
-					if( !soloFicha ){
+					
+					if( !soloFicha ) {
 						Detall.recarregar(data.id);
 					}
+					
 					Missatge.llansar({tipus: "alerta", modo: "correcte", fundit: "si", titol: data.nom});
-				}
+					
+					
+				}//End if
 
-			}
-		});
+			} //Fin success
+			
+		});//Fin ajax
+		
 	}
 	
 	this.guarda = function (dataVars) {
@@ -152,8 +160,8 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 	}
 
 	this.modificado = function(){
-		// Habilitamos el bot�n de guardar.
-		jQuery("#"+ids.btnGuardar).unbind("click").bind("click",function(){that.guarda();}).parent().removeClass("off");
+		// Habilitamos el botón de guardar.
+		jQuery("#"+ids.btnGuardar).unbind("click").bind("click", function() { that.guarda(); } ).parent().removeClass("off");
 	}
 
 	this.publica = function(){
@@ -183,7 +191,7 @@ function DetallBase( soloFicha, reglasFormulario, identificadores ){
 
 	this.carregar = function(itemID){
 
-		// Deshabilitamos inicialmente el bot�n de guardar.
+		// Deshabilitamos inicialmente el botón de guardar.
 		jQuery("#"+ids.btnGuardar).unbind("click").parent().removeClass("off").addClass("off");
 
 		escriptori_detall_elm.find(".botonera li.btnEliminar,.botonera li.btnPrevisualizar").show();

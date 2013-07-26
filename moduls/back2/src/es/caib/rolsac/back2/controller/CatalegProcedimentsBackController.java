@@ -67,6 +67,7 @@ import org.ibit.rol.sac.persistence.delegate.TramiteDelegate;
 import org.ibit.rol.sac.persistence.delegate.UnidadAdministrativaDelegate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.caib.rolsac.back2.util.HtmlUtils;
@@ -107,6 +108,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		model.put("idUA", getUAFromSession(session).getId());
 		String lang = getRequestLanguage(request);
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
+		
 
 	}
 
@@ -123,7 +125,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		try {
 			
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
-			model.put("llistaFetsVitals", LlistatUtil.llistarHechosVitales(lang));
 			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
@@ -422,8 +423,10 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	@RequestMapping(value = "/pagDetall.do", method = POST)
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request)
 	{
+		
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		String lang = getRequestLanguage(request);
+		
 		try {
 			Long id = new Long(request.getParameter("id"));
 
@@ -498,15 +501,26 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_finestreta_unica", true);
 			}
 			
+			//Obtención de listado de posibles hechos vitales del procedimiento
+			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales( proc.getPublicosObjetivo() , lang ) );
+			
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
-			if (dEx.isSecurityException())
+
+			if (dEx.isSecurityException()) {
+
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			else
+				
+			} else {
+				
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
 			
 		}
+		
 		return resultats;
+		
 	}
 	
 	/*
@@ -1517,6 +1531,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		
 	}
 	
+	
 	   /**
      * Devuelve true si ha habido algun cambio en el modulo.
      * 
@@ -1539,6 +1554,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
       return excepcioObjDTOList;
     }
     
+    
     private List<IdNomDTO> llistarCatalegDocuments(String lang) throws DelegateException {
       CatalegDocumentsDelegate catdocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
       List<IdNomDTO> catalegObjDTOList = new ArrayList<IdNomDTO>();
@@ -1550,5 +1566,35 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
       }
       return catalegObjDTOList;
     }
+    
+    
+    @RequestMapping( value = "/listarHechosVitales.do" , method = POST)
+	public @ResponseBody Map<String, Object> listarHechosVitales( @RequestParam Set<Long> publicosObjectivosSeleccionados , HttpSession session , HttpServletRequest request) {
+    	
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		String lang = getRequestLanguage(request);
+		
+		try {
+			
+			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales( publicosObjectivosSeleccionados , lang ) );
+			
+		} catch (DelegateException e) {
+			
+			logException(log, e);
+			
+			if (e.isSecurityException()) {
+				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+				
+			} else {
+				
+				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			}
+			
+		}
+		
+    	
+    	return resultats;
+    }
 
+    
 }

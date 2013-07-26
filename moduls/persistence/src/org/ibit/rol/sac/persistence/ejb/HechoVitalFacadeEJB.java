@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -145,25 +146,35 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
         }
     }
 
+    
     private List<?> listarTMHechosVitales(String idioma) {
     	
     	corregirOrdenacion();
     	Session session = getSession();
     	
     	try {
+    		
     		Query query = session.createQuery("select hechoVital.id, hechoVital.orden, trad.nombre " +
-    														"from HechoVital as hechoVital, hechoVital.traducciones as trad " +
-    														"where index(trad) = :idioma " +
-    														"order by hechoVital.orden asc");
+    									"from HechoVital as hechoVital, hechoVital.traducciones as trad " +
+    									"where index(trad) = :idioma" +
+    									"order by hechoVital.orden asc");
     		
     		query.setParameter("idioma", idioma);
-    		return query.list();    		
+    		
+    		return query.list();
+    		
     	} catch (HibernateException he) {
+    		
     		throw new EJBException(he);
+    		
     	} finally {
+    		
     		close(session);
+    		
     	}    	
+    	
     }
+    
     
     /**
      * Lista todas los Hechos Vitales y sus procedimientos.
@@ -645,5 +656,67 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
     		close(session);
     	}    	
     }    
+    
+    
+    /**
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+     * @param Set<?> publicosObjetivo
+     * @param String idioma
+     * @return Lista de todos los Hechos Vitales que puede tener un procedimiento restringido por sus públicos objetivos asignados
+     */
+    public List<HechoVital> listarHechosVitales(Set<?> publicosObjetivo, String idioma) {
+
+    	Session session = getSession();
+    	
+        try {
+
+        	Query query = session.createQuery("select hechoVital.id, trad.nombre, hechoVital.orden, po.id " +
+        	
+    				"from HechoVital hechoVital, " +
+    				"	hechoVital.traducciones as trad, " +
+    				"	AgrupacionHechoVital as agrHechoVital, " +
+    				"	HechoVitalAgrupacionHV as hva, " +
+    				"	PublicoObjetivo as po  " +
+    				
+    				"where ( index(trad) = :idioma ) " +
+    				"	and ( hva.agrupacion.id = agrHechoVital.id ) " +
+    				"	and ( hva.hechoVital.id = hechoVital.id ) and ( agrHechoVital.publico.id = po.id ) " +
+    				"	and ( po.id in (:publicosObjetivo) ) " +
+    				
+    				"order by hechoVital.orden asc ");
+        	
+    		query.setParameter("idioma", idioma);
+    		query.setParameterList("publicosObjetivo", publicosObjetivo);
+    		
+    		List<Object[]> l = query.list();
+    		List<HechoVital> listaHechoVital = new Vector<HechoVital>();
+    		
+    		for ( Object[] o : l ) {
+    			
+    			HechoVital hv = new HechoVital();
+    			hv.setId( (Long) o[0] );
+    			
+    			TraduccionHechoVital t = new TraduccionHechoVital(); 
+    			t.setNombre( (String) o[1] );
+    			hv.setTraduccion( idioma , t );
+    			
+    			listaHechoVital.add(hv);
+    			
+    		}
+				
+			return listaHechoVital;			
+            
+        } catch (HibernateException he) {
+        	
+            throw new EJBException(he);
+            
+        } finally {
+        	
+            close(session);
+            
+        }
+        
+    }
     
 }
