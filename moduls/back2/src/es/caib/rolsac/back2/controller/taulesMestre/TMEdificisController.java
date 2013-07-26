@@ -126,7 +126,7 @@ public class TMEdificisController extends PantallaBaseController {
 		String idUA = request.getParameter("idUA");
 		if (idUA != null && !"".equals(idUA)) {
 			idUABase=Long.valueOf(idUA);
-		}else if (permisosSuperAddicionals){ //Només mostra els edificis de les UAs autoritzades a l'usuari
+		}else if (permisosSuperAddicionals) { // Només mostra els edificis de les UAs autoritzades a l'usuari
 			uaFilles=true;
     		uaMeves=true;
 		}
@@ -283,177 +283,177 @@ public class TMEdificisController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/guardar.do", method = POST)
-    public ResponseEntity<String> guardarEdifici(HttpSession session, HttpServletRequest request) {
-		/**
+    public ResponseEntity<String> guardarEdifici(HttpSession session, HttpServletRequest request)
+    {
+    	/**
 		 * Forzar content type en la cabecera para evitar bug en IE y en Firefox.
 		 * Si no se fuerza el content type Spring lo calcula y curiosamente depende del navegador desde el que se hace la petici�n.
 		 * Esto se debe a que como esta petici�n es invocada desde un iFrame (oculto) algunos navegadores interpretan la respuesta como
 		 * un descargable o fichero vinculado a una aplicaci�n. 
 		 * De esta forma, y devolviendo un ResponseEntity, forzaremos el Content-Type de la respuesta.
 		 */
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
-
-        IdNomDTO result = null;
-        
-        Map<String, String> valoresForm = new HashMap<String, String>();
-		Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
-        
-        try {
-        	//Aqu� nos llegar� un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
-    		//Iremos recopilando los par�metros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
-        	List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
-
+    	HttpHeaders responseHeaders = new HttpHeaders();
+    	responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+    	
+    	IdNomDTO result = null;
+    	
+    	Map<String, String> valoresForm = new HashMap<String, String>();
+    	Map<String, FileItem> ficherosForm = new HashMap<String, FileItem>();
+    	
+    	try {
+    		// Aquí nos llegará un multipart, de modo que no podemos obtener los datos mediante request.getParameter().
+    		// Iremos recopilando los parémetros de tipo fichero en el Map ficherosForm y el resto en valoresForm.
+    		List<FileItem> items = UploadUtil.obtenerServletFileUpload().parseRequest(request);
     		for (FileItem item : items) {
-    			if (item.isFormField()) {
+    			if (item.isFormField())
     				valoresForm.put(item.getFieldName(), item.getString("UTF-8"));
-    			} else {
-    				ficherosForm.put(item.getFieldName(), item);    				
+    			else
+    				ficherosForm.put(item.getFieldName(), item);
+    		}
+    		
+    		Edificio edifici = guardarEdificiRecuperar(valoresForm);	// Recuperamos o creamos un edificio nuevo si no existe
+    		// Campos obligatorios
+    		String direccio = valoresForm.get("item_direccio");
+    		if (direccio == null || "".equals(direccio)) {
+    			String error = messageSource.getMessage("edifici.formulari.error.falten_camps", null, request.getLocale());
+    			result = new IdNomDTO(-3l, error);
+    			return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+    		}
+    		edifici.setDireccion(direccio);
+    		// Recumeramos los campos directamente del form
+    		if (valoresForm.get("item_latitud").length() < 15)
+    			edifici.setLatitud(valoresForm.get("item_latitud"));
+    		else
+    			edifici.setLatitud(valoresForm.get("item_latitud").substring(0,14));
+    		
+    		if (valoresForm.get("item_longitud").length() < 15)
+    			edifici.setLongitud(valoresForm.get("item_longitud"));
+    		else
+    			edifici.setLongitud(valoresForm.get("item_longitud").substring(0, 14));
+    		
+    		edifici.setCodigoPostal(valoresForm.get("item_codi_postal"));
+    		edifici.setPoblacion(valoresForm.get("item_poblacio"));
+    		edifici.setTelefono(valoresForm.get("item_telefon"));
+    		edifici.setFax(valoresForm.get("item_fax"));
+    		edifici.setEmail(valoresForm.get("item_email"));
+    		
+    		edifici = guardarEdificisFileItem(valoresForm, ficherosForm, "item_foto_petita", edifici);	// Recuperamos la foto pequeña
+    		edifici = guardarEdificisFileItem(valoresForm, ficherosForm, "item_foto_gran", edifici);	// Recuperamos la foto grande
+    		edifici = guardarEdificisFileItem(valoresForm, ficherosForm, "item_planol", edifici);		// Recuperamos el planol
+    		edifici = guardarEdificiTraduccions(valoresForm, edifici);
+    		
+    		// Unitats Administratives
+    		if (valoresForm.get("unitatsAdministratives") != null && !"".equals(valoresForm.get("unitatsAdministratives"))) {
+    			edifici = guardarEdificiUAs(valoresForm, edifici);										// Recuperamos las UAs
+    		} else {
+    			String error = messageSource.getMessage("edifici.formulari.unitat_administrativa.minim", null, request.getLocale());
+    			result = new IdNomDTO(-3l, error);
+    			return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+    		}
+    		
+    		EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
+    		edificiDelegate.grabarEdificio(edifici);													// Se guarda el edicicio en bbdd
+    		
+    		String ok = messageSource.getMessage("administracioRemota.guardat.correcte", null, request.getLocale());
+    		result = new IdNomDTO(edifici.getId(), ok);
+    		
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException()) {
+    			String error = messageSource.getMessage("error.permisos", null, request.getLocale());
+    			result = new IdNomDTO(-1l, error);
+    		} else {
+    			String error = messageSource.getMessage("error.altres", null, request.getLocale());
+    			result = new IdNomDTO(-2l, error);
+    			log.error(ExceptionUtils.getStackTrace(dEx));
+    		}
+    	} catch (UnsupportedEncodingException e) {
+    		String error = messageSource.getMessage("error.altres", null, request.getLocale());
+    		result = new IdNomDTO(-2l, error);
+    		log.error(ExceptionUtils.getStackTrace(e));
+    	} catch (FileUploadException e) {
+    		String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
+    		result = new IdNomDTO(-3l, error);
+    		log.error(ExceptionUtils.getStackTrace(e));;
+    	}
+    	
+    	return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+    }
+    
+    /*
+	 * Recuperamos el edificio o creamos uno nuevo si no existe
+	 */
+	private Edificio guardarEdificiRecuperar(Map<String, String> valoresForm) throws DelegateException
+	{
+		EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
+		Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
+		if (id != null)
+			return edificiDelegate.obtenerEdificio(id);
+		else
+			return new Edificio();
+	}
+	
+	/*
+	 * Función para recuperar los FIleItems
+	 */
+	private Edificio guardarEdificisFileItem(Map<String, String> valoresForm, Map<String, FileItem> ficherosForm, String parametro, Edificio edifici)
+	{
+		FileItem fileItem = ficherosForm.get(parametro);
+		if (fileItem.getSize() > 0)
+			edifici.setPlano(UploadUtil.obtenerArchivo(edifici.getPlano(), fileItem));
+		else if (valoresForm.get(parametro + "_delete") != null && !"".equals(valoresForm.get(parametro + "_delete"))) //borrar fichero si se solicita
+			edifici.setPlano(null);
+		
+		return edifici;
+	}
+	
+	/*
+	 * Función para recuperar las traducciones de los edificios
+	 */
+	private Edificio guardarEdificiTraduccions(Map<String, String> valoresForm, Edificio edifici) throws DelegateException
+	{
+		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
+		List<String> langs = idiomaDelegate.listarLenguajes();
+		
+		Map traduccions = new HashMap(langs.size());
+		for (String lang: langs) {
+			TraduccionEdificio tp = new TraduccionEdificio();
+			tp.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_"+  lang )) );
+			traduccions.put(lang, tp);
+		}
+		edifici.setTraduccionMap(traduccions);
+		return edifici;
+	}
+	
+	/*
+     * Función para controlar las UAs de los edificios
+     */
+    private Edificio guardarEdificiUAs(Map<String, String> valoresForm, Edificio edifici) throws DelegateException
+    {
+    	UnidadAdministrativaDelegate unitatAdminsitrativaDelegate = DelegateUtil.getUADelegate();
+    	Set<UnidadAdministrativa> unitatAdmNoves = new HashSet<UnidadAdministrativa>();
+    	String[] codisUANous = valoresForm.get("unitatsAdministratives").split(",");
+    	
+    	if (edifici.getId() != null) {
+    		for (int i = 0; i<codisUANous.length; i++) {
+    			for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
+    				UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
+    				if (unitatAdministrativa.getId().equals(ParseUtil.parseLong(codisUANous[i]))) {
+    					unitatAdmNoves.add(unitatAdministrativa);
+    					codisUANous[i] = null;
+    					break;
+    				}
     			}
     		}
-    		
-    		//Campos obligatorios
-            String direccio = valoresForm.get("item_direccio");
-            
-            
-            if (direccio == null || "".equals(direccio)) {
-                String error = messageSource.getMessage("edifici.formulari.error.falten_camps", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);                
-            } 
-    		
-            EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-            
-            Edificio edifici = new Edificio();
-            
-			Long id = ParseUtil.parseLong(valoresForm.get("item_id"));
-			if (id != null) { 
-				edifici = edificiDelegate.obtenerEdificio(id);
-			} else {									
-				edifici = new Edificio();
-			}
-			
-			edifici.setDireccion(direccio);
-			edifici.setCodigoPostal(valoresForm.get("item_codi_postal"));
-			edifici.setPoblacion(valoresForm.get("item_poblacio"));
-			if (valoresForm.get("item_latitud").length() < 15) {
-				edifici.setLatitud(valoresForm.get("item_latitud"));
-			} else {
-				edifici.setLatitud(valoresForm.get("item_latitud").substring(0,14));
-			}
-			if (valoresForm.get("item_longitud").length() < 15){
-				edifici.setLongitud(valoresForm.get("item_longitud"));
-			} else {
-				edifici.setLongitud(valoresForm.get("item_longitud").substring(0, 14));
-			}
-				
-			
-			
-			edifici.setTelefono(valoresForm.get("item_telefon"));
-			edifici.setFax(valoresForm.get("item_fax"));
-			edifici.setEmail(valoresForm.get("item_email"));
-			
-			//Foto Petita
-    		FileItem fileFotoPetita = ficherosForm.get("item_foto_petita");
-    		if ( fileFotoPetita.getSize() > 0 ) {
-    			edifici.setFotoPequenya(UploadUtil.obtenerArchivo(edifici.getFotoPequenya(), fileFotoPetita));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_foto_petita_delete") != null && !"".equals(valoresForm.get("item_foto_petita_delete"))){
-    			edifici.setFotoPequenya(null);
-    		}
-    		//FotoGran
-    		FileItem fileFotoGran = ficherosForm.get("item_foto_gran");
-    		if ( fileFotoGran.getSize() > 0 ) {
-    			edifici.setFotoGrande(UploadUtil.obtenerArchivo(edifici.getFotoGrande(), fileFotoGran));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_foto_gran_delete") != null && !"".equals(valoresForm.get("item_foto_gran_delete"))){
-    			edifici.setFotoGrande(null);
-    		}
-    		//Planol
-    		FileItem filePlanol = ficherosForm.get("item_planol");
-    		if ( filePlanol.getSize() > 0 ) {
-    			edifici.setPlano(UploadUtil.obtenerArchivo(edifici.getPlano(), filePlanol));
-    		} else
-    		//borrar fichero si se solicita
-    		if (valoresForm.get("item_planol_delete") != null && !"".equals(valoresForm.get("item_planol_delete"))){
-    			edifici.setPlano(null);
-    		}
-           
-
-            // Idiomas
-			IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
-			List<String> langs = idiomaDelegate.listarLenguajes();
-			
-			Map traduccions = new HashMap(langs.size());
-			for (String lang: langs) {
-				TraduccionEdificio tp = new TraduccionEdificio();
-				tp.setDescripcion( RolUtil.limpiaCadena(valoresForm.get("item_descripcio_"+  lang )) );		
-				traduccions.put(lang, tp);
-			}
-			edifici.setTraduccionMap(traduccions);
-			   	
-			
-			//Unitats Administratives
-            
-            if (valoresForm.get("unitatsAdministratives") != null && !"".equals(valoresForm.get("unitatsAdministratives"))){
-                UnidadAdministrativaDelegate unitatAdminsitrativaDelegate = DelegateUtil.getUADelegate();
-                Set<UnidadAdministrativa> unitatAdmNoves = new HashSet<UnidadAdministrativa>();
-                String[] codisUANous = valoresForm.get("unitatsAdministratives").split(",");
-                
-                if (edifici.getId() != null){
-                    for (int i = 0; i<codisUANous.length; i++){
-                    	for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
-        					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
-        					if(unitatAdministrativa.getId().equals(ParseUtil.parseLong(codisUANous[i]))){
-                                unitatAdmNoves.add(unitatAdministrativa);
-                                codisUANous[i] = null;
-                                break;
-                            }
-                        }                            
-                    }                         
-                }                    
-                
-                for (String codiUA: codisUANous){
-                    if (codiUA != null){
-                        unitatAdmNoves.add(unitatAdminsitrativaDelegate.obtenerUnidadAdministrativa(ParseUtil.parseLong(codiUA)));
-                    }                        
-                }
-                
-                edifici.setUnidadesAdministrativas(unitatAdmNoves);                                                 
-            }else {
-                String error = messageSource.getMessage("edifici.formulari.unitat_administrativa.minim", null, request.getLocale());
-                result = new IdNomDTO(-3l, error);
-                return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);  
-            }
-			
-            edificiDelegate.grabarEdificio(edifici);
-            
-            String ok = messageSource.getMessage("administracioRemota.guardat.correcte", null, request.getLocale());
-            result = new IdNomDTO(edifici.getId(), ok);
-            
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                String error = messageSource.getMessage("error.permisos", null, request.getLocale());
-                result = new IdNomDTO(-1l, error);
-            } else {
-                String error = messageSource.getMessage("error.altres", null, request.getLocale());
-                result = new IdNomDTO(-2l, error);
-                log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        } catch (UnsupportedEncodingException e) {
-			String error = messageSource.getMessage("error.altres", null, request.getLocale());
-			result = new IdNomDTO(-2l, error);
-			log.error(ExceptionUtils.getStackTrace(e));
-        } catch (FileUploadException e) {
-			String error = messageSource.getMessage("error.fitxer.tamany", null, request.getLocale());
-			result = new IdNomDTO(-3l, error);
-			log.error(ExceptionUtils.getStackTrace(e));;
-        }
-        
-        return new ResponseEntity<String>(result.getJson(), responseHeaders, HttpStatus.CREATED);
+    	}
+    	for (String codiUA: codisUANous) {
+    		if (codiUA != null)
+    			unitatAdmNoves.add(unitatAdminsitrativaDelegate.obtenerUnidadAdministrativa(ParseUtil.parseLong(codiUA)));
+    	}
+    	edifici.setUnidadesAdministrativas(unitatAdmNoves);
+    	
+    	return edifici;
     }
+    
     
     @RequestMapping(value = "/esborrarEdifici.do", method = POST)
 	public @ResponseBody IdNomDTO esborrarEdifici(HttpServletRequest request) {
