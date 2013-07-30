@@ -895,26 +895,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	historico.setMateria(null);
             	historico.setUa(null);
             }
-           // Historico historico = getHistorico(session, ficha);
-           // ((HistoricoFicha) historico).setFicha(null);
 
-            for (Iterator iterator = ficha.getMaterias().iterator(); iterator.hasNext();) {
-                Materia mat = (Materia) iterator.next();
-                mat.getFichas().remove(ficha);
-            }
-            for (Iterator iterator = ficha.getHechosVitales().iterator(); iterator.hasNext();) {
-                HechoVital hecho = (HechoVital) iterator.next();
-                hecho.getFichas().remove(ficha);
-            }
-            for (Iterator iterator = ficha.getFichasua().iterator(); iterator.hasNext();) {
-                FichaUA fichaUA = (FichaUA) iterator.next();
-                fichaUA.getSeccion().removeFichaUA(fichaUA);
-                UnidadAdministrativa ua = fichaUA.getUnidadAdministrativa();
-                if (ua != null) {
-                    ua.removeFichaUA(fichaUA);
-                }
-            }
-            
             // Borrar comentarios
             session.delete("from ComentarioFicha as cf where cf.ficha.id = ?", id, Hibernate.LONG);
 
