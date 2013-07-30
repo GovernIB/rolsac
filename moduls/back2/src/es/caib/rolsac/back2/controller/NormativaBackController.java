@@ -151,7 +151,7 @@ public class NormativaBackController extends PantallaBaseController {
 	@RequestMapping(value = "/llistat.do", method = POST)
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 
-		//Listar las normativas de la unidad administrativa
+		// Listar las normativas de la unidad administrativa
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
@@ -161,7 +161,6 @@ public class NormativaBackController extends PantallaBaseController {
 		String idioma = request.getLocale().getLanguage();
 
         ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-        //ResultadoBusqueda resultadoBusquedaExterna = new ResultadoBusqueda();
 
 		//Obtenemos la ordenacion por parametro
 		String campoOrdenacion = request.getParameter("ordreCamp");

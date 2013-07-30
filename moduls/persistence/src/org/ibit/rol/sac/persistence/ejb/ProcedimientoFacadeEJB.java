@@ -944,6 +944,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			String select = "select new ProcedimientoLocal(procedimiento.id, trad.nombre, procedimiento.validacion, " +
 								    "procedimiento.fechaActualizacion, procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, " +
 								    "tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ";
+			
 			String selectCount = "select count(*) ";
 
 			String restoQuery = " procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where;

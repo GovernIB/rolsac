@@ -186,6 +186,7 @@ public abstract class FichaResumenFacadeEJB extends HibernateEJB {
             for (int i = 0; i < params.size(); i++) {
                 Object o = params.get(i);
                 query.setParameter(i, o);
+                countQuery.setParameter(i, o);
             }
             
             int resultadosMax = new Integer(resultats).intValue();

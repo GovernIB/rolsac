@@ -895,28 +895,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
             	historico.setMateria(null);
             	historico.setUa(null);
             }
-           // Historico historico = getHistorico(session, ficha);
-           // ((HistoricoFicha) historico).setFicha(null);
 
-            /* agarcia: no es necesario esto, ya lo maneja hibernate
-            for (Iterator iterator = ficha.getMaterias().iterator(); iterator.hasNext();) {
-                Materia mat = (Materia) iterator.next();
-                mat.getFichas().remove(ficha);
-            }
-            for (Iterator iterator = ficha.getHechosVitales().iterator(); iterator.hasNext();) {
-                HechoVital hecho = (HechoVital) iterator.next();
-                hecho.getFichas().remove(ficha);
-            }
-            for (Iterator iterator = ficha.getFichasua().iterator(); iterator.hasNext();) {
-                FichaUA fichaUA = (FichaUA) iterator.next();
-                fichaUA.getSeccion().removeFichaUA(fichaUA);
-                UnidadAdministrativa ua = fichaUA.getUnidadAdministrativa();
-                if (ua != null) {
-                    ua.removeFichaUA(fichaUA);
-                }
-            }
-            */
-            
             // Borrar comentarios
             session.delete("from ComentarioFicha as cf where cf.ficha.id = ?", id, Hibernate.LONG);
 
@@ -1205,7 +1184,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
     /**
      * Crea o actualiza una FichaUA
-     * Esta ficha ser� la que tenga el orden 0 
+     * Esta ficha sera la que tenga el orden 0 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
      */
@@ -1233,7 +1212,7 @@ public abstract class FichaFacadeEJB extends HibernateEJB {
 
             Seccion seccion = (Seccion) session.load(Seccion.class, seccion_id);
             if (!getAccesoManager().tieneAccesoSeccion(seccion_id)) {
-                throw new SecurityException("No tiene acceso a la secci�n");
+                throw new SecurityException("No tiene acceso a la seccion");
             }
             
             // Cuando se aniade una ficha a una seccion o a una seccion + ua por defecto su orden es 1
