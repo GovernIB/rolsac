@@ -296,8 +296,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         
         try {
         	
-        	UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-        	
             List params = new ArrayList();            
             String sQuery = "";
             
@@ -311,121 +309,68 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
             	sQuery += "(" + populateQuery(traduccion, params) + ")";
             }            
             
-            String nombreBoletin = "";
-            String fromBoletin = "";
-            if (parametros.containsKey("boletin")) {
-                nombreBoletin = ", boletin.nombre";
-                fromBoletin = ", normativa.boletin as boletin";
-            }
-            
-            String nombreTipo = "";
-            String fromTipo = "";
-            String whereTipo = "";
-            if (parametros.containsKey("tipo")) { 
-                nombreTipo = ", traTipo.nombre";
-                fromTipo = ", normativa.tipo as tipo, tipo.traducciones as traTipo";
-                if (traduccion.get("idioma") != null) {
-                    whereTipo = " and index(traTipo) = '" + traduccion.get("idioma") + "' "; 
-                } else {
-                    whereTipo = " and index(traTipo) = '"  + idioma_per_defecte + "'";
-                }
-            }
-            
             String orderBy = " order by normativa." + campoOrdenacion + " " + orden;
             
-            Query queryLocal;
-            Query queryExterna;
-            List normativas = new ArrayList<Normativa>();
-            if ("local".equals(tipo) || "todas".equals(tipo)) {
-            	
-            	String select = "select new NormativaLocal(normativa.id, normativa.numero, normativa.fecha, " +
-            			"normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " +
-            			nombreBoletin + ", index(trad), normativa.unidadAdministrativa) ";
-            	
-            	String from = " from NormativaLocal as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
-            	
-            	String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
-            	if ( !StringUtils.isEmpty(uaQuery) ) {
-            		uaQuery = " and normativa.unidadAdministrativa.id in (" + uaQuery + ")";
-            	}
-            	queryLocal = session.createQuery(select + from + " where " + sQuery + uaQuery + whereTipo + orderBy);
-            	 for ( int i = 0; i < params.size(); i++ ) {
-                     Object o = params.get(i);
-                     queryLocal.setParameter(i, o);
-                 }
-            	 List normativasLocales = queryLocal.list();
-            	 normativas.addAll(normativasLocales);
+            Query query;
+            Query queryCount;
+            String select = "Select distinct normativa";
+            String selectCount = "Select count(distinct normativa)";
+            String from;
+            if ("local".equals(tipo)) {
+            	from = " from NormativaLocal as normativa, normativa.traducciones as trad ";
+            } else if ("todas".equals(tipo)) {
+            	from = " from Normativa as normativa, normativa.traduccionesCombinadas as trad ";
+            } else {
+            	from = " from NormativaExterna as normativa, normativa.traducciones as trad ";
             }
             
-            if ("externa".equals(tipo) || "todas".equals(tipo)) { // "externa".equals(tipo))
-
-                String select = "select new NormativaExterna(normativa.id, normativa.numero, normativa.fecha, " +
-                        "normativa.fechaBoletin " + nombreTipo + ", normativa.validacion, trad.titulo " + 
-                        nombreBoletin + ", index(trad) ) ";
-                
-                String from =  " from NormativaExterna as normativa, normativa.traducciones as trad " + fromTipo + fromBoletin;
-                
-                queryExterna = session.createQuery(select + from + " where " + sQuery + whereTipo + orderBy);
-                for ( int i = 0; i < params.size(); i++ ) {
-                    Object o = params.get(i);
-                    queryExterna.setParameter(i, o);
-                }
-                List normativasExternas = queryExterna.list();
-                normativas.addAll(normativasExternas);
-                
-                
-            }
-            
-            boolean ignorarPaginacion = true; 
-            
-            int resultadosMax = 0;
-            int primerResultado = 0;
-            
-            if ( resultats != null && pagina != null ) {
-            	resultadosMax = new Integer(resultats).intValue();
-				primerResultado = new Integer(pagina).intValue() * resultadosMax;
-				ignorarPaginacion = false;
+            String uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(idUA, uaFilles, uaMeves);
+        	if ( !StringUtils.isEmpty(uaQuery) ) {
+        		uaQuery = " and  ( 	normativa.unidadAdministrativa.id in (" + uaQuery + ") " +
+        				"		or normativa.unidadAdministrativa.id is null )"; //las externas no tienen ua
         	}
-            
+
+			//Filtrar por el acceso del usuario
+
+        	String accessQuery = "";
+			//tieneAccesoValidable
+			if (!userIsSuper()) {
+				accessQuery += " and normativa.validacion = " + Validacion.INTERNA;
+			}
+
+			// tieneAcceso
+			if (!userIsSystem()) {
+	            if ( StringUtils.isEmpty(uaQuery) ) { //Se está buscando en todas las unidades orgánicas            	
+					uaQuery = DelegateUtil.getUADelegate().obtenerCadenaFiltroUA(null, true, true);
+		            if ( !StringUtils.isEmpty(uaQuery) ) {        	
+		        		uaQuery = " and ( normativa.unidadAdministrativa.id in (" + uaQuery + ") " +
+        						  "		or normativa.unidadAdministrativa.id is null )"; //las externas no tienen ua
+		            } else {
+		            	//Esto significa que el usuario no tiene ninguna unidad administrativa configurada, y //no es system. 
+		        		uaQuery = " and normativa.unidadAdministrativa.id is null"; //las externas no tienen ua
+		            }
+				}
+			}
             ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
-            
-            if ("todas".equals(tipo)) {
-            	Collections.sort(normativas, comparator);
-            }
-            
-            List normativasAcceso = new ArrayList<Normativa>();
-            Usuario usuario = getUsuario(session);
-               
-            // Procesar todas las normativas para saber el total y 
-            // aprovechar el bucle para ir guardando el número 
-            // de normativas solicitadas según los parámetros de paginación.                
-            int contadorTotales = 0;
-            int normativasInsertadas = 0;
-            int iteraciones = 0;
-            
-            for ( int i = 0; i < normativas.size(); i++ ) {
-            
-            	if ( tieneAcceso(usuario, (Normativa) normativas.get(i) ) )  {
-            		
-            		if ( ignorarPaginacion || (normativasInsertadas != resultadosMax && iteraciones >= primerResultado) ) {
-            			if (normativas.get(i).getClass().equals(NormativaLocal.class))
-            				normativasAcceso.add(  NormativaLocal.class.cast(normativas.get(i) ) );
-            			else
-            				normativasAcceso.add(  NormativaExterna.class.cast(normativas.get(i) ) );
-            			
-            			normativasInsertadas++;
-            		}
-            		
-            		contadorTotales++;
-            		
-            	}
-            	
-            	iteraciones++;            	            	 
-            }
-            
-            resultadoBusqueda.setListaResultados( normativasAcceso );
-            resultadoBusqueda.setTotalResultados( contadorTotales );
-            
+        	queryCount = session.createQuery(selectCount + from + " where " + sQuery + uaQuery + accessQuery);
+        	query = session.createQuery(select + from + " where " + sQuery + uaQuery + accessQuery + orderBy);
+
+        	for ( int i = 0; i < params.size(); i++ ) {
+                 Object o = params.get(i);
+                 query.setParameter(i, o);
+                 queryCount.setParameter(i, o);
+             }
+
+            int resultadosMax = new Integer(resultats).intValue();
+			int primerResultado = new Integer(pagina).intValue() * resultadosMax;
+        	if ( resultadosMax != RESULTATS_CERCA_TOTS) {
+				query.setFirstResult(primerResultado);
+				query.setMaxResults(resultadosMax);
+			}
+
+			resultadoBusqueda.setTotalResultados( (Integer) queryCount.uniqueResult() );
+			resultadoBusqueda.setListaResultados(query.list());
+
             return resultadoBusqueda;
             
       } catch (DelegateException de) {
@@ -437,20 +382,6 @@ public abstract class NormativaFacadeEJB extends HibernateEJB {
         }
     }    
     
-	
-	Comparator<Normativa> comparator = new Comparator<Normativa>() {
-		
-		public int compare(Normativa o1, Normativa o2) {
-			if (o1.getFecha() != null && o2.getFecha() != null) {
-				if (o1.getFecha().before(o2.getFecha()))
-					return 1;
-				else
-					return 0;
-			
-			}
-			return 1;
-		}
-	};
 	
     /**
      * Construye el query de búsqueda multiidioma en todos los campos

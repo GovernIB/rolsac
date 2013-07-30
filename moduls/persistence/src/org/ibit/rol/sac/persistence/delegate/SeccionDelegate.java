@@ -195,6 +195,17 @@ public class SeccionDelegate implements StatelessDelegate {
     	}
     }
     
+
+	public String obtenerCadenaFiltroSeccion() throws DelegateException {
+
+    	try {
+    		return getFacade().obtenerCadenaFiltroSeccion();
+    	} catch (RemoteException e) {
+    		throw new DelegateException(e);
+    	}
+
+	}	
+    
     /* ========================================================= */
     /* ======================== REFERENCIA AL FACADE  ========== */
     /* ========================================================= */

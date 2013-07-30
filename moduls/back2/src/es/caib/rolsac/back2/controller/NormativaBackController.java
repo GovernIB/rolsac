@@ -173,39 +173,35 @@ public class NormativaBackController extends PantallaBaseController {
 	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
 
 		// Listar las normativas de la unidad administrativa.
-		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
-		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
+		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
+
 		
 		String idioma = request.getLocale().getLanguage();
 
-        ResultadoBusqueda resultadoBusquedaLocal = new ResultadoBusqueda();
-        ResultadoBusqueda resultadoBusquedaExterna = new ResultadoBusqueda();
+        ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
-		// Obtenemos la ordenación por parámetro.
+		//Obtenemos la ordenación por parámetro.
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
-		// Determinar si el usuario ha marcado el checkbox de buscar en normaticas externas.
+		//Determinar si el usuario ha marcado el checkbox de buscar en normaticas externas.
 		boolean buscaExternas = "true".equals(request.getParameter("cercaExternes"));
 		
-		// Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
+		//Determinar si ha marcado el checkbox "Cerar a totes les meves unitats".
 		boolean meves = "true".equals(request.getParameter("totesUnitats"));
         boolean uaFilles = "true".equals(request.getParameter("uaFilles"));
 		
 		Long idUA = null;
-		
-		int resultadosDescartados = 0;
 		
 		if (request.getParameter("idUA") != null && !request.getParameter("idUA").equals("")){                      
 			idUA = ParseUtil.parseLong(request.getParameter("idUA"));
 		}
 		
 		try {
-			
-			// Obtener parámetros de búsqueda.
+			//Obtener parámetros de búsqueda.
 			String idStr = request.getParameter("id");
 			Long id = -1l;
 									
@@ -214,98 +210,59 @@ public class NormativaBackController extends PantallaBaseController {
 			
 			paramMap.put("id", idStr != null ? id : null );
 			
-			// Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
+			//Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
 			procesarParametrosBusqueda(request, paramMap, paramTrad, idioma);
 						
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
-			// Información de paginación.
+			//Información de paginación.
 			String pagPag = request.getParameter("pagPag");		
 			String pagRes = request.getParameter("pagRes");
 			
 			if (pagPag == null) pagPag = String.valueOf(0); 
 			if (pagRes == null) pagRes = String.valueOf(10);                			
 			
-			resultadoBusquedaLocal = normativaDelegate.buscarNormativas(
-					paramMap, paramTrad, "local", idUA, meves, uaFilles,
+			String queBuscar = "local";
+			if (buscaExternas) {
+				queBuscar = "todas";
+			}
+			
+			resultadoBusqueda = normativaDelegate.buscarNormativas(
+					paramMap, paramTrad, queBuscar, idUA, meves, uaFilles,
 					campoOrdenacion, orden, pagPag, pagRes);
 			
-			llistaNormatives = castList(Normativa.class, resultadoBusquedaLocal.getListaResultados());
-			
-			if (buscaExternas) {
-				
-				resultadoBusquedaExterna = normativaDelegate.buscarNormativas(
-						paramMap, paramTrad, "externa", idUA, meves, uaFilles,
-						campoOrdenacion, orden, pagPag, pagRes);
-				
-				List<NormativaExterna> listaExternas = castList(NormativaExterna.class, resultadoBusquedaExterna.getListaResultados());
-				llistaNormatives.addAll(listaExternas);
-				
-			}
-			
-			String idiomaPorDefecto = request.getLocale().getLanguage();
-			
-			for ( Normativa normativa : llistaNormatives ) {
-							
+			for ( Normativa normativa : (List<Normativa>)resultadoBusqueda.getListaResultados() ) {
+
 				boolean local = NormativaLocal.class.isInstance(normativa);
-				
-				// Sólo guardar registros del idioma por defecto (para evitar registros repetidos en
-				// búsquedas por texto multi-idioma
-				if ( idiomaPorDefecto.equals(normativa.getIdioma() ) ) {					
-					llistaNormativesDTO.add( new NormativaDTO(
-								normativa.getId(), 
-								normativa.getNumero(),
-								obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
-								normativa.getFecha(),
-								normativa.getFechaBoletin(),
-								normativa.getNombreBoletin(),
-								normativa.getNombreTipo(),
-								local ? "Local" : "Externa",
-								normativa.isVisible())
-					);
-					
-				} else {
-					
-					resultadosDescartados++;
-					
-				}
-				
+				normativa.setIdioma(idioma);
+
+				llistaNormativesDTO.add( new NormativaDTO(
+							normativa.getId(), 
+							normativa.getNumero()!=null?normativa.getNumero():0,
+							obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
+							normativa.getFecha(),
+							normativa.getFechaBoletin(),
+							normativa.getNombreBoletin(),
+							normativa.getNombreTipo(),
+							local ? "Local" : "Externa",
+							normativa.isVisible())
+				);
 			}
-			
-			// Ordenar lista si se combinan locales y externas.
-			if (buscaExternas) {
-				
-				Collections.sort(llistaNormativesDTO);
-				
-				if ("DESC".equals(orden))
-					Collections.reverse(llistaNormativesDTO);
-				
-				// Reajustar la lista a las que se han pedido (quitar de ella los que sobran).						
-				int registrosPag = Integer.parseInt(pagRes);
-				int indice = registrosPag;												
-				
-				if ( llistaNormativesDTO.size() > indice && registrosPag <= 50 ) {
-					llistaNormativesDTO = llistaNormativesDTO.subList(0, indice);
-				}
-				
-			}
+
 			
 		} catch (ParseException e) {
-			
 			log.error(ExceptionUtils.getStackTrace(e));
 					
 		} catch (DelegateException dEx) {
-			
 			if (dEx.isSecurityException()) {
 				log.error("Permisos insuficients: " + dEx.getMessage());
             } else {
             	log.error("Error: " + dEx.getMessage());
             }
-			
 		}
 		
-		resultats.put("total",   resultadoBusquedaLocal.getTotalResultados() + resultadoBusquedaExterna.getTotalResultados() - resultadosDescartados);
+		resultats.put("total",   resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
 
 		return resultats;
@@ -385,8 +342,7 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String idioma = request.getLocale().getLanguage();
 
-		//TODO: ordenaci�n
-		//Obtenemos la ordenaci�n por par�metro
+		//Obtenemos la ordenacion por parametro
 		String campoOrdenacion = request.getParameter("ordreCamp");
 		String orden = request.getParameter("ordreTipus");
 		
@@ -894,14 +850,14 @@ public class NormativaBackController extends PantallaBaseController {
 		
 		String idioma = request.getLocale().getLanguage();
 		
-		//TODO obtener la ordenaci�n por par�metro
+		//TODO obtener la ordenacion por parametro
 		String campoOrdenacion = "fecha";
 		String orden = "desc";
 		
 		int totalNormativas = 0;
 		
 		try {
-			//Obtener par�metros de b�squeda					
+			//Obtener parametros de busqueda					
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));

@@ -8,8 +8,6 @@ public class NormativaLocal extends Normativa implements Indexable {
 
     private static final long serialVersionUID = -2873594389705741463L;
 
-    private UnidadAdministrativa unidadAdministrativa;
-
     public NormativaLocal() {
         super();
     }
@@ -39,8 +37,7 @@ public class NormativaLocal extends Normativa implements Indexable {
         setTraduccionTitulo(traduccionTitulo != null ? traduccionTitulo : "");
         setNombreBoletin(nombreBoletin != null ? nombreBoletin : "");
         setIdioma(idioma);
-
-        this.unidadAdministrativa = unidadAdministrativa;
+        setUnidadAdministrativa(unidadAdministrativa);
     }
 
     public NormativaLocal(
@@ -82,14 +79,6 @@ public class NormativaLocal extends Normativa implements Indexable {
             UnidadAdministrativa unidadAdministrativa) {
         
         this(id, numero, fecha, fechaBoletin, "", validacion, traduccionTitulo, "", idioma, unidadAdministrativa);
-    }
-
-    public UnidadAdministrativa getUnidadAdministrativa() {
-        return unidadAdministrativa;
-    }
-
-    public void setUnidadAdministrativa(UnidadAdministrativa unidadAdministrativa) {
-        this.unidadAdministrativa = unidadAdministrativa;
     }
 
 }

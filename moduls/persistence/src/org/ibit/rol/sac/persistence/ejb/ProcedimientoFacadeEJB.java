@@ -963,7 +963,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			}
 
 			if ( userIsOper() ) {
-				//Filtrar por las unidades a que el usuario tiene acceso:
+				//Filtrar por el acceso del usuario
 
 				//tieneAccesoValidable
 				if (!userIsSuper()) {
@@ -1000,15 +1000,21 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 								    "procedimiento.fechaActualizacion, procedimiento.fechaCaducidad, procedimiento.fechaPublicacion, " +
 								    "tradFam.nombre, index(trad), procedimiento.unidadAdministrativa ) ";
 
-			String queryStr = select + from 
-			        + "procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where  
-			        + " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			String selectCount = "select count(*) ";
+
+			String restoQuery = " procedimiento.traducciones as trad, procedimiento.familia as fam, fam.traducciones as tradFam " + i18nQuery + uaQuery + where;
+			String orderBy = " order by procedimiento." + parametros.get("ordreCamp") + " " + parametros.get("ordreTipus");
+			
+			String queryStr = select + from + restoQuery + orderBy;
+			String queryCountStr = selectCount + from + restoQuery;
 			
 			Query query = session.createQuery(queryStr);
+			Query queryCount = session.createQuery(queryCountStr);
 			
 			for (int i = 0; i < params.size(); i++) {
 				String o = (String) params.get(i);
 				query.setString(i, o);
+				queryCount.setString(i, o);
 			}
 
 			int resultadosMax = new Integer(resultats).intValue();
@@ -1016,7 +1022,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 						
 			ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();			
 
-			resultadoBusqueda.setTotalResultados(query.list().size());
+			resultadoBusqueda.setTotalResultados( (Integer) queryCount.uniqueResult() );
 			
 			if ( resultadosMax != RESULTATS_CERCA_TOTS) {
 				query.setFirstResult(primerResultado);

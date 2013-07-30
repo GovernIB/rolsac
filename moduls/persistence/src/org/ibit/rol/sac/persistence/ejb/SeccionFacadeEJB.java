@@ -19,10 +19,12 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.expression.Expression;
 import net.sf.hibernate.expression.Order;
 
+import org.apache.commons.lang.StringUtils;
 import org.ibit.rol.sac.model.Ficha;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.UnidadAdministrativa;
+import org.ibit.rol.sac.persistence.delegate.DelegateException;
 import org.ibit.rol.sac.persistence.util.FichaUAFichaIds;
 
 import es.caib.rolsac.utils.ResultadoBusqueda;
@@ -48,7 +50,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Crea una Secci�n.
+     * Crea una Seccion.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -74,7 +76,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza una Secci�n.
+     * Actualiza una Seccion.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
@@ -88,7 +90,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
             if (padreOld_id != null)
                 padreOld = this.obtenerSeccion(padreOld_id);
 
-            /* Comprova si el pare antic �s diferent del nou. Tots dos valors poden ser null. */
+            /* Comprova si el pare antic es diferent del nou. Tots dos valors poden ser null. */
             if ( (padre_id == null && padreOld_id != null) || (padre_id != null && padreOld_id == null) || (padre_id != null && padreOld_id != null && !padre_id.equals(padreOld_id))) {
                 if (padre_id == null) { //Quitamos de jerarquia i metemos en raiz.
                     if (padreOld != null)
@@ -117,7 +119,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Actualiza los ordenes de las fichas de una secci�n seg�n el orden de los campos del form
+     * Actualiza los ordenes de las fichas de una seccion segun el orden de los campos del form
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -258,7 +260,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una secci�n determinada.
+     * Obtiene una seccion determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -280,7 +282,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una secci�n determinada.
+     * Obtiene una seccion determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -304,7 +306,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Obtiene una secci�n determinada segun el nombre.
+     * Obtiene una seccion determinada segun el nombre.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -428,8 +430,40 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
         }
     }
 
+	/**
+	 * Metodo que devuelve una cadena csv de ids de secciones a las que el usuario tienen acceso
+	 * 	 
+	 * @return
+	 * @throws HibernateException
+	 * @throws DelegateException
+	 * 
+     * @ejb.interface-method
+     * @ejb.permission unchecked="true"
+	 */
+	public String obtenerCadenaFiltroSeccion()
+			throws DelegateException {
+	
+		List<String> roles = this.getUserRoles();
+		String rolesStr = "'" + StringUtils.join(roles.toArray(), "','") + "'";
+		
+        Session session = getSession();
+        try {
+            String select = "select s.id from Seccion as s where s.perfil in ( '0', "+ rolesStr +")";
+            Query query = session.createQuery(select);
+            List ids = query.list();
+            return StringUtils.join(ids.toArray(), ",");
+        } catch (HibernateException he) {
+            throw new EJBException(he);
+        } finally {
+            close(session);
+        }
+
+	}	
+	
+    
+
     /**
-     * Lista de la raiz hasta la secci�n indicada por el id.
+     * Lista de la raiz hasta la seccion indicada por el id.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin},${role.super},${role.oper}"
@@ -455,7 +489,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Lista de los hijos de una secci�n determinada.
+     * Lista de los hijos de una seccion determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
@@ -475,7 +509,7 @@ public abstract class SeccionFacadeEJB extends HibernateEJB {
     }
 
     /**
-     * Borra una secci�n determinada.
+     * Borra una seccion determinada.
      * 
      * @ejb.interface-method
      * @ejb.permission role-name="${role.system},${role.admin}"
