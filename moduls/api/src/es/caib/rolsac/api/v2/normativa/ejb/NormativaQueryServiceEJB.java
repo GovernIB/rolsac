@@ -253,12 +253,6 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris;
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-
         try {            
         	
             criteris = BasicUtils.parseCriterias(ProcedimentCriteria.class, HQL_PROCEDIMIENTOS_LOCALES_ALIAS, HQL_TRADUCCIONES_ALIAS, procedimentCriteria);
@@ -279,9 +273,6 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
             
             for (ProcedimientoLocal procediment : procedimentsResult) {
                 
-                if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-					
 					procedimentsDTOList.add(
 						(ProcedimentDTO)BasicUtils.entityToDTO(
 							ProcedimentDTO.class, 
@@ -290,8 +281,6 @@ public class NormativaQueryServiceEJB extends HibernateEJB {
 						)
 					);
 					
-				}
-                
             }
             
         } catch (HibernateException e) {

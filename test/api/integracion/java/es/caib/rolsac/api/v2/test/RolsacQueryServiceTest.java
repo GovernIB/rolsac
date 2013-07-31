@@ -293,7 +293,7 @@ public class RolsacQueryServiceTest {
     @Test
     public void recuperarTramits() {
         TramitCriteria tramitCriteria = new TramitCriteria();
-        tramitCriteria.setT_nombre("%sol·licitud%");
+        tramitCriteria.setT_nombre("%solï¿½licitud%");
         tramitCriteria.setTamany("10");
         List<TramitQueryServiceAdapter> tramits = null;
         try {
@@ -304,7 +304,7 @@ public class RolsacQueryServiceTest {
         Assert.assertTrue(tramits.size() > 0);
         Assert.assertTrue(tramits.size() <= 10);
         for (TramitQueryServiceAdapter t: tramits) {
-            Assert.assertTrue(t.getNombre().toLowerCase().contains("sol·licitud"));
+            Assert.assertTrue(t.getNombre().toLowerCase().contains("solï¿½licitud"));
         }
     }
     
@@ -1262,7 +1262,7 @@ public class RolsacQueryServiceTest {
         } catch (QueryServiceException e) {
             Assert.fail(e.toString());
         }
-        Assert.assertTrue(tn.getNombre().equals("Resolució"));
+        Assert.assertTrue(tn.getNombre().equals("Resoluciï¿½"));
     }
     
     /**

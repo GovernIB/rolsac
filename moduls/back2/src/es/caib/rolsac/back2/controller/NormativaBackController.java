@@ -385,7 +385,7 @@ public class NormativaBackController extends PantallaBaseController {
 	        Normativa normativa = normativaDelegate.obtenerNormativa(id);
 	        
 	        boolean normativaLocal = NormativaLocal.class.isInstance(normativa);
-	        
+
 	        if (normativaLocal) {
 	        	normativaDetall.put("tipologia", "L");
 	        	NormativaLocal normLoc = (NormativaLocal)normativa;
@@ -396,7 +396,7 @@ public class NormativaBackController extends PantallaBaseController {
 	        	normativaDetall.put("idUA", null);
 	        	normativaDetall.put("nomUA", null);
 	        }
-	        
+
 	        normativaDetall.put("id", normativa.getId());
 	        normativaDetall.put("data_norma", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");	   	        
 	        

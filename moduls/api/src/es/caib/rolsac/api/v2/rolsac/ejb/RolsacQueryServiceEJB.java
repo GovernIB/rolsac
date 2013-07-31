@@ -448,16 +448,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         ProcedimentDTO procedimentDTO = null;
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-        
-        // Guardamos el estado de la UA para que no influya en la query
-        String estadoUA = procedimentCriteria.getEstadoUA();
-        procedimentCriteria.setEstadoUA(null);
-        
         try {
         	
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
@@ -481,19 +471,11 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             ProcedimientoLocal procedimentLocal = (ProcedimientoLocal)query.uniqueResult();
             
             if (procedimentLocal != null) {
-                
-                if ( (soloRegistrosVisibles && procedimentLocal.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-    					|| !soloRegistrosVisibles ) {							// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-                	
-                	if (estadoUA == null || procedimentLocal.getUnidadAdministrativa().getValidacion() == Integer.parseInt(estadoUA)) {
-                		
-                		procedimentDTO = (ProcedimentDTO)BasicUtils.entityToDTO(
-                				ProcedimentDTO.class,
-                				procedimentLocal,
-                				procedimentCriteria.getIdioma()
-                			);
-                	}
-                }
+        		procedimentDTO = (ProcedimentDTO)BasicUtils.entityToDTO(
+        				ProcedimentDTO.class,
+        				procedimentLocal,
+        				procedimentCriteria.getIdioma()
+        			);
             }
             
         } catch (HibernateException e) {
@@ -536,27 +518,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-        
-        // Guardamos el estado de la UA para que no influya en la query
-        String estadoUA = procedimentCriteria.getEstadoUA();
-        procedimentCriteria.setEstadoUA(null);
-        
-        // Guardamos el tamanyo a consultar para realizar el filtrado posterior
-        int tamany = Integer.parseInt(procedimentCriteria.getTamany());
-        procedimentCriteria.setTamany(null);
-        
-        // Guardamos el inicio de la consulta
-        int inicio = 0;
-        if (procedimentCriteria.getInici() != null)
-        	inicio = Integer.parseInt(procedimentCriteria.getInici());
-        
-        procedimentCriteria.setInici(null);
-        
         try {
         	
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
@@ -580,25 +541,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             Query query = qb.createQuery(session);
             List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
             
-            List<ProcedimientoLocal> procedimentsBons = new ArrayList<ProcedimientoLocal>();
             for (ProcedimientoLocal procediment: procedimentsResult) {
-            	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-            	if ( (soloRegistrosVisibles && procediment.getIsVisible()) || !soloRegistrosVisibles ) {
-            		// Filtro según el estado de la UA
-            		if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion() == Integer.parseInt(estadoUA)) {
-            			procedimentsBons.add(procediment);
-            		}
-            	}
-            }
-            
-            int count = inicio;
-            ProcedimientoLocal procediment;
-            if (procedimentsBons.size() > 0)
-            	procediment  = procedimentsBons.get(count);
-            
-            while ((count < inicio + tamany) && (count < procedimentsBons.size())) {
-            	
-            	procediment  = procedimentsBons.get(count);
             	procedimentDTOList.add(
 						(ProcedimentDTO)BasicUtils.entityToDTO(
 							ProcedimentDTO.class, 
@@ -606,8 +549,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
 							procedimentCriteria.getIdioma()
 						)
 					);
-            	count++;
-            }
+           }
             
         } catch (HibernateException e) {
         	
@@ -644,20 +586,9 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
      */
     public int getNumProcediments(ProcedimentCriteria procedimentCriteria) {
     	
-        Integer numResultats = -1;
         List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( procedimentCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( procedimentCriteria.getVisible() != null && procedimentCriteria.getVisible().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        procedimentCriteria.setVisible(null);
-        
-        // Guardamos el estado de la UA para que no influya en la query
-        String estadoUA = procedimentCriteria.getEstadoUA();
-        procedimentCriteria.setEstadoUA(null);
-
         try {
         	
             ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
@@ -674,27 +605,13 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     HQL_PROCEDIMIENTO_ALIAS, 
                     entities, 
                     procedimentCriteria.getIdioma(),
-                    HQL_TRADUCCIONES_ALIAS);
+                    HQL_TRADUCCIONES_ALIAS, 
+                    true);
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<ProcedimientoLocal> procedimentsResult = (List<ProcedimientoLocal>)query.list();
-            
-            int cont = 0;
-			for (ProcedimientoLocal procediment : procedimentsResult) {
-				
-				if ( (soloRegistrosVisibles && procediment.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos al total de resultados si cumple con ello.
-						|| !soloRegistrosVisibles ) {						// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-					
-					if (estadoUA == null || procediment.getUnidadAdministrativa().getValidacion() == Integer.parseInt(estadoUA)) {
-						cont++;
-					}
-				}
-			
-			}
-			
-			numResultats = new Integer(cont);
+            return getNumberResults(query);
             
         } catch (HibernateException e) {
         	
@@ -717,8 +634,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             
         }
 
-        return numResultats;
-        
     }
 
     /**

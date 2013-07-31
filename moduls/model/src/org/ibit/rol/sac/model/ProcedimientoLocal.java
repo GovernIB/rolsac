@@ -425,7 +425,7 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		this.publicosObjetivo.remove(pob);
 	}
 	
-	//u92770[enric] a�adido equals para que procedimiento pueda ser testeable con easyMock.
+	//u92770[enric] añadido equals para que procedimiento pueda ser testeable con easyMock.
 	@Override
 	public boolean equals(Object obj) {
 		ProcedimientoLocal other=(ProcedimientoLocal)obj;
@@ -459,9 +459,5 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		return visible;
 	}
 	
-	// Metode creat per poder ser cridad des de la JSP atraves de jstl
-	public Boolean getIsVisible() {
-		return this.isVisible();
-	}
 	
 }
