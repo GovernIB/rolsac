@@ -190,7 +190,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_nom_ca",
+            "etiquetaValor": "item_nom_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":
@@ -249,7 +249,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_resolucio_ca",
+            "etiquetaValor": "item_resolucio_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             /*"caracters":
@@ -268,7 +268,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_notificacio_ca",
+            "etiquetaValor": "item_notificacio_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             /*"caracters":
@@ -325,7 +325,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_silenci_ca",
+            "etiquetaValor": "item_silenci_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             /*"caracters":
@@ -346,7 +346,7 @@
 			// Nom del tr?mit 
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_nom_tramit_ca",
+            "etiquetaValor": "item_nom_tramit_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":
@@ -1517,7 +1517,7 @@
             { // Titol (Catala)
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "doc_titol_ca",
+                "etiquetaValor": "doc_titol_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters": {
@@ -2824,7 +2824,7 @@
             { 
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_tipdoc_ca",
+                "etiquetaValor": "item_tipdoc_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "numeric",
                 "error": {

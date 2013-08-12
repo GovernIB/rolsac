@@ -166,8 +166,9 @@ public class DocumentRequeritBackController {
 
 			Tramite tramite = tramiteDelegate.obtenerTramite( new Long(request.getParameter("docReqTramitId")) );			
 
-			String docReqId = request.getParameter("docReqId"); 
-			Long tipusDocRequerit = Long.parseLong(request.getParameter("item_tipdoc_ca"));
+			String docReqId = request.getParameter("docReqId");
+			// Se cambia el "item_tipdoc_ca" por el "item_tipdoc_" + idioma  
+			Long tipusDocRequerit = Long.parseLong(request.getParameter("item_tipdoc_" + DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 
 			boolean edicion = !"".equals(docReqId);
 			if ( !edicion ) {
@@ -210,7 +211,8 @@ public class DocumentRequeritBackController {
 
 			if (tipusDocRequerit==DOC_CATALEG){
 				try {
-					Long IdDocCataleg = Long.parseLong(request.getParameter("item_cataleg_ca"));
+					// Se cambia el "item_cataleg_ca" por el "item_cataleg_" + idioma
+					Long IdDocCataleg = Long.parseLong(request.getParameter("item_cataleg_" + DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 					CatalegDocumentsDelegate catDocDelegate = DelegateUtil.getCatalegDocumentsDelegate();
 					catDoc  = catDocDelegate.obtenirDocumentoCataleg(IdDocCataleg);
 					nomDoc =((TraduccionCatalegDocuments)catDoc.getTraduccion("ca")).getNombre();

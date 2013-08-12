@@ -50,26 +50,33 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/agrupacioMateries/")
-public class TMAgrupacioMateriesController extends PantallaBaseController {
-    
+public class TMAgrupacioMateriesController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMMateriesController.class);
 	
+	
 	@RequestMapping(value = "/agrupacioMateries.do")
-    public String pantallaMateria(Map<String, Object> model, HttpServletRequest request) {
-    	model.put("menu", 1);
-    	model.put("submenu", "layout/submenu/submenuTMAgrupacioMateries.jsp");
-    	
-    	RolUtil rolUtil = new RolUtil(request);
-    	if (rolUtil.userIsAdmin()) {
-    		
-    		String lang = request.getLocale().getLanguage();
-    		
-            String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
-    		
-            // Listado secciones
-        	SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+	public String pantallaMateria(Map<String, Object> model, HttpServletRequest request)
+	{
+		model.put("menu", 1);
+		model.put("submenu", "layout/submenu/submenuTMAgrupacioMateries.jsp");
+		
+		RolUtil rolUtil = new RolUtil(request);
+		if (rolUtil.userIsAdmin()) {
+			String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
+			
+			// Listado secciones
+			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
 			List<IdNomDTO> llistaSeccioDTO = new ArrayList<IdNomDTO>();
 			List<Seccion> llistaSeccio = new ArrayList<Seccion>();
+			
+			String lang = null;
+			try {
+				lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			} catch (DelegateException dEx) {
+				log.error("Error al recuperar el idioma por defecto");
+				lang = "ca";
+			}
 			
 			try {
 				Seccion seccion = seccioDelegate.obtenerSeccionCE(codiEstandarSec);
@@ -82,61 +89,62 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 				} else {
 					log.warn("No se ha encontrado una seccion con el codigo estandar " + codiEstandarSec);
 				}
+				
+			} catch (DelegateException dEx) {
+				if (dEx.isSecurityException())
+					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
+				else
+					log.error(ExceptionUtils.getStackTrace(dEx));
+			}
+			model.put("llistaSeccio", llistaSeccioDTO);
+			
+			// Listado materias
+			List<IdNomDTO> llistaMateriaDTO = new ArrayList<IdNomDTO>();
+			try {
+				MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+				List<Materia> materies = materiaDelegate.listarMaterias();
+				for (Materia materia: materies) {
+					TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(lang);
+					llistaMateriaDTO.add(new IdNomDTO(materia.getId(),tm == null ? null : tm.getNombre()));
+				}
+				
+			} catch (DelegateException dEx) {
+				if (dEx.isSecurityException())
+					log.error("Permisos insuficients: " + dEx.getMessage());
+				else
+					log.error("Error: " + dEx.getMessage());
+			}
+			model.put("llistaMateries", llistaMateriaDTO);
+			
+			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
+			try {
+				List<IdNomDTO> perfilesDTO = new LinkedList<IdNomDTO>();
+				for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
+					TraduccionPerfilCiudadano tpc = (TraduccionPerfilCiudadano) perfil.getTraduccion();
+					perfilesDTO.add(new IdNomDTO(perfil.getId(), tpc != null ? tpc.getNombre() : ""));
+				}
+				model.put("perfils", perfilesDTO);
+				model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioMateries.jsp");
+				
 			} catch (DelegateException dEx) {
 				if (dEx.isSecurityException()) {
-					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
+					model.put("error", "permisos");
 				} else {
-					log.error(ExceptionUtils.getStackTrace(dEx));
+					log.error("Error: " + dEx.getMessage());
+					model.put("error", "altres");
 				}
 			}
-    		model.put("llistaSeccio", llistaSeccioDTO);
-    		
-    		// Listado materias
-    		List<IdNomDTO> llistaMateriaDTO = new ArrayList<IdNomDTO>();
-    		
-    		try {
-    			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-    			List<Materia> materies = materiaDelegate.listarMaterias();
-    			for (Materia materia: materies) {
-    				TraduccionMateria tm = (TraduccionMateria) materia.getTraduccion(request.getLocale().getLanguage());
-    				llistaMateriaDTO.add(new IdNomDTO(materia.getId(),tm == null ? null : tm.getNombre()));
-    			}
-    		} catch (DelegateException dEx) {
-    			if (dEx.isSecurityException()) {
-    				log.error("Permisos insuficients: " + dEx.getMessage());
-    			} else {
-    				log.error("Error: " + dEx.getMessage());
-    			}
-    		}
-
-    		model.put("llistaMateries", llistaMateriaDTO);
-    		
-    		PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
-    		try {
-    			List<IdNomDTO> perfilesDTO = new LinkedList<IdNomDTO>();
-    			for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
-    				TraduccionPerfilCiudadano tpc = (TraduccionPerfilCiudadano) perfil.getTraduccion();
-    				perfilesDTO.add(new IdNomDTO(perfil.getId(), tpc != null ? tpc.getNombre() : ""));
-    			}
-    			model.put("perfils", perfilesDTO);
-    			model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioMateries.jsp");
-    		} catch (DelegateException dEx) {
-    			if (dEx.isSecurityException()) {
-    				model.put("error", "permisos");
-    			} else {
-    				log.error("Error: " + dEx.getMessage());
-    				model.put("error", "altres");
-    			}
-    		}
-    	} else {
-    		model.put("error", "permisos");
-    	}
-
-		loadIndexModel (model, request);	
-    	return "index";
-    }
-
-    @RequestMapping(value = "/llistat.do")
+			
+		} else {
+			model.put("error", "permisos");
+		}
+		
+		loadIndexModel(model, request);
+		return "index";
+	}
+	
+	
+	@RequestMapping(value = "/llistat.do")
 	public @ResponseBody Map<String, Object> llistatAgrupacioMateria(HttpServletRequest request) {
 	
 		List<Map<String, Object>> llistaAgrupacioMateriaDTO = new ArrayList<Map<String, Object>>();
@@ -159,7 +167,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			
 			for (AgrupacionMateria agrupacionMateria: castList(AgrupacionMateria.class, resultadoBusqueda.getListaResultados() ) ) {
 				
-				TraduccionAgrupacionM tam = (TraduccionAgrupacionM) agrupacionMateria.getTraduccion(request.getLocale().getLanguage());
+				TraduccionAgrupacionM tam = (TraduccionAgrupacionM) agrupacionMateria.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 				agrupacioMateriaDTO = new HashMap<String, Object>();
 				agrupacioMateriaDTO.put("id", agrupacionMateria.getId());
 				agrupacioMateriaDTO.put("nom", tam == null ? "" : tam.getNombre());
@@ -321,7 +329,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 	        resultats.put("item_codi_estandard", agrupacioMateries.getCodigoEstandar());
 	        
 	        String codiEstandarSec = System.getProperty("es.caib.rolsac.codiEstandarSecGrupMat");
-	        String lang = request.getLocale().getLanguage();
+	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 	        
             resultats.put("item_seccions", getJSONSecciones(codiEstandarSec, lang));
             resultats.put("item_seccio", agrupacioMateries.getSeccion() != null ? agrupacioMateries.getSeccion().getId() : null);
@@ -329,7 +337,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
 			omplirCampsTraduibles(resultats, agrupacioMateries);
 	        
 	        
-	        // Mat�ries asociades
+	        // Matéries associades
             if (agrupacioMateries.getMateriasAgrupacionM() != null) {             
             	Map<String, String> map;
             	List<Map<String, String>> llistaMateriesAgrupacio = new ArrayList<Map<String, String>>();            	
@@ -357,7 +365,7 @@ public class TMAgrupacioMateriesController extends PantallaBaseController {
             } else {
                 resultats.put("materies", null);
             } 
-            // Fi Met�ries asociades
+            // Fi Metéries associades
 	        
 	        
 	    } catch (DelegateException dEx) {

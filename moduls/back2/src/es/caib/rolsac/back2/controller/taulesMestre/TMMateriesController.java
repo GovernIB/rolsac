@@ -46,7 +46,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sun.text.Normalizer;
-
 import es.caib.rolsac.back2.controller.PantallaBaseController;
 import es.caib.rolsac.back2.util.ParseUtil;
 import es.caib.rolsac.back2.util.RolUtil;
@@ -111,7 +110,7 @@ public class TMMateriesController extends PantallaBaseController {
 		try {
 			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
 			
-			resultadoBusqueda = materiaDelegate.listarMaterias( Integer.parseInt(pagPag), Integer.parseInt(pagRes) );
+			resultadoBusqueda = materiaDelegate.listarMaterias(Integer.parseInt(pagPag), Integer.parseInt(pagRes), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 			
 			for (Object o : resultadoBusqueda.getListaResultados() ) {
 				
@@ -187,102 +186,78 @@ public class TMMateriesController extends PantallaBaseController {
                 resultats.put("item_icona_gran", "");
             }  
             
-            String lang = request.getLocale().getLanguage();
             List<UnidadAdministrativa> listaUAs = materiaDelegate.listarUAsMateria(id);
             
             // Ordenamos las UAs por nombre, ascendente.
             Collections.sort(listaUAs, new Comparator<UnidadAdministrativa>() {
             	
-				public int compare(UnidadAdministrativa o1,
-						UnidadAdministrativa o2) {
-					
-					TraduccionUA tr1 = (TraduccionUA)o1.getTraduccion();
-					TraduccionUA tr2 = (TraduccionUA)o2.getTraduccion();					
-					
-					if (tr1.getNombre() == null) {
-						
-						return -1;
-						
-					} else if (tr2.getNombre() == null) {
-						
-						return 1;
-						
-					} else {				
-					
-						String nombre1 = tr1.getNombre();
-						String nombre2 = tr2.getNombre();
-												
-						// Normalizamos y pasamos a ASCII para ordenar ignorando acentos o resto de caracteres extraños.
-						nombre1 = Normalizer.normalize(nombre1, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
-						nombre2 = Normalizer.normalize(nombre2, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
-						
-						return nombre1.compareToIgnoreCase(nombre2);
-						
-					}
-					
-				}
-				
-			});
+            	public int compare(UnidadAdministrativa o1, UnidadAdministrativa o2)
+            	{
+            		TraduccionUA tr1 = (TraduccionUA)o1.getTraduccion();
+            		TraduccionUA tr2 = (TraduccionUA)o2.getTraduccion();
+            		
+            		if (tr1 == null) {
+            			return -1;
+            		} else if (tr2 == null) {
+            			return 1;
+            		} else {
+            			String nombre1 = tr1.getNombre();
+            			String nombre2 = tr2.getNombre();
+            			
+            			// Normalizamos y pasamos a ASCII para ordenar ignorando acentos o resto de caracteres extraños.
+            			nombre1 = Normalizer.normalize(nombre1, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
+            			nombre2 = Normalizer.normalize(nombre2, Normalizer.DECOMP_COMPAT, 0).replaceAll("[^\\p{ASCII}]", "");
+            			
+            			return nombre1.compareToIgnoreCase(nombre2);
+            		}
+            	}
+            });
             
-        	List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
-        	
-        	Iterator<UnidadAdministrativa> it = listaUAs.iterator();
-        	while ( it.hasNext() ) {
-        		
-        		UnidadAdministrativa ua = it.next();
-        		Map<String, Object> uaDTO = new HashMap<String, Object>(2);
-				uaDTO.put("id", ua.getId());
-				uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
-				listaUAsDTO.add(uaDTO);      
-        		
-        	}
-        	            
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            List<Map<String, Object>> listaUAsDTO = new ArrayList<Map<String, Object>>();
+            Iterator<UnidadAdministrativa> it = listaUAs.iterator();
+            while (it.hasNext()) {
+            	UnidadAdministrativa ua = it.next();
+            	Map<String, Object> uaDTO = new HashMap<String, Object>(2);
+            	uaDTO.put("id", ua.getId());
+            	uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
+            	listaUAsDTO.add(uaDTO);
+            }
             resultats.put("uas", listaUAsDTO);
             
             resultats.put("item_ua_principal", getUAPrincipal(materia.getUnidadesmaterias()));
             resultats.put("item_destacada", materia.isDestacada());
             
             // Icones materia
- 			if (materia.getIconos() != null) {
- 				
- 				Map<String, Object> iconaDTO;
- 				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
-
- 				for (IconoMateria icona : (Set<IconoMateria>) materia.getIconos()) {
- 					if (icona != null && icona.getIcono() != null) {
- 						iconaDTO = new HashMap<String, Object>(3);
- 						iconaDTO.put("id", icona.getId());
- 						iconaDTO.put("nombre", icona.getIcono().getNombre());
- 		                llistaIcones.add(iconaDTO);
- 					} else {
- 						log.error("La materia " + materia.getId() + " te una icona null o sense arxiu.");
- 					}
- 	            }
- 				
- 				resultats.put("icones", llistaIcones);
- 				
- 			} else {
- 				
- 	            resultats.put("icones", null);
- 	            
- 	        } 
- 			
-	    } catch (DelegateException dEx) {
-	    	
-			log.error(ExceptionUtils.getStackTrace(dEx));
-			
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-			
-		}
+            if (materia.getIconos() != null) {
+            	Map<String, Object> iconaDTO;
+            	List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
+            	for (IconoMateria icona : (Set<IconoMateria>) materia.getIconos()) {
+            		if (icona != null && icona.getIcono() != null) {
+            			iconaDTO = new HashMap<String, Object>(3);
+            			iconaDTO.put("id", icona.getId());
+            			iconaDTO.put("nombre", icona.getIcono().getNombre());
+            			llistaIcones.add(iconaDTO);
+            		} else {
+            			log.error("La materia " + materia.getId() + " te una icona null o sense arxiu.");
+            		}
+            	}
+            	resultats.put("icones", llistaIcones);
+            	
+            } else {
+            	resultats.put("icones", null);
+            }
+            
+        } catch (DelegateException dEx) {
+        	log.error(ExceptionUtils.getStackTrace(dEx));
+        	if (dEx.isSecurityException())
+        		resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+        	else
+        		resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+        }
 	    
-        return resultats;
-        
+	    return resultats;
 	}
-    
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, Materia materia) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();

@@ -29,11 +29,10 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-
 @Controller
 @RequestMapping("/excepcioDocumentacio/")
-public class TMExcepcioDocumentacioController extends PantallaBaseController {
-    
+public class TMExcepcioDocumentacioController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMExcepcioDocumentacioController.class);
 	
     @RequestMapping(value = "/excepcioDocumentacio.do")
@@ -54,45 +53,44 @@ public class TMExcepcioDocumentacioController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request) {
-
-       List<IdNomDTO> llistaExcepcio = new ArrayList<IdNomDTO>();
-       Map<String,Object> resultats = new HashMap<String,Object>();
-
-       //Informaci�n de paginaci�n
-       String pagPag = request.getParameter("pagPag");   
-       String pagRes = request.getParameter("pagRes");
-       
-       if (pagPag == null) pagPag = String.valueOf(0); 
-       if (pagRes == null) pagRes = String.valueOf(10);
-             
-       ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();            
-       
-       try {                      		   
-    	   ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
-         resultadoBusqueda = excepcioDelegate.llistarExcepcioDocumentacio(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
-         
-         for (ExcepcioDocumentacio excepcio: castList(ExcepcioDocumentacio.class, resultadoBusqueda.getListaResultados()) ) {
-				  TraduccionExcepcioDocumentacio traduccioExcepcio = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(request.getLocale().getLanguage());
-				  llistaExcepcio.add(new IdNomDTO(excepcio.getId(), traduccioExcepcio == null ? "" : traduccioExcepcio.getNombre()));                
-         }
-		    } catch (DelegateException dEx) {
-			 if (dEx.isSecurityException()) {
-				  log.error("Permisos insuficients: " + dEx.getMessage());
-       } else {
-            	log.error("Error: " + dEx.getMessage());
-       }
-		  }
-
-		resultats.put("total", resultadoBusqueda.getTotalResultados());
-        resultats.put("nodes", llistaExcepcio);
-
-		return resultats;
-	}
+	public @ResponseBody Map<String, Object> llistatTipusNormatives(HttpServletRequest request)
+	{
+    	List<IdNomDTO> llistaExcepcio = new ArrayList<IdNomDTO>();
+    	Map<String,Object> resultats = new HashMap<String,Object>();
+    	
+    	// Información de paginación
+    	String pagPag = request.getParameter("pagPag");
+    	String pagRes = request.getParameter("pagRes");
+    	
+    	if (pagPag == null) pagPag = String.valueOf(0);
+    	if (pagRes == null) pagRes = String.valueOf(10);
+    	
+    	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+    	
+    	try {
+    		ExcepcioDocumentacioDelegate excepcioDelegate = DelegateUtil.getExcepcioDocumentacioDelegate();
+    		resultadoBusqueda = excepcioDelegate.llistarExcepcioDocumentacio(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+    		
+    		for (ExcepcioDocumentacio excepcio: castList(ExcepcioDocumentacio.class, resultadoBusqueda.getListaResultados()) ) {
+    			TraduccionExcepcioDocumentacio traduccioExcepcio = (TraduccionExcepcioDocumentacio) excepcio.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+    			llistaExcepcio.add(new IdNomDTO(excepcio.getId(), traduccioExcepcio == null ? "" : traduccioExcepcio.getNombre()));
+    		}
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException()) {
+    			log.error("Permisos insuficients: " + dEx.getMessage());
+    		} else {
+    			log.error("Error: " + dEx.getMessage());
+    		}
+    	}
+    	
+    	resultats.put("total", resultadoBusqueda.getTotalResultados());
+    	resultats.put("nodes", llistaExcepcio);
+    	
+    	return resultats;
+    }
     
     
-
-	@RequestMapping(value = "/pagDetall.do")
+    @RequestMapping(value = "/pagDetall.do")
 	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    

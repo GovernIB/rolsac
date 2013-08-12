@@ -185,7 +185,7 @@
        {
            "modo": "individual",
            "etiqueta": "id",
-           "etiquetaValor": "item_titol_ca",
+           "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
            "obligatori": "si",
            "tipus": "alfanumeric",
            "caracters":
@@ -217,7 +217,7 @@
 		{
 		    "modo": "individual",
 		    "etiqueta": "id",
-		    "etiquetaValor": "enllas_titol_ca",
+		    "etiquetaValor": "enllas_titol_" + '<c:out value="${idiomaVal}"/>',
 		    "obligatori": "si",
 		    "tipus": "alfanumeric",
 		    "caracters":
@@ -1172,7 +1172,7 @@
             { // Titol (Catala)
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "doc_titol_ca",
+                "etiquetaValor": "doc_titol_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters": {

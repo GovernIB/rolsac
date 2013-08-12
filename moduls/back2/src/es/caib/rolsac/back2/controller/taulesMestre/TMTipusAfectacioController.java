@@ -34,8 +34,9 @@ public class TMTipusAfectacioController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMTipusAfectacioController.class);
 	
     @RequestMapping(value = "/tipusAfectacions.do")
-    public String pantallaTipusAfectacio(Map<String, Object> model, HttpServletRequest request) {
-        model.put("menu", 1);
+    public String pantallaTipusAfectacio(Map<String, Object> model, HttpServletRequest request)
+    {
+    	model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMTipusAfectacio.jsp");
         
         RolUtil rolUtil= new RolUtil(request);
@@ -49,49 +50,48 @@ public class TMTipusAfectacioController extends PantallaBaseController {
         return "index";
     }
     
+    
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusAfectacions(HttpServletRequest request) {
-
-       List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
-       Map<String,Object> resultats = new HashMap<String,Object>();
-
-		//Información de paginación
-		String pagPag = request.getParameter("pagPag");		
-		String pagRes = request.getParameter("pagRes");
-		
-		if (pagPag == null) pagPag = String.valueOf(0); 
-		if (pagRes == null) pagRes = String.valueOf(10);
-     		
-		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();       
-       
-       try {     
-    	   
-			TipoAfectacionDelegate tipoAfectacioDelegate = DelegateUtil.getTipoAfectacionDelegate();
-			
-			resultadoBusqueda = tipoAfectacioDelegate.listarTiposAfectaciones(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
-			
-			for ( TipoAfectacion tipoAfectacion : castList(TipoAfectacion.class, resultadoBusqueda.getListaResultados()) ) {
-				
-				TraduccionTipoAfectacion tp = (TraduccionTipoAfectacion) tipoAfectacion.getTraduccion(request.getLocale().getLanguage());
-                llistaTipus.add(new IdNomDTO(tipoAfectacion.getId(), tp == null ? "" : tp.getNombre()));
-                
-           }
-		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
-				log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-            	log.error("Error: " + dEx.getMessage());
-            }
-		}
-
-		resultats.put("total", resultadoBusqueda.getTotalResultados());
-        resultats.put("nodes", llistaTipus);
-
-		return resultats;
-	}
-
-	@RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> llistatTipusAfectacions(HttpServletRequest request)
+	{
+    	List<IdNomDTO> llistaTipus = new ArrayList<IdNomDTO>();
+    	Map<String,Object> resultats = new HashMap<String,Object>();
+    	
+    	//Información de paginación
+    	String pagPag = request.getParameter("pagPag");
+    	String pagRes = request.getParameter("pagRes");
+    	
+    	if (pagPag == null) pagPag = String.valueOf(0);
+    	if (pagRes == null) pagRes = String.valueOf(10);
+    	
+    	ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
+    	
+    	try {
+    		TipoAfectacionDelegate tipoAfectacioDelegate = DelegateUtil.getTipoAfectacionDelegate();
+    		resultadoBusqueda = tipoAfectacioDelegate.listarTiposAfectaciones(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
+    		
+    		for (TipoAfectacion tipoAfectacion : castList(TipoAfectacion.class, resultadoBusqueda.getListaResultados())) {
+    			TraduccionTipoAfectacion tp = (TraduccionTipoAfectacion) tipoAfectacion.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+    			llistaTipus.add(new IdNomDTO(tipoAfectacion.getId(), tp == null ? "" : tp.getNombre()));
+    		}
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException()) {
+    			log.error("Permisos insuficients: " + dEx.getMessage());
+    		} else {
+    			log.error("Error: " + dEx.getMessage());
+    		}
+    	}
+    	
+    	resultats.put("total", resultadoBusqueda.getTotalResultados());
+    	resultats.put("nodes", llistaTipus);
+    	
+    	return resultats;
+    }
+    
+    
+    @RequestMapping(value = "/pagDetall.do")
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    
 	    try {
@@ -144,8 +144,8 @@ public class TMTipusAfectacioController extends PantallaBaseController {
     
 	
 	@RequestMapping(value = "/guardar.do", method = POST)
-	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request) {
-
+	public @ResponseBody IdNomDTO guardarProcediment(HttpServletRequest request)
+	{
 		IdNomDTO result = null;
 		String error = null;
 

@@ -103,7 +103,7 @@ public class PersonalBackController extends PantallaBaseController {
     						persona.getId(),
     						persona.getNombre(),
     						persona.getUsername(),
-    						persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(request.getLocale().getLanguage()),
+    						persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()),
     						persona.getEmail(),
     						persona.getExtensionPublica()
     					));

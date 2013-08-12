@@ -44,15 +44,16 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/seccions/")
-public class TMSeccionsController extends PantallaBaseController {
-    
-private static Log log = LogFactory.getLog(TMSeccionsController.class);
+public class TMSeccionsController extends PantallaBaseController
+{
+	private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	
-    @RequestMapping(value = "/seccioBreadcrumb.do")
-    public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request) {
-    	Map<String, Object> resultats = new HashMap<String, Object>();
-    	
-    	try {
+	@RequestMapping(value = "/seccioBreadcrumb.do")
+	public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
     		// Breadcrumb del elemento
     		List<Map<String, Object>> breadcrumbDTO = new ArrayList<Map<String, Object>>();
     		Map<String, Object> elementoDTO;
@@ -62,7 +63,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
     			SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
     			List<Seccion> antecesores = seccioDelegate.listarAntecesoresSeccion(id);
     			for (Seccion seccion: antecesores) {
-    				TraduccionSeccion ts = (TraduccionSeccion) seccion.getTraduccion(request.getLocale().getLanguage());
+    				TraduccionSeccion ts = (TraduccionSeccion) seccion.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
     				elementoDTO = new HashMap<String, Object>();
     				elementoDTO.put("id", seccion.getId());
     				elementoDTO.put("nom", ts == null ? "" : ts.getNombre());
@@ -176,9 +177,11 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 		return resultats;
 	}
     
+    
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
+    	Map<String, Object> resultats = new HashMap<String, Object>();
 	    
 	    try {
 	        Long id = new Long(request.getParameter("id"));
@@ -189,7 +192,7 @@ private static Log log = LogFactory.getLog(TMSeccionsController.class);
 	        
 	        resultats.put("item_id", seccio.getId());
 
-	        String lang = request.getLocale().getLanguage();
+	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 	        
 	        // Perfil
             resultats.put("item_perfils", getJSONPerfiles(request));

@@ -54,18 +54,19 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/espaisTerritorials/")
-public class TMEspaiTerritorialController extends PantallaBaseController {
-    
+public class TMEspaiTerritorialController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMEspaiTerritorialController.class);
 	
-    @RequestMapping(value = "/espaiTerritorialBreadcrumb.do")
-    public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request) {
-    	Map<String, Object> resultats = new HashMap<String, Object>();
+	@RequestMapping(value = "/espaiTerritorialBreadcrumb.do")
+	public @ResponseBody Map<String, Object> getBrearcrumb(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
     	try {
     		// Breadcrumb del elemento
     		List<Map<String, Object>> breadcrumbDTO = new ArrayList<Map<String, Object>>();
     		Map<String, Object> elementoDTO;
-
+    		
     		if (request.getParameter("id") != null) {
     			Long id = new Long(request.getParameter("id"));
     			EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
@@ -78,23 +79,23 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
     				elementoDTO.put("nom", tet == null ? "" : tet.getNombre());
     				breadcrumbDTO.add(elementoDTO);
     			}
-//    			Collections.reverse(breadcrumbDTO);
     		}
     		resultats.put("breadcrumb", breadcrumbDTO);
     		
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				log.error("Permisos insuficients: " + dEx.getMessage());
-			} else {
+			else
 				log.error("Error: " + dEx.getMessage());
-			}
 		}
     	
 		return resultats;
     }
-    
-    @RequestMapping(value = "/espaiTerritorial.do")
-    public String pantallaEspaiTerritorial(Map<String, Object> model, HttpServletRequest request) {
+	
+	
+	@RequestMapping(value = "/espaiTerritorial.do")
+    public String pantallaEspaiTerritorial(Map<String, Object> model, HttpServletRequest request)
+    {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMEspaiTerritorial.jsp");
         
@@ -117,7 +118,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 				EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 				List<EspacioTerritorial> espais = espaiDelegate.listarEspacioTerritorialesRaiz();
 				for (EspacioTerritorial espacio: espais) {
-					TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) espacio.getTraduccion(request.getLocale().getLanguage());
+					TraduccionEspacioTerritorial tet = (TraduccionEspacioTerritorial) espacio.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 					espaiDTO = new HashMap<String, Object>();
 					espaiDTO.put("id", espacio.getId());
 					espaiDTO.put("nom", tet == null ? "" : tet.getNombre());
@@ -137,37 +138,38 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
         	model.put("error", "permisos");
         }
         
-		loadIndexModel (model, request);	
+		loadIndexModel (model, request);
         return "index";
     }
-    
-    @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatEspaiTerritorial(HttpServletRequest request) {
 	
+	
+	@RequestMapping(value = "/llistat.do")
+	public @ResponseBody Map<String, Object> llistatEspaiTerritorial(HttpServletRequest request)
+	{
 		List<Map<String, Object>> llistaEspaiDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> espaiDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
-		//Información de paginación
-		String pagPag = request.getParameter("pagPag");		
+		
+		// Información de paginación
+		String pagPag = request.getParameter("pagPag");
 		String pagRes = request.getParameter("pagRes");
 		
-		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagPag == null) pagPag = String.valueOf(0);
 		if (pagRes == null) pagRes = String.valueOf(10);
-       		
+		
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
 			String idiomaPorDefecto = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			EspacioTerritorialDelegate espaiDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 			
-			resultadoBusqueda = espaiDelegate.listarEspaciosTerritoriales(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto );
+			resultadoBusqueda = espaiDelegate.listarEspaciosTerritoriales(Integer.parseInt(pagPag), Integer.parseInt(pagRes), idiomaPorDefecto);
 			
 			for ( Object o : resultadoBusqueda.getListaResultados() ) {
 				
 				Long id = (Long) ((Object[]) o)[0];
 				String nom = ((Object[]) o)[1] != null ? (String) ((Object[]) o)[1] : "";
-						
+				
 				espaiDTO = new HashMap<String, Object>();
 				espaiDTO.put("id", id);
 				espaiDTO.put("nom", nom);
@@ -176,11 +178,10 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 			}
 			
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				log.error("Permisos insuficients: " + dEx.getMessage());
-			} else {
+			else
 				log.error("Error: " + dEx.getMessage());
-			}
 		}
 		
 		resultats.put("total", resultadoBusqueda.getTotalResultados());
@@ -188,10 +189,12 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 
 		return resultats;
 	}
-    
-    @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();
+	
+	
+	@RequestMapping(value = "/pagDetall.do")
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
 	    
 	    try {
 	        Long id = new Long(request.getParameter("id"));
@@ -201,7 +204,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 	        omplirCampsTraduibles(resultats, espai);
 	        
 	        resultats.put("item_id", espai.getId());
-
+	        
 	        // Mapa
             if (espai.getMapa() != null) {
             	resultats.put("item_mapa_enllas_arxiu", "espaisTerritorials/archivo.do?id=" + espai.getId() + "&tipus=1");
@@ -212,7 +215,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
             }
             
             // Logo
-            if (espai.getLogo() != null){
+            if (espai.getLogo() != null) {
             	resultats.put("item_logo_enllas_arxiu", "espaisTerritorials/archivo.do?id=" + espai.getId() + "&tipus=2");
                 resultats.put("item_logo", espai.getLogo().getNombre());
             } else {
@@ -220,7 +223,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
                 resultats.put("item_logo", "");
             }
             
-            String lang = request.getLocale().getLanguage();
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
             
             Long idPadre = null;
             String nomPadre = "";
@@ -248,7 +251,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
 						traET = (TraduccionEspacioTerritorial) espaiFill.getTraduccion(lang);
 						nombre = "";
 	    				if (traET != null) {
-	    					//Retirar posible enlace incrustado en titulo
+	    					// Retirar posible enlace incrustado en titulo
 	    					nombre = HtmlUtils.obtenerTituloDeEnlaceHtml(traET.getNombre());
 	    				}
 	    				map = new HashMap<String, String>(2);
@@ -261,22 +264,20 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
             } else {
                 resultats.put("espaisRelacionats", null);
             }
-            // Fi Met�ries asociades
+            // Fi Matéries asociades
             
 	    } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
+			else
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
 		}
 	    
         return resultats;
 	}
-    
-    
-    private void omplirCampsTraduibles(Map<String, Object> resultats, EspacioTerritorial espai) throws DelegateException {
+	
+	private void omplirCampsTraduibles(Map<String, Object> resultats, EspacioTerritorial espai) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		
@@ -361,7 +362,7 @@ public class TMEspaiTerritorialController extends PantallaBaseController {
         		
         	}
         	
-        	//Obtener los dem�s campos
+        	//Obtener los demás campos
         	Long idEspaiPare = null;
         	if (valoresForm.get("item_codi_pare") != null && !"".equals(valoresForm.get("item_codi_pare"))) {
         		idEspaiPare = ParseUtil.parseLong(valoresForm.get("item_codi_pare"));

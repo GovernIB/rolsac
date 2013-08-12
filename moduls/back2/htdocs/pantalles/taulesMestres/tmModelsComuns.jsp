@@ -91,7 +91,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "form_tramit_titol_ca",
+            "etiquetaValor": "item_titol_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":

@@ -40,58 +40,60 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/familia/")
-public class TMFamiliaController extends PantallaBaseController {
-    
+public class TMFamiliaController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMFamiliaController.class);
 	
-    @RequestMapping(value = "/familia.do")
-    public String pantallaFamilia(Map<String, Object> model, HttpServletRequest request) {
-        model.put("menu", 1);
-        model.put("submenu", "layout/submenu/submenuTMFamilia.jsp");
-        
-        RolUtil rolUtil= new RolUtil(request);
-        if (rolUtil.userIsAdmin()) {
-        	model.put("escriptori", "pantalles/taulesMestres/tmFamilia.jsp");
-
-        	// afegir llista de perfils
-        	String lang = request.getLocale().getLanguage();
-        	String nombrePerfil;
-        	List<IdNomDTO> perfilsDTO = new LinkedList<IdNomDTO>();
-        	PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
-        	try {
-        		for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
-        			Traduccion traPerfil = perfil.getTraduccion(lang);
-        			nombrePerfil = traPerfil == null ? "" : ((TraduccionPerfilCiudadano) traPerfil).getNombre();   
-        			perfilsDTO.add(new IdNomDTO(perfil.getId(), nombrePerfil));
-        		}
-        		
-        		model.put("perfils", perfilsDTO);
-        	} catch (DelegateException dEx) {
-    			if (dEx.isSecurityException()) {
-    				log.error("Permisos insuficients: " + dEx.getMessage());
-    				model.put("error", "permisos");
-    			} else {
-    				log.error("Error: " + dEx.getMessage());
-    				model.put("error", "altres");
-    			}
-    		}
-        } else {
-        	model.put("error", "permisos");
-        }
-
-		loadIndexModel (model, request);	
-        return "index";
-    }
-    
-    @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatFamilia(HttpServletRequest request) {
+	@RequestMapping(value = "/familia.do")
+	public String pantallaFamilia(Map<String, Object> model, HttpServletRequest request)
+	{
+		model.put("menu", 1);
+		model.put("submenu", "layout/submenu/submenuTMFamilia.jsp");
+		
+		RolUtil rolUtil= new RolUtil(request);
+		if (rolUtil.userIsAdmin()) {
+			model.put("escriptori", "pantalles/taulesMestres/tmFamilia.jsp");
+			
+			// afegir llista de perfils
+			String nombrePerfil;
+			List<IdNomDTO> perfilsDTO = new LinkedList<IdNomDTO>();
+			PerfilDelegate perfilDelegate = DelegateUtil.getPerfilDelegate();
+			try {
+				String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+				for (PerfilCiudadano perfil: (List<PerfilCiudadano>) perfilDelegate.listarPerfiles()) {
+					Traduccion traPerfil = perfil.getTraduccion(lang);
+					nombrePerfil = traPerfil == null ? "" : ((TraduccionPerfilCiudadano) traPerfil).getNombre();
+					perfilsDTO.add(new IdNomDTO(perfil.getId(), nombrePerfil));
+				}
+				model.put("perfils", perfilsDTO);
+				
+			} catch (DelegateException dEx) {
+				if (dEx.isSecurityException()) {
+					log.error("Permisos insuficients: " + dEx.getMessage());
+					model.put("error", "permisos");
+				} else {
+					log.error("Error: " + dEx.getMessage());
+					model.put("error", "altres");
+				}
+			}
+		} else {
+			model.put("error", "permisos");
+		}
+		
+		loadIndexModel (model, request);
+		return "index";
+	}
 	
+	
+	@RequestMapping(value = "/llistat.do")
+	public @ResponseBody Map<String, Object> llistatFamilia(HttpServletRequest request)
+	{
 		List<Map<String, Object>> llistaFamiliaDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> familiaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
+		
 		//Información de paginación
-		String pagPag = request.getParameter("pagPag");		
+		String pagPag = request.getParameter("pagPag");
 		String pagRes = request.getParameter("pagRes");
 		
 		if (pagPag == null) pagPag = String.valueOf(0); 
@@ -134,42 +136,44 @@ public class TMFamiliaController extends PantallaBaseController {
 
 		return resultats;
 	}
-    
-    @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    
-	    try {
-	        Long id = new Long(request.getParameter("id"));
-	        FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
-	        Familia familia = familiaDelegate.obtenerFamilia(id);	        	        
-	        
-	        resultats.put("item_id", familia.getId());
-	        omplirCampsTraduibles(resultats, familia);
+	
+	
+	@RequestMapping(value = "/pagDetall.do")
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
+		Map<String, Object> resultats = new HashMap<String, Object>();
+		
+		try {
+			Long id = new Long(request.getParameter("id"));
+			FamiliaDelegate familiaDelegate = DelegateUtil.getFamiliaDelegate();
+			Familia familia = familiaDelegate.obtenerFamilia(id);
 			
-	        // iconos
- 			if (familia.getIconos() != null) {
- 				Map<String, Object> iconaDTO;
- 				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
-
- 				for(IconoFamilia icona: (Set<IconoFamilia>) familia.getIconos()) {
- 					if (icona != null && icona.getIcono() != null) {
- 						iconaDTO = new HashMap<String, Object>(3);
- 						iconaDTO.put("id", icona.getId());
- 						iconaDTO.put("nombre", icona.getIcono().getNombre());
- 		                llistaIcones.add(iconaDTO);
- 					} else {
- 						log.error("La fam�lia " + familia.getId() + " te una icona null o sense arxiu.");
- 					}
- 	            }
- 				
- 				resultats.put("icones", llistaIcones);
- 			} else {
- 	            resultats.put("icones", null);
- 	        } 
-            // fin iconos
-	        
-	    } catch (DelegateException dEx) {
+			resultats.put("item_id", familia.getId());
+			omplirCampsTraduibles(resultats, familia);
+			
+			// iconos
+			if (familia.getIconos() != null) {
+				Map<String, Object> iconaDTO;
+				List<Map<String, Object>> llistaIcones = new ArrayList<Map<String, Object>>();
+				
+				for (IconoFamilia icona: (Set<IconoFamilia>) familia.getIconos()) {
+					if (icona != null && icona.getIcono() != null) {
+						iconaDTO = new HashMap<String, Object>(3);
+						iconaDTO.put("id", icona.getId());
+						iconaDTO.put("nombre", icona.getIcono().getNombre());
+						llistaIcones.add(iconaDTO);
+					} else {
+						log.error("La família " + familia.getId() + " te una icona null o sense arxiu.");
+					}
+				}
+				
+				resultats.put("icones", llistaIcones);
+			} else {
+				resultats.put("icones", null);
+			}
+			// fin iconos
+			
+		} catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
 			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
@@ -177,8 +181,8 @@ public class TMFamiliaController extends PantallaBaseController {
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
 			}
 		}
-	    
-        return resultats;
+		
+		return resultats;
 	}
     
     private void omplirCampsTraduibles(Map<String, Object> resultats, Familia familia) throws DelegateException {

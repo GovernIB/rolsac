@@ -50,37 +50,40 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/fetsVitals/")
-public class TMFetsVitalsController extends PantallaBaseController {
-	
+public class TMFetsVitalsController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMFetsVitalsController.class);
-    
-    @RequestMapping(value = "/fetsVitals.do")
-    public String pantallaFetsVitals(Map<String, Object> model, HttpServletRequest request) {
-        model.put("menu", 1);
-        model.put("submenu", "layout/submenu/submenuTMFetsVitals.jsp");
-        
-        RolUtil rolUtil= new RolUtil(request);
-        if (rolUtil.userIsAdmin()) {
-        	String lang = request.getLocale().getLanguage();
-        	model.put("escriptori", "pantalles/taulesMestres/tmFetsVitals.jsp");
-        	try {
+	
+	
+	@RequestMapping(value = "/fetsVitals.do")
+	public String pantallaFetsVitals(Map<String, Object> model, HttpServletRequest request)
+	{
+		model.put("menu", 1);
+		model.put("submenu", "layout/submenu/submenuTMFetsVitals.jsp");
+		
+		RolUtil rolUtil= new RolUtil(request);
+		if (rolUtil.userIsAdmin()) {
+			model.put("escriptori", "pantalles/taulesMestres/tmFetsVitals.jsp");
+			try {
+				String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 				model.put("families", LlistatUtil.llistarFamilias(lang));
 				model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
-        	} catch (DelegateException dEx) {
-    			if (dEx.isSecurityException()) {
-    				model.put("error", "permisos");
-    			} else {
-    				model.put("error", "altres");
-    				logException(log, dEx);
-    			}
-    		}
-        } else {
-        	model.put("error", "permisos");
-        }
-
-		loadIndexModel (model, request);	
-        return "index";
-    }
+				
+			} catch (DelegateException dEx) {
+				if (dEx.isSecurityException()) {
+					model.put("error", "permisos");
+				} else {
+					model.put("error", "altres");
+					logException(log, dEx);
+				}
+			}
+		} else {
+			model.put("error", "permisos");
+		}
+		
+		loadIndexModel(model, request);
+		return "index";
+	}
     
     @RequestMapping(value = "/llistat.do")
    	public @ResponseBody Map<String, Object> llistatFetsVitals(HttpServletRequest request) {
@@ -133,19 +136,19 @@ public class TMFetsVitalsController extends PantallaBaseController {
    		return resultats;
    	}
     
+    
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-    	String lang = request.getLocale().getLanguage();
-    	
-	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    try {
-	        Long id = new Long(request.getParameter("id"));
-	        
-	        HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
-	        HechoVital fetsVitals = fetsVitalsDelegate.obtenerHechoVital(id);	        	        
-	        
-	        resultats.put("item_id", fetsVitals.getId());
-	        resultats.put("item_codi_estandard", fetsVitals.getCodigoEstandar());
+    public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	try {
+    		Long id = new Long(request.getParameter("id"));
+    		
+    		HechoVitalDelegate fetsVitalsDelegate = DelegateUtil.getHechoVitalDelegate();
+    		HechoVital fetsVitals = fetsVitalsDelegate.obtenerHechoVital(id);
+    		
+    		resultats.put("item_id", fetsVitals.getId());
+    		resultats.put("item_codi_estandard", fetsVitals.getCodigoEstandar());
 	        
 	        // Foto
             if (fetsVitals.getFoto() != null) {
@@ -157,7 +160,7 @@ public class TMFetsVitalsController extends PantallaBaseController {
             }
             
             // Icona
-            if (fetsVitals.getIcono() != null){
+            if (fetsVitals.getIcono() != null) {
                 resultats.put("item_icona_enllas_arxiu", "fetsVitals/archivo.do?id=" + fetsVitals.getId() + "&tipus=2");
                 resultats.put("item_icona", fetsVitals.getIcono().getNombre());
             } else {
@@ -166,17 +169,17 @@ public class TMFetsVitalsController extends PantallaBaseController {
             }
             
             // Icona gran
-            if (fetsVitals.getIconoGrande() != null){
+            if (fetsVitals.getIconoGrande() != null) {
                 resultats.put("item_icona_gran_enllas_arxiu", "fetsVitals/archivo.do?id=" + fetsVitals.getId() + "&tipus=3");
                 resultats.put("item_icona_gran", fetsVitals.getIconoGrande().getNombre());
             } else {
                 resultats.put("item_icona_gran_enllas_arxiu", "");
                 resultats.put("item_icona_gran", "");
-            }  
-	      
-			omplirCampsTraduibles(resultats, fetsVitals);
-
-			//Procedimientos
+            }
+            
+            omplirCampsTraduibles(resultats, fetsVitals);
+            
+            //Procedimientos
 			List<ProcedimientoLocalDTO> procedimientos = new LinkedList<ProcedimientoLocalDTO>();
 	        List<HechoVitalProcedimiento> lista = castList(HechoVitalProcedimiento.class, fetsVitals.getHechosVitalesProcedimientos());
 	        List<HechoVitalProcedimiento> listaProcedimientos = new LinkedList<HechoVitalProcedimiento>();
@@ -185,13 +188,14 @@ public class TMFetsVitalsController extends PantallaBaseController {
 	        		listaProcedimientos.add(hechoProc);
 	        }
 	        Collections.sort(listaProcedimientos);
+	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 	        for (HechoVitalProcedimiento hvProc : listaProcedimientos) {
 	        	if (hvProc != null) {
 		        	TraduccionProcedimientoLocal traProc = (TraduccionProcedimientoLocal)hvProc.getProcedimiento().getTraduccion(lang); 
 		        	procedimientos.add(new ProcedimientoLocalDTO(
 		        			hvProc.getId(),
 		        			hvProc.getProcedimiento().getId(),
-		        			traProc != null ? traProc.getNombre() : "", 
+		        			traProc != null ? traProc.getNombre() : "",
 	    					null, null, null,
 	    					hvProc.getOrden()
 					));

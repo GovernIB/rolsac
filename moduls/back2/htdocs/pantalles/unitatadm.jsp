@@ -2253,7 +2253,7 @@
             { // Nom en catala
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "item_nom_ca",
+                "etiquetaValor": "item_nom_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters":
@@ -2433,7 +2433,7 @@
             { // Nom en catala
                 "modo": "individual",
                 "etiqueta": "id",
-                "etiquetaValor": "nuevaUA_item_nom_ca",
+                "etiquetaValor": "nuevaUA_item_nom_" + '<c:out value="${idiomaVal}"/>',
                 "obligatori": "si",
                 "tipus": "alfanumeric",
                 "caracters":

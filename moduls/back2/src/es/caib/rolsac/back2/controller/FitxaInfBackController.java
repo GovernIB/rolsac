@@ -32,7 +32,6 @@ import org.ibit.rol.sac.model.FichaResumen;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.HechoVital;
 import org.ibit.rol.sac.model.Materia;
-import org.ibit.rol.sac.model.ProcedimientoLocal;
 import org.ibit.rol.sac.model.PublicoObjetivo;
 import org.ibit.rol.sac.model.Seccion;
 import org.ibit.rol.sac.model.TraduccionDocumento;
@@ -77,83 +76,74 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/fitxainf/")
-public class FitxaInfBackController extends PantallaBaseController {
-	
-	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";	
-	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.fitxa.url"; 	
+public class FitxaInfBackController extends PantallaBaseController
+{
+	private String IDIOMA_ORIGEN_TRADUCTOR;
+	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.fitxa.url";
 	private static Log log = LogFactory.getLog(FitxaInfBackController.class);
 	
-    @RequestMapping(value = "/fitxainf.do", method = GET)
-    public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-    	
-        model.put("menu", 0);
-        model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-        model.put("submenu_seleccionado", 3);
-        model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
-        model.put("escriptori", "pantalles/fitxaInf.jsp");
-        request.setAttribute("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
-        
-        String lang = request.getLocale().getLanguage();
-        
-        if (session.getAttribute("unidadAdministrativa") != null) {
-            model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
-            model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
-        }
-        
-        try {
-        	
-        	MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-        	List<Materia> llistaMateries = new ArrayList<Materia>();
-        	List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
-        	
-        	llistaMateries = castList(Materia.class, materiaDelegate.listarMaterias() );
-        	
-        	for (Materia materia : llistaMateries) {
-        		llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));                }
-        	
-        	model.put("llistaMateries", llistaMateriesDTO);
-        	
-        	HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();  
-        	List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();                
-        	List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
-        	
-        	llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
-        	
-        	for (HechoVital fetVital : llistaFetsVitals) {
-        		TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
-        		llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), 
-        				thv == null ? null : thv.getNombre()));
-        	}
-        	
-        	model.put("llistaFetsVitals", llistaFetsVitalsDTO);
-        	
-        	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();  
-        	List<PublicoObjetivo> llistaPublicsObjectiu = new ArrayList<PublicoObjetivo>();                
-        	List<IdNomDTO> llistaPublicsObjectiuDTO = new ArrayList<IdNomDTO>();
-        	
-        	llistaPublicsObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
-        	
-        	for (PublicoObjetivo publicObjectiu : llistaPublicsObjectiu) {
-        		TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
-        		llistaPublicsObjectiuDTO.add(new IdNomDTO(publicObjectiu.getId(), 
-        				tpo == null ? null : tpo.getTitulo()));
-        	}
-        	
-        	model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);
-        	
-        } catch (DelegateException dEx) {
-        	if (dEx.isSecurityException()) {
-        		// model.put("error", "permisos");//TODO:mensajes de error
-        		log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
-        	} else {
-        		// model.put("error", "altres");
-        		log.error(ExceptionUtils.getStackTrace(dEx));
-        	}
-        }     
-        
-		loadIndexModel (model, request);	
-        return "index";
-    }
+	
+	@RequestMapping(value = "/fitxainf.do", method = GET)
+	public String pantallaFitxes(Map<String, Object> model, HttpServletRequest request, HttpSession session)
+	{
+		model.put("menu", 0);
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
+		model.put("submenu_seleccionado", 3);
+		model.put("titol_escriptori", messageSource.getMessage("submenu.fitxes_informatives", null, request.getLocale()));
+		model.put("escriptori", "pantalles/fitxaInf.jsp");
+		request.setAttribute("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
+		
+		try {
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			if (session.getAttribute("unidadAdministrativa") != null) {
+				model.put("idUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getId());
+				model.put("nomUA", ((UnidadAdministrativa) session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
+			}
+			
+			MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
+			List<Materia> llistaMateries = new ArrayList<Materia>();
+			List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
+			
+			llistaMateries = castList(Materia.class, materiaDelegate.listarMaterias());
+			
+			for (Materia materia : llistaMateries)
+				llistaMateriesDTO.add(new IdNomDTO(materia.getId(), materia.getNombreMateria(lang)));
+			
+			model.put("llistaMateries", llistaMateriesDTO);
+			
+			HechoVitalDelegate fetVitalDelegate = DelegateUtil.getHechoVitalDelegate();
+			List<HechoVital> llistaFetsVitals = new ArrayList<HechoVital>();
+			List<IdNomDTO> llistaFetsVitalsDTO = new ArrayList<IdNomDTO>();
+			
+			llistaFetsVitals = fetVitalDelegate.listarHechosVitales();
+			for (HechoVital fetVital : llistaFetsVitals) {
+				TraduccionHechoVital thv = (TraduccionHechoVital) fetVital.getTraduccion(lang);
+				llistaFetsVitalsDTO.add(new IdNomDTO(fetVital.getId(), thv == null ? null : thv.getNombre()));
+			}
+			model.put("llistaFetsVitals", llistaFetsVitalsDTO);
+			
+			PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
+			List<PublicoObjetivo> llistaPublicsObjectiu = new ArrayList<PublicoObjetivo>();
+			List<IdNomDTO> llistaPublicsObjectiuDTO = new ArrayList<IdNomDTO>();
+			
+			llistaPublicsObjectiu = publicObjectiuDelegate.listarPublicoObjetivo();
+			for (PublicoObjetivo publicObjectiu : llistaPublicsObjectiu) {
+				TraduccionPublicoObjetivo tpo = (TraduccionPublicoObjetivo) publicObjectiu.getTraduccion(lang);
+				llistaPublicsObjectiuDTO.add(new IdNomDTO(publicObjectiu.getId(), tpo == null ? null : tpo.getTitulo()));
+			}
+			model.put("llistaPublicsObjectiu", llistaPublicsObjectiuDTO);
+			
+		} catch (DelegateException dEx) {
+			if (dEx.isSecurityException())
+				log.error("Error de permisos " + ExceptionUtils.getStackTrace(dEx));
+			else
+				log.error(ExceptionUtils.getStackTrace(dEx));
+		}
+		
+		loadIndexModel(model, request);
+		return "index";
+	}
     
     
     @RequestMapping(value = "/llistat.do", method = POST)
@@ -193,7 +183,7 @@ public class FitxaInfBackController extends PantallaBaseController {
         	resultadoBusqueda = fitxaResumenDelegate.buscarFichas(paramMap, tradMap, ua, fetVital, materia, publicObjectiu, uaFilles, uaMeves, campoOrdenacion, orden, pagPag, pagRes, campoVisible);
         	
         	for (FichaResumen fitxaResumen : castList(FichaResumen.class, resultadoBusqueda.getListaResultados() ) ) {
-        		TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(request.getLocale().getLanguage());
+        		TraduccionFicha tfi = (TraduccionFicha) fitxaResumen.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
         		llistaFitxesDTO.add(new FichaDTO(
         				fitxaResumen.getId(),
         				tfi == null ? null : tfi.getTitulo(),
@@ -270,7 +260,11 @@ public class FitxaInfBackController extends PantallaBaseController {
     		tradMap.put("descripcion", textes);
     		tradMap.put("url", textes);
     	} else {
-    		tradMap.put("idioma", request.getLocale().getLanguage());
+    		try {
+    			tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+			} catch  (DelegateException dEx) {
+				logException(log, dEx);
+			}
     	}
     }
     
@@ -310,7 +304,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     	Map<String, Object> resultats = new HashMap<String, Object>();
     	
     	try {
-            String lang = request.getLocale().getLanguage();
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
             Long id = new Long(request.getParameter("id"));
         	FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
         	Ficha fitxa = fitxaDelegate.obtenerFicha(id);
@@ -325,7 +319,7 @@ public class FitxaInfBackController extends PantallaBaseController {
             resultats.put("item_notes", fitxa.getInfo());
         	//resultats.put("caducat","S");
         	
-        	recuperaFitxaIdioma(resultats, fitxa);				// Recuperar las fichas según el idioma.
+        	recuperaFitxaIdioma(resultats, fitxa, lang);		// Recuperar las fichas según el idioma.
         	recuperaFitxaDocs(resultats, fitxa);				// Recuperar los documentos asociados a una ficha.
         	recuperaFitxaIcono(resultats, fitxa);				// Recuperar el icono de una ficha.
         	recuperaFitxaBanner(resultats, fitxa);				// Recuperar los banners de una ficha.
@@ -349,15 +343,13 @@ public class FitxaInfBackController extends PantallaBaseController {
     /*
      * Función que recupera el contenido de las fichas según el idioma
      */
-    private void recuperaFitxaIdioma(Map<String, Object> resultats, Ficha fitxa)
+    private void recuperaFitxaIdioma(Map<String, Object> resultats, Ficha fitxa, String lang)
     {
-    	String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
-    	
     	if (fitxa.getTraduccion("ca") != null) {
             resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion("ca"));
         } else {
-        	if (fitxa.getTraduccion(langDefault) != null)
-        		resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	if (fitxa.getTraduccion(lang) != null)
+        		resultats.put("ca", (TraduccionFicha) fitxa.getTraduccion(lang));
         	else
         		resultats.put("ca", new TraduccionFicha());
         }
@@ -365,8 +357,8 @@ public class FitxaInfBackController extends PantallaBaseController {
     	if (fitxa.getTraduccion("es") != null) {
             resultats.put("es", (TraduccionFicha) fitxa.getTraduccion("es"));
         } else {
-        	if (fitxa.getTraduccion(langDefault) != null)
-        		resultats.put("es", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	if (fitxa.getTraduccion(lang) != null)
+        		resultats.put("es", (TraduccionFicha) fitxa.getTraduccion(lang));
         	else
         		resultats.put("es", new TraduccionFicha());
         }
@@ -374,8 +366,8 @@ public class FitxaInfBackController extends PantallaBaseController {
     	if (fitxa.getTraduccion("en") != null) {
             resultats.put("en", (TraduccionFicha) fitxa.getTraduccion("en"));
         } else {
-        	if (fitxa.getTraduccion(langDefault) != null)
-        		resultats.put("en", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	if (fitxa.getTraduccion(lang) != null)
+        		resultats.put("en", (TraduccionFicha) fitxa.getTraduccion(lang));
         	else
         		resultats.put("en", new TraduccionFicha());
         }
@@ -383,8 +375,8 @@ public class FitxaInfBackController extends PantallaBaseController {
     	if (fitxa.getTraduccion("de") != null) {
             resultats.put("de", (TraduccionFicha) fitxa.getTraduccion("de"));
         } else {
-        	if (fitxa.getTraduccion(langDefault) != null)
-        		resultats.put("de", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	if (fitxa.getTraduccion(lang) != null)
+        		resultats.put("de", (TraduccionFicha) fitxa.getTraduccion(lang));
         	else
         		resultats.put("de", new TraduccionFicha());
         }
@@ -392,8 +384,8 @@ public class FitxaInfBackController extends PantallaBaseController {
     	if (fitxa.getTraduccion("fr") != null) {
             resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion("fr"));
         } else {
-        	if (fitxa.getTraduccion(langDefault) != null)
-        		resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion(langDefault));
+        	if (fitxa.getTraduccion(lang) != null)
+        		resultats.put("fr", (TraduccionFicha) fitxa.getTraduccion(lang));
         	else
         		resultats.put("fr", new TraduccionFicha());
         }
@@ -697,10 +689,11 @@ public class FitxaInfBackController extends PantallaBaseController {
     /*
 	 * Función que comprueba los campos obligatorios
 	 */
-	private IdNomDTO guardarFitxaControlCampos(HttpServletRequest request, Map<String, String> valoresForm)
+	private IdNomDTO guardarFitxaControlCampos(HttpServletRequest request, Map<String, String> valoresForm) throws DelegateException
 	{
 		String error;
-		String titolCatala = valoresForm.get("item_titol_ca");
+		// Se cambia el "item_titol_ca" por el "item_titol_" + idioma
+		String titolCatala = valoresForm.get("item_titol_" + DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 		if (titolCatala == null || "".equals(titolCatala)) {
 			error = messageSource.getMessage("fitxes.formulari.error.falten.camps", null, request.getLocale());
 			return new IdNomDTO(-3l, error);
@@ -1366,7 +1359,7 @@ public class FitxaInfBackController extends PantallaBaseController {
     
     
     /**
-     * M�todo que comprueba si hay que mostrar los logos
+     * Método que comprueba si hay que mostrar los logos
      * 
      * @return boolean
      */
@@ -1446,4 +1439,24 @@ public class FitxaInfBackController extends PantallaBaseController {
         return "1".equals(valoresForm.get(modulo));
     }
     
+//    @RequestMapping(value = "/recuperarValidacionForm.do", method = POST)
+//	public @ResponseBody Map<String, Object> recuperarForm(HttpServletRequest request) {
+//		
+//		String PARAMETRO_VISTA = "key";
+//		String VISTA_FICHA = "formulariDades.fitxa";
+//		
+//		HashMap<String, Object> resultats = new HashMap<String, Object>();
+//		
+//		//String lang = System.getProperty("es.caib.rolsac.idiomaDefault");
+//		//if (lang == null) lang = request.getLocale().getLanguage();
+//		Locale locale = request.getLocale();
+//		
+//		System.out.println(request.getParameter(PARAMETRO_VISTA));
+//		System.out.println(messageSource.getMessage(VISTA_FICHA, null, locale));
+//		
+//		resultats.put(VISTA_FICHA, messageSource.getMessage(VISTA_FICHA, null, locale));
+//		
+//		return resultats;
+//	}
+//    
 }

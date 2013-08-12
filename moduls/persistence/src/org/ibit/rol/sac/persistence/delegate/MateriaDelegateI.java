@@ -15,7 +15,7 @@ public interface MateriaDelegateI {
 	public abstract Long grabarMateria(Materia materia)
 			throws DelegateException;
 
-    public abstract ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException;
+    public abstract ResultadoBusqueda listarMaterias(int pagina, int resultados, String lang) throws DelegateException;
     
 	public abstract List<Materia> listarMaterias() throws DelegateException;
 

@@ -80,68 +80,68 @@ import es.indra.rol.sac.integracion.traductor.Traductor;
 
 @Controller
 @RequestMapping("/catalegProcediments/")
-public class CatalegProcedimentsBackController extends PantallaBaseController {
-	
-	private final String IDIOMA_ORIGEN_TRADUCTOR = "ca";
+public class CatalegProcedimentsBackController extends PantallaBaseController
+{
+	private String IDIOMA_ORIGEN_TRADUCTOR;
 	private static final String URL_PREVISUALIZACION = "es.caib.rolsac.previsualitzacio.procediment.url";
 	private static Log log = LogFactory.getLog(CatalegProcedimentsBackController.class);
-
+	
 	@RequestMapping(value = "/catalegProcediments.do")
-	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-		if (estemEnUnitatAdministrativa(session) )  
-			crearModelComplert_pantalla(model, session, request);
-		else
-			crearModelSencill_pantalla(model, session, request);
-
-		//model.put( "idiomes_aplicacio", session.getAttribute("idiomes_aplicacio") );
+	public String pantallaProcediment(Map<String, Object> model, HttpSession session, HttpServletRequest request)
+	{
+		String lang;
+		try {
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		} catch (DelegateException dEx) {
+			log.error("Error al recuperar el idioma por defecto.");
+			lang = "ca";
+		}
+		this.IDIOMA_ORIGEN_TRADUCTOR = lang;
 		
-		loadIndexModel (model, request);	
+		if (estemEnUnitatAdministrativa(session))
+			crearModelComplert_pantalla(model, session, request, lang);
+		else
+			crearModelSencill_pantalla(model, session, request, lang);
+		
+		loadIndexModel (model, request);
 		return "index";
 	}
-
-	private boolean estemEnUnitatAdministrativa(HttpSession session) {
+	
+	private boolean estemEnUnitatAdministrativa(HttpSession session)
+	{
 		return null != getUAFromSession(session);
 	}
-
-	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-		crearModelSencill_pantalla(model, session, request);
+	
+	private void crearModelComplert_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
+	{
+		crearModelSencill_pantalla(model, session, request, lang);
 		model.put("idUA", getUAFromSession(session).getId());
-		String lang = getRequestLanguage(request);
 		model.put("nomUA", getUAFromSession(session).getNombreUnidadAdministrativa(lang));
-		
-
 	}
-
-	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-		
-		model.put("menu", 0);
-		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-		model.put("submenu_seleccionado", 2);
-		model.put("escriptori", "pantalles/catalegProcediments.jsp");
-		model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
-		
-		String lang = getRequestLanguage(request);
-		
+	
+	private void crearModelSencill_pantalla(Map<String, Object> model, HttpSession session, HttpServletRequest request, String lang)
+	{
 		try {
-			
+			model.put("menu", 0);
+			model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
+			model.put("submenu_seleccionado", 2);
+			model.put("escriptori", "pantalles/catalegProcediments.jsp");
+			model.put("urlPrevisualitzacio", System.getProperty(URL_PREVISUALIZACION));
 			model.put("llistaMateries", LlistatUtil.llistarMaterias(lang));
 			model.put("llistaPublicsObjectiu", LlistatUtil.llistarPublicObjectius(lang));
 			model.put("families", LlistatUtil.llistarFamilias(lang));
 			model.put("iniciacions", LlistatUtil.llistarIniciacions(lang));
-		    model.put("excepcions", llistarExcepcionsDocumentacio(lang));
-		    model.put("cataleg", llistarCatalegDocuments(lang));
-
-		} catch (DelegateException dEx) {
+			model.put("excepcions", llistarExcepcionsDocumentacio(lang));
+			model.put("cataleg", llistarCatalegDocuments(lang));
 			
+		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				model.put("error", "permisos");
 			} else {
 				model.put("error", "altres");
 				logException(log, dEx);
 			}
-			
 		}
-		
 	}
 	
 	
@@ -396,8 +396,11 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			tradMap.put("observaciones", textes);
 			tradMap.put("lugar", textes);
 		} else {
-			String lang = getRequestLanguage(request);
-			tradMap.put("idioma", lang);
+			try {
+				tradMap.put("idioma", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+			} catch  (DelegateException dEx) {
+				logException(log, dEx);
+			}
 		}
 	}
 	
@@ -406,7 +409,6 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	 */
 	private List<ProcedimientoLocalDTO> convertirProcLocales(ResultadoBusqueda resultadoBusqueda, HttpServletRequest request)
 	{
-		String idiomaPorDefecto = request.getLocale().getLanguage();
 		List<ProcedimientoLocalDTO> llistaProcedimientoLocalDTO = new ArrayList<ProcedimientoLocalDTO>();
 		for (ProcedimientoLocal pl : castList(ProcedimientoLocal.class, resultadoBusqueda.getListaResultados())) {
 			ProcedimientoLocalDTO procLocalDTO = new ProcedimientoLocalDTO(
@@ -425,9 +427,9 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 	{
 		
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		String lang = getRequestLanguage(request);
 		
 		try {
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			Long id = new Long(request.getParameter("id"));
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
@@ -449,7 +451,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			// TODO: Implementar getPublico()
 			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
 			
-			recuperaProcIdiomas(resultats, proc);				// Recuperar los procedimientos según los idiomas
+			recuperaProcIdiomas(resultats, proc, lang);			// Recuperar los procedimientos según los idiomas
 			recuperaProcDocs(resultats, proc);					// Recuperar los documentos relacionados de un procedimiento
 			recuperaProcTramites(resultats, proc, request);		// Recuperar los trámites relacionados de un procedimiento
 			recuperaProcMaterias(resultats, proc, lang);		// Recuperar las materias asociadas a un procedimiento
@@ -465,13 +467,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			if (proc.getUnidadAdministrativa() != null) {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
 				resultats.put("item_organ_responsable_id", ua.getId());
-				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
+				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(getRequestLanguage(request)));
 			}
 			
 			if (proc.getOrganResolutori() != null) {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
-				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
+				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(getRequestLanguage(request)));
 			}
 			
 			if (proc.getFamilia() != null) {
@@ -479,62 +481,49 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 				resultats.put("item_familia", familia.getId());
 			}
 			
-			if (proc.getVersion() != null) {
+			if (proc.getVersion() != null)
 				resultats.put("item_version", proc.getVersion());
-			}
 			
-			if (proc.getIndicador() == null || "0".equals(proc.getIndicador())) {
+			if (proc.getIndicador() == null || "0".equals(proc.getIndicador()))
 				resultats.put("item_fi_vida_administrativa", false);
-			} else {
+			else
 				resultats.put("item_fi_vida_administrativa", true);
-			}
 			
-			if (proc.getTaxa() == null || "0".equals(proc.getTaxa())) {
+			if (proc.getTaxa() == null || "0".equals(proc.getTaxa()))
 				resultats.put("item_taxa", false);
-			} else {
+			else
 				resultats.put("item_taxa", true);
-			}
 			
-			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica())) {
+			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica()))
 				resultats.put("item_finestreta_unica", false);
-			} else {
+			else
 				resultats.put("item_finestreta_unica", true);
-			}
 			
-			//Obtención de listado de posibles hechos vitales del procedimiento
-			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales( proc.getPublicosObjetivo() , lang ) );
+			// Obtención de listado de posibles hechos vitales del procedimiento
+			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(proc.getPublicosObjetivo() , lang));
 			
 		} catch (DelegateException dEx) {
-			
 			logException(log, dEx);
-
-			if (dEx.isSecurityException()) {
-
+			if (dEx.isSecurityException())
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-				
-			} else {
-				
+			else
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
 			
 		}
 		
 		return resultats;
-		
 	}
 	
 	/*
 	 * Función que recupera el contenido de los procedimientos según el idioma.
 	 */
-	private void recuperaProcIdiomas(Map<String, Object> resultats, ProcedimientoLocal proc)
+	private void recuperaProcIdiomas(Map<String, Object> resultats, ProcedimientoLocal proc, String lang)
 	{
-		String langDefault = System.getProperty("es.caib.rolsac.idiomaDefault");
-		
 		if (proc.getTraduccion("ca") != null) {
 			resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion("ca"));
 		} else {
-			if (proc.getTraduccion(langDefault) != null)
-				resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+			if (proc.getTraduccion(lang) != null)
+				resultats.put("ca", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
 			else
 				resultats.put("ca", new TraduccionProcedimientoLocal());
 		}
@@ -542,8 +531,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (proc.getTraduccion("es") != null) {
 			resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion("es"));
 		} else {
-			if (proc.getTraduccion(langDefault) != null)
-				resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+			if (proc.getTraduccion(lang) != null)
+				resultats.put("es", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
 			else
 				resultats.put("es", new TraduccionProcedimientoLocal());
 		}
@@ -551,8 +540,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (proc.getTraduccion("en") != null) {
 			resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion("en"));
 		} else {
-			if (proc.getTraduccion(langDefault) != null)
-				resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+			if (proc.getTraduccion(lang) != null)
+				resultats.put("en", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
 			else
 				resultats.put("en", new TraduccionProcedimientoLocal());
 		}
@@ -560,8 +549,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (proc.getTraduccion("de") != null) {
 			resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion("de"));
 		} else {
-			if (proc.getTraduccion(langDefault) != null)
-				resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+			if (proc.getTraduccion(lang) != null)
+				resultats.put("de", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
 			else
 				resultats.put("de", new TraduccionProcedimientoLocal());
 		}
@@ -569,8 +558,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		if (proc.getTraduccion("fr") != null) {
 			resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion("fr"));
 		} else {
-			if (proc.getTraduccion(langDefault) != null)
-				resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion(langDefault));
+			if (proc.getTraduccion(lang) != null)
+				resultats.put("fr", (TraduccionProcedimientoLocal) proc.getTraduccion(lang));
 			else
 				resultats.put("fr", new TraduccionProcedimientoLocal());
 		}

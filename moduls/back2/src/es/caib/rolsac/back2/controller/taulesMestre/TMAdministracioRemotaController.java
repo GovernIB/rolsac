@@ -44,51 +44,51 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/administracioRemota/")
-public class TMAdministracioRemotaController extends PantallaBaseController {
-
+public class TMAdministracioRemotaController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMAdministracioRemotaController.class);
-
+	
 	@RequestMapping(value = "/administracioRemota.do")
-	public String pantallaAdministracioRemota(Map<String, Object> model, HttpServletRequest request) {
+	public String pantallaAdministracioRemota(Map<String, Object> model, HttpServletRequest request)
+	{
 		model.put("menu", 1);
 		model.put("submenu", "layout/submenu/submenuTMAdministracioRemota.jsp");
-
+		
 		RolUtil rolUtil = new RolUtil(request);
 		if (rolUtil.userIsAdmin()) {
 			model.put("escriptori", "pantalles/taulesMestres/tmAdministracioRemota.jsp");
-
+			
 			EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
 			List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
 			List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
 			try {
 				llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
-
 				for (EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial) {
-					llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial
-							.getId(), espaiTerritorial
-							.getNombreEspacioTerritorial(request.getLocale().getLanguage())
+					llistaEspaiTerritorialDTO.add(new IdNomDTO(
+							espaiTerritorial.getId(),
+							espaiTerritorial.getNombreEspacioTerritorial(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())
 					));
 				}
-
+				
 			} catch (DelegateException dEx) {
-				if (dEx.isSecurityException()) {
-					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx)); 
-				} else {
+				if (dEx.isSecurityException())
+					log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
+				else
 					log.error(ExceptionUtils.getStackTrace(dEx));
-				}
 			}
-
+			
 			model.put("llistaEspaiTerritorial", llistaEspaiTerritorialDTO);
 		} else {
 			model.put("error", "permisos");
 		}
-		loadIndexModel (model, request);	
+		loadIndexModel (model, request);
 		return "index";
 	}
 	
+	
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatAdministracioRemota(HttpServletRequest request) {
-
+	public @ResponseBody Map<String, Object> llistatAdministracioRemota(HttpServletRequest request)
+	{
 		List<Map<String, Object>> llistaAdiministracionsRemotesDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> adRemotaDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();

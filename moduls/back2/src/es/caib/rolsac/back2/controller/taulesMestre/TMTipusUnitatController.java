@@ -29,8 +29,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/tipusUnitat/")
-public class TMTipusUnitatController extends PantallaBaseController {
-	
+public class TMTipusUnitatController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMTipusUnitatController.class);
     
     @RequestMapping(value = "/tipusUnitat.do")
@@ -51,30 +51,27 @@ public class TMTipusUnitatController extends PantallaBaseController {
     
 
 	@RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatTipusUnitat(HttpServletRequest request) {
-	
+	public @ResponseBody Map<String, Object> llistatTipusUnitat(HttpServletRequest request)
+	{
 		List<Map<String, Object>> llistaUnitatsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> unitatDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
+		
 		//Información de paginación
-		String pagPag = request.getParameter("pagPag");		
+		String pagPag = request.getParameter("pagPag");
 		String pagRes = request.getParameter("pagRes");
 		
-		if (pagPag == null) pagPag = String.valueOf(0); 
+		if (pagPag == null) pagPag = String.valueOf(0);
 		if (pagRes == null) pagRes = String.valueOf(10);
-      		
-		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();              		
+		
+		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
-			
 			TratamientoDelegate unitatDelegate = DelegateUtil.getTratamientoDelegate();
-			
 			resultadoBusqueda = unitatDelegate.listarTratamientos(Integer.parseInt(pagPag), Integer.parseInt(pagRes));
 			
-			for (Tratamiento unitat: castList(Tratamiento.class, resultadoBusqueda.getListaResultados() ) ) {
-				
-				TraduccionTratamiento tu = (TraduccionTratamiento) unitat.getTraduccion(request.getLocale().getLanguage());
+			for (Tratamiento unitat: castList(Tratamiento.class, resultadoBusqueda.getListaResultados())) {
+				TraduccionTratamiento tu = (TraduccionTratamiento) unitat.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 				
 				unitatDTO = new HashMap<String, Object>();
 				unitatDTO.put("id", unitat.getId());
@@ -94,10 +91,10 @@ public class TMTipusUnitatController extends PantallaBaseController {
 				log.error("Error: " + dEx.getMessage());
 			}
 		}
-
-		resultats.put( "total", resultadoBusqueda.getTotalResultados() );
+		
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaUnitatsDTO);
-
+		
 		return resultats;
 	}
 	

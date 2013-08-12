@@ -116,7 +116,7 @@
         },{
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_descripcio_ca",
+            "etiquetaValor": "item_descripcio_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":

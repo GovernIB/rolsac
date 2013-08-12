@@ -40,8 +40,8 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 		return impl.grabarMateria(materia);
 	}
 
-    public ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException {
-    	return impl.listarMaterias(pagina, resultados);
+    public ResultadoBusqueda listarMaterias(int pagina, int resultados, String lang) throws DelegateException {
+    	return impl.listarMaterias(pagina, resultados, lang);
     }
     
 	public List<Materia> listarMaterias() throws DelegateException {

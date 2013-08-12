@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
-import org.ibit.rol.sac.model.FichaResumenUA;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.ibit.rol.sac.model.Edificio;
 import org.ibit.rol.sac.model.EspacioTerritorial;
 import org.ibit.rol.sac.model.Ficha;
+import org.ibit.rol.sac.model.FichaResumenUA;
 import org.ibit.rol.sac.model.FichaUA;
 import org.ibit.rol.sac.model.Materia;
 import org.ibit.rol.sac.model.Seccion;
@@ -89,66 +90,59 @@ public class UnitatAdmBackController extends PantallaBaseController {
 	}       
 
 	@RequestMapping(value = "/unitatadm.do", method = GET)
-	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-
+	public String llistatUniAdm(Map<String, Object> model, HttpServletRequest request, HttpSession session)
+	{
 		MateriaDelegate materiaDelegate = DelegateUtil.getMateriaDelegate();
-
 		TratamientoDelegate tratamientoDelegate = DelegateUtil.getTratamientoDelegate();
 		EspacioTerritorialDelegate espacioTerritorialDelegate = DelegateUtil.getEspacioTerritorialDelegate();
-
+		
 		List<Materia> llistaMateries = new ArrayList<Materia>();
 		List<Tratamiento> llistaTractaments = new ArrayList<Tratamiento>();
 		List<EspacioTerritorial> llistaEspaiTerritorial = new ArrayList<EspacioTerritorial>();
 		List<IdNomDTO> llistaMateriesDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaTractamentsDTO = new ArrayList<IdNomDTO>();
 		List<IdNomDTO> llistaEspaiTerritorialDTO = new ArrayList<IdNomDTO>();
-
-		try {  
+		
+		String lang = null;
+		try {
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
-			llistaMateries = materiaDelegate.listarMaterias();	    	            
-
-			for (Materia materia : llistaMateries) {                
-				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(request.getLocale().getLanguage())));                
-			}
-
+			llistaMateries = materiaDelegate.listarMaterias();
+			for (Materia materia : llistaMateries)
+				llistaMateriesDTO.add(new IdNomDTO(materia.getId(),materia.getNombreMateria(lang)));
+			
 			llistaTractaments = tratamientoDelegate.listarTratamientos();
-
-			for (Tratamiento tractament : llistaTractaments) {                
-				llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(request.getLocale().getLanguage())));                
-			}                       
-
+			for (Tratamiento tractament : llistaTractaments)
+				llistaTractamentsDTO.add(new IdNomDTO(tractament.getId(), tractament.getNombreTratamiento(lang)));
+			
 			llistaEspaiTerritorial = espacioTerritorialDelegate.listarEspaciosTerritoriales();
-
-			for (EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial) {                
-				llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(request.getLocale().getLanguage())));                
-			}                       
-
+			for (EspacioTerritorial espaiTerritorial : llistaEspaiTerritorial)
+				llistaEspaiTerritorialDTO.add(new IdNomDTO(espaiTerritorial.getId(), espaiTerritorial.getNombreEspacioTerritorial(lang)));
+			
 		} catch (DelegateException dEx) {
-			
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				log.error("Error de permiso: " + ExceptionUtils.getStackTrace(dEx));
-			} else {
+			else
 				log.error(ExceptionUtils.getStackTrace(dEx));
-			}
 			
+			if (lang == null) lang = "ca";
 		}
-
+		
 		// Control de si se dan permisos extrar al rol SUPER
 		boolean accesoSuper = System.getProperty("es.caib.rolsac.permisosSuperAdicionales").equals("Y") && request.isUserInRole("sacsuper");
 		boolean accesoOtros = request.isUserInRole("sacsystem") || request.isUserInRole("sacadmin");
 		boolean acceso = (accesoSuper || accesoOtros) ? true : false;
 		
 		model.put("nuevaUA", acceso);
-
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 1);
 		model.put("titol_escriptori", messageSource.getMessage("submenu.unitatAdm", null, request.getLocale()));
 		model.put("escriptori", "pantalles/unitatadm.jsp");
-
-		if (session.getAttribute("unidadAdministrativa")!=null){
+		
+		if (session.getAttribute("unidadAdministrativa") != null) {
 			model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
+			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));            
 		}               
 
 		model.put("llistaMateries", llistaMateriesDTO);        
@@ -172,7 +166,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		if (request.getParameter("id") == null || "".equals(request.getParameter("id")) || "0".equals(request.getParameter("id"))) {
 			
 			try {
-				
 				if (unitatDelegate.autorizarCrearUA()) {
 					resultats.put("id", 0); // No hay id y tiene permisos para crear una UA
 				} else {
@@ -381,6 +374,11 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			seccionFichaDTO.setNumFichas( unitatDelegate.cuentaFichasSeccionUA(idUA, seccion.getId()) );
 
 			TraduccionSeccion tr = (TraduccionSeccion)seccion.getTraduccion();
+			if (tr == null) {
+				tr = new TraduccionSeccion(); 
+				tr.setNombre("");
+			}
+			
 			seccionFichaDTO.setNom(tr.getNombre());
 
 			listaSeccionesDTO.add(seccionFichaDTO);
@@ -516,7 +514,8 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			}
 
 			// Campos obligatorios.
-			String nom = valoresForm.get("item_nom_ca");
+			// Se cambia el "item_nom_ca" por el "item_nom_" + idioma
+			String nom = valoresForm.get("item_nom_" + DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
 			String validacio = valoresForm.get("item_validacio");
 			String sexeResponsable = valoresForm.get("item_responsable_sexe");
 			String tractament = valoresForm.get("item_tractament");
@@ -1169,7 +1168,6 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		Map<String, String> tradMap     = new HashMap<String, String>();
 
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-		String lang = getRequestLanguage(request);
 		String id = request.getParameter("codi");
 
 		int resultadosDescartados  = 0;
@@ -1183,6 +1181,14 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 		if ( !"".equals(tratamiento) && StringUtils.isNumeric(tratamiento) ) {
 			paramMap.put("tratamiento", tratamiento);
+		}
+		
+		String lang;
+		try {
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		} catch (DelegateException dEx) {
+			log.error("Idioma por defecto no encontrado");
+			lang = "ca";
 		}
 
 		if (StringUtils.isNotEmpty(id)) {
@@ -1265,10 +1271,9 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		try {	
 			
 			resultadoBusqueda = uaDelegate.buscadorUnidadesAdministrativas(paramMap, tradMap, (ua == null ? null : ua.getId()), lang, uaFilles, uaMeves, materia, pagPag, pagRes);
-			String idiomaPorDefecto = request.getLocale().getLanguage();
 
 			for ( UnidadAdministrativa uniAdm : castList(UnidadAdministrativa.class, resultadoBusqueda.getListaResultados()) ) {
-				if  ( idiomaPorDefecto.equals( uniAdm.getIdioma() )) {
+				if  ( lang.equals( uniAdm.getIdioma() )) {
 					UnidadAdministrativaDTO dto = new UnidadAdministrativaDTO( uniAdm.getId(), uniAdm.getCodigoEstandar(), 
 							uniAdm.getNombre(), uniAdm.getOrden());
 

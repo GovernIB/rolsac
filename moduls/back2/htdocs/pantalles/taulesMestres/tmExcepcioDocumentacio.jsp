@@ -33,6 +33,7 @@
     var txtAscendentment = "<spring:message code='txt.ascendentment'/>";
     var txtDescendentment = "<spring:message code='txt.descendentment'/>";
     var txtPer = "<spring:message code='txt.per'/>";
+    var txtNoHiHaLlistat = txtNoHiHa + " " + txtLlistaItems.toLowerCase();
 
     //taula    
     var txtNou = "<spring:message code='txt.afegir_nova'/> "; + txtLlistaItem.toLowerCase();
@@ -85,7 +86,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_nom_ca",
+            "etiquetaValor": "item_nom_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":

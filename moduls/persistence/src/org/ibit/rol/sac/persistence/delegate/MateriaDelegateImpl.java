@@ -51,9 +51,9 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
         }
     }
 
-    public ResultadoBusqueda listarMaterias(int pagina, int resultados) throws DelegateException {
+    public ResultadoBusqueda listarMaterias(int pagina, int resultados, String lang) throws DelegateException {
     	try {
-    		return getFacade().listarMaterias(pagina, resultados);
+    		return getFacade().listarMaterias(pagina, resultados, lang);
     	} catch (RemoteException e) {
     		throw new DelegateException(e);    		
     	} 

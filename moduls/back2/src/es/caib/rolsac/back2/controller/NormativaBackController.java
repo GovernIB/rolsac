@@ -9,7 +9,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -178,9 +177,6 @@ public class NormativaBackController extends PantallaBaseController {
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
 
-		
-		String idioma = request.getLocale().getLanguage();
-
         ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		//Obtenemos la ordenación por parámetro.
@@ -201,6 +197,8 @@ public class NormativaBackController extends PantallaBaseController {
 		}
 		
 		try {
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
 			//Obtener parámetros de búsqueda.
 			String idStr = request.getParameter("id");
 			Long id = -1l;
@@ -211,7 +209,7 @@ public class NormativaBackController extends PantallaBaseController {
 			paramMap.put("id", idStr != null ? id : null );
 			
 			//Procesa el objeto request y añade los valores necesarios a los mapas de parámetros y de traducciones.
-			procesarParametrosBusqueda(request, paramMap, paramTrad, idioma);
+			procesarParametrosBusqueda(request, paramMap, paramTrad, lang);
 						
 			//Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
@@ -235,7 +233,7 @@ public class NormativaBackController extends PantallaBaseController {
 			for ( Normativa normativa : (List<Normativa>)resultadoBusqueda.getListaResultados() ) {
 
 				boolean local = NormativaLocal.class.isInstance(normativa);
-				normativa.setIdioma(idioma);
+				normativa.setIdioma(lang);
 
 				llistaNormativesDTO.add( new NormativaDTO(
 							normativa.getId(), 

@@ -79,8 +79,8 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
     * @ejb.interface-method
     * @ejb.permission unchecked="true"
     */    
-    public ResultadoBusqueda listarMaterias(int pagina, int resultados) {
-    	return listarTablaMaestraPaginada(pagina, resultados, listarTMMaterias());
+    public ResultadoBusqueda listarMaterias(int pagina, int resultados, String lang) {
+    	return listarTablaMaestraPaginada(pagina, resultados, listarTMMaterias(lang));
     }
     
     /**
@@ -105,7 +105,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
      * Listar las materias del menú de administración (nuevo backoffice)
      * @return
      */
-    private List listarTMMaterias() {
+    private List listarTMMaterias(String lang) {
     	Session session = getSession();
     	
     	try {
@@ -114,7 +114,7 @@ public abstract class MateriaFacadeEJB extends HibernateEJB {
     														"where index(trad) = :idioma " +
     														"order by mat.codigoEstandar asc");
     		
-    		query.setParameter("idioma", idioma_per_defecte);
+    		query.setParameter("idioma", lang);
     		return query.list();    		
     	} catch (HibernateException he) {
     		throw new EJBException(he);

@@ -54,7 +54,8 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 	private static Log log = LogFactory.getLog(TMAgrupacioFetsVitalsController.class);
     
     @RequestMapping(value = "/agrupacioFetsVitals.do")
-    public String pantallaAgrupacioFetsVitals(Map<String, Object> model, HttpServletRequest request) {
+    public String pantallaAgrupacioFetsVitals(Map<String, Object> model, HttpServletRequest request)
+    {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMAgrupacioFetsVitals.jsp");
         
@@ -64,7 +65,13 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
         	
         	model.put("escriptori", "pantalles/taulesMestres/tmAgrupacioFetsVitals.jsp");
         	
-        	String lang = request.getLocale().getLanguage();
+        	String lang;
+        	try {
+        		lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+        	} catch (DelegateException dEx) {
+        		log.error("Idioma por defecto no encontrado");
+        		lang = "ca";
+        	}
         	
         	PublicoObjetivoDelegate publicObjectiuDelegate = DelegateUtil.getPublicoObjetivoDelegate();
 			List<IdNomDTO> llistaPublicObjectiuDTO = new ArrayList<IdNomDTO>();
@@ -121,9 +128,9 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     }
     
     @RequestMapping(value = "/llistat.do")
-	public @ResponseBody Map<String, Object> llistatAgrupacioVetsFitals(HttpServletRequest request) {
-	
-		List<Map<String, Object>> llistaAgrupacioFetsVitalsDTO = new ArrayList<Map<String, Object>>();
+	public @ResponseBody Map<String, Object> llistatAgrupacioVetsFitals(HttpServletRequest request)
+	{
+    	List<Map<String, Object>> llistaAgrupacioFetsVitalsDTO = new ArrayList<Map<String, Object>>();
 		Map<String, Object> agrupacioFetsVitalsDTO;
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
@@ -349,7 +356,8 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
 	    Map<String, Object> resultats = new HashMap<String, Object>();
 	    try {
 	        Long id = new Long(request.getParameter("id"));
@@ -394,7 +402,7 @@ public class TMAgrupacioFetsVitalsController extends PantallaBaseController {
 			omplirCampsTraduibles(resultats, agrupacioFetsVitals);
 	        
 	        
-	        String lang = request.getLocale().getLanguage();
+	        String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 	        // Fets vitals asociats
             if (agrupacioFetsVitals.getHechosVitalesAgrupacionHV() != null) {             
             	Map<String, String> map;

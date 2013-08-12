@@ -48,7 +48,8 @@ public abstract class PantallaBaseController {
 	    	String username = request.getRemoteUser();
 	    	nomLlinatges = username; 
 		    try {
-
+		    	model.put("idiomaVal", DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+		    	
 		    	UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
 		    	Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(username);
 		    	if (usuari != null && !StringUtils.isEmpty(usuari.getNombre())) {

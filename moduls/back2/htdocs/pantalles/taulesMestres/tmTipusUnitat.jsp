@@ -87,7 +87,7 @@
         {
             "modo": "individual",
             "etiqueta": "id",
-            "etiquetaValor": "item_tipus_ca",
+            "etiquetaValor": "item_tipus_" + '<c:out value="${idiomaVal}"/>',
             "obligatori": "si",
             "tipus": "alfanumeric",
             "caracters":

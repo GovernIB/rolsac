@@ -45,14 +45,22 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/edifici/")
-public class TMEdificisController extends PantallaBaseController {
-    
+public class TMEdificisController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(TMEdificisController.class);
 	
     @RequestMapping(value = "/edifici.do")
     public String pantallaEdifici(Map<String, Object> model, HttpServletRequest request) {
         model.put("menu", 1);
         model.put("submenu", "layout/submenu/submenuTMEdificis.jsp");
+        
+        String lang;
+        try {
+        	lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+        } catch (DelegateException dEx) {
+        	log.error("No se ha encontrado el idioma por defecto");
+        	lang = "ca";
+        }
         
         RolUtil rolUtil= new RolUtil(request);
     	loadIndexModel (model, request);
@@ -61,7 +69,8 @@ public class TMEdificisController extends PantallaBaseController {
         	 model.put("escriptori", "pantalles/taulesMestres/tmEdificis.jsp");
 	       	 if (request.getSession().getAttribute("unidadAdministrativa")!=null){
 	             model.put("idUA",((UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa")).getId());
-	             model.put("nomUA",((UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));
+	             
+	             model.put("nomUA",((UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(lang));
 	    	 }
         } else {
         	model.put("error", "permisos");
@@ -82,7 +91,14 @@ public class TMEdificisController extends PantallaBaseController {
 		Map<String, String> tradMap = new HashMap<String, String>();
 		Map<String, Object> model= new HashMap<String, Object>();
 		
-		String lang = request.getLocale().getLanguage();
+		String lang;
+		try {
+			lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+		} catch (DelegateException dEx) {
+			log.error("Idioma por defecto no encontrado");
+			lang = "ca";
+		}
+		
 		Long idUABase=null;
 		
     	loadIndexModel (model, request);
@@ -152,11 +168,10 @@ public class TMEdificisController extends PantallaBaseController {
 		try {
 
 			EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-			
 			resultadoBusqueda = edificiDelegate.buscarEdificios(paramMap, tradMap, idUABase, uaFilles, uaMeves, pagPag, pagRes);
 			
 			for (Edificio edf : castList(Edificio.class, resultadoBusqueda.getListaResultados() ) ) {
-                TraduccionEdificio tedf = (TraduccionEdificio) edf.getTraduccion(request.getLocale().getLanguage());
+                TraduccionEdificio tedf = (TraduccionEdificio) edf.getTraduccion(lang);
 				edificiDTO = new HashMap<String, Object>();
 				edificiDTO.put("id", edf.getId());
 				edificiDTO.put("direccio", edf.getDireccion());
@@ -181,13 +196,14 @@ public class TMEdificisController extends PantallaBaseController {
 	}
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();
-	    try {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	try {
 	        Long id = new Long(request.getParameter("id"));
 	        
 	        EdificioDelegate edificiDelegate = DelegateUtil.getEdificioDelegate();
-	        Edificio edifici = edificiDelegate.obtenerEdificio(id);	        	        
+	        Edificio edifici = edificiDelegate.obtenerEdificio(id);
 	        
 	        resultats.put("item_id", edifici.getId());
 	        resultats.put("item_direccio", edifici.getDireccion());
@@ -201,7 +217,7 @@ public class TMEdificisController extends PantallaBaseController {
 	        resultats.put("item_fax", edifici.getFax());
 	        resultats.put("item_email", edifici.getEmail());
 	        
-	        if (edifici.getFotoPequenya() != null){
+	        if (edifici.getFotoPequenya() != null) {
             	resultats.put("item_foto_petita_enllas_arxiu", "edifici/archivo.do?id=" + edifici.getId() + "&tipus=1");
                 resultats.put("item_foto_petita", edifici.getFotoPequenya().getNombre());
             } else {
@@ -221,19 +237,17 @@ public class TMEdificisController extends PantallaBaseController {
             } else {
                 resultats.put("item_planol_enllas_arxiu", "");
                 resultats.put("item_planol", "");
-            } 
-
-			omplirCampsTraduibles(resultats, edifici);
-	        
-	        
-	        String lang = request.getLocale().getLanguage();
-	        // Unitats Administratives asociadas
-            if (edifici.getUnidadesAdministrativas() != null) {             
+            }
+            
+            omplirCampsTraduibles(resultats, edifici);
+            
+            String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+            // Unitats Administratives asociadas
+            if (edifici.getUnidadesAdministrativas() != null) {
             	Map<String, String> map;
-            	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();            	
+            	List<Map<String, String>> llistaUnitatsAdministratives = new ArrayList<Map<String, String>>();
             	TraduccionUA traUA;
 				String nombre;
-                
 				
 				for (Iterator it = edifici.getUnidadesAdministrativas().iterator(); it.hasNext();) {
 					UnidadAdministrativa unitatAdministrativa = (UnidadAdministrativa) it.next();
@@ -251,25 +265,21 @@ public class TMEdificisController extends PantallaBaseController {
 				resultats.put("unitatsAdm", llistaUnitatsAdministratives);
             } else {
                 resultats.put("unitatsAdm", null);
-            } 
+            }
             // Fin unitatsAdm asociadas
-	        
-	        
-	    } catch (DelegateException dEx) {
+            
+        } catch (DelegateException dEx) {
 			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
+			else
 				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
 		}
-	    
-        return resultats;
+    	
+    	return resultats;
 	}
-
-
-	private void omplirCampsTraduibles(Map<String, Object> resultats,
-			Edificio edifici) throws DelegateException {
+    
+    private void omplirCampsTraduibles(Map<String, Object> resultats, Edificio edifici) throws DelegateException {
 		IdiomaDelegate idiomaDelegate = DelegateUtil.getIdiomaDelegate();
 		List<String> langs = idiomaDelegate.listarLenguajes();
 		

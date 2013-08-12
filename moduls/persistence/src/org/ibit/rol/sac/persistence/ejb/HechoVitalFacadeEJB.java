@@ -156,7 +156,7 @@ public abstract class HechoVitalFacadeEJB extends HibernateEJB {
     		
     		Query query = session.createQuery("select hechoVital.id, hechoVital.orden, trad.nombre " +
     									"from HechoVital as hechoVital, hechoVital.traducciones as trad " +
-    									"where index(trad) = :idioma" +
+    									"where index(trad) = :idioma " +
     									"order by hechoVital.orden asc");
     		
     		query.setParameter("idioma", idioma);
