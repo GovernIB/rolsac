@@ -89,11 +89,11 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
         Session session = null;
         
         // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( fitxaCriteria.getVisible() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( fitxaCriteria.getVisible() != null && fitxaCriteria.getVisible().booleanValue() );  
+        boolean soloRegistrosVisibles = ( fitxaCriteria.getActiu() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
+        		|| ( fitxaCriteria.getActiu() != null && fitxaCriteria.getActiu().booleanValue() );  
 
         // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        fitxaCriteria.setVisible(null);
+        fitxaCriteria.setActiu(null);
 
         try {            
             criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHAS_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);

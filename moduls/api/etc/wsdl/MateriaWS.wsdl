@@ -124,6 +124,7 @@
 				<complexContent>
 					<extension base="tns2:BasicCriteria">
 						<sequence>
+							<element name="actiu" nillable="true" type="xsd:boolean" />						
 							<element name="fechaActualizacion" nillable="true"
 								type="xsd:string" />
 							<element name="fechaCaducidad" nillable="true" type="xsd:string" />
@@ -140,7 +141,6 @@
 							<element name="validacion" nillable="true" type="xsd:string" />
                             <element name="publicoObjetivo" nillable="true" type="xsd:string" />
                             <element name="seccion" nillable="true" type="xsd:string" />
-                            <element name="visible" nillable="true" type="xsd:boolean" />
 						</sequence>
 					</extension>
 				</complexContent>
