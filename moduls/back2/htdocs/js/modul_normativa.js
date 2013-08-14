@@ -171,50 +171,63 @@ function CEscriptoriNormativa(){
 	}
 	
 	this.finCargaListado = function(data, opcions){
-		// total
-		resultats_total = parseInt(data.total,10);
 		
-		if (resultats_total > 0) {
+		// total
+		resultats_total = parseInt( data.total , 10 );
+		
+		if ( resultats_total > 0 ) {
 			
-			txtT = (resultats_total > 1) ? txtNormatives : txtNormativa;
+			txtT = ( resultats_total > 1 ) ? txtNormatives : txtNormativa;
 			
-			ultimaPag = Math.floor(resultats_total / pag_Res) - 1;
-			if (resultats_total % pag_Res > 0){
+			ultimaPag = Math.floor( resultats_total / pag_Res ) - 1;
+			if ( resultats_total % pag_Res > 0 ) {
 				ultimaPag++;
 			}
-			if (pag_Pag > ultimaPag) {
+			
+			if ( pag_Pag > ultimaPag ) {
 				pag_Pag = ultimaPag;
 			}
 			
-			resultatInici = ((pag_Pag*pag_Res)+1);
-			resultatFinal = ((pag_Pag*pag_Res) + pag_Res > resultats_total) ? resultats_total : (pag_Pag*pag_Res) + pag_Res;
+			resultatInici = ( ( pag_Pag * pag_Res ) + 1 );
+			resultatFinal = ( ( pag_Pag * pag_Res ) + pag_Res > resultats_total ) ? resultats_total : ( pag_Pag * pag_Res ) + pag_Res;
+			
+			var isUltimaPagina = false;
+			if ( resultats_total == resultatFinal ) {
+				isUltimaPagina = true;
+			}
 			
 			// ordenacio
 			ordre_T = ordre_Tipus;
 			ordre_C = ordre_Camp;
-			ordre_c1 = (ordre_C == "id") ? " " + ordre_T : "";
-			ordre_c2 = (ordre_C == "fecha") ? " " + ordre_T : "";
-			ordre_c3 = (ordre_C == "fechaBoletin") ? " " + ordre_T : "";
+			ordre_c1 = ( ordre_C == "id" ) ? " " + ordre_T : "";
+			ordre_c2 = ( ordre_C == "fecha" ) ? " " + ordre_T : "";
+			ordre_c3 = ( ordre_C == "fechaBoletin" ) ? " " + ordre_T : "";
 			
 			txt_ordenacio = "";
 			
-			if (resultats_total > 1) {
+			if ( resultats_total > 1 ) {
 			
-				txt_ordenats = (ordre_T == "ASC") ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
+				txt_ordenats = ( ordre_T == "ASC" ) ? txtOrdenats + " <em>" + txtAscendentment + "</em>" : txtOrdenats + " <em>" + txtDescendentment + "</em>";
 				
-				if (ordre_C == "id") {
+				if ( ordre_C == "id" ) {
+					
 					txt_per = txtTitol;
-				} else if (ordre_C == "fecha") {
+					
+				} else if ( ordre_C == "fecha" ) {
+					
 					txt_per = txtData;
+					
 				} else {
+					
 					txt_per = txtDataButlleti;
+					
 				}
 				
 				txt_ordenacio += ", " + txt_ordenats + " " + txtPer + " <em>" + txt_per + "</em>";
 			
 			}
 			
-			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
+			codi_totals = "<p class=\"info\">" + txtTrobats + " <strong>" + resultats_total + " " + txtT.toLowerCase() + "</strong>" + ". " + txtMostrem + " " + resultatInici + txtMostremAl + resultatFinal + txt_ordenacio + ".</p>";
 
 			/* Se desactiva la ordenacion
 			codi_cap1 = "<div class=\"th nom" + ordre_c1 + "\" role=\"columnheader\"><a href=\"javascript:;\">" + txtAdresa + "</a></div>";
@@ -237,7 +250,8 @@ function CEscriptoriNormativa(){
 			codi_taula += "<div class=\"tbody\">";
 			
 			// codi cuerpo
-			$(data.nodes).slice(resultatInici-1,resultatFinal).each(function(i) {
+			$(data.nodes).slice().each(function(i) {
+				
 				dada_node = this;
 				parClass = (i%2) ? " par": "";
 				
@@ -252,12 +266,13 @@ function CEscriptoriNormativa(){
 				codi_taula += "<div class=\"td dataButlleti\" role=\"gridcell\">" + dada_node.fechaBoletin+ "</div>";
 				
 				codi_taula += "</div>";
+				
 			});
 			
 			codi_taula += "</div>";
 			codi_taula += "</div>";
 			
-			if($.browser.opera) {
+			if ( $.browser.opera ) {
 				escriptori_contingut_elm.find("div.table:first").css("font-size",".85em");
 			}
 			
@@ -266,7 +281,8 @@ function CEscriptoriNormativa(){
 				total: resultats_total,
 				itemsPorPagina: pag_Res,
 				paginaActual: pag_Pag,
-				funcionPagina: "EscriptoriNormativa.cambiaPagina"
+				funcionPagina: "EscriptoriNormativa.cambiaPagina",
+				isUltimaPagina: isUltimaPagina	
 			});
 			
 			codi_navegacio = multipagina_normativa.getHtml();
@@ -281,25 +297,30 @@ function CEscriptoriNormativa(){
 			
 		}
 		
-		// animacio
+		// animació
 		normatives_dades_elm.fadeOut(300, function() {
+			
 			// pintem
 			normatives_dades_elm.html(codi_final).fadeIn(300, function() {
 														
 				// Evento lanzado al hacer click en un elemento de la lista.
 				//jQuery("#resultats .llistat .tbody a").unbind("click").bind("click",function(){
-                resultats_normativa_elm.find(".llistat .tbody a").unbind("click").bind("click",function(){
+                resultats_normativa_elm.find(".llistat .tbody a").unbind("click").bind( "click", function() {
+                	
 					var partesItem = jQuery(this).attr("class").split("_");
 					var itemID = partesItem[1];
 					var titulo = jQuery(this).html();
 					that.agregaItem(itemID,titulo);
-					});
+					
+				});
 				
 				// cercador
 				normatives_cercador_elm.find("input, select").removeAttr("disabled");
 				
 			});
+			
 		});	
+		
 	}
 
 	this.carregar = function(opcions) {		
@@ -308,9 +329,9 @@ function CEscriptoriNormativa(){
 		dataVars = "";
 		
 		// cercador
-		dataVars_cercador = "&titol=" + $("#cerca_normativa_titol").val();
-		dataVars_cercador += "&data=" + $("#cerca_normativa_data").val();
-		dataVars_cercador += "&dataButlleti=" + $("#cerca_normativa_data_butlleti").val();
+		var filtrosBuscador = "&titol=" + $("#cerca_normativa_titol").val();
+		filtrosBuscador += "&data=" + $("#cerca_normativa_data").val();
+		filtrosBuscador += "&dataButlleti=" + $("#cerca_normativa_data_butlleti").val();
 
 		// ordreTipus
 		if (typeof opcions.ordreTipus != "undefined") {
@@ -322,15 +343,14 @@ function CEscriptoriNormativa(){
 		}
 			
 		// paginacio
-		//pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : parseInt(pagPagina_normativa_elm.val(),10);
-		pag_Pag = (opcions.ajaxPag) ? parseInt(opcions.ajaxPag,10) : multipagina.getPaginaActual();			
+		pag_Pag = ( opcions.pagina != undefined ) ? parseInt( opcions.pagina , 10 ) : multipagina.getPaginaActual();
 			
 		// ordre
 		ordre_Tipus = ordreTipus_normativa_elm.val();
 		ordre_Camp = ordreCamp_normativa_elm.val();
 			
 		// variables
-		dataVars += "&pagPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + dataVars_cercador;		
+		dataVars += "&numeroPagina=" + pag_Pag + "&pagRes=" + pag_Res + "&ordreTipus=" + ordre_Tipus + "&ordreCamp=" + ordre_Camp + filtrosBuscador;		
 		
 		// ajax
 		$.ajax({

@@ -1229,7 +1229,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		Map<String, Object> paramMap = new HashMap<String, Object>();	
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		
-		// TODO obtener la ordenaci�n por par�metro
+		// TODO obtener la ordenación por parámetro
 		//String campoOrdenacion = "normativa.fecha";
 		String campoOrdenacion = "fecha";
 		String orden = "desc";		
@@ -1243,7 +1243,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
-			//Obtener par�metros de b�squeda
+			//Obtener parámetros de búsqueda
 		
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				Date fecha = DateUtils.parseDate(request.getParameter("data"));
@@ -1265,7 +1265,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController {
 			}			
 			
 			//Información de paginación
-			String pagPag = request.getParameter("pagPag");		
+			String pagPag = request.getParameter("numeroPagina");		
 			String pagRes = request.getParameter("pagRes");
 			
 			if (pagPag == null) pagPag = String.valueOf(0); 
