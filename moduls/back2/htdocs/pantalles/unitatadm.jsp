@@ -77,7 +77,7 @@
                                     <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
                                     <option value="1"><spring:message code='txt.validacio.publica'/></option>
                                     <option value="2"><spring:message code='txt.validacio.interna'/></option>
-                                    <option value="3"><spring:message code='txt.validacio.reserva'/></option>
+                                    <!-- <option value="3"><spring:message code='txt.validacio.reserva'/></option> -->
                                 </select>
                             </div>
                         </div>                      

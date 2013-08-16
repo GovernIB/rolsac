@@ -600,7 +600,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 				Hibernate.initialize(ua.getPersonal());
 				Hibernate.initialize(ua.getNormativas());
 
-				if (userIsAdmin()) {
+				if (userIsSuper()) {
 					Hibernate.initialize(ua.getUsuarios());
 				}
 
@@ -3200,34 +3200,33 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 			String from     = "from UnidadAdministrativa as unidad, unidad.traducciones trad ";
 			String where   = "where " + i18nQuery + " and unidad.padre = " + id + " ";			
 			String orderBy = "order by unidad.orden";
-
+			
+			if (userIsSystem()) {
+				if (id == null) {
+					where =  "where " + i18nQuery + (uaFilles ? "" : " and unidad.padre is null ");
+				} else if (uaMeves && uaFilles) {
+					where   = "where " + i18nQuery;
+				} else if (uaFilles) {
+					where = " where " + i18nQuery + " and unidad.padre in (" + cargarArbolUnidadId(id).toString().replaceAll("\\[|\\]", "") + ")";
+				}
+				
+			} else {
+				String cadenaFiltro = obtenerCadenaFiltroUA(id, uaFilles, uaMeves);
+				if (StringUtils.isEmpty(cadenaFiltro))
+					cadenaFiltro = EMPTY_ID;
+				
+				where = where.replaceFirst("and unidad.padre = " + id, " ");
+				where += "and (unidad.id in(" + cadenaFiltro + ") " +
+						(id != null ? "or unidad.padre = " + id : "" )  + ") " +
+						(id != null ? "and unidad.id != " + id + " " : "");
+			}
+			
 			if ( materia != null ) {
 				where += " and unidad.id in (select uam.unidad.id " +
 						"from UnidadMateria as uam " +
 						"where uam.materia.id = " + materia + ") ";
 			}
-
-			if ( userIsSystem() ) {
-
-				if ( id == null ) {										
-					where =  "where " + i18nQuery + (uaFilles ? "" : " and unidad.padre is null "); 
-				} else if ( uaMeves && uaFilles ) {
-					where   = "where " + i18nQuery;					
-				} else if ( uaFilles ){ 
-					where = " where " + i18nQuery + " and unidad.padre in (" + cargarArbolUnidadId(id).toString().replaceAll("\\[|\\]", "") + ")";					 
-				}
-
-			} else {
-				String cadenaFiltro = obtenerCadenaFiltroUA(id, uaFilles, uaMeves);
-				if ( StringUtils.isEmpty(cadenaFiltro) ) {
-					cadenaFiltro = EMPTY_ID;
-				}
-				where = where.replaceFirst("and unidad.padre = " + id, " ");
-				where += "and (unidad.id in(" + cadenaFiltro + ") " +
-						(id != null ? "or unidad.padre = " + id : "" )  + ") " +							 
-						(id != null ? "and unidad.id != " + id + " " : "");
-			}
-
+			
 			Query query = session.createQuery( select + from + where + orderBy);
 
 			// Asignar parámetros

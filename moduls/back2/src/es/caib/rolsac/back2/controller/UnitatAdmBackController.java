@@ -301,23 +301,20 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 
-	private Object getLlistaUsuarisDTO(Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+	private Object getLlistaUsuarisDTO(Map<String, Object> resultats, UnidadAdministrativa uni)
+	{
 		List<IdNomDTO> llistaUsuarisDTO = null;
-
-		if (uni.getUsuarios() != null) {
-			
-			llistaUsuarisDTO = new ArrayList<IdNomDTO>();
-			
-			for (Object usuario: uni.getUsuarios())
-				llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(),
-						((Usuario)usuario).getNombre()));
-
-			
+		try {
+			if (uni.getUsuarios() != null) {
+				llistaUsuarisDTO = new ArrayList<IdNomDTO>();
+				for (Object usuario: uni.getUsuarios())
+					llistaUsuarisDTO.add(new IdNomDTO(((Usuario)usuario).getId(), ((Usuario)usuario).getNombre()));
+			}
+		} catch (Exception ex) {
+			log.error("Error recuperando los usuarios.");
 		}
 		
 		return llistaUsuarisDTO;
-		
 	}
 
 	private Object getLlistaEdificisDTO(Map<String, Object> resultats, UnidadAdministrativa uni) {
