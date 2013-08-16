@@ -55,7 +55,7 @@ public class UnidadAdministrativaController {
 				uaHijos = uaDelegate.listarHijosUA(uaId);
 			}
             			
-			String lang = locale.getLanguage();
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			Usuario usuari = usuariDelegate.obtenerUsuariobyUsername(request.getRemoteUser());
 			for (UnidadAdministrativa ua: uaHijos) {
 				// Miramos que el padre sea visible por el usuario

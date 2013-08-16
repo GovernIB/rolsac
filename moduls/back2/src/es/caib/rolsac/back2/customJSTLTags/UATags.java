@@ -54,7 +54,7 @@ public class UATags extends TagSupport {
                 url.append("&redirectTo=");
                 url.append(httpRequest.getRequestURL());
                 UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
-                mollapa.append(uaDelegate.getUaMollaBack2(ua.getId(), locale.getLanguage(), url.toString(), UA_ID_PLACEHOLDER));
+                mollapa.append(uaDelegate.getUaMollaBack2(ua.getId(), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto(), url.toString(), UA_ID_PLACEHOLDER));
                 textoBotonCargarHijos = messages.getMessage("mollapa.unitats.filles.label", null, locale);
                                 
             } else {
