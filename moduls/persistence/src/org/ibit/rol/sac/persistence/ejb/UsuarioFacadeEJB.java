@@ -268,7 +268,8 @@ public abstract class UsuarioFacadeEJB extends HibernateEJB {
                 if (value instanceof String) {
                     String sValue = (String) value;
                     if (sValue.length() > 0) {
-                        criteri.add(Expression.ilike(key, value));
+                    	String valor = "%" + sValue + "%";
+                        criteri.add(Expression.ilike(key, valor));
                     }
                 } else {
                     criteri.add(Expression.eq(key, value));
