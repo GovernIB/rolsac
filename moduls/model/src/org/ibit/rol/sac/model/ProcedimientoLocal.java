@@ -459,5 +459,9 @@ public class ProcedimientoLocal extends Classificable implements Procedimiento, 
 		return visible;
 	}
 	
+	// Mètode creat per poder ser cridat des de la JSP a través de JSTL.
+	public Boolean getIsVisible() {
+		return this.isVisible();
+	}	
 	
 }
