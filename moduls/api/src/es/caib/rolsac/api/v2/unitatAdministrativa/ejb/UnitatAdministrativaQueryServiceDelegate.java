@@ -85,7 +85,7 @@ public class UnitatAdministrativaQueryServiceDelegate {
     }
     
     @SuppressWarnings("unchecked")
-    public List<Long> llistarDescendents(long uaId) throws DelegateException {
+    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws DelegateException {
         try {
             UnitatAdministrativaQueryServiceEJBRemote ejb = unitatAdministrativaQueryServiceLocator.getUnitatAdministrativaQueryServiceEJB();
             return ejb.llistarDescendents(uaId);

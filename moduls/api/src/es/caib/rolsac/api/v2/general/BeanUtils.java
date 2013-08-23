@@ -43,7 +43,7 @@ public class BeanUtils {
         // return null if dto is null
         if (params.length > 0 && params[0] == null) {return null;}
         if (adapterPrefix.equals("estadistica")) {
-        	//El nombre del adapter de estadistica, sigue un patrón diferente
+        	//El nombre del adapter de estadistica, sigue un patrï¿½n diferente
             return getBean(adapterPrefix + INSERT_INFIX + strategy + ADAPTER_SUFIX, params);
         } else {
             return getBean(adapterPrefix + ADAPTER_INFIX + strategy + ADAPTER_SUFIX, params);

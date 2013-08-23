@@ -243,23 +243,20 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
      * @ejb.interface-method
      * @ejb.permission unchecked="true"
      */
-    public List<Long> llistarDescendents(long uaId) {
-        List<Long> uas = new ArrayList<Long>();
-        try {
-            UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
-            uaCriteria.setId(String.valueOf(uaId));
-            RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB(); 
-            UnitatAdministrativaDTO uaDto = ejb.obtenirUnitatAdministrativa(uaCriteria);
-            
-            List<UnitatAdministrativaDTO> uasList = new ArrayList<UnitatAdministrativaDTO>();
-            obtenirDescendents(uaDto, uasList);
-            for (UnitatAdministrativaDTO ua: uasList) {
-                uas.add(ua.getId());
-            }
-        } catch (QueryServiceException e) {
-            log.error(e);
-        }
-        return uas;
+    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId)
+    {
+    	List<UnitatAdministrativaDTO> uasList = new ArrayList<UnitatAdministrativaDTO>();
+    	try {
+    		UnitatAdministrativaCriteria uaCriteria = new UnitatAdministrativaCriteria();
+    		uaCriteria.setId(String.valueOf(uaId));
+    		RolsacQueryServiceEJB ejb = new RolsacQueryServiceEJB();
+    		UnitatAdministrativaDTO uaDto = ejb.obtenirUnitatAdministrativa(uaCriteria);
+    		obtenirDescendents(uaDto, uasList);
+    		
+    	} catch (QueryServiceException e) {
+    		log.error(e);
+    	}
+    	return uasList;
     }
     
     // Obtiene recursivamente los descendientes de la UA

@@ -1014,17 +1014,16 @@
     <bean id="iniciacioQueryServiceEJBLocator" class="es.caib.rolsac.api.v2.iniciacio.ejb.IniciacioQueryServiceEJBLocator" />
     
 	<!-- WS -->
-	<!-- Esta funcionalidad la proporciona RolsacWS
-	<bean id="usuariQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.usuari.IniciacioQueryServiceAdapter" scope="prototype">
-        <property name="usuariQueryServiceStrategy" ref="usuariQueryServiceWSStrategy" />
+	<!-- Esta funcionalidad la proporciona RolsacWS -->
+	<bean id="iniciacioQueryServiceWSAdapter" class="es.caib.rolsac.api.v2.iniciacio.IniciacioQueryServiceAdapter" scope="prototype">
+        <property name="iniciacioQueryServiceStrategy" ref="iniciacioQueryServiceWSStrategy" />
     </bean>
 
-    <bean id="usuariQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.usuari.ws.IniciacioQueryServiceWSStrategy">
+    <bean id="iniciacioQueryServiceWSStrategy" class="es.caib.rolsac.api.v2.iniciacio.ws.IniciacioQueryServiceWSStrategy">
         <property name="gateway" ref="gatewayIniciacio" />
     </bean>
 
-	<bean id="gatewayIniciacio" class="es.caib.rolsac.api.v2.usuari.ws.IniciacioQueryServiceGateway" />
-	-->
+	<bean id="gatewayIniciacio" class="es.caib.rolsac.api.v2.iniciacio.ws.IniciacioQueryServiceGateway" />
     <!-- IniciacioQueryService beans -->
 
 </beans>

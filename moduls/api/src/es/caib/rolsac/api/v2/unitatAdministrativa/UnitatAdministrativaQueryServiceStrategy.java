@@ -35,7 +35,7 @@ public interface UnitatAdministrativaQueryServiceStrategy {
 
     public List<UnitatAdministrativaDTO> llistarFilles(long id, UnitatAdministrativaCriteria unitatAdministrativaCriteria) throws StrategyException;
     
-    public List<Long> llistarDescendents(long uaId) throws StrategyException;
+    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException;
 
     public List<EdificiDTO> llistarEdificis(long id, EdificiCriteria edificiCriteria) throws StrategyException;
 

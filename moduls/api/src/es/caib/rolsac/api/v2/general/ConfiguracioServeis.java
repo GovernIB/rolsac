@@ -25,6 +25,7 @@ public final class ConfiguracioServeis {
 	public static final String NOM_SERVEI_FORMULARI = "FormulariWS";
 	public static final String NOM_SERVEI_ICONA_FAMILIA = "IconaFamiliaWS";
 	public static final String NOM_SERVEI_ICONA_MATERIA = "IconaMateriaWS";
+	public static final String NOM_SERVEI_INICIACIO = "IniciacioWS";
 	public static final String NOM_SERVEI_MATERIA_AGRUPACIO = "MateriaAgrupacioWS";
 	public static final String NOM_SERVEI_MATERIA = "MateriaWS";
 	public static final String NOM_SERVEI_NORMATIVA = "NormativaWS";

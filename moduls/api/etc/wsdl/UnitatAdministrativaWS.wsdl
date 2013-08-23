@@ -807,7 +807,7 @@
 		<wsdl:part name="llistarFillesReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
 	</wsdl:message>
     <wsdl:message name="llistarDescendentsResponse">
-        <wsdl:part name="llistarDescendentsReturn" type="impl:ArrayOf_xsd_anyType" />
+        <wsdl:part name="llistarDescendentsReturn" type="impl:ArrayOfUnitatAdministrativaDTO" />
     </wsdl:message>
 	<wsdl:message name="obtenirLogosRequest">
 		<wsdl:part name="in0" type="xsd:long" />
@@ -925,7 +925,7 @@
 			<wsdl:input message="impl:llistarFillesRequest" name="llistarFillesRequest" />
 			<wsdl:output message="impl:llistarFillesResponse" name="llistarFillesResponse" />
 		</wsdl:operation>
-        <wsdl:operation name="llistarDescendents" parameterOrder="in0 in1">
+        <wsdl:operation name="llistarDescendents" parameterOrder="in0">
             <wsdl:input message="impl:llistarDescendentsRequest" name="llistarDescendentsRequest" />
             <wsdl:output message="impl:llistarDescendentsResponse" name="llistarDescendentsResponse" />
         </wsdl:operation>
@@ -1177,14 +1177,15 @@
                     namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
                     use="encoded" />
             </wsdl:output>
-        </wsdl:operation><wsdl:operation name="llistarDescendents">
-            <wsdlsoap:operation soapAction="" />
-            <wsdl:input name="llistarDescendentsRequest">
-                <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
-                    namespace="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
-                    use="encoded" />
-            </wsdl:input>
-            <wsdl:output name="llistarDescendentsResponse">
+        </wsdl:operation>
+        <wsdl:operation name="llistarDescendents">
+        	<wsdlsoap:operation soapAction="" />
+        	<wsdl:input name="llistarDescendentsRequest">
+        		<wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+        			namespace="http://intf.ejb.unitatAdministrativa.v2.api.rolsac.caib.es"
+        			use="encoded" />
+        	</wsdl:input>
+        	<wsdl:output name="llistarDescendentsResponse">
                 <wsdlsoap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
                     namespace="http://ws.unitatAdministrativa.v2.api.rolsac.caib.es"
                     use="encoded" />

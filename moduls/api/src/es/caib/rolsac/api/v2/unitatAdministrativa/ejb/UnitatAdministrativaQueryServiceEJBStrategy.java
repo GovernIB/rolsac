@@ -69,7 +69,7 @@ public class UnitatAdministrativaQueryServiceEJBStrategy implements UnitatAdmini
         }
     }
 
-    public List<Long> llistarDescendents(long uaId) throws StrategyException {
+    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException {
         try {
             return unitatAdministrativaQueryServiceDelegate.llistarDescendents(uaId);
         } catch (DelegateException e) {

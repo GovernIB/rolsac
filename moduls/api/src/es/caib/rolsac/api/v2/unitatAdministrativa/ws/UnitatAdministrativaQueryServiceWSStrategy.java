@@ -74,7 +74,7 @@ public class UnitatAdministrativaQueryServiceWSStrategy implements UnitatAdminis
         }
     }
     
-    public List<Long> llistarDescendents(long uaId) throws StrategyException {
+    public List<UnitatAdministrativaDTO> llistarDescendents(long uaId) throws StrategyException {
         try {
             return gateway.llistarDescendents(uaId);
         } catch (RemoteException e) {

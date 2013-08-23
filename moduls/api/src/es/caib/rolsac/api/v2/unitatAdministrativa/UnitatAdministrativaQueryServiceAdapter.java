@@ -108,7 +108,11 @@ public class UnitatAdministrativaQueryServiceAdapter extends UnitatAdministrativ
     
     public List<Long> llistarDescendents() throws QueryServiceException {
         try {
-            return unitatAdministrativaQueryServiceStrategy.llistarDescendents(getId());
+        	List<Long> lista = new ArrayList<Long>();
+            for (UnitatAdministrativaDTO uaDTO: unitatAdministrativaQueryServiceStrategy.llistarDescendents(getId()))
+            	lista.add(uaDTO.getId());
+            	
+            return lista;
         } catch (StrategyException e) {
             throw new QueryServiceException(ExceptionMessages.LIST_GETTER + "descendientes.", e);
         }
