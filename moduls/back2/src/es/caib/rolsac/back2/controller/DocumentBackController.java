@@ -174,7 +174,6 @@ public class DocumentBackController extends ArchivoController {
 	@RequestMapping(value = "/carregarDocument.do")
 	public @ResponseBody Map<String, Object> carregarDocument(HttpServletRequest request)  {
 		Map<String, Object> resultats = new HashMap<String, Object>();
-		String lang = request.getLocale().getLanguage();
 
 		try {
 			Long id = new Long(request.getParameter("id"));

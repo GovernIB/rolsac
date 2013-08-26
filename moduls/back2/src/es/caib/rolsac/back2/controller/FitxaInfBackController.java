@@ -1245,92 +1245,81 @@ public class FitxaInfBackController extends PantallaBaseController
     
     
     @RequestMapping(value = "/seccions.do", method = POST)
-    public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request) {
-
-        Map<String, Object> resultats = new HashMap<String, Object>();
-        List<Seccion> llistaSeccions = new ArrayList<Seccion>();
-        List<SeccionDTO> llistaSeccionsDTO = new ArrayList<SeccionDTO>();
-        
-        SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
-        
-        String lang = request.getLocale().getLanguage();
-        
-        try {
-        
-            if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))){ 
-                llistaSeccions = seccioDelegate.listarSeccionesRaizPerfil();
-            } else {
-                llistaSeccions = seccioDelegate.listarHijosSeccion(ParseUtil.parseLong(request.getParameter("pare")));
-            }
-            
-            for (Seccion seccio: llistaSeccions){
-                TraduccionSeccion tse = (TraduccionSeccion) seccio.getTraduccion(lang);
-                llistaSeccionsDTO.add(new SeccionDTO(seccio.getId(),
-                                        tse == null ? "" : tse.getNombre(),
-                                        seccio.getPadre() == null ? null : seccio.getPadre().getId(),                                                                        
-                                        seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false                                                                
-                ));
-            }
-
-            resultats.put("llistaSeccions", llistaSeccionsDTO);
-            
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                // model.put("error", "permisos");
-            	log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
-            } else {
-                // model.put("error", "altres");
-            	log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        }
-        
-        return resultats;
-    }   
+    public @ResponseBody Map<String, Object> arbreSeccions(HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	List<Seccion> llistaSeccions = new ArrayList<Seccion>();
+    	List<SeccionDTO> llistaSeccionsDTO = new ArrayList<SeccionDTO>();
+    	
+    	try {
+    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		SeccionDelegate seccioDelegate = DelegateUtil.getSeccionDelegate();
+    		
+    		if (request.getParameter("pare") == null || "".equals(request.getParameter("pare")))
+    			llistaSeccions = seccioDelegate.listarSeccionesRaizPerfil();
+    		else
+    			llistaSeccions = seccioDelegate.listarHijosSeccion(ParseUtil.parseLong(request.getParameter("pare")));
+    		
+    		for (Seccion seccio: llistaSeccions) {
+    			TraduccionSeccion tse = (TraduccionSeccion) seccio.getTraduccion(lang);
+    			llistaSeccionsDTO.add(new SeccionDTO(
+    					seccio.getId(),
+    					tse == null ? "" : tse.getNombre(),
+    					seccio.getPadre() == null ? null : seccio.getPadre().getId(),
+    					seccioDelegate.listarHijosSeccion(seccio.getId()).size() > 0 ? true : false
+    			));
+    		}
+    		resultats.put("llistaSeccions", llistaSeccionsDTO);
+    		
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException())
+    			log.error("Error de permisos: " + ExceptionUtils.getStackTrace(dEx));
+    		else
+    			log.error(ExceptionUtils.getStackTrace(dEx));
+    	}
+    	
+    	return resultats;
+    }
+    
     
     @RequestMapping(value = "/unitats.do", method = POST)
-    public @ResponseBody Map<String, Object> arbreUnitats(HttpServletRequest request) {
-
-        Map<String, Object> resultats = new HashMap<String, Object>();
-        List<UnidadAdministrativa> llistaUnitats = new ArrayList<UnidadAdministrativa>();
-        List<UnidadDTO> llistaUnitatsDTO = new ArrayList<UnidadDTO>();
-        
-        UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
-        
-        String lang = request.getLocale().getLanguage();
-        
-        try {
-        
-            if (request.getParameter("pare") == null || "".equals(request.getParameter("pare"))){ 
-                llistaUnitats = unitatDelegate.listarUnidadesAdministrativasRaiz();
-            } else {
-                llistaUnitats = unitatDelegate.listarHijosUA(ParseUtil.parseLong(request.getParameter("pare")));
-            }
-            
-            for (UnidadAdministrativa unitat: llistaUnitats){
-                String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
-                String abreviatura = unitat.getAbreviaturaUnidadAdministrativa(lang);
-               
-                llistaUnitatsDTO.add(new UnidadDTO(unitat.getId(),
-                                        nomUnitat == null ? "" : nomUnitat,
-                                        abreviatura == null ? "" : abreviatura,
-                                        unitat.getPadre() == null ? null : unitat.getPadre().getId(),                                                                        
-                                        unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false                                                                
-                ));
-            }
-
-            resultats.put("llistaUnitats", llistaUnitatsDTO);
-            
-        } catch (DelegateException dEx) {
-            if (dEx.isSecurityException()) {
-                // model.put("error", "permisos");
-            	log.error("Error de persimos: " + ExceptionUtils.getStackTrace(dEx));
-            } else {
-                // model.put("error", "altres");
-            	log.error(ExceptionUtils.getStackTrace(dEx));
-            }
-        }
-        
-        return resultats;
+    public @ResponseBody Map<String, Object> arbreUnitats(HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	List<UnidadAdministrativa> llistaUnitats = new ArrayList<UnidadAdministrativa>();
+    	List<UnidadDTO> llistaUnitatsDTO = new ArrayList<UnidadDTO>();
+    	
+    	try {
+    		UnidadAdministrativaDelegate unitatDelegate = DelegateUtil.getUADelegate();
+    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		
+    		if (request.getParameter("pare") == null || "".equals(request.getParameter("pare")))
+    			llistaUnitats = unitatDelegate.listarUnidadesAdministrativasRaiz();
+    		else
+    			llistaUnitats = unitatDelegate.listarHijosUA(ParseUtil.parseLong(request.getParameter("pare")));
+    		
+    		for (UnidadAdministrativa unitat: llistaUnitats) {
+    			String nomUnitat = unitat.getNombreUnidadAdministrativa(lang);
+    			String abreviatura = unitat.getAbreviaturaUnidadAdministrativa(lang);
+    			llistaUnitatsDTO.add(new UnidadDTO(
+    					unitat.getId(),
+    					nomUnitat == null ? "" : nomUnitat,
+    					abreviatura == null ? "" : abreviatura,
+    					unitat.getPadre() == null ? null : unitat.getPadre().getId(),
+    					unitatDelegate.listarHijosUA(unitat.getId()).size() > 0 ? true : false
+    			));
+    		}
+    		
+    		resultats.put("llistaUnitats", llistaUnitatsDTO);
+    		
+    	} catch (DelegateException dEx) {
+    		if (dEx.isSecurityException())
+    			log.error("Error de persimos: " + ExceptionUtils.getStackTrace(dEx));
+    		else
+    			log.error(ExceptionUtils.getStackTrace(dEx));
+    	}
+    	
+    	return resultats;
     }
     
     @RequestMapping(value = "/esborrarFitxa.do", method = POST)
@@ -1439,24 +1428,4 @@ public class FitxaInfBackController extends PantallaBaseController
         return "1".equals(valoresForm.get(modulo));
     }
     
-//    @RequestMapping(value = "/recuperarValidacionForm.do", method = POST)
-//	public @ResponseBody Map<String, Object> recuperarForm(HttpServletRequest request) {
-//		
-//		String PARAMETRO_VISTA = "key";
-//		String VISTA_FICHA = "formulariDades.fitxa";
-//		
-//		HashMap<String, Object> resultats = new HashMap<String, Object>();
-//		
-//		//String lang = System.getProperty("es.caib.rolsac.idiomaDefault");
-//		//if (lang == null) lang = request.getLocale().getLanguage();
-//		Locale locale = request.getLocale();
-//		
-//		System.out.println(request.getParameter(PARAMETRO_VISTA));
-//		System.out.println(messageSource.getMessage(VISTA_FICHA, null, locale));
-//		
-//		resultats.put(VISTA_FICHA, messageSource.getMessage(VISTA_FICHA, null, locale));
-//		
-//		return resultats;
-//	}
-//    
 }

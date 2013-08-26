@@ -92,7 +92,7 @@ public class TramiteBackController {
     		resultats.put("idTramit", tramite.getId());
     		resultats.put("id_tramit_actual", tramite.getId());
     		resultats.put("id_procediment_tramit", procedimiento.getId());
-    		resultats.put("nom_procediment_tramit", ((TraduccionProcedimiento) procedimiento.getTraduccion(request.getLocale().getLanguage())).getNombre() );
+    		resultats.put("nom_procediment_tramit", ((TraduccionProcedimiento) procedimiento.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre());
     		resultats.put("tramit_item_data_actualitzacio", DateUtils.formatDate(tramite.getDataActualitzacio()));
     		resultats.put("tramit_item_data_publicacio", DateUtils.formatDate(tramite.getDataPublicacio()));
     		resultats.put("tramit_item_data_caducitat", DateUtils.formatDate(tramite.getDataCaducitat()));
@@ -121,15 +121,16 @@ public class TramiteBackController {
         			resultats.put("ua_" + idioma, nombreUA);
     			}
     		}
-    	
+    		
+    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
     		// Documentos relacionados
-    		resultats.put("documentosTramite", getListaDocumentosDTO(request, tramite));
+    		resultats.put("documentosTramite", getListaDocumentosDTO(request, tramite, lang));
     		// Formularios relacionados    		
-    		resultats.put("formulariosTramite", getListaFormulariosDTO(request, tramite));
+    		resultats.put("formulariosTramite", getListaFormulariosDTO(request, tramite, lang));
     		// Documents Requerits relacionats
-    		resultats.put("docRequeritsTramite", getListaRequeritsDTO(request, tramite));
+    		resultats.put("docRequeritsTramite", getListaRequeritsDTO(request, tramite, lang));
     		// Tasas relacionadas
-    		resultats.put("tasasTramite", getListaTasasDTO(request, tramite));
+    		resultats.put("tasasTramite", getListaTasasDTO(request, tramite, lang));
     		    		
     	} catch (DelegateException dEx) {
     		
@@ -147,90 +148,77 @@ public class TramiteBackController {
     	
     }
     
-	private List<IdNomDTO> getListaTasasDTO(HttpServletRequest request, Tramite tramite) {
-		
+	private List<IdNomDTO> getListaTasasDTO(HttpServletRequest request, Tramite tramite, String lang)
+	{
 		Set<Taxa> listaTasas = tramite.getTaxes();
 		List<IdNomDTO> listaTasasDTO = null;
 		
-		if ( listaTasas != null ) {
-
+		if (listaTasas != null) {
 			listaTasasDTO = new ArrayList<IdNomDTO>();
-
-			for (Taxa tasa : listaTasas) {
-				String codificacionTasa = ((TraduccionTaxa) tasa.getTraduccion(request.getLocale().getLanguage())).getCodificacio();
+			for (Taxa tasa: listaTasas) {
+				String codificacionTasa = ((TraduccionTaxa) tasa.getTraduccion(lang)).getCodificacio();
 				listaTasasDTO.add( new IdNomDTO(tasa.getId(), codificacionTasa));
-			}    		
+			}
 		}
 		
 		return listaTasasDTO;
-		
 	}
-
-	private List<IdNomDTO> getListaRequeritsDTO(HttpServletRequest request, Tramite tramite) {
-		
+	
+	private List<IdNomDTO> getListaRequeritsDTO(HttpServletRequest request, Tramite tramite, String lang)
+	{
 		Set<DocumentTramit> listaDocumentsRequerits = tramite.getDocsRequerits();
 		List<IdNomDTO> listaRequeritsDTO = null;
 		
-		if ( listaDocumentsRequerits != null ) {
-
+		if (listaDocumentsRequerits != null) {
 			listaRequeritsDTO = new ArrayList<IdNomDTO>();
 			String nomDocRequerit = "";
 			
-			for (DocumentTramit docReq : listaDocumentsRequerits ) { 
-				if (docReq.getDocCatalogo()!=null){
-					nomDocRequerit = ((TraduccionCatalegDocuments)docReq.getDocCatalogo().getTraduccion(request.getLocale().getLanguage())).getNombre();
-				} else {
-					nomDocRequerit = ((TraduccionDocumento) docReq.getTraduccion(request.getLocale().getLanguage())).getTitulo();
-				}
-				listaRequeritsDTO.add( new IdNomDTO(docReq.getId(), nomDocRequerit) );
+			for (DocumentTramit docReq: listaDocumentsRequerits) {
+				if (docReq.getDocCatalogo() != null)
+					nomDocRequerit = ((TraduccionCatalegDocuments)docReq.getDocCatalogo().getTraduccion(lang)).getNombre();
+				else
+					nomDocRequerit = ((TraduccionDocumento) docReq.getTraduccion(lang)).getTitulo();
+				
+				listaRequeritsDTO.add(new IdNomDTO(docReq.getId(), nomDocRequerit));
 			}
-			
 		}
 		
 		return listaRequeritsDTO;
-		
 	}
-
-	private List<IdNomDTO> getListaFormulariosDTO(HttpServletRequest request, Tramite tramite) {
-		
+	
+	private List<IdNomDTO> getListaFormulariosDTO(HttpServletRequest request, Tramite tramite, String lang)
+	{
 		Set<DocumentTramit> listaFormularios = tramite.getFormularios();
 		List<IdNomDTO> listaFormulariosDTO = null;
 		
-		if ( listaFormularios != null ) {
-			
+		if (listaFormularios != null) {
 			listaFormulariosDTO = new ArrayList<IdNomDTO>();
-			
-    		for (DocumentTramit formulari : listaFormularios ) { 
-    			String nombreFormulario = ((TraduccionDocumento) formulari.getTraduccion(request.getLocale().getLanguage())).getTitulo();
-    			listaFormulariosDTO.add( new IdNomDTO(formulari.getId(), nombreFormulario) );
-    		}
-    		
+			for (DocumentTramit formulari: listaFormularios) {
+				String nombreFormulario = ((TraduccionDocumento) formulari.getTraduccion(lang)).getTitulo();
+				listaFormulariosDTO.add(new IdNomDTO(formulari.getId(), nombreFormulario));
+			}
 		}
 		
 		return listaFormulariosDTO;
-		
 	}
-
-	private List<IdNomDTO> getListaDocumentosDTO(HttpServletRequest request, Tramite tramite) {
-
+	
+	private List<IdNomDTO> getListaDocumentosDTO(HttpServletRequest request, Tramite tramite, String lang)
+	{
 		Set<DocumentTramit> listaDocumentos = tramite.getDocsInformatius();
 		List<IdNomDTO> listaDocumentosDTO = null;
 		
-		if ( listaDocumentos != null ) {
-			
+		if (listaDocumentos != null) {
 			listaDocumentosDTO = new ArrayList<IdNomDTO>();
-			
-    		for (DocumentTramit document : listaDocumentos) {
-    			String nombreDocumento = ((TraduccionDocumento) document.getTraduccion(request.getLocale().getLanguage())).getTitulo();
-    			listaDocumentosDTO.add( new IdNomDTO( document.getId(), nombreDocumento));
-    		} 
-    		
-		}    		
+			for (DocumentTramit document: listaDocumentos) {
+				String nombreDocumento = ((TraduccionDocumento) document.getTraduccion(lang)).getTitulo();
+				listaDocumentosDTO.add( new IdNomDTO( document.getId(), nombreDocumento));
+			}
+		}
 		
 		return listaDocumentosDTO;
-		
 	}
-
+	
+	
 	@RequestMapping(value = "/guardarTramit.do", method = POST)
 	public @ResponseBody ResponseEntity<String> guardarTramite(HttpSession session, HttpServletRequest request) {		
 		

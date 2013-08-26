@@ -220,7 +220,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// UA Padre.
 			if (uni.getPadre() != null) {
 				resultats.put("pareId", uni.getPadre().getId());
-				resultats.put("pareNom", uni.getPadre().getNombreUnidadAdministrativa(request.getLocale().getLanguage()));
+				resultats.put("pareNom", uni.getPadre().getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 			} else {
 				resultats.put("idPadre", null);
 				resultats.put("pareNom", null);
@@ -276,7 +276,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			resultats.put("seccions", getListaSeccionesDTO(idUA, unitatDelegate));
 
 			// Materias asociadas.
-			resultats.put("materies", getLlistaMateriesDTO(request, resultats, uni));
+			resultats.put("materies", getLlistaMateriesDTO(request, resultats, uni, DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
 
 			// Edificios.
 			resultats.put("edificis", getLlistaEdificisDTO(resultats, uni));			
@@ -335,23 +335,19 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		
 	}
 
-	private Object getLlistaMateriesDTO(HttpServletRequest request,
-			Map<String, Object> resultats, UnidadAdministrativa uni) {
-		
+	private Object getLlistaMateriesDTO(HttpServletRequest request, Map<String, Object> resultats, UnidadAdministrativa uni, String lang)
+	{
 		List<IdNomDTO> llistaMateriesDTO = null;
-		
 		if (uni.getUnidadesMaterias() != null) {
-			
 			llistaMateriesDTO = new ArrayList<IdNomDTO>();
-			
-			for (UnidadMateria unidadMateria : uni.getUnidadesMaterias())
-				llistaMateriesDTO.add(new IdNomDTO(unidadMateria.getMateria().getId(), 
-						unidadMateria.getMateria().getNombreMateria(request.getLocale().getLanguage())));
-
+			for (UnidadMateria unidadMateria: uni.getUnidadesMaterias())
+				llistaMateriesDTO.add(new IdNomDTO(
+						unidadMateria.getMateria().getId(),
+						unidadMateria.getMateria().getNombreMateria(lang
+				)));
 		}
 		
 		return llistaMateriesDTO;
-		
 	}
 
 	private List<SeccionFichaDTO> getListaSeccionesDTO(Long idUA, UnidadAdministrativaDelegate unitatDelegate)
@@ -968,9 +964,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, Object> tradMap = new HashMap<String, Object>();
-
-		String lang = request.getLocale().getLanguage();
-
+		
 		// Per defecte només carregarem les fitxes de la UA actual i de les seves UAs filles.
 		boolean uaMeves = false;
 		boolean uaFilles = false;
@@ -1000,19 +994,17 @@ public class UnitatAdmBackController extends PantallaBaseController {
 			// FIXME: avisar de error y cancelar consulta de datos.
 			
 		}
-
-		String textes = request.getParameter("texteFitxa");
-
-		if ( textes != null && !"".equals(textes) ) {
-
-			textes = textes.toUpperCase();
-			tradMap.put("titulo", textes);
-
-		} else {
-			tradMap.put("idioma", lang);
-		}
-
+		
 		try {
+			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			String textes = request.getParameter("texteFitxa");
+			if (textes != null && !"".equals(textes)) {
+				textes = textes.toUpperCase();
+				tradMap.put("titulo", textes);
+			} else {
+				tradMap.put("idioma", lang);
+			}
 
 			FichaDelegate fitxaDelegate = DelegateUtil.getFichaDelegate();
 
@@ -1031,7 +1023,7 @@ public class UnitatAdmBackController extends PantallaBaseController {
 
 			for (Ficha fitxa : castList(Ficha.class, resultadoBusqueda.getListaResultados()) ) {
 
-				TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(request.getLocale().getLanguage());
+				TraduccionFicha tfi = (TraduccionFicha) fitxa.getTraduccion(lang);
 				llistaFitxesDTO.add(new FichaDTO(fitxa.getId(), 
 						tfi == null ? null : tfi.getTitulo(), 
 								DateUtils.formatDate(fitxa.getFechaPublicacion()), 
@@ -1056,43 +1048,40 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return resultats;
 
 	}
-
-	@RequestMapping(value = "/llistatSeccions.do", method = POST)	
-	public @ResponseBody Map<String, Object> llistaSeccions(HttpServletRequest request) {
-
+	
+	
+	@RequestMapping(value = "/llistatSeccions.do", method = POST)
+	public @ResponseBody Map<String, Object> llistaSeccions(HttpServletRequest request)
+	{
 		Map<String,Object> resultats = new HashMap<String,Object>();
-
-		try {	
-
-			String filtreNom = request.getParameter("nomSeccio").trim();									
-			SeccionDelegate secDel = DelegateUtil.getSeccionDelegate();			
-
+		
+		try {
+			String filtreNom = request.getParameter("nomSeccio").trim();
+			SeccionDelegate secDel = DelegateUtil.getSeccionDelegate();
+			
 			List<Seccion> listaSecciones = secDel.listarSecciones();
 			List<SeccionDTO> listaSeccionesDTO = new ArrayList<SeccionDTO>();
-
-			for ( Iterator iterator = listaSecciones.iterator(); iterator.hasNext(); ) {
-
-				SeccionDTO seccionDTO = new SeccionDTO();				
+			
+			for (Iterator iterator = listaSecciones.iterator(); iterator.hasNext();) {
+				SeccionDTO seccionDTO = new SeccionDTO();
 				Seccion seccion = (Seccion) iterator.next();
-
-				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion( request.getLocale().getLanguage()) ).getNombre().replaceAll("\\<.*?>", "");
-
-				if ( toFormatComparacio( nomSeccio ).contains( toFormatComparacio(filtreNom) ) || "".equals(filtreNom) ) { 
-					seccionDTO.setId( seccion.getId() );
-					seccionDTO.setNom( nomSeccio );
-
+				
+				String nomSeccio = ( (TraduccionSeccion) seccion.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre().replaceAll("\\<.*?>", "");
+				
+				if (toFormatComparacio(nomSeccio).contains(toFormatComparacio(filtreNom)) || "".equals(filtreNom)) {
+					seccionDTO.setId(seccion.getId());
+					seccionDTO.setNom(nomSeccio);
 					listaSeccionesDTO.add(seccionDTO);
 				}
 			}
-
-			Collections.sort( listaSeccionesDTO );			
-
-			resultats.put("total", listaSeccionesDTO.size());        
-			resultats.put("nodes", listaSeccionesDTO);        			
-
+			
+			Collections.sort(listaSeccionesDTO);
+			
+			resultats.put("total", listaSeccionesDTO.size());
+			resultats.put("nodes", listaSeccionesDTO);
+			
 		} catch (DelegateException dEx) {
-
-			if ( dEx.isSecurityException() ) {
+			if (dEx.isSecurityException()) {
 				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
 				resultats.put("id", -1);
 			} else {
@@ -1100,13 +1089,12 @@ public class UnitatAdmBackController extends PantallaBaseController {
 				resultats.put("id", -2);
 				log.error(ExceptionUtils.getStackTrace(dEx));
 			}
-			
 		}
 		
 		return resultats;
-		
-	} 
-
+	}
+	
+	
 	@RequestMapping(value = "/reordenarUAs.do", method = POST) 
 	public @ResponseBody IdNomDTO reordenarUAs(HttpServletRequest request) {
 		
@@ -1405,83 +1393,63 @@ public class UnitatAdmBackController extends PantallaBaseController {
 		return "";
 		
 	}
-
+	
+	
 	/**
-	 * Solicita las fichas relacionadas con una UA y una secci��n.
+	 * Solicita las fichas relacionadas con una UA y una sección.
 	 */
 	@RequestMapping(value = "/obtenirFitxesUASeccio.do", method = POST)
-	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(HttpServletRequest request) {
-
+	public @ResponseBody Map<String, Object> llistaFitxesUASeccio(HttpServletRequest request)
+	{
 		Map<String, Object> resultats = new HashMap<String, Object>();
-
+		
 		UnidadAdministrativa ua = new UnidadAdministrativa();
-		if ( request.getSession().getAttribute("unidadAdministrativa") == null) {
-
+		if (request.getSession().getAttribute("unidadAdministrativa") == null) {
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 			resultats.put("id", -2);
-
-			log.error("Error de sessi���n: Sessi���n expirada o no inciada");
-
+			log.error("Error de sessión: Sessión expirada o no inciada");
+			
 			return resultats; // Si no hay unidad administrativa se devuelve vacio
-
 		}
-
+		
 		Long idSeccion = Long.valueOf(request.getParameter("idseccion"));
-		if ( idSeccion == null || "".equals(idSeccion) || idSeccion < 1 ) {
-
+		if (idSeccion == null || "".equals(idSeccion) || idSeccion < 1) {
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 			resultats.put("id", -2);
-
-			log.error("Error de session: Session expirada o no inciada");
-
+			log.error("Error de sessión: Sessión expirada o no inciada");
+			
 			return resultats; // Si no hay unidad administrativa se devuelve vacio
-
 		}
-
-		ua = (UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa");	
+		
+		ua = (UnidadAdministrativa)request.getSession().getAttribute("unidadAdministrativa");
 		UnidadAdministrativaDelegate uaDelegate = DelegateUtil.getUADelegate();
 
-		List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
-
 		try {
-
+			List<FichaDTO> listaFichas = new ArrayList<FichaDTO>();
 			List<FichaResumenUA> listaFichasSeccionUA = uaDelegate.listarFichasSeccionUA(ua.getId(), idSeccion);
-
+			
 			if (listaFichasSeccionUA != null) {
-
 				Iterator<FichaResumenUA> iterator2 = listaFichasSeccionUA.iterator();
-
-				while ( iterator2.hasNext() ) {
-
+				while (iterator2.hasNext()) {
 					FichaResumenUA  ficha = iterator2.next();
-
 					if (ficha.getFicha() != null) {
-
 						FichaDTO fichaDTO = new FichaDTO();
-
-						fichaDTO.setId( ficha.getFicha().getId() );
-						fichaDTO.setTitulo( ( ((TraduccionFicha) ficha.getFicha().getTraduccion( request.getLocale().getLanguage())).getTitulo()).replaceAll("\\<.*?>", "") );
-						fichaDTO.setOrdre( new Long(ficha.getOrden()) );    						
+						fichaDTO.setId(ficha.getFicha().getId());
+						fichaDTO.setTitulo( ( ((TraduccionFicha) ficha.getFicha().getTraduccion( DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getTitulo()).replaceAll("\\<.*?>", "") );
+						fichaDTO.setOrdre(new Long(ficha.getOrden()));
 						listaFichas.add( fichaDTO );
-
 					}
-
 				}
-
 			}
-
 			resultats.put("fitxes", listaFichas);
-
+			
 		} catch (DelegateException e) {
-
 			resultats.put("error", messageSource.getMessage("error.operacio_fallida", null, request.getLocale()));
 			resultats.put("id", -2);
 			log.error(ExceptionUtils.getStackTrace(e));
-
 		}
-
+		
 		return resultats;
-
 	}
 
 

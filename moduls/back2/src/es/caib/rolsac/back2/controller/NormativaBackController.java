@@ -67,58 +67,48 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/normativa/")
-public class NormativaBackController extends PantallaBaseController {
-		
+public class NormativaBackController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(NormativaBackController.class);
 	
-    @RequestMapping(value = "/normativa.do", method = GET)
-	public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session) {
-
-		String idioma = request.getLocale().getLanguage();
-		
+	@RequestMapping(value = "/normativa.do", method = GET)
+	public String pantallaNormatives(Map<String, Object> model, HttpServletRequest request, HttpSession session)
+	{
 		model.put("menu", 0);
 		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
 		model.put("submenu_seleccionado", 4);
 		model.put("titol_escriptori", "Normativa");
 		model.put("escriptori", "pantalles/normativa.jsp");
-
-        if (session.getAttribute("unidadAdministrativa")!=null){
-            model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-            model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa());            
-        } 	
-        
-        String traspasboib = System.getProperty("es.caib.rolsac.traspasboib");
-        if (traspasboib == null) { 
-        	traspasboib = "N";
-        }
-        model.put("traspasboib", traspasboib);
-        
-        // Listas para el buscador.
-        // Las pasamos a DTO.
-        try {        	
-        	
-        	// Boletines.
-        	model.put("llistaButlletins", getListaBoletinesDTO());
-        	// Tipos normativa.
-        	model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));        	
-        	// Tipos afectación.
-        	model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));
-        	        	
-        } catch (DelegateException e) {
-        	
-            if (e.isSecurityException()) {
-                model.put("error", "permisos");
-            } else {
-                model.put("error", "altres");
-                log.error(ExceptionUtils.getStackTrace(e));
-            }
-            
-        }
+		
+		if (session.getAttribute("unidadAdministrativa") != null) {
+			model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
+			model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa());
+		}
+		
+		String traspasboib = System.getProperty("es.caib.rolsac.traspasboib");
+		if (traspasboib == null)
+			traspasboib = "N";
+		
+		model.put("traspasboib", traspasboib);
+		
+		// Listas para el buscador. Las pasamos a DTO.
+		try {
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			model.put("llistaButlletins", getListaBoletinesDTO());					// Boletines.
+			model.put("llistaTipusNormativa", getListaTiposNormativaDTO(idioma));	// Tipos normativa.
+			model.put("llistaTipusAfectacio", getListaTiposAfectacionDTO(idioma));	// Tipos afectación.
+			
+		} catch (DelegateException e) {
+			if (e.isSecurityException()) {
+				model.put("error", "permisos");
+			} else {
+				model.put("error", "altres");
+				log.error(ExceptionUtils.getStackTrace(e));
+			}
+		}
 		
 		loadIndexModel (model, request);
-		
 		return "index";
-		
 	}
 	
 	private List<IdNomDTO> getListaTiposAfectacionDTO(String idioma) throws DelegateException {
@@ -144,10 +134,15 @@ public class NormativaBackController extends PantallaBaseController {
     	List<IdNomDTO> listaTiposNormativaDTO = new ArrayList<IdNomDTO>();
     	for (Tipo tipo : listaTiposNormativa) {
     		TraduccionTipo traTipo = (TraduccionTipo)tipo.getTraduccion(idioma);
-    		if (traTipo == null) {
-    			traTipo = (TraduccionTipo)tipo.getTraduccion();        			
-    		}
-    		IdNomDTO tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+    		if (traTipo == null) 
+    			traTipo = (TraduccionTipo)tipo.getTraduccion();
+    		
+    		IdNomDTO tipoTran;
+    		if (traTipo != null)
+    			tipoTran = new IdNomDTO(tipo.getId(), traTipo.getNombre());
+    		else
+    			tipoTran = new IdNomDTO(tipo.getId(), "");
+    		
     		listaTiposNormativaDTO.add(tipoTran);
     	}
     	
@@ -331,46 +326,43 @@ public class NormativaBackController extends PantallaBaseController {
 		}
 		
 	}
-
+	
+	
 	@RequestMapping(value = "/cercaBoib.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatEnviamentsBoib(HttpServletRequest request, HttpSession session)  {
-
+	public @ResponseBody Map<String, Object> llistatEnviamentsBoib(HttpServletRequest request, HttpSession session)
+	{
 		List<NormativaDTO>llistaNormativesDTO= new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
 		
-		String idioma = request.getLocale().getLanguage();
-
-		//Obtenemos la ordenacion por parametro
-		String campoOrdenacion = request.getParameter("ordreCamp");
-		String orden = request.getParameter("ordreTipus");
-		
-		//Realizar la consulta y obtener resultados
+		// Realizar la consulta y obtener resultados
 		String numBoletin = request.getParameter("numeroboletin");
 		String numRegistro = request.getParameter("numeroregistro");
 		String fecha = request.getParameter("fecha");
 		
-		if ( numBoletin != null ) numBoletin = numBoletin.trim();
-		if ( numRegistro != null ) numRegistro = numRegistro.trim();
-		if ( fecha != null ) fecha = fecha.trim();
+		if (numBoletin != null) numBoletin = numBoletin.trim();
+		if (numRegistro != null) numRegistro = numRegistro.trim();
+		if (fecha != null) fecha = fecha.trim();
 		
-		SearchNormativa bdcons = new EBoibSearchNormativa( numBoletin, numRegistro, fecha );
+		SearchNormativa bdcons = new EBoibSearchNormativa(numBoletin, numRegistro, fecha);
 		bdcons.makeSearch();
 		
-		if (bdcons.getNumeroNormativas() == -1) {
-			//error
+		if (bdcons.getNumeroNormativas() == -1)	//error
 			resultats.put("errorMessage", bdcons.getMensajeavisobean().getCabecera() + ":" + bdcons.getMensajeavisobean().getSubcabecera());
-		}
 		
 		if (bdcons.getNumeroNormativas() > 0) {
-			llistaNormativesDTO = pasarListaEboibADTO(bdcons.getListadonormativas(), idioma);
+			try {
+				llistaNormativesDTO = pasarListaEboibADTO(bdcons.getListadonormativas(), DelegateUtil.getIdiomaDelegate().lenguajePorDefecto());
+			} catch (DelegateException dEx) {
+				log.error("Error: " + dEx.getMessage());
+			}
 		}
-		
 		resultats.put("total", llistaNormativesDTO.size());
 		resultats.put("nodes", llistaNormativesDTO);
-
+		
 		return resultats;
 	}
-
+	
+	
 	@RequestMapping(value = "/detallBoib.do", method = POST)
 	public @ResponseBody Map<String, Object> detallBoib(HttpServletRequest request, Map<String, Object> model) {
 			
@@ -409,73 +401,64 @@ public class NormativaBackController extends PantallaBaseController {
         return normativaDetall;
 	}
 	
+	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request, Map<String, Object> model)
+	{
+		Map<String, Object> normativaDetall = new HashMap<String, Object>();
+		
+		try {
+			String idiomaUsuario = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			Long id = ParseUtil.parseLong(request.getParameter("id"));
 			
-	    Map<String, Object> normativaDetall = new HashMap<String, Object>();	    
-	    String idiomaUsuario = request.getLocale().getLanguage();
-	    
-	    try {
-	        
-	        Long id = ParseUtil.parseLong(request.getParameter("id"));		
-	        
-	        NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-	        Normativa normativa = normativaDelegate.obtenerNormativa(id);
-	        
-	        boolean normativaLocal = NormativaLocal.class.isInstance(normativa);
-	        
-	        if (normativaLocal) {
-	        	normativaDetall.put("tipologia", "L");
-	        	NormativaLocal normLoc = (NormativaLocal)normativa;
-	        	normativaDetall.put("idUA", normLoc.getUnidadAdministrativa().getId());
-	        	normativaDetall.put("nomUA", normLoc.getUnidadAdministrativa().getNombreUnidadAdministrativa());
-	        } else {
-	        	normativaDetall.put("tipologia", "E");
-	        	normativaDetall.put("idUA", null);
-	        	normativaDetall.put("nomUA", null);
-	        }
-	        
-	        normativaDetall.put("id", normativa.getId());
-	        normativaDetall.put("data_norma", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");	   	        
-	        
-        	// Campos por idioma.
-        	List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
-        	for (String idioma : idiomas) {
-        		
-        		TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
-        		agregarTraduccionNormativaADetalle(traNorm, idioma, normativaDetall, normativaLocal, normativa);
-    	        
-        	}
-	        
-	        normativaDetall.put("numero", normativa.getNumero());	        
-	        normativaDetall.put("butlleti_id", normativa.getBoletin() != null ? normativa.getBoletin().getId() : null);
-	        normativaDetall.put("butlleti", normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : null);
-	        normativaDetall.put("data_butlleti", normativa.getFechaBoletin() != null ? DateUtils.formatearddMMyyyy(normativa.getFechaBoletin()) : null);
-	        normativaDetall.put("registre", normativa.getRegistro());
-	        normativaDetall.put("llei", normativa.getLey());
-	        normativaDetall.put("tipus", normativa.getTipo() != null ? normativa.getTipo().getId() : null);	        
-	        normativaDetall.put("validacio", normativa.getValidacion());
-	        
-	        // Normativas afectadas.
-	        normativaDetall.put("afectacions", getNormativasAfectadasDTO(normativa, idiomaUsuario));
-	        
-	        // Procedimientos asociados a la normativa.
-	        normativaDetall.put("procediments", getProcedimientosNormativaDTO(normativa, idiomaUsuario));
-	        
-	    } catch (DelegateException dEx) {
-	    	
-	    	log.error("Error: " + dEx.getMessage());
-	    	
-			if (dEx.isSecurityException()) {
-				normativaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
+			Normativa normativa = normativaDelegate.obtenerNormativa(id);
+			
+			boolean normativaLocal = NormativaLocal.class.isInstance(normativa);
+			
+			if (normativaLocal) {
+				normativaDetall.put("tipologia", "L");
+				NormativaLocal normLoc = (NormativaLocal)normativa;
+				normativaDetall.put("idUA", normLoc.getUnidadAdministrativa().getId());
+				normativaDetall.put("nomUA", normLoc.getUnidadAdministrativa().getNombreUnidadAdministrativa());
 			} else {
-				normativaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+				normativaDetall.put("tipologia", "E");
+				normativaDetall.put("idUA", null);
+				normativaDetall.put("nomUA", null);
 			}
 			
-        }
-	    
-        return normativaDetall;
-        
+			normativaDetall.put("id", normativa.getId());
+			normativaDetall.put("data_norma", normativa.getFecha() != null ? DateUtils.formatearddMMyyyy(normativa.getFecha()) : "");
+			
+			// Campos por idioma.
+			List<String> idiomas = DelegateUtil.getIdiomaDelegate().listarLenguajes();
+			for (String idioma : idiomas) {
+				TraduccionNormativa traNorm = (TraduccionNormativa)normativa.getTraduccion(idioma);
+				agregarTraduccionNormativaADetalle(traNorm, idioma, normativaDetall, normativaLocal, normativa);
+			}
+			
+			normativaDetall.put("numero", normativa.getNumero());
+			normativaDetall.put("butlleti_id", normativa.getBoletin() != null ? normativa.getBoletin().getId() : null);
+			normativaDetall.put("butlleti", normativa.getBoletin() != null ? normativa.getBoletin().getNombre() : null);
+			normativaDetall.put("data_butlleti", normativa.getFechaBoletin() != null ? DateUtils.formatearddMMyyyy(normativa.getFechaBoletin()) : null);
+			normativaDetall.put("registre", normativa.getRegistro());
+			normativaDetall.put("llei", normativa.getLey());
+			normativaDetall.put("tipus", normativa.getTipo() != null ? normativa.getTipo().getId() : null);
+			normativaDetall.put("validacio", normativa.getValidacion());
+			// Normativas afectadas.
+			normativaDetall.put("afectacions", getNormativasAfectadasDTO(normativa, idiomaUsuario));
+			// Procedimientos asociados a la normativa.
+			normativaDetall.put("procediments", getProcedimientosNormativaDTO(normativa, idiomaUsuario));
+			
+		} catch (DelegateException dEx) {
+			log.error("Error: " + dEx.getMessage());
+			if (dEx.isSecurityException())
+				normativaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+			else
+				normativaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+		}
+		
+		return normativaDetall;
 	}
 	
 	private List<ProcedimientoLocalDTO> getProcedimientosNormativaDTO(Normativa normativa, String idiomaUsuario) {
@@ -837,30 +820,28 @@ public class NormativaBackController extends PantallaBaseController {
 	
 	
 	@RequestMapping(value = "/cercarNormatives.do", method = POST)
-	public @ResponseBody Map<String, Object> cercarNormatives(HttpServletRequest request, HttpSession session)  {
-
+	public @ResponseBody Map<String, Object> cercarNormatives(HttpServletRequest request, HttpSession session)
+	{
 		//Listar las normativas de la unidad administrativa
 		List<Normativa>llistaNormatives = new ArrayList<Normativa>();
 		List<NormativaDTO>llistaNormativesDTO = new ArrayList<NormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
-		Map<String, Object> paramMap = new HashMap<String, Object>();	
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> paramTrad = new HashMap<String, String>();
-		
-		String idioma = request.getLocale().getLanguage();
 		
 		//TODO obtener la ordenacion por parametro
 		String campoOrdenacion = "fecha";
 		String orden = "desc";
 		
-		int totalNormativas = 0;
-		
 		try {
-			//Obtener parametros de busqueda					
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			// Obtener parametros de busqueda
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				Date data = df.parse(request.getParameter("data"));
 				paramMap.put("fecha", data);
-			}			
+			}
 			
 			if (request.getParameter("data_butlleti") != null && !request.getParameter("data_butlleti").equals("")) {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -874,40 +855,35 @@ public class NormativaBackController extends PantallaBaseController {
 				paramTrad.put("titulo", titulo);
 			} else {
 				paramTrad.put("idioma", idioma);
-			}						
-
-			//Información de paginación
+			}
+			
+			// Información de paginación
 			String pagPag = request.getParameter("pagPagina");
 			String pagRes = request.getParameter("pagRes");
 			
-			if (pagPag == null) pagPag = String.valueOf(0); 
+			if (pagPag == null) pagPag = String.valueOf(0);
 			if (pagRes == null) pagRes = String.valueOf(10);
 			
-			//Realizar la consulta y obtener resultados
+			// Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
-			
 			ResultadoBusqueda resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "todas", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
 			resultats.put("total", resultadoBusqueda.getTotalResultados());
 			
-			llistaNormatives.addAll( (List<Normativa>) resultadoBusqueda.getListaResultados() );
-			
+			llistaNormatives.addAll((List<Normativa>) resultadoBusqueda.getListaResultados());
 			llistaNormativesDTO = pasarListaNormativasADTO(llistaNormatives, idioma);
 			
-		} catch (ParseException e) {			
+		} catch (ParseException e) {
 			log.error("Error: " + e.getMessage());
-					
+			
 		} catch (DelegateException dEx) {
-			if (dEx.isSecurityException()) {
+			if (dEx.isSecurityException())
 				log.error("Permisos insuficients: " + dEx.getMessage());
-            } else {
-            	log.error("Error: " + dEx.getMessage());
-            }
+			else
+				log.error("Error: " + dEx.getMessage());
 		}
 		
 		resultats.put("nodes", llistaNormativesDTO);
-
 		return resultats;
-		
 	}	
 
 	/**

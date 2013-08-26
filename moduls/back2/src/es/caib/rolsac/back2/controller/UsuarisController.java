@@ -117,54 +117,54 @@ public class UsuarisController extends PantallaBaseController {
     
     
     @RequestMapping(value = "/pagDetall.do")
-	public @ResponseBody Map<String, Object> recuperaUsuari(HttpServletRequest request) {
-	    Map<String, Object> resultats = new HashMap<String, Object>();	    
-	    try {
-	        Long id = new Long(request.getParameter("id"));
-	        
-	        UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
-	        Usuario usuari = usuariDelegate.obtenerUsuario(id);	        	        
-	        
-	        resultats.put("item_id", usuari.getId());
-	        resultats.put("item_nom", usuari.getNombre());
-	        resultats.put("item_username", usuari.getUsername());
-	        resultats.put("item_password", usuari.getPassword());
-	        resultats.put("item_email", usuari.getEmail());
-	        resultats.put("item_observacions", usuari.getObservaciones());
-	        resultats.put("item_perfil", usuari.getPerfil());
-	        
-	        // UAs relacionades
-            if (usuari.getUnidadesAdministrativas() != null) {     
-            	String lang = request.getLocale().getLanguage();
-            	Map<String, Object> uaDTO;
-            	List<Map<String, Object>> llistaUAs = new ArrayList<Map<String, Object>>();
-                
-            	Iterator<UnidadAdministrativa> uasIterator = usuari.getUnidadesAdministrativas().iterator();
-				while(uasIterator.hasNext()) {
-					UnidadAdministrativa ua = uasIterator.next();
-					uaDTO = new HashMap<String, Object>(2);
-					uaDTO.put("id", ua.getId());
-					uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
-                    llistaUAs.add(uaDTO);      
-                }
-
-				resultats.put("uas", llistaUAs);
-            } else {
-                resultats.put("uas", null);
-            } 
-            // Fi UAs relacionades
-	        
-	    } catch (DelegateException dEx) {
-			log.error(ExceptionUtils.getStackTrace(dEx));
-			if (dEx.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-		}
-	    
-        return resultats;
-	}
+    public @ResponseBody Map<String, Object> recuperaUsuari(HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
+    	try {
+    		Long id = new Long(request.getParameter("id"));
+    		
+    		UsuarioDelegate usuariDelegate = DelegateUtil.getUsuarioDelegate();
+    		Usuario usuari = usuariDelegate.obtenerUsuario(id);
+    		
+    		resultats.put("item_id", usuari.getId());
+    		resultats.put("item_nom", usuari.getNombre());
+    		resultats.put("item_username", usuari.getUsername());
+    		resultats.put("item_password", usuari.getPassword());
+    		resultats.put("item_email", usuari.getEmail());
+    		resultats.put("item_observacions", usuari.getObservaciones());
+    		resultats.put("item_perfil", usuari.getPerfil());
+    		
+    		// UAs relacionades
+    		if (usuari.getUnidadesAdministrativas() != null) {
+    			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    			Map<String, Object> uaDTO;
+    			List<Map<String, Object>> llistaUAs = new ArrayList<Map<String, Object>>();
+    			
+    			Iterator<UnidadAdministrativa> uasIterator = usuari.getUnidadesAdministrativas().iterator();
+    			while (uasIterator.hasNext()) {
+    				UnidadAdministrativa ua = uasIterator.next();
+    				uaDTO = new HashMap<String, Object>(2);
+    				uaDTO.put("id", ua.getId());
+    				uaDTO.put("nombre", ua.getNombreUnidadAdministrativa(lang));
+    				llistaUAs.add(uaDTO);
+    			}
+    			resultats.put("uas", llistaUAs);
+    			
+    		} else {
+    			resultats.put("uas", null);
+    		}
+    		// Fi UAs relacionades
+    		
+    	} catch (DelegateException dEx) {
+    		log.error(ExceptionUtils.getStackTrace(dEx));
+    		if (dEx.isSecurityException())
+    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+    		else
+    			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+    	}
+    	
+    	return resultats;
+    }
     
     
     @RequestMapping(value = "/esborrarUsuari.do", method = POST)

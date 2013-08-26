@@ -467,13 +467,13 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 			if (proc.getUnidadAdministrativa() != null) {
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
 				resultats.put("item_organ_responsable_id", ua.getId());
-				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(getRequestLanguage(request)));
+				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 			
 			if (proc.getOrganResolutori() != null) {
 				UnidadAdministrativa ua = proc.getOrganResolutori();
 				resultats.put("item_organ_id", ua.getId());
-				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(getRequestLanguage(request)));
+				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
 			}
 			
 			if (proc.getFamilia() != null) {
@@ -616,16 +616,16 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	/*
 	 * Función para recuperar los trámites de un procedimiento
 	 */
-	private void recuperaProcTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request)
+	private void recuperaProcTramites(Map<String, Object> resultats, ProcedimientoLocal proc, HttpServletRequest request) throws DelegateException
 	{
 		List<ListadoModuloTramiteDTO> listaTramitesDTO = null;
-		if ( proc.getTramites() != null ) {
+		if (proc.getTramites() != null && proc.getTramites().size() != 0) {
 			listaTramitesDTO = new ArrayList<ListadoModuloTramiteDTO>();
-			for( Tramite tramite : proc.getTramites() ) {
+			for (Tramite tramite : proc.getTramites()) {
 				if (tramite != null) {
 					String nombreTramite;
-					if (tramite.getTraduccion(request.getLocale().getLanguage()) != null)
-						nombreTramite = ((TraduccionTramite) tramite.getTraduccion(request.getLocale().getLanguage())).getNombre();
+					if (tramite.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()) != null)
+						nombreTramite = ((TraduccionTramite) tramite.getTraduccion(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto())).getNombre();
 					else
 						nombreTramite = "void";
 					
@@ -1345,36 +1345,33 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/cercarNormatives.do", method = POST)
-	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)  {
-		
+	public @ResponseBody Map<String, Object> llistatNormatives(HttpServletRequest request, HttpSession session)
+	{
 		//Listar las normativas de la unidad administrativa
-		//List<Normativa>llistaNormatives = new ArrayList<Normativa>();
 		List<ProcedimientoNormativaDTO>llistaNormativesDTO= new ArrayList<ProcedimientoNormativaDTO>();
 		Map<String,Object> resultats = new HashMap<String,Object>();
-		Map<String, Object> paramMap = new HashMap<String, Object>();	
+		Map<String, Object> paramMap = new HashMap<String, Object>();
 		Map<String, String> paramTrad = new HashMap<String, String>();
 		
-		// TODO obtener la ordenaci�n por par�metro
-		//String campoOrdenacion = "normativa.fecha";
+		// TODO obtener la ordenación por parámetro
+		// String campoOrdenacion = "normativa.fecha";
 		String campoOrdenacion = "fecha";
-		String orden = "desc";		
-				
-		String idioma = getRequestLanguage(request);
+		String orden = "desc";
 		
-		if (getUAFromSession(session) == null){
-			return resultats;//Si no hay unidad administrativa se devuelve vac�o
-		}
+		if (getUAFromSession(session) == null)
+			return resultats;	//Si no hay unidad administrativa se devuelve vac�o
 		
 		ResultadoBusqueda resultadoBusqueda = new ResultadoBusqueda();
 		
 		try {
-			//Obtener par�metros de b�squeda
-		
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+			
+			// Obtener parámetros de búsqueda
 			if (request.getParameter("data") != null && !request.getParameter("data").equals("")) {
 				Date fecha = DateUtils.parseDate(request.getParameter("data"));
 				paramMap.put("fecha", fecha);
-			}			
-
+			}
+			
 			if (request.getParameter("dataButlleti") != null && !request.getParameter("dataButlleti").equals("")) {
 				Date fechaBoletin = DateUtils.parseDate(request.getParameter("dataButlleti"));
 				paramMap.put("fechaBoletin", fechaBoletin);
@@ -1387,42 +1384,40 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 				paramTrad.put("titulo", text);
 			} else {
 				paramTrad.put("idioma", idioma);
-			}			
+			}
 			
-			//Información de paginación
-			String pagPag = request.getParameter("pagPag");		
+			// Información de paginación
+			String pagPag = request.getParameter("pagPag");
 			String pagRes = request.getParameter("pagRes");
 			
-			if (pagPag == null) pagPag = String.valueOf(0); 
-			if (pagRes == null) pagRes = String.valueOf(10);                						
+			if (pagPag == null) pagPag = String.valueOf(0);
+			if (pagRes == null) pagRes = String.valueOf(10);
 			
 			resultadoBusqueda = new ResultadoBusqueda();
 			
-			//Realizar la consulta y obtener resultados
+			// Realizar la consulta y obtener resultados
 			NormativaDelegate normativaDelegate = DelegateUtil.getNormativaDelegate();
 			
 			//La búsqueda de normativas no tendrá en cuenta la UA actual (idua = null)
-			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap,
-					paramTrad, "local", null, false, false, campoOrdenacion,
-					orden, pagPag, pagRes);		
+			resultadoBusqueda = normativaDelegate.buscarNormativas(paramMap, paramTrad, "local", null, false, false, campoOrdenacion, orden, pagPag, pagRes);
 			
-			for ( Normativa normativa : castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
-				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(normativa
-						.getId(), HtmlUtils.obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()), DateUtils
-						.formatDate(normativa.getFecha()), DateUtils
-						.formatDate(normativa.getFechaBoletin())));
+			for (Normativa normativa: castList(Normativa.class, resultadoBusqueda.getListaResultados()) ) {
+				llistaNormativesDTO.add(new ProcedimientoNormativaDTO(
+						normativa.getId(),
+						HtmlUtils.obtenerTituloDeEnlaceHtml(normativa.getTraduccionTitulo()),
+						DateUtils.formatDate(normativa.getFecha()),
+						DateUtils.formatDate(normativa.getFechaBoletin()
+				)));
 			}
-
+			
 		} catch (DelegateException dEx) {
 			if (dEx.isSecurityException()) {
 				//model.put("error", "permisos");
 			} else {
-				//model.put("error", "altres");
 				logException(log, dEx);
 			}
 		}
-		
-		resultats.put("total", resultadoBusqueda.getTotalResultados() );
+		resultats.put("total", resultadoBusqueda.getTotalResultados());
 		resultats.put("nodes", llistaNormativesDTO);
 		
 		return resultats;
@@ -1521,7 +1516,7 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	}
 	
 	
-	   /**
+	/**
      * Devuelve true si ha habido algun cambio en el modulo.
      * 
      * @param modulo
@@ -1558,32 +1553,24 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
     
     
     @RequestMapping( value = "/listarHechosVitales.do" , method = POST)
-	public @ResponseBody Map<String, Object> listarHechosVitales( @RequestParam Set<Long> publicosObjectivosSeleccionados , HttpSession session , HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> listarHechosVitales(@RequestParam Set<Long> publicosObjectivosSeleccionados, HttpSession session, HttpServletRequest request)
+    {
+    	Map<String, Object> resultats = new HashMap<String, Object>();
     	
-		Map<String, Object> resultats = new HashMap<String, Object>();
-		String lang = getRequestLanguage(request);
-		
-		try {
-			
-			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales( publicosObjectivosSeleccionados , lang ) );
-			
-		} catch (DelegateException e) {
-			
-			logException(log, e);
-			
-			if (e.isSecurityException()) {
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-				
-			} else {
-				
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-			
-		}
-		
+    	try {
+    		String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
+    		resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(publicosObjectivosSeleccionados, lang));
+    		
+    	} catch (DelegateException e) {
+    		logException(log, e);
+    		
+    		if (e.isSecurityException())
+    			resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
+    		else
+    			resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+    	}
     	
     	return resultats;
     }
-
     
 }

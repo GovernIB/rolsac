@@ -31,34 +31,38 @@ import es.caib.rolsac.utils.ResultadoBusqueda;
 
 @Controller
 @RequestMapping("/personal/")
-public class PersonalBackController extends PantallaBaseController {
-    
+public class PersonalBackController extends PantallaBaseController
+{
 	private static Log log = LogFactory.getLog(PersonalBackController.class);
 	
-    @RequestMapping(value = "/personal.do", method = GET)
-    public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request) {
-
-        model.put("menu", 0);
-        model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
-        model.put("submenu_seleccionado", 5);
-        
-        RolUtil rolUtil= new RolUtil(request);
-        if (rolUtil.userIsSuper()) {
-        	model.put("escriptori", "pantalles/personal.jsp");
-            if (session.getAttribute("unidadAdministrativa")!=null){
-                model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
-                model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(request.getLocale().getLanguage()));            
+	@RequestMapping(value = "/personal.do", method = GET)
+	public String pantallaPersonal(Map<String, Object> model, HttpSession session, HttpServletRequest request)
+	{
+		model.put("menu", 0);
+		model.put("submenu", "layout/submenu/submenuOrganigrama.jsp");
+		model.put("submenu_seleccionado", 5);
+		
+		RolUtil rolUtil= new RolUtil(request);
+		if (rolUtil.userIsSuper()) {
+			model.put("escriptori", "pantalles/personal.jsp");
+			if (session.getAttribute("unidadAdministrativa") != null) {
+				model.put("idUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getId());
+				try {
+					model.put("nomUA",((UnidadAdministrativa)session.getAttribute("unidadAdministrativa")).getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+				} catch (DelegateException e) {
+					log.error("Error: " + e.getMessage());
+				}
             }
-        } else {
-        	model.put("error", "permisos");
-        }        
-
-		loadIndexModel (model, request);	
-        return "index";
-    }
-
-
-    @RequestMapping(value = "/llistat.do", method = POST)
+		} else {
+			model.put("error", "permisos");
+		}
+		
+		loadIndexModel (model, request);
+		return "index";
+	}
+	
+	
+	@RequestMapping(value = "/llistat.do", method = POST)
     public @ResponseBody Map<String, Object> llistatPersonal(HttpServletRequest request, HttpSession session) {
     	
     	List<PersonalDTO> llistaPersonalDTO = new ArrayList<PersonalDTO>();
@@ -124,45 +128,44 @@ public class PersonalBackController extends PantallaBaseController {
     	return resultats;
     }
 	
+	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request) {
-	    
-	    Map<String, Object> personaDetall = new HashMap<String, Object>();
-	    
-	    try {
-	        
-	        Long id = new Long(request.getParameter("id"));
-	        
-	        PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
-	        Personal persona = personalDelegate.obtenerPersonal(id);	        	        
-	        
-	        personaDetall.put("id", persona.getId());
-	        personaDetall.put("nom", persona.getNombre());
-	        personaDetall.put("codi", persona.getUsername());
-	        personaDetall.put("funcions", persona.getFunciones());
-	        personaDetall.put("carrec", persona.getCargo());
-	        personaDetall.put("email", persona.getEmail());
-	        personaDetall.put("ua", persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(request.getLocale().getLanguage()));
-	        personaDetall.put("uaId", persona.getUnidadAdministrativa().getId());
-	        personaDetall.put("extensioPublicaIntranet", persona.getExtensionPublica());
-	        personaDetall.put("numeroLlargPublicIntranet", persona.getNumeroLargoPublico());
-	        personaDetall.put("extensioPrivadaIntranet", persona.getExtensionPrivada());
-	        personaDetall.put("numeroLlargPrivatIntranet", persona.getNumeroLargoPrivado());
-	        personaDetall.put("extensioMobil", persona.getExtensionMovil());
-	        personaDetall.put("extensioLlargMobil", persona.getNumeroLargoMovil());
-	        
-	    } catch (DelegateException dEx) {
-	    	log.error("Error: " + dEx.getMessage());
-			if (dEx.isSecurityException()) {
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpServletRequest request)
+	{
+		Map<String, Object> personaDetall = new HashMap<String, Object>();
+		
+		try {
+			Long id = new Long(request.getParameter("id"));
+			
+			PersonalDelegate personalDelegate = DelegateUtil.getPersonalDelegate();
+			Personal persona = personalDelegate.obtenerPersonal(id);
+			
+			personaDetall.put("id", persona.getId());
+			personaDetall.put("nom", persona.getNombre());
+			personaDetall.put("codi", persona.getUsername());
+			personaDetall.put("funcions", persona.getFunciones());
+			personaDetall.put("carrec", persona.getCargo());
+			personaDetall.put("email", persona.getEmail());
+			personaDetall.put("ua", persona.getUnidadAdministrativa().getNombreUnidadAdministrativa(DelegateUtil.getIdiomaDelegate().lenguajePorDefecto()));
+			personaDetall.put("uaId", persona.getUnidadAdministrativa().getId());
+			personaDetall.put("extensioPublicaIntranet", persona.getExtensionPublica());
+			personaDetall.put("numeroLlargPublicIntranet", persona.getNumeroLargoPublico());
+			personaDetall.put("extensioPrivadaIntranet", persona.getExtensionPrivada());
+			personaDetall.put("numeroLlargPrivatIntranet", persona.getNumeroLargoPrivado());
+			personaDetall.put("extensioMobil", persona.getExtensionMovil());
+			personaDetall.put("extensioLlargMobil", persona.getNumeroLargoMovil());
+			
+		} catch (DelegateException dEx) {
+			log.error("Error: " + dEx.getMessage());
+			if (dEx.isSecurityException())
 				personaDetall.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			} else {
+			else
 				personaDetall.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
-			}
-        }
-	    
-        return personaDetall;
+		}
+		
+		return personaDetall;
 	}
-
+	
 	
 	@RequestMapping(value = "/esborrarPersonal.do", method = POST)
     public @ResponseBody IdNomDTO esborrarPersonal(HttpServletRequest request) {

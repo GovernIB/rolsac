@@ -119,7 +119,7 @@ public class QuadreControlController extends PantallaBaseController {
 
 			Map<Timestamp, Object> llistaCanvis = eDelegate.listarUltimasModificaciones(dataActualFi.getTime(), dataActual.getTime(), Parametros.NUMERO_REGISTROS, llistaUnitatAdministrativaId);
 			
-			String idioma = request.getLocale().getLanguage();
+			String idioma = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
 			
 			if (idioma != null && !"".equals(idioma)) {
 				

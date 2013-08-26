@@ -71,16 +71,6 @@ public abstract class PantallaBaseController {
 
 	
 	/**
-	 * Devuelve el idioma actual.
-	 * 
-	 * @param request Request.
-	 * @return String con el nombre del idioma actual.
-	 */
-	protected String getRequestLanguage(HttpServletRequest request) {
-		return request.getLocale().getLanguage();
-	}	
-	
-	/**
 	 * Devuelve la UnidadAdministrativa actual.
 	 * 
 	 * @param session Sesión.
