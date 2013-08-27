@@ -157,7 +157,7 @@ function CModulTramit(){
         // Editar el tramite al hacer click sobre el.                
         modul_tramits_elm.find('div.tramit').each(function() {          
             $(this).unbind("click").bind("click", function() {               
-                EscriptoriTramit.editarTramit(this);
+                EscriptoriTramit.editarTramit(this, null);
             });
         });
         
@@ -285,12 +285,12 @@ function CEscriptoriTramit(){
                         });
                         // Asignamos la funci�n de edici�n al nuevo enlace creado
                         nouTramit = $("#" + idTramit).parent().parent();
-                        nouTramit.unbind("click").bind("click", function() {that.editarTramit(nouTramit)});
+                        nouTramit.unbind("click").bind("click", function() {that.editarTramit(nouTramit, null)});
                         
                         that.contaSeleccionats();
                     }
                     
-                    // that.torna(); Se pide que al guardar un tramite no vuelva hacia el procedimiento.
+                    that.editarTramit(null, data.id); 
                 }
             }
         });
@@ -447,9 +447,12 @@ function CEscriptoriTramit(){
         ModulTaxesTramit.inicializarTaxes(datos.tasasTramite);      
     }
     
-    this.editarTramit = function( el ) {
+    this.editarTramit = function( el, id ) {
 
         var tramitId = $(el).find("input.tramit_id").val();
+        if (tramitId == null) {
+        	tramitId = id;
+        }
         
         Missatge.llansar({tipus: "missatge", modo: "executant", fundit: "si", titol: txtEnviantDades});
         
