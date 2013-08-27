@@ -123,7 +123,7 @@ public abstract class UnidadAdministrativaFacadeEJB extends HibernateEJB impleme
 	/**
 	 * Crea una Unidad Administrativa
 	 * @ejb.interface-method
-	 * @ejb.permission role-name="${role.system},${role.organigrama}"
+	 * @ejb.permission role-name="${role.system},${role.organigrama},${role.super}"
 	 */
 	public Long crearUnidadAdministrativa(UnidadAdministrativa unidad, Long padre_id) {
 		Session session = getSession();
