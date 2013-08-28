@@ -423,95 +423,135 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 	
 	
 	@RequestMapping(value = "/pagDetall.do", method = POST)
-	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request)
-	{
+	public @ResponseBody Map<String, Object> recuperaDetall(HttpSession session, HttpServletRequest request) {
 		
 		Map<String, Object> resultats = new HashMap<String, Object>();
 		
 		try {
+			
 			String lang = DelegateUtil.getIdiomaDelegate().lenguajePorDefecto();
-			Long id = new Long(request.getParameter("id"));
+			Long id = new Long( request.getParameter("id") );
 
 			ProcedimientoDelegate procedimientoDelegate = DelegateUtil.getProcedimientoDelegate();
 			ProcedimientoLocal proc = procedimientoDelegate.obtenerProcedimiento(id);
 
-			resultats.put("item_id", proc.getId());
-            resultats.put("item_codigo_pro", proc.getSignatura());			
-			resultats.put("item_estat", proc.getValidacion());						
-			resultats.put("item_data_actualitzacio", DateUtils.formatDate(proc.getFechaActualizacion()));
-			resultats.put("item_data_publicacio", DateUtils.formatDate(proc.getFechaPublicacion()));
-			resultats.put("item_data_caducitat", DateUtils.formatDate(proc.getFechaCaducidad()));
-			resultats.put("item_codi", proc.getSignatura());
-			resultats.put("item_tramite", proc.getTramite());
-			resultats.put("item_url", proc.getUrl());
-			resultats.put("item_responsable", proc.getResponsable());
-			resultats.put("item_finestreta_unica", proc.esVentanillaUnica());
-			resultats.put("item_notes", proc.getInfo());
+			resultats.put( "item_id", proc.getId() );
+            resultats.put( "item_codigo_pro", proc.getSignatura() );			
+			resultats.put( "item_estat", proc.getValidacion() );						
+			resultats.put( "item_data_actualitzacio", DateUtils.formatDate( proc.getFechaActualizacion() ) );
+			resultats.put( "item_data_publicacio", DateUtils.formatDate( proc.getFechaPublicacion() ) );
+			resultats.put( "item_data_caducitat", DateUtils.formatDate( proc.getFechaCaducidad() ) );
+			resultats.put( "item_codi", proc.getSignatura() );
+			resultats.put( "item_tramite", proc.getTramite() );
+			resultats.put( "item_url", proc.getUrl() );
+			resultats.put( "item_responsable", proc.getResponsable() );
+			resultats.put( "item_finestreta_unica", proc.esVentanillaUnica() );
+			resultats.put( "item_notes", proc.getInfo() );
 			
 			// TODO: Implementar getPublico()
 			// resultats.put("item_public_objectiu", DateUtils.formatDate(proc.getPublico()));
 			
-			recuperaProcIdiomas(resultats, proc, lang);			// Recuperar los procedimientos según los idiomas
-			recuperaProcDocs(resultats, proc);					// Recuperar los documentos relacionados de un procedimiento
-			recuperaProcTramites(resultats, proc, request);		// Recuperar los trámites relacionados de un procedimiento
-			recuperaProcMaterias(resultats, proc, lang);		// Recuperar las materias asociadas a un procedimiento
-			recuperaProcPO(resultats, proc, lang);				// Recuperar los públicos objetivos asociados a un procedimiento
-			recuperaProcHechosVitales(resultats, proc, lang);	// Recuperar los hechos vitales asociados a un procedimiento
-			recuperaProcNormativas(resultats, proc, lang);		// Recuperar las normativas asociadas a un procedimiento
+			recuperaProcIdiomas( resultats, proc, lang );			// Recuperar los procedimientos según los idiomas
+			recuperaProcDocs( resultats, proc );					// Recuperar los documentos relacionados de un procedimiento
+			recuperaProcTramites( resultats, proc, request );		// Recuperar los trámites relacionados de un procedimiento
+			recuperaProcMaterias( resultats, proc, lang );		// Recuperar las materias asociadas a un procedimiento
+			recuperaProcPO( resultats, proc, lang );				// Recuperar los públicos objetivos asociados a un procedimiento
+			recuperaProcHechosVitales( resultats, proc, lang );	// Recuperar los hechos vitales asociados a un procedimiento
+			recuperaProcNormativas( resultats, proc, lang );		// Recuperar las normativas asociadas a un procedimiento
 			
-			if (proc.getIniciacion() != null) {
+			if ( proc.getIniciacion() != null ) {
+				
 				Iniciacion iniciacion = proc.getIniciacion();
-				resultats.put("item_iniciacio", iniciacion.getId());
+				resultats.put( "item_iniciacio", iniciacion.getId() );
+				
 			}
 			
-			if (proc.getUnidadAdministrativa() != null) {
+			if ( proc.getUnidadAdministrativa() != null ) {
+				
 				UnidadAdministrativa ua = proc.getUnidadAdministrativa();
-				resultats.put("item_organ_responsable_id", ua.getId());
-				resultats.put("item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang));
+				resultats.put( "item_organ_responsable_id", ua.getId() );
+				resultats.put( "item_organ_responsable_nom", ua.getNombreUnidadAdministrativa(lang) );
+				
 			}
 			
-			if (proc.getOrganResolutori() != null) {
+			if ( proc.getOrganResolutori() != null ) {
+				
 				UnidadAdministrativa ua = proc.getOrganResolutori();
-				resultats.put("item_organ_id", ua.getId());
-				resultats.put("item_organ_nom", ua.getNombreUnidadAdministrativa(lang));
+				resultats.put( "item_organ_id", ua.getId() );
+				resultats.put( "item_organ_nom", ua.getNombreUnidadAdministrativa(lang) );
+				
 			}
 			
-			if (proc.getFamilia() != null) {
+			if ( proc.getFamilia() != null ) {
+				
 				Familia familia = proc.getFamilia();
-				resultats.put("item_familia", familia.getId());
+				resultats.put( "item_familia", familia.getId() );
+				
 			}
 			
 			if (proc.getVersion() != null)
-				resultats.put("item_version", proc.getVersion());
+				resultats.put( "item_version", proc.getVersion() );
 			
-			if (proc.getIndicador() == null || "0".equals(proc.getIndicador()))
+			if ( proc.getIndicador() == null || "0".equals( proc.getIndicador() ) ) {
+				
 				resultats.put("item_fi_vida_administrativa", false);
-			else
+				
+			} else {
+				
 				resultats.put("item_fi_vida_administrativa", true);
-			
-			if (proc.getTaxa() == null || "0".equals(proc.getTaxa()))
+				
+			}
+				
+			if ( proc.getTaxa() == null || "0".equals( proc.getTaxa() ) ) {
+				
 				resultats.put("item_taxa", false);
-			else
+				
+			} else {
+				
 				resultats.put("item_taxa", true);
+				
+			}
 			
-			if (proc.getVentanillaUnica() == null || "0".equals(proc.getVentanillaUnica()))
+			if ( proc.getVentanillaUnica() == null || "0".equals( proc.getVentanillaUnica() ) ) {
+				
 				resultats.put("item_finestreta_unica", false);
-			else
+				
+			} else {
+				
 				resultats.put("item_finestreta_unica", true);
+				
+			}
 			
 			// Obtención de listado de posibles hechos vitales del procedimiento
-			resultats.put("listadoHechosVitales", LlistatUtil.llistarHechosVitales(proc.getPublicosObjetivo() , lang));
+			Set<PublicoObjetivo> listaPublicosObjetivos = proc.getPublicosObjetivo();
+			if ( !listaPublicosObjetivos.isEmpty() ) {
+				
+				resultats.put( "listadoHechosVitales", LlistatUtil.llistarHechosVitales( listaPublicosObjetivos , lang ) );
+				
+			} else {
+				
+				resultats.put( "listadoHechosVitales", Collections.EMPTY_SET );
+				
+			}
 			
 		} catch (DelegateException dEx) {
+			
 			logException(log, dEx);
-			if (dEx.isSecurityException())
-				resultats.put("error", messageSource.getMessage("error.permisos", null, request.getLocale()));
-			else
-				resultats.put("error", messageSource.getMessage("error.altres", null, request.getLocale()));
+			
+			if ( dEx.isSecurityException() ){
+				
+				resultats.put( "error", messageSource.getMessage( "error.permisos", null, request.getLocale() ) );
+				
+			} else {
+				
+				resultats.put( "error", messageSource.getMessage( "error.altres", null, request.getLocale() ) );
+				
+			}
 			
 		}
 		
 		return resultats;
+		
 	}
 	
 	/*
