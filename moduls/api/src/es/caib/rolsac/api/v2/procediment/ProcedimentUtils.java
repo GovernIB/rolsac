@@ -40,7 +40,7 @@ public class ProcedimentUtils {
     }
 	
 	private static String parseTelematico(ProcedimentCriteria pc, String where) {
-		if (pc.getTelematico()) {
+		if (pc.getTelematico() != null && pc.getTelematico()) {
 			if (where.equals(""))
 				where += "WHERE ";
 			else
@@ -53,7 +53,7 @@ public class ProcedimentUtils {
 	}
 	
 	private static String parseVigente(ProcedimentCriteria pc, String where) {
-        if (pc.getVigente()) {
+        if (pc.getVigente() != null && pc.getVigente()) {
         	if (where.equals(""))
         		where += "WHERE ";
         	else
