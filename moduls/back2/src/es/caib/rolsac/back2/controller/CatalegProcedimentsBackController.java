@@ -158,8 +158,8 @@ public class CatalegProcedimentsBackController extends PantallaBaseController
 		
 		boolean uaFilles = "1".equals(request.getParameter("uaFilles"));		// Recuperamos si se debe buscar en las UAs hijas
 		boolean uaMeves = "1".equals(request.getParameter("uaMeves"));			// Recuperamos si se debe buscar en las UAs propias
-		boolean enPlazo = "1".equals(request.getParameter("en_plazo"));			// Recuperamos si se encuentra vigente
-		boolean telematico = "1".equals(request.getParameter("telematico"));	// Recuperamos el campo de si es telamático
+		String enPlazo = request.getParameter("en_plazo");						// Recuperamos si se encuentra vigente
+		String telematico = request.getParameter("telematico");					// Recuperamos el campo de si es telamático
 		
 		// Recuperamos los ids de los parametros
 		Long materia = recuperarProcParametro(request, "materia");				// Recuperamos la materia para filtrar

@@ -497,13 +497,29 @@
                                     <input id="cerca_tramit" name="cerca_tramit" type="text"/>
                                 </div>
                             </div>
-                            <div class="element checkbox">
-                            	<input id="enPlazo" name="enPlazo" type="checkbox" value="1"/>
-                            	<label for="enPlazo"><spring:message code='camp.cerca_en_plazo'/></label>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="enPlazo"><spring:message code='camp.cerca_en_plazo'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="enPlazo" name="enPlazo" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="element checkbox">
-                            	<input id="telematico" name="telematico" type="checkbox" value="1"/>
-                            	<label for="telematico"><spring:message code='camp.cerca_telematico'/></label>
+                            <div class="element t25">
+                                <div class="etiqueta">
+                                    <label for="telematico"><spring:message code='camp.cerca_telematico'/></label>
+                                </div>
+                                <div class="control">
+                                    <select id="telematico" name="telematico" class="t8">
+                                        <option value="" selected="selected"><spring:message code='camp.tria.opcio'/></option>
+                                        <option value="0"><spring:message code='txt.no'/></option>
+                                        <option value="1"><spring:message code='txt.si'/></option>
+                                    </select>
+                                </div>
                             </div>
                             <%--
                             <div class="element t25">

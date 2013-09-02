@@ -895,7 +895,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 	 * @ejb.interface-method
 	 * @ejb.permission unchecked="true"
 	 */
-	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, boolean en_plazo, boolean telematico) {
+	public ResultadoBusqueda buscadorProcedimientos(Map parametros, Map traduccion, UnidadAdministrativa ua, boolean uaFilles, boolean uaMeves, Long materia, Long fetVital, Long publicObjectiu, String pagina, String resultats, int visible, String en_plazo, String telematico) {
 		Session session = getSession();
 
 		try {
@@ -927,41 +927,49 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 			String from = "from ProcedimientoLocal as procedimiento, ";
 			String where = "";
 			
-			if (telematico) {
-				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where ";
-				where += "tra.idTraTel is not null )";
+			if (telematico != null && !telematico.equals("")) {
+				if (telematico.equals("1"))
+					where += "and procedimiento.id in ";
+				else if (telematico.equals("0"))
+					where += "and procedimiento.id not in ";
+				
+				where += "( select tra.procedimiento from Tramite as tra where tra.idTraTel is not null )";
 			}
 			
-			if (en_plazo) {
-				where += "and procedimiento.id in ( select tra.procedimiento from Tramite as tra where ";
-				where += "tra.fase = 1 ";
+			if (en_plazo != null && !en_plazo.equals("")) {
+				if (en_plazo.equals("1"))
+					where += "and procedimiento.id in ";
+				else if (en_plazo.equals("0"))
+					where += "and procedimiento.id not in ";
+				
+				where += "( select tra.procedimiento from Tramite as tra where tra.fase = 1 ";
 				where += "and (sysdate < tra.dataTancament or tra.dataTancament is null) ";
 				where += "and (sysdate > tra.dataInici or tra.dataInici is null) ) ";
 			}
 			
-			if ( materia != null ) {
+			if (materia != null) {
 				where += " and procedimiento.id in ( select procsLocales.id " +
-																"from Materia as mat, mat.procedimientosLocales as procsLocales " +
-																"where mat.id = " + materia + ")";
+						"from Materia as mat, mat.procedimientosLocales as procsLocales " +
+						"where mat.id = " + materia + ")";
 			}
-
-			if ( fetVital != null ) {
-				from += "procedimiento.hechosVitalesProcedimientos as hechosVit, "; 
-				where += " and hechosVit.hechoVital.id = " + fetVital;				
+			
+			if (fetVital != null) {
+				from += "procedimiento.hechosVitalesProcedimientos as hechosVit, ";
+				where += " and hechosVit.hechoVital.id = " + fetVital;
 			}
-
-			if ( publicObjectiu != null ) {
+			
+			if (publicObjectiu != null) {
 				from += "procedimiento.publicosObjetivo as pubsObj, ";
-				where += " and pubsObj.id = " + publicObjectiu;				
+				where += " and pubsObj.id = " + publicObjectiu;
 			}
 			
 			if (visible == 1) {
 				where += " and (sysdate < procedimiento.fechaCaducidad or procedimiento.fechaCaducidad is null) ";
 				where += " and (sysdate > procedimiento.fechaPublicacion or procedimiento.fechaPublicacion is null) ";
-			} else if (visible == 2){
+			} else if (visible == 2) {
 				where += " and (sysdate > procedimiento.fechaCaducidad or sysdate < procedimiento.fechaPublicacion or procedimiento.validacion = 2 or procedimiento.validacion = 3) ";
 			}
-
+			
 			if ( userIsOper() ) {
 				//Filtrar por el acceso del usuario
 
