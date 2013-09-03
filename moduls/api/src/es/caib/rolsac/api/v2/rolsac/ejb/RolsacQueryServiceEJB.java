@@ -73,6 +73,7 @@ import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fetVital.FetVitalDTO;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaUtils;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUACriteria;
 import es.caib.rolsac.api.v2.fitxaUA.FitxaUADTO;
 import es.caib.rolsac.api.v2.formulari.FormulariCriteria;
@@ -450,20 +451,22 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         
         try {
         	
-            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS,HQL_PROCEDIMIENTO_ALIAS));
+
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_PROCEDIMIENTO_ALIAS, 
+                    entities, 
+                    procedimentCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS, qb);
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
                     HQL_TRADUCCIONES_ALIAS,
                     procedimentCriteria));
 
-            List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS,HQL_PROCEDIMIENTO_ALIAS));
-            QueryBuilder qb = new QueryBuilder(
-                    HQL_PROCEDIMIENTO_ALIAS, 
-                    entities, 
-                    procedimentCriteria.getIdioma(),
-                    HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
@@ -520,21 +523,22 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         
         try {
         	
-            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
+            List<FromClause> entities = new ArrayList<FromClause>();
+            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
+
+            QueryBuilder qb = new QueryBuilder(
+                    HQL_PROCEDIMIENTO_ALIAS, 
+                    entities, 
+                    procedimentCriteria.getIdioma(),
+                    HQL_TRADUCCIONES_ALIAS);
+
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS, qb);
             criteris.addAll(BasicUtils.parseCriterias(
                     ProcedimentCriteria.class,
                     HQL_PROCEDIMIENTO_ALIAS,
                     HQL_TRADUCCIONES_ALIAS, 
                     procedimentCriteria));
             
-            List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
-            
-            QueryBuilder qb = new QueryBuilder(
-                    HQL_PROCEDIMIENTO_ALIAS, 
-                    entities, 
-                    procedimentCriteria.getIdioma(),
-                    HQL_TRADUCCIONES_ALIAS);
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
@@ -591,13 +595,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
         
         try {
         	
-            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS);            
-            criteris.addAll(BasicUtils.parseCriterias(
-                    ProcedimentCriteria.class,
-                    HQL_PROCEDIMIENTO_ALIAS,
-                    HQL_TRADUCCIONES_ALIAS, 
-                    procedimentCriteria));
-            
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_PROCEDIMIENTO_CLASS, HQL_PROCEDIMIENTO_ALIAS));
             
@@ -607,10 +604,19 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     procedimentCriteria.getIdioma(),
                     HQL_TRADUCCIONES_ALIAS, 
                     true);
+            
+            ProcedimentUtils.parseActiu(criteris, procedimentCriteria, HQL_PROCEDIMIENTO_ALIAS, qb);            
+            criteris.addAll(BasicUtils.parseCriterias(
+                    ProcedimentCriteria.class,
+                    HQL_PROCEDIMIENTO_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, 
+                    procedimentCriteria));
+
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
             Query query = qb.createQuery(session);
+            
             return getNumberResults(query);
             
         } catch (HibernateException e) {
@@ -1076,23 +1082,12 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
      */
     public FitxaDTO obtenirFitxa(FitxaCriteria fitxaCriteria) {
     	
-        List<CriteriaObject> criteris;
+        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         FitxaDTO fitxaDTO = null;
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( fitxaCriteria.getActiu() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( fitxaCriteria.getActiu() != null && fitxaCriteria.getActiu().booleanValue() ); 
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        fitxaCriteria.setActiu(null);
-
         try {
         	
-            criteris = BasicUtils.parseCriterias(
-                    FitxaCriteria.class,
-                    HQL_FITXA_ALIAS,
-                    HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
-
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
             
@@ -1101,23 +1096,22 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     entities, 
                     fitxaCriteria.getIdioma(),
                     HQL_TRADUCCIONES_ALIAS);
+            
+			FitxaUtils.parseActiu(criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb);
+            criteris = BasicUtils.parseCriterias(
+                    FitxaCriteria.class,
+                    HQL_FITXA_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
             Query query = qb.createQuery(session);
-            Ficha fitxa = (Ficha)query.uniqueResult();
+            Ficha fitxa = (Ficha) query.uniqueResult();
             
-            if (fitxa != null) {
-            	
-                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-    					|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-            		
-                	fitxaDTO = (FitxaDTO)BasicUtils.entityToDTO(FitxaDTO.class, fitxa, fitxaCriteria.getIdioma());
-            		
-            	}
+            if ( fitxa != null )
+                	fitxaDTO = (FitxaDTO) BasicUtils.entityToDTO( FitxaDTO.class, fitxa, fitxaCriteria.getIdioma() );
 
-            }
-                        
         } catch (HibernateException e) {
         	
             log.error(e);
@@ -1155,23 +1149,11 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
     public List<FitxaDTO> llistarFitxes(FitxaCriteria fitxaCriteria) {
     	
         List<FitxaDTO> fitxaDTOList = new ArrayList<FitxaDTO>();
-        List<CriteriaObject> criteris;
+		List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( fitxaCriteria.getActiu() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( fitxaCriteria.getActiu() != null && fitxaCriteria.getActiu().booleanValue() );  
-
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        fitxaCriteria.setActiu(null);
-
         try {
         	
-            criteris = BasicUtils.parseCriterias(
-                    FitxaCriteria.class,
-                    HQL_FITXA_ALIAS,
-                    HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
-
             List<FromClause> entities = new ArrayList<FromClause>();
             entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
             
@@ -1180,6 +1162,13 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                     entities, 
                     fitxaCriteria.getIdioma(),
                     HQL_TRADUCCIONES_ALIAS);
+            
+            FitxaUtils.parseActiu( criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb );
+            criteris = BasicUtils.parseCriterias(
+                    FitxaCriteria.class,
+                    HQL_FITXA_ALIAS,
+                    HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
@@ -1187,10 +1176,7 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
             List<Ficha> fitxaResult = (List<Ficha>) query.list();
             
             for (Ficha ficha: fitxaResult) {
-            	
-            	if ( (soloRegistrosVisibles && ficha.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-            		
+            	            		
             		fitxaDTOList.add(
             			(FitxaDTO)BasicUtils.entityToDTO(
                             FitxaDTO.class, 
@@ -1198,8 +1184,6 @@ public class RolsacQueryServiceEJB extends HibernateEJB {
                             fitxaCriteria.getIdioma()
                         )
                     );
-            		
-            	}
             	            	                
             }
             

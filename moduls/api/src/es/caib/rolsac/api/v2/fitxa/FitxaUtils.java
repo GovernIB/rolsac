@@ -5,20 +5,24 @@ import java.util.List;
 import es.caib.rolsac.api.v2.fitxa.co.FitxaByActivoCriteria;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
+import es.caib.rolsac.api.v2.procediment.co.ProcedimentByActivoCriteria;
+import es.caib.rolsac.api.v2.query.QueryBuilder;
 
 public class FitxaUtils {
     
-    public static void parseActiu(List<CriteriaObject> criteris, FitxaCriteria fc, String alias) {
-    	
-        if (fc.getActiu() != null) {
-        	
-        	FitxaByActivoCriteria c = new FitxaByActivoCriteria(alias);
-            c.parseCriteria(BasicUtils.booleanToString(fc.getActiu()));
-            criteris.add(c);
-            fc.setActiu(null); // Para que no lo parsee BasicUtils.
-            
-        }
-        
-    }
+    
+	public static void parseActiu(List<CriteriaObject> criteris, FitxaCriteria fitxaCriteria, String alias, QueryBuilder qb) {
+
+		if (fitxaCriteria.getActiu() != null) {
+
+			ProcedimentByActivoCriteria c = new ProcedimentByActivoCriteria(alias);
+			c.parseCriteria(BasicUtils.booleanToString(fitxaCriteria.getActiu()));
+			c.extendCriteria(qb);
+			criteris.add(c);
+			fitxaCriteria.setActiu(null);
+
+		}
+
+	}
     
 }

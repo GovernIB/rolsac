@@ -33,6 +33,7 @@ import es.caib.rolsac.api.v2.espaiTerritorial.EspaiTerritorialDTO;
 import es.caib.rolsac.api.v2.exception.QueryServiceException;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaUtils;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
@@ -592,54 +593,43 @@ public class UnitatAdministrativaQueryServiceEJB extends HibernateEJB {
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
     	
     	List<FitxaDTO> fitxesDTOList = new ArrayList<FitxaDTO>();
-        List<CriteriaObject> criteris;
+        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
-        
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( fitxaCriteria.getActiu() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( fitxaCriteria.getActiu() != null && fitxaCriteria.getActiu().booleanValue() );  
-
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        fitxaCriteria.setActiu(null);
         
         try {
         	
-            if (StringUtils.isBlank(fitxaCriteria.getOrdenacio())) {
+            if ( StringUtils.isBlank( fitxaCriteria.getOrdenacio() ) ) {
                 fitxaCriteria.setOrdenacio(HQL_FITXA_UA_ALIAS + ".orden");
             }
             
-            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
             List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS));
-            entities.add(new FromClause(HQL_FITXA_UA_CLASS, HQL_FITXA_UA_ALIAS));
-            entities.add(new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            entities.add( new FromClause(HQL_UA_CLASS, HQL_UA_ALIAS) );
+            entities.add( new FromClause(HQL_FITXA_UA_CLASS, HQL_FITXA_UA_ALIAS) );
+            entities.add( new FromClause(HQL_FITXA_CLASS, HQL_FITXA_ALIAS) );
+            QueryBuilder qb = new QueryBuilder( HQL_FITXA_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS );
+            FitxaUtils.parseActiu( criteris, fitxaCriteria, HQL_FITXA_ALIAS, qb );
+            criteris = BasicUtils.parseCriterias( FitxaCriteria.class, HQL_FITXA_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria );
             qb.extendCriteriaObjects(criteris);
             
             UnitatAdministrativaCriteria uac = new UnitatAdministrativaCriteria();
             uac.setId(String.valueOf(id));
-            criteris = BasicUtils.parseCriterias(UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac);
+            criteris = BasicUtils.parseCriterias( UnitatAdministrativaCriteria.class, HQL_UA_ALIAS, uac );
             qb.extendCriteriaObjects(criteris);
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Ficha> fitxesResult = (List<Ficha>)query.list();
+            List<Ficha> fitxesResult = (List<Ficha>) query.list();
             
-            for (Ficha fitxa : fitxesResult) {
+            for ( Ficha fitxa : fitxesResult ) {
 
-                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-            		
                 	fitxesDTOList.add(
-            			(FitxaDTO)BasicUtils.entityToDTO(
+            			(FitxaDTO) BasicUtils.entityToDTO(
         					FitxaDTO.class,  
         					fitxa, 
         					fitxaCriteria.getIdioma()
             			)
                 	);
             		
-            	}
-                
             }
             
         } catch (HibernateException e) {

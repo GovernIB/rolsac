@@ -21,6 +21,7 @@ import es.caib.rolsac.api.v2.arxiu.ArxiuDTO;
 import es.caib.rolsac.api.v2.fetVital.FetVitalCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaCriteria;
 import es.caib.rolsac.api.v2.fitxa.FitxaDTO;
+import es.caib.rolsac.api.v2.fitxa.FitxaUtils;
 import es.caib.rolsac.api.v2.general.BasicUtils;
 import es.caib.rolsac.api.v2.general.HibernateEJB;
 import es.caib.rolsac.api.v2.general.co.CriteriaObject;
@@ -85,22 +86,18 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
     public List<FitxaDTO> llistarFitxes(long id, FitxaCriteria fitxaCriteria) {
     	
         List<FitxaDTO> fitxesDTOList = new ArrayList<FitxaDTO>();
-        List<CriteriaObject> criteris;
+        List<CriteriaObject> criteris = new ArrayList<CriteriaObject>();
         Session session = null;
         
-        // Comprobamos si solicitan registros visibles.
-        boolean soloRegistrosVisibles = ( fitxaCriteria.getActiu() == null ) // Si el campo no se especifica, mostramos sólo visibles por defecto.
-        		|| ( fitxaCriteria.getActiu() != null && fitxaCriteria.getActiu().booleanValue() );  
-
-        // Ponemos campo a null para que no se procese como Criteria para la consulta HQL (i.e. para que no lo parsee BasicUtils.parseCriterias()).
-        fitxaCriteria.setActiu(null);
-
         try {            
-            criteris = BasicUtils.parseCriterias(FitxaCriteria.class, HQL_FICHAS_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria);
+        	
             List<FromClause> entities = new ArrayList<FromClause>();
-            entities.add(new FromClause(HQL_FET_VITAL_CLASS, HQL_FET_VITAL_ALIAS));
-            entities.add(new FromClause(HQL_FICHAS_CLASS, HQL_FICHAS_ALIAS));
-            QueryBuilder qb = new QueryBuilder(HQL_FICHAS_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS);
+            entities.add( new FromClause(HQL_FET_VITAL_CLASS, HQL_FET_VITAL_ALIAS) );
+            entities.add( new FromClause(HQL_FICHAS_CLASS, HQL_FICHAS_ALIAS) );
+            QueryBuilder qb = new QueryBuilder( HQL_FICHAS_ALIAS, entities, fitxaCriteria.getIdioma(), HQL_TRADUCCIONES_ALIAS );
+            
+            FitxaUtils.parseActiu( criteris, fitxaCriteria, HQL_FICHAS_ALIAS, qb );
+            criteris = BasicUtils.parseCriterias( FitxaCriteria.class, HQL_FICHAS_ALIAS, HQL_TRADUCCIONES_ALIAS, fitxaCriteria );
             qb.extendCriteriaObjects(criteris);
             
             FetVitalCriteria fvc = new FetVitalCriteria();
@@ -110,13 +107,10 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
 
             session = getSession();
             Query query = qb.createQuery(session);
-            List<Ficha> fitxesResult = (List<Ficha>)query.list();
+            List<Ficha> fitxesResult = (List<Ficha>) query.list();
             
-            for (Ficha fitxa : fitxesResult) {
+            for ( Ficha fitxa : fitxesResult ) {
 
-                if ( (soloRegistrosVisibles && fitxa.getIsVisible())	// Si nos solicitan recursos visibles, sólo lo añadimos a la lista de resultados si cumple con ello.
-						|| !soloRegistrosVisibles ) {					// Si no los solicitan sólo visibles, los añadimos sin comprobar nada más.
-            		
                 	fitxesDTOList.add(
             			(FitxaDTO)BasicUtils.entityToDTO(
         					FitxaDTO.class,  
@@ -125,8 +119,6 @@ public class FetVitalQueryServiceEJB extends HibernateEJB {
             			)
                 	);
             		
-            	}
-                
             }
             
         } catch (HibernateException e) {
