@@ -975,7 +975,7 @@ public abstract class ProcedimientoFacadeEJB extends HibernateEJB implements Pro
 
 				//tieneAccesoValidable
 				if (!userIsSuper()) {
-					where += " and prod.validacion = " + Validacion.INTERNA;
+					where += " and procedimiento.validacion = " + Validacion.INTERNA;
 				}
 
 				// tieneAcceso
